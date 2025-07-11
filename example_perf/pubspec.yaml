@@ -35,23 +35,16 @@ dependencies:
   super_editor:
     path: ../
   super_text_layout:
-    path: ../../super_text_layout
+    path: ../packages/super_text_layout
+  super_editor_markdown:
+    path: ../packages/super_editor_markdown
+  attributed_text:
+    path: ../packages/attributed_text
+
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.6
-
-dependency_overrides:
-  # Override to local mono-repo path so devs can test this repo
-  # against changes that they're making to other mono-repo packages
-  super_editor:
-    path: ../
-  super_editor_markdown:
-    path: ../../super_editor_markdown
-  super_text_layout:
-    path: ../../super_text_layout
-  attributed_text:
-    path: ../../attributed_text
 
 dev_dependencies:
   flutter_test:
