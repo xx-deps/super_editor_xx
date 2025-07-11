@@ -3,7 +3,7 @@
 import 'package:logging/logging.dart' as logging;
 
 /// Overlord logger names.
-class LogNames {
+class OverlordLoggerName {
   static const cupertino = 'cupertino';
   static const cupertinoToolbar = 'cupertino.toolbar';
   static const cupertinoMenu = 'cupertino.menu';
@@ -11,9 +11,9 @@ class LogNames {
 
 /// Overlord logging.
 class OverlordLogs {
-  static final cupertino = logging.Logger(LogNames.cupertino);
-  static final cupertinoToolbar = logging.Logger(LogNames.cupertinoToolbar);
-  static final cupertinoMenu = logging.Logger(LogNames.cupertinoMenu);
+  static final cupertino = logging.Logger(OverlordLoggerName.cupertino);
+  static final cupertinoToolbar = logging.Logger(OverlordLoggerName.cupertinoToolbar);
+  static final cupertinoMenu = logging.Logger(OverlordLoggerName.cupertinoMenu);
 
   static final _activeLoggers = <logging.Logger>{};
 

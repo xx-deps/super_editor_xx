@@ -3,7 +3,7 @@
 import 'package:logging/logging.dart';
 export 'package:logging/logging.dart';
 
-class LogNames {
+class SuperTextLayoutLoggingName {
   static const errors = 'super_text.errors';
   static const builds = 'super_text.builds';
   static const layout = 'super_text.layout';
@@ -11,10 +11,10 @@ class LogNames {
 }
 
 // Errors that don't fit into other loggers
-final errorsLog = Logger(LogNames.errors);
-final buildsLog = Logger(LogNames.builds);
-final layoutLog = Logger(LogNames.layout);
-final robotLog = Logger(LogNames.typingRobot);
+final errorsLog = Logger(SuperTextLayoutLoggingName.errors);
+final buildsLog = Logger(SuperTextLayoutLoggingName.builds);
+final layoutLog = Logger(SuperTextLayoutLoggingName.layout);
+final robotLog = Logger(SuperTextLayoutLoggingName.typingRobot);
 
 final _activeLoggers = <Logger>{};
 

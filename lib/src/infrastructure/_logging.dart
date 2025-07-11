@@ -4,7 +4,7 @@ import 'package:logging/logging.dart' as logging;
 
 export 'package:logging/logging.dart' show Level;
 
-class LogNames {
+class SuperEditorLoggerName {
   static const editor = 'editor';
   static const editorEdits = 'editor.edits';
   static const editorPolicies = 'editor.policies';
@@ -59,51 +59,51 @@ final messagePagePaintLog = logging.Logger('chat.messagePage.paint');
 final messageEditorHeightLog = logging.Logger('chat.messagePage.editorHeight');
 
 // Super Editor
-final editorLog = logging.Logger(LogNames.editor);
-final editorEditsLog = logging.Logger(LogNames.editorEdits);
-final editorPoliciesLog = logging.Logger(LogNames.editorPolicies);
-final editorScrollingLog = logging.Logger(LogNames.editorScrolling);
-final editorGesturesLog = logging.Logger(LogNames.editorGestures);
-final editorKeyLog = logging.Logger(LogNames.editorKeys);
-final editorImeLog = logging.Logger(LogNames.editorIme);
-final editorImeConnectionLog = logging.Logger(LogNames.editorImeConnection);
-final editorImeDeltasLog = logging.Logger(LogNames.editorImeDeltas);
-final editorIosFloatingCursorLog = logging.Logger(LogNames.editorIosFloatingCursor);
-final editorLayoutLog = logging.Logger(LogNames.editorLayout);
-final editorStyleLog = logging.Logger(LogNames.editorStyle);
-final editorDocLog = logging.Logger(LogNames.editorDocument);
-final editorOpsLog = logging.Logger(LogNames.editorCommonOps);
-final editorTokensLog = logging.Logger(LogNames.editorTokens);
-final editorTagsLog = logging.Logger(LogNames.editorTags);
-final editorStableTagsLog = logging.Logger(LogNames.editorUserTags);
-final editorPatternTagsLog = logging.Logger(LogNames.editorHashTags);
-final editorActionTagsLog = logging.Logger(LogNames.editorActionTags);
-final editorSpellingAndGrammarLog = logging.Logger(LogNames.editorSpellingAndGrammar);
+final editorLog = logging.Logger(SuperEditorLoggerName.editor);
+final editorEditsLog = logging.Logger(SuperEditorLoggerName.editorEdits);
+final editorPoliciesLog = logging.Logger(SuperEditorLoggerName.editorPolicies);
+final editorScrollingLog = logging.Logger(SuperEditorLoggerName.editorScrolling);
+final editorGesturesLog = logging.Logger(SuperEditorLoggerName.editorGestures);
+final editorKeyLog = logging.Logger(SuperEditorLoggerName.editorKeys);
+final editorImeLog = logging.Logger(SuperEditorLoggerName.editorIme);
+final editorImeConnectionLog = logging.Logger(SuperEditorLoggerName.editorImeConnection);
+final editorImeDeltasLog = logging.Logger(SuperEditorLoggerName.editorImeDeltas);
+final editorIosFloatingCursorLog = logging.Logger(SuperEditorLoggerName.editorIosFloatingCursor);
+final editorLayoutLog = logging.Logger(SuperEditorLoggerName.editorLayout);
+final editorStyleLog = logging.Logger(SuperEditorLoggerName.editorStyle);
+final editorDocLog = logging.Logger(SuperEditorLoggerName.editorDocument);
+final editorOpsLog = logging.Logger(SuperEditorLoggerName.editorCommonOps);
+final editorTokensLog = logging.Logger(SuperEditorLoggerName.editorTokens);
+final editorTagsLog = logging.Logger(SuperEditorLoggerName.editorTags);
+final editorStableTagsLog = logging.Logger(SuperEditorLoggerName.editorUserTags);
+final editorPatternTagsLog = logging.Logger(SuperEditorLoggerName.editorHashTags);
+final editorActionTagsLog = logging.Logger(SuperEditorLoggerName.editorActionTags);
+final editorSpellingAndGrammarLog = logging.Logger(SuperEditorLoggerName.editorSpellingAndGrammar);
 
 // Super Reader
-final readerLog = logging.Logger(LogNames.reader);
-final readerScrollingLog = logging.Logger(LogNames.readerScrolling);
-final readerGesturesLog = logging.Logger(LogNames.readerGestures);
-final readerKeyLog = logging.Logger(LogNames.readerKeys);
-final readerImeLog = logging.Logger(LogNames.readerIme);
-final readerLayoutLog = logging.Logger(LogNames.readerLayout);
-final readerStyleLog = logging.Logger(LogNames.readerStyle);
-final readerDocLog = logging.Logger(LogNames.readerDocument);
-final readerOpsLog = logging.Logger(LogNames.readerCommonOps);
+final readerLog = logging.Logger(SuperEditorLoggerName.reader);
+final readerScrollingLog = logging.Logger(SuperEditorLoggerName.readerScrolling);
+final readerGesturesLog = logging.Logger(SuperEditorLoggerName.readerGestures);
+final readerKeyLog = logging.Logger(SuperEditorLoggerName.readerKeys);
+final readerImeLog = logging.Logger(SuperEditorLoggerName.readerIme);
+final readerLayoutLog = logging.Logger(SuperEditorLoggerName.readerLayout);
+final readerStyleLog = logging.Logger(SuperEditorLoggerName.readerStyle);
+final readerDocLog = logging.Logger(SuperEditorLoggerName.readerDocument);
+final readerOpsLog = logging.Logger(SuperEditorLoggerName.readerCommonOps);
 
-final textFieldLog = logging.Logger(LogNames.textField);
-final scrollingTextFieldLog = logging.Logger(LogNames.scrollingTextField);
-final imeTextFieldLog = logging.Logger(LogNames.imeTextField);
-final androidTextFieldLog = logging.Logger(LogNames.androidTextField);
-final iosTextFieldLog = logging.Logger(LogNames.iosTextField);
+final textFieldLog = logging.Logger(SuperEditorLoggerName.textField);
+final scrollingTextFieldLog = logging.Logger(SuperEditorLoggerName.scrollingTextField);
+final imeTextFieldLog = logging.Logger(SuperEditorLoggerName.imeTextField);
+final androidTextFieldLog = logging.Logger(SuperEditorLoggerName.androidTextField);
+final iosTextFieldLog = logging.Logger(SuperEditorLoggerName.iosTextField);
 
-final docGesturesLog = logging.Logger(LogNames.documentGestures);
-final infrastructureLog = logging.Logger(LogNames.infrastructure);
-final keyboardPanelLog = logging.Logger(LogNames.keyboardPanel);
-final longPressSelectionLog = logging.Logger(LogNames.longPressSelection);
-final schedulerLog = logging.Logger(LogNames.scheduler);
-final contentLayersLog = logging.Logger(LogNames.contentLayers);
-final attributionsLog = logging.Logger(LogNames.attributions);
+final docGesturesLog = logging.Logger(SuperEditorLoggerName.documentGestures);
+final infrastructureLog = logging.Logger(SuperEditorLoggerName.infrastructure);
+final keyboardPanelLog = logging.Logger(SuperEditorLoggerName.keyboardPanel);
+final longPressSelectionLog = logging.Logger(SuperEditorLoggerName.longPressSelection);
+final schedulerLog = logging.Logger(SuperEditorLoggerName.scheduler);
+final contentLayersLog = logging.Logger(SuperEditorLoggerName.contentLayers);
+final attributionsLog = logging.Logger(SuperEditorLoggerName.attributions);
 
 final _activeLoggers = <logging.Logger>{};
 

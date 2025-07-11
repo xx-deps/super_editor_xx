@@ -1,7 +1,14 @@
 library super_editor;
 
+// Export from super_text_layout so that downstream clients don't
+// have to add this package to get access to these classes.
+export 'package:super_text_layout/super_text_layout.dart';
+export 'package:super_editor_markdown/super_editor_markdown.dart';
+export 'package:super_keyboard/super_keyboard.dart';
 export 'package:attributed_text/attributed_text.dart';
-export 'package:super_text_layout/src/caret_layer.dart';
+export 'package:follow_the_leader/follow_the_leader.dart';
+export 'package:linkify/linkify.dart';
+export 'package:overlord/overlord.dart';
 
 // Fundamental document abstractions
 export 'src/core/document.dart';
@@ -110,15 +117,3 @@ export 'src/super_reader/read_only_document_keyboard_interactor.dart';
 export 'src/super_reader/read_only_document_mouse_interactor.dart';
 export 'src/super_reader/reader_context.dart';
 export 'src/super_reader/super_reader.dart';
-
-// Export from super_text_layout so that downstream clients don't
-// have to add this package to get access to these classes.
-export 'package:super_text_layout/super_text_layout.dart'
-    show
-        UnderlineStyle,
-        SquiggleUnderlineStyle,
-        SquiggleUnderlinePainter,
-        DottedUnderlineStyle,
-        DottedUnderlinePainter,
-        StraightUnderlineStyle,
-        StraightUnderlinePainter;
