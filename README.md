@@ -4,16 +4,16 @@ fvm use 3.32.6
 
 ## Melos
 ### 快速使用步骤
-1. 安装 Melos
-fvm dart pub global activate melos<br>
-2. 安装所有子包依赖
-fvm dart run melos bootstrap<br>
-3. 运行自定义脚本（批量执行 pub get）
-fvm dart run melos run pub-get<br>
-4. 查看所有管理的包
-fvm dart run melos list<br>
-5. 在所有子包执行任意命令
-fvm dart run melos exec <your-command><br>
+1. 安装 Melos<br>
+fvm dart pub global activate melos
+2. 安装所有子包依赖<br>
+fvm dart run melos bootstrap
+3. 运行自定义脚本（批量执行 pub get）<br>
+fvm dart run melos run pub-get
+4. 查看所有管理的包<br>
+fvm dart run melos list
+5. 在所有子包执行任意命令<br>
+fvm dart run melos exec <your-command>
 
 ### 常用命令总结
 melos bootstrap - 初始化并安装所有依赖
