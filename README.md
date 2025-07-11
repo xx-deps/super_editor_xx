@@ -1,3 +1,36 @@
+
+## flutter版本
+fvm use 3.32.6
+
+## Melos
+### 快速使用步骤
+1. 安装 Melos
+fvm dart pub global activate melos
+2. 创建配置文件
+在项目根目录创建 melos.yaml，内容示例：
+yamlname: my_mono_repo
+packages:
+  - packages/*
+scripts:
+  pub-get:
+    run: flutter pub get
+3. 安装所有子包依赖
+fvm dart run melos bootstrap
+4. 运行自定义脚本（批量执行 pub get）
+fvm dart run melos run pub-get
+5. 查看所有管理的包
+fvm dart run melos list
+6. 在所有子包执行任意命令
+fvm dart run melos exec <your-command>
+
+### 常用命令总结
+melos bootstrap - 初始化并安装所有依赖
+melos list - 列出所有管理的包
+melos exec <command> - 在所有包中执行命令
+melos run <script> - 运行自定义脚本
+melos clean - 清理所有包的构建文件
+melos version - 管理包版本和发布
+
 <p align="center">
   <img src="https://user-images.githubusercontent.com/7259036/170845431-e83699df-5c6c-4e9c-90fc-c12277cc2f48.png" width="300" alt="Super Editor"><br>
   <span><b>Open source, configurable, extensible text editor and document renderer for Flutter.</b></span><br><br>

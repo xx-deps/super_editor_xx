@@ -1,0 +1,22 @@
+name: super_editor
+
+packages:
+  - packages/**
+
+ignore:
+  # e.g. ignore example apps
+  - "packages/**/example"
+
+command:
+  version:
+    flutter: fvm flutter
+  bootstrap:
+    runPubGetInParallel: true
+    usePubspecOverrides: true
+
+scripts:
+  pub-get:
+    description: 给所有主包运行 pub get
+    run: fvm dart pub get
+    exec:
+      concurrency: 6

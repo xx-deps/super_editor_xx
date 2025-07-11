@@ -1,0 +1,36 @@
+name: overlord
+description: An assortment of widgets that loom over your content.
+version: 0.0.3+5
+homepage: https://github.com/flutter-bounty-hunters/overlord
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  collection: ^1.18.0
+  follow_the_leader:
+    path: ../follow_the_leader
+  logging: ^1.0.1
+
+#dependency_overrides:
+#  follow_the_leader:
+#    git:
+#      url: https://github.com/Flutter-Bounty-Hunters/follow_the_leader
+#      ref: main
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+  golden_toolkit: ^0.15.0
+  flutter_test_runners: ^0.0.4
+
+  # For loading icon font files in tests
+  file: ^6.1.4
+  platform: ^3.1.0
+
+
