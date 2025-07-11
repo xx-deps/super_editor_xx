@@ -37,24 +37,11 @@ dependencies:
   flutter_keyboard_visibility: ^6.0.0
   google_fonts: ^6.2.1
   http: ^1.2.2
-  linkify:
-    path: ../packages/linkify
   logging: ^1.3.0
   uuid: ^4.5.1
   super_editor:
     path: ../
-  super_editor_markdown:
-    path: ../packages/super_editor_markdown
-  super_text_layout:
-    path: ../packages/super_text_layout
-  attributed_text:
-    path: ../packages/attributed_text
-  super_keyboard:
-    path: ../packages/super_keyboard
-  follow_the_leader:
-    path: ../packages/follow_the_leader
-  overlord:
-    path: ../packages/overlord
+  
 
 dev_dependencies:
   flutter_test:
