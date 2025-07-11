@@ -16,12 +16,12 @@ fvm dart run melos list
 fvm dart run melos exec <your-command>
 
 ### 常用命令总结
-melos bootstrap - 初始化并安装所有依赖
-melos list - 列出所有管理的包
-melos exec <command> - 在所有包中执行命令
-melos run <script> - 运行自定义脚本
-melos clean - 清理所有包的构建文件
-melos version - 管理包版本和发布
+* melos bootstrap - 初始化并安装所有依赖
+* melos list - 列出所有管理的包
+* melos exec <command> - 在所有包中执行命令
+* melos run <script> - 运行自定义脚本
+* melos clean - 清理所有包的构建文件
+* melos version - 管理包版本和发布
 
 <p align="center">
   <img src="https://user-images.githubusercontent.com/7259036/170845431-e83699df-5c6c-4e9c-90fc-c12277cc2f48.png" width="300" alt="Super Editor"><br>
