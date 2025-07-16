@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:super_editor/super_editor.dart';
+import 'package:xx_demo_edit/customer_command.dart';
 import 'package:xx_demo_edit/customer_image_builder.dart';
 
 void main() {
@@ -80,6 +81,7 @@ class _MyHomePageState extends State<MyHomePage> {
       document: _doc,
       composer: _composer,
     );
+
     super.initState();
   }
 
@@ -91,7 +93,13 @@ class _MyHomePageState extends State<MyHomePage> {
   }) {
     final editor = Editor(
       editables: {Editor.documentKey: document, Editor.composerKey: composer},
-      requestHandlers: List.from(defaultRequestHandlers),
+      requestHandlers: [
+        ///添加命令
+        ...List.from(defaultRequestHandlers),
+        (editor, request) => request is InsertImageCommandRequest
+            ? InsertImageCommand(url: request.url)
+            : null,
+      ],
       historyGroupingPolicy: historyGroupingPolicy,
       reactionPipeline: List.from(defaultEditorReactions),
       isHistoryEnabled: isHistoryEnabled,
@@ -105,24 +113,13 @@ class _MyHomePageState extends State<MyHomePage> {
     final XFile? image = await ImagePicker().pickImage(
       source: ImageSource.gallery,
     );
-    if (image == null) return;
 
+    if (image == null) return;
     final path = image.path;
 
-    final endId = _docEditor.composer.selection?.end.nodeId ?? '';
-    if (endId.isEmpty) {
-      return;
-    }
-    final imageNode = ImageNode(
-      id: Editor.createNodeId(),
-      imageUrl: path,
-      altText: '示例图片',
-    );
-    _docEditor.document.insertNodeAfter(
-      existingNodeId: endId,
-      newNode: imageNode,
-    );
-    setState(() {});
+    if (path.isEmpty) return;
+
+    _docEditor.execute([InsertImageCommandRequest(url: path)]);
   }
 
   MutableDocument _createDocument() {
@@ -160,7 +157,7 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Container(
-              height: 310,
+              height: 600,
               decoration: BoxDecoration(
                 border: _hasFocus
                     ? Border.all(
