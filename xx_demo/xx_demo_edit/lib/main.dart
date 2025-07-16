@@ -97,7 +97,10 @@ class _MyHomePageState extends State<MyHomePage> {
         ///添加命令
         ...List.from(defaultRequestHandlers),
         (editor, request) => request is InsertImageCommandRequest
-            ? InsertImageCommand(url: request.url)
+            ? InsertImageCommand(
+                url: request.url,
+                expectedSize: request.expectedSize,
+              )
             : null,
       ],
       historyGroupingPolicy: historyGroupingPolicy,
@@ -106,6 +109,27 @@ class _MyHomePageState extends State<MyHomePage> {
     );
 
     return editor;
+  }
+
+  void _bold(){
+// _docEditor.execute([
+//       InsertImageCommandRequest(
+//         url: path,
+//         expectedSize: ExpectedSize(100, 100),
+//       ),
+//     ]);
+  }
+
+   void _Italic(){
+
+  }
+
+  void _Delete(){
+
+  }
+
+  void _UnderLine(){
+    
   }
 
   Future<void> _insertImage() async {
@@ -119,7 +143,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
     if (path.isEmpty) return;
 
-    _docEditor.execute([InsertImageCommandRequest(url: path)]);
+    _docEditor.execute([
+      InsertImageCommandRequest(
+        url: path,
+        expectedSize: ExpectedSize(100, 100),
+      ),
+    ]);
   }
 
   MutableDocument _createDocument() {
@@ -191,13 +220,40 @@ class _MyHomePageState extends State<MyHomePage> {
                   _focusNode.unfocus();
                 },
                 child: SizedBox.expand(
-                  child: Center(
-                    child: TextButton(
-                      onPressed: () async {
-                        await _insertImage();
-                      },
-                      child: Text('添加图片'),
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      TextButton(
+                        onPressed: () async {
+                        
+                        },
+                        child: Text('B'),
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                         
+                        },
+                        child: Text('I'),
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          
+                        },
+                        child: Text('D'),
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                         
+                        },
+                        child: Text('U'),
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          await _insertImage();
+                        },
+                        child: Text('添加图片'),
+                      ),
+                    ],
                   ),
                 ),
               ),

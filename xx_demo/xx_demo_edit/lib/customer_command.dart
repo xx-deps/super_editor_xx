@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:super_editor/super_editor.dart';
 
 class InsertImageCommandRequest implements EditRequest {
@@ -52,6 +54,7 @@ class InsertImageCommand extends EditCommand {
           newNode: imageNode,
         ),
       );
+
       return;
     }
 
