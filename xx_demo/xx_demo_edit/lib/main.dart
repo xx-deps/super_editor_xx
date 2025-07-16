@@ -136,11 +136,6 @@ class _MyHomePageState extends State<MyHomePage> {
             'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus sed sagittis urna. Aenean mattis ante justo, quis sollicitudin metus interdum id. Aenean ornare urna ac enim consequat mollis. In aliquet convallis efficitur. Phasellus convallis purus in fringilla scelerisque. Ut ac orci a turpis egestas lobortis. Morbi aliquam dapibus sem, vitae sodales arcu ultrices eu. Duis vulputate mauris quam, eleifend pulvinar quam blandit eget.',
           ),
         ),
-        ImageNode(
-          id: Editor.createNodeId(),
-          imageUrl: '/Users/fom8520/Downloads/1.webp',
-          expectedBitmapSize: ExpectedSize(200, 200),
-        ),
       ],
     );
   }

@@ -1,7 +1,8 @@
 import 'package:super_editor/super_editor.dart';
 
 class InsertImageCommandRequest implements EditRequest {
-  const InsertImageCommandRequest({required this.url});
+  final ExpectedSize? expectedSize;
+  const InsertImageCommandRequest({required this.url, this.expectedSize});
 
   final String url;
 
@@ -17,7 +18,8 @@ class InsertImageCommandRequest implements EditRequest {
 }
 
 class InsertImageCommand extends EditCommand {
-  const InsertImageCommand({required this.url});
+  final ExpectedSize? expectedSize;
+  const InsertImageCommand({required this.url, this.expectedSize});
 
   final String url;
 
@@ -35,11 +37,12 @@ class InsertImageCommand extends EditCommand {
     if (endId.isEmpty) {
       return;
     }
-    
+
     final imageNode = ImageNode(
       id: Editor.createNodeId(),
       imageUrl: url,
       altText: 'image',
+      expectedBitmapSize: expectedSize,
     );
 
     if (composer.selection == null) {
