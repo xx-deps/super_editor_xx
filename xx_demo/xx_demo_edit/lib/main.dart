@@ -112,12 +112,12 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _bold(){
-// _docEditor.execute([
-//       InsertImageCommandRequest(
-//         url: path,
-//         expectedSize: ExpectedSize(100, 100),
-//       ),
-//     ]);
+_docEditor.execute([
+      InsertImageCommandRequest(
+        url: path,
+        expectedSize: ExpectedSize(100, 100),
+      ),
+    ]);
   }
 
    void _Italic(){
