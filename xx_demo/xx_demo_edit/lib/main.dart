@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:super_editor/super_editor.dart';
+import 'package:xx_demo_edit/customer_image_builder.dart';
 
 void main() {
   runApp(const MyApp());
@@ -59,8 +61,19 @@ class _MyHomePageState extends State<MyHomePage> {
   late MutableDocumentComposer _composer;
   late Editor _docEditor;
 
+  late FocusNode _focusNode;
+
+  bool _hasFocus = false;
+
   @override
   void initState() {
+    _focusNode = FocusNode();
+    _focusNode.addListener(() {
+      print('_focusNode:${_focusNode.hasFocus}');
+      _hasFocus = _focusNode.hasFocus;
+      setState(() {});
+    });
+
     _doc = _createDocument();
     _composer = MutableDocumentComposer();
     _docEditor = createDefaultDocumentEditor(
@@ -74,7 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
     required MutableDocument document,
     required MutableDocumentComposer composer,
     HistoryGroupingPolicy historyGroupingPolicy = defaultMergePolicy,
-    bool isHistoryEnabled = false,
+    bool isHistoryEnabled = true,
   }) {
     final editor = Editor(
       editables: {Editor.documentKey: document, Editor.composerKey: composer},
@@ -85,6 +98,31 @@ class _MyHomePageState extends State<MyHomePage> {
     );
 
     return editor;
+  }
+
+  Future<void> _insertImage() async {
+    /// todo 这里还需要分选中和不选中空白的情况
+    final XFile? image = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+    );
+    if (image == null) return;
+
+    final path = image.path;
+
+    final endId = _docEditor.composer.selection?.end.nodeId ?? '';
+    if (endId.isEmpty) {
+      return;
+    }
+    final imageNode = ImageNode(
+      id: Editor.createNodeId(),
+      imageUrl: path,
+      altText: '示例图片',
+    );
+    _docEditor.document.insertNodeAfter(
+      existingNodeId: endId,
+      newNode: imageNode,
+    );
+    setState(() {});
   }
 
   MutableDocument _createDocument() {
@@ -101,6 +139,11 @@ class _MyHomePageState extends State<MyHomePage> {
             'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus sed sagittis urna. Aenean mattis ante justo, quis sollicitudin metus interdum id. Aenean ornare urna ac enim consequat mollis. In aliquet convallis efficitur. Phasellus convallis purus in fringilla scelerisque. Ut ac orci a turpis egestas lobortis. Morbi aliquam dapibus sem, vitae sodales arcu ultrices eu. Duis vulputate mauris quam, eleifend pulvinar quam blandit eget.',
           ),
         ),
+        ImageNode(
+          id: Editor.createNodeId(),
+          imageUrl: '/Users/fom8520/Downloads/1.webp',
+          expectedBitmapSize: ExpectedSize(200, 200),
+        ),
       ],
     );
   }
@@ -114,16 +157,55 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
+            Container(
+              height: 310,
+              decoration: BoxDecoration(
+                border: _hasFocus
+                    ? Border.all(
+                        color: Colors.blue, // 边框颜色
+                        width: 1, // 边框宽度
+                        style: BorderStyle.solid, // 边框样式（实线）
+                      )
+                    : null,
+                borderRadius: BorderRadius.circular(8.0), // 圆角半径
+              ),
+              child: Center(
+                child: SuperEditor(
+                  editor: _docEditor,
+                  focusNode: _focusNode,
+                  inputSource: TextInputSource.ime,
+                  stylesheet: defaultStylesheet.copyWith(
+                    documentPadding: const EdgeInsets.symmetric(
+                      vertical: 0,
+                      horizontal: 0,
+                    ),
+                  ),
+                  componentBuilders: [
+                    BlockquoteComponentBuilder(),
+                    ParagraphComponentBuilder(),
+                    ListItemComponentBuilder(),
+                    CustomerImageComponentBuilder(),
+                    HorizontalRuleComponentBuilder(),
+                  ],
+                ),
+              ),
+            ),
             Expanded(
-              child: SuperEditor(
-                editor: _docEditor,
-                inputSource: TextInputSource.ime,
-                stylesheet: defaultStylesheet.copyWith(
-                  documentPadding: const EdgeInsets.symmetric(
-                    vertical: 56,
-                    horizontal: 24,
+              child: GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onTap: () {
+                  _focusNode.unfocus();
+                },
+                child: SizedBox.expand(
+                  child: Center(
+                    child: TextButton(
+                      onPressed: () async {
+                        await _insertImage();
+                      },
+                      child: Text('添加图片'),
+                    ),
                   ),
                 ),
               ),
