@@ -111,26 +111,20 @@ class _MyHomePageState extends State<MyHomePage> {
     return editor;
   }
 
-  void _bold(){
-_docEditor.execute([
-      InsertImageCommandRequest(
-        url: path,
-        expectedSize: ExpectedSize(100, 100),
-      ),
+  void _bold() {
+    _docEditor.execute([
+      // InsertImageCommandRequest(
+      //   url: path,
+      //   expectedSize: ExpectedSize(100, 100),
+      // ),
     ]);
   }
 
-   void _Italic(){
+  void _Italic() {}
 
-  }
+  void _Delete() {}
 
-  void _Delete(){
-
-  }
-
-  void _UnderLine(){
-    
-  }
+  void _UnderLine() {}
 
   Future<void> _insertImage() async {
     /// todo 这里还需要分选中和不选中空白的情况
@@ -223,30 +217,10 @@ _docEditor.execute([
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      TextButton(
-                        onPressed: () async {
-                        
-                        },
-                        child: Text('B'),
-                      ),
-                      TextButton(
-                        onPressed: () async {
-                         
-                        },
-                        child: Text('I'),
-                      ),
-                      TextButton(
-                        onPressed: () async {
-                          
-                        },
-                        child: Text('D'),
-                      ),
-                      TextButton(
-                        onPressed: () async {
-                         
-                        },
-                        child: Text('U'),
-                      ),
+                      TextButton(onPressed: () async {}, child: Text('B')),
+                      TextButton(onPressed: () async {}, child: Text('I')),
+                      TextButton(onPressed: () async {}, child: Text('D')),
+                      TextButton(onPressed: () async {}, child: Text('U')),
                       TextButton(
                         onPressed: () async {
                           await _insertImage();
