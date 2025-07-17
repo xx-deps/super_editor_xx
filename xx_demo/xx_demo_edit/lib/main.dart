@@ -112,19 +112,71 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _bold() {
+    final selection = _docEditor.composer.selection;
+    if (selection == null) {
+      return;
+    }
+
+    //     /// Bold style attribution.
+    // const boldAttribution = NamedAttribution('bold');
+
+    // /// Italics style attribution.
+    // const italicsAttribution = NamedAttribution('italics');
+
+    // /// Underline style attribution.
+    // const underlineAttribution = NamedAttribution('underline');
+
+    // /// Strikethrough style attribution.
+    // const strikethroughAttribution = NamedAttribution('strikethrough');
     _docEditor.execute([
-      // InsertImageCommandRequest(
-      //   url: path,
-      //   expectedSize: ExpectedSize(100, 100),
-      // ),
+      ToggleTextAttributionsRequest(
+        attributions: {NamedAttribution('bold')},
+        documentRange: selection,
+      ),
     ]);
   }
 
-  void _Italic() {}
+  void _italic() {
+    final selection = _docEditor.composer.selection;
+    if (selection == null) {
+      return;
+    }
 
-  void _Delete() {}
+    _docEditor.execute([
+      ToggleTextAttributionsRequest(
+        attributions: {NamedAttribution('italics')},
+        documentRange: selection,
+      ),
+    ]);
+  }
 
-  void _UnderLine() {}
+  void _delete() {
+    final selection = _docEditor.composer.selection;
+    if (selection == null) {
+      return;
+    }
+
+    _docEditor.execute([
+      ToggleTextAttributionsRequest(
+        attributions: {NamedAttribution('strikethrough')},
+        documentRange: selection,
+      ),
+    ]);
+  }
+
+  void _underLine() {
+    final selection = _docEditor.composer.selection;
+    if (selection == null) {
+      return;
+    }
+
+    _docEditor.execute([
+      ToggleTextAttributionsRequest(
+        attributions: {NamedAttribution('underline')},
+        documentRange: selection,
+      ),
+    ]);
+  }
 
   Future<void> _insertImage() async {
     /// todo 这里还需要分选中和不选中空白的情况
@@ -217,10 +269,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      TextButton(onPressed: () async {}, child: Text('B')),
-                      TextButton(onPressed: () async {}, child: Text('I')),
-                      TextButton(onPressed: () async {}, child: Text('D')),
-                      TextButton(onPressed: () async {}, child: Text('U')),
+                      TextButton(onPressed: _bold, child: Text('B')),
+                      TextButton(onPressed: _italic, child: Text('I')),
+                      TextButton(onPressed: _delete, child: Text('D')),
+                      TextButton(onPressed: _underLine, child: Text('U')),
                       TextButton(
                         onPressed: () async {
                           await _insertImage();
