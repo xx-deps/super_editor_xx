@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:super_editor/super_editor.dart';
+import 'package:xx_demo_edit/customer_command.dart';
+import 'package:xx_demo_edit/customer_image_builder.dart';
 
 void main() {
   runApp(const MyApp());
@@ -54,69 +58,240 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  late MutableDocument _doc;
+  late MutableDocumentComposer _composer;
+  late Editor _docEditor;
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+  late FocusNode _focusNode;
+
+  late final StableTagPlugin _userTagPlugin;
+
+  late final ActionTagsPlugin _actionTagsPlugin;
+
+  bool _hasFocus = false;
+
+  @override
+  void initState() {
+    _focusNode = FocusNode();
+    _focusNode.addListener(() {
+      print('_focusNode:${_focusNode.hasFocus}');
+      _hasFocus = _focusNode.hasFocus;
+      setState(() {});
     });
+
+    _doc = _createDocument();
+    _composer = MutableDocumentComposer();
+    _docEditor = createDefaultDocumentEditor(
+      document: _doc,
+      composer: _composer,
+    );
+
+    
+    _userTagPlugin = StableTagPlugin()
+      ..tagIndex.composingStableTag.addListener(() {
+        print(_userTagPlugin.tagIndex.composingStableTag.value);
+      })
+      ..tagIndex.addListener(() {
+        print(_userTagPlugin.tagIndex.composingStableTag.value);
+      });
+
+    _composer.addListener(() {
+      print(_userTagPlugin.tagIndex.composingStableTag.value);
+    });
+
+    _actionTagsPlugin = ActionTagsPlugin();
+
+    super.initState();
+  }
+
+  Editor createDefaultDocumentEditor({
+    required MutableDocument document,
+    required MutableDocumentComposer composer,
+    HistoryGroupingPolicy historyGroupingPolicy = defaultMergePolicy,
+    bool isHistoryEnabled = true,
+  }) {
+    final editor = Editor(
+      editables: {Editor.documentKey: document, Editor.composerKey: composer},
+      requestHandlers: [
+        ///添加命令
+        ...List.from(defaultRequestHandlers),
+        (editor, request) => request is InsertImageCommandRequest
+            ? InsertImageCommand(
+                url: request.url,
+                expectedSize: request.expectedSize,
+              )
+            : null,
+      ],
+      historyGroupingPolicy: historyGroupingPolicy,
+      reactionPipeline: List.from(defaultEditorReactions),
+      isHistoryEnabled: isHistoryEnabled,
+    );
+
+    return editor;
+  }
+
+  void _bold() {
+    final selection = _docEditor.composer.selection;
+    if (selection == null) {
+      return;
+    }
+
+    _docEditor.execute([
+      ToggleTextAttributionsRequest(
+        attributions: {NamedAttribution('bold')},
+        documentRange: selection,
+      ),
+    ]);
+  }
+
+  void _italic() {
+    final selection = _docEditor.composer.selection;
+    if (selection == null) {
+      return;
+    }
+
+    _docEditor.execute([
+      ToggleTextAttributionsRequest(
+        attributions: {NamedAttribution('italics')},
+        documentRange: selection,
+      ),
+    ]);
+  }
+
+  void _delete() {
+    final selection = _docEditor.composer.selection;
+    if (selection == null) {
+      return;
+    }
+
+    _docEditor.execute([
+      ToggleTextAttributionsRequest(
+        attributions: {NamedAttribution('strikethrough')},
+        documentRange: selection,
+      ),
+    ]);
+  }
+
+  void _underLine() {
+    final selection = _docEditor.composer.selection;
+    if (selection == null) {
+      return;
+    }
+
+    _docEditor.execute([
+      ToggleTextAttributionsRequest(
+        attributions: {NamedAttribution('underline')},
+        documentRange: selection,
+      ),
+    ]);
+  }
+
+  Future<void> _insertImage() async {
+    /// todo 这里还需要分选中和不选中空白的情况
+    final XFile? image = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+    );
+
+    if (image == null) return;
+    final path = image.path;
+
+    if (path.isEmpty) return;
+
+    _docEditor.execute([InsertImageCommandRequest(url: path)]);
+  }
+
+  MutableDocument _createDocument() {
+    return MutableDocument(
+      nodes: [
+        ParagraphNode(
+          id: Editor.createNodeId(),
+          text: AttributedText('Document #1'),
+          metadata: {'blockType': header1Attribution},
+        ),
+        ParagraphNode(
+          id: Editor.createNodeId(),
+          text: AttributedText(
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus sed sagittis urna. Aenean mattis ante justo, quis sollicitudin metus interdum id. Aenean ornare urna ac enim consequat mollis. In aliquet convallis efficitur. Phasellus convallis purus in fringilla scelerisque. Ut ac orci a turpis egestas lobortis. Morbi aliquam dapibus sem, vitae sodales arcu ultrices eu. Duis vulputate mauris quam, eleifend pulvinar quam blandit eget.',
+          ),
+        ),
+      ],
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
       body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
         child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+            Container(
+              height: 600,
+              decoration: BoxDecoration(
+                border: _hasFocus
+                    ? Border.all(
+                        color: Colors.blue, // 边框颜色
+                        width: 1, // 边框宽度
+                        style: BorderStyle.solid, // 边框样式（实线）
+                      )
+                    : null,
+                borderRadius: BorderRadius.circular(8.0), // 圆角半径
+              ),
+              child: Center(
+                child: SuperEditor(
+                  editor: _docEditor,
+                  focusNode: _focusNode,
+                  inputSource: TextInputSource.ime,
+                  stylesheet: defaultStylesheet.copyWith(
+                    documentPadding: const EdgeInsets.symmetric(
+                      vertical: 0,
+                      horizontal: 0,
+                    ),
+                  ),
+                  componentBuilders: [
+                    BlockquoteComponentBuilder(),
+                    ParagraphComponentBuilder(),
+                    ListItemComponentBuilder(),
+                    CustomerImageComponentBuilder(),
+                    HorizontalRuleComponentBuilder(),
+                  ],
+
+                  plugins: {_userTagPlugin},
+                ),
+              ),
+            ),
+            Expanded(
+              child: GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onTap: () {
+                  _focusNode.unfocus();
+                },
+                child: SizedBox.expand(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      TextButton(onPressed: _bold, child: Text('B')),
+                      TextButton(onPressed: _italic, child: Text('I')),
+                      TextButton(onPressed: _delete, child: Text('D')),
+                      TextButton(onPressed: _underLine, child: Text('U')),
+                      TextButton(
+                        onPressed: () async {
+                          await _insertImage();
+                        },
+                        child: Text('添加图片'),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
