@@ -25,7 +25,6 @@ class _UserTagsFeatureDemoState extends State<UserTagsFeatureDemo> {
   @override
   void initState() {
     super.initState();
-
     _document = MutableDocument.empty();
     _composer = MutableDocumentComposer();
     _editor = Editor(
@@ -61,6 +60,7 @@ class _UserTagsFeatureDemoState extends State<UserTagsFeatureDemo> {
   }
 
   void _updateUserTagList() {
+    print(_userTagPlugin.tagIndex.composingStableTag.value);
     setState(() {
       _users.clear();
 

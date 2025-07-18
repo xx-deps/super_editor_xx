@@ -64,6 +64,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   late FocusNode _focusNode;
 
+  late final StableTagPlugin _userTagPlugin;
+
+  late final ActionTagsPlugin _actionTagsPlugin;
+
   bool _hasFocus = false;
 
   @override
@@ -81,6 +85,21 @@ class _MyHomePageState extends State<MyHomePage> {
       document: _doc,
       composer: _composer,
     );
+
+    
+    _userTagPlugin = StableTagPlugin()
+      ..tagIndex.composingStableTag.addListener(() {
+        print(_userTagPlugin.tagIndex.composingStableTag.value);
+      })
+      ..tagIndex.addListener(() {
+        print(_userTagPlugin.tagIndex.composingStableTag.value);
+      });
+
+    _composer.addListener(() {
+      print(_userTagPlugin.tagIndex.composingStableTag.value);
+    });
+
+    _actionTagsPlugin = ActionTagsPlugin();
 
     super.initState();
   }
@@ -117,17 +136,6 @@ class _MyHomePageState extends State<MyHomePage> {
       return;
     }
 
-    //     /// Bold style attribution.
-    // const boldAttribution = NamedAttribution('bold');
-
-    // /// Italics style attribution.
-    // const italicsAttribution = NamedAttribution('italics');
-
-    // /// Underline style attribution.
-    // const underlineAttribution = NamedAttribution('underline');
-
-    // /// Strikethrough style attribution.
-    // const strikethroughAttribution = NamedAttribution('strikethrough');
     _docEditor.execute([
       ToggleTextAttributionsRequest(
         attributions: {NamedAttribution('bold')},
@@ -189,12 +197,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     if (path.isEmpty) return;
 
-    _docEditor.execute([
-      InsertImageCommandRequest(
-        url: path,
-        expectedSize: ExpectedSize(100, 100),
-      ),
-    ]);
+    _docEditor.execute([InsertImageCommandRequest(url: path)]);
   }
 
   MutableDocument _createDocument() {
@@ -256,6 +259,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     CustomerImageComponentBuilder(),
                     HorizontalRuleComponentBuilder(),
                   ],
+
+                  plugins: {_userTagPlugin},
                 ),
               ),
             ),
