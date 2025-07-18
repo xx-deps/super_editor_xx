@@ -25,8 +25,8 @@ class _UserTagsFeatureDemoState extends State<UserTagsFeatureDemo> {
   @override
   void initState() {
     super.initState();
-    _document = MutableDocument.empty();
     
+    _document = MutableDocument.empty();
     _composer = MutableDocumentComposer();
     _editor = Editor(
       editables: {
