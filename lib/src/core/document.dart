@@ -453,6 +453,8 @@ abstract class DocumentNode {
   /// metadata with [newMetadata].
   DocumentNode copyAndReplaceMetadata(Map<String, dynamic> newMetadata);
 
+  DocumentNode copyWithNewId(String id);
+
   /// Returns a copy of this node's metadata.
   Map<String, dynamic> copyMetadata() => Map.from(_metadata);
 

@@ -1,0 +1,6 @@
+# melos_managed_dependency_overrides: attributed_text,golden_runner
+dependency_overrides:
+  attributed_text:
+    path: ../attributed_text
+  golden_runner:
+    path: ../golden_runner
