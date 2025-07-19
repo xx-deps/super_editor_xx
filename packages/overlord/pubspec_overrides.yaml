@@ -1,0 +1,4 @@
+# melos_managed_dependency_overrides: follow_the_leader
+dependency_overrides:
+  follow_the_leader:
+    path: ../follow_the_leader

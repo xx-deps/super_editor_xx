@@ -26,11 +26,11 @@ import 'package:super_editor/src/infrastructure/keyboard.dart';
 import 'package:super_editor/src/infrastructure/strings.dart';
 import 'package:super_text_layout/super_text_layout.dart';
 
-import 'layout_single_column/layout_single_column.dart';
-import 'multi_node_editing.dart';
-import 'paragraph.dart';
-import 'selection_upstream_downstream.dart';
-import 'text_tools.dart';
+import 'package:super_editor/src/default_editor/layout_single_column/layout_single_column.dart';
+import 'package:super_editor/src/default_editor/multi_node_editing.dart';
+import 'package:super_editor/src/default_editor/paragraph.dart';
+import 'package:super_editor/src/default_editor/selection_upstream_downstream.dart';
+import 'package:super_editor/src/default_editor/text_tools.dart';
 
 @immutable
 class TextNode extends DocumentNode {
@@ -184,6 +184,11 @@ class TextNode extends DocumentNode {
     return copyTextNodeWith(
       metadata: {...metadata, ...newProperties},
     );
+  }
+
+  @override
+  DocumentNode copyWithNewId(String id) {
+    return copyTextNodeWith(id: id);
   }
 
   TextNode copy() {

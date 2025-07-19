@@ -29,6 +29,11 @@ class UpsellNode extends BlockNode {
   }
 
   @override
+  DocumentNode copyWithNewId(String id) {
+    return UpsellNode(id);
+  }
+
+  @override
   String? copyContent(NodeSelection selection) {
     return null;
   }

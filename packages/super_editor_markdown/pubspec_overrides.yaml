@@ -1,0 +1,6 @@
+# melos_managed_dependency_overrides: attributed_text,flutter_test_robots
+dependency_overrides:
+  attributed_text:
+    path: ../attributed_text
+  flutter_test_robots:
+    path: ../flutter_test_robots

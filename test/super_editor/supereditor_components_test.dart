@@ -228,4 +228,9 @@ class _UnknownNode extends BlockNode {
   _UnknownNode copy() {
     return _UnknownNode(id: id);
   }
+
+  @override
+  DocumentNode copyWithNewId(String id) {
+    return _UnknownNode(id: id);
+  }
 }
