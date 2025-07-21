@@ -398,7 +398,7 @@ class TagUserReaction extends EditReaction {
 
     // Run tag commits after updating tags, above, so that we don't commit an in-progress
     // tag when a new character is added to the end of the tag.
-    _commitCompletedComposingTag(editContext, requestDispatcher, changeList);
+    // _commitCompletedComposingTag(editContext, requestDispatcher, changeList);
 
     _updateTagIndex(editContext, changeList);
   }

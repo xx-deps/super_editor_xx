@@ -3,6 +3,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:super_editor/super_editor.dart';
 import 'package:xx_demo_edit/customer_command.dart';
 import 'package:xx_demo_edit/customer_image_builder.dart';
+import 'package:xx_demo_edit/mention_overlay.dart';
 
 void main() {
   runApp(const MyApp());
@@ -66,9 +67,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   late final StableTagPlugin _userTagPlugin;
 
-  late final ActionTagsPlugin _actionTagsPlugin;
-
   bool _hasFocus = false;
+
+  final _composingLink = LeaderLink();
 
   @override
   void initState() {
@@ -80,28 +81,22 @@ class _MyHomePageState extends State<MyHomePage> {
     });
 
     _doc = _createDocument();
-    _composer = MutableDocumentComposer();
+    _composer = MutableDocumentComposer()..addListener(() {});
     _docEditor = createDefaultDocumentEditor(
       document: _doc,
       composer: _composer,
     );
 
-    
     _userTagPlugin = StableTagPlugin()
-      ..tagIndex.composingStableTag.addListener(() {
-        print(_userTagPlugin.tagIndex.composingStableTag.value);
-      })
-      ..tagIndex.addListener(() {
-        print(_userTagPlugin.tagIndex.composingStableTag.value);
-      });
-
-    _composer.addListener(() {
-      print(_userTagPlugin.tagIndex.composingStableTag.value);
-    });
-
-    _actionTagsPlugin = ActionTagsPlugin();
+      ..tagIndex.composingStableTag.addListener(onTagChange)
+      ..tagIndex.addListener(onTagChange);
 
     super.initState();
+  }
+
+  void onTagChange() {
+    print('_userTagPlugin:${_userTagPlugin.tagIndex.composingStableTag.value}');
+    setState(() {});
   }
 
   Editor createDefaultDocumentEditor({
@@ -226,69 +221,124 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              height: 600,
-              decoration: BoxDecoration(
-                border: _hasFocus
-                    ? Border.all(
-                        color: Colors.blue, // 边框颜色
-                        width: 1, // 边框宽度
-                        style: BorderStyle.solid, // 边框样式（实线）
-                      )
-                    : null,
-                borderRadius: BorderRadius.circular(8.0), // 圆角半径
-              ),
-              child: Center(
-                child: SuperEditor(
-                  editor: _docEditor,
-                  focusNode: _focusNode,
-                  inputSource: TextInputSource.ime,
-                  stylesheet: defaultStylesheet.copyWith(
-                    documentPadding: const EdgeInsets.symmetric(
-                      vertical: 0,
-                      horizontal: 0,
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    height: 600,
+                    decoration: BoxDecoration(
+                      border: _hasFocus
+                          ? Border.all(
+                              color: Colors.blue, // 边框颜色
+                              width: 1, // 边框宽度
+                              style: BorderStyle.solid, // 边框样式（实线）
+                            )
+                          : null,
+                      borderRadius: BorderRadius.circular(8.0), // 圆角半径
+                    ),
+                    child: Center(
+                      child: SuperEditor(
+                        editor: _docEditor,
+                        focusNode: _focusNode,
+                        inputSource: TextInputSource.ime,
+                        stylesheet: defaultStylesheet.copyWith(
+                          documentPadding: const EdgeInsets.symmetric(
+                            vertical: 0,
+                            horizontal: 0,
+                          ),
+                          inlineTextStyler: (attributions, existingStyle) {
+                            TextStyle style = defaultInlineTextStyler(
+                              attributions,
+                              existingStyle,
+                            );
+                            if (attributions
+                                .whereType<CommittedStableTagAttribution>()
+                                .isNotEmpty) {
+                              style = style.copyWith(color: Colors.orange);
+                            }
+                            return style;
+                          },
+                        ),
+                        componentBuilders: [
+                          // BlockquoteComponentBuilder(),
+                          ParagraphComponentBuilder(),
+                          // ListItemComponentBuilder(),
+                          CustomerImageComponentBuilder(),
+                          // HorizontalRuleComponentBuilder(),
+                        ],
+
+                        plugins: {_userTagPlugin},
+                        documentOverlayBuilders: [
+                          DefaultCaretOverlayBuilder(),
+                          // MentionOverlayBuilder(showDebugTag: true),
+                          AttributedTextBoundsOverlay(
+                            selector: (a) => a == stableTagComposingAttribution,
+                            builder: (context, attribution) {
+                              return Leader(
+                                link: _composingLink,
+                                child: const SizedBox(),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                  componentBuilders: [
-                    BlockquoteComponentBuilder(),
-                    ParagraphComponentBuilder(),
-                    ListItemComponentBuilder(),
-                    CustomerImageComponentBuilder(),
-                    HorizontalRuleComponentBuilder(),
-                  ],
-
-                  plugins: {_userTagPlugin},
-                ),
+                  Expanded(
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () {
+                        _focusNode.unfocus();
+                      },
+                      child: SizedBox.expand(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            TextButton(onPressed: _bold, child: Text('B')),
+                            TextButton(onPressed: _italic, child: Text('I')),
+                            TextButton(onPressed: _delete, child: Text('D')),
+                            TextButton(onPressed: _underLine, child: Text('U')),
+                            TextButton(
+                              onPressed: () async {
+                                await _insertImage();
+                              },
+                              child: Text('添加图片'),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-            Expanded(
-              child: GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                onTap: () {
-                  _focusNode.unfocus();
-                },
-                child: SizedBox.expand(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      TextButton(onPressed: _bold, child: Text('B')),
-                      TextButton(onPressed: _italic, child: Text('I')),
-                      TextButton(onPressed: _delete, child: Text('D')),
-                      TextButton(onPressed: _underLine, child: Text('U')),
-                      TextButton(
-                        onPressed: () async {
-                          await _insertImage();
-                        },
-                        child: Text('添加图片'),
-                      ),
-                    ],
+            if (_userTagPlugin.tagIndex.composingStableTag.value != null)
+              Follower.withOffset(
+                link: _composingLink,
+                offset: Offset(0, 16),
+                leaderAnchor: Alignment.bottomCenter,
+                followerAnchor: Alignment.topCenter,
+                showWhenUnlinked: false,
+                child: GestureDetector(
+                  onTap: () {
+                    _docEditor.execute([
+                      FillInComposingStableTagRequest('你好哦', userTagRule),
+                    ]);
+                    final markdown = serializeDocumentToMarkdown(
+                      _docEditor.document,
+                    );
+                    print(markdown);
+                  },
+                  child: Container(
+                    height: 300,
+                    width: 300,
+                    color: Colors.yellow,
                   ),
                 ),
               ),
-            ),
           ],
         ),
       ),
