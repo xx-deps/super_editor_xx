@@ -121,6 +121,11 @@ class UrlMediaNode extends BlockNode {
     );
   }
 
+  @override
+  DocumentNode copyWithNewId(String id) {
+    return copyUrlMediaWith(id: id);
+  }
+
   DocumentNode copy() {
     return UrlMediaNode(
       id: id,

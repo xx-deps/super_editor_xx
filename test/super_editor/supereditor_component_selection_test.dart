@@ -676,6 +676,11 @@ class _ButtonNode extends BlockNode {
 
   @override
   int get hashCode => id.hashCode;
+
+  @override
+  DocumentNode copyWithNewId(String id) {
+    return _ButtonNode(id: id);
+  }
 }
 
 class _ButtonViewModel extends SingleColumnLayoutComponentViewModel with SelectionAwareViewModelMixin {

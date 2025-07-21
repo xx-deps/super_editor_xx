@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:super_editor/src/default_editor/layout_single_column/selection_aware_viewmodel.dart';
 import 'package:super_editor/src/default_editor/selection_upstream_downstream.dart';
 
-import '../core/document.dart';
-import 'box_component.dart';
-import 'layout_single_column/layout_single_column.dart';
+import 'package:super_editor/src/core/document.dart';
+import 'package:super_editor/src/default_editor/box_component.dart';
+import 'package:super_editor/src/default_editor/layout_single_column/layout_single_column.dart';
 
 /// [DocumentNode] for a horizontal rule, which represents a full-width
 /// horizontal separation in a document.
@@ -49,6 +49,16 @@ class HorizontalRuleNode extends BlockNode {
   @override
   DocumentNode copyAndReplaceMetadata(Map<String, dynamic> newMetadata) {
     return HorizontalRuleNode(id: id, metadata: newMetadata);
+  }
+
+  @override
+  DocumentNode copyWithNewId(String id) {
+    return HorizontalRuleNode(
+      id: id,
+      metadata: {
+        ...metadata,
+      },
+    );
   }
 
   @override
