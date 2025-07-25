@@ -4,7 +4,7 @@ enum MarkdownSyntax {
 
   /// Extended syntax which supports serialization of text alignment, strikethrough, underline and image size.
   ///
-  /// Underline text is serialized between a pair of `¬`.
+  /// Underline text is serialized between a pair of `<u>`.
   ///
   /// Text alignment is serialized using an alignment notation at the
   /// line preceding the paragraph:

@@ -7,6 +7,87 @@ import 'package:super_editor_markdown/super_editor_markdown.dart';
 
 import 'super_editor_syntax.dart';
 
+/// 不管是空行还是非空行，都保留一个段落
+/// A [BlockSyntax] that treats every line as a separate paragraph,
+/// including empty lines.
+class _LinePreservingParagraphSyntax extends md.BlockSyntax {
+  const _LinePreservingParagraphSyntax();
+
+  @override
+  RegExp get pattern => RegExp(r'.*'); // 匹配任意一行，空或非空
+
+  @override
+  bool canParse(md.BlockParser parser) => true;
+
+  @override
+  bool canEndBlock(md.BlockParser parser) => true;
+
+  @override
+  md.Node? parse(md.BlockParser parser) {
+    final content = parser.current.content;
+    parser.advance();
+
+    // 如果是空行，也要保留一个空段落
+    return md.Element('p', [md.Text(content)]);
+  }
+}
+
+/// 专门用来内部粘贴保留markdown格式用的
+MutableDocument deserializeMarkdownToDocumentForPaste(
+  String markdown, {
+  MarkdownSyntax syntax = MarkdownSyntax.superEditor,
+  List<md.BlockSyntax> customBlockSyntax = const [],
+  List<ElementToNodeConverter> customElementToNodeConverters = const [],
+  bool encodeHtml = false,
+}) {
+  final markdownLines = const LineSplitter().convert(markdown).map<md.Line>((String l) {
+    return md.Line(l);
+  }).toList();
+
+  final markdownDoc = md.Document(
+    encodeHtml: encodeHtml,
+    blockSyntaxes: [
+      ...customBlockSyntax,
+      if (syntax == MarkdownSyntax.superEditor) ...[
+        _HeaderWithAlignmentSyntax(),
+        const _LinePreservingParagraphSyntax(),
+      ],
+      const md.UnorderedListWithCheckboxSyntax(),
+    ],
+  );
+  final blockParser = md.BlockParser(markdownLines, markdownDoc);
+
+  // Parse markdown string to structured markdown.
+  final markdownNodes = blockParser.parseLines();
+
+  // Convert structured markdown to a Document.
+  final nodeVisitor = _MarkdownToDocument(customElementToNodeConverters, encodeHtml, syntax);
+  for (final node in markdownNodes) {
+    node.accept(nodeVisitor);
+  }
+
+  final documentNodes = nodeVisitor.content;
+
+  if (documentNodes.isEmpty) {
+    // An empty markdown was parsed.
+    // For the user to be able to interact with the editor, at least one
+    // node is required, so we add an empty paragraph.
+    documentNodes.add(
+      ParagraphNode(id: Editor.createNodeId(), text: AttributedText()),
+    );
+  }
+
+  // Add 1 hanging line for every 2 blank lines at the end, need this to preserve behavior pre markdown 7.2.1
+  final hangingEmptyLines = markdownLines.reversed.takeWhile((md.Line l) => l.isBlankLine);
+  if (hangingEmptyLines.isNotEmpty && documentNodes.lastOrNull is ListItemNode) {
+    for (var i = 0; i < hangingEmptyLines.length ~/ 2; i++) {
+      documentNodes.add(ParagraphNode(id: Editor.createNodeId(), text: AttributedText()));
+    }
+  }
+
+  return MutableDocument(nodes: documentNodes);
+}
+
 /// Parses the given [markdown] and deserializes it into a [MutableDocument].
 ///
 /// The given [syntax] controls how the [markdown] is parsed, e.g., [MarkdownSyntax.normal]
@@ -546,7 +627,7 @@ abstract class ElementToNodeConverter {
 }
 
 /// A Markdown [DelimiterSyntax] that matches underline spans of text, which are represented in
-/// Markdown with surrounding `¬` tags, e.g., "this is ¬underline¬ text".
+/// Markdown with surrounding `<u>` tags, e.g., "this is <u>underline<u> text".
 ///
 /// This [DelimiterSyntax] produces `Element`s with a `u` tag.
 class UnderlineSyntax extends md.DelimiterSyntax {
@@ -562,7 +643,7 @@ class UnderlineSyntax extends md.DelimiterSyntax {
   /// https://github.com/dart-lang/markdown/blob/d53feae0760a4f0aae5ffdfb12d8e6acccf14b40/lib/src/inline_syntaxes/delimiter_syntax.dart#L319
   static final _tags = [md.DelimiterTag("u", 1)];
 
-  UnderlineSyntax() : super('¬', requiresDelimiterRun: true, allowIntraWord: true, tags: _tags);
+  UnderlineSyntax() : super('<u>', requiresDelimiterRun: true, allowIntraWord: true, tags: _tags);
 
   @override
   Iterable<md.Node>? close(

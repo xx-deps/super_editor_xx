@@ -1,3 +1,5 @@
+library super_editor_markdown;
+
 export 'src/document_to_markdown_serializer.dart';
 export 'src/markdown_inline_upstream_plugin.dart';
 export 'src/markdown_to_attributed_text_parsing.dart';
