@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:attributed_text/attributed_text.dart';
 import 'package:flutter/foundation.dart' show ValueListenable, defaultTargetPlatform;
 import 'package:flutter/material.dart' hide SelectableText;
@@ -397,7 +399,7 @@ class SuperEditorState extends State<SuperEditor> {
   // including the cases where SuperEditor controls an ancestor Scrollable.
   final _scrollChangeSignal = SignalNotifier();
 
-  // @visibleForTesting
+  @visibleForTesting
   late SuperEditorContext editContext;
 
   List<ContentTapDelegate>? _contentTapHandlers;
@@ -426,6 +428,8 @@ class SuperEditorState extends State<SuperEditor> {
   late SoftwareKeyboardController _softwareKeyboardController;
 
   late ValueNotifier<bool> _isImeConnected;
+
+  late StreamSubscription _streamSubscription;
 
   @override
   void initState() {
@@ -462,6 +466,8 @@ class SuperEditorState extends State<SuperEditor> {
 
     _createEditContext();
     _createLayoutPresenter();
+
+    _streamSubscription = widget.editor.customEventStream.listen(_handleCustomEvent);
   }
 
   @override
@@ -502,6 +508,8 @@ class SuperEditorState extends State<SuperEditor> {
 
       _createEditContext();
       _createLayoutPresenter();
+      _streamSubscription.cancel();
+      _streamSubscription = widget.editor.customEventStream.listen(_handleCustomEvent);
     } else {
       if (widget.selectionStyles != oldWidget.selectionStyles) {
         _docLayoutSelectionStyler.selectionStyles = widget.selectionStyles;
@@ -528,6 +536,7 @@ class SuperEditorState extends State<SuperEditor> {
 
   @override
   void dispose() {
+    _streamSubscription.cancel();
     if (_contentTapHandlers != null) {
       for (final handler in _contentTapHandlers!) {
         handler.dispose();
@@ -544,7 +553,6 @@ class SuperEditorState extends State<SuperEditor> {
       // We are using our own private FocusNode. Dispose it.
       _focusNode.dispose();
     }
-
     super.dispose();
   }
 
@@ -581,6 +589,14 @@ class SuperEditorState extends State<SuperEditor> {
       }
     }
     _contentTapHandlers = widget.contentTapDelegateFactories?.map((factory) => factory.call(editContext)).toList();
+  }
+
+  void _handleCustomEvent(CustomEditorEvent event) {
+    if (event == CustomEditorEvent.copy) {
+      editContext.commonOps.copy();
+    } else if (event == CustomEditorEvent.paste) {
+      editContext.commonOps.paste();
+    }
   }
 
   void _createLayoutPresenter() {
