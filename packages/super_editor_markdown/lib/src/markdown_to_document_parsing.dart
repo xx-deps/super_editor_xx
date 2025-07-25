@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:markdown/markdown.dart' as md;
 import 'package:super_editor/super_editor.dart';
@@ -243,18 +244,18 @@ class _MarkdownToDocument implements md.NodeVisitor {
         break;
       case 'p':
         final inlineVisitor = _parseInline(element.textContent);
-
+        final size = _parseSizeFromImageName(inlineVisitor.imageAltText ?? '');
         if (inlineVisitor.isImage) {
           _addImage(
             // TODO: handle null image URL
             imageUrl: inlineVisitor.imageUrl!,
             altText: inlineVisitor.imageAltText!,
-            expectedBitmapSize: inlineVisitor.width != null || inlineVisitor.height != null
-                ? ExpectedSize(
-                    inlineVisitor.width != null ? int.tryParse(inlineVisitor.width!) : null,
-                    inlineVisitor.height != null ? int.tryParse(inlineVisitor.height!) : null,
-                  )
-                : null,
+            expectedBitmapSize: size == null
+                ? null
+                : ExpectedSize(
+                    size.width.toInt(),
+                    size.height.toInt(),
+                  ),
           );
         } else {
           _addParagraph(inlineVisitor.attributedText, element.attributes);
@@ -316,6 +317,23 @@ class _MarkdownToDocument implements md.NodeVisitor {
     }
 
     return true;
+  }
+
+  Size? _parseSizeFromImageName(String name) {
+    try {
+      final regex = RegExp(r'w(\d+)h(\d+)', caseSensitive: false);
+      final match = regex.firstMatch(name);
+      if (match != null) {
+        final width = double.tryParse(match.group(1)!);
+        final height = double.tryParse(match.group(2)!);
+        if (width != null && height != null) {
+          return Size(width, height);
+        }
+      }
+      return null;
+    } catch (err) {
+      return null;
+    }
   }
 
   @override
