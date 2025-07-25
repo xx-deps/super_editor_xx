@@ -3,7 +3,6 @@ import 'package:super_editor/super_editor.dart';
 
 import 'super_editor_syntax.dart';
 
-/// By Leazer
 /// Serializes the given [DocumentNode] to Markdown text.
 String serializeNodeToMarkdown(
   Document doc,
@@ -61,6 +60,7 @@ String serializeDocumentToMarkdown(
     const TaskNodeSerializer(),
     HeaderNodeSerializer(syntax),
     ParagraphNodeSerializer(syntax),
+    MentionNodeSerializer(),
   ];
 
   StringBuffer buffer = StringBuffer();
@@ -190,6 +190,17 @@ class ListItemNodeSerializer
       buffer.writeln('');
     }
 
+    return buffer.toString();
+  }
+}
+
+class MentionNodeSerializer
+    extends NodeTypedDocumentNodeMarkdownSerializer<TextNode> {
+  const MentionNodeSerializer();
+
+  @override
+  String doSerialization(Document document, TextNode node) {
+    final buffer = StringBuffer();
     return buffer.toString();
   }
 }
@@ -420,7 +431,7 @@ class AttributedTextMarkdownSerializer extends AttributionVisitor {
     } else if (attribution == strikethroughAttribution) {
       return '~';
     } else if (attribution == underlineAttribution) {
-      return '¬';
+      return '<u>';
     } else {
       return '';
     }

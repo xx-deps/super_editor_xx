@@ -1,6 +1,6 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
-export "FLUTTER_ROOT=/Users/oopz/fvm/versions/3.32.6"
+export "FLUTTER_ROOT=/Users/oopz/fvm/versions/3.32.7"
 export "FLUTTER_APPLICATION_PATH=/Users/oopz/Documents/oopzdev/super_editor_xx/packages/follow_the_leader/example"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
 export "FLUTTER_BUILD_DIR=build"

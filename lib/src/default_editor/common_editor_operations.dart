@@ -25,6 +25,8 @@ import 'package:super_editor/src/default_editor/image.dart';
 import 'package:super_editor/src/default_editor/multi_node_editing.dart';
 import 'package:super_editor/src/default_editor/text_tools.dart';
 
+import 'package:super_editor_markdown/super_editor_markdown.dart';
+
 /// Performs common, high-level editing and composition tasks
 /// with a simplified API.
 ///
@@ -2384,6 +2386,20 @@ class CommonEditorOperations {
         if (selectedNode is ImageNode) {
           markdownBuffer
               .write('![${selectedNode.altText}](${selectedNode.imageUrl})');
+        } else if (selectedNode is ParagraphNode &&
+            nodeSelection is TextNodeSelection) {
+          final fullText = selectedNode.text;
+          final start = nodeSelection.start;
+          final end = nodeSelection.end;
+
+          final normalizedStart = start < end ? start : end;
+          final normalizedEnd = start < end ? end : start;
+
+          final attributedSubstring = fullText
+              .copyTextInRange(SpanRange(normalizedStart, normalizedEnd));
+
+          final markdown = attributedSubstring.toMarkdown();
+          markdownBuffer.write(markdown);
         } else {
           markdownBuffer.write(nodeContent);
         }
@@ -2453,7 +2469,6 @@ class CommonEditorOperations {
     required DocumentPosition pastePosition,
   }) async {
     final content = (await Clipboard.getData('text/plain'))?.text ?? '';
-
     editor.execute([
       PasteEditorRequest(
         content: content,
@@ -2589,11 +2604,14 @@ class PasteEditorCommand extends EditCommand {
   }
 
   // MARK: 自定义粘贴的内容转化
+  // TODO: 实现更多markdown内容的解析
   List<DocumentNode> _parseContent() {
     // Split the pasted content at newlines, and apply attributions based
     // on inspection of the pasted content, e.g., link attributions.
-    final attributedLines = _inferAttributionsForLinesOfPastedText(_content);
-    final nodes = _convertLinesToParagraphs(attributedLines).toList();
+    // final attributedLines = _inferAttributionsForLinesOfPastedText(_content);
+    // final nodes = _convertLinesToParagraphs(attributedLines).toList();
+    final mutableDocument = deserializeMarkdownToDocumentForPaste(_content);
+    final List<DocumentNode> nodes = mutableDocument.nodes;
 
     /// 如果第一行是图片节点，前面需要添加一个空的段落节点，以实现截断换行
     if (nodes.isNotEmpty && nodes.first is ImageNode) {
