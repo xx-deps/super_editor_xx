@@ -13,6 +13,7 @@ import 'package:super_editor/src/core/document.dart';
 import 'package:super_editor/src/core/document_composer.dart';
 
 enum CustomEditorEvent {
+  cut,
   copy,
   paste,
 }
@@ -482,6 +483,10 @@ class Editor implements RequestDispatcher {
 
     // TODO: find out why this is needed. If it's not, remove it.
     _notifyListeners([]);
+  }
+
+  void cut() {
+    _customEventController.add(CustomEditorEvent.cut);
   }
 
   void copy() {

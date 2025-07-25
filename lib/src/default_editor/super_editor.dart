@@ -592,10 +592,15 @@ class SuperEditorState extends State<SuperEditor> {
   }
 
   void _handleCustomEvent(CustomEditorEvent event) {
+    if (_focusNode.hasFocus == false) {
+      return;
+    }
     if (event == CustomEditorEvent.copy) {
       editContext.commonOps.copy();
     } else if (event == CustomEditorEvent.paste) {
       editContext.commonOps.paste();
+    } else if (event == CustomEditorEvent.cut) {
+      editContext.commonOps.cut();
     }
   }
 
