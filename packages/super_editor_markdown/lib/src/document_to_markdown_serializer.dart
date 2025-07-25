@@ -1,8 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:super_editor/super_editor.dart';
 
-import 'super_editor_syntax.dart';
-
 /// Serializes the given [DocumentNode] to Markdown text.
 String serializeNodeToMarkdown(
   Document doc,
@@ -15,7 +13,7 @@ String serializeNodeToMarkdown(
     // specialized cases of traditional nodes, such as serializing a
     // `ParagraphNode` with a special `"blockType"`.
     ...customNodeSerializers,
-    ImageNodeSerializer(useSizeNotation: syntax == MarkdownSyntax.superEditor),
+    const ImageNodeSerializer(),
     const HorizontalRuleNodeSerializer(),
     const ListItemNodeSerializer(),
     const TaskNodeSerializer(),
@@ -54,7 +52,7 @@ String serializeDocumentToMarkdown(
     // specialized cases of traditional nodes, such as serializing a
     // `ParagraphNode` with a special `"blockType"`.
     ...customNodeSerializers,
-    ImageNodeSerializer(useSizeNotation: syntax == MarkdownSyntax.superEditor),
+    const ImageNodeSerializer(),
     const HorizontalRuleNodeSerializer(),
     const ListItemNodeSerializer(),
     const TaskNodeSerializer(),
@@ -115,21 +113,11 @@ abstract class NodeTypedDocumentNodeMarkdownSerializer<NodeType> implements Docu
 /// [DocumentNodeMarkdownSerializer] for serializing [ImageNode]s as standard Markdown
 /// images.
 class ImageNodeSerializer extends NodeTypedDocumentNodeMarkdownSerializer<ImageNode> {
-  const ImageNodeSerializer({
-    this.useSizeNotation = false,
-  });
-
-  final bool useSizeNotation;
+  const ImageNodeSerializer();
 
   @override
   String doSerialization(Document document, ImageNode node) {
-    if (!useSizeNotation || (node.expectedBitmapSize?.width == null && node.expectedBitmapSize?.height == null)) {
-      // We don't want to use size notation or the image doesn't have
-      // size information. Use the regular syntax.
-      return '![IMAGEw${node.expectedBitmapSize?.width}h${node.expectedBitmapSize?.height}](${node.imageUrl})\n';
-    }
-
-    return '![${node.altText}](${node.imageUrl}})\n';
+    return '![IMAGEw${node.expectedBitmapSize?.width}h${node.expectedBitmapSize?.height}](${node.imageUrl})\n';
   }
 }
 
@@ -226,6 +214,7 @@ class ParagraphNodeSerializer extends NodeTypedDocumentNodeMarkdownSerializer<Pa
           buffer.writeln(alignmentToken);
         }
       }
+
       buffer.write(node.text.toMarkdown());
     }
 

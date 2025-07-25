@@ -5,8 +5,6 @@ import 'package:super_editor/src/default_editor/layout_single_column/_layout.dar
 import 'package:super_editor/src/default_editor/layout_single_column/_presenter.dart';
 import 'package:super_editor/src/infrastructure/content_layers.dart';
 import 'package:super_editor/src/infrastructure/documents/document_scroller.dart';
-import 'package:super_editor/src/infrastructure/flutter/build_context.dart';
-import 'package:super_editor/src/infrastructure/sliver_hybrid_stack.dart';
 
 /// A scaffold that combines pieces to create a scrolling single-column document, with
 /// gestures placed beneath the document.

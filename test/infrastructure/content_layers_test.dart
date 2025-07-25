@@ -574,8 +574,10 @@ class _RebuildableWidget extends StatefulWidget {
     Key? key,
     this.rebuildSignal,
     this.buildTracker,
+    // ignore: unused_element_parameter
     this.elementTracker,
     this.onBuildScheduled,
+    // ignore: unused_element_parameter
     this.onBuild,
     this.builder,
     this.child,
