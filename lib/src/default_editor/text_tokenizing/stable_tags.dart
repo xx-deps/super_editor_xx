@@ -774,6 +774,7 @@ class TagUserReaction extends EditReaction {
   }
 
   /// Find any composing tag that's no longer being composed, and commit it.
+  // ignore: unused_element
   void _commitCompletedComposingTag(
     EditContext editContext,
     RequestDispatcher requestDispatcher,
