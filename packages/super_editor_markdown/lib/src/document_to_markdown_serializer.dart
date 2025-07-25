@@ -58,7 +58,6 @@ String serializeDocumentToMarkdown(
     const TaskNodeSerializer(),
     HeaderNodeSerializer(syntax),
     ParagraphNodeSerializer(syntax),
-    const MentionNodeSerializer(),
   ];
 
   StringBuffer buffer = StringBuffer();
@@ -94,7 +93,8 @@ abstract class DocumentNodeMarkdownSerializer {
 ///
 /// Use this base class to avoid repeating type checks across various
 /// serializers.
-abstract class NodeTypedDocumentNodeMarkdownSerializer<NodeType> implements DocumentNodeMarkdownSerializer {
+abstract class NodeTypedDocumentNodeMarkdownSerializer<NodeType>
+    implements DocumentNodeMarkdownSerializer {
   const NodeTypedDocumentNodeMarkdownSerializer();
 
   @override
@@ -112,7 +112,8 @@ abstract class NodeTypedDocumentNodeMarkdownSerializer<NodeType> implements Docu
 
 /// [DocumentNodeMarkdownSerializer] for serializing [ImageNode]s as standard Markdown
 /// images.
-class ImageNodeSerializer extends NodeTypedDocumentNodeMarkdownSerializer<ImageNode> {
+class ImageNodeSerializer
+    extends NodeTypedDocumentNodeMarkdownSerializer<ImageNode> {
   const ImageNodeSerializer();
 
   @override
@@ -123,7 +124,8 @@ class ImageNodeSerializer extends NodeTypedDocumentNodeMarkdownSerializer<ImageN
 
 /// [DocumentNodeMarkdownSerializer] for serializing [HorizontalRuleNode]s as standard
 /// Markdown horizontal rules.
-class HorizontalRuleNodeSerializer extends NodeTypedDocumentNodeMarkdownSerializer<HorizontalRuleNode> {
+class HorizontalRuleNodeSerializer
+    extends NodeTypedDocumentNodeMarkdownSerializer<HorizontalRuleNode> {
   const HorizontalRuleNodeSerializer();
 
   @override
@@ -136,7 +138,8 @@ class HorizontalRuleNodeSerializer extends NodeTypedDocumentNodeMarkdownSerializ
 /// list items.
 ///
 /// Includes support for ordered and unordered list items.
-class ListItemNodeSerializer extends NodeTypedDocumentNodeMarkdownSerializer<ListItemNode> {
+class ListItemNodeSerializer
+    extends NodeTypedDocumentNodeMarkdownSerializer<ListItemNode> {
   const ListItemNodeSerializer();
 
   @override
@@ -149,8 +152,11 @@ class ListItemNodeSerializer extends NodeTypedDocumentNodeMarkdownSerializer<Lis
     buffer.write('$indent$symbol ${node.text.toMarkdown()}');
 
     final nodeIndex = document.getNodeIndexById(node.id);
-    final nodeBelow = nodeIndex < document.nodeCount - 1 ? document.getNodeAt(nodeIndex + 1) : null;
-    if (nodeBelow != null && (nodeBelow is! ListItemNode || nodeBelow.type != node.type)) {
+    final nodeBelow = nodeIndex < document.nodeCount - 1
+        ? document.getNodeAt(nodeIndex + 1)
+        : null;
+    if (nodeBelow != null &&
+        (nodeBelow is! ListItemNode || nodeBelow.type != node.type)) {
       // This list item is the last item in the list. Add an extra
       // blank line after it.
       buffer.writeln('');
@@ -160,21 +166,12 @@ class ListItemNodeSerializer extends NodeTypedDocumentNodeMarkdownSerializer<Lis
   }
 }
 
-class MentionNodeSerializer extends NodeTypedDocumentNodeMarkdownSerializer<TextNode> {
-  const MentionNodeSerializer();
-
-  @override
-  String doSerialization(Document document, TextNode node) {
-    final buffer = StringBuffer();
-    return buffer.toString();
-  }
-}
-
 /// [DocumentNodeMarkdownSerializer] for serializing [ParagraphNode]s as standard Markdown
 /// paragraphs.
 ///
 /// Includes support for headers, blockquotes, and code blocks.
-class ParagraphNodeSerializer extends NodeTypedDocumentNodeMarkdownSerializer<ParagraphNode> {
+class ParagraphNodeSerializer
+    extends NodeTypedDocumentNodeMarkdownSerializer<ParagraphNode> {
   const ParagraphNodeSerializer(this.markdownSyntax);
 
   final MarkdownSyntax markdownSyntax;
@@ -208,7 +205,9 @@ class ParagraphNodeSerializer extends NodeTypedDocumentNodeMarkdownSerializer<Pa
     } else {
       final String? textAlign = node.getMetadataValue('textAlign');
       // Left alignment is the default, so there is no need to add the alignment token.
-      if (markdownSyntax == MarkdownSyntax.superEditor && textAlign != null && textAlign != 'left') {
+      if (markdownSyntax == MarkdownSyntax.superEditor &&
+          textAlign != null &&
+          textAlign != 'left') {
         final alignmentToken = _convertAlignmentToMarkdown(textAlign);
         if (alignmentToken != null) {
           buffer.writeln(alignmentToken);
@@ -234,7 +233,8 @@ class ParagraphNodeSerializer extends NodeTypedDocumentNodeMarkdownSerializer<Pa
 ///
 /// A completed task is serialized as `- [x] This is a completed task`
 /// An incomplete task is serialized as `- [ ] This is an incomplete task`
-class TaskNodeSerializer extends NodeTypedDocumentNodeMarkdownSerializer<TaskNode> {
+class TaskNodeSerializer
+    extends NodeTypedDocumentNodeMarkdownSerializer<TaskNode> {
   const TaskNodeSerializer();
 
   @override
@@ -294,32 +294,50 @@ class AttributedTextMarkdownSerializer extends AttributionVisitor {
       fullText.toPlainText().substring(_bufferCursor, index),
     );
 
+    bool hasMentionMarker = false;
     // Add start markers.
     if (startingAttributions.isNotEmpty) {
-      final markdownStyles = _sortAndSerializeAttributions(startingAttributions, AttributionVisitEvent.start);
+      final markdownStyles = _sortAndSerializeAttributions(
+          startingAttributions, AttributionVisitEvent.start);
       // Links are different from the plain styles since they are both not NamedAttributions (and therefore
       // can't be checked using equality comparison) and asymmetrical in markdown.
-      final linkMarker = _encodeLinkMarker(startingAttributions, AttributionVisitEvent.start);
+      final linkMarker =
+          _encodeLinkMarker(startingAttributions, AttributionVisitEvent.start);
 
+      final mentionMarker = _encodeMentionMarker(
+          startingAttributions, AttributionVisitEvent.start);
+      if (mentionMarker.isNotEmpty) {
+        hasMentionMarker = true;
+      }
       _buffer
         ..write(linkMarker)
-        ..write(markdownStyles);
+        ..write(markdownStyles)
+        ..write(mentionMarker);
     }
 
     // Write out the character at this index.
-    _writeTextToBuffer(_fullText[index]);
+    // TODO: 临时实现，如果前面是met并且后面是@，则不输出@符号
+    if ((hasMentionMarker && _fullText[index] == '@') == false) {
+      _writeTextToBuffer(_fullText[index]);
+    }
     _bufferCursor = index + 1;
 
     // Add end markers.
     if (endingAttributions.isNotEmpty) {
-      final markdownStyles = _sortAndSerializeAttributions(endingAttributions, AttributionVisitEvent.end);
+      final markdownStyles = _sortAndSerializeAttributions(
+          endingAttributions, AttributionVisitEvent.end);
       // Links are different from the plain styles since they are both not NamedAttributions (and therefore
       // can't be checked using equality comparison) and asymmetrical in markdown.
-      final linkMarker = _encodeLinkMarker(endingAttributions, AttributionVisitEvent.end);
+      final linkMarker =
+          _encodeLinkMarker(endingAttributions, AttributionVisitEvent.end);
+
+      final mentionMarker =
+          _encodeMentionMarker(endingAttributions, AttributionVisitEvent.end);
 
       _buffer
         ..write(markdownStyles)
-        ..write(linkMarker);
+        ..write(linkMarker)
+        ..write(mentionMarker);
     }
   }
 
@@ -356,7 +374,8 @@ class AttributedTextMarkdownSerializer extends AttributionVisitor {
   /// Serializes style attributions into markdown syntax in a repeatable
   /// order such that opening and closing styles match each other on
   /// the opening and closing ends of a span.
-  static String _sortAndSerializeAttributions(Set<Attribution> attributions, AttributionVisitEvent event) {
+  static String _sortAndSerializeAttributions(
+      Set<Attribution> attributions, AttributionVisitEvent event) {
     const startOrder = [
       codeAttribution,
       boldAttribution,
@@ -366,7 +385,8 @@ class AttributedTextMarkdownSerializer extends AttributionVisitor {
     ];
 
     final buffer = StringBuffer();
-    final encodingOrder = event == AttributionVisitEvent.start ? startOrder : startOrder.reversed;
+    final encodingOrder =
+        event == AttributionVisitEvent.start ? startOrder : startOrder.reversed;
 
     for (final markdownStyleAttribution in encodingOrder) {
       if (attributions.contains(markdownStyleAttribution)) {
@@ -393,9 +413,24 @@ class AttributedTextMarkdownSerializer extends AttributionVisitor {
     }
   }
 
+  static String _encodeMentionMarker(
+      Set<Attribution> attributions, AttributionVisitEvent event) {
+    final mentionAttributions =
+        attributions.whereType<CommittedStableTagAttribution>();
+    if (mentionAttributions.isNotEmpty) {
+      if (event == AttributionVisitEvent.start) {
+        return '(met)';
+      } else {
+        return '(met)';
+      }
+    }
+    return "";
+  }
+
   /// Checks for the presence of a link in the attributions and returns the characters necessary to represent it
   /// at the open or closing boundary of the attribution, depending on the event.
-  static String _encodeLinkMarker(Set<Attribution> attributions, AttributionVisitEvent event) {
+  static String _encodeLinkMarker(
+      Set<Attribution> attributions, AttributionVisitEvent event) {
     final linkAttributions = attributions.whereType<LinkAttribution?>();
     if (linkAttributions.isNotEmpty) {
       final linkAttribution = linkAttributions.first as LinkAttribution;
@@ -417,7 +452,8 @@ class AttributedTextMarkdownSerializer extends AttributionVisitor {
 /// Headers are represented by `ParagraphNode`s and therefore this serializer must
 /// run before a [ParagraphNodeSerializer], so that this serializer can process
 /// header-specific details, such as header alignment.
-class HeaderNodeSerializer extends NodeTypedDocumentNodeMarkdownSerializer<ParagraphNode> {
+class HeaderNodeSerializer
+    extends NodeTypedDocumentNodeMarkdownSerializer<ParagraphNode> {
   const HeaderNodeSerializer(this.markdownSyntax);
 
   final MarkdownSyntax markdownSyntax;
@@ -452,7 +488,9 @@ class HeaderNodeSerializer extends NodeTypedDocumentNodeMarkdownSerializer<Parag
     final String? textAlign = node.getMetadataValue('textAlign');
 
     // Add the alignment token, we exclude the left alignment because it's the default.
-    if (markdownSyntax == MarkdownSyntax.superEditor && textAlign != null && textAlign != 'left') {
+    if (markdownSyntax == MarkdownSyntax.superEditor &&
+        textAlign != null &&
+        textAlign != 'left') {
       final alignmentToken = _convertAlignmentToMarkdown(textAlign);
       if (alignmentToken != null) {
         buffer.writeln(alignmentToken);
