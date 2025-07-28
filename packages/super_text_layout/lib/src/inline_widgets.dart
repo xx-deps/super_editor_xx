@@ -8,7 +8,9 @@ class InlineNetworkImagePlaceholder {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is InlineNetworkImagePlaceholder && runtimeType == other.runtimeType && url == other.url;
+      other is InlineNetworkImagePlaceholder &&
+          runtimeType == other.runtimeType &&
+          url == other.url;
 
   @override
   int get hashCode => url.hashCode;
@@ -24,8 +26,26 @@ class InlineAssetImagePlaceholder {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is InlineAssetImagePlaceholder && runtimeType == other.runtimeType && assetPath == other.assetPath;
+      other is InlineAssetImagePlaceholder &&
+          runtimeType == other.runtimeType &&
+          assetPath == other.assetPath;
 
   @override
   int get hashCode => assetPath.hashCode;
+}
+
+class InlineMentionPlaceholder {
+  const InlineMentionPlaceholder({required this.uid});
+
+  final String uid;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is InlineMentionPlaceholder &&
+          runtimeType == other.runtimeType &&
+          uid == other.uid;
+
+  @override
+  int get hashCode => uid.hashCode;
 }

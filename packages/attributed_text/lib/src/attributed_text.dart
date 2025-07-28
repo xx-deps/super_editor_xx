@@ -71,8 +71,7 @@ class AttributedText {
       int start = 0;
       int insertedPlaceholders = 0;
       for (final entry in this.placeholders.entries) {
-        final textSegment = _text.substring(
-            start - insertedPlaceholders, entry.key - insertedPlaceholders);
+        final textSegment = _text.substring(start - insertedPlaceholders, entry.key - insertedPlaceholders);
         buffer.write(textSegment);
         start += textSegment.length;
 
@@ -82,8 +81,7 @@ class AttributedText {
         insertedPlaceholders += 1;
       }
       if (start - insertedPlaceholders < _text.length) {
-        buffer
-            .write(_text.substring(start - insertedPlaceholders, _text.length));
+        buffer.write(_text.substring(start - insertedPlaceholders, _text.length));
       }
 
       _textWithPlaceholders = buffer.toString();
@@ -102,8 +100,7 @@ class AttributedText {
     int maxAllowableIndex = _text.length;
     for (final entry in placeholders.entries) {
       if (entry.key > maxAllowableIndex) {
-        throw AssertionError(
-            "Invalid placeholder index. The index is too large. ${entry.key} -> ${entry.value}.");
+        throw AssertionError("Invalid placeholder index. The index is too large. ${entry.key} -> ${entry.value}.");
       }
 
       maxAllowableIndex += 1;
@@ -115,8 +112,7 @@ class AttributedText {
   }
 
   /// The text that this [AttributedText] attributes.
-  @Deprecated(
-      "Use toPlainText() instead, so you can choose whether to include placeholder characters")
+  @Deprecated("Use toPlainText() instead, so you can choose whether to include placeholder characters")
   String get text => _text;
   final String _text;
 
@@ -126,12 +122,10 @@ class AttributedText {
   Object get first => placeholders[0] ?? _textWithPlaceholders[0];
 
   /// Returns the character or placeholder at the given [offset].
-  Object operator [](int offset) =>
-      placeholders[offset] ?? _textWithPlaceholders[offset];
+  Object operator [](int offset) => placeholders[offset] ?? _textWithPlaceholders[offset];
 
   /// Returns the character or placeholder at the end of this `AttributedText`.
-  Object get last =>
-      placeholders[length - 1] ?? _textWithPlaceholders[length - 1];
+  Object get last => placeholders[length - 1] ?? _textWithPlaceholders[length - 1];
 
   /// Returns a plain-text version of this `AttributedText`.
   ///
@@ -154,8 +148,7 @@ class AttributedText {
       if (replacementCharacter != placeholderCharacter) {
         // The caller wants to use a non-standard character to represent
         // placeholders. Do a replace-all and return the result.
-        return _textWithPlaceholders.replaceAll(
-            placeholderCharacter, replacementCharacter);
+        return _textWithPlaceholders.replaceAll(placeholderCharacter, replacementCharacter);
       }
 
       return _textWithPlaceholders;
@@ -275,16 +268,14 @@ class AttributedText {
   }
 
   /// Returns all spans in this [AttributedText] for the given [attributions].
-  Set<AttributionSpan> getAttributionSpans(Set<Attribution> attributions) =>
-      getAttributionSpansInRange(
+  Set<AttributionSpan> getAttributionSpans(Set<Attribution> attributions) => getAttributionSpansInRange(
         attributionFilter: (a) => attributions.contains(a),
         range: SpanRange(0, length),
       );
 
   /// Returns all spans in this [AttributedText], for attributions that are
   /// selected by the given [filter].
-  Set<AttributionSpan> getAttributionSpansByFilter(AttributionFilter filter) =>
-      getAttributionSpansInRange(
+  Set<AttributionSpan> getAttributionSpansByFilter(AttributionFilter filter) => getAttributionSpansInRange(
         attributionFilter: filter,
         range: SpanRange(0, length),
       );
@@ -373,8 +364,7 @@ class AttributedText {
   /// Removes the given [attribution] from all characters within the
   /// given [range], inclusive.
   void removeAttribution(Attribution attribution, SpanRange range) {
-    spans.removeAttribution(
-        attributionToRemove: attribution, start: range.start, end: range.end);
+    spans.removeAttribution(attributionToRemove: attribution, start: range.start, end: range.end);
     _notifyListeners();
   }
 
@@ -401,8 +391,7 @@ class AttributedText {
       attributions.addAll(spans.getAllAttributionsAt(i));
     }
     for (final attribution in attributions) {
-      spans.removeAttribution(
-          attributionToRemove: attribution, start: range.start, end: range.end);
+      spans.removeAttribution(attributionToRemove: attribution, start: range.start, end: range.end);
     }
   }
 
@@ -410,32 +399,27 @@ class AttributedText {
   /// that [attribution] is removed from the text in [range], inclusive.
   /// Otherwise, all of the text in [range], inclusive, is given the [attribution].
   void toggleAttribution(Attribution attribution, SpanRange range) {
-    spans.toggleAttribution(
-        attribution: attribution, start: range.start, end: range.end);
+    spans.toggleAttribution(attribution: attribution, start: range.start, end: range.end);
     _notifyListeners();
   }
 
   /// Copies all text and attributions from [range.start] to [range.end] (exclusive),
   /// and returns them as a new [AttributedText].
-  AttributedText copyTextInRange(SpanRange range) =>
-      copyText(range.start, range.end);
+  AttributedText copyTextInRange(SpanRange range) => copyText(range.start, range.end);
 
   /// Copies all text, attributions, and placeholders from [startOffset] to
   /// [endOffset], exclusive, and returns them as a new [AttributedText].
   AttributedText copyText(int startOffset, [int? endOffset]) {
     _log.fine('start: $startOffset, end: $endOffset');
 
-    final placeholdersBeforeStartOffset =
-        placeholders.entries.where((entry) => entry.key < startOffset);
-    final textStartCopyOffset =
-        startOffset - placeholdersBeforeStartOffset.length;
+    final placeholdersBeforeStartOffset = placeholders.entries.where((entry) => entry.key < startOffset);
+    final textStartCopyOffset = startOffset - placeholdersBeforeStartOffset.length;
 
     final placeholdersAfterStartBeforeEndOffset = placeholders.entries.where(
       (entry) => startOffset <= entry.key && entry.key < (endOffset ?? length),
     );
-    final textEndCopyOffset = (endOffset ?? length) -
-        placeholdersBeforeStartOffset.length -
-        placeholdersAfterStartBeforeEndOffset.length;
+    final textEndCopyOffset =
+        (endOffset ?? length) - placeholdersBeforeStartOffset.length - placeholdersAfterStartBeforeEndOffset.length;
 
     // The span marker offsets are based on the text with placeholders, so we need
     // to copy the text with placeholders to ensure the span markers are correct.
@@ -443,9 +427,7 @@ class AttributedText {
 
     // Note: -1 because copyText() uses an exclusive `start` and `end` but
     // _copyAttributionRegion() uses an inclusive `start` and `end`.
-    final startCopyOffset = startOffset < textWithPlaceholders.length
-        ? startOffset
-        : textWithPlaceholders.length - 1;
+    final startCopyOffset = startOffset < textWithPlaceholders.length ? startOffset : textWithPlaceholders.length - 1;
     int endCopyOffset;
     if (endOffset == startOffset) {
       endCopyOffset = startCopyOffset;
@@ -461,8 +443,7 @@ class AttributedText {
     // beginning of this AttributedText.
     final copiedPlaceholders = <int, Object>{};
     for (final existingPlaceholder in placeholdersAfterStartBeforeEndOffset) {
-      copiedPlaceholders[existingPlaceholder.key - startOffset] =
-          existingPlaceholder.value;
+      copiedPlaceholders[existingPlaceholder.key - startOffset] = existingPlaceholder.value;
     }
 
     return AttributedText(
@@ -487,16 +468,14 @@ class AttributedText {
   /// length of the range.
   /// {@endtemplate}
   String substring(int start, [int? end]) {
-    final placeholdersBeforeStartOffset =
-        placeholders.entries.where((entry) => entry.key < start);
+    final placeholdersBeforeStartOffset = placeholders.entries.where((entry) => entry.key < start);
     final textStartCopyOffset = start - placeholdersBeforeStartOffset.length;
 
     final placeholdersAfterStartBeforeEndOffset = placeholders.entries.where(
       (entry) => start <= entry.key && entry.key < (end ?? length),
     );
-    final textEndCopyOffset = (end ?? length) -
-        placeholdersBeforeStartOffset.length -
-        placeholdersAfterStartBeforeEndOffset.length;
+    final textEndCopyOffset =
+        (end ?? length) - placeholdersBeforeStartOffset.length - placeholdersAfterStartBeforeEndOffset.length;
 
     return _text.substring(textStartCopyOffset, textEndCopyOffset);
   }
@@ -517,8 +496,7 @@ class AttributedText {
     }
 
     if (isEmpty) {
-      _log.fine(
-          'our `text` is empty. Returning a direct copy of the `other` text.');
+      _log.fine('our `text` is empty. Returning a direct copy of the `other` text.');
       return AttributedText(
         other._text,
         other.spans.copy(),
@@ -531,8 +509,7 @@ class AttributedText {
       spans.copy()..addAt(other: other.spans, index: length),
       {
         ...placeholders,
-        ...other.placeholders.map(
-            (offset, placeholder) => MapEntry(offset + length, placeholder)),
+        ...other.placeholders.map((offset, placeholder) => MapEntry(offset + length, placeholder)),
       },
     );
   }
@@ -560,8 +537,7 @@ class AttributedText {
     required int startOffset,
     Set<Attribution> applyAttributions = const {},
   }) {
-    _log.fine(
-        'text: "$textToInsert", start: $startOffset, attributions: $applyAttributions');
+    _log.fine('text: "$textToInsert", start: $startOffset, attributions: $applyAttributions');
 
     _log.fine('copying text to the left');
     final startText = copyText(0, startOffset);
@@ -594,15 +570,12 @@ class AttributedText {
   AttributedText insertPlaceholder(int index, Object placeholder) {
     return AttributedText(_text, spans.copy(), {
       // Insert existing placeholders that come before the new placeholder.
-      ...Map.fromEntries(
-          placeholders.entries.where((entry) => entry.key < index)),
+      ...Map.fromEntries(placeholders.entries.where((entry) => entry.key < index)),
       // Insert the new placeholder.
       index: placeholder,
       // Push back all later placeholders by 1 unit, because of the new placeholder.
       ...Map.fromEntries(
-        placeholders.entries
-            .where((entry) => entry.key >= index)
-            .map((entry) => MapEntry(entry.key + 1, entry.value)),
+        placeholders.entries.where((entry) => entry.key >= index).map((entry) => MapEntry(entry.key + 1, entry.value)),
       ),
     });
   }
@@ -616,8 +589,7 @@ class AttributedText {
     _log.fine('Removing text region from $startOffset to $endOffset');
     _log.fine('initial attributions:');
     _log.fine(spans.toString());
-    final reducedText =
-        substring(0, startOffset) + substring(endOffset, length);
+    final reducedText = substring(0, startOffset) + substring(endOffset, length);
 
     AttributedSpans contractedAttributions = spans.copy()
       ..contractAttributions(
@@ -633,8 +605,7 @@ class AttributedText {
       contractedAttributions,
       Map.fromEntries(
         placeholders.entries
-            .where(
-                (entry) => entry.key < startOffset || endOffset <= entry.key) //
+            .where((entry) => entry.key < startOffset || endOffset <= entry.key) //
             .map(
               (entry) => entry.key >= endOffset //
                   ? MapEntry(entry.key - (endOffset - startOffset), entry.value)
@@ -676,8 +647,7 @@ class AttributedText {
       // at currentIndex.
       if (marker.offset != currentIndex) {
         if (currentIndex >= 0) {
-          visitor.visitAttributions(
-              this, currentIndex, startingAttributions, endingAttributions);
+          visitor.visitAttributions(this, currentIndex, startingAttributions, endingAttributions);
         }
 
         currentIndex = marker.offset;
@@ -694,8 +664,7 @@ class AttributedText {
 
     // Visit the final set of end markers.
     if (endingAttributions.isNotEmpty) {
-      visitor.visitAttributions(
-          this, currentIndex, startingAttributions, endingAttributions);
+      visitor.visitAttributions(this, currentIndex, startingAttributions, endingAttributions);
     }
 
     visitor.onVisitEnd();
@@ -761,8 +730,7 @@ class AttributedText {
             runtimeType == other.runtimeType &&
             _text == other._text &&
             spans == other.spans &&
-            (const DeepCollectionEquality())
-                .equals(placeholders, other.placeholders);
+            (const DeepCollectionEquality()).equals(placeholders, other.placeholders);
   }
 
   @override
@@ -839,8 +807,7 @@ class CallbackAttributionVisitor implements AttributionVisitor {
     Set<Attribution> startingAttributions,
     Set<Attribution> endingAttributions,
   ) {
-    _onVisitAttributions(
-        fullText, index, startingAttributions, endingAttributions);
+    _onVisitAttributions(fullText, index, startingAttributions, endingAttributions);
   }
 
   @override
