@@ -93,8 +93,7 @@ abstract class DocumentNodeMarkdownSerializer {
 ///
 /// Use this base class to avoid repeating type checks across various
 /// serializers.
-abstract class NodeTypedDocumentNodeMarkdownSerializer<NodeType>
-    implements DocumentNodeMarkdownSerializer {
+abstract class NodeTypedDocumentNodeMarkdownSerializer<NodeType> implements DocumentNodeMarkdownSerializer {
   const NodeTypedDocumentNodeMarkdownSerializer();
 
   @override
@@ -112,8 +111,7 @@ abstract class NodeTypedDocumentNodeMarkdownSerializer<NodeType>
 
 /// [DocumentNodeMarkdownSerializer] for serializing [ImageNode]s as standard Markdown
 /// images.
-class ImageNodeSerializer
-    extends NodeTypedDocumentNodeMarkdownSerializer<ImageNode> {
+class ImageNodeSerializer extends NodeTypedDocumentNodeMarkdownSerializer<ImageNode> {
   const ImageNodeSerializer();
 
   @override
@@ -124,8 +122,7 @@ class ImageNodeSerializer
 
 /// [DocumentNodeMarkdownSerializer] for serializing [HorizontalRuleNode]s as standard
 /// Markdown horizontal rules.
-class HorizontalRuleNodeSerializer
-    extends NodeTypedDocumentNodeMarkdownSerializer<HorizontalRuleNode> {
+class HorizontalRuleNodeSerializer extends NodeTypedDocumentNodeMarkdownSerializer<HorizontalRuleNode> {
   const HorizontalRuleNodeSerializer();
 
   @override
@@ -138,8 +135,7 @@ class HorizontalRuleNodeSerializer
 /// list items.
 ///
 /// Includes support for ordered and unordered list items.
-class ListItemNodeSerializer
-    extends NodeTypedDocumentNodeMarkdownSerializer<ListItemNode> {
+class ListItemNodeSerializer extends NodeTypedDocumentNodeMarkdownSerializer<ListItemNode> {
   const ListItemNodeSerializer();
 
   @override
@@ -152,11 +148,8 @@ class ListItemNodeSerializer
     buffer.write('$indent$symbol ${node.text.toMarkdown()}');
 
     final nodeIndex = document.getNodeIndexById(node.id);
-    final nodeBelow = nodeIndex < document.nodeCount - 1
-        ? document.getNodeAt(nodeIndex + 1)
-        : null;
-    if (nodeBelow != null &&
-        (nodeBelow is! ListItemNode || nodeBelow.type != node.type)) {
+    final nodeBelow = nodeIndex < document.nodeCount - 1 ? document.getNodeAt(nodeIndex + 1) : null;
+    if (nodeBelow != null && (nodeBelow is! ListItemNode || nodeBelow.type != node.type)) {
       // This list item is the last item in the list. Add an extra
       // blank line after it.
       buffer.writeln('');
@@ -170,8 +163,7 @@ class ListItemNodeSerializer
 /// paragraphs.
 ///
 /// Includes support for headers, blockquotes, and code blocks.
-class ParagraphNodeSerializer
-    extends NodeTypedDocumentNodeMarkdownSerializer<ParagraphNode> {
+class ParagraphNodeSerializer extends NodeTypedDocumentNodeMarkdownSerializer<ParagraphNode> {
   const ParagraphNodeSerializer(this.markdownSyntax);
 
   final MarkdownSyntax markdownSyntax;
@@ -205,9 +197,7 @@ class ParagraphNodeSerializer
     } else {
       final String? textAlign = node.getMetadataValue('textAlign');
       // Left alignment is the default, so there is no need to add the alignment token.
-      if (markdownSyntax == MarkdownSyntax.superEditor &&
-          textAlign != null &&
-          textAlign != 'left') {
+      if (markdownSyntax == MarkdownSyntax.superEditor && textAlign != null && textAlign != 'left') {
         final alignmentToken = _convertAlignmentToMarkdown(textAlign);
         if (alignmentToken != null) {
           buffer.writeln(alignmentToken);
@@ -233,8 +223,7 @@ class ParagraphNodeSerializer
 ///
 /// A completed task is serialized as `- [x] This is a completed task`
 /// An incomplete task is serialized as `- [ ] This is an incomplete task`
-class TaskNodeSerializer
-    extends NodeTypedDocumentNodeMarkdownSerializer<TaskNode> {
+class TaskNodeSerializer extends NodeTypedDocumentNodeMarkdownSerializer<TaskNode> {
   const TaskNodeSerializer();
 
   @override
@@ -297,15 +286,12 @@ class AttributedTextMarkdownSerializer extends AttributionVisitor {
 
     // Add start markers.
     if (startingAttributions.isNotEmpty) {
-      final markdownStyles = _sortAndSerializeAttributions(
-          startingAttributions, AttributionVisitEvent.start);
+      final markdownStyles = _sortAndSerializeAttributions(startingAttributions, AttributionVisitEvent.start);
       // Links are different from the plain styles since they are both not NamedAttributions (and therefore
       // can't be checked using equality comparison) and asymmetrical in markdown.
-      final linkMarker =
-          _encodeLinkMarker(startingAttributions, AttributionVisitEvent.start);
+      final linkMarker = _encodeLinkMarker(startingAttributions, AttributionVisitEvent.start);
 
-      final mentionMarker = _encodeMentionMarker(
-          startingAttributions, AttributionVisitEvent.start);
+      final mentionMarker = _encodeMentionMarker(startingAttributions, AttributionVisitEvent.start);
       if (mentionMarker.isNotEmpty) {
         hasMentionMarker = true;
       }
@@ -324,15 +310,12 @@ class AttributedTextMarkdownSerializer extends AttributionVisitor {
 
     // Add end markers.
     if (endingAttributions.isNotEmpty) {
-      final markdownStyles = _sortAndSerializeAttributions(
-          endingAttributions, AttributionVisitEvent.end);
+      final markdownStyles = _sortAndSerializeAttributions(endingAttributions, AttributionVisitEvent.end);
       // Links are different from the plain styles since they are both not NamedAttributions (and therefore
       // can't be checked using equality comparison) and asymmetrical in markdown.
-      final linkMarker =
-          _encodeLinkMarker(endingAttributions, AttributionVisitEvent.end);
+      final linkMarker = _encodeLinkMarker(endingAttributions, AttributionVisitEvent.end);
 
-      final mentionMarker =
-          _encodeMentionMarker(endingAttributions, AttributionVisitEvent.end);
+      final mentionMarker = _encodeMentionMarker(endingAttributions, AttributionVisitEvent.end);
       if (mentionMarker.isNotEmpty) {
         hasMentionMarker = false;
       }
@@ -376,8 +359,7 @@ class AttributedTextMarkdownSerializer extends AttributionVisitor {
   /// Serializes style attributions into markdown syntax in a repeatable
   /// order such that opening and closing styles match each other on
   /// the opening and closing ends of a span.
-  static String _sortAndSerializeAttributions(
-      Set<Attribution> attributions, AttributionVisitEvent event) {
+  static String _sortAndSerializeAttributions(Set<Attribution> attributions, AttributionVisitEvent event) {
     const startOrder = [
       codeAttribution,
       boldAttribution,
@@ -387,8 +369,7 @@ class AttributedTextMarkdownSerializer extends AttributionVisitor {
     ];
 
     final buffer = StringBuffer();
-    final encodingOrder =
-        event == AttributionVisitEvent.start ? startOrder : startOrder.reversed;
+    final encodingOrder = event == AttributionVisitEvent.start ? startOrder : startOrder.reversed;
 
     for (final markdownStyleAttribution in encodingOrder) {
       if (attributions.contains(markdownStyleAttribution)) {
@@ -415,16 +396,13 @@ class AttributedTextMarkdownSerializer extends AttributionVisitor {
     }
   }
 
-  static String _encodeMentionMarker(
-      Set<Attribution> attributions, AttributionVisitEvent event) {
-    final mentionAttributions = attributions
-        .whereType<NamedAttribution>()
-        .where((e) => e.id.contains('(met)'));
+  static String _encodeMentionMarker(Set<Attribution> attributions, AttributionVisitEvent event) {
+    final mentionAttributions = attributions.whereType<NamedAttribution>().where((e) => e.id.contains('(met)'));
     if (mentionAttributions.isNotEmpty) {
       if (event == AttributionVisitEvent.start) {
         return mentionAttributions.first.id;
       } else {
-        return '(met) ';
+        return '(met)';
       }
     }
     return "";
@@ -432,8 +410,7 @@ class AttributedTextMarkdownSerializer extends AttributionVisitor {
 
   /// Checks for the presence of a link in the attributions and returns the characters necessary to represent it
   /// at the open or closing boundary of the attribution, depending on the event.
-  static String _encodeLinkMarker(
-      Set<Attribution> attributions, AttributionVisitEvent event) {
+  static String _encodeLinkMarker(Set<Attribution> attributions, AttributionVisitEvent event) {
     final linkAttributions = attributions.whereType<LinkAttribution?>();
     if (linkAttributions.isNotEmpty) {
       final linkAttribution = linkAttributions.first as LinkAttribution;
@@ -455,8 +432,7 @@ class AttributedTextMarkdownSerializer extends AttributionVisitor {
 /// Headers are represented by `ParagraphNode`s and therefore this serializer must
 /// run before a [ParagraphNodeSerializer], so that this serializer can process
 /// header-specific details, such as header alignment.
-class HeaderNodeSerializer
-    extends NodeTypedDocumentNodeMarkdownSerializer<ParagraphNode> {
+class HeaderNodeSerializer extends NodeTypedDocumentNodeMarkdownSerializer<ParagraphNode> {
   const HeaderNodeSerializer(this.markdownSyntax);
 
   final MarkdownSyntax markdownSyntax;
@@ -491,9 +467,7 @@ class HeaderNodeSerializer
     final String? textAlign = node.getMetadataValue('textAlign');
 
     // Add the alignment token, we exclude the left alignment because it's the default.
-    if (markdownSyntax == MarkdownSyntax.superEditor &&
-        textAlign != null &&
-        textAlign != 'left') {
+    if (markdownSyntax == MarkdownSyntax.superEditor && textAlign != null && textAlign != 'left') {
       final alignmentToken = _convertAlignmentToMarkdown(textAlign);
       if (alignmentToken != null) {
         buffer.writeln(alignmentToken);
