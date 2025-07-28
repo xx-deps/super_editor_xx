@@ -282,6 +282,7 @@ class AttributedTextMarkdownSerializer extends AttributionVisitor {
     return _buffer.toString();
   }
 
+  bool hasMentionMarker = false;
   @override
   void visitAttributions(
     AttributedText fullText,
@@ -294,7 +295,6 @@ class AttributedTextMarkdownSerializer extends AttributionVisitor {
       fullText.toPlainText().substring(_bufferCursor, index),
     );
 
-    bool hasMentionMarker = false;
     // Add start markers.
     if (startingAttributions.isNotEmpty) {
       final markdownStyles = _sortAndSerializeAttributions(
@@ -316,8 +316,8 @@ class AttributedTextMarkdownSerializer extends AttributionVisitor {
     }
 
     // Write out the character at this index.
-    // TODO: 临时实现，如果前面是met并且后面是@，则不输出@符号
-    if ((hasMentionMarker && _fullText[index] == '@') == false) {
+    // TODO: 如果进入了mention的attribution，中间的内容会忽略掉
+    if (hasMentionMarker == false) {
       _writeTextToBuffer(_fullText[index]);
     }
     _bufferCursor = index + 1;
@@ -333,7 +333,9 @@ class AttributedTextMarkdownSerializer extends AttributionVisitor {
 
       final mentionMarker =
           _encodeMentionMarker(endingAttributions, AttributionVisitEvent.end);
-
+      if (mentionMarker.isNotEmpty) {
+        hasMentionMarker = false;
+      }
       _buffer
         ..write(markdownStyles)
         ..write(linkMarker)
@@ -415,13 +417,14 @@ class AttributedTextMarkdownSerializer extends AttributionVisitor {
 
   static String _encodeMentionMarker(
       Set<Attribution> attributions, AttributionVisitEvent event) {
-    final mentionAttributions =
-        attributions.whereType<CommittedStableTagAttribution>();
+    final mentionAttributions = attributions
+        .whereType<NamedAttribution>()
+        .where((e) => e.id.contains('(met)'));
     if (mentionAttributions.isNotEmpty) {
       if (event == AttributionVisitEvent.start) {
-        return '(met)';
+        return mentionAttributions.first.id;
       } else {
-        return '(met)';
+        return '(met) ';
       }
     }
     return "";
