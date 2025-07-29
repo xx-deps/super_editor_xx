@@ -1,39 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:super_editor/super_editor.dart';
 
-/// Serializes the given [DocumentNode] to Markdown text.
-String serializeNodeToMarkdown(
-  Document doc,
-  DocumentNode node, {
-  MarkdownSyntax syntax = MarkdownSyntax.superEditor,
-  List<DocumentNodeMarkdownSerializer> customNodeSerializers = const [],
-}) {
-  final nodeSerializers = [
-    // Custom serializers first, in case the custom serializers handle
-    // specialized cases of traditional nodes, such as serializing a
-    // `ParagraphNode` with a special `"blockType"`.
-    ...customNodeSerializers,
-    const ImageNodeSerializer(),
-    const HorizontalRuleNodeSerializer(),
-    const ListItemNodeSerializer(),
-    const TaskNodeSerializer(),
-    HeaderNodeSerializer(syntax),
-    ParagraphNodeSerializer(syntax),
-  ];
-
-  StringBuffer buffer = StringBuffer();
-
-  for (final serializer in nodeSerializers) {
-    final serialization = serializer.serialize(doc, node);
-    if (serialization != null) {
-      buffer.write(serialization);
-      break;
-    }
-  }
-
-  return buffer.toString();
-}
-
 /// Serializes the given [doc] to Markdown text.
 ///
 /// The given [syntax] controls how the [doc] is serialized, e.g., [MarkdownSyntax.normal]
@@ -46,13 +13,14 @@ String serializeDocumentToMarkdown(
   Document doc, {
   MarkdownSyntax syntax = MarkdownSyntax.superEditor,
   List<DocumentNodeMarkdownSerializer> customNodeSerializers = const [],
+  bool needDistinguishLocalPath = true,
 }) {
   final nodeSerializers = [
     // Custom serializers first, in case the custom serializers handle
     // specialized cases of traditional nodes, such as serializing a
     // `ParagraphNode` with a special `"blockType"`.
     ...customNodeSerializers,
-    const ImageNodeSerializer(),
+    ImageNodeSerializer(needDistinguishLocalPath: needDistinguishLocalPath),
     const HorizontalRuleNodeSerializer(),
     const ListItemNodeSerializer(),
     const TaskNodeSerializer(),
@@ -62,21 +30,31 @@ String serializeDocumentToMarkdown(
 
   StringBuffer buffer = StringBuffer();
 
+  bool previousNodeIsImage = false;
   for (int i = 0; i < doc.nodeCount; ++i) {
     if (i > 0) {
       // Add a new line before every node, except the first node.
       buffer.writeln();
     }
+    // 如果图片节点和其他节点之间缺乏两个\n\n，手动补一个
+    // TODO：看后面是否改到插入事件里来手动补
+    if (previousNodeIsImage) {
+      buffer.writeln();
+    }
 
     // Serialize the current node to markdown.
     final node = doc.getNodeAt(i)!;
-
     for (final serializer in nodeSerializers) {
       final serialization = serializer.serialize(doc, node);
       if (serialization != null) {
         buffer.write(serialization);
         break;
       }
+    }
+    if (node is ImageNode) {
+      previousNodeIsImage = true;
+    } else {
+      previousNodeIsImage = false;
     }
   }
 
@@ -114,11 +92,26 @@ abstract class NodeTypedDocumentNodeMarkdownSerializer<NodeType>
 /// images.
 class ImageNodeSerializer
     extends NodeTypedDocumentNodeMarkdownSerializer<ImageNode> {
-  const ImageNodeSerializer();
+  const ImageNodeSerializer({
+    required this.needDistinguishLocalPath,
+  });
+
+  /// 是否启用本地图片路径导出时使用<>包裹
+  final bool needDistinguishLocalPath;
 
   @override
   String doSerialization(Document document, ImageNode node) {
-    return '![IMAGEw${node.expectedBitmapSize?.width}h${node.expectedBitmapSize?.height}](${node.imageUrl})\n';
+    if (needDistinguishLocalPath) {
+      if (node.imageUrl.startsWith('https://') ||
+          node.imageUrl.startsWith('http://') ||
+          node.imageUrl.startsWith('ftp://')) {
+        return '![IMAGEw${node.expectedBitmapSize?.width}h${node.expectedBitmapSize?.height}](${node.imageUrl})';
+      } else {
+        return '![IMAGEw${node.expectedBitmapSize?.width}h${node.expectedBitmapSize?.height}](<${node.imageUrl}>)';
+      }
+    } else {
+      return '![IMAGEw${node.expectedBitmapSize?.width}h${node.expectedBitmapSize?.height}](${node.imageUrl})';
+    }
   }
 }
 
