@@ -34,6 +34,7 @@ class _LinePreservingParagraphSyntax extends md.BlockSyntax {
 }
 
 /// 专门用来内部粘贴保留markdown格式用的
+@Deprecated('继续使用[deserializeMarkdownToDocument]，这个换行会多一行')
 MutableDocument deserializeMarkdownToDocumentForPaste(
   String markdown, {
   MarkdownSyntax syntax = MarkdownSyntax.superEditor,
