@@ -2528,90 +2528,189 @@ class PasteEditorCommand extends EditCommand {
     final composer = context.find<MutableDocumentComposer>(Editor.composerKey);
     final currentNodeWithSelection =
         document.getNodeById(_pastePosition.nodeId);
-    if (currentNodeWithSelection is! TextNode) {
-      return;
-      // throw Exception(
-      //     'Can\'t handle pasting text within node of type: $currentNodeWithSelection');
-    }
 
-    editorOpsLog.info("Pasting clipboard content in document.");
+    if (currentNodeWithSelection is TextNode) {
+      editorOpsLog.info("Pasting clipboard content in document.");
 
-    final textNode = document.getNode(_pastePosition) as TextNode;
-    final pasteTextOffset =
-        (_pastePosition.nodePosition as TextPosition).offset;
+      final textNode = document.getNode(_pastePosition) as TextNode;
+      final pasteTextOffset =
+          (_pastePosition.nodePosition as TextPosition).offset;
 
-    if (parsedContent.length > 1 &&
-        pasteTextOffset < textNode.endPosition.offset) {
-      // There is more than 1 node of content being pasted. Therefore,
-      // new nodes will need to be added, which means that the currently
-      // selected text node will be split at the current text offset.
-      // Configure a new node to be added at the end of the pasted content
-      // which contains the trailing text from the currently selected
-      // node.
-      executor.executeCommand(
-        SplitParagraphCommand(
-          nodeId: currentNodeWithSelection.id,
-          splitPosition: TextPosition(offset: pasteTextOffset),
-          newNodeId: Editor.createNodeId(),
-          replicateExistingMetadata: true,
-        ),
-      );
-    }
-
-    if (parsedContent.first is TextNode) {
-      // Paste the first piece of attributed content into the existing selected TextNode.
-      executor.executeCommand(
-        InsertAttributedTextCommand(
-          documentPosition: _pastePosition,
-          textToInsert: (parsedContent.first as TextNode).text,
-        ),
-      );
-    } else if (parsedContent.first is ImageNode) {
-      executor.executeCommand(
-        InsertNodeAfterNodeCommand(
-            existingNodeId: _pastePosition.nodeId,
-            newNode: parsedContent.first),
-      );
-    }
-
-    // The first line of pasted text was added to the selected paragraph.
-    // Now, add all remaining pasted nodes to the document..
-    DocumentNode previousNode = document.getNodeById(_pastePosition.nodeId)!;
-    // ^ re-query the node where the first paragraph was pasted because nodes are immutable.
-    for (final pastedNode in parsedContent.sublist(1)) {
-      document.insertNodeAfter(
-        existingNodeId: previousNode.id,
-        newNode: pastedNode,
-      );
-      previousNode = pastedNode;
-
-      executor.logChanges([
-        DocumentEdit(
-          NodeInsertedEvent(
-              pastedNode.id, document.getNodeIndexById(pastedNode.id)),
-        )
-      ]);
-    }
-
-    // Place the caret at the end of the pasted content.
-    final pastedNode = document.getNodeById(previousNode.id)!;
-    // ^ re-query the node where we pasted content because nodes are immutable.
-
-    executor.executeCommand(
-      ChangeSelectionCommand(
-        DocumentSelection.collapsed(
-          position: DocumentPosition(
-            nodeId: pastedNode.id,
-            nodePosition: pastedNode.endPosition,
+      if (parsedContent.length > 1 &&
+          pasteTextOffset < textNode.endPosition.offset) {
+        // There is more than 1 node of content being pasted. Therefore,
+        // new nodes will need to be added, which means that the currently
+        // selected text node will be split at the current text offset.
+        // Configure a new node to be added at the end of the pasted content
+        // which contains the trailing text from the currently selected
+        // node.
+        executor.executeCommand(
+          SplitParagraphCommand(
+            nodeId: currentNodeWithSelection.id,
+            splitPosition: TextPosition(offset: pasteTextOffset),
+            newNodeId: Editor.createNodeId(),
+            replicateExistingMetadata: true,
           ),
+        );
+      }
+
+      if (parsedContent.first is TextNode) {
+        // Paste the first piece of attributed content into the existing selected TextNode.
+        executor.executeCommand(
+          InsertAttributedTextCommand(
+            documentPosition: _pastePosition,
+            textToInsert: (parsedContent.first as TextNode).text,
+          ),
+        );
+      } else if (parsedContent.first is ImageNode) {
+        executor.executeCommand(
+          InsertNodeAfterNodeCommand(
+              existingNodeId: _pastePosition.nodeId,
+              newNode: parsedContent.first),
+        );
+      }
+
+      // The first line of pasted text was added to the selected paragraph.
+      // Now, add all remaining pasted nodes to the document..
+      DocumentNode previousNode = document.getNodeById(_pastePosition.nodeId)!;
+      // ^ re-query the node where the first paragraph was pasted because nodes are immutable.
+      for (final pastedNode in parsedContent.sublist(1)) {
+        document.insertNodeAfter(
+          existingNodeId: previousNode.id,
+          newNode: pastedNode,
+        );
+        previousNode = pastedNode;
+
+        executor.logChanges([
+          DocumentEdit(
+            NodeInsertedEvent(
+                pastedNode.id, document.getNodeIndexById(pastedNode.id)),
+          )
+        ]);
+      }
+
+      // Place the caret at the end of the pasted content.
+      final pastedNode = document.getNodeById(previousNode.id)!;
+      // ^ re-query the node where we pasted content because nodes are immutable.
+
+      executor.executeCommand(
+        ChangeSelectionCommand(
+          DocumentSelection.collapsed(
+            position: DocumentPosition(
+              nodeId: pastedNode.id,
+              nodePosition: pastedNode.endPosition,
+            ),
+          ),
+          SelectionChangeType.insertContent,
+          SelectionReason.userInteraction,
         ),
-        SelectionChangeType.insertContent,
-        SelectionReason.userInteraction,
-      ),
-    );
-    editorOpsLog
-        .fine('New selection after paste operation: ${composer.selection}');
-    editorOpsLog.fine('Done with paste command.');
+      );
+      editorOpsLog
+          .fine('New selection after paste operation: ${composer.selection}');
+      editorOpsLog.fine('Done with paste command.');
+    } else if (currentNodeWithSelection is ImageNode) {
+      editorOpsLog
+          .info("Pasting clipboard content in document after ImageNode.");
+      final pasteTargetNode = document.getNode(_pastePosition);
+      if (pasteTargetNode == null) {
+        editorOpsLog.warning("Paste position node not found.");
+        return;
+      }
+
+      /// 提取第一段
+      final firstPastedNode =
+          parsedContent.isNotEmpty ? parsedContent.first : null;
+
+      /// 判断是否需要换行段（TextNode 可以，ImageNode 不加）
+      final shouldInsertLineBreak =
+          firstPastedNode != null && firstPastedNode is! ImageNode;
+
+      DocumentNode? previousNode;
+
+      /// 1. （可选）插入空段落
+      if (shouldInsertLineBreak) {
+        final lineBreakNode = ParagraphNode(
+          id: Editor.createNodeId(),
+          text: AttributedText(),
+        );
+
+        executor.executeCommand(
+          InsertNodeAfterNodeCommand(
+            existingNodeId: pasteTargetNode.id,
+            newNode: lineBreakNode,
+          ),
+        );
+
+        previousNode = document.getNodeById(lineBreakNode.id);
+      } else {
+        previousNode = pasteTargetNode;
+      }
+
+      /// 2. 插入第一段内容
+      if (firstPastedNode != null && previousNode != null) {
+        if (firstPastedNode is TextNode) {
+          executor.executeCommand(
+            InsertAttributedTextCommand(
+              documentPosition: DocumentPosition(
+                nodeId: previousNode.id,
+                nodePosition: const TextNodePosition(offset: 0),
+              ),
+              textToInsert: firstPastedNode.text,
+            ),
+          );
+
+          // 重新获取因为已被覆盖的段落
+          final updated = document.getNodeById(previousNode.id);
+          if (updated != null) {
+            previousNode = updated;
+          }
+        } else {
+          executor.executeCommand(
+            InsertNodeAfterNodeCommand(
+              existingNodeId: previousNode.id,
+              newNode: firstPastedNode,
+            ),
+          );
+          previousNode = document.getNodeById(firstPastedNode.id);
+        }
+      }
+
+      /// 3. 插入剩余段落
+      for (final node in parsedContent.skip(1)) {
+        if (previousNode == null) break;
+
+        executor.executeCommand(
+          InsertNodeAfterNodeCommand(
+            existingNodeId: previousNode.id,
+            newNode: node,
+          ),
+        );
+        previousNode = document.getNodeById(node.id);
+      }
+
+      /// 4. 设置光标到最后插入的位置
+      if (previousNode != null) {
+        final position = previousNode.endPosition;
+        if (position != null) {
+          executor.executeCommand(
+            ChangeSelectionCommand(
+              DocumentSelection.collapsed(
+                position: DocumentPosition(
+                  nodeId: previousNode.id,
+                  nodePosition: position,
+                ),
+              ),
+              SelectionChangeType.insertContent,
+              SelectionReason.userInteraction,
+            ),
+          );
+        }
+      }
+
+      editorOpsLog
+          .fine('New selection after paste operation: ${composer.selection}');
+      editorOpsLog.fine('Done with paste command.');
+    }
   }
 
   // MARK: 自定义粘贴的内容转化
@@ -2621,7 +2720,7 @@ class PasteEditorCommand extends EditCommand {
     // on inspection of the pasted content, e.g., link attributions.
     // final attributedLines = _inferAttributionsForLinesOfPastedText(_content);
     // final nodes = _convertLinesToParagraphs(attributedLines).toList();
-    final mutableDocument = deserializeMarkdownToDocumentForPaste(_content);
+    final mutableDocument = deserializeMarkdownToDocument(_content);
     final List<DocumentNode> nodes = mutableDocument.nodes;
     return nodes;
   }
