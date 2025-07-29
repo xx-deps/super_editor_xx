@@ -2382,10 +2382,16 @@ class CommonEditorOperations {
       }
       final nodeContent = selectedNode.copyContent(nodeSelection);
       if (nodeContent != null) {
-        // TODO: 实现@逻辑
         if (selectedNode is ImageNode) {
-          markdownBuffer
-              .write('![${selectedNode.altText}](${selectedNode.imageUrl})');
+          if (selectedNode.imageUrl.startsWith('https://') ||
+              selectedNode.imageUrl.startsWith('http://') ||
+              selectedNode.imageUrl.startsWith('ftp://')) {
+            markdownBuffer
+                .write('![${selectedNode.altText}](${selectedNode.imageUrl})');
+          } else {
+            markdownBuffer.write(
+                '![${selectedNode.altText}](<${selectedNode.imageUrl}>)');
+          }
         } else if (selectedNode is ParagraphNode &&
             nodeSelection is TextNodeSelection) {
           final fullText = selectedNode.text;
@@ -2534,7 +2540,6 @@ class PasteEditorCommand extends EditCommand {
     final pasteTextOffset =
         (_pastePosition.nodePosition as TextPosition).offset;
 
-    /// 如果第一张就是图片没有其他文字内容，有需要断行
     if (parsedContent.length > 1 &&
         pasteTextOffset < textNode.endPosition.offset) {
       // There is more than 1 node of content being pasted. Therefore,
@@ -2560,6 +2565,12 @@ class PasteEditorCommand extends EditCommand {
           documentPosition: _pastePosition,
           textToInsert: (parsedContent.first as TextNode).text,
         ),
+      );
+    } else if (parsedContent.first is ImageNode) {
+      executor.executeCommand(
+        InsertNodeAfterNodeCommand(
+            existingNodeId: _pastePosition.nodeId,
+            newNode: parsedContent.first),
       );
     }
 
@@ -2612,14 +2623,6 @@ class PasteEditorCommand extends EditCommand {
     // final nodes = _convertLinesToParagraphs(attributedLines).toList();
     final mutableDocument = deserializeMarkdownToDocumentForPaste(_content);
     final List<DocumentNode> nodes = mutableDocument.nodes;
-
-    /// 如果第一行是图片节点，前面需要添加一个空的段落节点，以实现截断换行
-    if (nodes.isNotEmpty && nodes.first is ImageNode) {
-      return [
-        ParagraphNode(id: Editor.createNodeId(), text: AttributedText('')),
-        ...nodes
-      ];
-    }
     return nodes;
   }
 

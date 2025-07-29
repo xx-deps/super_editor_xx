@@ -257,19 +257,20 @@ class _MarkdownToDocument implements md.NodeVisitor {
       case 'p':
         final inlineVisitor = _parseInline(element.textContent);
         if (inlineVisitor.isImage) {
-          final size =
-              _parseSizeFromImageName(inlineVisitor.imageAltText ?? '');
-          _addImage(
-            // TODO: handle null image URL
-            imageUrl: inlineVisitor.imageUrl!,
-            altText: inlineVisitor.imageAltText!,
-            expectedBitmapSize: size == null
-                ? null
-                : ExpectedSize(
-                    size.width.toInt(),
-                    size.height.toInt(),
-                  ),
-          );
+          final altText = inlineVisitor.imageAltText ?? '';
+          final imageUrl = inlineVisitor.imageUrl;
+          if (imageUrl != null && imageUrl.isNotEmpty) {
+            final size = _parseSizeFromImageName(altText);
+            final expectedSize = size != null
+                ? ExpectedSize(size.width.toInt(), size.height.toInt())
+                : null;
+
+            _addImage(
+              imageUrl: imageUrl,
+              altText: altText,
+              expectedBitmapSize: expectedSize,
+            );
+          }
         } else {
           _addParagraph(inlineVisitor.attributedText, element.attributes);
         }
@@ -338,8 +339,10 @@ class _MarkdownToDocument implements md.NodeVisitor {
       final regex = RegExp(r'w(\d+)h(\d+)', caseSensitive: false);
       final match = regex.firstMatch(name);
       if (match != null) {
-        final width = double.tryParse(match.group(1)!);
-        final height = double.tryParse(match.group(2)!);
+        final widthStr = match.group(1);
+        final heightStr = match.group(2);
+        final width = widthStr != null ? double.tryParse(widthStr) : null;
+        final height = heightStr != null ? double.tryParse(heightStr) : null;
         if (width != null && height != null) {
           return Size(width, height);
         }
