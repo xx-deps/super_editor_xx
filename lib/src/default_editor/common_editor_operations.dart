@@ -2691,21 +2691,19 @@ class PasteEditorCommand extends EditCommand {
       /// 4. 设置光标到最后插入的位置
       if (previousNode != null) {
         final position = previousNode.endPosition;
-        if (position != null) {
-          executor.executeCommand(
-            ChangeSelectionCommand(
-              DocumentSelection.collapsed(
-                position: DocumentPosition(
-                  nodeId: previousNode.id,
-                  nodePosition: position,
-                ),
+        executor.executeCommand(
+          ChangeSelectionCommand(
+            DocumentSelection.collapsed(
+              position: DocumentPosition(
+                nodeId: previousNode.id,
+                nodePosition: position,
               ),
-              SelectionChangeType.insertContent,
-              SelectionReason.userInteraction,
             ),
-          );
-        }
-      }
+            SelectionChangeType.insertContent,
+            SelectionReason.userInteraction,
+          ),
+        );
+            }
 
       editorOpsLog
           .fine('New selection after paste operation: ${composer.selection}');

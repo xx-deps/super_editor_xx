@@ -52,14 +52,16 @@ dependencies:
   url_launcher: ^6.3.1
   uuid: ^4.5.1
 
-  # Dependencies for testing tools that we ship with super_editor
+ 
+
+  clock: ^1.1.1
+
+dev_dependencies:
+ # Dependencies for testing tools that we ship with super_editor
   flutter_test:
     sdk: flutter
   flutter_test_robots:
     path: packages/flutter_test_robots
-  clock: ^1.1.1
-
-dev_dependencies:
   super_editor_markdown:
     path: packages/super_editor_markdown
   flutter_lints: ^2.0.1
