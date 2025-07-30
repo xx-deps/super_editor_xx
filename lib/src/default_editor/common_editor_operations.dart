@@ -2518,14 +2518,37 @@ class PasteEditorCommand extends EditCommand {
     _parsedContent ??= _parseContent();
 
     // Assign locally so we don't have to use a "!" everywhere we reference it.
-    final parsedContent = _parsedContent!.toList();
-    if (parsedContent.isEmpty) {
+    final tryParsedContent = _parsedContent!.toList();
+    if (tryParsedContent.isEmpty) {
       // No content to paste.
       return;
     }
 
+    // parsedContent
+
     final document = context.document;
     final composer = context.find<MutableDocumentComposer>(Editor.composerKey);
+    final currentAttributions =
+        composer.preferences.currentAttributions.toList();
+    final parsedContent = [];
+    if (currentAttributions.isNotEmpty) {
+      tryParsedContent.forEach((node) {
+        ///如果是文字节点需要粘贴进去
+        if (node is TextNode) {
+          final attributedText = node.text;
+          currentAttributions.forEach((attributions) {
+            attributedText.addAttribution(
+                attributions, SpanRange(0, attributedText.length - 1));
+          });
+          final newTextNode = node.copyTextNodeWith(
+            text: attributedText,
+          );
+          parsedContent.add(node);
+        } else {
+          parsedContent.add(node);
+        }
+      });
+    }
     final currentNodeWithSelection =
         document.getNodeById(_pastePosition.nodeId);
 
@@ -2703,7 +2726,7 @@ class PasteEditorCommand extends EditCommand {
             SelectionReason.userInteraction,
           ),
         );
-            }
+      }
 
       editorOpsLog
           .fine('New selection after paste operation: ${composer.selection}');
