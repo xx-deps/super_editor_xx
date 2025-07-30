@@ -86,7 +86,7 @@ class SingleColumnLayoutPresenter {
   }
 
   void _onDocumentChange(_) {
-    editorLayoutLog.info("The document changed. Marking the presenter dirty.");
+    editorLayoutLog.finest("The document changed. Marking the presenter dirty.");
     final wasDirty = isDirty;
 
     _earliestDirtyPhase = 0;
@@ -117,7 +117,7 @@ class SingleColumnLayoutPresenter {
           _earliestDirtyPhase = phaseIndex;
         }
 
-        editorLayoutLog.info("Presenter phase ($phaseIndex) is dirty.");
+        editorLayoutLog.finest("Presenter phase ($phaseIndex) is dirty.");
 
         if (!wasDirty) {
           // The presenter just went from clean to dirty. Notify listeners.
@@ -136,7 +136,7 @@ class SingleColumnLayoutPresenter {
   }
 
   void updateViewModel() {
-    editorLayoutLog.info("Calculating an updated view model for document layout.");
+    editorLayoutLog.finest("Calculating an updated view model for document layout.");
     if (_earliestDirtyPhase == _pipeline.length) {
       editorLayoutLog.fine("The presenter is already up to date");
       return;
@@ -147,7 +147,7 @@ class SingleColumnLayoutPresenter {
     final oldViewModel = _viewModel;
     _viewModel = _createNewViewModel();
 
-    editorLayoutLog.info("Done calculating new document layout view model");
+    editorLayoutLog.finest("Done calculating new document layout view model");
 
     _notifyListenersOfChanges(
       oldViewModel: oldViewModel,
@@ -403,7 +403,7 @@ abstract class SingleColumnLayoutStylePhase {
   /// Marks this phase as needing to re-run its view model calculations.
   @protected
   void markDirty() {
-    editorLayoutLog.info("Marking a layout phase as dirty: $runtimeType");
+    editorLayoutLog.finest("Marking a layout phase as dirty: $runtimeType");
     _dirtyCallback?.call();
   }
 

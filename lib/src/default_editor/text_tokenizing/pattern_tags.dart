@@ -214,10 +214,10 @@ class PatternTagReaction extends EditReaction {
       return;
     }
 
-    editorPatternTagsLog.info("Reacting to possible hash tagging");
-    editorPatternTagsLog.info("Incoming change list:");
-    editorPatternTagsLog.info(changeList.map((event) => event.runtimeType).toList());
-    editorPatternTagsLog.info(
+    editorPatternTagsLog.finest("Reacting to possible hash tagging");
+    editorPatternTagsLog.finest("Incoming change list:");
+    editorPatternTagsLog.finest(changeList.map((event) => event.runtimeType).toList());
+    editorPatternTagsLog.finest(
         "Caret position: ${editContext.find<MutableDocumentComposer>(Editor.composerKey).selection?.extent.nodePosition}");
 
     _adjustTagAttributionsAroundAlteredTags(editContext, requestDispatcher, changeList);
@@ -410,7 +410,7 @@ class PatternTagReaction extends EditReaction {
       return;
     }
 
-    editorPatternTagsLog.info("Checking edited text nodes for back-to-back pattern tags that need to be split apart");
+    editorPatternTagsLog.finest("Checking edited text nodes for back-to-back pattern tags that need to be split apart");
     for (final textEdit in textEdits) {
       final node = document.getNodeById(textEdit.nodeId) as TextNode;
       _splitBackToBackTagsInTextNode(requestDispatcher, node);
@@ -545,7 +545,7 @@ class PatternTagReaction extends EditReaction {
       for (final tag in allTags) {
         final tagText = textNode.text.substring(tag.start, tag.end + 1);
         if (!tagText.startsWith(_tagRule.trigger) || tagText == _tagRule.trigger) {
-          editorPatternTagsLog.info("Removing tag with value: '$tagText'");
+          editorPatternTagsLog.finest("Removing tag with value: '$tagText'");
           removeTagRequests.add(
             RemoveTextAttributionsRequest(
               documentRange: textNode.selectionBetween(

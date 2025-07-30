@@ -381,10 +381,10 @@ class TagUserReaction extends EditReaction {
 
   @override
   void react(EditContext editContext, RequestDispatcher requestDispatcher, List<EditEvent> changeList) {
-    editorStableTagsLog.info("Reacting to possible stable tagging");
-    editorStableTagsLog.info("Incoming change list:");
-    editorStableTagsLog.info(changeList.map((event) => event.runtimeType).toList());
-    editorStableTagsLog.info(
+    editorStableTagsLog.finest("Reacting to possible stable tagging");
+    editorStableTagsLog.finest("Incoming change list:");
+    editorStableTagsLog.finest(changeList.map((event) => event.runtimeType).toList());
+    editorStableTagsLog.finest(
         "Caret position: ${editContext.find<MutableDocumentComposer>(Editor.composerKey).selection?.extent.nodePosition}");
 
     final document = editContext.document;
@@ -525,7 +525,7 @@ class TagUserReaction extends EditReaction {
     RequestDispatcher requestDispatcher,
     List<EditEvent> changeList,
   ) {
-    editorStableTagsLog.info("Removing invalid tags.");
+    editorStableTagsLog.finest("Removing invalid tags.");
     final document = editContext.document;
     final nodesToInspect = <String>{};
     for (final edit in changeList) {
@@ -570,7 +570,7 @@ class TagUserReaction extends EditReaction {
         final tagText = textNode.text.substring(tag.start, tag.end + 1);
 
         if (!tagText.startsWith(_tagRule.trigger)) {
-          editorStableTagsLog.info("Removing tag with value: '$tagText'");
+          editorStableTagsLog.finest("Removing tag with value: '$tagText'");
 
           onUpdateComposingStableTag?.call(null);
 
@@ -621,7 +621,7 @@ class TagUserReaction extends EditReaction {
           // The tag was partially deleted it. Delete the whole thing.
           final deleteFrom = tag.start;
           final deleteTo = tag.end + 1; // +1 because SpanRange is inclusive and text position is exclusive
-          editorStableTagsLog.info("Deleting partial tag '$tagText': $deleteFrom -> $deleteTo");
+          editorStableTagsLog.finest("Deleting partial tag '$tagText': $deleteFrom -> $deleteTo");
 
           if (baseBeforeDeletions.nodeId == textNode.id) {
             if (baseOffsetAfterDeletions >= deleteTo) {
@@ -832,7 +832,7 @@ class TagUserReaction extends EditReaction {
       for (final composingTag in composingTags) {
         if (selection == null || selection.extent.nodeId != textNodeId || selection.base.nodeId != textNodeId) {
           editorStableTagsLog
-              .info("Committing tag because selection is null, or selection moved to different node: '$composingTag'");
+              .finest("Committing tag because selection is null, or selection moved to different node: '$composingTag'");
           _commitTag(requestDispatcher, textNode, composingTag);
           continue;
         }
@@ -841,7 +841,7 @@ class TagUserReaction extends EditReaction {
         if (selection.isCollapsed &&
             (extentPosition.offset <= composingTag.startOffset || extentPosition.offset > composingTag.endOffset)) {
           editorStableTagsLog
-              .info("Committing tag because the caret is out of range: '$composingTag', extent: $extentPosition");
+              .finest("Committing tag because the caret is out of range: '$composingTag', extent: $extentPosition");
           _commitTag(requestDispatcher, textNode, composingTag);
           continue;
         }
@@ -1121,7 +1121,7 @@ class AdjustSelectionAroundTagReaction extends EditReaction {
 
   @override
   void react(EditContext editContext, RequestDispatcher requestDispatcher, List<EditEvent> changeList) {
-    editorStableTagsLog.info("KeepCaretOutOfTagReaction - react()");
+    editorStableTagsLog.finest("KeepCaretOutOfTagReaction - react()");
 
     SelectionChangeEvent? selectionChangeEvent;
     bool hasNonSelectionOrComposingRegionChange = false;
@@ -1139,11 +1139,11 @@ class AdjustSelectionAroundTagReaction extends EditReaction {
       // We only want to move the caret when we're confident about what changed. Therefore,
       // we only react to changes that are solely a selection or composing region change,
       // i.e., we ignore situations like text entry, text deletion, etc.
-      editorStableTagsLog.info(" - change list isn't just a single SelectionChangeEvent: $changeList");
+      editorStableTagsLog.finest(" - change list isn't just a single SelectionChangeEvent: $changeList");
       return;
     }
 
-    editorStableTagsLog.info(" - we received just one selection change event. Checking for user tag.");
+    editorStableTagsLog.finest(" - we received just one selection change event. Checking for user tag.");
 
     final document = editContext.document;
 
@@ -1354,7 +1354,7 @@ class AdjustSelectionAroundTagReaction extends EditReaction {
     TagAroundPosition tagAroundCaret,
   ) {
     DocumentSelection? newSelection;
-    editorStableTagsLog.info("oldCaret is null. Pushing caret to end of tag.");
+    editorStableTagsLog.finest("oldCaret is null. Pushing caret to end of tag.");
     // The caret was placed directly in the token without a previous selection. This might
     // be a user tap, or programmatic placement. Move the caret to the nearest edge of the
     // token.
@@ -1394,7 +1394,7 @@ class AdjustSelectionAroundTagReaction extends EditReaction {
     TagAroundPosition tagAroundCaret, {
     bool expand = false,
   }) {
-    editorStableTagsLog.info("Pushing caret to other side of token - tag around caret: $tagAroundCaret");
+    editorStableTagsLog.finest("Pushing caret to other side of token - tag around caret: $tagAroundCaret");
     final Document document = editContext.document;
 
     final pushDirection = document.getAffinityBetween(
@@ -1449,7 +1449,7 @@ class AdjustSelectionAroundTagReaction extends EditReaction {
     required TextNode? baseNode,
     required TextNode? extentNode,
   }) {
-    editorStableTagsLog.info("Pushing expanded selection to other side(s) of token(s)");
+    editorStableTagsLog.finest("Pushing expanded selection to other side(s) of token(s)");
 
     final document = editContext.document;
     final selection = selectionChangeEvent.newSelection!;
@@ -1495,7 +1495,7 @@ class AdjustSelectionAroundTagReaction extends EditReaction {
 
     if (newBasePosition == null && newExtentPosition == null) {
       // No adjustment is needed.
-      editorStableTagsLog.info("No selection adjustment is needed.");
+      editorStableTagsLog.finest("No selection adjustment is needed.");
       return;
     }
 

@@ -757,7 +757,7 @@ class _AndroidDocumentTouchInteractorState extends State<AndroidDocumentTouchInt
       return;
     }
 
-    editorGesturesLog.info("Tap down on document");
+    editorGesturesLog.finest("Tap down on document");
     final docOffset = _getDocumentOffsetFromGlobalOffset(details.globalPosition);
     editorGesturesLog.fine(" - document offset: $docOffset");
 
@@ -824,7 +824,7 @@ class _AndroidDocumentTouchInteractorState extends State<AndroidDocumentTouchInt
   }
 
   void _onDoubleTapDown(TapDownDetails details) {
-    editorGesturesLog.info("Double tap down on document");
+    editorGesturesLog.finest("Double tap down on document");
     final docOffset = _getDocumentOffsetFromGlobalOffset(details.globalPosition);
     editorGesturesLog.fine(" - document offset: $docOffset");
 
@@ -907,7 +907,7 @@ class _AndroidDocumentTouchInteractorState extends State<AndroidDocumentTouchInt
   }
 
   void _onTripleTapDown(TapDownDetails details) {
-    editorGesturesLog.info("Triple tap down on document");
+    editorGesturesLog.finest("Triple tap down on document");
     final docOffset = _getDocumentOffsetFromGlobalOffset(details.globalPosition);
     editorGesturesLog.fine(" - document offset: $docOffset");
 

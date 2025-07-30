@@ -255,7 +255,7 @@ class RenderSuperTextLayout extends RenderBox
 
   @override
   void performLayout() {
-    layoutLog.info("Running SuperText layout. Incoming constraints: $constraints");
+    layoutLog.finest("Running SuperText layout. Incoming constraints: $constraints");
     final children = getChildrenAsList();
     final background = children[0];
     final text = children[1];
@@ -263,7 +263,7 @@ class RenderSuperTextLayout extends RenderBox
 
     text.layout(constraints, parentUsesSize: true);
     state._paragraph = text as RenderLayoutAwareParagraph;
-    layoutLog.info("SuperText text layout size: ${text.size}");
+    layoutLog.finest("SuperText text layout size: ${text.size}");
 
     final layerConstraints = BoxConstraints.tight(text.size);
 

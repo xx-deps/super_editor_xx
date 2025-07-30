@@ -530,7 +530,7 @@ class _ReadOnlyAndroidDocumentTouchInteractorState extends State<ReadOnlyAndroid
       return;
     }
 
-    readerGesturesLog.info("Tap down on document");
+    readerGesturesLog.finest("Tap down on document");
     final docOffset = _interactorOffsetToDocOffset(details.localPosition);
     readerGesturesLog.fine(" - document offset: $docOffset");
 
@@ -577,7 +577,7 @@ class _ReadOnlyAndroidDocumentTouchInteractorState extends State<ReadOnlyAndroid
   }
 
   void _onDoubleTapDown(TapDownDetails details) {
-    readerGesturesLog.info("Double tap down on document");
+    readerGesturesLog.finest("Double tap down on document");
     final docOffset = _interactorOffsetToDocOffset(details.localPosition);
     readerGesturesLog.fine(" - document offset: $docOffset");
 
@@ -635,7 +635,7 @@ class _ReadOnlyAndroidDocumentTouchInteractorState extends State<ReadOnlyAndroid
   }
 
   void _onTripleTapDown(TapDownDetails details) {
-    readerGesturesLog.info("Triple down down on document");
+    readerGesturesLog.finest("Triple down down on document");
     final docOffset = _interactorOffsetToDocOffset(details.localPosition);
     readerGesturesLog.fine(" - document offset: $docOffset");
 
@@ -905,7 +905,7 @@ class _ReadOnlyAndroidDocumentTouchInteractorState extends State<ReadOnlyAndroid
     final dragEndInDoc = _interactorOffsetToDocOffset(_dragEndInInteractor!);
 
     final dragPosition = _docLayout.getDocumentPositionNearestToOffset(dragEndInDoc);
-    readerGesturesLog.info("Selecting new position during drag: $dragPosition");
+    readerGesturesLog.finest("Selecting new position during drag: $dragPosition");
 
     if (dragPosition == null) {
       return;

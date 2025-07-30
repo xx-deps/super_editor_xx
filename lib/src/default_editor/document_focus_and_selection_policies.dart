@@ -120,7 +120,7 @@ class _EditorSelectionAndFocusPolicyState extends State<EditorSelectionAndFocusP
       if (widget.restorePreviousSelectionOnGainFocus && _previousSelection != null) {
         if (widget.document.getNodeById(_previousSelection!.base.nodeId) == null ||
             widget.document.getNodeById(_previousSelection!.extent.nodeId) == null) {
-          editorPoliciesLog.info(
+          editorPoliciesLog.finest(
               "[${widget.runtimeType}] - not restoring previous editor selection because one of the selected nodes was deleted");
           return;
         }
@@ -137,7 +137,7 @@ class _EditorSelectionAndFocusPolicyState extends State<EditorSelectionAndFocusP
 
         // Restore the previous selection.
         editorPoliciesLog
-            .info("[${widget.runtimeType}] - restoring previous editor selection because the editor re-gained focus");
+            .finest("[${widget.runtimeType}] - restoring previous editor selection because the editor re-gained focus");
         final previousSelection = _previousSelection!;
         late final DocumentSelection restoredSelection;
         final baseNode = widget.editor.context.document.getNodeById(previousSelection.base.nodeId);
@@ -193,11 +193,11 @@ class _EditorSelectionAndFocusPolicyState extends State<EditorSelectionAndFocusP
       } else if (widget.placeCaretAtEndOfDocumentOnGainFocus) {
         // Place the caret at the end of the document.
         editorPoliciesLog
-            .info("[${widget.runtimeType}] - placing caret at end of document because the editor gained focus");
+            .finest("[${widget.runtimeType}] - placing caret at end of document because the editor gained focus");
         if (!widget.isDocumentLayoutAvailable()) {
           // We are focused, but the document hasn't been laid out yet. This could happen if SuperEditor has autofocus.
           // Wait until the end of the frame, so we have access to the document layout.
-          editorPoliciesLog.info(
+          editorPoliciesLog.finest(
               "[${widget.runtimeType}] - the document hasn't been laid out yet. Trying again at the end of the frame");
           WidgetsBinding.instance.scheduleFrameCallback((timeStamp) {
             if (!mounted) {
@@ -226,7 +226,7 @@ class _EditorSelectionAndFocusPolicyState extends State<EditorSelectionAndFocusP
 
     // (Maybe) remove the editor's selection when it loses focus.
     if (!widget.focusNode.hasFocus && widget.clearSelectionWhenEditorLosesFocus) {
-      editorPoliciesLog.info("[${widget.runtimeType}] - clearing editor selection because the editor lost all focus");
+      editorPoliciesLog.finest("[${widget.runtimeType}] - clearing editor selection because the editor lost all focus");
 
       widget.editor.execute([
         const ClearSelectionRequest(),

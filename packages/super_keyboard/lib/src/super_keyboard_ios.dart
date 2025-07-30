@@ -68,7 +68,7 @@ class SuperKeyboardIOS {
   static final log = Logger("super_keyboard.ios");
 
   SuperKeyboardIOS._() {
-    log.info("Initializing iOS plugin for super_keyboard");
+    log.finest("Initializing iOS plugin for super_keyboard");
     assert(
       defaultTargetPlatform == TargetPlatform.iOS,
       "You shouldn't initialize SuperKeyboardIOS when not on an iOS platform. Current: $defaultTargetPlatform",
@@ -93,7 +93,7 @@ class SuperKeyboardIOS {
 
     switch (message.method) {
       case "keyboardWillShow":
-        log.info("keyboardWillShow");
+        log.finest("keyboardWillShow");
         _geometry.value = _geometry.value.updateWith(
           MobileWindowGeometry(
             keyboardState: KeyboardState.opening,
@@ -107,7 +107,7 @@ class SuperKeyboardIOS {
         }
         break;
       case "keyboardDidShow":
-        log.info("keyboardDidShow");
+        log.finest("keyboardDidShow");
         _geometry.value = _geometry.value.updateWith(
           MobileWindowGeometry(
             keyboardState: KeyboardState.open,
@@ -121,10 +121,10 @@ class SuperKeyboardIOS {
         }
         break;
       case "keyboardWillChangeFrame":
-        log.info("keyboardWillChangeFrame - keyboard type: ${message.arguments['keyboardType']}");
+        log.finest("keyboardWillChangeFrame - keyboard type: ${message.arguments['keyboardType']}");
         break;
       case "keyboardWillHide":
-        log.info("keyboardWillHide");
+        log.finest("keyboardWillHide");
         _geometry.value = _geometry.value.updateWith(
           MobileWindowGeometry(
             keyboardState: KeyboardState.closing,
@@ -138,7 +138,7 @@ class SuperKeyboardIOS {
         }
         break;
       case "keyboardDidHide":
-        log.info("keyboardDidHide");
+        log.finest("keyboardDidHide");
         _geometry.value = _geometry.value.updateWith(
           MobileWindowGeometry(
             keyboardState: KeyboardState.closed,

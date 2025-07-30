@@ -34,7 +34,7 @@ class SingleColumnLayoutComposingRegionStyler extends SingleColumnLayoutStylePha
 
   @override
   SingleColumnLayoutViewModel style(Document document, SingleColumnLayoutViewModel viewModel) {
-    editorStyleLog.info("(Re)calculating composing region view model for document layout");
+    editorStyleLog.finest("(Re)calculating composing region view model for document layout");
     final documentComposingRegion = _composingRegion.value;
     if (documentComposingRegion == null) {
       // There's nothing for us to style if there's no composing region. Return the

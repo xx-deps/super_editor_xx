@@ -186,7 +186,7 @@ class Editor implements RequestDispatcher {
       return;
     }
 
-    editorEditsLog.info("Starting transaction");
+    editorEditsLog.finest("Starting transaction");
     _isInTransaction = true;
     _activeChangeList = <EditEvent>[];
     _transaction = CommandTransaction([], clock.now());
@@ -244,7 +244,7 @@ class Editor implements RequestDispatcher {
     // transaction.
     _onTransactionEnd();
 
-    editorEditsLog.info("Finished transaction");
+    editorEditsLog.finest("Finished transaction");
   }
 
   /// Executes the given [requests].
@@ -388,7 +388,7 @@ class Editor implements RequestDispatcher {
       return;
     }
 
-    editorEditsLog.info("Running undo");
+    editorEditsLog.finest("Running undo");
     if (_history.isEmpty) {
       return;
     }
@@ -432,7 +432,7 @@ class Editor implements RequestDispatcher {
       }
     }
 
-    editorEditsLog.info("Finished undo");
+    editorEditsLog.finest("Finished undo");
 
     editorEditsLog.finer("Ending transaction on all editables");
     for (final editable in context._resources.values) {
@@ -450,7 +450,7 @@ class Editor implements RequestDispatcher {
       return;
     }
 
-    editorEditsLog.info("Running redo");
+    editorEditsLog.finest("Running redo");
     if (_future.isEmpty) {
       return;
     }
@@ -473,7 +473,7 @@ class Editor implements RequestDispatcher {
     }
     _history.add(commandTransaction);
 
-    editorEditsLog.info("Finished redo");
+    editorEditsLog.finest("Finished redo");
 
     editorEditsLog.finer("Ending transaction on all editables");
     for (final editable in context._resources.values) {

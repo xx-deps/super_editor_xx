@@ -70,7 +70,7 @@ class _SoftwareKeyboardOpenerState extends State<SoftwareKeyboardOpener> impleme
   void open({
     required int viewId,
   }) {
-    editorImeLog.info("[SoftwareKeyboard] - showing keyboard");
+    editorImeLog.finest("[SoftwareKeyboard] - showing keyboard");
     widget.imeConnection.value ??= TextInput.attach(widget.createImeClient(), widget.createImeConfiguration());
     widget.imeConnection.value!.show();
   }
@@ -82,7 +82,7 @@ class _SoftwareKeyboardOpenerState extends State<SoftwareKeyboardOpener> impleme
 
   @override
   void close() {
-    editorImeLog.info("[SoftwareKeyboard] - closing IME connection.");
+    editorImeLog.finest("[SoftwareKeyboard] - closing IME connection.");
     widget.imeConnection.value?.close();
     widget.imeConnection.value = null;
   }

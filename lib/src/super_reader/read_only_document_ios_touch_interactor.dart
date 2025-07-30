@@ -500,7 +500,7 @@ class _SuperReaderIosDocumentTouchInteractorState extends State<SuperReaderIosDo
       return;
     }
 
-    readerGesturesLog.info("Tap down on document");
+    readerGesturesLog.finest("Tap down on document");
     final docOffset = _interactorOffsetToDocumentOffset(details.localPosition);
     readerGesturesLog.fine(" - document offset: $docOffset");
 
@@ -544,7 +544,7 @@ class _SuperReaderIosDocumentTouchInteractorState extends State<SuperReaderIosDo
       return;
     }
 
-    readerGesturesLog.info("Double tap down on document");
+    readerGesturesLog.finest("Double tap down on document");
     final docOffset = _interactorOffsetToDocumentOffset(details.localPosition);
     readerGesturesLog.fine(" - document offset: $docOffset");
 
@@ -602,7 +602,7 @@ class _SuperReaderIosDocumentTouchInteractorState extends State<SuperReaderIosDo
   }
 
   void _onTripleTapUp(TapUpDetails details) {
-    readerGesturesLog.info("Triple down down on document");
+    readerGesturesLog.finest("Triple down down on document");
 
     final docOffset = _interactorOffsetToDocumentOffset(details.localPosition);
     readerGesturesLog.fine(" - document offset: $docOffset");
@@ -832,7 +832,7 @@ class _SuperReaderIosDocumentTouchInteractorState extends State<SuperReaderIosDo
 
     final dragEndInDoc = _interactorOffsetToDocumentOffset(_dragEndInInteractor!);
     final dragPosition = _docLayout.getDocumentPositionNearestToOffset(dragEndInDoc);
-    readerGesturesLog.info("Selecting new position during drag: $dragPosition");
+    readerGesturesLog.finest("Selecting new position during drag: $dragPosition");
 
     if (dragPosition == null) {
       return;

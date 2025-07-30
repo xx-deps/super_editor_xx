@@ -218,7 +218,7 @@ class _ReadOnlyDocumentMouseInteractorState extends State<ReadOnlyDocumentMouseI
   }
 
   void _onTapUp(TapUpDetails details) {
-    readerGesturesLog.info("Tap up on document");
+    readerGesturesLog.finest("Tap up on document");
     final docOffset = _getDocOffsetFromGlobalOffset(details.globalPosition);
     readerGesturesLog.fine(" - document offset: $docOffset");
 
@@ -275,7 +275,7 @@ class _ReadOnlyDocumentMouseInteractorState extends State<ReadOnlyDocumentMouseI
   }
 
   void _onDoubleTapDown(TapDownDetails details) {
-    readerGesturesLog.info("Double tap down on document");
+    readerGesturesLog.finest("Double tap down on document");
     final docOffset = _getDocOffsetFromGlobalOffset(details.globalPosition);
     readerGesturesLog.fine(" - document offset: $docOffset");
 
@@ -334,12 +334,12 @@ class _ReadOnlyDocumentMouseInteractorState extends State<ReadOnlyDocumentMouseI
   }
 
   void _onDoubleTap() {
-    readerGesturesLog.info("Double tap up on document");
+    readerGesturesLog.finest("Double tap up on document");
     _selectionType = SelectionType.position;
   }
 
   void _onTripleTapDown(TapDownDetails details) {
-    readerGesturesLog.info("Triple down down on document");
+    readerGesturesLog.finest("Triple down down on document");
     final docOffset = _getDocOffsetFromGlobalOffset(details.globalPosition);
     readerGesturesLog.fine(" - document offset: $docOffset");
 
@@ -388,7 +388,7 @@ class _ReadOnlyDocumentMouseInteractorState extends State<ReadOnlyDocumentMouseI
   }
 
   void _onTripleTap() {
-    readerGesturesLog.info("Triple tap up on document");
+    readerGesturesLog.finest("Triple tap up on document");
     _selectionType = SelectionType.position;
   }
 
@@ -400,7 +400,7 @@ class _ReadOnlyDocumentMouseInteractorState extends State<ReadOnlyDocumentMouseI
   }
 
   void _onPanStart(DragStartDetails details) {
-    readerGesturesLog.info("Pan start on document, global offset: ${details.globalPosition}, device: ${details.kind}");
+    readerGesturesLog.finest("Pan start on document, global offset: ${details.globalPosition}, device: ${details.kind}");
 
     _panGestureDevice = details.kind;
 
@@ -430,7 +430,7 @@ class _ReadOnlyDocumentMouseInteractorState extends State<ReadOnlyDocumentMouseI
 
   void _onPanUpdate(DragUpdateDetails details) {
     readerGesturesLog
-        .info("Pan update on document, global offset: ${details.globalPosition}, device: $_panGestureDevice");
+        .finest("Pan update on document, global offset: ${details.globalPosition}, device: $_panGestureDevice");
 
     setState(() {
       _dragEndGlobal = details.globalPosition;
@@ -444,7 +444,7 @@ class _ReadOnlyDocumentMouseInteractorState extends State<ReadOnlyDocumentMouseI
   }
 
   void _onPanEnd(DragEndDetails details) {
-    readerGesturesLog.info("Pan end on document, device: $_panGestureDevice");
+    readerGesturesLog.finest("Pan end on document, device: $_panGestureDevice");
 
     if (_panGestureDevice == PointerDeviceKind.trackpad) {
       // The user ended a pan gesture with two fingers on a trackpad.
@@ -456,7 +456,7 @@ class _ReadOnlyDocumentMouseInteractorState extends State<ReadOnlyDocumentMouseI
   }
 
   void _onPanCancel() {
-    readerGesturesLog.info("Pan cancel on document");
+    readerGesturesLog.finest("Pan cancel on document");
     _onDragEnd();
   }
 
@@ -729,7 +729,7 @@ void selectRegion({
   required SelectionType selectionType,
   bool expandSelection = false,
 }) {
-  docGesturesLog.info("Selecting region with selection mode: $selectionType");
+  docGesturesLog.finest("Selecting region with selection mode: $selectionType");
   DocumentSelection? regionSelection = documentLayout.getDocumentSelectionInRegion(
     baseOffsetInDocument,
     extentOffsetInDocument,
