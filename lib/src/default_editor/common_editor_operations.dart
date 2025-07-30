@@ -2524,8 +2524,6 @@ class PasteEditorCommand extends EditCommand {
       return;
     }
 
-    // parsedContent
-
     final document = context.document;
     final composer = context.find<MutableDocumentComposer>(Editor.composerKey);
     final currentAttributions =
