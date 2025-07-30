@@ -2409,9 +2409,11 @@ class CommonEditorOperations {
         } else {
           markdownBuffer.write(nodeContent);
         }
+
         buffer.write(nodeContent);
         if (i < selectedNodes.length - 1) {
           buffer.writeln();
+          markdownBuffer.writeln();
           markdownBuffer.writeln();
         }
       }
@@ -2536,7 +2538,8 @@ class PasteEditorCommand extends EditCommand {
       final pasteTextOffset =
           (_pastePosition.nodePosition as TextPosition).offset;
 
-      if (parsedContent.length > 1 &&
+      if ((parsedContent.length > 1 ||
+              parsedContent.isNotEmpty && parsedContent.first is ImageNode) &&
           pasteTextOffset < textNode.endPosition.offset) {
         // There is more than 1 node of content being pasted. Therefore,
         // new nodes will need to be added, which means that the currently
@@ -2554,31 +2557,40 @@ class PasteEditorCommand extends EditCommand {
         );
       }
 
-      if (parsedContent.first is TextNode) {
+      final firstParsedContent = parsedContent.first;
+      int? aimCaretOffset;
+      if (firstParsedContent is TextNode) {
         // Paste the first piece of attributed content into the existing selected TextNode.
         executor.executeCommand(
           InsertAttributedTextCommand(
             documentPosition: _pastePosition,
-            textToInsert: (parsedContent.first as TextNode).text,
+            textToInsert: firstParsedContent.text,
           ),
         );
-      } else if (parsedContent.first is ImageNode) {
-        executor.executeCommand(
-          InsertNodeAfterNodeCommand(
-              existingNodeId: _pastePosition.nodeId,
-              newNode: parsedContent.first),
-        );
+        aimCaretOffset = pasteTextOffset + firstParsedContent.text.length;
       }
 
       // The first line of pasted text was added to the selected paragraph.
       // Now, add all remaining pasted nodes to the document..
       DocumentNode previousNode = document.getNodeById(_pastePosition.nodeId)!;
-      // ^ re-query the node where the first paragraph was pasted because nodes are immutable.
-      for (final pastedNode in parsedContent.sublist(1)) {
-        document.insertNodeAfter(
-          existingNodeId: previousNode.id,
-          newNode: pastedNode,
-        );
+      final usedCount = firstParsedContent is TextNode ? 1 : 0;
+      for (int i = usedCount; i < parsedContent.length; i++) {
+        final pastedNode = parsedContent[i];
+        if (usedCount == 0 &&
+            textNode.text.isEmpty &&
+            i == 0 &&
+            pastedNode is ImageNode) {
+          document.replaceNodeById(
+            _pastePosition.nodeId,
+            pastedNode,
+          );
+        } else {
+          document.insertNodeAfter(
+            existingNodeId: previousNode.id,
+            newNode: pastedNode,
+          );
+        }
+
         previousNode = pastedNode;
 
         executor.logChanges([
@@ -2589,16 +2601,16 @@ class PasteEditorCommand extends EditCommand {
         ]);
       }
 
-      // Place the caret at the end of the pasted content.
-      final pastedNode = document.getNodeById(previousNode.id)!;
-      // ^ re-query the node where we pasted content because nodes are immutable.
-
+      final aimNodePosition =
+          (aimCaretOffset == null || parsedContent.length > 1)
+              ? previousNode.endPosition
+              : TextNodePosition(offset: aimCaretOffset);
       executor.executeCommand(
         ChangeSelectionCommand(
           DocumentSelection.collapsed(
             position: DocumentPosition(
-              nodeId: pastedNode.id,
-              nodePosition: pastedNode.endPosition,
+              nodeId: previousNode.id,
+              nodePosition: aimNodePosition,
             ),
           ),
           SelectionChangeType.insertContent,
@@ -2691,20 +2703,18 @@ class PasteEditorCommand extends EditCommand {
       /// 4. 设置光标到最后插入的位置
       if (previousNode != null) {
         final position = previousNode.endPosition;
-        if (position != null) {
-          executor.executeCommand(
-            ChangeSelectionCommand(
-              DocumentSelection.collapsed(
-                position: DocumentPosition(
-                  nodeId: previousNode.id,
-                  nodePosition: position,
-                ),
+        executor.executeCommand(
+          ChangeSelectionCommand(
+            DocumentSelection.collapsed(
+              position: DocumentPosition(
+                nodeId: previousNode.id,
+                nodePosition: position,
               ),
-              SelectionChangeType.insertContent,
-              SelectionReason.userInteraction,
             ),
-          );
-        }
+            SelectionChangeType.insertContent,
+            SelectionReason.userInteraction,
+          ),
+        );
       }
 
       editorOpsLog

@@ -42,8 +42,7 @@ MutableDocument deserializeMarkdownToDocumentForPaste(
   List<ElementToNodeConverter> customElementToNodeConverters = const [],
   bool encodeHtml = false,
 }) {
-  final markdownLines =
-      const LineSplitter().convert(markdown).map<md.Line>((String l) {
+  final markdownLines = const LineSplitter().convert(markdown).map<md.Line>((String l) {
     return md.Line(l);
   }).toList();
 
@@ -64,8 +63,7 @@ MutableDocument deserializeMarkdownToDocumentForPaste(
   final markdownNodes = blockParser.parseLines();
 
   // Convert structured markdown to a Document.
-  final nodeVisitor =
-      _MarkdownToDocument(customElementToNodeConverters, encodeHtml, syntax);
+  final nodeVisitor = _MarkdownToDocument(customElementToNodeConverters, encodeHtml, syntax);
   for (final node in markdownNodes) {
     node.accept(nodeVisitor);
   }
@@ -82,13 +80,10 @@ MutableDocument deserializeMarkdownToDocumentForPaste(
   }
 
   // Add 1 hanging line for every 2 blank lines at the end, need this to preserve behavior pre markdown 7.2.1
-  final hangingEmptyLines =
-      markdownLines.reversed.takeWhile((md.Line l) => l.isBlankLine);
-  if (hangingEmptyLines.isNotEmpty &&
-      documentNodes.lastOrNull is ListItemNode) {
+  final hangingEmptyLines = markdownLines.reversed.takeWhile((md.Line l) => l.isBlankLine);
+  if (hangingEmptyLines.isNotEmpty && documentNodes.lastOrNull is ListItemNode) {
     for (var i = 0; i < hangingEmptyLines.length ~/ 2; i++) {
-      documentNodes.add(
-          ParagraphNode(id: Editor.createNodeId(), text: AttributedText()));
+      documentNodes.add(ParagraphNode(id: Editor.createNodeId(), text: AttributedText()));
     }
   }
 
@@ -111,8 +106,7 @@ MutableDocument deserializeMarkdownToDocument(
   List<ElementToNodeConverter> customElementToNodeConverters = const [],
   bool encodeHtml = false,
 }) {
-  final markdownLines =
-      const LineSplitter().convert(markdown).map<md.Line>((String l) {
+  final markdownLines = const LineSplitter().convert(markdown).map<md.Line>((String l) {
     return md.Line(l);
   }).toList();
 
@@ -134,8 +128,7 @@ MutableDocument deserializeMarkdownToDocument(
   final markdownNodes = blockParser.parseLines();
 
   // Convert structured markdown to a Document.
-  final nodeVisitor =
-      _MarkdownToDocument(customElementToNodeConverters, encodeHtml, syntax);
+  final nodeVisitor = _MarkdownToDocument(customElementToNodeConverters, encodeHtml, syntax);
   for (final node in markdownNodes) {
     node.accept(nodeVisitor);
   }
@@ -152,13 +145,10 @@ MutableDocument deserializeMarkdownToDocument(
   }
 
   // Add 1 hanging line for every 2 blank lines at the end, need this to preserve behavior pre markdown 7.2.1
-  final hangingEmptyLines =
-      markdownLines.reversed.takeWhile((md.Line l) => l.isBlankLine);
-  if (hangingEmptyLines.isNotEmpty &&
-      documentNodes.lastOrNull is ListItemNode) {
+  final hangingEmptyLines = markdownLines.reversed.takeWhile((md.Line l) => l.isBlankLine);
+  if (hangingEmptyLines.isNotEmpty && documentNodes.lastOrNull is ListItemNode) {
     for (var i = 0; i < hangingEmptyLines.length ~/ 2; i++) {
-      documentNodes.add(
-          ParagraphNode(id: Editor.createNodeId(), text: AttributedText()));
+      documentNodes.add(ParagraphNode(id: Editor.createNodeId(), text: AttributedText()));
     }
   }
 
@@ -221,9 +211,7 @@ class _MarkdownToDocument implements md.NodeVisitor {
 
     if (_listItemVisitedCount > 0 &&
         !const ['li', 'ul', 'ol'].contains(element.tag) &&
-        (element.children == null ||
-            element.children!.isEmpty ||
-            element.children!.length == 1)) {
+        (element.children == null || element.children!.isEmpty || element.children!.length == 1)) {
       // We are visiting the text content of a list item. Add a list item node to the document.
       _addListItem(
         element,
@@ -262,9 +250,7 @@ class _MarkdownToDocument implements md.NodeVisitor {
           final imageUrl = inlineVisitor.imageUrl;
           if (imageUrl != null && imageUrl.isNotEmpty) {
             final size = _parseSizeFromImageName(altText);
-            final expectedSize = size != null
-                ? ExpectedSize(size.width.toInt(), size.height.toInt())
-                : null;
+            final expectedSize = size != null ? ExpectedSize(size.width.toInt(), size.height.toInt()) : null;
 
             _addImage(
               imageUrl: imageUrl,
@@ -295,8 +281,7 @@ class _MarkdownToDocument implements md.NodeVisitor {
         break;
       case 'li':
         if (_listItemTypeStack.isEmpty) {
-          throw Exception(
-              'Tried to parse a markdown list item but the list item type was null');
+          throw Exception('Tried to parse a markdown list item but the list item type was null');
         }
 
         if (element.attributes['class'] == 'task-list-item') {
@@ -409,8 +394,7 @@ class _MarkdownToDocument implements md.NodeVisitor {
     );
   }
 
-  void _addParagraph(
-      AttributedText attributedText, Map<String, String> attributes) {
+  void _addParagraph(AttributedText attributedText, Map<String, String> attributes) {
     final textAlign = attributes['textAlign'];
 
     _content.add(
@@ -486,9 +470,7 @@ class _MarkdownToDocument implements md.NodeVisitor {
   }) {
     late String content;
 
-    if (element.children != null &&
-        element.children!.isNotEmpty &&
-        element.children!.first is md.UnparsedContent) {
+    if (element.children != null && element.children!.isNotEmpty && element.children!.first is md.UnparsedContent) {
       // The list item might contain another sub-list. In that case, the textContent
       // contains the text for the whole list instead of just the current list item.
       // Use the textContent for the first child, which contains only the text
@@ -514,8 +496,7 @@ class _MarkdownToDocument implements md.NodeVisitor {
         element.children!.isNotEmpty &&
         element.children!.first is md.Element &&
         (element.children!.first as md.Element).tag == 'input') {
-      checked = (element.children!.first as md.Element).attributes['checked'] ==
-          'true';
+      checked = (element.children!.first as md.Element).attributes['checked'] == 'true';
     }
 
     _content.add(
@@ -648,8 +629,7 @@ class _InlineMarkdownToDocument implements md.NodeVisitor {
       );
     } else if (element.tag == '(met)') {
       final uid = element.attributes['content'] ?? '';
-      styledText = styledText
-          .insertPlaceholders({0: InlineMentionPlaceholder(uid: uid)});
+      styledText = styledText.insertPlaceholders({0: InlineMentionPlaceholder(uid: uid)});
       styledText.addAttribution(
         NamedAttribution('(met)$uid'),
         SpanRange(0, styledText.length - 1),
@@ -712,9 +692,7 @@ class UnderlineSyntax extends md.DelimiterSyntax {
   /// https://github.com/dart-lang/markdown/blob/d53feae0760a4f0aae5ffdfb12d8e6acccf14b40/lib/src/inline_syntaxes/delimiter_syntax.dart#L319
   static final _tags = [md.DelimiterTag("u", 1)];
 
-  UnderlineSyntax()
-      : super('<u>',
-            requiresDelimiterRun: true, allowIntraWord: true, tags: _tags);
+  UnderlineSyntax() : super('<u>', requiresDelimiterRun: true, allowIntraWord: true, tags: _tags);
 
   @override
   Iterable<md.Node>? close(
@@ -730,7 +708,7 @@ class UnderlineSyntax extends md.DelimiterSyntax {
 }
 
 /// A Markdown [DelimiterSyntax] that matches strikethrough spans of text, which are represented in
-/// Markdown with surrounding `~` tags, e.g., "this is ~strikethrough~ text".
+/// Markdown with surrounding `~~` tags, e.g., "this is ~~strikethrough~~ text".
 ///
 /// Markdown in library in 7.2.1 seems to not be matching single strikethroughs
 ///
@@ -738,7 +716,7 @@ class UnderlineSyntax extends md.DelimiterSyntax {
 class SingleStrikethroughSyntax extends md.DelimiterSyntax {
   SingleStrikethroughSyntax()
       : super(
-          '~',
+          '~~',
           requiresDelimiterRun: true,
           allowIntraWord: true,
           tags: [md.DelimiterTag('del', 1)],
@@ -746,8 +724,7 @@ class SingleStrikethroughSyntax extends md.DelimiterSyntax {
 }
 
 /// Parses a paragraph preceded by an alignment token.
-class _ParagraphWithAlignmentSyntax
-    extends _EmptyLinePreservingParagraphSyntax {
+class _ParagraphWithAlignmentSyntax extends _EmptyLinePreservingParagraphSyntax {
   /// This pattern matches the text aligment notation.
   ///
   /// Possible values are `:---`, `:---:`, `---:` and `-::-`.
@@ -773,8 +750,7 @@ class _ParagraphWithAlignmentSyntax
     /// We found a paragraph alignment token, but the block after the alignment token isn't a paragraph.
     /// Therefore, the paragraph alignment token is actually regular content. This parser doesn't need to
     /// take any action.
-    if (_standardNonParagraphBlockSyntaxes
-        .any((syntax) => syntax.pattern.hasMatch(nextLine.content))) {
+    if (_standardNonParagraphBlockSyntaxes.any((syntax) => syntax.pattern.hasMatch(nextLine.content))) {
       return false;
     }
 
@@ -795,10 +771,7 @@ class _ParagraphWithAlignmentSyntax
     final paragraph = super.parse(parser);
 
     if (paragraph is md.Element) {
-      paragraph.attributes.addAll({
-        'textAlign':
-            _convertMarkdownAlignmentTokenToSuperEditorAlignment(match!.input)
-      });
+      paragraph.attributes.addAll({'textAlign': _convertMarkdownAlignmentTokenToSuperEditorAlignment(match!.input)});
     }
 
     return paragraph;
@@ -806,8 +779,7 @@ class _ParagraphWithAlignmentSyntax
 
   /// Converts a markdown alignment token to the textAlign metadata used to configure
   /// the [ParagraphNode] alignment.
-  String _convertMarkdownAlignmentTokenToSuperEditorAlignment(
-      String alignmentToken) {
+  String _convertMarkdownAlignmentTokenToSuperEditorAlignment(String alignmentToken) {
     switch (alignmentToken) {
       case ':---':
         return 'left';
@@ -850,8 +822,7 @@ class _EmptyLinePreservingParagraphSyntax extends md.BlockSyntax {
       return true;
     }
 
-    if (_isAtParagraphEnd(parser,
-        ignoreEmptyBlocks: _endsWithHardLineBreak(parser.current.content))) {
+    if (_isAtParagraphEnd(parser, ignoreEmptyBlocks: _endsWithHardLineBreak(parser.current.content))) {
       // Another parser wants to parse this input. Let the other parser run.
       return false;
     }
@@ -921,8 +892,7 @@ class _EmptyLinePreservingParagraphSyntax extends md.BlockSyntax {
 
     // Remove trailing whitespace from each line of the parsed paragraph
     // and join them into a single string, separated by a line breaks.
-    final contents = md.UnparsedContent(
-        childLines.map((e) => _removeTrailingSpaces(e)).join('\n'));
+    final contents = md.UnparsedContent(childLines.map((e) => _removeTrailingSpaces(e)).join('\n'));
     return _LineBreakSeparatedElement('p', [contents]);
   }
 
@@ -930,8 +900,7 @@ class _EmptyLinePreservingParagraphSyntax extends md.BlockSyntax {
   /// block syntax can parse the current input.
   ///
   /// An empty line ends the paragraph, unless [ignoreEmptyBlocks] is `true`.
-  bool _isAtParagraphEnd(md.BlockParser parser,
-      {required bool ignoreEmptyBlocks}) {
+  bool _isAtParagraphEnd(md.BlockParser parser, {required bool ignoreEmptyBlocks}) {
     if (parser.isDone) {
       return true;
     }
@@ -968,14 +937,11 @@ class _EmptyLinePreservingParagraphSyntax extends md.BlockSyntax {
 ///
 /// The default [Element] implementation ignores all line breaks.
 class _LineBreakSeparatedElement extends md.Element {
-  _LineBreakSeparatedElement(String tag, List<md.Node>? children)
-      : super(tag, children);
+  _LineBreakSeparatedElement(String tag, List<md.Node>? children) : super(tag, children);
 
   @override
   String get textContent {
-    return (children ?? [])
-        .map((md.Node? child) => child!.textContent)
-        .join('\n');
+    return (children ?? []).map((md.Node? child) => child!.textContent).join('\n');
   }
 }
 
@@ -1033,10 +999,7 @@ class _HeaderWithAlignmentSyntax extends md.BlockSyntax {
     final headerNode = _headerSyntax.parse(parser);
 
     if (headerNode is md.Element) {
-      headerNode.attributes.addAll({
-        'textAlign':
-            _convertMarkdownAlignmentTokenToSuperEditorAlignment(match!.input)
-      });
+      headerNode.attributes.addAll({'textAlign': _convertMarkdownAlignmentTokenToSuperEditorAlignment(match!.input)});
     }
 
     return headerNode;
@@ -1044,8 +1007,7 @@ class _HeaderWithAlignmentSyntax extends md.BlockSyntax {
 
   /// Converts a markdown alignment token to the textAlign metadata used to configure
   /// the [ParagraphNode] alignment.
-  String _convertMarkdownAlignmentTokenToSuperEditorAlignment(
-      String alignmentToken) {
+  String _convertMarkdownAlignmentTokenToSuperEditorAlignment(String alignmentToken) {
     switch (alignmentToken) {
       case ':---':
         return 'left';
