@@ -25,9 +25,11 @@ import 'package:super_editor/super_editor.dart';
 ///
 class MarkdownInlineUpstreamSyntaxPlugin extends SuperEditorPlugin {
   MarkdownInlineUpstreamSyntaxPlugin({
-    List<UpstreamMarkdownInlineSyntax> parsers = defaultUpstreamInlineMarkdownParsers,
+    List<UpstreamMarkdownInlineSyntax> parsers =
+        defaultUpstreamInlineMarkdownParsers,
   }) {
-    _markdownInlineUpstreamSyntaxReaction = MarkdownInlineUpstreamSyntaxReaction(parsers);
+    _markdownInlineUpstreamSyntaxReaction =
+        MarkdownInlineUpstreamSyntaxReaction(parsers);
   }
 
   /// An [EditReaction] that finds and converts Markdown styling into attributed
@@ -72,18 +74,23 @@ class MarkdownInlineUpstreamSyntaxReaction extends EditReaction {
   final List<UpstreamMarkdownInlineSyntax> _parsers;
 
   @override
-  void react(EditContext editContext, RequestDispatcher requestDispatcher, List<EditEvent> changeList) {
+  void react(EditContext editContext, RequestDispatcher requestDispatcher,
+      List<EditEvent> changeList) {
     if (changeList.whereType<DocumentEdit>().isEmpty) {
       // No edits means no Markdown insertions. Nothing for this plugin to do.
       return;
     }
-    if (changeList.where((edit) => edit is DocumentEdit && edit.change is TextInsertionEvent).isEmpty) {
+    if (changeList
+        .where(
+            (edit) => edit is DocumentEdit && edit.change is TextInsertionEvent)
+        .isEmpty) {
       // No text insertions. Nothing for this reaction to do.
       return;
     }
 
     final document = editContext.find<MutableDocument>(Editor.documentKey);
-    final composer = editContext.find<MutableDocumentComposer>(Editor.composerKey);
+    final composer =
+        editContext.find<MutableDocumentComposer>(Editor.composerKey);
     final selection = composer.selection;
     if (selection == null) {
       // No selection, so no caret for us to search upstream.
@@ -114,7 +121,8 @@ class MarkdownInlineUpstreamSyntaxReaction extends EditReaction {
 
   /// Finds and returns the node IDs for every [TextNode] that was altered during this
   /// transaction.
-  Set<String> _findEditedTextNodes(Document document, List<EditEvent> changeList) {
+  Set<String> _findEditedTextNodes(
+      Document document, List<EditEvent> changeList) {
     final editedTextNodes = <String>{};
     for (final change in changeList) {
       if (change is! DocumentEdit || change.change is! NodeDocumentChange) {
@@ -155,7 +163,8 @@ class MarkdownInlineUpstreamSyntaxReaction extends EditReaction {
 
     final newCaretPosition = DocumentPosition(
       nodeId: editedNode.id,
-      nodePosition: TextNodePosition(offset: markdownRun.start + markdownRun.replacementText.length),
+      nodePosition: TextNodePosition(
+          offset: markdownRun.start + markdownRun.replacementText.length),
     );
     return [
       // Delete the whole run of Markdown text, e.g., "**my bold**".
@@ -258,7 +267,8 @@ class _UpstreamInlineMarkdownParser {
     // Start visiting upstream characters by visiting the first character
     // and checking for possible syntaxes.
     for (final parser in parsers) {
-      final markdownToken = parser.startWith(attributedText[offset] as String, offset);
+      final markdownToken =
+          parser.startWith(attributedText[offset] as String, offset);
       if (markdownToken != null) {
         _possibleSyntaxes.add(markdownToken);
       }
@@ -275,7 +285,8 @@ class _UpstreamInlineMarkdownParser {
       // Store any successful parsers on a stack. We keep searching after successful
       // parsing because some parsers are essentially supersets of others, e.g., "*"
       // will succeed when we really want to keep parsing and find "**".
-      successfulParsers.addAll(_possibleSyntaxes.where((parser) => parser.isComplete && parser.isValid));
+      successfulParsers.addAll(_possibleSyntaxes
+          .where((parser) => parser.isComplete && parser.isValid));
       _possibleSyntaxes.removeWhere((parser) => parser.isComplete);
 
       if (offset > 0) {
@@ -292,7 +303,8 @@ class _UpstreamInlineMarkdownParser {
         // Finding a completed syntax isn't enough. We need to ensure that the
         // immediate upstream character before the syntax doesn't invalidate it.
         final upstreamCharacter = attributedText[offset - 1] as String;
-        successfulParsers.removeWhere((parser) => !parser.canFollowCharacter(upstreamCharacter));
+        successfulParsers.removeWhere(
+            (parser) => !parser.canFollowCharacter(upstreamCharacter));
       }
     }
 
@@ -317,7 +329,8 @@ class _UpstreamInlineMarkdownParser {
       return null;
     }
 
-    final characterAtCaret = attributedText[caretOffset - 1] as String; // -1 because caret sits after character
+    final characterAtCaret = attributedText[caretOffset - 1]
+        as String; // -1 because caret sits after character
     if (characterAtCaret != " ") {
       // Don't linkify unless the user just inserted a space after the token.
       return null;
@@ -330,7 +343,8 @@ class _UpstreamInlineMarkdownParser {
       return null;
     }
 
-    final markdownLinkRegex = RegExp(r'\[([\w\s\d]+)]\(((?:|https?://)[\w\d./?=#]+)\)');
+    final markdownLinkRegex =
+        RegExp(r'\[([\w\s\d]+)]\(((?:|https?://)[\w\d./?=#]+)\)');
     final matches = markdownLinkRegex.allMatches(attributedText.toPlainText());
     if (matches.isEmpty) {
       // Didn't find any links.
@@ -362,7 +376,8 @@ class _UpstreamInlineMarkdownParser {
             ]),
           ),
           match.start,
-          match.end + 1, // +1 to include the space after the link so the caret stays in same place.
+          match.end +
+              1, // +1 to include the space after the link so the caret stays in same place.
         );
       }
     }
@@ -469,12 +484,14 @@ abstract interface class UpstreamMarkdownToken {
 
 /// An [UpstreamMarkdownInlineSyntax] that parses standard Markdown styles, e.g.,
 /// bold, italics, code, strikethrough.
-class StyleUpstreamMarkdownSyntaxParser implements UpstreamMarkdownInlineSyntax {
+class StyleUpstreamMarkdownSyntaxParser
+    implements UpstreamMarkdownInlineSyntax {
   const StyleUpstreamMarkdownSyntaxParser();
 
   @override
   UpstreamMarkdownToken? startWith(String character, int atTextIndex) {
-    if (!StyleUpstreamMarkdownToken.possibleStartCharacters.contains(character)) {
+    if (!StyleUpstreamMarkdownToken.possibleStartCharacters
+        .contains(character)) {
       return null;
     }
 
@@ -500,7 +517,8 @@ class StyleUpstreamMarkdownToken implements UpstreamMarkdownToken {
   static const _lookingForOpenSyntax = 2;
   static const _done = 3;
 
-  StyleUpstreamMarkdownToken(this._triggerCharacter, this._maxSyntaxLength, this._triggerIndex)
+  StyleUpstreamMarkdownToken(
+      this._triggerCharacter, this._maxSyntaxLength, this._triggerIndex)
       : assert(_triggerCharacter.length == 1),
         assert(possibleStartCharacters.contains(_triggerCharacter)),
         _closingSyntax = _triggerCharacter {
@@ -609,7 +627,7 @@ class StyleUpstreamMarkdownToken implements UpstreamMarkdownToken {
       case "*":
       case "_":
         newStyles.add(italicsAttribution);
-      case "~":
+      case "~~":
         newStyles.add(strikethroughAttribution);
       case "`":
         newStyles.add(codeAttribution);
@@ -624,7 +642,8 @@ class StyleUpstreamMarkdownToken implements UpstreamMarkdownToken {
       _triggerIndex - syntaxLength + 1,
     );
     for (final attribution in newStyles) {
-      appliedText.addAttribution(attribution, SpanRange(0, appliedText.length - 1));
+      appliedText.addAttribution(
+          attribution, SpanRange(0, appliedText.length - 1));
     }
 
     return appliedText;

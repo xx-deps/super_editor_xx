@@ -21,8 +21,8 @@ import 'package:super_editor/src/infrastructure/keyboard.dart';
 import 'package:super_editor/src/infrastructure/platforms/platform.dart';
 import 'package:super_text_layout/super_text_layout.dart';
 
-import 'layout_single_column/layout_single_column.dart';
-import 'text_tools.dart';
+import 'package:super_editor/src/default_editor/layout_single_column/layout_single_column.dart';
+import 'package:super_editor/src/default_editor/text_tools.dart';
 
 @immutable
 class ParagraphNode extends TextNode {
@@ -1296,6 +1296,12 @@ ExecutionInstruction enterToInsertBlockNewline({
   }
 
   if (keyEvent.logicalKey != LogicalKeyboardKey.enter && keyEvent.logicalKey != LogicalKeyboardKey.numpadEnter) {
+    return ExecutionInstruction.continueExecution;
+  }
+
+  // ⚠️ 检查是否正在使用中文输入法合成文字（还在选字阶段）
+  if (editContext.composer.composingRegion.value != null) {
+    // 处于 IME 合成中，不能发送，交给输入法处理
     return ExecutionInstruction.continueExecution;
   }
 

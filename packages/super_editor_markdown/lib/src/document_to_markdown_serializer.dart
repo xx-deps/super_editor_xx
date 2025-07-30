@@ -400,7 +400,7 @@ class AttributedTextMarkdownSerializer extends AttributionVisitor {
     } else if (attribution == italicsAttribution) {
       return '*';
     } else if (attribution == strikethroughAttribution) {
-      return '~';
+      return '~~';
     } else if (attribution == underlineAttribution) {
       return '<u>';
     } else {
