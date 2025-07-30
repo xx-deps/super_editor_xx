@@ -2520,19 +2520,40 @@ class PasteEditorCommand extends EditCommand {
     _parsedContent ??= _parseContent();
 
     // Assign locally so we don't have to use a "!" everywhere we reference it.
-    final parsedContent = _parsedContent!.toList();
-    if (parsedContent.isEmpty) {
+    final tryParsedContent = _parsedContent!.toList();
+    if (tryParsedContent.isEmpty) {
       // No content to paste.
       return;
     }
 
     final document = context.document;
     final composer = context.find<MutableDocumentComposer>(Editor.composerKey);
+    final currentAttributions =
+        composer.preferences.currentAttributions.toList();
+    final parsedContent = [];
+    if (currentAttributions.isNotEmpty) {
+      tryParsedContent.forEach((node) {
+        ///如果是文字节点需要粘贴进去
+        if (node is TextNode) {
+          final attributedText = node.text;
+          currentAttributions.forEach((attributions) {
+            attributedText.addAttribution(
+                attributions, SpanRange(0, attributedText.length - 1));
+          });
+          final newTextNode = node.copyTextNodeWith(
+            text: attributedText,
+          );
+          parsedContent.add(node);
+        } else {
+          parsedContent.add(node);
+        }
+      });
+    }
     final currentNodeWithSelection =
         document.getNodeById(_pastePosition.nodeId);
 
     if (currentNodeWithSelection is TextNode) {
-      editorOpsLog.info("Pasting clipboard content in document.");
+      editorOpsLog.finest("Pasting clipboard content in document.");
 
       final textNode = document.getNode(_pastePosition) as TextNode;
       final pasteTextOffset =
@@ -2622,7 +2643,7 @@ class PasteEditorCommand extends EditCommand {
       editorOpsLog.fine('Done with paste command.');
     } else if (currentNodeWithSelection is ImageNode) {
       editorOpsLog
-          .info("Pasting clipboard content in document after ImageNode.");
+          .finest("Pasting clipboard content in document after ImageNode.");
       final pasteTargetNode = document.getNode(_pastePosition);
       if (pasteTargetNode == null) {
         editorOpsLog.warning("Paste position node not found.");

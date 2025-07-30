@@ -44,7 +44,7 @@ class TextDeltasDocumentEditor {
 
   /// Applies the given [textEditingDeltas] to the [Document].
   void applyDeltas(List<TextEditingDelta> textEditingDeltas) {
-    editorImeLog.info("Applying ${textEditingDeltas.length} IME deltas to document");
+    editorImeLog.finest("Applying ${textEditingDeltas.length} IME deltas to document");
 
     editorImeDeltasLog.fine("Incoming deltas:");
     for (final delta in textEditingDeltas) {
@@ -72,9 +72,9 @@ class TextDeltasDocumentEditor {
     editor.startTransaction();
 
     for (final delta in textEditingDeltas) {
-      editorImeLog.info("---------------------------------------------------");
+      editorImeLog.finest("---------------------------------------------------");
 
-      editorImeLog.info("Applying delta: $delta");
+      editorImeLog.finest("Applying delta: $delta");
 
       _nextImeValue = delta.apply(_previousImeValue);
       if (delta is TextEditingDeltaInsertion) {
@@ -89,7 +89,7 @@ class TextDeltasDocumentEditor {
         editorImeLog.shout("Unknown IME delta type: ${delta.runtimeType}");
       }
 
-      editorImeLog.info("---------------------------------------------------");
+      editorImeLog.finest("---------------------------------------------------");
     }
 
     // Update the editor's IME composing region based on the composing region

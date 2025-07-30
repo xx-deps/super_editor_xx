@@ -70,7 +70,7 @@ class SingleColumnLayoutSelectionStyler extends SingleColumnLayoutStylePhase {
 
   @override
   SingleColumnLayoutViewModel style(Document document, SingleColumnLayoutViewModel viewModel) {
-    editorStyleLog.info("(Re)calculating selection view model for document layout");
+    editorStyleLog.finest("(Re)calculating selection view model for document layout");
     editorStyleLog.fine("Applying selection to components: ${_selection.value}");
     return SingleColumnLayoutViewModel(
       padding: viewModel.padding,

@@ -78,7 +78,7 @@ class SuperKeyboard {
   }
 
   void _init() {
-    log.info("Initializing SuperKeyboard");
+    log.finest("Initializing SuperKeyboard");
     if (defaultTargetPlatform == TargetPlatform.iOS) {
       log.fine("SuperKeyboard - Initializing for iOS");
       SuperKeyboardIOS.instance.geometry.addListener(_onIOSWindowGeometryChange);

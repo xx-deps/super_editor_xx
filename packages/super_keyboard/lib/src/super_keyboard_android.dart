@@ -69,7 +69,7 @@ class SuperKeyboardAndroid {
   static final log = Logger("super_keyboard.android");
 
   SuperKeyboardAndroid._() {
-    log.info("Initializing Android plugin for super_keyboard");
+    log.finest("Initializing Android plugin for super_keyboard");
     assert(
       defaultTargetPlatform == TargetPlatform.android,
       "You shouldn't initialize SuperKeyboardAndroid when not on an Android platform. Current: $defaultTargetPlatform",

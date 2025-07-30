@@ -430,7 +430,7 @@ class ImeAttributedTextEditingController extends AttributedTextEditingController
 
   @override
   void connectionClosed() {
-    _log.info('TextInputClient: connectionClosed()');
+    _log.finest('TextInputClient: connectionClosed()');
     _inputConnectionNotifier.value = null;
     _latestTextEditingValueSentToPlatform = null;
   }

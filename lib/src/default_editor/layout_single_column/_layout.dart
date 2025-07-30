@@ -130,7 +130,7 @@ class _SingleColumnDocumentLayoutState extends State<SingleColumnDocumentLayout>
 
   @override
   DocumentPosition? getDocumentPositionAtOffset(Offset documentOffset) {
-    editorLayoutLog.info('Getting document position at exact offset: $documentOffset');
+    editorLayoutLog.finest('Getting document position at exact offset: $documentOffset');
 
     final componentKey = _findComponentAtOffset(documentOffset);
     if (componentKey == null || componentKey.currentContext == null) {
@@ -153,7 +153,7 @@ class _SingleColumnDocumentLayoutState extends State<SingleColumnDocumentLayout>
       rawDocumentOffset.dx.clamp(1.0, max(docBox.size.width - 1.0, 1.0)),
       rawDocumentOffset.dy,
     );
-    editorLayoutLog.info('Getting document position near offset: $documentOffset');
+    editorLayoutLog.finest('Getting document position near offset: $documentOffset');
 
     if (_isAboveStartOfContent(documentOffset)) {
       // The given offset is above the start of the content.
@@ -184,7 +184,7 @@ class _SingleColumnDocumentLayoutState extends State<SingleColumnDocumentLayout>
   DocumentPosition? _getDocumentPositionInComponentNearOffset(GlobalKey componentKey, Offset documentOffset) {
     final component = componentKey.currentState as DocumentComponent;
     final componentBox = componentKey.currentContext!.findRenderObject() as RenderBox;
-    editorLayoutLog.info(' - found node at position: $component');
+    editorLayoutLog.finest(' - found node at position: $component');
     final componentOffset = _componentOffset(componentBox, documentOffset);
     final componentPosition = component.getPositionAtOffset(componentOffset);
 
@@ -196,7 +196,7 @@ class _SingleColumnDocumentLayoutState extends State<SingleColumnDocumentLayout>
       nodeId: _componentKeysToNodeIds[componentKey]!,
       nodePosition: componentPosition,
     );
-    editorLayoutLog.info(' - selection at offset: $selectionAtOffset');
+    editorLayoutLog.finest(' - selection at offset: $selectionAtOffset');
     return selectionAtOffset;
   }
 
@@ -232,7 +232,7 @@ class _SingleColumnDocumentLayoutState extends State<SingleColumnDocumentLayout>
   Rect? getEdgeForPosition(DocumentPosition position) {
     final component = getComponentByNodeId(position.nodeId);
     if (component == null) {
-      editorLayoutLog.info('Could not find any component for node position: $position');
+      editorLayoutLog.finest('Could not find any component for node position: $position');
       return null;
     }
 
@@ -248,7 +248,7 @@ class _SingleColumnDocumentLayoutState extends State<SingleColumnDocumentLayout>
   Rect? getRectForPosition(DocumentPosition position) {
     final component = getComponentByNodeId(position.nodeId);
     if (component == null) {
-      editorLayoutLog.info('Could not find any component for node position: $position');
+      editorLayoutLog.finest('Could not find any component for node position: $position');
       return null;
     }
 
@@ -265,7 +265,7 @@ class _SingleColumnDocumentLayoutState extends State<SingleColumnDocumentLayout>
     final baseComponent = getComponentByNodeId(base.nodeId);
     final extentComponent = getComponentByNodeId(extent.nodeId);
     if (baseComponent == null || extentComponent == null) {
-      editorLayoutLog.info(
+      editorLayoutLog.finest(
           'Could not find base and/or extent position to calculate bounding box for selection. Base: $base -> $baseComponent, Extent: $extent -> $extentComponent');
       return null;
     }
@@ -369,7 +369,7 @@ class _SingleColumnDocumentLayoutState extends State<SingleColumnDocumentLayout>
 
   @override
   DocumentSelection? getDocumentSelectionInRegion(Offset baseOffset, Offset extentOffset) {
-    editorLayoutLog.info('getDocumentSelectionInRegion() - from: $baseOffset, to: $extentOffset');
+    editorLayoutLog.finest('getDocumentSelectionInRegion() - from: $baseOffset, to: $extentOffset');
     final region = Rect.fromPoints(baseOffset, extentOffset);
 
     String? topNodeId;
@@ -387,9 +387,9 @@ class _SingleColumnDocumentLayoutState extends State<SingleColumnDocumentLayout>
     final componentSearchStartIndex = max(_findComponentIndexAtOffset(selectionRegionTopOffset), 0);
     for (int i = componentSearchStartIndex; i < _topToBottomComponentKeys.length; i++) {
       final componentKey = _topToBottomComponentKeys[i];
-      editorLayoutLog.info(' - considering component "$componentKey"');
+      editorLayoutLog.finest(' - considering component "$componentKey"');
       if (componentKey.currentState is! DocumentComponent) {
-        editorLayoutLog.info(' - found unknown component: ${componentKey.currentState}');
+        editorLayoutLog.finest(' - found unknown component: ${componentKey.currentState}');
         continue;
       }
 
@@ -645,11 +645,11 @@ class _SingleColumnDocumentLayoutState extends State<SingleColumnDocumentLayout>
   DocumentComponent? getComponentByNodeId(String nodeId) {
     final key = _nodeIdsToComponentKeys[nodeId];
     if (key == null) {
-      editorLayoutLog.info('WARNING: could not find component for node ID: $nodeId');
+      editorLayoutLog.finest('WARNING: could not find component for node ID: $nodeId');
       return null;
     }
     if (key.currentState is! DocumentComponent) {
-      editorLayoutLog.info(
+      editorLayoutLog.finest(
           'WARNING: found component but it\'s not a DocumentComponent: $nodeId, layout key: $key, state: ${key.currentState}, widget: ${key.currentWidget}, context: ${key.currentContext}');
       if (kDebugMode) {
         throw Exception(

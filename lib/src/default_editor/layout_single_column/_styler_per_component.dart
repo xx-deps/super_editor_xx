@@ -19,7 +19,7 @@ class SingleColumnLayoutCustomComponentStyler extends SingleColumnLayoutStylePha
 
   @override
   SingleColumnLayoutViewModel style(Document document, SingleColumnLayoutViewModel viewModel) {
-    editorStyleLog.info("(Re)calculating custom component styles view model for document layout");
+    editorStyleLog.finest("(Re)calculating custom component styles view model for document layout");
     return SingleColumnLayoutViewModel(
       padding: viewModel.padding,
       componentViewModels: [

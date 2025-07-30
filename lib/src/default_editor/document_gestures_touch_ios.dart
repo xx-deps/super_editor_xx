@@ -604,7 +604,7 @@ class _IosDocumentTouchInteractorState extends State<IosDocumentTouchInteractor>
       ..hideMagnifier()
       ..blinkCaret();
 
-    editorGesturesLog.info("Tap down on document");
+    editorGesturesLog.finest("Tap down on document");
     final docOffset = _interactorOffsetToDocumentOffset(details.localPosition);
     editorGesturesLog.fine(" - document offset: $docOffset");
 
@@ -742,7 +742,7 @@ class _IosDocumentTouchInteractorState extends State<IosDocumentTouchInteractor>
   }
 
   void _onDoubleTapUp(TapUpDetails details) {
-    editorGesturesLog.info("Double tap down on document");
+    editorGesturesLog.finest("Double tap down on document");
     final docOffset = _interactorOffsetToDocumentOffset(details.localPosition);
     editorGesturesLog.fine(" - document offset: $docOffset");
 
@@ -835,7 +835,7 @@ class _IosDocumentTouchInteractorState extends State<IosDocumentTouchInteractor>
   }
 
   void _onTripleTapUp(TapUpDetails details) {
-    editorGesturesLog.info("Triple down down on document");
+    editorGesturesLog.finest("Triple down down on document");
 
     final docOffset = _interactorOffsetToDocumentOffset(details.localPosition);
     editorGesturesLog.fine(" - document offset: $docOffset");
@@ -1198,7 +1198,7 @@ class _IosDocumentTouchInteractorState extends State<IosDocumentTouchInteractor>
 
     final dragEndInDoc = _interactorOffsetToDocumentOffset(_dragEndInInteractor!);
     final dragPosition = _docLayout.getDocumentPositionNearestToOffset(dragEndInDoc);
-    editorGesturesLog.info("Selecting new position during drag: $dragPosition");
+    editorGesturesLog.finest("Selecting new position during drag: $dragPosition");
 
     if (dragPosition == null) {
       return;
