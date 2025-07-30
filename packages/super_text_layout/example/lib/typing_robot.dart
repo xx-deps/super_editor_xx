@@ -166,7 +166,7 @@ class TypingRobot {
       return;
     }
 
-    robotLog.info("Typing character: $character");
+    robotLog.finest("Typing character: $character");
     _controller.value = TextEditingValue(
       text: _controller.text + character,
       selection: TextSelection.collapsed(offset: _controller.selection.extentOffset + 1),

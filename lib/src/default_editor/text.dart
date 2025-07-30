@@ -1603,7 +1603,7 @@ class AddTextAttributionsCommand extends EditCommand {
 
   @override
   void execute(EditContext context, CommandExecutor executor) {
-    editorDocLog.info('Executing AddTextAttributionsCommand');
+    editorDocLog.finest('Executing AddTextAttributionsCommand');
     final document = context.document;
     final nodes =
         document.getNodesInside(documentRange.start, documentRange.end);
@@ -1616,7 +1616,7 @@ class AddTextAttributionsCommand extends EditCommand {
     // Calculate a normalized DocumentRange so we know which DocumentPosition
     // belongs to the first node, and which belongs to the last node.
     final normalRange = documentRange.normalize(document);
-    editorDocLog.info(' - node range: $normalRange');
+    editorDocLog.finest(' - node range: $normalRange');
 
     // ignore: prefer_collection_literals
     final nodesAndSelections = LinkedHashMap<TextNode, TextRange>();
@@ -1632,7 +1632,7 @@ class AddTextAttributionsCommand extends EditCommand {
       if (textNode == nodes.first && textNode == nodes.last) {
         // Handle selection within a single node
         editorDocLog
-            .info(' - the selection is within a single node: ${textNode.id}');
+            .finest(' - the selection is within a single node: ${textNode.id}');
 
         startOffset = (normalRange.start.nodePosition as TextPosition).offset;
 
@@ -1642,12 +1642,12 @@ class AddTextAttributionsCommand extends EditCommand {
       } else if (textNode == nodes.first) {
         // Handle partial node selection in first node.
         editorDocLog
-            .info(' - selecting part of the first node: ${textNode.id}');
+            .finest(' - selecting part of the first node: ${textNode.id}');
         startOffset = (normalRange.start.nodePosition as TextPosition).offset;
         endOffset = max(textNode.text.length - 1, 0);
       } else if (textNode == nodes.last) {
         // Handle partial node selection in last node.
-        editorDocLog.info(' - adding part of the last node: ${textNode.id}');
+        editorDocLog.finest(' - adding part of the last node: ${textNode.id}');
         startOffset = 0;
 
         // -1 because TextPosition's offset indexes the character after the
@@ -1655,7 +1655,7 @@ class AddTextAttributionsCommand extends EditCommand {
         endOffset = (normalRange.end.nodePosition as TextPosition).offset - 1;
       } else {
         // Handle full node selection.
-        editorDocLog.info(' - adding full node: ${textNode.id}');
+        editorDocLog.finest(' - adding full node: ${textNode.id}');
         startOffset = 0;
         endOffset = max(textNode.text.length - 1, 0);
       }
@@ -1670,7 +1670,7 @@ class AddTextAttributionsCommand extends EditCommand {
       for (Attribution attribution in attributions) {
         final node = entry.key;
         final range = entry.value.toSpanRange();
-        editorDocLog.info(' - adding attribution: $attribution. Range: $range');
+        editorDocLog.finest(' - adding attribution: $attribution. Range: $range');
 
         // Create a new AttributedText with updated attribution spans, so that the presentation system can
         // see that we made a change, and re-renders the text in the document.
@@ -1704,7 +1704,7 @@ class AddTextAttributionsCommand extends EditCommand {
       }
     }
 
-    editorDocLog.info(' - done adding attributions');
+    editorDocLog.finest(' - done adding attributions');
   }
 }
 
@@ -1733,7 +1733,7 @@ class RemoveTextAttributionsCommand extends EditCommand {
 
   @override
   void execute(EditContext context, CommandExecutor executor) {
-    editorDocLog.info('Executing RemoveTextAttributionsCommand');
+    editorDocLog.finest('Executing RemoveTextAttributionsCommand');
     final document = context.document;
     final nodes =
         document.getNodesInside(documentRange.start, documentRange.end);
@@ -1746,7 +1746,7 @@ class RemoveTextAttributionsCommand extends EditCommand {
     // Normalize the DocumentRange so we know which DocumentPosition
     // belongs to the first node, and which belongs to the last node.
     final normalizedRange = documentRange.normalize(document);
-    editorDocLog.info(' - node range: $normalizedRange');
+    editorDocLog.finest(' - node range: $normalizedRange');
 
     // ignore: prefer_collection_literals
     final nodesAndSelections = LinkedHashMap<TextNode, TextRange>();
@@ -1762,7 +1762,7 @@ class RemoveTextAttributionsCommand extends EditCommand {
       if (textNode == nodes.first && textNode == nodes.last) {
         // Handle selection within a single node
         editorDocLog
-            .info(' - the selection is within a single node: ${textNode.id}');
+            .finest(' - the selection is within a single node: ${textNode.id}');
 
         startOffset =
             (normalizedRange.start.nodePosition as TextPosition).offset;
@@ -1776,13 +1776,13 @@ class RemoveTextAttributionsCommand extends EditCommand {
       } else if (textNode == nodes.first) {
         // Handle partial node selection in first node.
         editorDocLog
-            .info(' - selecting part of the first node: ${textNode.id}');
+            .finest(' - selecting part of the first node: ${textNode.id}');
         startOffset =
             (normalizedRange.start.nodePosition as TextPosition).offset;
         endOffset = max(textNode.text.length - 1, 0);
       } else if (textNode == nodes.last) {
         // Handle partial node selection in last node.
-        editorDocLog.info(' - adding part of the last node: ${textNode.id}');
+        editorDocLog.finest(' - adding part of the last node: ${textNode.id}');
         startOffset = 0;
 
         // -1 because TextPosition's offset indexes the character after the
@@ -1791,7 +1791,7 @@ class RemoveTextAttributionsCommand extends EditCommand {
             (normalizedRange.end.nodePosition as TextPosition).offset - 1;
       } else {
         // Handle full node selection.
-        editorDocLog.info(' - adding full node: ${textNode.id}');
+        editorDocLog.finest(' - adding full node: ${textNode.id}');
         startOffset = 0;
         endOffset = max(textNode.text.length - 1, 0);
       }
@@ -1808,7 +1808,7 @@ class RemoveTextAttributionsCommand extends EditCommand {
 
       for (Attribution attribution in attributions) {
         editorDocLog
-            .info(' - removing attribution: $attribution. Range: $range');
+            .finest(' - removing attribution: $attribution. Range: $range');
 
         // Create a new AttributedText with updated attribution spans, so that the presentation system can
         // see that we made a change, and re-renders the text in the document.
@@ -1841,7 +1841,7 @@ class RemoveTextAttributionsCommand extends EditCommand {
       document.replaceNodeById(node.id, node);
     }
 
-    editorDocLog.info(' - done adding attributions');
+    editorDocLog.finest(' - done adding attributions');
   }
 }
 
@@ -1877,7 +1877,7 @@ class ToggleTextAttributionsCommand extends EditCommand {
   // and provide a hook for the specific operation: add, remove, toggle.
   @override
   void execute(EditContext context, CommandExecutor executor) {
-    editorDocLog.info('Executing ToggleTextAttributionsCommand');
+    editorDocLog.finest('Executing ToggleTextAttributionsCommand');
     final document = context.document;
     final nodes =
         document.getNodesInside(documentRange.start, documentRange.end);
@@ -1890,7 +1890,7 @@ class ToggleTextAttributionsCommand extends EditCommand {
     // Normalize DocumentRange so we know which DocumentPosition
     // belongs to the first node, and which belongs to the last node.
     final normalizedRange = documentRange.normalize(document);
-    editorDocLog.info(' - node range: $normalizedRange');
+    editorDocLog.finest(' - node range: $normalizedRange');
 
     // ignore: prefer_collection_literals
     final nodesAndSelections = LinkedHashMap<TextNode, SpanRange>();
@@ -1908,7 +1908,7 @@ class ToggleTextAttributionsCommand extends EditCommand {
       if (textNode == nodes.first && textNode == nodes.last) {
         // Handle selection within a single node
         editorDocLog
-            .info(' - the selection is within a single node: ${textNode.id}');
+            .finest(' - the selection is within a single node: ${textNode.id}');
 
         startOffset =
             (normalizedRange.start.nodePosition as TextPosition).offset;
@@ -1920,7 +1920,7 @@ class ToggleTextAttributionsCommand extends EditCommand {
       } else if (textNode == nodes.first) {
         // Handle partial node selection in first node.
         editorDocLog
-            .info(' - selecting part of the first node: ${textNode.id}');
+            .finest(' - selecting part of the first node: ${textNode.id}');
         startOffset =
             (normalizedRange.start.nodePosition as TextPosition).offset;
         endOffset = max(textNode.text.length - 1, 0);
@@ -1934,7 +1934,7 @@ class ToggleTextAttributionsCommand extends EditCommand {
         }
       } else if (textNode == nodes.last) {
         // Handle partial node selection in last node.
-        editorDocLog.info(' - toggling part of the last node: ${textNode.id}');
+        editorDocLog.finest(' - toggling part of the last node: ${textNode.id}');
         startOffset = 0;
 
         // -1 because TextPosition's offset indexes the character after the
@@ -1951,7 +1951,7 @@ class ToggleTextAttributionsCommand extends EditCommand {
         }
       } else {
         // Handle full node selection.
-        editorDocLog.info(' - toggling full node: ${textNode.id}');
+        editorDocLog.finest(' - toggling full node: ${textNode.id}');
         startOffset = 0;
         endOffset = max(textNode.text.length - 1, 0);
       }
@@ -1973,12 +1973,12 @@ class ToggleTextAttributionsCommand extends EditCommand {
 
       for (Attribution attribution in attributions) {
         editorDocLog
-            .info(' - toggling attribution: $attribution. Range: $range');
+            .finest(' - toggling attribution: $attribution. Range: $range');
 
         if (alreadyHasAttributions) {
           // Attribution is present throughout the user selection. Remove attribution.
           editorDocLog
-              .info(' - Removing attribution: $attribution. Range: $range');
+              .finest(' - Removing attribution: $attribution. Range: $range');
 
           // Create a new AttributedText with updated attribution spans, so that the presentation system can
           // see that we made a change, and re-renders the text in the document.
@@ -1992,7 +1992,7 @@ class ToggleTextAttributionsCommand extends EditCommand {
         } else {
           // Attribution isn't present throughout the user selection. Apply attribution.
           editorDocLog
-              .info(' - Adding attribution: $attribution. Range: $range');
+              .finest(' - Adding attribution: $attribution. Range: $range');
 
           // Create a new AttributedText with updated attribution spans, so that the presentation system can
           // see that we made a change, and re-renders the text in the document.
@@ -2032,7 +2032,7 @@ class ToggleTextAttributionsCommand extends EditCommand {
       document.replaceNodeById(node.id, node);
     }
 
-    editorDocLog.info(' - done toggling attributions');
+    editorDocLog.finest(' - done toggling attributions');
   }
 }
 

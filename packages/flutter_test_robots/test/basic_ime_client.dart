@@ -103,13 +103,13 @@ class _BareBonesTextFieldWithInputClientState extends State<BareBonesTextFieldWi
   void updateEditingValueWithDeltas(List<TextEditingDelta> textEditingDeltas) {
     setState(() {
       for (final delta in textEditingDeltas) {
-        imeTestClientLog.info("Handling delta: $delta");
+        imeTestClientLog.finest("Handling delta: $delta");
         imeTestClientLog.fine(_deltaSummary(delta));
 
         _currentTextEditingValue = delta.apply(_currentTextEditingValue);
 
-        imeTestClientLog.info("New text: ${_currentTextEditingValue.text}");
-        imeTestClientLog.info("New selection: ${_currentTextEditingValue.selection}");
+        imeTestClientLog.finest("New text: ${_currentTextEditingValue.text}");
+        imeTestClientLog.finest("New selection: ${_currentTextEditingValue.selection}");
       }
       _textInputConnection!.setEditingState(_currentTextEditingValue);
     });

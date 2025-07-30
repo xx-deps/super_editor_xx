@@ -2530,7 +2530,7 @@ class PasteEditorCommand extends EditCommand {
         document.getNodeById(_pastePosition.nodeId);
 
     if (currentNodeWithSelection is TextNode) {
-      editorOpsLog.info("Pasting clipboard content in document.");
+      editorOpsLog.finest("Pasting clipboard content in document.");
 
       final textNode = document.getNode(_pastePosition) as TextNode;
       final pasteTextOffset =
@@ -2610,7 +2610,7 @@ class PasteEditorCommand extends EditCommand {
       editorOpsLog.fine('Done with paste command.');
     } else if (currentNodeWithSelection is ImageNode) {
       editorOpsLog
-          .info("Pasting clipboard content in document after ImageNode.");
+          .finest("Pasting clipboard content in document after ImageNode.");
       final pasteTargetNode = document.getNode(_pastePosition);
       if (pasteTargetNode == null) {
         editorOpsLog.warning("Paste position node not found.");

@@ -98,7 +98,7 @@ class _SuperTextWithSelectionState extends ProseTextState<SuperTextWithSelection
 
   @override
   Widget build(BuildContext context) {
-    buildsLog.info("Building SuperTextWithSelection ($hashCode)");
+    buildsLog.finest("Building SuperTextWithSelection ($hashCode)");
     // TODO: how do we prevent a full SuperText rebuild when the selection changes?
     // TODO: add a test that ensures the highlight painter doesn't paint anything when
     //       the selection is collapsed
@@ -186,12 +186,12 @@ class _RebuildOptimizedSuperTextWithSelectionState extends State<_RebuildOptimiz
   @override
   Widget build(BuildContext context) {
     if (_cachedSubtree != null) {
-      buildsLog.info(
+      buildsLog.finest(
           "Building SuperTextWithSelection ($hashCode), returning cached subtree for optimized super text with selection");
       return _cachedSubtree!;
     }
 
-    buildsLog.info("Building SuperTextWithSelection ($hashCode), doing full build (no cached subtree is available)");
+    buildsLog.finest("Building SuperTextWithSelection ($hashCode), doing full build (no cached subtree is available)");
     _cachedSubtree = SuperText(
       key: widget.textLayoutKey,
       richText: widget.richText,
@@ -207,7 +207,7 @@ class _RebuildOptimizedSuperTextWithSelectionState extends State<_RebuildOptimiz
     return ValueListenableBuilder<List<UserSelection>>(
       valueListenable: widget.userSelections,
       builder: (context, value, child) {
-        buildsLog.info(
+        buildsLog.finest(
             "SuperTextWithSelection ($hashCode) user selection changed, building new selection highlights: ${widget.userSelections.value.isNotEmpty ? widget.userSelections.value.first.selection : "null"}");
 
         return Stack(
@@ -234,7 +234,7 @@ class _RebuildOptimizedSuperTextWithSelectionState extends State<_RebuildOptimiz
     return ValueListenableBuilder<List<UserSelection>>(
       valueListenable: widget.userSelections,
       builder: (context, value, child) {
-        buildsLog.info(
+        buildsLog.finest(
             "SuperTextWithSelection ($hashCode) user selection changed, building carets: ${widget.userSelections.value.isNotEmpty ? widget.userSelections.value.first.selection : "null"}");
 
         return Stack(

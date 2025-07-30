@@ -495,7 +495,7 @@ class RenderContentLayers extends RenderSliver with RenderSliverHelpers {
 
   @override
   void attach(PipelineOwner owner) {
-    contentLayersLog.info("Attaching RenderContentLayers to owner: $owner");
+    contentLayersLog.finest("Attaching RenderContentLayers to owner: $owner");
     super.attach(owner);
 
     visitChildren((child) {
@@ -505,7 +505,7 @@ class RenderContentLayers extends RenderSliver with RenderSliverHelpers {
 
   @override
   void detach() {
-    contentLayersLog.info("detach()'ing RenderContentLayers from pipeline");
+    contentLayersLog.finest("detach()'ing RenderContentLayers from pipeline");
     // IMPORTANT: we must detach ourselves before detaching our children.
     // This is a Flutter framework requirement.
     super.detach();
@@ -611,7 +611,7 @@ class RenderContentLayers extends RenderSliver with RenderSliverHelpers {
 
   @override
   void performLayout() {
-    contentLayersLog.info("Laying out ContentLayers");
+    contentLayersLog.finest("Laying out ContentLayers");
     if (_content == null) {
       geometry = SliverGeometry.zero;
       _contentNeedsLayout = false;

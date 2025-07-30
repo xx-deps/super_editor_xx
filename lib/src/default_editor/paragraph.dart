@@ -693,18 +693,18 @@ class CombineParagraphsCommand extends EditCommand {
 
   @override
   void execute(EditContext context, CommandExecutor executor) {
-    editorDocLog.info('Executing CombineParagraphsCommand');
-    editorDocLog.info(' - merging "$firstNodeId" <- "$secondNodeId"');
+    editorDocLog.finest('Executing CombineParagraphsCommand');
+    editorDocLog.finest(' - merging "$firstNodeId" <- "$secondNodeId"');
     final document = context.document;
     final secondNode = document.getNodeById(secondNodeId);
     if (secondNode is! TextNode) {
-      editorDocLog.info('WARNING: Cannot merge node of type: $secondNode into node above.');
+      editorDocLog.finest('WARNING: Cannot merge node of type: $secondNode into node above.');
       return;
     }
 
     DocumentNode? nodeAbove = document.getNodeBefore(secondNode);
     if (nodeAbove == null) {
-      editorDocLog.info('At top of document. Cannot merge with node above.');
+      editorDocLog.finest('At top of document. Cannot merge with node above.');
       return;
     }
 
@@ -725,11 +725,11 @@ class CombineParagraphsCommand extends EditCommand {
     }
 
     if (nodeAbove == null) {
-      editorDocLog.info('The specified `firstNodeId` is not the node before `secondNodeId`.');
+      editorDocLog.finest('The specified `firstNodeId` is not the node before `secondNodeId`.');
       return;
     }
     if (nodeAbove is! TextNode) {
-      editorDocLog.info('Cannot merge ParagraphNode into node of type: $nodeAbove');
+      editorDocLog.finest('Cannot merge ParagraphNode into node of type: $nodeAbove');
       return;
     }
 
@@ -762,7 +762,7 @@ class CombineParagraphsCommand extends EditCommand {
 
     bool didRemove = document.deleteNode(secondNode.id);
     if (!didRemove) {
-      editorDocLog.info('ERROR: Failed to delete the currently selected node from the document.');
+      editorDocLog.finest('ERROR: Failed to delete the currently selected node from the document.');
     }
 
     executor.logChanges([
@@ -836,21 +836,21 @@ class SplitParagraphCommand extends EditCommand {
 
   @override
   void execute(EditContext context, CommandExecutor executor) {
-    editorDocLog.info('Executing SplitParagraphCommand');
+    editorDocLog.finest('Executing SplitParagraphCommand');
 
     final document = context.document;
     final node = document.getNodeById(nodeId);
     if (node is! ParagraphNode) {
-      editorDocLog.info('WARNING: Cannot split paragraph for node of type: $node.');
+      editorDocLog.finest('WARNING: Cannot split paragraph for node of type: $node.');
       return;
     }
 
     final text = node.text;
     final startText = text.copyText(0, splitPosition.offset);
     final endText = text.copyText(splitPosition.offset);
-    editorDocLog.info('Splitting paragraph:');
-    editorDocLog.info(' - start text: "${startText.toPlainText()}"');
-    editorDocLog.info(' - end text: "${endText.toPlainText()}"');
+    editorDocLog.finest('Splitting paragraph:');
+    editorDocLog.finest(' - start text: "${startText.toPlainText()}"');
+    editorDocLog.finest(' - end text: "${endText.toPlainText()}"');
 
     if (splitPosition.offset == text.length) {
       // The paragraph was split at the very end, the user is creating a new,
@@ -876,7 +876,7 @@ class SplitParagraphCommand extends EditCommand {
     }
 
     // Change the current nodes content to just the text before the caret.
-    editorDocLog.info(' - changing the original paragraph text due to split');
+    editorDocLog.finest(' - changing the original paragraph text due to split');
     final updatedNode = node.copyParagraphWith(text: startText);
     document.replaceNodeById(
       node.id,
@@ -894,13 +894,13 @@ class SplitParagraphCommand extends EditCommand {
     );
 
     // Insert the new node after the current node.
-    editorDocLog.info(' - inserting new node in document');
+    editorDocLog.finest(' - inserting new node in document');
     document.insertNodeAfter(
       existingNodeId: updatedNode.id,
       newNode: newNode,
     );
 
-    editorDocLog.info(' - inserted new node: ${newNode.id} after old one: ${node.id}');
+    editorDocLog.finest(' - inserted new node: ${newNode.id} after old one: ${node.id}');
 
     // Move the caret to the new node.
     final composer = context.find<MutableDocumentComposer>(Editor.composerKey);
@@ -1184,8 +1184,8 @@ class DeleteParagraphCommand extends EditCommand {
 
   @override
   void execute(EditContext context, CommandExecutor executor) {
-    editorDocLog.info('Executing DeleteParagraphCommand');
-    editorDocLog.info(' - deleting "$nodeId"');
+    editorDocLog.finest('Executing DeleteParagraphCommand');
+    editorDocLog.finest(' - deleting "$nodeId"');
     final document = context.document;
     final node = document.getNodeById(nodeId);
     if (node is! TextNode) {

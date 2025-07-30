@@ -268,7 +268,7 @@ class _DocumentMouseInteractorState extends State<DocumentMouseInteractor> with 
   }
 
   void _onTapUp(TapUpDetails details) {
-    editorGesturesLog.info("Tap up on document");
+    editorGesturesLog.finest("Tap up on document");
     final docOffset = _getDocOffsetFromGlobalOffset(details.globalPosition);
     editorGesturesLog.fine(" - document offset: $docOffset");
 
@@ -333,7 +333,7 @@ class _DocumentMouseInteractorState extends State<DocumentMouseInteractor> with 
   }
 
   void _onDoubleTapDown(TapDownDetails details) {
-    editorGesturesLog.info("Double tap down on document");
+    editorGesturesLog.finest("Double tap down on document");
     final docOffset = _getDocOffsetFromGlobalOffset(details.globalPosition);
     editorGesturesLog.fine(" - document offset: $docOffset");
 
@@ -446,12 +446,12 @@ class _DocumentMouseInteractorState extends State<DocumentMouseInteractor> with 
   }
 
   void _onDoubleTap() {
-    editorGesturesLog.info("Double tap up on document");
+    editorGesturesLog.finest("Double tap up on document");
     _selectionType = SelectionType.position;
   }
 
   void _onTripleTapDown(TapDownDetails details) {
-    editorGesturesLog.info("Triple down down on document");
+    editorGesturesLog.finest("Triple down down on document");
     final docOffset = _getDocOffsetFromGlobalOffset(details.globalPosition);
     editorGesturesLog.fine(" - document offset: $docOffset");
 
@@ -519,7 +519,7 @@ class _DocumentMouseInteractorState extends State<DocumentMouseInteractor> with 
   }
 
   void _onTripleTap() {
-    editorGesturesLog.info("Triple tap up on document");
+    editorGesturesLog.finest("Triple tap up on document");
     _selectionType = SelectionType.position;
   }
 
@@ -538,7 +538,7 @@ class _DocumentMouseInteractorState extends State<DocumentMouseInteractor> with 
   }
 
   void _onPanStart(DragStartDetails details) {
-    editorGesturesLog.info("Pan start on document, global offset: ${details.globalPosition}, device: ${details.kind}");
+    editorGesturesLog.finest("Pan start on document, global offset: ${details.globalPosition}, device: ${details.kind}");
 
     _panGestureDevice = details.kind;
 
@@ -568,7 +568,7 @@ class _DocumentMouseInteractorState extends State<DocumentMouseInteractor> with 
 
   void _onPanUpdate(DragUpdateDetails details) {
     editorGesturesLog
-        .info("Pan update on document, global offset: ${details.globalPosition}, device: $_panGestureDevice");
+        .finest("Pan update on document, global offset: ${details.globalPosition}, device: $_panGestureDevice");
 
     setState(() {
       _dragEndGlobal = details.globalPosition;
@@ -582,12 +582,12 @@ class _DocumentMouseInteractorState extends State<DocumentMouseInteractor> with 
   }
 
   void _onPanEnd(DragEndDetails details) {
-    editorGesturesLog.info("Pan end on document, device: $_panGestureDevice");
+    editorGesturesLog.finest("Pan end on document, device: $_panGestureDevice");
     _onDragEnd();
   }
 
   void _onPanCancel() {
-    editorGesturesLog.info("Pan cancel on document");
+    editorGesturesLog.finest("Pan cancel on document");
     _onDragEnd();
   }
 
@@ -643,7 +643,7 @@ Updating drag selection:
     required SelectionType selectionType,
     bool expandSelection = false,
   }) {
-    editorGesturesLog.info("Selecting region with selection mode: $selectionType");
+    editorGesturesLog.finest("Selecting region with selection mode: $selectionType");
     DocumentSelection? selection = documentLayout.getDocumentSelectionInRegion(
       baseOffsetInDocument,
       extentOffsetInDocument,

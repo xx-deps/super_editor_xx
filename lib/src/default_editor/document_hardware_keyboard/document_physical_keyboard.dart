@@ -77,7 +77,7 @@ class _SuperEditorHardwareKeyHandlerState extends State<SuperEditorHardwareKeyHa
       // Don't run any of the editor key handlers and let the event bubble up.
       return KeyEventResult.ignored;
     }
-    editorKeyLog.info("Handling key press: $keyEvent");
+    editorKeyLog.finest("Handling key press: $keyEvent");
     ExecutionInstruction instruction = ExecutionInstruction.continueExecution;
     int index = 0;
     while (instruction == ExecutionInstruction.continueExecution && index < widget.keyboardActions.length) {

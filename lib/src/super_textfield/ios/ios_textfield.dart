@@ -442,7 +442,7 @@ class SuperIOSTextFieldState extends State<SuperIOSTextField>
 
       if (_focusNode.hasFocus) {
         if (!_textEditingController.isAttachedToIme) {
-          _log.info('Attaching TextInputClient to TextInput');
+          _log.finest('Attaching TextInputClient to TextInput');
           setState(() {
             if (!_textEditingController.selection.isValid) {
               _textEditingController.selection = TextSelection.collapsed(offset: _textEditingController.text.length);
@@ -463,7 +463,7 @@ class SuperIOSTextFieldState extends State<SuperIOSTextField>
           });
         }
       } else {
-        _log.info('Lost focus. Detaching TextInputClient from TextInput.');
+        _log.finest('Lost focus. Detaching TextInputClient from TextInput.');
         setState(() {
           _textEditingController.detachFromIme();
           _textEditingController.selection = const TextSelection.collapsed(offset: -1);

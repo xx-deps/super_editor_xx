@@ -328,7 +328,7 @@ class AttributedSpans {
       return;
     }
 
-    _log.info("Adding attribution ($newAttribution) from $start to $end");
+    _log.finest("Adding attribution ($newAttribution) from $start to $end");
     _log.finer("Has ${_markers.length} markers before addition");
 
     final conflicts = <_AttributionConflict>[];
@@ -509,7 +509,7 @@ class AttributedSpans {
     required int start,
     required int end,
   }) {
-    _log.info('Removing attribution $attributionToRemove from $start to $end');
+    _log.finest('Removing attribution $attributionToRemove from $start to $end');
     if (start < 0 || start > end) {
       throw Exception('removeAttribution() did not satisfy start < 0 and start > end, start: $start, end: $end');
     }
@@ -601,7 +601,7 @@ class AttributedSpans {
     required int start,
     required int end,
   }) {
-    _log.info('Toggling attribution $attribution from $start to $end');
+    _log.finest('Toggling attribution $attribution from $start to $end');
     if (_isContinuousAttribution(attribution: attribution, start: start, end: end)) {
       removeAttribution(attributionToRemove: attribution, start: start, end: end);
     } else {

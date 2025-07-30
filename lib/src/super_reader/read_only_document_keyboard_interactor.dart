@@ -61,7 +61,7 @@ class ReadOnlyDocumentKeyboardInteractor extends StatelessWidget {
   final Widget child;
 
   KeyEventResult _onKeyEventPressed(FocusNode node, KeyEvent keyEvent) {
-    readerKeyLog.info("Handling key press: $keyEvent");
+    readerKeyLog.finest("Handling key press: $keyEvent");
     ExecutionInstruction instruction = ExecutionInstruction.continueExecution;
     int index = 0;
     while (instruction == ExecutionInstruction.continueExecution && index < keyboardActions.length) {

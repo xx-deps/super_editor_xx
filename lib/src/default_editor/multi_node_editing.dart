@@ -57,7 +57,7 @@ class PasteStructuredContentEditorCommand extends EditCommand {
       throw Exception('Can\'t handle pasting text within node of type: $currentNodeWithSelection');
     }
 
-    editorOpsLog.info("Pasting clipboard content as Markdown in document.");
+    editorOpsLog.finest("Pasting clipboard content as Markdown in document.");
 
     if (_content.length == 1) {
       _pasteSingleNode(executor, document, _content.first, _pastePosition, currentNodeWithSelection);

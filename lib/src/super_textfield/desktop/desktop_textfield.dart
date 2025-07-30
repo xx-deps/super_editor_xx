@@ -1568,7 +1568,7 @@ class _SuperTextFieldImeInteractorState extends State<SuperTextFieldImeInteracto
   void _updateSelectionAndImeConnectionOnFocusChange() {
     if (widget.focusNode.hasFocus) {
       if (!_textController.isAttachedToIme) {
-        _log.info('Attaching TextInputClient to TextInput');
+        _log.finest('Attaching TextInputClient to TextInput');
         setState(() {
           if (!_textController.selection.isValid) {
             _textController.selection = TextSelection.collapsed(offset: _textController.text.length);
@@ -1587,7 +1587,7 @@ class _SuperTextFieldImeInteractorState extends State<SuperTextFieldImeInteracto
         });
       }
     } else {
-      _log.info('Lost focus. Detaching TextInputClient from TextInput.');
+      _log.finest('Lost focus. Detaching TextInputClient from TextInput.');
       setState(() {
         _textController.detachFromIme();
         _textController.selection = const TextSelection.collapsed(offset: -1);

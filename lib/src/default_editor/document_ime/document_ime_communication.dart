@@ -336,6 +336,6 @@ class DocumentImeInputClient extends TextInputConnectionDecorator with TextInput
 
   @override
   void connectionClosed() {
-    editorImeLog.info("IME connection was closed");
+    editorImeLog.finest("IME connection was closed");
   }
 }
