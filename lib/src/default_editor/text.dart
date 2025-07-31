@@ -837,45 +837,27 @@ class TextComponentState extends State<TextComponent> with DocumentComponent imp
   }
 
   @override
-  Offset getOffsetForPosition(dynamic nodePosition) {
-    if (nodePosition is! TextPosition) {
-      throw Exception('Expected nodePosition of type TextPosition but received: $nodePosition');
-    }
+  Offset getOffsetForPosition(covariant TextNodePosition nodePosition) {
     return textLayout.getOffsetAtPosition(nodePosition);
   }
 
   @override
-  Rect getEdgeForPosition(NodePosition nodePosition) {
-    if (nodePosition is! TextPosition) {
-      throw Exception('Expected nodePosition of type TextPosition but received: $nodePosition');
-    }
-
-    final textNodePosition = nodePosition as TextPosition;
+  Rect getEdgeForPosition(covariant TextNodePosition nodePosition) {
+    final textNodePosition = nodePosition;
     final characterBox = getRectForPosition(textNodePosition);
 
     return textNodePosition.affinity == TextAffinity.upstream ? characterBox.leftEdge : characterBox.rightEdge;
   }
 
   @override
-  Rect getRectForPosition(dynamic nodePosition) {
-    if (nodePosition is! TextPosition) {
-      throw Exception('Expected nodePosition of type TextPosition but received: $nodePosition');
-    }
-
+  Rect getRectForPosition(covariant TextNodePosition nodePosition) {
     final offset = getOffsetForPosition(nodePosition);
     final lineHeight = textLayout.getHeightForCaret(nodePosition) ?? textLayout.getLineHeightAtPosition(nodePosition);
     return Rect.fromLTWH(offset.dx, offset.dy, 0, lineHeight);
   }
 
   @override
-  Rect getRectForSelection(dynamic baseNodePosition, dynamic extentNodePosition) {
-    if (baseNodePosition is! TextPosition) {
-      throw Exception('Expected nodePosition of type TextPosition but received: $baseNodePosition');
-    }
-    if (extentNodePosition is! TextPosition) {
-      throw Exception('Expected nodePosition of type TextPosition but received: $extentNodePosition');
-    }
-
+  Rect getRectForSelection(covariant TextNodePosition baseNodePosition, covariant TextNodePosition extentNodePosition) {
     final selection = TextSelection(
       baseOffset: baseNodePosition.offset,
       extentOffset: extentNodePosition.offset,
