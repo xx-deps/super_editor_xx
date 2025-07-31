@@ -18,6 +18,16 @@ enum CustomEditorEvent {
   paste,
 }
 
+class CustomEditorEventData {
+  final CustomEditorEvent event;
+  final String? text;
+
+  CustomEditorEventData({
+    required this.event,
+    this.text,
+  });
+}
+
 /// Editor for a document editing experience.
 ///
 /// An [Editor] is the entry point for all mutations within a document editing experience.
@@ -71,7 +81,7 @@ class Editor implements RequestDispatcher {
         _changeListeners = listeners ?? [] {
     context = EditContext(editables);
     _commandExecutor = _DocumentEditorCommandExecutor(context);
-    _customEventController = StreamController<CustomEditorEvent>.broadcast();
+    _customEventController = StreamController<CustomEditorEventData>.broadcast();
   }
 
   void dispose() {
@@ -81,9 +91,9 @@ class Editor implements RequestDispatcher {
   }
 
   /// SuperEditor中editorContext未暴露的方法，在这里通过监听外部事件执行
-  late final StreamController<CustomEditorEvent> _customEventController;
+  late final StreamController<CustomEditorEventData> _customEventController;
 
-  Stream<CustomEditorEvent> get customEventStream => _customEventController.stream;
+  Stream<CustomEditorEventData> get customEventStream => _customEventController.stream;
 
   /// Chain of Responsibility that maps a given [EditRequest] to an [EditCommand].
   final List<EditRequestHandler> requestHandlers;
@@ -485,16 +495,16 @@ class Editor implements RequestDispatcher {
     _notifyListeners([]);
   }
 
-  void cut() {
-    _customEventController.add(CustomEditorEvent.cut);
+  void cut({String? customMarkdownText}) {
+    _customEventController.add(CustomEditorEventData(event: CustomEditorEvent.cut, text: customMarkdownText));
   }
 
-  void copy() {
-    _customEventController.add(CustomEditorEvent.copy);
+  void copy({String? customMarkdownText}) {
+    _customEventController.add(CustomEditorEventData(event: CustomEditorEvent.copy, text: customMarkdownText));
   }
 
-  void paste() {
-    _customEventController.add(CustomEditorEvent.paste);
+  void paste({String? customMarkdownText}) {
+    _customEventController.add(CustomEditorEventData(event: CustomEditorEvent.paste, text: customMarkdownText));
   }
 
   void _notifyListeners(List<EditEvent> changeList) {

@@ -933,12 +933,19 @@ class CommonEditorOperations {
             // is not deletable. Skip the non-deletable node and try to merge the selected
             // node with the next non-deletable node.
             return _mergeTextNodeWithDownstreamTextNode();
-          } else if (componentAfter.isVisualSelectionSupported()) {
-            // The caret is at the end of a TextNode, but the next node
-            // is not a TextNode. Move the document selection to the
-            // next node.
-            return _moveSelectionToBeginningOfNextNode();
-          } else {
+          }
+          // TODO：目前改成直接删除后面的节点，而不是先移动光标至下一行
+          // componentAfter 是视图层对应的 Widget（如渲染组件），不是模型层的 DocumentNode
+          // 如果该组件支持可视化选区（即允许被选中、聚焦），如：图片、代码块、视频等
+          // ✅ 处理：将光标从当前节点末尾移动到下一个节点的开始
+          //  else if (componentAfter.isVisualSelectionSupported()) {
+          //   // The caret is at the end of a TextNode, but the next node
+          //   // is not a TextNode. Move the document selection to the
+          //   // next node.
+          //   return _moveSelectionToBeginningOfNextNode();
+
+          // }
+          else {
             // The next node/component isn't selectable. Delete it.
             deleteNonSelectedNode(nodeAfter);
             return true;
@@ -2341,7 +2348,7 @@ class CommonEditorOperations {
   /// The clipboard operation is asynchronous. As a result, if the user quickly
   /// moves the caret, it's possible that the clipboard content will be pasted
   /// at the wrong spot.
-  void paste() {
+  void paste({String? customMarkdownText}) {
     DocumentPosition? pastePosition = composer.selection!.extent;
 
     // Start a transaction so that we can capture both the initial deletion behavior,
@@ -2378,6 +2385,7 @@ class CommonEditorOperations {
       editor: editor,
       composer: composer,
       pastePosition: pastePosition,
+      customMarkdownText: customMarkdownText,
     );
 
     editor.endTransaction();
@@ -2388,8 +2396,9 @@ class CommonEditorOperations {
     required Editor editor,
     required DocumentComposer composer,
     required DocumentPosition pastePosition,
+    String? customMarkdownText,
   }) async {
-    final content = (await Clipboard.getData('text/plain'))?.text ?? '';
+    final content = customMarkdownText ?? (await Clipboard.getData('text/plain'))?.text ?? '';
     editor.execute([
       PasteEditorRequest(
         content: content,

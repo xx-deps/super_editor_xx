@@ -591,15 +591,15 @@ class SuperEditorState extends State<SuperEditor> {
     _contentTapHandlers = widget.contentTapDelegateFactories?.map((factory) => factory.call(editContext)).toList();
   }
 
-  void _handleCustomEvent(CustomEditorEvent event) {
+  void _handleCustomEvent(CustomEditorEventData data) {
     if (_focusNode.hasFocus == false) {
       return;
     }
-    if (event == CustomEditorEvent.copy) {
+    if (data.event == CustomEditorEvent.copy) {
       editContext.commonOps.copy();
-    } else if (event == CustomEditorEvent.paste) {
-      editContext.commonOps.paste();
-    } else if (event == CustomEditorEvent.cut) {
+    } else if (data.event == CustomEditorEvent.paste) {
+      editContext.commonOps.paste(customMarkdownText: data.text);
+    } else if (data.event == CustomEditorEvent.cut) {
       editContext.commonOps.cut();
     }
   }
