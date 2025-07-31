@@ -135,10 +135,8 @@ class TextNode extends DocumentNode {
   }
 
   @override
-  String copyContent(dynamic selection) {
-    assert(selection is TextSelection);
-
-    return (selection as TextSelection).textInside(text.toPlainText());
+  String copyContent(covariant TextNodeSelection selection) {
+    return selection.textInside(text.toPlainText());
   }
 
   @override
