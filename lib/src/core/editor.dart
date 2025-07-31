@@ -1130,7 +1130,7 @@ class MutableDocument with Iterable<DocumentNode> implements Document, Editable 
 
   final _listeners = <DocumentChangeListener>[];
 
-  @override
+
   List<DocumentNode> get nodes => List.unmodifiable(_nodes);
 
   @override
@@ -1304,23 +1304,6 @@ class MutableDocument with Iterable<DocumentNode> implements Document, Editable 
     if (_nodes.remove(node)) {
       _nodes.insert(targetIndex, node);
       _refreshNodeIdCaches();
-    }
-  }
-
-  /// Replaces the given [oldNode] with the given [newNode]
-  @Deprecated("Use replaceNodeById() instead")
-  void replaceNode({
-    required DocumentNode oldNode,
-    required DocumentNode newNode,
-  }) {
-    final index = _nodes.indexOf(oldNode);
-
-    if (index >= 0) {
-      _nodes.removeAt(index);
-      _nodes.insert(index, newNode);
-      _refreshNodeIdCaches();
-    } else {
-      throw Exception('Could not find oldNode: ${oldNode.id}');
     }
   }
 

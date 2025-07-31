@@ -42,11 +42,7 @@ class ImageNode extends BlockNode {
   final String altText;
 
   @override
-  String? copyContent(dynamic selection) {
-    if (selection is! UpstreamDownstreamNodeSelection) {
-      throw Exception('ImageNode can only copy content from a UpstreamDownstreamNodeSelection.');
-    }
-
+  String? copyContent(covariant UpstreamDownstreamNodeSelection selection) {
     return !selection.isCollapsed ? imageUrl : null;
   }
 

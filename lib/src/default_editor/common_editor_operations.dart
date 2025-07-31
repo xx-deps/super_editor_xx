@@ -163,22 +163,29 @@ class CommonEditorOperations {
   /// selection could be computed, e.g., the selection was not collapsed,
   /// the selection was not in a [TextNode].
   bool selectSurroundingWord() {
-    if (composer.selection == null) {
+    final selection = composer.selection;
+    if (selection == null) {
       return false;
     }
-    if (composer.selection!.base.nodeId != composer.selection!.extent.nodeId) {
+    if (selection.base.nodeId != selection.extent.nodeId) {
       return false;
     }
 
-    final selectedNode = document.getNodeById(composer.selection!.extent.nodeId);
+    final selectedNode = document.getNodeById(selection.extent.nodeId);
     if (selectedNode is! TextNode) {
       return false;
     }
 
-    final docSelection = composer.selection!;
+    final docSelection = selection;
+    final basePosition = docSelection.base.nodePosition;
+    final extentPosition = docSelection.extent.nodePosition;
+    if (basePosition is! TextNodePosition || extentPosition is! TextNodePosition) return false;
+
+    final baseOffset = basePosition.offset;
+    final extentOffset = extentPosition.offset;
     final currentSelection = TextSelection(
-      baseOffset: (docSelection.base.nodePosition as TextNodePosition).offset,
-      extentOffset: (docSelection.extent.nodePosition as TextNodePosition).offset,
+      baseOffset: baseOffset,
+      extentOffset: extentOffset,
     );
     final selectedText = currentSelection.textInside(selectedNode.text.toPlainText());
 
@@ -189,7 +196,7 @@ class CommonEditorOperations {
 
     final wordTextSelection = expandPositionToWord(
       text: selectedNode.text.toPlainText(),
-      textPosition: TextPosition(offset: (docSelection.extent.nodePosition as TextNodePosition).offset),
+      textPosition: TextPosition(offset: extentOffset),
     );
     final wordNodeSelection = TextNodeSelection.fromTextSelection(wordTextSelection);
 
