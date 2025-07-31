@@ -12,7 +12,8 @@ class OverlordLoggerName {
 /// Overlord logging.
 class OverlordLogs {
   static final cupertino = logging.Logger(OverlordLoggerName.cupertino);
-  static final cupertinoToolbar = logging.Logger(OverlordLoggerName.cupertinoToolbar);
+  static final cupertinoToolbar =
+      logging.Logger(OverlordLoggerName.cupertinoToolbar);
   static final cupertinoMenu = logging.Logger(OverlordLoggerName.cupertinoMenu);
 
   static final _activeLoggers = <logging.Logger>{};

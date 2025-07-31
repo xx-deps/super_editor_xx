@@ -85,7 +85,8 @@ class _ScaleLeaderAndFollower extends StatefulWidget {
   final double scale;
 
   @override
-  State<_ScaleLeaderAndFollower> createState() => _ScaleLeaderAndFollowerState();
+  State<_ScaleLeaderAndFollower> createState() =>
+      _ScaleLeaderAndFollowerState();
 }
 
 class _ScaleLeaderAndFollowerState extends State<_ScaleLeaderAndFollower> {
@@ -120,7 +121,8 @@ class _ScaleLeaderAndFollowerState extends State<_ScaleLeaderAndFollower> {
                     alignment: const Alignment(0.0, 0.0),
                     child: Leader(
                       link: _anchor,
-                      child: Container(width: 25, height: 25, color: Colors.red),
+                      child:
+                          Container(width: 25, height: 25, color: Colors.red),
                     ),
                   ),
                   Follower.withAligner(
@@ -138,12 +140,14 @@ class _ScaleLeaderAndFollowerState extends State<_ScaleLeaderAndFollower> {
                         TextButton(
                           // ignore: avoid_print
                           onPressed: () => print("one"),
-                          child: const Text("One", style: TextStyle(color: Colors.white)),
+                          child: const Text("One",
+                              style: TextStyle(color: Colors.white)),
                         ),
                         TextButton(
                           // ignore: avoid_print
                           onPressed: () => print("two"),
-                          child: const Text("Two", style: TextStyle(color: Colors.white)),
+                          child: const Text("Two",
+                              style: TextStyle(color: Colors.white)),
                         ),
                       ],
                     ),
@@ -177,10 +181,12 @@ class _ScaleLeaderButNotFollower extends StatefulWidget {
   final double scale;
 
   @override
-  State<_ScaleLeaderButNotFollower> createState() => _ScaleLeaderButNotFollowerState();
+  State<_ScaleLeaderButNotFollower> createState() =>
+      _ScaleLeaderButNotFollowerState();
 }
 
-class _ScaleLeaderButNotFollowerState extends State<_ScaleLeaderButNotFollower> {
+class _ScaleLeaderButNotFollowerState
+    extends State<_ScaleLeaderButNotFollower> {
   final _anchor = LeaderLink();
   final _boundsKey = GlobalKey();
 
@@ -261,10 +267,12 @@ class _ScaleFollowerButNotLeader extends StatefulWidget {
   final double scale;
 
   @override
-  State<_ScaleFollowerButNotLeader> createState() => _ScaleFollowerButNotLeaderState();
+  State<_ScaleFollowerButNotLeader> createState() =>
+      _ScaleFollowerButNotLeaderState();
 }
 
-class _ScaleFollowerButNotLeaderState extends State<_ScaleFollowerButNotLeader> {
+class _ScaleFollowerButNotLeaderState
+    extends State<_ScaleFollowerButNotLeader> {
   final _anchor = LeaderLink();
   final _boundsKey = GlobalKey();
 
@@ -320,12 +328,14 @@ class _ScaleFollowerButNotLeaderState extends State<_ScaleFollowerButNotLeader> 
                 TextButton(
                   // ignore: avoid_print
                   onPressed: () => print("one"),
-                  child: const Text("One", style: TextStyle(color: Colors.white)),
+                  child:
+                      const Text("One", style: TextStyle(color: Colors.white)),
                 ),
                 TextButton(
                   // ignore: avoid_print
                   onPressed: () => print("two"),
-                  child: const Text("Two", style: TextStyle(color: Colors.white)),
+                  child:
+                      const Text("Two", style: TextStyle(color: Colors.white)),
                 ),
               ],
             ),

@@ -6,7 +6,8 @@ import 'package:super_editor/src/infrastructure/_logging.dart';
 /// with a span of text.
 ///
 /// The [attributions] set may be empty.
-typedef AttributionStyleBuilder = TextStyle Function(Set<Attribution> attributions);
+typedef AttributionStyleBuilder = TextStyle Function(
+    Set<Attribution> attributions);
 
 extension ToSpanRange on TextRange {
   SpanRange toSpanRange() => SpanRange(start, end);
@@ -102,7 +103,8 @@ extension ComputeTextSpan on AttributedText {
   ///
   /// The given [styleBuilder] interprets the meaning of every
   /// attribution and constructs [TextStyle]s accordingly.
-  @Deprecated("Use computeInlineSpan() instead, which adds support for inline widgets.")
+  @Deprecated(
+      "Use computeInlineSpan() instead, which adds support for inline widgets.")
   TextSpan computeTextSpan(AttributionStyleBuilder styleBuilder) {
     attributionsLog.fine('text length: ${text.length}');
     attributionsLog.fine('attributions used to compute spans:');
@@ -117,7 +119,8 @@ extension ComputeTextSpan on AttributedText {
     final collapsedSpans = spans.collapseSpans(contentLength: text.length);
     final textSpans = collapsedSpans
         .map((attributedSpan) => TextSpan(
-              text: text.substring(attributedSpan.start, attributedSpan.end + 1),
+              text:
+                  text.substring(attributedSpan.start, attributedSpan.end + 1),
               style: styleBuilder(attributedSpan.attributions),
             ))
         .toList();

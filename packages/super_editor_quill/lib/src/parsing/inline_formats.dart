@@ -13,10 +13,12 @@ class ColorDeltaFormat extends FilterByNameInlineDeltaFormat {
   @override
   Attribution? createAttribution(String value) {
     if (!value.startsWith("#")) {
-      throw Exception("Unknown color value: '$value' - expected it to start with '#'");
+      throw Exception(
+          "Unknown color value: '$value' - expected it to start with '#'");
     }
     if (value.length != 7 && value.length != 9) {
-      throw Exception("Unknown color value: '$value' - expected either #rrggbb or #aarrggbb");
+      throw Exception(
+          "Unknown color value: '$value' - expected either #rrggbb or #aarrggbb");
     }
 
     late final int colorValue;
@@ -42,10 +44,12 @@ class BackgroundColorDeltaFormat extends FilterByNameInlineDeltaFormat {
   @override
   Attribution? createAttribution(String value) {
     if (!value.startsWith("#")) {
-      throw Exception("Unknown color value: '$value' - expected it to start with '#'");
+      throw Exception(
+          "Unknown color value: '$value' - expected it to start with '#'");
     }
     if (value.length != 7 && value.length != 9) {
-      throw Exception("Unknown color value: '$value' (length ${value.length}) - expected either #rrggbb or #aarrggbb");
+      throw Exception(
+          "Unknown color value: '$value' (length ${value.length}) - expected either #rrggbb or #aarrggbb");
     }
 
     late final int colorValue;
@@ -185,7 +189,8 @@ abstract interface class InlineDeltaFormat {
 }
 
 abstract interface class InlineEmbedFormat {
-  bool insert(Editor editor, DocumentComposer composer, Map<String, dynamic> embed);
+  bool insert(
+      Editor editor, DocumentComposer composer, Map<String, dynamic> embed);
 }
 
 class InlineEmbed {
@@ -197,7 +202,10 @@ class InlineEmbed {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is InlineEmbed && runtimeType == other.runtimeType && text == other.text && data == other.data;
+      other is InlineEmbed &&
+          runtimeType == other.runtimeType &&
+          text == other.text &&
+          data == other.data;
 
   @override
   int get hashCode => text.hashCode ^ data.hashCode;

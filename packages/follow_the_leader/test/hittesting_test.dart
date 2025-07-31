@@ -25,7 +25,8 @@ void main() {
                     left: 0,
                     child: Leader(
                       link: _link,
-                      child: Container(color: Colors.red, width: 50, height: 50),
+                      child:
+                          Container(color: Colors.red, width: 50, height: 50),
                     ),
                   ),
                   Positioned(
@@ -35,7 +36,8 @@ void main() {
                       link: _link,
                       boundary: ScreenFollowerBoundary(
                         screenSize: MediaQuery.of(context).size,
-                        devicePixelRatio: MediaQuery.of(context).devicePixelRatio,
+                        devicePixelRatio:
+                            MediaQuery.of(context).devicePixelRatio,
                       ),
                       leaderAnchor: Alignment.bottomRight,
                       followerAnchor: Alignment.topLeft,

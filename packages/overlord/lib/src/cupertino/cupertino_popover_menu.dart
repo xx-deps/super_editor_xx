@@ -111,7 +111,8 @@ class CupertinoPopoverMenu extends SingleChildRenderObjectWidget {
   }
 
   @override
-  void updateRenderObject(BuildContext context, covariant RenderPopover renderObject) {
+  void updateRenderObject(
+      BuildContext context, covariant RenderPopover renderObject) {
     super.updateRenderObject(context, renderObject);
     renderObject
       ..borderRadius = borderRadius
@@ -345,7 +346,8 @@ class RenderPopover extends RenderShiftedBox {
   /// Prevents the [ClipPathLayer]'s resources from being disposed.
   ///
   /// When the child's `needsCompositing` is `true`, a new layer is created for clipping during paint.
-  final LayerHandle<ClipPathLayer> _clipPathLayer = LayerHandle<ClipPathLayer>();
+  final LayerHandle<ClipPathLayer> _clipPathLayer =
+      LayerHandle<ClipPathLayer>();
 
   @override
   void dispose() {
@@ -363,8 +365,10 @@ class RenderPopover extends RenderShiftedBox {
     // Compute the child constraints to leave space for the arrow and padding.
     BoxConstraints innerConstraints = constraints.enforce(
       BoxConstraints(
-        maxHeight: min(_screenSize.height, constraints.maxHeight) - reservedSize.height,
-        maxWidth: min(_screenSize.width, constraints.maxWidth) - reservedSize.width,
+        maxHeight: min(_screenSize.height, constraints.maxHeight) -
+            reservedSize.height,
+        maxWidth:
+            min(_screenSize.width, constraints.maxWidth) - reservedSize.width,
       ),
     );
 
@@ -393,7 +397,9 @@ class RenderPopover extends RenderShiftedBox {
     late ArrowDirection direction;
     late double arrowCenter;
 
-    final localFocalPoint = focalPoint.globalOffset != null ? globalToLocal(focalPoint.globalOffset!) : null;
+    final localFocalPoint = focalPoint.globalOffset != null
+        ? globalToLocal(focalPoint.globalOffset!)
+        : null;
     if (localFocalPoint != null) {
       // We have a menu focal point. Orient the arrow towards that
       // focal point.
@@ -421,7 +427,8 @@ class RenderPopover extends RenderShiftedBox {
       );
     }
 
-    context.canvas.drawPath(_backgroundShapePath!.shift(offset), _backgroundPaint);
+    context.canvas
+        .drawPath(_backgroundShapePath!.shift(offset), _backgroundPaint);
 
     _clipPathLayer.layer = context.pushClipPath(
       needsCompositing,
@@ -444,7 +451,8 @@ class RenderPopover extends RenderShiftedBox {
       );
 
       if (localFocalPoint != null) {
-        context.canvas.drawCircle(localFocalPoint, 10, Paint()..color = Colors.blue);
+        context.canvas
+            .drawCircle(localFocalPoint, 10, Paint()..color = Colors.blue);
       }
     }
   }
@@ -490,7 +498,8 @@ class RenderPopover extends RenderShiftedBox {
   /// Builds the path used to paint the menu.
   ///
   /// The path includes a rounded rectangle and a arrow pointing to [arrowDirection], centered at [arrowCenter].
-  Path _createBackgroundShapePath(ArrowDirection arrowDirection, double arrowCenter) {
+  Path _createBackgroundShapePath(
+      ArrowDirection arrowDirection, double arrowCenter) {
     final halfOfBase = arrowBaseWidth / 2;
 
     // The content size is the size of this `RenderObject`, minus the reserved arrow space.
@@ -502,7 +511,9 @@ class RenderPopover extends RenderShiftedBox {
 
     final contentRect = _backgroundShapeOffset & contentSize;
 
-    Path path = Path()..addRRect(RRect.fromRectAndRadius(contentRect, Radius.circular(borderRadius)));
+    Path path = Path()
+      ..addRRect(
+          RRect.fromRectAndRadius(contentRect, Radius.circular(borderRadius)));
 
     // Add the arrow.
     if (arrowDirection == ArrowDirection.left) {
@@ -538,9 +549,11 @@ class RenderPopover extends RenderShiftedBox {
   /// the arrow points left or right.
   ///
   /// If [allowHorizontalArrow] is `false`, the arrow only points up or down.
-  ArrowDirection _computeArrowDirection(Rect menuRect, Offset globalFocalPoint) {
+  ArrowDirection _computeArrowDirection(
+      Rect menuRect, Offset globalFocalPoint) {
     final isFocalPointInsideHorizontalBounds =
-        globalFocalPoint.dx >= menuRect.left && globalFocalPoint.dx <= menuRect.right;
+        globalFocalPoint.dx >= menuRect.left &&
+            globalFocalPoint.dx <= menuRect.right;
 
     if (isFocalPointInsideHorizontalBounds || !allowHorizontalArrow) {
       if (globalFocalPoint.dy < menuRect.top) {
@@ -596,17 +609,20 @@ class RenderPopover extends RenderShiftedBox {
 
   /// Indicates whether or not the arrow points to a vertical direction.
   bool _isArrowVertical(ArrowDirection arrowDirection) =>
-      arrowDirection == ArrowDirection.up || arrowDirection == ArrowDirection.down;
+      arrowDirection == ArrowDirection.up ||
+      arrowDirection == ArrowDirection.down;
 
   /// Minimum focal point for the given [arrowDirection] in which the arrow can be displayed inside the popover bounds.
-  double _minArrowFocalPoint(ArrowDirection arrowDirection) => _isArrowVertical(arrowDirection)
-      ? _minArrowHorizontalCenter(arrowDirection)
-      : _minArrowVerticalCenter(arrowDirection);
+  double _minArrowFocalPoint(ArrowDirection arrowDirection) =>
+      _isArrowVertical(arrowDirection)
+          ? _minArrowHorizontalCenter(arrowDirection)
+          : _minArrowVerticalCenter(arrowDirection);
 
   /// Maximum focal point for the given [arrowDirection] in which the arrow can be displayed inside the popover bounds.
-  double _maxArrowFocalPoint(ArrowDirection arrowDirection) => _isArrowVertical(arrowDirection)
-      ? _maxArrowHorizontalCenter(arrowDirection)
-      : _maxArrowVerticalCenter(arrowDirection);
+  double _maxArrowFocalPoint(ArrowDirection arrowDirection) =>
+      _isArrowVertical(arrowDirection)
+          ? _maxArrowHorizontalCenter(arrowDirection)
+          : _maxArrowVerticalCenter(arrowDirection);
 
   /// Minimum distance on the x-axis in which the arrow can be displayed without being above the corner.
   double _minArrowHorizontalCenter(ArrowDirection arrowDirection) =>
@@ -614,18 +630,24 @@ class RenderPopover extends RenderShiftedBox {
 
   /// Maximum distance on the x-axis in which the arrow can be displayed without being above the corner.
   double _maxArrowHorizontalCenter(ArrowDirection arrowDirection) =>
-      (size.width - borderRadius - arrowBaseWidth - _backgroundShapeOffset.dx / 2);
+      (size.width -
+          borderRadius -
+          arrowBaseWidth -
+          _backgroundShapeOffset.dx / 2);
 
   /// Minimum distance on the y-axis which the arrow can be displayed without being above the corner.
-  double _minArrowVerticalCenter(ArrowDirection arrowDirection) => (borderRadius + arrowBaseWidth / 2) + arrowLength;
+  double _minArrowVerticalCenter(ArrowDirection arrowDirection) =>
+      (borderRadius + arrowBaseWidth / 2) + arrowLength;
 
   /// Maximum distance on the y-axis which the arrow can be displayed without being above the corner.
   double _maxArrowVerticalCenter(ArrowDirection arrowDirection) =>
       (size.height - borderRadius - arrowLength - (arrowBaseWidth / 2));
 
   /// Constrain the focal point to be inside the menu bounds, respecting the minimum and maximum focal points.
-  double _constrainFocalPoint(double desiredFocalPoint, ArrowDirection arrowDirection) {
-    return min(max(desiredFocalPoint, _minArrowFocalPoint(arrowDirection)), _maxArrowFocalPoint(arrowDirection));
+  double _constrainFocalPoint(
+      double desiredFocalPoint, ArrowDirection arrowDirection) {
+    return min(max(desiredFocalPoint, _minArrowFocalPoint(arrowDirection)),
+        _maxArrowFocalPoint(arrowDirection));
   }
 }
 

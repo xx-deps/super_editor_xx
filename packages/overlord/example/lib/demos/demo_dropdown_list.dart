@@ -154,13 +154,16 @@ class AndroidStudioRunConfigurationList extends StatefulWidget {
 
   final VoidCallback onEditConfigurationsSelected;
 
-  final void Function(RunConfiguration runConfiguration) onRunConfigurationSelected;
+  final void Function(RunConfiguration runConfiguration)
+      onRunConfigurationSelected;
 
   @override
-  State<AndroidStudioRunConfigurationList> createState() => _AndroidStudioRunConfigurationListState();
+  State<AndroidStudioRunConfigurationList> createState() =>
+      _AndroidStudioRunConfigurationListState();
 }
 
-class _AndroidStudioRunConfigurationListState extends State<AndroidStudioRunConfigurationList> {
+class _AndroidStudioRunConfigurationListState
+    extends State<AndroidStudioRunConfigurationList> {
   final _listFocusNode = FocusNode();
   final _editConfigurationsKey = GlobalKey();
 
@@ -186,8 +189,11 @@ class _AndroidStudioRunConfigurationListState extends State<AndroidStudioRunConf
       return KeyEventResult.ignored;
     }
 
-    if (!const [LogicalKeyboardKey.arrowUp, LogicalKeyboardKey.arrowDown, LogicalKeyboardKey.enter]
-        .contains(event.logicalKey)) {
+    if (!const [
+      LogicalKeyboardKey.arrowUp,
+      LogicalKeyboardKey.arrowDown,
+      LogicalKeyboardKey.enter
+    ].contains(event.logicalKey)) {
       return KeyEventResult.ignored;
     }
 
@@ -200,7 +206,8 @@ class _AndroidStudioRunConfigurationListState extends State<AndroidStudioRunConf
       return KeyEventResult.handled;
     }
 
-    if (event.logicalKey == LogicalKeyboardKey.arrowDown && activeIndex < _listLength - 1) {
+    if (event.logicalKey == LogicalKeyboardKey.arrowDown &&
+        activeIndex < _listLength - 1) {
       setState(() {
         _activateItemAt(activeIndex + 1);
       });
@@ -211,7 +218,8 @@ class _AndroidStudioRunConfigurationListState extends State<AndroidStudioRunConf
       if (activeIndex == 0) {
         widget.onEditConfigurationsSelected();
       } else {
-        widget.onRunConfigurationSelected(widget.runConfigurations[activeIndex - 1]);
+        widget.onRunConfigurationSelected(
+            widget.runConfigurations[activeIndex - 1]);
       }
     }
 
@@ -220,7 +228,9 @@ class _AndroidStudioRunConfigurationListState extends State<AndroidStudioRunConf
 
   int get _activeIndex => _activeItemKey == _editConfigurationsKey //
       ? 0
-      : widget.runConfigurations.indexWhere((element) => element.key == _activeItemKey) + 1;
+      : widget.runConfigurations
+              .indexWhere((element) => element.key == _activeItemKey) +
+          1;
 
   int get _listLength => widget.runConfigurations.length + 1;
 

@@ -16,7 +16,8 @@ class BareBonesTextFieldWithInputClient extends StatefulWidget {
   State createState() => _BareBonesTextFieldWithInputClientState();
 }
 
-class _BareBonesTextFieldWithInputClientState extends State<BareBonesTextFieldWithInputClient>
+class _BareBonesTextFieldWithInputClientState
+    extends State<BareBonesTextFieldWithInputClient>
     with DeltaTextInputClient, TextInputClient {
   late FocusNode _focusNode;
   TextInputConnection? _textInputConnection;
@@ -48,7 +49,8 @@ class _BareBonesTextFieldWithInputClientState extends State<BareBonesTextFieldWi
         // Only set the text selection if one doesn't already exist. This way, tests can pass
         // an initial selection value and then tap on the field to give it focus.
         _currentTextEditingValue = _currentTextEditingValue.copyWith(
-          selection: TextSelection.collapsed(offset: _currentTextEditingValue.text.length),
+          selection: TextSelection.collapsed(
+              offset: _currentTextEditingValue.text.length),
         );
       }
 
@@ -109,7 +111,8 @@ class _BareBonesTextFieldWithInputClientState extends State<BareBonesTextFieldWi
         _currentTextEditingValue = delta.apply(_currentTextEditingValue);
 
         imeTestClientLog.finest("New text: ${_currentTextEditingValue.text}");
-        imeTestClientLog.finest("New selection: ${_currentTextEditingValue.selection}");
+        imeTestClientLog
+            .finest("New selection: ${_currentTextEditingValue.selection}");
       }
       _textInputConnection!.setEditingState(_currentTextEditingValue);
     });

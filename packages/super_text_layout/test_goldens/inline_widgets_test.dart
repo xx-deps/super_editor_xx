@@ -198,15 +198,24 @@ final _allAlignmentsWithText = TextSpan(
     const TextSpan(
       text: "< Bottom",
     ),
-    WidgetSpan(child: _inlineBlock(), alignment: PlaceholderAlignment.aboveBaseline, baseline: TextBaseline.alphabetic),
+    WidgetSpan(
+        child: _inlineBlock(),
+        alignment: PlaceholderAlignment.aboveBaseline,
+        baseline: TextBaseline.alphabetic),
     const TextSpan(
       text: "< Above Baseline",
     ),
-    WidgetSpan(child: _inlineBlock(), alignment: PlaceholderAlignment.baseline, baseline: TextBaseline.alphabetic),
+    WidgetSpan(
+        child: _inlineBlock(),
+        alignment: PlaceholderAlignment.baseline,
+        baseline: TextBaseline.alphabetic),
     const TextSpan(
       text: "< Baseline",
     ),
-    WidgetSpan(child: _inlineBlock(), alignment: PlaceholderAlignment.belowBaseline, baseline: TextBaseline.alphabetic),
+    WidgetSpan(
+        child: _inlineBlock(),
+        alignment: PlaceholderAlignment.belowBaseline,
+        baseline: TextBaseline.alphabetic),
     const TextSpan(
       text: "< Below Baseline",
     ),
@@ -220,9 +229,18 @@ final _allAlignmentsNoText = TextSpan(
     WidgetSpan(child: _inlineBlock(), alignment: PlaceholderAlignment.top),
     WidgetSpan(child: _inlineBlock(), alignment: PlaceholderAlignment.middle),
     WidgetSpan(child: _inlineBlock(), alignment: PlaceholderAlignment.bottom),
-    WidgetSpan(child: _inlineBlock(), alignment: PlaceholderAlignment.aboveBaseline, baseline: TextBaseline.alphabetic),
-    WidgetSpan(child: _inlineBlock(), alignment: PlaceholderAlignment.baseline, baseline: TextBaseline.alphabetic),
-    WidgetSpan(child: _inlineBlock(), alignment: PlaceholderAlignment.belowBaseline, baseline: TextBaseline.alphabetic),
+    WidgetSpan(
+        child: _inlineBlock(),
+        alignment: PlaceholderAlignment.aboveBaseline,
+        baseline: TextBaseline.alphabetic),
+    WidgetSpan(
+        child: _inlineBlock(),
+        alignment: PlaceholderAlignment.baseline,
+        baseline: TextBaseline.alphabetic),
+    WidgetSpan(
+        child: _inlineBlock(),
+        alignment: PlaceholderAlignment.belowBaseline,
+        baseline: TextBaseline.alphabetic),
   ],
   style: _testTextStyle,
 );
@@ -234,9 +252,18 @@ final _allAlignmentsMultipleSizesSmallToLarge = TextSpan(
     WidgetSpan(child: _inlineBlock(), alignment: PlaceholderAlignment.top),
     WidgetSpan(child: _inlineBlock(), alignment: PlaceholderAlignment.middle),
     WidgetSpan(child: _inlineBlock(), alignment: PlaceholderAlignment.bottom),
-    WidgetSpan(child: _inlineBlock(), alignment: PlaceholderAlignment.aboveBaseline, baseline: TextBaseline.alphabetic),
-    WidgetSpan(child: _inlineBlock(), alignment: PlaceholderAlignment.baseline, baseline: TextBaseline.alphabetic),
-    WidgetSpan(child: _inlineBlock(), alignment: PlaceholderAlignment.belowBaseline, baseline: TextBaseline.alphabetic),
+    WidgetSpan(
+        child: _inlineBlock(),
+        alignment: PlaceholderAlignment.aboveBaseline,
+        baseline: TextBaseline.alphabetic),
+    WidgetSpan(
+        child: _inlineBlock(),
+        alignment: PlaceholderAlignment.baseline,
+        baseline: TextBaseline.alphabetic),
+    WidgetSpan(
+        child: _inlineBlock(),
+        alignment: PlaceholderAlignment.belowBaseline,
+        baseline: TextBaseline.alphabetic),
     const TextSpan(
       text: "Hello World!",
     ),
@@ -245,10 +272,17 @@ final _allAlignmentsMultipleSizesSmallToLarge = TextSpan(
     WidgetSpan(child: _inlineBlock(20), alignment: PlaceholderAlignment.middle),
     WidgetSpan(child: _inlineBlock(20), alignment: PlaceholderAlignment.bottom),
     WidgetSpan(
-        child: _inlineBlock(20), alignment: PlaceholderAlignment.aboveBaseline, baseline: TextBaseline.alphabetic),
-    WidgetSpan(child: _inlineBlock(20), alignment: PlaceholderAlignment.baseline, baseline: TextBaseline.alphabetic),
+        child: _inlineBlock(20),
+        alignment: PlaceholderAlignment.aboveBaseline,
+        baseline: TextBaseline.alphabetic),
     WidgetSpan(
-        child: _inlineBlock(20), alignment: PlaceholderAlignment.belowBaseline, baseline: TextBaseline.alphabetic),
+        child: _inlineBlock(20),
+        alignment: PlaceholderAlignment.baseline,
+        baseline: TextBaseline.alphabetic),
+    WidgetSpan(
+        child: _inlineBlock(20),
+        alignment: PlaceholderAlignment.belowBaseline,
+        baseline: TextBaseline.alphabetic),
     const TextSpan(
       text: "Hello World!",
     ),
@@ -257,10 +291,17 @@ final _allAlignmentsMultipleSizesSmallToLarge = TextSpan(
     WidgetSpan(child: _inlineBlock(40), alignment: PlaceholderAlignment.middle),
     WidgetSpan(child: _inlineBlock(40), alignment: PlaceholderAlignment.bottom),
     WidgetSpan(
-        child: _inlineBlock(40), alignment: PlaceholderAlignment.aboveBaseline, baseline: TextBaseline.alphabetic),
-    WidgetSpan(child: _inlineBlock(40), alignment: PlaceholderAlignment.baseline, baseline: TextBaseline.alphabetic),
+        child: _inlineBlock(40),
+        alignment: PlaceholderAlignment.aboveBaseline,
+        baseline: TextBaseline.alphabetic),
     WidgetSpan(
-        child: _inlineBlock(40), alignment: PlaceholderAlignment.belowBaseline, baseline: TextBaseline.alphabetic),
+        child: _inlineBlock(40),
+        alignment: PlaceholderAlignment.baseline,
+        baseline: TextBaseline.alphabetic),
+    WidgetSpan(
+        child: _inlineBlock(40),
+        alignment: PlaceholderAlignment.belowBaseline,
+        baseline: TextBaseline.alphabetic),
   ],
   style: _testTextStyle,
 );
@@ -273,10 +314,17 @@ final _allAlignmentsMultipleSizesLargeToSmall = TextSpan(
     WidgetSpan(child: _inlineBlock(40), alignment: PlaceholderAlignment.middle),
     WidgetSpan(child: _inlineBlock(40), alignment: PlaceholderAlignment.bottom),
     WidgetSpan(
-        child: _inlineBlock(40), alignment: PlaceholderAlignment.aboveBaseline, baseline: TextBaseline.alphabetic),
-    WidgetSpan(child: _inlineBlock(40), alignment: PlaceholderAlignment.baseline, baseline: TextBaseline.alphabetic),
+        child: _inlineBlock(40),
+        alignment: PlaceholderAlignment.aboveBaseline,
+        baseline: TextBaseline.alphabetic),
     WidgetSpan(
-        child: _inlineBlock(40), alignment: PlaceholderAlignment.belowBaseline, baseline: TextBaseline.alphabetic),
+        child: _inlineBlock(40),
+        alignment: PlaceholderAlignment.baseline,
+        baseline: TextBaseline.alphabetic),
+    WidgetSpan(
+        child: _inlineBlock(40),
+        alignment: PlaceholderAlignment.belowBaseline,
+        baseline: TextBaseline.alphabetic),
     const TextSpan(
       text: "Hello World!",
     ),
@@ -285,10 +333,17 @@ final _allAlignmentsMultipleSizesLargeToSmall = TextSpan(
     WidgetSpan(child: _inlineBlock(20), alignment: PlaceholderAlignment.middle),
     WidgetSpan(child: _inlineBlock(20), alignment: PlaceholderAlignment.bottom),
     WidgetSpan(
-        child: _inlineBlock(20), alignment: PlaceholderAlignment.aboveBaseline, baseline: TextBaseline.alphabetic),
-    WidgetSpan(child: _inlineBlock(20), alignment: PlaceholderAlignment.baseline, baseline: TextBaseline.alphabetic),
+        child: _inlineBlock(20),
+        alignment: PlaceholderAlignment.aboveBaseline,
+        baseline: TextBaseline.alphabetic),
     WidgetSpan(
-        child: _inlineBlock(20), alignment: PlaceholderAlignment.belowBaseline, baseline: TextBaseline.alphabetic),
+        child: _inlineBlock(20),
+        alignment: PlaceholderAlignment.baseline,
+        baseline: TextBaseline.alphabetic),
+    WidgetSpan(
+        child: _inlineBlock(20),
+        alignment: PlaceholderAlignment.belowBaseline,
+        baseline: TextBaseline.alphabetic),
     const TextSpan(
       text: "Hello World!",
     ),
@@ -296,9 +351,18 @@ final _allAlignmentsMultipleSizesLargeToSmall = TextSpan(
     WidgetSpan(child: _inlineBlock(), alignment: PlaceholderAlignment.top),
     WidgetSpan(child: _inlineBlock(), alignment: PlaceholderAlignment.middle),
     WidgetSpan(child: _inlineBlock(), alignment: PlaceholderAlignment.bottom),
-    WidgetSpan(child: _inlineBlock(), alignment: PlaceholderAlignment.aboveBaseline, baseline: TextBaseline.alphabetic),
-    WidgetSpan(child: _inlineBlock(), alignment: PlaceholderAlignment.baseline, baseline: TextBaseline.alphabetic),
-    WidgetSpan(child: _inlineBlock(), alignment: PlaceholderAlignment.belowBaseline, baseline: TextBaseline.alphabetic),
+    WidgetSpan(
+        child: _inlineBlock(),
+        alignment: PlaceholderAlignment.aboveBaseline,
+        baseline: TextBaseline.alphabetic),
+    WidgetSpan(
+        child: _inlineBlock(),
+        alignment: PlaceholderAlignment.baseline,
+        baseline: TextBaseline.alphabetic),
+    WidgetSpan(
+        child: _inlineBlock(),
+        alignment: PlaceholderAlignment.belowBaseline,
+        baseline: TextBaseline.alphabetic),
   ],
   style: _testTextStyle,
 );

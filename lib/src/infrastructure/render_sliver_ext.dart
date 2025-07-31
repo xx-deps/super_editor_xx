@@ -5,7 +5,8 @@ import 'package:flutter/rendering.dart';
 extension RenderSliverExt on RenderSliver {
   Size get size {
     assert(attached);
-    return Size(geometry!.crossAxisExtent ?? constraints.crossAxisExtent, geometry!.paintExtent);
+    return Size(geometry!.crossAxisExtent ?? constraints.crossAxisExtent,
+        geometry!.paintExtent);
   }
 
   bool get hasSize {

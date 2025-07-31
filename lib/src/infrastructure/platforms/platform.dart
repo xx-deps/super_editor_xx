@@ -3,7 +3,8 @@ import 'package:flutter/foundation.dart';
 class CurrentPlatform {
   /// Whether or not we are running on an Apple device (MacOS or iOS).
   static bool get isApple =>
-      defaultTargetPlatform == TargetPlatform.macOS || defaultTargetPlatform == TargetPlatform.iOS;
+      defaultTargetPlatform == TargetPlatform.macOS ||
+      defaultTargetPlatform == TargetPlatform.iOS;
 
   /// Whether or not we are running on web.
   ///

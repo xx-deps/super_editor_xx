@@ -64,7 +64,8 @@ class MobileWindowGeometry {
           bottomPadding == other.bottomPadding;
 
   @override
-  int get hashCode => keyboardState.hashCode ^ keyboardHeight.hashCode ^ bottomPadding.hashCode;
+  int get hashCode =>
+      keyboardState.hashCode ^ keyboardHeight.hashCode ^ bottomPadding.hashCode;
 }
 
 enum KeyboardState {

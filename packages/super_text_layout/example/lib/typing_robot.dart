@@ -27,7 +27,8 @@ class TypingRobot {
     _actionQueue.add(
       _randomPauseBefore(
         () {
-          _controller.selection = TextSelection.collapsed(offset: position.offset);
+          _controller.selection =
+              TextSelection.collapsed(offset: position.offset);
         },
       ),
     );
@@ -156,20 +157,25 @@ class TypingRobot {
   }
 
   void _typeCharacter(String character) {
-    if (_controller.selection.extentOffset < 0 || _controller.selection.extentOffset > _controller.text.length) {
-      robotLog.warning("WARNING: Can't type character because the selection extent is invalid");
-      robotLog.warning(" - tried to type: '$character' at selection: ${_controller.selection}");
+    if (_controller.selection.extentOffset < 0 ||
+        _controller.selection.extentOffset > _controller.text.length) {
+      robotLog.warning(
+          "WARNING: Can't type character because the selection extent is invalid");
+      robotLog.warning(
+          " - tried to type: '$character' at selection: ${_controller.selection}");
       return;
     }
     if (!_controller.selection.isCollapsed) {
-      robotLog.warning("WARNING: Can't type character because the selection is expanded: ${_controller.selection}");
+      robotLog.warning(
+          "WARNING: Can't type character because the selection is expanded: ${_controller.selection}");
       return;
     }
 
     robotLog.finest("Typing character: $character");
     _controller.value = TextEditingValue(
       text: _controller.text + character,
-      selection: TextSelection.collapsed(offset: _controller.selection.extentOffset + 1),
+      selection: TextSelection.collapsed(
+          offset: _controller.selection.extentOffset + 1),
     );
   }
 
@@ -179,21 +185,26 @@ class TypingRobot {
     _actionQueue.add(
       _randomPauseBefore(
         () {
-          if (_controller.selection.extentOffset < 1 || _controller.selection.extentOffset > _controller.text.length) {
-            robotLog
-                .warning("WARNING: Can't backspace because the selection extent is invalid - ${_controller.selection}");
+          if (_controller.selection.extentOffset < 1 ||
+              _controller.selection.extentOffset > _controller.text.length) {
+            robotLog.warning(
+                "WARNING: Can't backspace because the selection extent is invalid - ${_controller.selection}");
             return;
           }
 
           if (_controller.selection.isCollapsed) {
-            final newSelection = TextSelection.collapsed(offset: _controller.selection.extentOffset - 1);
-            _controller.text = _controller.text
-                .replaceRange(_controller.selection.extentOffset, _controller.selection.extentOffset, "");
+            final newSelection = TextSelection.collapsed(
+                offset: _controller.selection.extentOffset - 1);
+            _controller.text = _controller.text.replaceRange(
+                _controller.selection.extentOffset,
+                _controller.selection.extentOffset,
+                "");
             _controller.selection = newSelection;
           } else {
-            final newSelection = TextSelection.collapsed(offset: _controller.selection.start);
-            _controller.text =
-                _controller.text.replaceRange(_controller.selection.start, _controller.selection.end, "");
+            final newSelection =
+                TextSelection.collapsed(offset: _controller.selection.start);
+            _controller.text = _controller.text.replaceRange(
+                _controller.selection.start, _controller.selection.end, "");
             _controller.selection = newSelection;
           }
         },
@@ -208,21 +219,26 @@ class TypingRobot {
       _randomPauseBefore(
         () {
           if (_controller.selection.extentOffset < 0 ||
-              _controller.selection.extentOffset > _controller.text.length - 1) {
-            robotLog
-                .warning("WARNING: Can't delete because the selection extent is invalid - ${_controller.selection}");
+              _controller.selection.extentOffset >
+                  _controller.text.length - 1) {
+            robotLog.warning(
+                "WARNING: Can't delete because the selection extent is invalid - ${_controller.selection}");
             return;
           }
 
           if (_controller.selection.isCollapsed) {
-            final newSelection = TextSelection.collapsed(offset: _controller.selection.extentOffset - 1);
-            _controller.text = _controller.text
-                .replaceRange(_controller.selection.extentOffset + 1, _controller.selection.extentOffset + 1, "");
+            final newSelection = TextSelection.collapsed(
+                offset: _controller.selection.extentOffset - 1);
+            _controller.text = _controller.text.replaceRange(
+                _controller.selection.extentOffset + 1,
+                _controller.selection.extentOffset + 1,
+                "");
             _controller.selection = newSelection;
           } else {
-            final newSelection = TextSelection.collapsed(offset: _controller.selection.start);
-            _controller.text =
-                _controller.text.replaceRange(_controller.selection.start, _controller.selection.end, "");
+            final newSelection =
+                TextSelection.collapsed(offset: _controller.selection.start);
+            _controller.text = _controller.text.replaceRange(
+                _controller.selection.start, _controller.selection.end, "");
             _controller.selection = newSelection;
           }
         },
@@ -253,7 +269,9 @@ class TypingRobot {
   }
 
   Duration _randomWaitPeriod([bool fastMode = false]) {
-    return Duration(milliseconds: _random.nextInt(fastMode ? 45 : 300) + (fastMode ? 5 : 20));
+    return Duration(
+        milliseconds:
+            _random.nextInt(fastMode ? 45 : 300) + (fastMode ? 5 : 20));
   }
 
   Future<void> start() async {
@@ -269,7 +287,8 @@ class TypingRobot {
 
   void _ensureNotDisposed() {
     if (_isDisposed) {
-      throw Exception("Tried to schedule a TypingRobot operation after it was disposed.");
+      throw Exception(
+          "Tried to schedule a TypingRobot operation after it was disposed.");
     }
   }
 }

@@ -16,7 +16,8 @@ class HeaderDeltaFormat extends FilterByNameBlockDeltaFormat {
       return null;
     }
 
-    final composer = editor.context.find<MutableDocumentComposer>(Editor.composerKey);
+    final composer =
+        editor.context.find<MutableDocumentComposer>(Editor.composerKey);
     final level = value;
 
     return [
@@ -54,7 +55,8 @@ class BlockquoteDeltaFormat extends FilterByNameBlockDeltaFormat {
 
   @override
   List<EditRequest>? doApplyFormat(Editor editor, Object value) {
-    final composer = editor.context.find<MutableDocumentComposer>(Editor.composerKey);
+    final composer =
+        editor.context.find<MutableDocumentComposer>(Editor.composerKey);
 
     return [
       ChangeParagraphBlockTypeRequest(
@@ -73,7 +75,8 @@ class CodeBlockDeltaFormat extends FilterByNameBlockDeltaFormat {
 
   @override
   List<EditRequest>? doApplyFormat(Editor editor, Object value) {
-    final composer = editor.context.find<MutableDocumentComposer>(Editor.composerKey);
+    final composer =
+        editor.context.find<MutableDocumentComposer>(Editor.composerKey);
 
     // TODO: add support for recording the language of the code block, which comes from
     //       the value of the "code-block" property.
@@ -100,7 +103,8 @@ class ListDeltaFormat extends FilterByNameBlockDeltaFormat {
       return null;
     }
 
-    final composer = editor.context.find<MutableDocumentComposer>(Editor.composerKey);
+    final composer =
+        editor.context.find<MutableDocumentComposer>(Editor.composerKey);
 
     if (_isTask(value)) {
       return [
@@ -156,7 +160,8 @@ class AlignDeltaFormat extends FilterByNameBlockDeltaFormat {
       return null;
     }
 
-    final composer = editor.context.find<MutableDocumentComposer>(Editor.composerKey);
+    final composer =
+        editor.context.find<MutableDocumentComposer>(Editor.composerKey);
 
     return [
       ChangeParagraphAlignmentRequest(
@@ -190,7 +195,8 @@ class IndentParagraphDeltaFormat extends FilterByNameBlockDeltaFormat {
 
   @override
   List<EditRequest>? doApplyFormat(Editor editor, Object value) {
-    final composer = editor.context.find<MutableDocumentComposer>(Editor.composerKey);
+    final composer =
+        editor.context.find<MutableDocumentComposer>(Editor.composerKey);
 
     return [
       SetParagraphIndentRequest(
@@ -319,7 +325,8 @@ abstract class StandardEmbedBlockDeltaFormat implements BlockDeltaFormat {
     final document = editor.context.find<MutableDocument>(Editor.documentKey);
     final selectedNodeId = editor.context.composer.selection!.extent.nodeId;
     final selectedNode = document.getNodeById(selectedNodeId);
-    final shouldReplaceSelectedNode = selectedNode is TextNode && selectedNode.text.isEmpty;
+    final shouldReplaceSelectedNode =
+        selectedNode is TextNode && selectedNode.text.isEmpty;
 
     final newNodeId = Editor.createNodeId();
     final newNode = createNodeForEmbed(operation, newNodeId);

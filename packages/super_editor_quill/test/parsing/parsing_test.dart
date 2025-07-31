@@ -29,13 +29,20 @@ void main() {
           (document.getNodeAt(0)! as ParagraphNode).text.toPlainText(),
           "This is regular text",
         );
-        expect((document.getNodeAt(0)! as ParagraphNode).getMetadataValue("blockType"), paragraphAttribution);
+        expect(
+            (document.getNodeAt(0)! as ParagraphNode)
+                .getMetadataValue("blockType"),
+            paragraphAttribution);
         expect(
           (document.getNodeAt(1)! as ParagraphNode).text.toPlainText(),
           "This is a code block",
         );
-        expect((document.getNodeAt(1)! as ParagraphNode).getMetadataValue("blockType"), codeAttribution);
-        expect((document.getNodeAt(2)! as ParagraphNode).text.toPlainText(), "");
+        expect(
+            (document.getNodeAt(1)! as ParagraphNode)
+                .getMetadataValue("blockType"),
+            codeAttribution);
+        expect(
+            (document.getNodeAt(2)! as ParagraphNode).text.toPlainText(), "");
         expect(document.nodeCount, 3);
       });
 
@@ -59,14 +66,30 @@ void main() {
         expect(
           node.text.getAttributionSpansByFilter((a) => true),
           {
-            const AttributionSpan(attribution: boldAttribution, start: 19, end: 22),
-            const AttributionSpan(attribution: italicsAttribution, start: 25, end: 31),
-            const AttributionSpan(attribution: underlineAttribution, start: 34, end: 42),
-            const AttributionSpan(attribution: strikethroughAttribution, start: 45, end: 57),
-            const AttributionSpan(attribution: ColorAttribution(Color(0xFFe60000)), start: 60, end: 69),
-            const AttributionSpan(attribution: BackgroundColorAttribution(Color(0xFFe60000)), start: 72, end: 87),
-            const AttributionSpan(attribution: FontFamilyAttribution("serif"), start: 90, end: 100),
-            const AttributionSpan(attribution: LinkAttribution("google.com"), start: 103, end: 106),
+            const AttributionSpan(
+                attribution: boldAttribution, start: 19, end: 22),
+            const AttributionSpan(
+                attribution: italicsAttribution, start: 25, end: 31),
+            const AttributionSpan(
+                attribution: underlineAttribution, start: 34, end: 42),
+            const AttributionSpan(
+                attribution: strikethroughAttribution, start: 45, end: 57),
+            const AttributionSpan(
+                attribution: ColorAttribution(Color(0xFFe60000)),
+                start: 60,
+                end: 69),
+            const AttributionSpan(
+                attribution: BackgroundColorAttribution(Color(0xFFe60000)),
+                start: 72,
+                end: 87),
+            const AttributionSpan(
+                attribution: FontFamilyAttribution("serif"),
+                start: 90,
+                end: 100),
+            const AttributionSpan(
+                attribution: LinkAttribution("google.com"),
+                start: 103,
+                end: 106),
           },
         );
 
@@ -169,14 +192,16 @@ void main() {
 
         // Tasks.
         expect(node, isA<TaskNode>());
-        expect((node as TaskNode).text.toPlainText(), "I'm a task that's incomplete");
+        expect((node as TaskNode).text.toPlainText(),
+            "I'm a task that's incomplete");
         expect(node.isComplete, isFalse);
 
         nodes.moveNext();
         node = nodes.current;
 
         expect(node, isA<TaskNode>());
-        expect((node as TaskNode).text.toPlainText(), "I'm a task that's complete");
+        expect((node as TaskNode).text.toPlainText(),
+            "I'm a task that's complete");
         expect(node.isComplete, isTrue);
 
         nodes.moveNext();
@@ -191,14 +216,16 @@ void main() {
 
         // Indented paragraphs.
         expect(node, isA<ParagraphNode>());
-        expect((node as TextNode).text.toPlainText(), "I'm an indented paragraph at level 1");
+        expect((node as TextNode).text.toPlainText(),
+            "I'm an indented paragraph at level 1");
         expect((node as ParagraphNode).indent, 1);
 
         nodes.moveNext();
         node = nodes.current;
 
         expect(node, isA<ParagraphNode>());
-        expect((node as TextNode).text.toPlainText(), "I'm a paragraph indented at level 2");
+        expect((node as TextNode).text.toPlainText(),
+            "I'm a paragraph indented at level 2");
         expect((node as ParagraphNode).indent, 2);
 
         nodes.moveNext();
@@ -213,11 +240,13 @@ void main() {
 
         // Superscript and subscript.
         expect(node, isA<ParagraphNode>());
-        expect((node as TextNode).text.toPlainText(), "Some contentThis is a subscript");
+        expect((node as TextNode).text.toPlainText(),
+            "Some contentThis is a subscript");
         expect(
           node.text.getAttributionSpansByFilter((a) => true),
           {
-            const AttributionSpan(attribution: subscriptAttribution, start: 12, end: 30),
+            const AttributionSpan(
+                attribution: subscriptAttribution, start: 12, end: 30),
           },
         );
 
@@ -225,11 +254,13 @@ void main() {
         node = nodes.current;
 
         expect(node, isA<ParagraphNode>());
-        expect((node as TextNode).text.toPlainText(), "Some contentThis is a superscript");
+        expect((node as TextNode).text.toPlainText(),
+            "Some contentThis is a superscript");
         expect(
           node.text.getAttributionSpansByFilter((a) => true),
           {
-            const AttributionSpan(attribution: superscriptAttribution, start: 12, end: 32),
+            const AttributionSpan(
+                attribution: superscriptAttribution, start: 12, end: 32),
           },
         );
 
@@ -249,7 +280,10 @@ void main() {
         expect(
           node.text.getAttributionSpansByFilter((a) => true),
           {
-            const AttributionSpan(attribution: NamedFontSizeAttribution("huge"), start: 0, end: 3),
+            const AttributionSpan(
+                attribution: NamedFontSizeAttribution("huge"),
+                start: 0,
+                end: 3),
           },
         );
 
@@ -261,7 +295,10 @@ void main() {
         expect(
           node.text.getAttributionSpansByFilter((a) => true),
           {
-            const AttributionSpan(attribution: NamedFontSizeAttribution("large"), start: 0, end: 4),
+            const AttributionSpan(
+                attribution: NamedFontSizeAttribution("large"),
+                start: 0,
+                end: 4),
           },
         );
 
@@ -273,7 +310,10 @@ void main() {
         expect(
           node.text.getAttributionSpansByFilter((a) => true),
           {
-            const AttributionSpan(attribution: NamedFontSizeAttribution("small"), start: 0, end: 4),
+            const AttributionSpan(
+                attribution: NamedFontSizeAttribution("small"),
+                start: 0,
+                end: 4),
           },
         );
 
@@ -304,7 +344,8 @@ void main() {
 
         // Code block - with multiple lines.
         expect(node, isA<ParagraphNode>());
-        expect((node as TextNode).text.toPlainText(), "This is a code block\nThat spans two lines.");
+        expect((node as TextNode).text.toPlainText(),
+            "This is a code block\nThat spans two lines.");
         expect(node.metadata["blockType"], codeAttribution);
 
         nodes.moveNext();
@@ -349,13 +390,17 @@ void main() {
         );
 
         final paragraph = document.first as ParagraphNode;
-        expect(paragraph.text.toPlainText(), "This paragraph has some overlapping styles.");
+        expect(paragraph.text.toPlainText(),
+            "This paragraph has some overlapping styles.");
         expect(
           paragraph.text.getAttributionSpansByFilter((a) => true),
           {
-            const AttributionSpan(attribution: boldAttribution, start: 5, end: 22),
-            const AttributionSpan(attribution: italicsAttribution, start: 15, end: 34),
-            const AttributionSpan(attribution: underlineAttribution, start: 19, end: 41),
+            const AttributionSpan(
+                attribution: boldAttribution, start: 5, end: 22),
+            const AttributionSpan(
+                attribution: italicsAttribution, start: 15, end: 34),
+            const AttributionSpan(
+                attribution: underlineAttribution, start: 19, end: 41),
           },
         );
       });
@@ -374,17 +419,22 @@ void main() {
         expect(document.nodeCount, 3);
 
         expect(document.getNodeAt(0)!, isA<ParagraphNode>());
-        expect((document.getNodeAt(0)! as ParagraphNode).text.toPlainText(), "Paragraph one");
+        expect((document.getNodeAt(0)! as ParagraphNode).text.toPlainText(),
+            "Paragraph one");
         expect(
-          (document.getNodeAt(0)! as ParagraphNode).text.getAttributionSpansByFilter((a) => true),
+          (document.getNodeAt(0)! as ParagraphNode)
+              .text
+              .getAttributionSpansByFilter((a) => true),
           const <AttributionSpan>{},
         );
 
         expect(document.getNodeAt(1)!, isA<ParagraphNode>());
-        expect((document.getNodeAt(1)! as ParagraphNode).text.toPlainText(), "Paragraph two");
+        expect((document.getNodeAt(1)! as ParagraphNode).text.toPlainText(),
+            "Paragraph two");
 
         expect(document.getNodeAt(2)!, isA<ParagraphNode>());
-        expect((document.getNodeAt(2)! as ParagraphNode).text.toPlainText(), "");
+        expect(
+            (document.getNodeAt(2)! as ParagraphNode).text.toPlainText(), "");
       });
 
       test("gracefully handles unknown text block format", () {
@@ -400,18 +450,24 @@ void main() {
         expect(document.nodeCount, 3);
 
         expect(document.getNodeAt(0)!, isA<ParagraphNode>());
-        expect((document.getNodeAt(0)! as ParagraphNode).text.toPlainText(), "Paragraph one");
-        expect((document.getNodeAt(0)! as ParagraphNode).metadata["blockType"], paragraphAttribution);
+        expect((document.getNodeAt(0)! as ParagraphNode).text.toPlainText(),
+            "Paragraph one");
+        expect((document.getNodeAt(0)! as ParagraphNode).metadata["blockType"],
+            paragraphAttribution);
         expect(
-          (document.getNodeAt(0)! as ParagraphNode).text.getAttributionSpansByFilter((a) => true),
+          (document.getNodeAt(0)! as ParagraphNode)
+              .text
+              .getAttributionSpansByFilter((a) => true),
           const <AttributionSpan>{},
         );
 
         expect(document.getNodeAt(1)!, isA<ParagraphNode>());
-        expect((document.getNodeAt(1)! as ParagraphNode).text.toPlainText(), "Paragraph two");
+        expect((document.getNodeAt(1)! as ParagraphNode).text.toPlainText(),
+            "Paragraph two");
 
         expect(document.getNodeAt(2)!, isA<ParagraphNode>());
-        expect((document.getNodeAt(2)! as ParagraphNode).text.toPlainText(), "");
+        expect(
+            (document.getNodeAt(2)! as ParagraphNode).text.toPlainText(), "");
       });
     });
 
@@ -519,13 +575,16 @@ void main() {
         expect(document.nodeCount, 3);
 
         expect(document.getNodeAt(0)!, isA<ParagraphNode>());
-        expect((document.getNodeAt(0)! as ParagraphNode).text.toPlainText(), "Paragraph one");
+        expect((document.getNodeAt(0)! as ParagraphNode).text.toPlainText(),
+            "Paragraph one");
 
         expect(document.getNodeAt(1)!, isA<ParagraphNode>());
-        expect((document.getNodeAt(1)! as ParagraphNode).text.toPlainText(), "Paragraph two");
+        expect((document.getNodeAt(1)! as ParagraphNode).text.toPlainText(),
+            "Paragraph two");
 
         expect(document.getNodeAt(2)!, isA<ParagraphNode>());
-        expect((document.getNodeAt(2)! as ParagraphNode).text.toPlainText(), "");
+        expect(
+            (document.getNodeAt(2)! as ParagraphNode).text.toPlainText(), "");
       });
     });
 
@@ -637,14 +696,20 @@ void main() {
         ]);
 
         final text = (document.first as ParagraphNode).text;
-        expect(text.toPlainText(), "Have you heard about inline embeds, @John Smith?");
+        expect(text.toPlainText(),
+            "Have you heard about inline embeds, @John Smith?");
         expect(
           text.spans,
           AttributedSpans(
             attributions: [
               const SpanMarker(
-                  attribution: _UserTagAttribution("123456"), offset: 36, markerType: SpanMarkerType.start),
-              const SpanMarker(attribution: _UserTagAttribution("123456"), offset: 46, markerType: SpanMarkerType.end),
+                  attribution: _UserTagAttribution("123456"),
+                  offset: 36,
+                  markerType: SpanMarkerType.start),
+              const SpanMarker(
+                  attribution: _UserTagAttribution("123456"),
+                  offset: 46,
+                  markerType: SpanMarkerType.end),
             ],
           ),
         );
@@ -673,13 +738,18 @@ void main() {
           (document.getNodeAt(0)! as ParagraphNode).text.toPlainText(),
           "This is regular text",
         );
-        expect((document.getNodeAt(0)! as ParagraphNode).getMetadataValue("blockType"), paragraphAttribution);
+        expect(
+            (document.getNodeAt(0)! as ParagraphNode)
+                .getMetadataValue("blockType"),
+            paragraphAttribution);
         expect(
           (document.getNodeAt(1)! as ParagraphNode).text.toPlainText(),
           "This is a banner",
         );
         expect(
-            (document.getNodeAt(1)! as ParagraphNode).getMetadataValue("blockType"), const _BannerAttribution("red"));
+            (document.getNodeAt(1)! as ParagraphNode)
+                .getMetadataValue("blockType"),
+            const _BannerAttribution("red"));
         expect(document.nodeCount, 3);
       });
     });
@@ -695,7 +765,8 @@ class _CustomListItemBlockFormat extends FilterByNameBlockDeltaFormat {
       return null;
     }
 
-    final composer = editor.context.find<MutableDocumentComposer>(Editor.composerKey);
+    final composer =
+        editor.context.find<MutableDocumentComposer>(Editor.composerKey);
     return [
       ConvertParagraphToTaskRequest(
         nodeId: composer.selection!.extent.nodeId,
@@ -713,7 +784,8 @@ class _BannerBlockFormat extends FilterByNameBlockDeltaFormat {
       return null;
     }
 
-    final composer = editor.context.find<MutableDocumentComposer>(Editor.composerKey);
+    final composer =
+        editor.context.find<MutableDocumentComposer>(Editor.composerKey);
     return [
       ChangeParagraphBlockTypeRequest(
         nodeId: composer.selection!.extent.nodeId,
@@ -742,7 +814,10 @@ class _BannerAttribution implements Attribution {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) || other is _BannerAttribution && runtimeType == other.runtimeType && color == other.color;
+      identical(this, other) ||
+      other is _BannerAttribution &&
+          runtimeType == other.runtimeType &&
+          color == other.color;
 
   @override
   int get hashCode => color.hashCode;
@@ -752,7 +827,8 @@ class _UserTagEmbedParser implements InlineEmbedFormat {
   const _UserTagEmbedParser();
 
   @override
-  bool insert(Editor editor, DocumentComposer composer, Map<String, dynamic> embed) {
+  bool insert(
+      Editor editor, DocumentComposer composer, Map<String, dynamic> embed) {
     if (embed
         case {
           "tag": {
@@ -818,7 +894,9 @@ class _UserTagAttribution implements Attribution {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is _UserTagAttribution && runtimeType == other.runtimeType && userId == other.userId;
+      other is _UserTagAttribution &&
+          runtimeType == other.runtimeType &&
+          userId == other.userId;
 
   @override
   int get hashCode => userId.hashCode;

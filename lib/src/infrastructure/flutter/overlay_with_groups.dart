@@ -14,7 +14,8 @@ import 'package:flutter/widgets.dart';
 /// defined for common use-cases, so that those use-cases remain consistent across apps.
 class GroupedOverlayPortalController extends OverlayPortalController {
   static final _visibleControllers =
-      PriorityQueue<GroupedOverlayPortalController>((a, b) => a.displayPriority.compareTo(b.displayPriority));
+      PriorityQueue<GroupedOverlayPortalController>(
+          (a, b) => a.displayPriority.compareTo(b.displayPriority));
 
   static bool _isReworkingOrder = false;
 
@@ -103,5 +104,6 @@ class OverlayGroupPriority implements Comparable<OverlayGroupPriority> {
   final int priority;
 
   @override
-  int compareTo(OverlayGroupPriority other) => priority.compareTo(other.priority);
+  int compareTo(OverlayGroupPriority other) =>
+      priority.compareTo(other.priority);
 }

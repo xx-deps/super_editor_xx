@@ -64,14 +64,16 @@ class SuperTextWithSelection extends StatefulWidget {
   State<SuperTextWithSelection> createState() => _SuperTextWithSelectionState();
 }
 
-class _SuperTextWithSelectionState extends ProseTextState<SuperTextWithSelection> {
+class _SuperTextWithSelectionState
+    extends ProseTextState<SuperTextWithSelection> {
   late GlobalKey _textLayoutKey;
   late final ValueNotifier<List<UserSelection>> _userSelections;
 
   @override
   void initState() {
     super.initState();
-    _textLayoutKey = widget.textLayoutKey ?? GlobalKey(debugLabel: "text_layout");
+    _textLayoutKey =
+        widget.textLayoutKey ?? GlobalKey(debugLabel: "text_layout");
     _userSelections = ValueNotifier(widget.userSelections);
   }
 
@@ -80,7 +82,8 @@ class _SuperTextWithSelectionState extends ProseTextState<SuperTextWithSelection
     super.didUpdateWidget(oldWidget);
 
     if (widget.textLayoutKey != oldWidget.textLayoutKey) {
-      _textLayoutKey = widget.textLayoutKey ?? GlobalKey(debugLabel: "text_layout");
+      _textLayoutKey =
+          widget.textLayoutKey ?? GlobalKey(debugLabel: "text_layout");
     }
 
     // Notify the optimized rendering widget that the user selections
@@ -88,13 +91,15 @@ class _SuperTextWithSelectionState extends ProseTextState<SuperTextWithSelection
     // regular widget rebuild so that we can tactically rebuild only
     // the parts of the subtree that are used for selection painting.
     if (widget.userSelections != oldWidget.userSelections) {
-      buildsLog.finest("SuperTextWithSelection ($hashCode) user selections changed. Notifying optimized subtree");
+      buildsLog.finest(
+          "SuperTextWithSelection ($hashCode) user selections changed. Notifying optimized subtree");
       _userSelections.value = widget.userSelections;
     }
   }
 
   @override
-  ProseTextLayout get textLayout => (_textLayoutKey.currentState as ProseTextBlock).textLayout;
+  ProseTextLayout get textLayout =>
+      (_textLayoutKey.currentState as ProseTextBlock).textLayout;
 
   @override
   Widget build(BuildContext context) {
@@ -130,10 +135,12 @@ class _RebuildOptimizedSuperTextWithSelection extends StatefulWidget {
   final ValueNotifier<List<UserSelection>> userSelections;
 
   @override
-  _RebuildOptimizedSuperTextWithSelectionState createState() => _RebuildOptimizedSuperTextWithSelectionState();
+  _RebuildOptimizedSuperTextWithSelectionState createState() =>
+      _RebuildOptimizedSuperTextWithSelectionState();
 }
 
-class _RebuildOptimizedSuperTextWithSelectionState extends State<_RebuildOptimizedSuperTextWithSelection> {
+class _RebuildOptimizedSuperTextWithSelectionState
+    extends State<_RebuildOptimizedSuperTextWithSelection> {
   Widget? _cachedSubtree;
 
   @override
@@ -147,7 +154,8 @@ class _RebuildOptimizedSuperTextWithSelectionState extends State<_RebuildOptimiz
   void didUpdateWidget(_RebuildOptimizedSuperTextWithSelection oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.richText != oldWidget.richText) {
-      buildsLog.fine("Rich text changed. Invalidating the cached SuperText widget.");
+      buildsLog
+          .fine("Rich text changed. Invalidating the cached SuperText widget.");
 
       _updateTextLength();
 
@@ -156,7 +164,8 @@ class _RebuildOptimizedSuperTextWithSelectionState extends State<_RebuildOptimiz
       _cachedSubtree = null;
     }
     if (widget.textAlign != oldWidget.textAlign) {
-      buildsLog.fine("Text align changed. Invalidating the cached SuperText widget.");
+      buildsLog.fine(
+          "Text align changed. Invalidating the cached SuperText widget.");
 
       // The text align changed, which means the text layout changed. Invalidate
       // the cache so that the full SuperText widget subtree is rebuilt.
@@ -164,7 +173,8 @@ class _RebuildOptimizedSuperTextWithSelectionState extends State<_RebuildOptimiz
     }
 
     if (widget.textScaler != oldWidget.textScaler) {
-      buildsLog.fine("Text scaler changed. Invalidating the cached SuperText widget.");
+      buildsLog.fine(
+          "Text scaler changed. Invalidating the cached SuperText widget.");
 
       // The text scaleFactor changed, which means the text layout changed. Invalidate
       // the cache so that the full SuperText widget subtree is rebuilt.
@@ -191,7 +201,8 @@ class _RebuildOptimizedSuperTextWithSelectionState extends State<_RebuildOptimiz
       return _cachedSubtree!;
     }
 
-    buildsLog.finest("Building SuperTextWithSelection ($hashCode), doing full build (no cached subtree is available)");
+    buildsLog.finest(
+        "Building SuperTextWithSelection ($hashCode), doing full build (no cached subtree is available)");
     _cachedSubtree = SuperText(
       key: widget.textLayoutKey,
       richText: widget.richText,
@@ -338,7 +349,8 @@ class UserSelection {
       selection: selection ?? this.selection,
       highlightStyle: highlightStyle ?? this.highlightStyle,
       highlightWhenEmpty: highlightWhenEmpty ?? this.highlightWhenEmpty,
-      highlightBoundsFollower: highlightBoundsFollower ?? this.highlightBoundsFollower,
+      highlightBoundsFollower:
+          highlightBoundsFollower ?? this.highlightBoundsFollower,
       caretStyle: caretStyle ?? this.caretStyle,
       blinkCaret: blinkCaret ?? this.blinkCaret,
       hasCaret: hasCaret ?? this.hasCaret,

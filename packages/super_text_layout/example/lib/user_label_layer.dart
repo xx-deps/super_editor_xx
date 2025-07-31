@@ -21,7 +21,8 @@ class TextLayoutUserLabel extends StatelessWidget {
       return const SizedBox();
     }
 
-    final offset = textLayout!.getOffsetForCaret(position!) + const Offset(2, 0);
+    final offset =
+        textLayout!.getOffsetForCaret(position!) + const Offset(2, 0);
     return Stack(
       children: [
         Positioned(

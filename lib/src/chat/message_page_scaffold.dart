@@ -378,7 +378,8 @@ class MessagePageElement extends RenderObjectElement {
   }
 
   void buildContent(double bottomSpacing) {
-    messagePageElementLog.finest('ContentLayersElement ($hashCode) - (re)building layers');
+    messagePageElementLog
+        .finest('ContentLayersElement ($hashCode) - (re)building layers');
     widget.controller?.debugMostRecentBottomSpacing.value = bottomSpacing;
 
     owner!.buildScope(this, () {
@@ -931,7 +932,9 @@ class RenderMessagePageScaffold extends RenderBox {
     // Do a throw-away layout pass to get the preview height of the bottom
     // sheet, bounded within its min/max height.
     _overrideSheetMode = BottomSheetMode.preview;
-    _previewHeight = _bottomSheet!.computeDryLayout(constraints.copyWith(minHeight: 0)).height;
+    _previewHeight = _bottomSheet!
+        .computeDryLayout(constraints.copyWith(minHeight: 0))
+        .height;
 
     // Switch back to a real layout pass.
     _overrideSheetMode = null;
@@ -1057,8 +1060,8 @@ class RenderMessagePageScaffold extends RenderBox {
     messagePageLayoutLog.finest(
         'Running dry layout on bottom sheet content to find the intrinsic height...');
     messagePageLayoutLog.finest(' - Bottom sheet constraints: $constraints');
-    messagePageLayoutLog
-        .finest(' - Controller desired sheet mode: ${_controller.collapsedMode}');
+    messagePageLayoutLog.finest(
+        ' - Controller desired sheet mode: ${_controller.collapsedMode}');
     _overrideSheetMode = BottomSheetMode.intrinsic;
     messagePageLayoutLog.finest(' - Override sheet mode: $_overrideSheetMode');
 
@@ -1306,8 +1309,8 @@ class RenderMessageEditorHeight extends RenderBox
     switch (heightMode) {
       case BottomSheetMode.preview:
         // Preview mode imposes a specific height on the bottom sheet.
-        messageEditorHeightLog
-            .finest(' - Forcing bottom sheet to preview height: $_previewHeight');
+        messageEditorHeightLog.finest(
+            ' - Forcing bottom sheet to preview height: $_previewHeight');
 
         // We want to be a specific height. Get as close as we can.
         size = constraints.constrainDimensions(
@@ -1337,8 +1340,8 @@ class RenderMessageEditorHeight extends RenderBox
         messageEditorHeightLog
             .finest(' - Mode $heightMode - Filling available height');
         if (!constraints.hasBoundedHeight) {
-          messageEditorHeightLog
-              .finest('   - No bounded height was provided. Deferring to child');
+          messageEditorHeightLog.finest(
+              '   - No bounded height was provided. Deferring to child');
           size = _doIntrinsicLayout(constraints);
           messageEditorHeightLog.finest(' - Our reported size: $size');
           return;
@@ -1372,8 +1375,8 @@ class RenderMessageEditorHeight extends RenderBox
     BoxConstraints constraints, {
     bool doDryLayout = false,
   }) {
-    messageEditorHeightLog
-        .finest(' - Measuring child intrinsic height. Constraints: $constraints');
+    messageEditorHeightLog.finest(
+        ' - Measuring child intrinsic height. Constraints: $constraints');
 
     final child = this.child;
     if (child == null) {

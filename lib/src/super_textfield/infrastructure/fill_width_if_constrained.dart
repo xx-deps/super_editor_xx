@@ -30,8 +30,10 @@ class FillWidthIfConstrained extends SingleChildRenderObjectWidget {
   }
 
   @override
-  void updateRenderObject(BuildContext context, RenderFillWidthIfConstrained renderObject) {
-    renderObject.findAncestorScrollableWidth = _createViewportWidthLookup(context);
+  void updateRenderObject(
+      BuildContext context, RenderFillWidthIfConstrained renderObject) {
+    renderObject.findAncestorScrollableWidth =
+        _createViewportWidthLookup(context);
   }
 
   double? Function() _createViewportWidthLookup(BuildContext context) {
@@ -52,7 +54,9 @@ class FillWidthIfConstrained extends SingleChildRenderObjectWidget {
     if (direction == AxisDirection.up || direction == AxisDirection.down) {
       return null;
     }
-    return (scrollable.context.findRenderObject() as RenderBox?)?.constraints.maxWidth;
+    return (scrollable.context.findRenderObject() as RenderBox?)
+        ?.constraints
+        .maxWidth;
   }
 }
 
@@ -85,7 +89,8 @@ class RenderFillWidthIfConstrained extends RenderProxyBox {
         minHeight: constraints.minHeight,
         maxHeight: constraints.maxHeight,
       );
-    } else if (ancestorViewportWidth != null && ancestorViewportWidth < double.infinity) {
+    } else if (ancestorViewportWidth != null &&
+        ancestorViewportWidth < double.infinity) {
       // The available width is unbounded and we're inside of a Scrollable.
       // Make the child at least as wide as the Scrollable viewport.
       childConstraints = BoxConstraints(

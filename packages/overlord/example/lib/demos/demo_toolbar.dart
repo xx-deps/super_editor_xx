@@ -94,7 +94,8 @@ class _ToolbarDemoState extends State<ToolbarDemo> {
   }
 }
 
-typedef _DemoBuilder = Widget Function(BuildContext, [BoxConstraints boundConstraints]);
+typedef _DemoBuilder = Widget Function(BuildContext,
+    [BoxConstraints boundConstraints]);
 
 final _demoItems = [
   _ToolbarDemoItem(
@@ -415,8 +416,10 @@ class ToolbarExample extends StatefulWidget {
     this.pages,
     this.toolbarHeight,
     this.children,
-  })  : assert(children != null || pages != null, 'You should provide either children or pages'),
-        assert(children == null || pages == null, "You can't provide both children and pages");
+  })  : assert(children != null || pages != null,
+            'You should provide either children or pages'),
+        assert(children == null || pages == null,
+            "You can't provide both children and pages");
 
   final String demoTitle;
   final BoxConstraints? constraints;

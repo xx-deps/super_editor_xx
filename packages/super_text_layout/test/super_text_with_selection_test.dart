@@ -29,7 +29,8 @@ void main() {
       // is considered good.
     });
 
-    testWidgets("doesn't rebuild text layout when text stays the same", (tester) async {
+    testWidgets("doesn't rebuild text layout when text stays the same",
+        (tester) async {
       final userSelection = ValueNotifier<UserSelection?>(
         const UserSelection(
           highlightStyle: _highlightStyle,
@@ -57,7 +58,9 @@ void main() {
       );
 
       // Ensure that the SuperText has built exactly 1 time to start off.
-      final superTextState1 = (find.byType(SuperText).evaluate().first as StatefulElement).state as SuperTextState;
+      final superTextState1 =
+          (find.byType(SuperText).evaluate().first as StatefulElement).state
+              as SuperTextState;
       expect(superTextState1.textBuildCount, 1);
 
       // Change the user selection, which will rebuild the SuperTextWithSelection
@@ -70,7 +73,9 @@ void main() {
       await tester.pumpAndSettle();
 
       // Ensure that the text within SuperText didn't rebuild since the last check.
-      final superTextState2 = (find.byType(SuperText).evaluate().first as StatefulElement).state as SuperTextState;
+      final superTextState2 =
+          (find.byType(SuperText).evaluate().first as StatefulElement).state
+              as SuperTextState;
       // We need to make sure the State objects remained the same because if the
       // original State object was replaced with a new one then the build count
       // will still read `1`, despite two builds taking place.

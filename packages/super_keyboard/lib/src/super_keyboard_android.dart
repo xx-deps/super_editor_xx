@@ -13,10 +13,12 @@ class SuperKeyboardAndroidBuilder extends StatefulWidget {
   final Widget Function(BuildContext, MobileWindowGeometry) builder;
 
   @override
-  State<SuperKeyboardAndroidBuilder> createState() => _SuperKeyboardAndroidBuilderState();
+  State<SuperKeyboardAndroidBuilder> createState() =>
+      _SuperKeyboardAndroidBuilderState();
 }
 
-class _SuperKeyboardAndroidBuilderState extends State<SuperKeyboardAndroidBuilder>
+class _SuperKeyboardAndroidBuilderState
+    extends State<SuperKeyboardAndroidBuilder>
     implements SuperKeyboardAndroidListener {
   @override
   void initState() {
@@ -81,25 +83,32 @@ class SuperKeyboardAndroid {
 
   /// Enable/disable platform-side logging, e.g., Android logs.
   Future<void> enablePlatformLogging(bool isEnabled) async {
-    await _methodChannel.invokeMethod(isEnabled ? "startLogging" : "stopLogging");
+    await _methodChannel
+        .invokeMethod(isEnabled ? "startLogging" : "stopLogging");
   }
 
   ValueListenable<MobileWindowGeometry> get geometry => _geometry;
-  final _geometry = ValueNotifier<MobileWindowGeometry>(const MobileWindowGeometry());
+  final _geometry =
+      ValueNotifier<MobileWindowGeometry>(const MobileWindowGeometry());
 
   final _listeners = <SuperKeyboardAndroidListener>{};
-  void addListener(SuperKeyboardAndroidListener listener) => _listeners.add(listener);
-  void removeListener(SuperKeyboardAndroidListener listener) => _listeners.remove(listener);
+  void addListener(SuperKeyboardAndroidListener listener) =>
+      _listeners.add(listener);
+  void removeListener(SuperKeyboardAndroidListener listener) =>
+      _listeners.remove(listener);
 
   Future<void> _onPlatformMessage(MethodCall message) async {
-    log.fine("Android platform message: '${message.method}', args: ${message.arguments}");
+    log.fine(
+        "Android platform message: '${message.method}', args: ${message.arguments}");
     switch (message.method) {
       case "keyboardOpening":
         _geometry.value = _geometry.value.updateWith(
           MobileWindowGeometry(
             keyboardState: KeyboardState.opening,
-            keyboardHeight: (message.arguments["keyboardHeight"] as num?)?.toDouble(),
-            bottomPadding: (message.arguments["bottomPadding"] as num?)?.toDouble(),
+            keyboardHeight:
+                (message.arguments["keyboardHeight"] as num?)?.toDouble(),
+            bottomPadding:
+                (message.arguments["bottomPadding"] as num?)?.toDouble(),
           ),
         );
 
@@ -111,8 +120,10 @@ class SuperKeyboardAndroid {
         _geometry.value = _geometry.value.updateWith(
           MobileWindowGeometry(
             keyboardState: KeyboardState.open,
-            keyboardHeight: (message.arguments["keyboardHeight"] as num?)?.toDouble(),
-            bottomPadding: (message.arguments["bottomPadding"] as num?)?.toDouble(),
+            keyboardHeight:
+                (message.arguments["keyboardHeight"] as num?)?.toDouble(),
+            bottomPadding:
+                (message.arguments["bottomPadding"] as num?)?.toDouble(),
           ),
         );
 
@@ -124,8 +135,10 @@ class SuperKeyboardAndroid {
         _geometry.value = _geometry.value.updateWith(
           MobileWindowGeometry(
             keyboardState: KeyboardState.closing,
-            keyboardHeight: (message.arguments["keyboardHeight"] as num?)?.toDouble(),
-            bottomPadding: (message.arguments["bottomPadding"] as num?)?.toDouble(),
+            keyboardHeight:
+                (message.arguments["keyboardHeight"] as num?)?.toDouble(),
+            bottomPadding:
+                (message.arguments["bottomPadding"] as num?)?.toDouble(),
           ),
         );
 
@@ -140,7 +153,8 @@ class SuperKeyboardAndroid {
             // Just in case the height got out of sync, perhaps due to Activity
             // lifecycle changes, explicitly set the keyboard height to zero.
             keyboardHeight: 0,
-            bottomPadding: (message.arguments["bottomPadding"] as num?)?.toDouble(),
+            bottomPadding:
+                (message.arguments["bottomPadding"] as num?)?.toDouble(),
           ),
         );
 
@@ -151,16 +165,20 @@ class SuperKeyboardAndroid {
       case "onProgress":
         _geometry.value = _geometry.value.updateWith(
           MobileWindowGeometry(
-            keyboardHeight: (message.arguments["keyboardHeight"] as num?)?.toDouble(),
-            bottomPadding: (message.arguments["bottomPadding"] as num?)?.toDouble(),
+            keyboardHeight:
+                (message.arguments["keyboardHeight"] as num?)?.toDouble(),
+            bottomPadding:
+                (message.arguments["bottomPadding"] as num?)?.toDouble(),
           ),
         );
         break;
       case "metricsUpdate":
         _geometry.value = _geometry.value.updateWith(
           MobileWindowGeometry(
-            keyboardHeight: (message.arguments["keyboardHeight"] as num?)?.toDouble(),
-            bottomPadding: (message.arguments["bottomPadding"] as num?)?.toDouble(),
+            keyboardHeight:
+                (message.arguments["keyboardHeight"] as num?)?.toDouble(),
+            bottomPadding:
+                (message.arguments["bottomPadding"] as num?)?.toDouble(),
           ),
         );
         break;

@@ -30,7 +30,8 @@ const double _kScrollbarCrossAxisMargin = 3.0;
 ///
 /// By using this widget, an app can use [NeverScrollableScrollPhysics], for example,
 /// to prevent scrolling by drag, and still let users interact with the scrollbar.
-class CupertinoScrollbarWithCustomPhysics extends RawScrollbarWithCustomPhysics {
+class CupertinoScrollbarWithCustomPhysics
+    extends RawScrollbarWithCustomPhysics {
   /// Creates an iOS style scrollbar that wraps the given [child].
   ///
   /// The [child] should be a source of [ScrollNotification] notifications,
@@ -54,7 +55,8 @@ class CupertinoScrollbarWithCustomPhysics extends RawScrollbarWithCustomPhysics 
           fadeDuration: _kScrollbarFadeDuration,
           timeToFade: _kScrollbarTimeToFade,
           pressDuration: const Duration(milliseconds: 100),
-          notificationPredicate: notificationPredicate ?? defaultScrollNotificationPredicate,
+          notificationPredicate:
+              notificationPredicate ?? defaultScrollNotificationPredicate,
         );
 
   /// Default value for [thickness] if it's not specified in [CupertinoScrollbarWithCustomPhysics].
@@ -87,19 +89,23 @@ class CupertinoScrollbarWithCustomPhysics extends RawScrollbarWithCustomPhysics 
   final Radius radiusWhileDragging;
 
   @override
-  RawScrollbarWithCustomPhysicsState<CupertinoScrollbarWithCustomPhysics> createState() => _CupertinoScrollbarState();
+  RawScrollbarWithCustomPhysicsState<CupertinoScrollbarWithCustomPhysics>
+      createState() => _CupertinoScrollbarState();
 }
 
-class _CupertinoScrollbarState extends RawScrollbarWithCustomPhysicsState<CupertinoScrollbarWithCustomPhysics> {
+class _CupertinoScrollbarState extends RawScrollbarWithCustomPhysicsState<
+    CupertinoScrollbarWithCustomPhysics> {
   late AnimationController _thicknessAnimationController;
 
   double get _thickness {
     return widget.thickness! +
-        _thicknessAnimationController.value * (widget.thicknessWhileDragging - widget.thickness!);
+        _thicknessAnimationController.value *
+            (widget.thicknessWhileDragging - widget.thickness!);
   }
 
   Radius get _radius {
-    return Radius.lerp(widget.radius, widget.radiusWhileDragging, _thicknessAnimationController.value)!;
+    return Radius.lerp(widget.radius, widget.radiusWhileDragging,
+        _thicknessAnimationController.value)!;
   }
 
   @override
@@ -170,11 +176,13 @@ class _CupertinoScrollbarState extends RawScrollbarWithCustomPhysicsState<Cupert
     super.handleThumbPressEnd(localPosition, velocity);
     switch (direction) {
       case Axis.vertical:
-        if (velocity.pixelsPerSecond.dy.abs() < 10 && (localPosition.dy - _pressStartAxisPosition).abs() > 0) {
+        if (velocity.pixelsPerSecond.dy.abs() < 10 &&
+            (localPosition.dy - _pressStartAxisPosition).abs() > 0) {
           HapticFeedback.mediumImpact();
         }
       case Axis.horizontal:
-        if (velocity.pixelsPerSecond.dx.abs() < 10 && (localPosition.dx - _pressStartAxisPosition).abs() > 0) {
+        if (velocity.pixelsPerSecond.dx.abs() < 10 &&
+            (localPosition.dx - _pressStartAxisPosition).abs() > 0) {
           HapticFeedback.mediumImpact();
         }
     }

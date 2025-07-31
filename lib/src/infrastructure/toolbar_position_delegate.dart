@@ -52,13 +52,19 @@ class ToolbarPositionDelegate extends SingleChildLayoutDelegate {
 
   @override
   Offset getPositionForChild(Size size, Size childSize) {
-    final heightNeeded = childSize.height + gapBetweenToolbarAndContent + (screenPadding?.top ?? 0.0);
-    final fitsAboveTextField = (textFieldGlobalOffset.dy + desiredTopAnchorInTextField.dy) > heightNeeded;
+    final heightNeeded = childSize.height +
+        gapBetweenToolbarAndContent +
+        (screenPadding?.top ?? 0.0);
+    final fitsAboveTextField =
+        (textFieldGlobalOffset.dy + desiredTopAnchorInTextField.dy) >
+            heightNeeded;
     final desiredAnchor = fitsAboveTextField
         ? desiredTopAnchorInTextField
         : (desiredBottomAnchorInTextField + Offset(0, childSize.height));
 
-    final desiredTopLeft = (desiredAnchor - Offset(childSize.width / 2, childSize.height)) + textFieldGlobalOffset;
+    final desiredTopLeft =
+        (desiredAnchor - Offset(childSize.width / 2, childSize.height)) +
+            textFieldGlobalOffset;
 
     double x = max(desiredTopLeft.dx, (screenPadding?.left ?? 0));
     x = min(x, size.width - childSize.width - (screenPadding?.right ?? 0));
@@ -69,7 +75,8 @@ class ToolbarPositionDelegate extends SingleChildLayoutDelegate {
     _log.finer(' - available space: $size');
     _log.finer(' - child size: $childSize');
     _log.finer(' - text field offset: $textFieldGlobalOffset');
-    _log.finer(' - ideal y-position: ${textFieldGlobalOffset.dy + desiredTopAnchorInTextField.dy}');
+    _log.finer(
+        ' - ideal y-position: ${textFieldGlobalOffset.dy + desiredTopAnchorInTextField.dy}');
     _log.finer(' - fits above text field: $fitsAboveTextField');
     _log.finer(' - desired anchor: $desiredAnchor');
     _log.finer(' - desired top left: $desiredTopLeft');

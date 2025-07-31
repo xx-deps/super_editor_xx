@@ -11,7 +11,8 @@ class PageListViewportDemo extends StatefulWidget {
   State<PageListViewportDemo> createState() => _PageListViewportDemoState();
 }
 
-class _PageListViewportDemoState extends State<PageListViewportDemo> with SingleTickerProviderStateMixin {
+class _PageListViewportDemoState extends State<PageListViewportDemo>
+    with SingleTickerProviderStateMixin {
   late final PageListViewportController _controller;
   final _leaderLink = LeaderLink();
 
@@ -53,7 +54,8 @@ class _PageListViewportDemoState extends State<PageListViewportDemo> with Single
 
                 return LayoutBuilder(
                   builder: (context, constraints) {
-                    final size = Size(constraints.maxWidth, constraints.maxHeight);
+                    final size =
+                        Size(constraints.maxWidth, constraints.maxHeight);
 
                     return Stack(
                       children: [
@@ -96,22 +98,26 @@ class _PageListViewportDemoState extends State<PageListViewportDemo> with Single
                 TextButton(
                   // ignore: avoid_print
                   onPressed: () => print("one"),
-                  child: const Text("One", style: TextStyle(color: Colors.white)),
+                  child:
+                      const Text("One", style: TextStyle(color: Colors.white)),
                 ),
                 TextButton(
                   // ignore: avoid_print
                   onPressed: () => print("two"),
-                  child: const Text("Two", style: TextStyle(color: Colors.white)),
+                  child:
+                      const Text("Two", style: TextStyle(color: Colors.white)),
                 ),
                 TextButton(
                   // ignore: avoid_print
                   onPressed: () => print("three"),
-                  child: const Text("Three", style: TextStyle(color: Colors.white)),
+                  child: const Text("Three",
+                      style: TextStyle(color: Colors.white)),
                 ),
                 TextButton(
                   // ignore: avoid_print
                   onPressed: () => print("four"),
-                  child: const Text("Four", style: TextStyle(color: Colors.white)),
+                  child:
+                      const Text("Four", style: TextStyle(color: Colors.white)),
                 ),
               ],
             ),

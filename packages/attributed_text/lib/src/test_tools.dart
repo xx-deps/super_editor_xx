@@ -38,10 +38,15 @@ class ExpectedSpans {
   List<String> _combinedSpans;
 
   void expectSpans(AttributedSpans spans) {
-    for (int characterIndex = 0; characterIndex < _combinedSpans.length; ++characterIndex) {
-      for (int attributionIndex = 0; attributionIndex < _combinedSpans[characterIndex].length; ++attributionIndex) {
+    for (int characterIndex = 0;
+        characterIndex < _combinedSpans.length;
+        ++characterIndex) {
+      for (int attributionIndex = 0;
+          attributionIndex < _combinedSpans[characterIndex].length;
+          ++attributionIndex) {
         // The attribution name is just a letter, like 'b', 'i', or 's'.
-        final attributionName = _combinedSpans[characterIndex][attributionIndex];
+        final attributionName =
+            _combinedSpans[characterIndex][attributionIndex];
         if (attributionName == '_') {
           continue;
         }
@@ -58,14 +63,19 @@ class ExpectedSpans {
             namedAttribution = strikethrough;
             break;
           default:
-            throw Exception('Unknown span template character: $attributionName');
+            throw Exception(
+                'Unknown span template character: $attributionName');
         }
 
-        if (!spans.hasAttributionAt(characterIndex, attribution: namedAttribution)) {
+        if (!spans.hasAttributionAt(characterIndex,
+            attribution: namedAttribution)) {
           // ignore: avoid_print
           print("SPAN MISMATCH: missing $namedAttribution at $characterIndex");
         }
-        expect(spans.hasAttributionAt(characterIndex, attribution: namedAttribution), true);
+        expect(
+            spans.hasAttributionAt(characterIndex,
+                attribution: namedAttribution),
+            true);
       }
     }
   }

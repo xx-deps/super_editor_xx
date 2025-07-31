@@ -98,7 +98,8 @@ class SpellingAndGrammarStyler extends SingleColumnLayoutStylePhase {
   }
 
   @override
-  SingleColumnLayoutViewModel style(Document document, SingleColumnLayoutViewModel viewModel) {
+  SingleColumnLayoutViewModel style(
+      Document document, SingleColumnLayoutViewModel viewModel) {
     final updatedViewModel = SingleColumnLayoutViewModel(
       padding: viewModel.padding,
       componentViewModels: [
@@ -112,35 +113,40 @@ class SpellingAndGrammarStyler extends SingleColumnLayoutStylePhase {
     return updatedViewModel;
   }
 
-  SingleColumnLayoutComponentViewModel _applyErrors(SingleColumnLayoutComponentViewModel viewModel) {
+  SingleColumnLayoutComponentViewModel _applyErrors(
+      SingleColumnLayoutComponentViewModel viewModel) {
     if (!_errorsByNode.containsKey(viewModel.nodeId)) {
       return viewModel;
     }
     if (viewModel is! TextComponentViewModel) {
-      editorSpellingAndGrammarLog
-          .warning("Tried to apply spelling/grammar errors to a non-text view model: ${viewModel.runtimeType}");
+      editorSpellingAndGrammarLog.warning(
+          "Tried to apply spelling/grammar errors to a non-text view model: ${viewModel.runtimeType}");
       return viewModel;
     }
 
-    final spellingErrors = _errorsByNode[viewModel.nodeId]!.where((error) => error.type == TextErrorType.spelling);
+    final spellingErrors = _errorsByNode[viewModel.nodeId]!
+        .where((error) => error.type == TextErrorType.spelling);
     if (_spellingErrorUnderlineStyle != null) {
       // The user explicitly requested this style be used for spelling errors.
       // Apply it.
       viewModel.spellingErrorUnderlineStyle = _spellingErrorUnderlineStyle!;
     }
-    viewModel.spellingErrors = spellingErrors.map((error) => error.range).toList();
+    viewModel.spellingErrors =
+        spellingErrors.map((error) => error.range).toList();
 
     if (_overrideSelectionColor && selectionHighlightColor != null) {
       viewModel.selectionColor = selectionHighlightColor!;
     }
 
-    final grammarErrors = _errorsByNode[viewModel.nodeId]!.where((error) => error.type == TextErrorType.grammar);
+    final grammarErrors = _errorsByNode[viewModel.nodeId]!
+        .where((error) => error.type == TextErrorType.grammar);
     if (_grammarErrorUnderlineStyle != null) {
       // The user explicitly requested this style be used for grammar errors.
       // Apply it.
       viewModel.grammarErrorUnderlineStyle = _grammarErrorUnderlineStyle!;
     }
-    viewModel.grammarErrors = grammarErrors.map((error) => error.range).toList();
+    viewModel.grammarErrors =
+        grammarErrors.map((error) => error.range).toList();
 
     return viewModel;
   }
@@ -195,7 +201,8 @@ class TextError {
           value == other.value;
 
   @override
-  int get hashCode => nodeId.hashCode ^ range.hashCode ^ type.hashCode ^ value.hashCode;
+  int get hashCode =>
+      nodeId.hashCode ^ range.hashCode ^ type.hashCode ^ value.hashCode;
 }
 
 enum TextErrorType {
@@ -203,5 +210,7 @@ enum TextErrorType {
   grammar;
 }
 
-const defaultSpellingErrorUnderlineStyle = SquiggleUnderlineStyle(color: Colors.red);
-const defaultGrammarErrorUnderlineStyle = SquiggleUnderlineStyle(color: Colors.blue);
+const defaultSpellingErrorUnderlineStyle =
+    SquiggleUnderlineStyle(color: Colors.red);
+const defaultGrammarErrorUnderlineStyle =
+    SquiggleUnderlineStyle(color: Colors.blue);

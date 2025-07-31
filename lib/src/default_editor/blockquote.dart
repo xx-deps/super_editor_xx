@@ -20,7 +20,8 @@ class BlockquoteComponentBuilder implements ComponentBuilder {
   const BlockquoteComponentBuilder();
 
   @override
-  SingleColumnLayoutComponentViewModel? createViewModel(Document document, DocumentNode node) {
+  SingleColumnLayoutComponentViewModel? createViewModel(
+      Document document, DocumentNode node) {
     if (node is! ParagraphNode) {
       return null;
     }
@@ -30,7 +31,8 @@ class BlockquoteComponentBuilder implements ComponentBuilder {
 
     final textDirection = getParagraphDirection(node.text.toPlainText());
 
-    TextAlign textAlign = (textDirection == TextDirection.ltr) ? TextAlign.left : TextAlign.right;
+    TextAlign textAlign =
+        (textDirection == TextDirection.ltr) ? TextAlign.left : TextAlign.right;
     final textAlignName = node.getMetadataValue('textAlign');
     switch (textAlignName) {
       case 'left':
@@ -62,8 +64,8 @@ class BlockquoteComponentBuilder implements ComponentBuilder {
   }
 
   @override
-  Widget? createComponent(
-      SingleColumnDocumentComponentContext componentContext, SingleColumnLayoutComponentViewModel componentViewModel) {
+  Widget? createComponent(SingleColumnDocumentComponentContext componentContext,
+      SingleColumnLayoutComponentViewModel componentViewModel) {
     if (componentViewModel is! BlockquoteComponentViewModel) {
       return null;
     }
@@ -84,7 +86,8 @@ class BlockquoteComponentBuilder implements ComponentBuilder {
   }
 }
 
-class BlockquoteComponentViewModel extends SingleColumnLayoutComponentViewModel with TextComponentViewModel {
+class BlockquoteComponentViewModel extends SingleColumnLayoutComponentViewModel
+    with TextComponentViewModel {
   BlockquoteComponentViewModel({
     required super.nodeId,
     super.createdAt,
@@ -105,9 +108,11 @@ class BlockquoteComponentViewModel extends SingleColumnLayoutComponentViewModel 
     this.highlightWhenEmpty = false,
     TextRange? composingRegion,
     bool showComposingRegionUnderline = false,
-    UnderlineStyle spellingErrorUnderlineStyle = const SquiggleUnderlineStyle(color: Color(0xFFFF0000)),
+    UnderlineStyle spellingErrorUnderlineStyle =
+        const SquiggleUnderlineStyle(color: Color(0xFFFF0000)),
     List<TextRange> spellingErrors = const <TextRange>[],
-    UnderlineStyle grammarErrorUnderlineStyle = const SquiggleUnderlineStyle(color: Colors.blue),
+    UnderlineStyle grammarErrorUnderlineStyle =
+        const SquiggleUnderlineStyle(color: Colors.blue),
     List<TextRange> grammarErrors = const <TextRange>[],
   }) {
     this.composingRegion = composingRegion;
@@ -168,7 +173,8 @@ class BlockquoteComponentViewModel extends SingleColumnLayoutComponentViewModel 
   }
 
   @override
-  BlockquoteComponentViewModel internalCopy(BlockquoteComponentViewModel viewModel) {
+  BlockquoteComponentViewModel internalCopy(
+      BlockquoteComponentViewModel viewModel) {
     final copy = super.internalCopy(viewModel) as BlockquoteComponentViewModel;
 
     copy
@@ -193,7 +199,11 @@ class BlockquoteComponentViewModel extends SingleColumnLayoutComponentViewModel 
 
   @override
   int get hashCode =>
-      super.hashCode ^ textViewModelHashCode ^ indent.hashCode ^ backgroundColor.hashCode ^ borderRadius.hashCode;
+      super.hashCode ^
+      textViewModelHashCode ^
+      indent.hashCode ^
+      backgroundColor.hashCode ^
+      borderRadius.hashCode;
 }
 
 /// Displays a blockquote in a document.

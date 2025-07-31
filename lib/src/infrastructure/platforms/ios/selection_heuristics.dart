@@ -12,23 +12,32 @@ class IosHeuristics {
     }
 
     final upstreamWordStart = text.moveOffsetUpstreamByWord(tapOffset) ?? 0;
-    final upstreamWordEnd = text.moveOffsetDownstreamByWord(upstreamWordStart) ?? text.length;
+    final upstreamWordEnd =
+        text.moveOffsetDownstreamByWord(upstreamWordStart) ?? text.length;
 
-    final downstreamWordEnd = text.moveOffsetDownstreamByWord(tapOffset) ?? text.length;
-    final downstreamWordStart = text.moveOffsetUpstreamByWord(downstreamWordEnd) ?? 0;
+    final downstreamWordEnd =
+        text.moveOffsetDownstreamByWord(tapOffset) ?? text.length;
+    final downstreamWordStart =
+        text.moveOffsetUpstreamByWord(downstreamWordEnd) ?? 0;
 
     if (text[tapOffset] == " ") {
       // User tapped between words. Pick the nearest word.
-      return downstreamWordStart - tapOffset < tapOffset - upstreamWordEnd ? downstreamWordStart : upstreamWordEnd;
+      return downstreamWordStart - tapOffset < tapOffset - upstreamWordEnd
+          ? downstreamWordStart
+          : upstreamWordEnd;
     } else {
       // User tapped within a word. Adjust the offset to the end of the
       // word unless the user is within 1 character of the start of the word.
       if (tapOffset <= upstreamWordEnd) {
         // The tap position is within the upstream word.
-        return tapOffset - upstreamWordStart <= 1 ? upstreamWordStart : upstreamWordEnd;
+        return tapOffset - upstreamWordStart <= 1
+            ? upstreamWordStart
+            : upstreamWordEnd;
       } else {
         // The tap position is within the downstream word.
-        return tapOffset - downstreamWordStart <= 1 ? downstreamWordStart : downstreamWordEnd;
+        return tapOffset - downstreamWordStart <= 1
+            ? downstreamWordStart
+            : downstreamWordEnd;
       }
     }
   }

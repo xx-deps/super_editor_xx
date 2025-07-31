@@ -72,7 +72,8 @@ class ImeAttributedTextEditingController extends AttributedTextEditingController
 
   final AttributedTextEditingController _realController;
 
-  @Deprecated("this property is exposed temporarily as super_editor evaluates what to do with controllers")
+  @Deprecated(
+      "this property is exposed temporarily as super_editor evaluates what to do with controllers")
   AttributedTextEditingController get innerController => _realController;
 
   final bool _disposeClientController;
@@ -95,17 +96,22 @@ class ImeAttributedTextEditingController extends AttributedTextEditingController
   /// The floating cursor's position is reported by Flutter through a
   /// `TextInputClient`, which is why this controller is required to offer this
   /// information.
-  set onIOSFloatingCursorChange(void Function(RawFloatingCursorPoint)? callback) {
+  set onIOSFloatingCursorChange(
+      void Function(RawFloatingCursorPoint)? callback) {
     _onIOSFloatingCursorChange = callback;
   }
 
   /// Notifies whenever the current [TextInputConnection] changes.
-  ValueListenable<TextInputConnection?> get inputConnectionNotifier => _inputConnectionNotifier;
-  final ValueNotifier<TextInputConnection?> _inputConnectionNotifier = ValueNotifier<TextInputConnection?>(null);
+  ValueListenable<TextInputConnection?> get inputConnectionNotifier =>
+      _inputConnectionNotifier;
+  final ValueNotifier<TextInputConnection?> _inputConnectionNotifier =
+      ValueNotifier<TextInputConnection?>(null);
 
   bool _isKeyboardDisplayDesired = false;
 
-  bool get isAttachedToIme => _inputConnectionNotifier.value != null && _inputConnectionNotifier.value!.attached;
+  bool get isAttachedToIme =>
+      _inputConnectionNotifier.value != null &&
+      _inputConnectionNotifier.value!.attached;
 
   /// Holds the current editing value in the IME.
   ///
@@ -148,7 +154,8 @@ class ImeAttributedTextEditingController extends AttributedTextEditingController
 
     // Delta model is required for SuperTextField to work.
     final imeConfig = configuration.copyWith(enableDeltaModel: true);
-    final inputConnection = _inputConnectionFactory?.call(this, imeConfig) ?? TextInput.attach(this, imeConfig);
+    final inputConnection = _inputConnectionFactory?.call(this, imeConfig) ??
+        TextInput.attach(this, imeConfig);
     inputConnection.show();
 
     _inputConnectionNotifier.value = inputConnection;
@@ -190,7 +197,8 @@ class ImeAttributedTextEditingController extends AttributedTextEditingController
       keyboardAppearance: keyboardAppearance,
       textCapitalization: textCapitalization,
     );
-    final inputConnection = _inputConnectionFactory?.call(this, imeConfig) ?? TextInput.attach(this, imeConfig);
+    final inputConnection = _inputConnectionFactory?.call(this, imeConfig) ??
+        TextInput.attach(this, imeConfig);
     inputConnection.show();
 
     _inputConnectionNotifier.value = inputConnection;
@@ -280,8 +288,10 @@ class ImeAttributedTextEditingController extends AttributedTextEditingController
   }
 
   void Function(TextInputAction)? _onPerformActionPressed;
-  set onPerformActionPressed(Function(TextInputAction)? callback) => _onPerformActionPressed = callback;
-  Function(TextInputAction)? get onPerformActionPressed => _onPerformActionPressed;
+  set onPerformActionPressed(Function(TextInputAction)? callback) =>
+      _onPerformActionPressed = callback;
+  Function(TextInputAction)? get onPerformActionPressed =>
+      _onPerformActionPressed;
 
   @override
   TextEditingValue? get currentTextEditingValue => TextEditingValue(
@@ -335,7 +345,8 @@ class ImeAttributedTextEditingController extends AttributedTextEditingController
     for (final delta in deltas) {
       if (delta is TextEditingDeltaInsertion) {
         _log.fine('Processing insertion: $delta');
-        if (selection.isCollapsed && delta.insertionOffset == selection.extentOffset) {
+        if (selection.isCollapsed &&
+            delta.insertionOffset == selection.extentOffset) {
           // This action appears to be user input at the caret.
           insertAtCaret(
             text: delta.textInserted,
@@ -409,7 +420,8 @@ class ImeAttributedTextEditingController extends AttributedTextEditingController
     // with a new line.
     //
     // See https://github.com/superlistapp/super_editor/issues/2004 for more information.
-    _hasPerformedNonNewLineTextInputActionThisFrame = action != TextInputAction.newline;
+    _hasPerformedNonNewLineTextInputActionThisFrame =
+        action != TextInputAction.newline;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _hasPerformedNonNewLineTextInputActionThisFrame = false;
     });
@@ -453,17 +465,21 @@ class ImeAttributedTextEditingController extends AttributedTextEditingController
   set selection(TextSelection newValue) => _realController.selection = newValue;
 
   @override
-  Set<Attribution> get composingAttributions => _realController.composingAttributions;
+  Set<Attribution> get composingAttributions =>
+      _realController.composingAttributions;
   @override
-  set composingAttributions(Set<Attribution> attributions) => _realController.composingAttributions = attributions;
+  set composingAttributions(Set<Attribution> attributions) =>
+      _realController.composingAttributions = attributions;
 
   @override
   TextRange get composingRegion => _realController.composingRegion;
   @override
-  set composingRegion(TextRange newValue) => _realController.composingRegion = newValue;
+  set composingRegion(TextRange newValue) =>
+      _realController.composingRegion = newValue;
 
   @override
-  void updateTextAndSelection({required AttributedText text, required TextSelection selection}) {
+  void updateTextAndSelection(
+      {required AttributedText text, required TextSelection selection}) {
     _realController.updateTextAndSelection(
       text: text,
       selection: selection,
@@ -532,7 +548,8 @@ class ImeAttributedTextEditingController extends AttributedTextEditingController
   }
 
   @override
-  void insertAtCaretUnstyled({required String text, TextRange? newComposingRegion}) {
+  void insertAtCaretUnstyled(
+      {required String text, TextRange? newComposingRegion}) {
     _realController.insertAtCaretUnstyled(
       text: text,
       newComposingRegion: newComposingRegion,
@@ -540,7 +557,8 @@ class ImeAttributedTextEditingController extends AttributedTextEditingController
   }
 
   @override
-  void insertAtCaretWithUpstreamAttributions({required String text, TextRange? newComposingRegion}) {
+  void insertAtCaretWithUpstreamAttributions(
+      {required String text, TextRange? newComposingRegion}) {
     _realController.insertAtCaretWithUpstreamAttributions(
       text: text,
       newComposingRegion: newComposingRegion,
@@ -548,7 +566,8 @@ class ImeAttributedTextEditingController extends AttributedTextEditingController
   }
 
   @override
-  void insertAttributedTextAtCaret({required AttributedText attributedText, TextRange? newComposingRegion}) {
+  void insertAttributedTextAtCaret(
+      {required AttributedText attributedText, TextRange? newComposingRegion}) {
     _realController.insertAttributedTextAtCaret(
       attributedText: attributedText,
       newComposingRegion: newComposingRegion,
@@ -576,7 +595,8 @@ class ImeAttributedTextEditingController extends AttributedTextEditingController
   }
 
   @override
-  void replaceSelectionWithUnstyledText({required String replacementText, TextRange? newComposingRegion}) {
+  void replaceSelectionWithUnstyledText(
+      {required String replacementText, TextRange? newComposingRegion}) {
     _realController.replaceSelectionWithUnstyledText(
       replacementText: replacementText,
       newComposingRegion: newComposingRegion,
@@ -601,7 +621,11 @@ class ImeAttributedTextEditingController extends AttributedTextEditingController
   }
 
   @override
-  void delete({required int from, required int to, TextSelection? newSelection, TextRange? newComposingRegion}) {
+  void delete(
+      {required int from,
+      required int to,
+      TextSelection? newSelection,
+      TextRange? newComposingRegion}) {
     _realController.delete(
       from: from,
       to: to,
@@ -617,7 +641,8 @@ class ImeAttributedTextEditingController extends AttributedTextEditingController
 
   @override
   void deletePreviousCharacter({TextRange? newComposingRegion}) {
-    _realController.deletePreviousCharacter(newComposingRegion: newComposingRegion);
+    _realController.deletePreviousCharacter(
+        newComposingRegion: newComposingRegion);
   }
 
   @override
@@ -626,7 +651,10 @@ class ImeAttributedTextEditingController extends AttributedTextEditingController
   }
 
   @override
-  void update({AttributedText? text, TextSelection? selection, TextRange? composingRegion}) {
+  void update(
+      {AttributedText? text,
+      TextSelection? selection,
+      TextRange? composingRegion}) {
     _realController.update(
       text: text,
       selection: selection,
@@ -650,7 +678,8 @@ class ImeAttributedTextEditingController extends AttributedTextEditingController
   }
 
   @override
-  @Deprecated('This will be removed in a future release. Use clearText or clearTextAndSelection instead')
+  @Deprecated(
+      'This will be removed in a future release. Use clearText or clearTextAndSelection instead')
   void clear() {
     // ignore: deprecated_member_use_from_same_package
     _realController.clear();

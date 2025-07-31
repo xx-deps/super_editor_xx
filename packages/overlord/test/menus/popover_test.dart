@@ -6,7 +6,8 @@ import 'package:overlord/overlord.dart';
 
 void main() {
   group('PopoverScaffold', () {
-    testWidgetsOnAllPlatforms('opens and closes the popover when requested', (tester) async {
+    testWidgetsOnAllPlatforms('opens and closes the popover when requested',
+        (tester) async {
       final popoverController = PopoverController();
 
       await tester.pumpWidget(
@@ -15,7 +16,8 @@ void main() {
             body: PopoverScaffold(
               controller: popoverController,
               buttonBuilder: (context) => const SizedBox(),
-              popoverBuilder: (context) => const RoundedRectanglePopoverAppearance(
+              popoverBuilder: (context) =>
+                  const RoundedRectanglePopoverAppearance(
                 child: SizedBox(),
               ),
             ),
@@ -41,7 +43,8 @@ void main() {
       expect(find.byType(RoundedRectanglePopoverAppearance), findsNothing);
     });
 
-    testWidgetsOnAllPlatforms('closes the popover when tapping outside', (tester) async {
+    testWidgetsOnAllPlatforms('closes the popover when tapping outside',
+        (tester) async {
       final popoverController = PopoverController();
 
       await tester.pumpWidget(
@@ -53,7 +56,8 @@ void main() {
                 child: PopoverScaffold(
                   controller: popoverController,
                   buttonBuilder: (context) => const SizedBox(),
-                  popoverBuilder: (context) => const RoundedRectanglePopoverAppearance(
+                  popoverBuilder: (context) =>
+                      const RoundedRectanglePopoverAppearance(
                     child: SizedBox(),
                   ),
                 ),
@@ -81,7 +85,8 @@ void main() {
       expect(find.byType(RoundedRectanglePopoverAppearance), findsNothing);
     });
 
-    testWidgetsOnAllPlatforms('does not close popover when tapping a widget with the same tap region groupId',
+    testWidgetsOnAllPlatforms(
+        'does not close popover when tapping a widget with the same tap region groupId',
         (tester) async {
       final popoverController = PopoverController();
 
@@ -107,7 +112,8 @@ void main() {
                         tapRegionGroupId: tapRegionGroupId,
                         controller: popoverController,
                         buttonBuilder: (context) => const SizedBox(),
-                        popoverBuilder: (context) => const RoundedRectanglePopoverAppearance(
+                        popoverBuilder: (context) =>
+                            const RoundedRectanglePopoverAppearance(
                           child: SizedBox(),
                         ),
                       ),
@@ -150,7 +156,8 @@ void main() {
       expect(find.byType(RoundedRectanglePopoverAppearance), findsOneWidget);
     });
 
-    testWidgetsOnAllPlatforms('enforces the given popover geometry', (tester) async {
+    testWidgetsOnAllPlatforms('enforces the given popover geometry',
+        (tester) async {
       final buttonKey = GlobalKey();
       final popoverController = PopoverController();
 
@@ -162,15 +169,17 @@ void main() {
                 controller: popoverController,
                 popoverGeometry: PopoverGeometry(
                   constraints: const BoxConstraints(maxHeight: 300),
-                  aligner: FunctionalPopoverAligner(
-                      (globalLeaderRect, followerSize, screenSize, boundaryKey) => const FollowerAlignment(
-                            leaderAnchor: Alignment.topRight,
-                            followerAnchor: Alignment.topLeft,
-                            followerOffset: Offset(10, 10),
-                          )),
+                  aligner: FunctionalPopoverAligner((globalLeaderRect,
+                          followerSize, screenSize, boundaryKey) =>
+                      const FollowerAlignment(
+                        leaderAnchor: Alignment.topRight,
+                        followerAnchor: Alignment.topLeft,
+                        followerOffset: Offset(10, 10),
+                      )),
                 ),
                 buttonBuilder: (context) => SizedBox(key: buttonKey),
-                popoverBuilder: (context) => const RoundedRectanglePopoverAppearance(
+                popoverBuilder: (context) =>
+                    const RoundedRectanglePopoverAppearance(
                   child: SizedBox(height: 500),
                 ),
               ),
@@ -190,7 +199,8 @@ void main() {
       expect(find.byType(RoundedRectanglePopoverAppearance), findsOneWidget);
 
       final buttonRect = tester.getRect(find.byKey(buttonKey));
-      final popoverRect = tester.getRect(find.byType(RoundedRectanglePopoverAppearance));
+      final popoverRect =
+          tester.getRect(find.byType(RoundedRectanglePopoverAppearance));
 
       // Ensure the given geometry was honored.
       expect(popoverRect.height, moreOrLessEquals(300));
@@ -200,7 +210,9 @@ void main() {
 
     group('default popover geometry', () {
       group('with a boundary key', () {
-        testWidgetsOnAllPlatforms('positions the popover below button if there is room', (tester) async {
+        testWidgetsOnAllPlatforms(
+            'positions the popover below button if there is room',
+            (tester) async {
           final boundaryKey = GlobalKey();
           final buttonKey = GlobalKey();
           final popoverController = PopoverController();
@@ -232,7 +244,8 @@ void main() {
                             key: buttonKey,
                             height: 50,
                           ),
-                          popoverBuilder: (context) => const RoundedRectanglePopoverAppearance(
+                          popoverBuilder: (context) =>
+                              const RoundedRectanglePopoverAppearance(
                             child: SizedBox(height: 200),
                           ),
                         ),
@@ -252,16 +265,19 @@ void main() {
           await tester.pumpAndSettle();
 
           // Ensure the popover is displayed.
-          expect(find.byType(RoundedRectanglePopoverAppearance), findsOneWidget);
+          expect(
+              find.byType(RoundedRectanglePopoverAppearance), findsOneWidget);
 
           final buttonRect = tester.getRect(find.byKey(buttonKey));
-          final popoverRect = tester.getRect(find.byType(RoundedRectanglePopoverAppearance));
+          final popoverRect =
+              tester.getRect(find.byType(RoundedRectanglePopoverAppearance));
 
           // Ensure popover was displayed below the button.
           expect(popoverRect.top, greaterThan(buttonRect.bottom));
         });
 
-        testWidgetsOnAllPlatforms('positions the popover above button if there is room above but not below',
+        testWidgetsOnAllPlatforms(
+            'positions the popover above button if there is room above but not below',
             (tester) async {
           final boundaryKey = GlobalKey();
           final buttonKey = GlobalKey();
@@ -294,7 +310,8 @@ void main() {
                             key: buttonKey,
                             height: 50,
                           ),
-                          popoverBuilder: (context) => const RoundedRectanglePopoverAppearance(
+                          popoverBuilder: (context) =>
+                              const RoundedRectanglePopoverAppearance(
                             child: SizedBox(height: 200),
                           ),
                         ),
@@ -314,10 +331,12 @@ void main() {
           await tester.pumpAndSettle();
 
           // Ensure the popover is displayed.
-          expect(find.byType(RoundedRectanglePopoverAppearance), findsOneWidget);
+          expect(
+              find.byType(RoundedRectanglePopoverAppearance), findsOneWidget);
 
           final buttonRect = tester.getRect(find.byKey(buttonKey));
-          final popoverRect = tester.getRect(find.byType(RoundedRectanglePopoverAppearance));
+          final popoverRect =
+              tester.getRect(find.byType(RoundedRectanglePopoverAppearance));
 
           // Ensure popover was displayed above the button.
           expect(popoverRect.bottom, lessThan(buttonRect.top));
@@ -357,7 +376,8 @@ void main() {
                             key: buttonKey,
                             height: 50,
                           ),
-                          popoverBuilder: (context) => const RoundedRectanglePopoverAppearance(
+                          popoverBuilder: (context) =>
+                              const RoundedRectanglePopoverAppearance(
                             child: SizedBox(height: 700),
                           ),
                         ),
@@ -377,9 +397,11 @@ void main() {
           await tester.pumpAndSettle();
 
           // Ensure the popover is displayed.
-          expect(find.byType(RoundedRectanglePopoverAppearance), findsOneWidget);
+          expect(
+              find.byType(RoundedRectanglePopoverAppearance), findsOneWidget);
 
-          final popoverRect = tester.getRect(find.byType(RoundedRectanglePopoverAppearance));
+          final popoverRect =
+              tester.getRect(find.byType(RoundedRectanglePopoverAppearance));
 
           // Ensure popover was pinned of the bottom to the boundary widget
           // and did not exceeded the boundary size.
@@ -389,7 +411,9 @@ void main() {
       });
 
       group('without a boundary key', () {
-        testWidgetsOnAllPlatforms('positions the popover below button if there is room', (tester) async {
+        testWidgetsOnAllPlatforms(
+            'positions the popover below button if there is room',
+            (tester) async {
           final buttonKey = GlobalKey();
           final popoverController = PopoverController();
 
@@ -410,7 +434,8 @@ void main() {
                     key: buttonKey,
                     height: 50,
                   ),
-                  popoverBuilder: (context) => const RoundedRectanglePopoverAppearance(
+                  popoverBuilder: (context) =>
+                      const RoundedRectanglePopoverAppearance(
                     child: SizedBox(height: 500),
                   ),
                 ),
@@ -426,16 +451,19 @@ void main() {
           await tester.pumpAndSettle();
 
           // Ensure the popover is displayed.
-          expect(find.byType(RoundedRectanglePopoverAppearance), findsOneWidget);
+          expect(
+              find.byType(RoundedRectanglePopoverAppearance), findsOneWidget);
 
           final buttonRect = tester.getRect(find.byKey(buttonKey));
-          final popoverRect = tester.getRect(find.byType(RoundedRectanglePopoverAppearance));
+          final popoverRect =
+              tester.getRect(find.byType(RoundedRectanglePopoverAppearance));
 
           // Ensure popover was displayed below the button.
           expect(popoverRect.top, greaterThan(buttonRect.bottom));
         });
 
-        testWidgetsOnAllPlatforms('positions the popover above button if there is room above but not below',
+        testWidgetsOnAllPlatforms(
+            'positions the popover above button if there is room above but not below',
             (tester) async {
           final buttonKey = GlobalKey();
           final popoverController = PopoverController();
@@ -459,7 +487,8 @@ void main() {
                       key: buttonKey,
                       height: 50,
                     ),
-                    popoverBuilder: (context) => const RoundedRectanglePopoverAppearance(
+                    popoverBuilder: (context) =>
+                        const RoundedRectanglePopoverAppearance(
                       child: SizedBox(height: 500),
                     ),
                   ),
@@ -476,17 +505,20 @@ void main() {
           await tester.pumpAndSettle();
 
           // Ensure the popover is displayed.
-          expect(find.byType(RoundedRectanglePopoverAppearance), findsOneWidget);
+          expect(
+              find.byType(RoundedRectanglePopoverAppearance), findsOneWidget);
 
           final buttonRect = tester.getRect(find.byKey(buttonKey));
-          final popoverRect = tester.getRect(find.byType(RoundedRectanglePopoverAppearance));
+          final popoverRect =
+              tester.getRect(find.byType(RoundedRectanglePopoverAppearance));
 
           // Ensure popover was displayed above the button.
           expect(popoverRect.bottom, lessThan(buttonRect.top));
         });
 
         testWidgetsOnAllPlatforms(
-            'pins the popover to the bottom of screen if there is not room below or above the button', (tester) async {
+            'pins the popover to the bottom of screen if there is not room below or above the button',
+            (tester) async {
           final buttonKey = GlobalKey();
           final popoverController = PopoverController();
 
@@ -508,7 +540,8 @@ void main() {
                       key: buttonKey,
                       height: 50,
                     ),
-                    popoverBuilder: (context) => const RoundedRectanglePopoverAppearance(
+                    popoverBuilder: (context) =>
+                        const RoundedRectanglePopoverAppearance(
                       child: SizedBox(height: 500),
                     ),
                   ),
@@ -525,9 +558,11 @@ void main() {
           await tester.pumpAndSettle();
 
           // Ensure the popover is displayed.
-          expect(find.byType(RoundedRectanglePopoverAppearance), findsOneWidget);
+          expect(
+              find.byType(RoundedRectanglePopoverAppearance), findsOneWidget);
 
-          final popoverRect = tester.getRect(find.byType(RoundedRectanglePopoverAppearance));
+          final popoverRect =
+              tester.getRect(find.byType(RoundedRectanglePopoverAppearance));
 
           // Ensure popover was displayed pinned to the bottom of the screen.
           expect(popoverRect.bottom, 600);
@@ -535,7 +570,8 @@ void main() {
       });
     });
 
-    testWidgetsOnAllPlatforms('shares focus with widgets of a different subtree', (tester) async {
+    testWidgetsOnAllPlatforms(
+        'shares focus with widgets of a different subtree', (tester) async {
       // When PopoverScaffold is in a different subtree from the currently focused widget,
       // for example, an Overlay or OverlayPortal, it doesn't naturally shares focus with it.
       //

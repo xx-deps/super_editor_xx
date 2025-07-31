@@ -23,7 +23,10 @@ class BuildInOrder extends MultiChildRenderObjectWidget {
 
 /// [RenderBox] for a [BuildInOrder] widget.
 class RenderBuildInOrder extends RenderBox
-    with ContainerRenderObjectMixin<RenderBox, ContainerBoxParentData<RenderBox>>, RenderBoxContainerDefaultsMixin {
+    with
+        ContainerRenderObjectMixin<RenderBox,
+            ContainerBoxParentData<RenderBox>>,
+        RenderBoxContainerDefaultsMixin {
   @override
   ContainerBoxParentData<RenderBox> setupParentData(RenderBox child) {
     child.parentData = MultiChildLayoutParentData();

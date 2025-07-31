@@ -106,7 +106,8 @@ class ReadOnlyAndroidDocumentTouchInteractor extends StatefulWidget {
   /// If no clipper factory method is provided, then the overlay controls
   /// will be allowed to appear anywhere in the overlay in which they sit
   /// (probably the entire screen).
-  final CustomClipper<Rect> Function(BuildContext overlayContext)? createOverlayControlsClipper;
+  final CustomClipper<Rect> Function(BuildContext overlayContext)?
+      createOverlayControlsClipper;
 
   /// Shows, hides, and positions a floating toolbar and magnifier.
   final MagnifierAndToolbarController? overlayController;
@@ -123,7 +124,8 @@ class ReadOnlyAndroidDocumentTouchInteractor extends StatefulWidget {
   State createState() => _ReadOnlyAndroidDocumentTouchInteractorState();
 }
 
-class _ReadOnlyAndroidDocumentTouchInteractorState extends State<ReadOnlyAndroidDocumentTouchInteractor>
+class _ReadOnlyAndroidDocumentTouchInteractorState
+    extends State<ReadOnlyAndroidDocumentTouchInteractor>
     with WidgetsBindingObserver, SingleTickerProviderStateMixin {
   // The ScrollPosition attached to the _ancestorScrollable, if there's an ancestor
   // Scrollable.
@@ -134,8 +136,8 @@ class _ReadOnlyAndroidDocumentTouchInteractorState extends State<ReadOnlyAndroid
 
   // Overlay controller that displays editing controls, e.g., drag handles,
   // magnifier, and toolbar.
-  final _overlayPortalController =
-      GroupedOverlayPortalController(displayPriority: OverlayGroupPriority.editingControls);
+  final _overlayPortalController = GroupedOverlayPortalController(
+      displayPriority: OverlayGroupPriority.editingControls);
   final _overlayPortalRebuildSignal = SignalNotifier();
   late AndroidDocumentGestureEditingController _editingController;
   final _magnifierFocalPointLink = LeaderLink();
@@ -178,7 +180,8 @@ class _ReadOnlyAndroidDocumentTouchInteractorState extends State<ReadOnlyAndroid
 
     _configureScrollController();
 
-    _overlayController = widget.overlayController ?? MagnifierAndToolbarController();
+    _overlayController =
+        widget.overlayController ?? MagnifierAndToolbarController();
 
     _editingController = AndroidDocumentGestureEditingController(
       selectionLinks: widget.selectionLinks,
@@ -187,7 +190,8 @@ class _ReadOnlyAndroidDocumentTouchInteractorState extends State<ReadOnlyAndroid
     );
 
     widget.readerContext.document.addListener(_onDocumentChange);
-    widget.readerContext.composer.selectionNotifier.addListener(_onSelectionChange);
+    widget.readerContext.composer.selectionNotifier
+        .addListener(_onSelectionChange);
 
     // If we already have a selection, we need to display the caret.
     if (widget.readerContext.composer.selection != null) {
@@ -201,7 +205,8 @@ class _ReadOnlyAndroidDocumentTouchInteractorState extends State<ReadOnlyAndroid
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    _ancestorScrollPosition = context.findAncestorScrollableWithVerticalScroll?.position;
+    _ancestorScrollPosition =
+        context.findAncestorScrollableWithVerticalScroll?.position;
 
     // On the next frame, check if our active scroll position changed to a
     // different instance. If it did, move our listener to the new one.
@@ -227,8 +232,10 @@ class _ReadOnlyAndroidDocumentTouchInteractorState extends State<ReadOnlyAndroid
     }
 
     if (widget.readerContext.composer != oldWidget.readerContext.composer) {
-      oldWidget.readerContext.composer.selectionNotifier.removeListener(_onSelectionChange);
-      widget.readerContext.composer.selectionNotifier.addListener(_onSelectionChange);
+      oldWidget.readerContext.composer.selectionNotifier
+          .removeListener(_onSelectionChange);
+      widget.readerContext.composer.selectionNotifier
+          .addListener(_onSelectionChange);
     }
 
     if (widget.scrollController != oldWidget.scrollController) {
@@ -237,12 +244,14 @@ class _ReadOnlyAndroidDocumentTouchInteractorState extends State<ReadOnlyAndroid
     }
 
     if (widget.overlayController != oldWidget.overlayController) {
-      _overlayController = widget.overlayController ?? MagnifierAndToolbarController();
+      _overlayController =
+          widget.overlayController ?? MagnifierAndToolbarController();
       _editingController.overlayController = _overlayController;
     }
 
     // Selection has changed, we need to update the caret.
-    if (widget.readerContext.composer.selection != oldWidget.readerContext.composer.selection) {
+    if (widget.readerContext.composer.selection !=
+        oldWidget.readerContext.composer.selection) {
       _onSelectionChange();
     }
   }
@@ -280,7 +289,8 @@ class _ReadOnlyAndroidDocumentTouchInteractorState extends State<ReadOnlyAndroid
     });
 
     widget.readerContext.document.removeListener(_onDocumentChange);
-    widget.readerContext.composer.selectionNotifier.removeListener(_onSelectionChange);
+    widget.readerContext.composer.selectionNotifier
+        .removeListener(_onSelectionChange);
 
     _teardownScrollController();
 
@@ -330,8 +340,10 @@ class _ReadOnlyAndroidDocumentTouchInteractorState extends State<ReadOnlyAndroid
     }
 
     // Determines the offset of the editor in the viewport coordinate
-    final editorBox = widget.documentKey.currentContext!.findRenderObject() as RenderSliver;
-    final editorInViewportOffset = viewportBox.localToGlobal(Offset.zero) - editorBox.localToGlobal(Offset.zero);
+    final editorBox =
+        widget.documentKey.currentContext!.findRenderObject() as RenderSliver;
+    final editorInViewportOffset = viewportBox.localToGlobal(Offset.zero) -
+        editorBox.localToGlobal(Offset.zero);
 
     // Determines the offset of the handle in the viewport coordinate
     late Offset handleInViewportOffset;
@@ -419,7 +431,8 @@ class _ReadOnlyAndroidDocumentTouchInteractorState extends State<ReadOnlyAndroid
   /// If this widget doesn't have an ancestor `Scrollable`, then this
   /// widget includes a `ScrollView` and the `ScrollView`'s position
   /// is returned.
-  ScrollPosition get scrollPosition => _ancestorScrollPosition ?? widget.scrollController.position;
+  ScrollPosition get scrollPosition =>
+      _ancestorScrollPosition ?? widget.scrollController.position;
 
   /// Returns the `RenderBox` for the scrolling viewport.
   ///
@@ -432,7 +445,8 @@ class _ReadOnlyAndroidDocumentTouchInteractorState extends State<ReadOnlyAndroid
   RenderBox get viewportBox => context.findViewportBox();
 
   /// Returns the render box for the interactor gesture detector.
-  RenderBox get interactorBox => _interactor.currentContext!.findRenderObject() as RenderBox;
+  RenderBox get interactorBox =>
+      _interactor.currentContext!.findRenderObject() as RenderBox;
 
   Offset _getDocumentOffsetFromGlobalOffset(Offset globalOffset) {
     return _docLayout.getDocumentOffsetFromAncestorOffset(globalOffset);
@@ -487,7 +501,8 @@ class _ReadOnlyAndroidDocumentTouchInteractorState extends State<ReadOnlyAndroid
     );
 
     final didLongPressSelectionStart = _longPressStrategy!.onLongPressStart(
-      tapDownDocumentOffset: _getDocumentOffsetFromGlobalOffset(_globalTapDownOffset!),
+      tapDownDocumentOffset:
+          _getDocumentOffsetFromGlobalOffset(_globalTapDownOffset!),
     );
     if (!didLongPressSelectionStart) {
       _longPressStrategy = null;
@@ -549,7 +564,8 @@ class _ReadOnlyAndroidDocumentTouchInteractorState extends State<ReadOnlyAndroid
       }
     }
 
-    final docPosition = _docLayout.getDocumentPositionNearestToOffset(docOffset);
+    final docPosition =
+        _docLayout.getDocumentPositionNearestToOffset(docOffset);
     readerGesturesLog.fine(" - tapped document position: $docPosition");
 
     if (docPosition == null) {
@@ -561,8 +577,9 @@ class _ReadOnlyAndroidDocumentTouchInteractorState extends State<ReadOnlyAndroid
     }
 
     final selection = widget.readerContext.composer.selection;
-    final didTapOnExistingSelection =
-        selection != null && widget.readerContext.document.doesSelectionContainPosition(selection, docPosition);
+    final didTapOnExistingSelection = selection != null &&
+        widget.readerContext.document
+            .doesSelectionContainPosition(selection, docPosition);
     if (didTapOnExistingSelection) {
       // Toggle the toolbar display when the user taps on the collapsed caret,
       // or on top of an existing selection.
@@ -598,18 +615,21 @@ class _ReadOnlyAndroidDocumentTouchInteractorState extends State<ReadOnlyAndroid
 
     _clearSelection();
 
-    final docPosition = _docLayout.getDocumentPositionNearestToOffset(docOffset);
+    final docPosition =
+        _docLayout.getDocumentPositionNearestToOffset(docOffset);
     readerGesturesLog.fine(" - tapped document position: $docPosition");
     if (docPosition != null) {
       // The user tapped a non-selectable component, so we can't select a word.
       // The editor will remain focused and selection will remain in the nearest
       // selectable component, as set in _onTapUp.
-      final tappedComponent = _docLayout.getComponentByNodeId(docPosition.nodeId)!;
+      final tappedComponent =
+          _docLayout.getComponentByNodeId(docPosition.nodeId)!;
       if (!tappedComponent.isVisualSelectionSupported()) {
         return;
       }
 
-      final wordSelection = getWordSelection(docPosition: docPosition, docLayout: _docLayout);
+      final wordSelection =
+          getWordSelection(docPosition: docPosition, docLayout: _docLayout);
       var didSelectContent = wordSelection != null;
       if (wordSelection != null) {
         _setSelection(wordSelection);
@@ -655,13 +675,15 @@ class _ReadOnlyAndroidDocumentTouchInteractorState extends State<ReadOnlyAndroid
     }
 
     _clearSelection();
-    final docPosition = _docLayout.getDocumentPositionNearestToOffset(docOffset);
+    final docPosition =
+        _docLayout.getDocumentPositionNearestToOffset(docOffset);
     readerGesturesLog.fine(" - tapped document position: $docPosition");
     if (docPosition != null) {
       // The user tapped a non-selectable component, so we can't select a paragraph.
       // The editor will remain focused and selection will remain in the nearest
       // selectable component, as set in _onTapUp.
-      final tappedComponent = _docLayout.getComponentByNodeId(docPosition.nodeId)!;
+      final tappedComponent =
+          _docLayout.getComponentByNodeId(docPosition.nodeId)!;
       if (!tappedComponent.isVisualSelectionSupported()) {
         return;
       }
@@ -684,7 +706,8 @@ class _ReadOnlyAndroidDocumentTouchInteractorState extends State<ReadOnlyAndroid
     _tapDownLongPressTimer?.cancel();
 
     _globalStartDragOffset = details.globalPosition;
-    _dragStartInDoc = _getDocumentOffsetFromGlobalOffset(details.globalPosition);
+    _dragStartInDoc =
+        _getDocumentOffsetFromGlobalOffset(details.globalPosition);
     // We need to record the scroll offset at the beginning of
     // a drag for the case that this interactor is embedded
     // within an ancestor Scrollable. We need to use this value
@@ -718,11 +741,14 @@ class _ReadOnlyAndroidDocumentTouchInteractorState extends State<ReadOnlyAndroid
 
       final fingerDragDelta = _globalDragOffset! - _globalStartDragOffset!;
       final scrollDelta = _dragStartScrollOffset! - scrollPosition.pixels;
-      final fingerDocumentOffset = _docLayout.getDocumentOffsetFromAncestorOffset(details.globalPosition);
-      final fingerDocumentPosition = _docLayout.getDocumentPositionNearestToOffset(
+      final fingerDocumentOffset = _docLayout
+          .getDocumentOffsetFromAncestorOffset(details.globalPosition);
+      final fingerDocumentPosition =
+          _docLayout.getDocumentPositionNearestToOffset(
         _startDragPositionOffset! + fingerDragDelta - Offset(0, scrollDelta),
       );
-      _longPressStrategy!.onLongPressDragUpdate(fingerDocumentOffset, fingerDocumentPosition);
+      _longPressStrategy!
+          .onLongPressDragUpdate(fingerDocumentOffset, fingerDocumentPosition);
       return;
     }
   }
@@ -739,11 +765,17 @@ class _ReadOnlyAndroidDocumentTouchInteractorState extends State<ReadOnlyAndroid
   }
 
   void _updateOverlayControlsOnLongPressDrag() {
-    final extentDocumentOffset = _docLayout.getRectForPosition(widget.readerContext.composer.selection!.extent)!.center;
-    final extentGlobalOffset = _docLayout.getAncestorOffsetFromDocumentOffset(extentDocumentOffset);
-    final extentInteractorOffset = interactorBox.globalToLocal(extentGlobalOffset);
-    final extentViewportOffset = _interactorOffsetInViewport(extentInteractorOffset);
-    _handleAutoScrolling.updateAutoScrollHandleMonitoring(dragEndInViewport: extentViewportOffset);
+    final extentDocumentOffset = _docLayout
+        .getRectForPosition(widget.readerContext.composer.selection!.extent)!
+        .center;
+    final extentGlobalOffset =
+        _docLayout.getAncestorOffsetFromDocumentOffset(extentDocumentOffset);
+    final extentInteractorOffset =
+        interactorBox.globalToLocal(extentGlobalOffset);
+    final extentViewportOffset =
+        _interactorOffsetInViewport(extentInteractorOffset);
+    _handleAutoScrolling.updateAutoScrollHandleMonitoring(
+        dragEndInViewport: extentViewportOffset);
 
     _longPressMagnifierGlobalOffset.value = extentGlobalOffset;
     _overlayPortalRebuildSignal.notifyListeners();
@@ -794,7 +826,8 @@ class _ReadOnlyAndroidDocumentTouchInteractorState extends State<ReadOnlyAndroid
   }
 
   void _onHandleDragStart(HandleType handleType, Offset globalOffset) {
-    final selectionAffinity = widget.readerContext.document.getAffinityForSelection(
+    final selectionAffinity =
+        widget.readerContext.document.getAffinityForSelection(
       widget.readerContext.composer.selection!,
     );
     switch (handleType) {
@@ -842,7 +875,8 @@ class _ReadOnlyAndroidDocumentTouchInteractorState extends State<ReadOnlyAndroid
   void _onHandleDragUpdate(Offset globalOffset) {
     _globalDragOffset = globalOffset;
     _dragEndInInteractor = interactorBox.globalToLocal(globalOffset);
-    final dragEndInViewport = _interactorOffsetInViewport(_dragEndInInteractor!);
+    final dragEndInViewport =
+        _interactorOffsetInViewport(_dragEndInInteractor!);
 
     _updateSelectionForNewDragHandleLocation();
 
@@ -856,8 +890,8 @@ class _ReadOnlyAndroidDocumentTouchInteractorState extends State<ReadOnlyAndroid
   void _updateSelectionForNewDragHandleLocation() {
     final docDragDelta = _globalDragOffset! - _globalStartDragOffset!;
     final dragScrollDelta = _dragStartScrollOffset! - scrollPosition.pixels;
-    final docDragPosition = _docLayout
-        .getDocumentPositionNearestToOffset(_startDragPositionOffset! + docDragDelta - Offset(0, dragScrollDelta));
+    final docDragPosition = _docLayout.getDocumentPositionNearestToOffset(
+        _startDragPositionOffset! + docDragDelta - Offset(0, dragScrollDelta));
 
     if (docDragPosition == null) {
       return;
@@ -904,8 +938,10 @@ class _ReadOnlyAndroidDocumentTouchInteractorState extends State<ReadOnlyAndroid
     // in the document is impacted by auto-scrolling behavior.
     final dragEndInDoc = _interactorOffsetToDocOffset(_dragEndInInteractor!);
 
-    final dragPosition = _docLayout.getDocumentPositionNearestToOffset(dragEndInDoc);
-    readerGesturesLog.finest("Selecting new position during drag: $dragPosition");
+    final dragPosition =
+        _docLayout.getDocumentPositionNearestToOffset(dragEndInDoc);
+    readerGesturesLog
+        .finest("Selecting new position during drag: $dragPosition");
 
     if (dragPosition == null) {
       return;
@@ -931,26 +967,32 @@ class _ReadOnlyAndroidDocumentTouchInteractorState extends State<ReadOnlyAndroid
       base: basePosition,
       extent: extentPosition,
     ));
-    readerGesturesLog.fine("Selected region: ${widget.readerContext.composer.selection}");
+    readerGesturesLog
+        .fine("Selected region: ${widget.readerContext.composer.selection}");
   }
 
   void _positionExpandedHandles() {
     final selection = widget.readerContext.composer.selection;
     if (selection == null) {
-      readerGesturesLog.shout("Tried to update expanded handle offsets but there is no document selection");
+      readerGesturesLog.shout(
+          "Tried to update expanded handle offsets but there is no document selection");
       return;
     }
     if (selection.isCollapsed) {
-      readerGesturesLog.shout("Tried to update expanded handle offsets but the selection is collapsed");
+      readerGesturesLog.shout(
+          "Tried to update expanded handle offsets but the selection is collapsed");
       return;
     }
 
     // Calculate the new rectangles for the upstream and downstream handles.
     final baseHandleRect = _docLayout.getRectForPosition(selection.base)!;
     final extentHandleRect = _docLayout.getRectForPosition(selection.extent)!;
-    final affinity = widget.readerContext.document.getAffinityBetween(base: selection.base, extent: selection.extent);
-    late Rect upstreamHandleRect = affinity == TextAffinity.downstream ? baseHandleRect : extentHandleRect;
-    late Rect downstreamHandleRect = affinity == TextAffinity.downstream ? extentHandleRect : baseHandleRect;
+    final affinity = widget.readerContext.document
+        .getAffinityBetween(base: selection.base, extent: selection.extent);
+    late Rect upstreamHandleRect =
+        affinity == TextAffinity.downstream ? baseHandleRect : extentHandleRect;
+    late Rect downstreamHandleRect =
+        affinity == TextAffinity.downstream ? extentHandleRect : baseHandleRect;
 
     _editingController
       ..removeCaret()
@@ -992,7 +1034,8 @@ class _ReadOnlyAndroidDocumentTouchInteractorState extends State<ReadOnlyAndroid
     );
     selectionRect = Rect.fromPoints(
       _docLayout.getGlobalOffsetFromDocumentOffset(selectionRectInDoc.topLeft),
-      _docLayout.getGlobalOffsetFromDocumentOffset(selectionRectInDoc.bottomRight),
+      _docLayout
+          .getGlobalOffsetFromDocumentOffset(selectionRectInDoc.bottomRight),
     );
 
     // TODO: fix the horizontal placement
@@ -1005,8 +1048,10 @@ class _ReadOnlyAndroidDocumentTouchInteractorState extends State<ReadOnlyAndroid
     //       the left side of the screen. This logic will position the
     //       toolbar near the left side of the content, when the toolbar should
     //       instead be centered across the full width of the document.
-    toolbarTopAnchor = selectionRect.topCenter - const Offset(0, gapBetweenToolbarAndContent);
-    toolbarBottomAnchor = selectionRect.bottomCenter + const Offset(0, gapBetweenToolbarAndContent);
+    toolbarTopAnchor =
+        selectionRect.topCenter - const Offset(0, gapBetweenToolbarAndContent);
+    toolbarBottomAnchor = selectionRect.bottomCenter +
+        const Offset(0, gapBetweenToolbarAndContent);
 
     _editingController.positionToolbar(
       topAnchor: toolbarTopAnchor,
@@ -1044,7 +1089,8 @@ class _ReadOnlyAndroidDocumentTouchInteractorState extends State<ReadOnlyAndroid
         RawGestureDetector(
           behavior: HitTestBehavior.translucent,
           gestures: <Type, GestureRecognizerFactory>{
-            TapSequenceGestureRecognizer: GestureRecognizerFactoryWithHandlers<TapSequenceGestureRecognizer>(
+            TapSequenceGestureRecognizer: GestureRecognizerFactoryWithHandlers<
+                TapSequenceGestureRecognizer>(
               () => TapSequenceGestureRecognizer(),
               (TapSequenceGestureRecognizer recognizer) {
                 recognizer
@@ -1067,7 +1113,8 @@ class _ReadOnlyAndroidDocumentTouchInteractorState extends State<ReadOnlyAndroid
             key: _interactor,
             behavior: HitTestBehavior.translucent,
             gestures: <Type, GestureRecognizerFactory>{
-              EagerPanGestureRecognizer: GestureRecognizerFactoryWithHandlers<EagerPanGestureRecognizer>(
+              EagerPanGestureRecognizer: GestureRecognizerFactoryWithHandlers<
+                  EagerPanGestureRecognizer>(
                 () => EagerPanGestureRecognizer(),
                 (EagerPanGestureRecognizer recognizer) {
                   recognizer
@@ -1149,12 +1196,14 @@ class AndroidDocumentTouchEditingControls extends StatefulWidget {
   /// If no clipper factory method is provided, then the overlay controls
   /// will be allowed to appear anywhere in the overlay in which they sit
   /// (probably the entire screen).
-  final CustomClipper<Rect> Function(BuildContext overlayContext)? createOverlayControlsClipper;
+  final CustomClipper<Rect> Function(BuildContext overlayContext)?
+      createOverlayControlsClipper;
 
   /// The color of the Android-style drag handles.
   final Color handleColor;
 
-  final void Function(HandleType handleType, Offset globalOffset)? onHandleDragStart;
+  final void Function(HandleType handleType, Offset globalOffset)?
+      onHandleDragStart;
 
   final void Function(Offset globalOffset)? onHandleDragUpdate;
 
@@ -1174,7 +1223,8 @@ class AndroidDocumentTouchEditingControls extends StatefulWidget {
   State createState() => _AndroidDocumentTouchEditingControlsState();
 }
 
-class _AndroidDocumentTouchEditingControlsState extends State<AndroidDocumentTouchEditingControls>
+class _AndroidDocumentTouchEditingControlsState
+    extends State<AndroidDocumentTouchEditingControls>
     with SingleTickerProviderStateMixin {
   // These global keys are assigned to each draggable handle to
   // prevent a strange dragging issue.
@@ -1249,10 +1299,12 @@ class _AndroidDocumentTouchEditingControlsState extends State<AndroidDocumentTou
       _isDraggingHandle = true;
       // We map global to local instead of using  details.localPosition because
       // this drag event started in a handle, not within this overall widget.
-      _localDragOffset = (context.findRenderObject() as RenderBox).globalToLocal(details.globalPosition);
+      _localDragOffset = (context.findRenderObject() as RenderBox)
+          .globalToLocal(details.globalPosition);
     });
 
-    widget.onHandleDragStart?.call(HandleType.collapsed, details.globalPosition);
+    widget.onHandleDragStart
+        ?.call(HandleType.collapsed, details.globalPosition);
   }
 
   void _onUpstreamHandlePanStart(DragStartDetails details) {
@@ -1262,7 +1314,8 @@ class _AndroidDocumentTouchEditingControlsState extends State<AndroidDocumentTou
 
   void _onDownstreamHandlePanStart(DragStartDetails details) {
     _onExpandedHandleDragStart(details);
-    widget.onHandleDragStart?.call(HandleType.downstream, details.globalPosition);
+    widget.onHandleDragStart
+        ?.call(HandleType.downstream, details.globalPosition);
   }
 
   void _onExpandedHandleDragStart(DragStartDetails details) {
@@ -1271,7 +1324,8 @@ class _AndroidDocumentTouchEditingControlsState extends State<AndroidDocumentTou
       _isDraggingHandle = true;
       // We map global to local instead of using  details.localPosition because
       // this drag event started in a handle, not within this overall widget.
-      _localDragOffset = (context.findRenderObject() as RenderBox).globalToLocal(details.globalPosition);
+      _localDragOffset = (context.findRenderObject() as RenderBox)
+          .globalToLocal(details.globalPosition);
     });
   }
 
@@ -1318,7 +1372,8 @@ class _AndroidDocumentTouchEditingControlsState extends State<AndroidDocumentTou
           // Remove the keyboard from the space that we occupy so that
           // clipping calculations apply to the expected visual borders,
           // instead of applying underneath the keyboard.
-          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
           child: ClipRect(
             clipper: widget.createOverlayControlsClipper?.call(context),
             child: SizedBox(
@@ -1336,12 +1391,15 @@ class _AndroidDocumentTouchEditingControlsState extends State<AndroidDocumentTou
                   if (!CurrentPlatform.isWeb) //
                     ..._buildHandles(),
                   // Build the focal point for the magnifier
-                  if (_isDraggingHandle || widget.longPressMagnifierGlobalOffset.value != null)
+                  if (_isDraggingHandle ||
+                      widget.longPressMagnifierGlobalOffset.value != null)
                     _buildMagnifierFocalPoint(),
                   // Build the magnifier (this needs to be done before building
                   // the handles so that the magnifier doesn't show the handles.
                   // We don't show magnifier on web because the browser already displays the native magnifier.
-                  if (!CurrentPlatform.isWeb && widget.editingController.shouldDisplayMagnifier) _buildMagnifier(),
+                  if (!CurrentPlatform.isWeb &&
+                      widget.editingController.shouldDisplayMagnifier)
+                    _buildMagnifier(),
                   // Build the editing toolbar.
                   // We don't show toolbar on web because the browser already displays the native toolbar.
                   if (!CurrentPlatform.isWeb &&
@@ -1394,12 +1452,14 @@ class _AndroidDocumentTouchEditingControlsState extends State<AndroidDocumentTou
   List<Widget> _buildHandles() {
     if (!widget.editingController.shouldDisplayCollapsedHandle &&
         !widget.editingController.shouldDisplayExpandedHandles) {
-      editorGesturesLog.finer('Not building overlay handles because there is no selection');
+      editorGesturesLog
+          .finer('Not building overlay handles because there is no selection');
       // There is no selection. Draw nothing.
       return [];
     }
 
-    if (widget.editingController.shouldDisplayCollapsedHandle && !_isDraggingExpandedHandle) {
+    if (widget.editingController.shouldDisplayCollapsedHandle &&
+        !_isDraggingExpandedHandle) {
       // Note: we don't build the collapsed handle if we're currently dragging
       //       the base or extent because, if we did, then when the user drags
       //       crosses the base and extent, we'd suddenly jump from an expanded
@@ -1481,7 +1541,8 @@ class _AndroidDocumentTouchEditingControlsState extends State<AndroidDocumentTou
           child: Container(
             color: widget.showDebugPaint ? Colors.green : Colors.transparent,
             child: AnimatedOpacity(
-              opacity: handleType == HandleType.collapsed && widget.editingController.isCollapsedHandleAutoHidden
+              opacity: handleType == HandleType.collapsed &&
+                      widget.editingController.isCollapsedHandleAutoHidden
                   ? 0.0
                   : 1.0,
               duration: const Duration(milliseconds: 150),
@@ -1532,7 +1593,8 @@ class _AndroidDocumentTouchEditingControlsState extends State<AndroidDocumentTou
     // target. This magnifier follows that target.
     return AndroidFollowingMagnifier(
       layerLink: widget.editingController.magnifierFocalPointLink,
-      offsetFromFocalPoint: Offset(0, -54 * MediaQuery.devicePixelRatioOf(context)),
+      offsetFromFocalPoint:
+          Offset(0, -54 * MediaQuery.devicePixelRatioOf(context)),
     );
   }
 
@@ -1555,8 +1617,10 @@ class _AndroidDocumentTouchEditingControlsState extends State<AndroidDocumentTou
       delegate: ToolbarPositionDelegate(
         // TODO: handle situation where document isn't full screen
         textFieldGlobalOffset: Offset.zero,
-        desiredTopAnchorInTextField: widget.editingController.toolbarTopAnchor!, //toolbarTopAnchor,
-        desiredBottomAnchorInTextField: widget.editingController.toolbarBottomAnchor!, //toolbarBottomAnchor,
+        desiredTopAnchorInTextField:
+            widget.editingController.toolbarTopAnchor!, //toolbarTopAnchor,
+        desiredBottomAnchorInTextField: widget
+            .editingController.toolbarBottomAnchor!, //toolbarBottomAnchor,
         screenPadding: widget.editingController.screenPadding,
       ),
       child: IgnorePointer(

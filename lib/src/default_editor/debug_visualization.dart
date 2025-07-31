@@ -5,11 +5,15 @@ import 'package:super_editor/src/infrastructure/sliver_hybrid_stack.dart';
 
 class SuperEditorDebugVisuals extends InheritedWidget {
   static SuperEditorDebugVisualsConfig of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<SuperEditorDebugVisuals>()!.config;
+    return context
+        .dependOnInheritedWidgetOfExactType<SuperEditorDebugVisuals>()!
+        .config;
   }
 
   static SuperEditorDebugVisualsConfig? maybeOf(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<SuperEditorDebugVisuals>()?.config;
+    return context
+        .dependOnInheritedWidgetOfExactType<SuperEditorDebugVisuals>()
+        ?.config;
   }
 
   const SuperEditorDebugVisuals({
@@ -129,7 +133,8 @@ class SuperEditorImeDebugVisuals extends StatelessWidget {
             Align(
               alignment: Alignment.topCenter,
               child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                 decoration: BoxDecoration(
                   color: color,
                   borderRadius: const BorderRadius.only(

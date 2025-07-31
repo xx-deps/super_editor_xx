@@ -28,7 +28,8 @@ void main() {
   });
 }
 
-Future<void> _pumpToolbarScaffold(WidgetTester tester, {required Widget child}) async {
+Future<void> _pumpToolbarScaffold(WidgetTester tester,
+    {required Widget child}) async {
   tester.view
     ..physicalSize = const Size(500, 500)
     ..platformDispatcher.textScaleFactorTestValue = 1.0

@@ -73,7 +73,8 @@ class ItemSelectionList<T> extends StatefulWidget {
 }
 
 @visibleForTesting
-class ItemSelectionListState<T> extends State<ItemSelectionList<T>> with SingleTickerProviderStateMixin {
+class ItemSelectionListState<T> extends State<ItemSelectionList<T>>
+    with SingleTickerProviderStateMixin {
   final GlobalKey _scrollableKey = GlobalKey();
 
   @visibleForTesting
@@ -180,7 +181,8 @@ class ItemSelectionListState<T> extends State<ItemSelectionList<T>> with SingleT
       return KeyEventResult.handled;
     }
 
-    if (event.logicalKey == LogicalKeyboardKey.enter || event.logicalKey == LogicalKeyboardKey.numpadEnter) {
+    if (event.logicalKey == LogicalKeyboardKey.enter ||
+        event.logicalKey == LogicalKeyboardKey.numpadEnter) {
       if (_activeIndex == null) {
         // The user pressed ENTER without an active item.
         // Clear the selected item.
@@ -216,7 +218,8 @@ class ItemSelectionListState<T> extends State<ItemSelectionList<T>> with SingleT
     }
 
     setState(() {
-      _activateItem(newActiveIndex, animationDuration: const Duration(milliseconds: 100));
+      _activateItem(newActiveIndex,
+          animationDuration: const Duration(milliseconds: 100));
     });
 
     return KeyEventResult.handled;
@@ -294,4 +297,5 @@ class ItemSelectionListState<T> extends State<ItemSelectionList<T>> with SingleT
 /// The active item is the currently focused item in the list, which can be selected by pressing ENTER.
 ///
 /// The provided [onTap] must be called when the button is tapped.
-typedef SelectableListItemBuilder<T> = Widget Function(BuildContext context, T item, bool isActive, VoidCallback onTap);
+typedef SelectableListItemBuilder<T> = Widget Function(
+    BuildContext context, T item, bool isActive, VoidCallback onTap);

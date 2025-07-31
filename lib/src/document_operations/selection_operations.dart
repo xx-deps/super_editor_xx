@@ -35,19 +35,23 @@ bool moveSelectionToNearestSelectableNode({
   NodePosition? newPosition;
 
   // Try to find a new selection downstream.
-  final downstreamNode = getDownstreamSelectableNodeAfter(document, documentLayoutResolver, startingNode);
+  final downstreamNode = getDownstreamSelectableNodeAfter(
+      document, documentLayoutResolver, startingNode);
   if (downstreamNode != null) {
     newNodeId = downstreamNode.id;
-    final nextComponent = documentLayoutResolver().getComponentByNodeId(newNodeId);
+    final nextComponent =
+        documentLayoutResolver().getComponentByNodeId(newNodeId);
     newPosition = nextComponent?.getBeginningPosition();
   }
 
   // Try to find a new selection upstream.
   if (newPosition == null) {
-    final upstreamNode = getUpstreamSelectableNodeBefore(document, documentLayoutResolver, startingNode);
+    final upstreamNode = getUpstreamSelectableNodeBefore(
+        document, documentLayoutResolver, startingNode);
     if (upstreamNode != null) {
       newNodeId = upstreamNode.id;
-      final previousComponent = documentLayoutResolver().getComponentByNodeId(newNodeId);
+      final previousComponent =
+          documentLayoutResolver().getComponentByNodeId(newNodeId);
       newPosition = previousComponent?.getBeginningPosition();
     }
   }
@@ -100,7 +104,8 @@ DocumentNode? getDownstreamSelectableNodeAfter(
     selectableNode = document.getNodeAfter(prevNode);
 
     if (selectableNode != null) {
-      final nextComponent = documentLayoutResolver().getComponentByNodeId(selectableNode.id);
+      final nextComponent =
+          documentLayoutResolver().getComponentByNodeId(selectableNode.id);
       if (nextComponent != null) {
         foundSelectableNode = nextComponent.isVisualSelectionSupported();
       }
@@ -125,7 +130,8 @@ DocumentNode? getUpstreamSelectableNodeBefore(
     selectableNode = document.getNodeBefore(prevNode);
 
     if (selectableNode != null) {
-      final nextComponent = documentLayoutResolver().getComponentByNodeId(selectableNode.id);
+      final nextComponent =
+          documentLayoutResolver().getComponentByNodeId(selectableNode.id);
       if (nextComponent != null) {
         foundSelectableNode = nextComponent.isVisualSelectionSupported();
       }
@@ -147,7 +153,8 @@ bool selectWordAt({
   required DocumentLayout docLayout,
   required ValueNotifier<DocumentSelection?> selection,
 }) {
-  final newSelection = getWordSelection(docPosition: docPosition, docLayout: docLayout);
+  final newSelection =
+      getWordSelection(docPosition: docPosition, docLayout: docLayout);
   if (newSelection != null) {
     selection.value = newSelection;
     return true;
@@ -156,7 +163,8 @@ bool selectWordAt({
   }
 }
 
-bool selectBlockAt(DocumentPosition position, ValueNotifier<DocumentSelection?> selection) {
+bool selectBlockAt(
+    DocumentPosition position, ValueNotifier<DocumentSelection?> selection) {
   if (position.nodePosition is! UpstreamDownstreamNodePosition) {
     return false;
   }
@@ -215,11 +223,13 @@ bool moveCaretUpstream({
   }
 
   String newExtentNodeId = nodeId;
-  NodePosition? newExtentNodePosition = extentComponent.movePositionLeft(currentExtent.nodePosition, movementModifier);
+  NodePosition? newExtentNodePosition = extentComponent.movePositionLeft(
+      currentExtent.nodePosition, movementModifier);
 
   if (newExtentNodePosition == null) {
     // Move to next node
-    final nextNode = getUpstreamSelectableNodeBefore(editor.document, () => documentLayout, node);
+    final nextNode = getUpstreamSelectableNodeBefore(
+        editor.document, () => documentLayout, node);
 
     if (nextNode == null) {
       // We're at the beginning of the document and can't go anywhere.
@@ -229,7 +239,8 @@ bool moveCaretUpstream({
     newExtentNodeId = nextNode.id;
     final nextComponent = documentLayout.getComponentByNodeId(nextNode.id);
     if (nextComponent == null) {
-      throw Exception('Could not find component in document layout for the upstream node with ID: ${nextNode.id}');
+      throw Exception(
+          'Could not find component in document layout for the upstream node with ID: ${nextNode.id}');
     }
     newExtentNodePosition = nextComponent.getEndPosition();
   }
@@ -293,11 +304,13 @@ bool moveCaretDownstream({
   }
 
   String newExtentNodeId = nodeId;
-  NodePosition? newExtentNodePosition = extentComponent.movePositionRight(currentExtent.nodePosition, movementModifier);
+  NodePosition? newExtentNodePosition = extentComponent.movePositionRight(
+      currentExtent.nodePosition, movementModifier);
 
   if (newExtentNodePosition == null) {
     // Move to next node
-    final nextNode = getDownstreamSelectableNodeAfter(editor.document, () => documentLayout, node);
+    final nextNode = getDownstreamSelectableNodeAfter(
+        editor.document, () => documentLayout, node);
 
     if (nextNode == null) {
       // We're at the beginning/end of the document and can't go
@@ -308,7 +321,8 @@ bool moveCaretDownstream({
     newExtentNodeId = nextNode.id;
     final nextComponent = documentLayout.getComponentByNodeId(nextNode.id);
     if (nextComponent == null) {
-      throw Exception('Could not find component in document layout for the downstream node with ID: ${nextNode.id}');
+      throw Exception(
+          'Could not find component in document layout for the downstream node with ID: ${nextNode.id}');
     }
     newExtentNodePosition = nextComponent.getBeginningPosition();
   }
@@ -374,20 +388,25 @@ bool moveCaretUp({
   }
 
   String newExtentNodeId = nodeId;
-  NodePosition? newExtentNodePosition = extentComponent.movePositionUp(currentExtent.nodePosition);
+  NodePosition? newExtentNodePosition =
+      extentComponent.movePositionUp(currentExtent.nodePosition);
 
   if (newExtentNodePosition == null) {
     // Move to next node
-    final nextNode = getUpstreamSelectableNodeBefore(editor.document, () => documentLayout, node);
+    final nextNode = getUpstreamSelectableNodeBefore(
+        editor.document, () => documentLayout, node);
     if (nextNode != null) {
       newExtentNodeId = nextNode.id;
       final nextComponent = documentLayout.getComponentByNodeId(nextNode.id);
       if (nextComponent == null) {
-        editorOpsLog.shout("Tried to obtain non-existent component by node id: $newExtentNodeId");
+        editorOpsLog.shout(
+            "Tried to obtain non-existent component by node id: $newExtentNodeId");
         return false;
       }
-      final offsetToMatch = extentComponent.getOffsetForPosition(currentExtent.nodePosition);
-      newExtentNodePosition = nextComponent.getEndPositionNearX(offsetToMatch.dx);
+      final offsetToMatch =
+          extentComponent.getOffsetForPosition(currentExtent.nodePosition);
+      newExtentNodePosition =
+          nextComponent.getEndPositionNearX(offsetToMatch.dx);
     } else {
       // We're at the top of the document. Move the cursor to the
       // beginning of the current node.
@@ -457,20 +476,25 @@ bool moveCaretDown({
   }
 
   String newExtentNodeId = nodeId;
-  NodePosition? newExtentNodePosition = extentComponent.movePositionDown(currentExtent.nodePosition);
+  NodePosition? newExtentNodePosition =
+      extentComponent.movePositionDown(currentExtent.nodePosition);
 
   if (newExtentNodePosition == null) {
     // Move to next node
-    final nextNode = getDownstreamSelectableNodeAfter(editor.document, () => documentLayout, node);
+    final nextNode = getDownstreamSelectableNodeAfter(
+        editor.document, () => documentLayout, node);
     if (nextNode != null) {
       newExtentNodeId = nextNode.id;
       final nextComponent = documentLayout.getComponentByNodeId(nextNode.id);
       if (nextComponent == null) {
-        editorOpsLog.shout("Tried to obtain non-existent component by node id: $newExtentNodeId");
+        editorOpsLog.shout(
+            "Tried to obtain non-existent component by node id: $newExtentNodeId");
         return false;
       }
-      final offsetToMatch = extentComponent.getOffsetForPosition(currentExtent.nodePosition);
-      newExtentNodePosition = nextComponent.getBeginningPositionNearX(offsetToMatch.dx);
+      final offsetToMatch =
+          extentComponent.getOffsetForPosition(currentExtent.nodePosition);
+      newExtentNodePosition =
+          nextComponent.getBeginningPositionNearX(offsetToMatch.dx);
     } else {
       // We're at the bottom of the document. Move the cursor to the
       // end of the current node.
@@ -558,12 +582,14 @@ String _textInSelection({
 
     if (i == 0) {
       // This is the first node and it may be partially selected.
-      final baseSelectionPosition = selectedNode.id == documentSelection.base.nodeId
-          ? documentSelection.base.nodePosition
-          : documentSelection.extent.nodePosition;
+      final baseSelectionPosition =
+          selectedNode.id == documentSelection.base.nodeId
+              ? documentSelection.base.nodePosition
+              : documentSelection.extent.nodePosition;
 
-      final extentSelectionPosition =
-          selectedNodes.length > 1 ? selectedNode.endPosition : documentSelection.extent.nodePosition;
+      final extentSelectionPosition = selectedNodes.length > 1
+          ? selectedNode.endPosition
+          : documentSelection.extent.nodePosition;
 
       nodeSelection = selectedNode.computeSelection(
         base: baseSelectionPosition,

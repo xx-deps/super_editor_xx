@@ -73,10 +73,12 @@ class EditorSelectionAndFocusPolicy extends StatefulWidget {
   final Widget child;
 
   @override
-  State<EditorSelectionAndFocusPolicy> createState() => _EditorSelectionAndFocusPolicyState();
+  State<EditorSelectionAndFocusPolicy> createState() =>
+      _EditorSelectionAndFocusPolicyState();
 }
 
-class _EditorSelectionAndFocusPolicyState extends State<EditorSelectionAndFocusPolicy> {
+class _EditorSelectionAndFocusPolicyState
+    extends State<EditorSelectionAndFocusPolicy> {
   bool _wasFocused = false;
   DocumentSelection? _previousSelection;
 
@@ -117,9 +119,12 @@ class _EditorSelectionAndFocusPolicyState extends State<EditorSelectionAndFocusP
   void _onFocusChange() {
     // Ensure the editor has a selection when focused.
     if (!_wasFocused && widget.focusNode.hasFocus) {
-      if (widget.restorePreviousSelectionOnGainFocus && _previousSelection != null) {
-        if (widget.document.getNodeById(_previousSelection!.base.nodeId) == null ||
-            widget.document.getNodeById(_previousSelection!.extent.nodeId) == null) {
+      if (widget.restorePreviousSelectionOnGainFocus &&
+          _previousSelection != null) {
+        if (widget.document.getNodeById(_previousSelection!.base.nodeId) ==
+                null ||
+            widget.document.getNodeById(_previousSelection!.extent.nodeId) ==
+                null) {
           editorPoliciesLog.finest(
               "[${widget.runtimeType}] - not restoring previous editor selection because one of the selected nodes was deleted");
           return;
@@ -136,12 +141,14 @@ class _EditorSelectionAndFocusPolicyState extends State<EditorSelectionAndFocusP
         }
 
         // Restore the previous selection.
-        editorPoliciesLog
-            .finest("[${widget.runtimeType}] - restoring previous editor selection because the editor re-gained focus");
+        editorPoliciesLog.finest(
+            "[${widget.runtimeType}] - restoring previous editor selection because the editor re-gained focus");
         final previousSelection = _previousSelection!;
         late final DocumentSelection restoredSelection;
-        final baseNode = widget.editor.context.document.getNodeById(previousSelection.base.nodeId);
-        final extentNode = widget.editor.context.document.getNodeById(previousSelection.extent.nodeId);
+        final baseNode = widget.editor.context.document
+            .getNodeById(previousSelection.base.nodeId);
+        final extentNode = widget.editor.context.document
+            .getNodeById(previousSelection.extent.nodeId);
         if (baseNode == null && extentNode == null) {
           // The node(s) where the selection was previously are gone. Possibly deleted.
           // Therefore, we can't restore the previous selection. Fizzle.
@@ -154,7 +161,8 @@ class _EditorSelectionAndFocusPolicyState extends State<EditorSelectionAndFocusP
             // type of content in the node changed. Either way, we can't restore this selection.
             return;
           }
-          if (!extentNode.containsPosition(previousSelection.extent.nodePosition)) {
+          if (!extentNode
+              .containsPosition(previousSelection.extent.nodePosition)) {
             // Either the extent node content changed and the selection no longer fits, or the
             // type of content in the node changed. Either way, we can't restore this selection.
             return;
@@ -165,13 +173,15 @@ class _EditorSelectionAndFocusPolicyState extends State<EditorSelectionAndFocusP
           restoredSelection = previousSelection;
         } else if (baseNode == null) {
           // The base node disappeared, but the extent node remains.
-          if (!extentNode!.containsPosition(previousSelection.extent.nodePosition)) {
+          if (!extentNode!
+              .containsPosition(previousSelection.extent.nodePosition)) {
             // Either the extent node content changed and the selection no longer fits, or the
             // type of content in the node changed. Either way, we can't restore this selection.
             return;
           }
 
-          restoredSelection = DocumentSelection.collapsed(position: previousSelection.extent);
+          restoredSelection =
+              DocumentSelection.collapsed(position: previousSelection.extent);
         } else if (extentNode == null) {
           // The extent node disappeared, but the base node remains.
           if (!baseNode.containsPosition(previousSelection.base.nodePosition)) {
@@ -180,7 +190,8 @@ class _EditorSelectionAndFocusPolicyState extends State<EditorSelectionAndFocusP
             return;
           }
 
-          restoredSelection = DocumentSelection.collapsed(position: previousSelection.base);
+          restoredSelection =
+              DocumentSelection.collapsed(position: previousSelection.base);
         }
 
         widget.editor.execute([
@@ -192,8 +203,8 @@ class _EditorSelectionAndFocusPolicyState extends State<EditorSelectionAndFocusP
         ]);
       } else if (widget.placeCaretAtEndOfDocumentOnGainFocus) {
         // Place the caret at the end of the document.
-        editorPoliciesLog
-            .finest("[${widget.runtimeType}] - placing caret at end of document because the editor gained focus");
+        editorPoliciesLog.finest(
+            "[${widget.runtimeType}] - placing caret at end of document because the editor gained focus");
         if (!widget.isDocumentLayoutAvailable()) {
           // We are focused, but the document hasn't been laid out yet. This could happen if SuperEditor has autofocus.
           // Wait until the end of the frame, so we have access to the document layout.
@@ -209,7 +220,8 @@ class _EditorSelectionAndFocusPolicyState extends State<EditorSelectionAndFocusP
           return;
         }
 
-        DocumentPosition? position = widget.getDocumentLayout().findLastSelectablePosition();
+        DocumentPosition? position =
+            widget.getDocumentLayout().findLastSelectablePosition();
         if (position != null) {
           widget.editor.execute([
             ChangeSelectionRequest(
@@ -225,8 +237,10 @@ class _EditorSelectionAndFocusPolicyState extends State<EditorSelectionAndFocusP
     }
 
     // (Maybe) remove the editor's selection when it loses focus.
-    if (!widget.focusNode.hasFocus && widget.clearSelectionWhenEditorLosesFocus) {
-      editorPoliciesLog.finest("[${widget.runtimeType}] - clearing editor selection because the editor lost all focus");
+    if (!widget.focusNode.hasFocus &&
+        widget.clearSelectionWhenEditorLosesFocus) {
+      editorPoliciesLog.finest(
+          "[${widget.runtimeType}] - clearing editor selection because the editor lost all focus");
 
       widget.editor.execute([
         const ClearSelectionRequest(),

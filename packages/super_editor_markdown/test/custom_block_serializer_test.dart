@@ -11,9 +11,11 @@ void main() {
       final markdown = serializeDocumentToMarkdown(
         MutableDocument(
           nodes: [
-            ParagraphNode(id: Editor.createNodeId(), text: AttributedText("Paragraph 1")),
+            ParagraphNode(
+                id: Editor.createNodeId(), text: AttributedText("Paragraph 1")),
             UpsellNode(Editor.createNodeId()),
-            ParagraphNode(id: Editor.createNodeId(), text: AttributedText("Paragraph 2")),
+            ParagraphNode(
+                id: Editor.createNodeId(), text: AttributedText("Paragraph 2")),
           ],
         ),
         customNodeSerializers: [UpsellSerializer()],
@@ -44,7 +46,8 @@ Paragraph 2''',
                 "blockType": NamedAttribution("callout"),
               },
             ),
-            ParagraphNode(id: Editor.createNodeId(), text: AttributedText("Paragraph 2")),
+            ParagraphNode(
+                id: Editor.createNodeId(), text: AttributedText("Paragraph 2")),
           ],
         ),
         customNodeSerializers: [CalloutSerializer()],

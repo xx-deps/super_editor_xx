@@ -88,13 +88,15 @@ class SimulatedClipboard {
   /// to the platform, and responds to those messages as a simulated
   /// clipboard.
   void init() {
-    _tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(SystemChannels.platform, _methodCallHandler);
+    _tester.binding.defaultBinaryMessenger
+        .setMockMethodCallHandler(SystemChannels.platform, _methodCallHandler);
   }
 
   /// Stops intercepting [Clipboard] messages sent from Flutter to
   /// the platform.
   void dispose() {
-    _tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(SystemChannels.platform, null);
+    _tester.binding.defaultBinaryMessenger
+        .setMockMethodCallHandler(SystemChannels.platform, null);
   }
 
   Future<dynamic> _methodCallHandler(MethodCall call) async {

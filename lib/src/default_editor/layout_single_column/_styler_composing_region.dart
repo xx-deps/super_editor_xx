@@ -10,7 +10,8 @@ import '_presenter.dart';
 
 /// [SingleColumnLayoutStylePhase] that draws an underline beneath the text in the IME's
 /// composing region.
-class SingleColumnLayoutComposingRegionStyler extends SingleColumnLayoutStylePhase {
+class SingleColumnLayoutComposingRegionStyler
+    extends SingleColumnLayoutStylePhase {
   SingleColumnLayoutComposingRegionStyler({
     required Document document,
     required ValueListenable<DocumentRange?> composingRegion,
@@ -33,8 +34,10 @@ class SingleColumnLayoutComposingRegionStyler extends SingleColumnLayoutStylePha
   final bool _showComposingRegionUnderline;
 
   @override
-  SingleColumnLayoutViewModel style(Document document, SingleColumnLayoutViewModel viewModel) {
-    editorStyleLog.finest("(Re)calculating composing region view model for document layout");
+  SingleColumnLayoutViewModel style(
+      Document document, SingleColumnLayoutViewModel viewModel) {
+    editorStyleLog.finest(
+        "(Re)calculating composing region view model for document layout");
     final documentComposingRegion = _composingRegion.value;
     if (documentComposingRegion == null) {
       // There's nothing for us to style if there's no composing region. Return the
@@ -50,7 +53,8 @@ class SingleColumnLayoutComposingRegionStyler extends SingleColumnLayoutStylePha
       padding: viewModel.padding,
       componentViewModels: [
         for (final previousViewModel in viewModel.componentViewModels) //
-          _applyComposingRegion(previousViewModel.copy(), documentComposingRegion),
+          _applyComposingRegion(
+              previousViewModel.copy(), documentComposingRegion),
       ],
     );
   }
@@ -87,13 +91,17 @@ class SingleColumnLayoutComposingRegionStyler extends SingleColumnLayoutStylePha
     editorStyleLog.fine("Node selection (${node.id}): $nodeSelection");
 
     TextRange? textComposingRegion;
-    if (documentComposingRegion.start.nodeId == documentComposingRegion.end.nodeId &&
+    if (documentComposingRegion.start.nodeId ==
+            documentComposingRegion.end.nodeId &&
         documentComposingRegion.start.nodeId == node.id) {
       // There's a composing region and it's entirely within this text node.
       // TODO: handle the possibility of a composing region extending across multiple nodes.
-      final startPosition = documentComposingRegion.start.nodePosition as TextNodePosition;
-      final endPosition = documentComposingRegion.end.nodePosition as TextNodePosition;
-      textComposingRegion = TextRange(start: startPosition.offset, end: endPosition.offset);
+      final startPosition =
+          documentComposingRegion.start.nodePosition as TextNodePosition;
+      final endPosition =
+          documentComposingRegion.end.nodePosition as TextNodePosition;
+      textComposingRegion =
+          TextRange(start: startPosition.offset, end: endPosition.offset);
     }
 
     viewModel
@@ -131,7 +139,8 @@ class SingleColumnLayoutComposingRegionStyler extends SingleColumnLayoutStylePha
       final extentNodePosition = documentRange.end.nodePosition;
       late NodeSelection? nodeSelection;
       try {
-        nodeSelection = node.computeSelection(base: baseNodePosition, extent: extentNodePosition);
+        nodeSelection = node.computeSelection(
+            base: baseNodePosition, extent: extentNodePosition);
       } catch (exception) {
         // This situation can happen in the moment between a document change and
         // a corresponding selection change. For example: deleting an image and
@@ -156,7 +165,9 @@ class SingleColumnLayoutComposingRegionStyler extends SingleColumnLayoutStylePha
         editorStyleLog.finer('   - ${node.id}');
       }
 
-      if (selectedNodes.firstWhereOrNull((selectedNode) => selectedNode.id == node.id) == null) {
+      if (selectedNodes
+              .firstWhereOrNull((selectedNode) => selectedNode.id == node.id) ==
+          null) {
         // The document selection does not contain the node we're interested in. Return.
         editorStyleLog.finer(' - this node is not in the selection');
         return null;
@@ -185,11 +196,14 @@ class SingleColumnLayoutComposingRegionStyler extends SingleColumnLayoutStylePha
           nodeId: node.id,
           nodeSelection: node.computeSelection(
             base: isBase ? node.beginningPosition : node.beginningPosition,
-            extent: isBase ? documentRange.start.nodePosition : documentRange.end.nodePosition,
+            extent: isBase
+                ? documentRange.start.nodePosition
+                : documentRange.end.nodePosition,
           ),
         );
       } else {
-        editorStyleLog.finer(' - this node is fully selected within the selection');
+        editorStyleLog
+            .finer(' - this node is fully selected within the selection');
         // Multiple nodes are selected and this node is neither the top
         // or the bottom node, therefore this entire node is selected.
         return _DocumentNodeSelection(

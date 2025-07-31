@@ -28,7 +28,8 @@ class TextLayoutCaret extends StatefulWidget {
 }
 
 @visibleForTesting
-class TextLayoutCaretState extends State<TextLayoutCaret> with TickerProviderStateMixin {
+class TextLayoutCaretState extends State<TextLayoutCaret>
+    with TickerProviderStateMixin {
   late BlinkController _blinkController;
 
   @override
@@ -89,11 +90,14 @@ class TextLayoutCaretState extends State<TextLayoutCaret> with TickerProviderSta
   }
 
   @visibleForTesting
-  bool get isCaretPresent => widget.position != null && widget.position!.offset >= 0;
+  bool get isCaretPresent =>
+      widget.position != null && widget.position!.offset >= 0;
 
   @visibleForTesting
   Offset? get caretOffset => isCaretPresent
-      ? widget.textLayout.getOffsetForCaret(widget.position!).translate(-widget.style.width / 2, 0.0)
+      ? widget.textLayout
+          .getOffsetForCaret(widget.position!)
+          .translate(-widget.style.width / 2, 0.0)
       : null;
 
   @visibleForTesting
@@ -103,15 +107,19 @@ class TextLayoutCaretState extends State<TextLayoutCaret> with TickerProviderSta
       : null;
 
   @visibleForTesting
-  Rect? get localCaretGeometry => isCaretPresent ? caretOffset! & Size(widget.style.width, caretHeight!) : null;
+  Rect? get localCaretGeometry => isCaretPresent
+      ? caretOffset! & Size(widget.style.width, caretHeight!)
+      : null;
 
   Rect? get globalCaretGeometry {
     if (!isCaretPresent) {
       return null;
     }
 
-    final topLeftInGlobalSpace = (context.findRenderObject() as RenderBox).localToGlobal(Offset.zero);
-    return localCaretGeometry!.translate(topLeftInGlobalSpace.dx, topLeftInGlobalSpace.dy);
+    final topLeftInGlobalSpace =
+        (context.findRenderObject() as RenderBox).localToGlobal(Offset.zero);
+    return localCaretGeometry!
+        .translate(topLeftInGlobalSpace.dx, topLeftInGlobalSpace.dy);
   }
 
   @override
@@ -179,7 +187,9 @@ class CaretPainter extends CustomPainter {
         //       update painter to support generic geometry
         _caretStyle.borderRadius.resolve(TextDirection.ltr).topLeft,
       ),
-      Paint()..color = _caretStyle.color.withValues(alpha: blinkController?.opacity ?? 1.0),
+      Paint()
+        ..color = _caretStyle.color
+            .withValues(alpha: blinkController?.opacity ?? 1.0),
     );
   }
 

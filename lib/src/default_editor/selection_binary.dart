@@ -20,7 +20,9 @@ class BinaryNodePosition implements NodePosition {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is BinaryNodePosition && runtimeType == other.runtimeType && isIncluded == other.isIncluded;
+      other is BinaryNodePosition &&
+          runtimeType == other.runtimeType &&
+          isIncluded == other.isIncluded;
 
   @override
   int get hashCode => isIncluded.hashCode;
@@ -36,7 +38,8 @@ class BinaryNodePosition implements NodePosition {
 /// "selection" type.
 class BinarySelection implements NodeSelection {
   const BinarySelection.all() : position = const BinaryNodePosition.included();
-  const BinarySelection.none() : position = const BinaryNodePosition.notIncluded();
+  const BinarySelection.none()
+      : position = const BinaryNodePosition.notIncluded();
 
   final BinaryNodePosition position;
 
@@ -48,7 +51,9 @@ class BinarySelection implements NodeSelection {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is BinarySelection && runtimeType == other.runtimeType && position == other.position;
+      other is BinarySelection &&
+          runtimeType == other.runtimeType &&
+          position == other.position;
 
   @override
   int get hashCode => position.hashCode;

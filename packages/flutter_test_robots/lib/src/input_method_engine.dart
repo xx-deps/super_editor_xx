@@ -45,7 +45,8 @@ class ImeSimulator {
   }) async {
     final imeClient = _findImeClient(finder: finder, getter: getter);
 
-    assert(imeClient.currentTextEditingValue != null, "The target widget doesn't have a text selection to type into.");
+    assert(imeClient.currentTextEditingValue != null,
+        "The target widget doesn't have a text selection to type into.");
     assert(imeClient.currentTextEditingValue!.selection.extentOffset != -1,
         "The target widget doesn't have a text selection to type into.");
 
@@ -54,7 +55,8 @@ class ImeSimulator {
     }
   }
 
-  Future<void> _typeCharacter(DeltaTextInputClient imeClient, String character) async {
+  Future<void> _typeCharacter(
+      DeltaTextInputClient imeClient, String character) async {
     assert(imeClient.currentTextEditingValue != null);
     assert(imeClient.currentTextEditingValue!.selection.extentOffset != -1);
 
@@ -66,7 +68,8 @@ class ImeSimulator {
         TextEditingDeltaDeletion(
           oldText: imeClient.currentTextEditingValue!.text,
           deletedRange: imeClient.currentTextEditingValue!.selection,
-          selection: TextSelection.collapsed(offset: imeClient.currentTextEditingValue!.selection.baseOffset),
+          selection: TextSelection.collapsed(
+              offset: imeClient.currentTextEditingValue!.selection.baseOffset),
           composing: TextRange.empty,
         ),
       TextEditingDeltaInsertion(
@@ -78,8 +81,11 @@ class ImeSimulator {
           "",
         ),
         textInserted: character,
-        insertionOffset: imeClient.currentTextEditingValue!.selection.baseOffset,
-        selection: TextSelection.collapsed(offset: imeClient.currentTextEditingValue!.selection.baseOffset + 1),
+        insertionOffset:
+            imeClient.currentTextEditingValue!.selection.baseOffset,
+        selection: TextSelection.collapsed(
+            offset:
+                imeClient.currentTextEditingValue!.selection.baseOffset + 1),
         composing: TextRange.empty,
       ),
     ];
@@ -114,8 +120,8 @@ class ImeSimulator {
   }) async {
     final imeClient = _findImeClient(finder: finder, getter: getter);
 
-    assert(
-        imeClient.currentTextEditingValue != null, "The target widget doesn't have a text selection to backspace in.");
+    assert(imeClient.currentTextEditingValue != null,
+        "The target widget doesn't have a text selection to backspace in.");
     assert(imeClient.currentTextEditingValue!.selection.extentOffset != -1,
         "The target widget doesn't have a text selection to backspace in.");
 
@@ -131,12 +137,15 @@ class ImeSimulator {
         deletedRange: imeClient.currentTextEditingValue!.selection.isCollapsed
             ? TextSelection(
                 baseOffset: imeClient.currentTextEditingValue!.selection.start,
-                extentOffset: imeClient.currentTextEditingValue!.selection.start - 1,
+                extentOffset:
+                    imeClient.currentTextEditingValue!.selection.start - 1,
               )
             : imeClient.currentTextEditingValue!.selection,
         selection: imeClient.currentTextEditingValue!.selection.isCollapsed
-            ? TextSelection.collapsed(offset: imeClient.currentTextEditingValue!.selection.start - 1)
-            : TextSelection.collapsed(offset: imeClient.currentTextEditingValue!.selection.start),
+            ? TextSelection.collapsed(
+                offset: imeClient.currentTextEditingValue!.selection.start - 1)
+            : TextSelection.collapsed(
+                offset: imeClient.currentTextEditingValue!.selection.start),
         composing: TextRange.empty,
       ),
     ];
@@ -176,10 +185,12 @@ class ImeSimulator {
     Finder? finder,
     GetDeltaTextInputClient? getter,
   }) {
-    assert(finder != null && getter == null || finder == null && getter != null);
+    assert(
+        finder != null && getter == null || finder == null && getter != null);
 
     if (finder != null) {
-      return (finder.evaluate().single as StatefulElement).state as DeltaTextInputClient;
+      return (finder.evaluate().single as StatefulElement).state
+          as DeltaTextInputClient;
     } else {
       return getter!();
     }
@@ -187,7 +198,8 @@ class ImeSimulator {
 
   // ignore: unused_element
   Future<void> _sendDeltasThroughChannel(List<TextEditingDelta> deltas) async {
-    final ByteData? messageBytes = const JSONMessageCodec().encodeMessage(<String, dynamic>{
+    final ByteData? messageBytes =
+        const JSONMessageCodec().encodeMessage(<String, dynamic>{
       'args': <dynamic>[
         1,
         {

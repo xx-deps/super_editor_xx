@@ -14,12 +14,15 @@ import '_presenter.dart';
 /// that it picks up any style related changes. Given that the entire style pipeline
 /// re-runs every time the document changes, this phase automatically runs at the
 /// appropriate time.
-class SingleColumnLayoutCustomComponentStyler extends SingleColumnLayoutStylePhase {
+class SingleColumnLayoutCustomComponentStyler
+    extends SingleColumnLayoutStylePhase {
   SingleColumnLayoutCustomComponentStyler();
 
   @override
-  SingleColumnLayoutViewModel style(Document document, SingleColumnLayoutViewModel viewModel) {
-    editorStyleLog.finest("(Re)calculating custom component styles view model for document layout");
+  SingleColumnLayoutViewModel style(
+      Document document, SingleColumnLayoutViewModel viewModel) {
+    editorStyleLog.finest(
+        "(Re)calculating custom component styles view model for document layout");
     return SingleColumnLayoutViewModel(
       padding: viewModel.padding,
       componentViewModels: [
@@ -36,7 +39,8 @@ class SingleColumnLayoutCustomComponentStyler extends SingleColumnLayoutStylePha
     DocumentNode node,
     SingleColumnLayoutComponentViewModel viewModel,
   ) {
-    final componentStyles = SingleColumnLayoutComponentStyles.fromMetadata(node);
+    final componentStyles =
+        SingleColumnLayoutComponentStyles.fromMetadata(node);
 
     viewModel
       ..maxWidth = componentStyles.width ?? viewModel.maxWidth

@@ -89,7 +89,8 @@ void main() {
         await screenMatchesGolden(tester, "CaretLayer_multi-caret");
       });
 
-      testGoldensOnAndroid("paints two carets at the same position", (tester) async {
+      testGoldensOnAndroid("paints two carets at the same position",
+          (tester) async {
         await pumpThreeLinePlainSuperText(
           tester,
           aboveBuilder: (context, TextLayout textLayout) {
@@ -112,7 +113,8 @@ void main() {
           },
         );
 
-        await screenMatchesGolden(tester, "CaretLayer_two-carets-same-position");
+        await screenMatchesGolden(
+            tester, "CaretLayer_two-carets-same-position");
       });
     });
   });

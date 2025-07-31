@@ -28,7 +28,8 @@ class _SuperKeyboardBuilderState extends State<SuperKeyboardBuilder> {
 
   @override
   void dispose() {
-    SuperKeyboard.instance.mobileGeometry.removeListener(_onKeyboardStateChange);
+    SuperKeyboard.instance.mobileGeometry
+        .removeListener(_onKeyboardStateChange);
     super.dispose();
   }
 
@@ -56,7 +57,8 @@ class SuperKeyboard {
   }
 
   @visibleForTesting
-  static set testInstance(SuperKeyboard? testInstance) => _instance = testInstance;
+  static set testInstance(SuperKeyboard? testInstance) =>
+      _instance = testInstance;
 
   static final log = Logger("super_keyboard");
 
@@ -65,7 +67,8 @@ class SuperKeyboard {
     log.level = level;
     log.onRecord.listen((record) {
       // ignore: avoid_print
-      print('${record.level.name}: ${record.time.toLogTime()}: ${record.message}');
+      print(
+          '${record.level.name}: ${record.time.toLogTime()}: ${record.message}');
     });
   }
 
@@ -81,10 +84,12 @@ class SuperKeyboard {
     log.finest("Initializing SuperKeyboard");
     if (defaultTargetPlatform == TargetPlatform.iOS) {
       log.fine("SuperKeyboard - Initializing for iOS");
-      SuperKeyboardIOS.instance.geometry.addListener(_onIOSWindowGeometryChange);
+      SuperKeyboardIOS.instance.geometry
+          .addListener(_onIOSWindowGeometryChange);
     } else if (defaultTargetPlatform == TargetPlatform.android) {
       log.fine("SuperKeyboard - Initializing for Android");
-      SuperKeyboardAndroid.instance.geometry.addListener(_onAndroidWindowGeometryChange);
+      SuperKeyboardAndroid.instance.geometry
+          .addListener(_onAndroidWindowGeometryChange);
     }
   }
 
@@ -94,15 +99,18 @@ class SuperKeyboard {
   /// by [startLogging].
   Future<void> enablePlatformLogging(bool isEnabled) async {
     if (defaultTargetPlatform == TargetPlatform.iOS) {
-      log.fine("SuperKeyboard - Tried to start logging for iOS, but it's not implemented yet.");
+      log.fine(
+          "SuperKeyboard - Tried to start logging for iOS, but it's not implemented yet.");
     } else if (defaultTargetPlatform == TargetPlatform.android) {
-      log.fine("SuperKeyboard - ${isEnabled ? "Enabling" : "Disabling"} logs for Android.");
+      log.fine(
+          "SuperKeyboard - ${isEnabled ? "Enabling" : "Disabling"} logs for Android.");
       await SuperKeyboardAndroid.instance.enablePlatformLogging(isEnabled);
     }
   }
 
   ValueListenable<MobileWindowGeometry> get mobileGeometry => _mobileGeometry;
-  final _mobileGeometry = ValueNotifier<MobileWindowGeometry>(const MobileWindowGeometry());
+  final _mobileGeometry =
+      ValueNotifier<MobileWindowGeometry>(const MobileWindowGeometry());
 
   void _onIOSWindowGeometryChange() {
     _mobileGeometry.value = SuperKeyboardIOS.instance.geometry.value;

@@ -63,7 +63,10 @@ class ListItemNode extends TextNode {
 
   @override
   bool hasEquivalentContent(DocumentNode other) {
-    return other is ListItemNode && type == other.type && indent == other.indent && text == other.text;
+    return other is ListItemNode &&
+        type == other.type &&
+        indent == other.indent &&
+        text == other.text;
   }
 
   ListItemNode copyListItemWith({
@@ -151,7 +154,8 @@ class ListItemComponentBuilder implements ComponentBuilder {
   const ListItemComponentBuilder();
 
   @override
-  SingleColumnLayoutComponentViewModel? createViewModel(Document document, DocumentNode node) {
+  SingleColumnLayoutComponentViewModel? createViewModel(
+      Document document, DocumentNode node) {
     if (node is! ListItemNode) {
       return null;
     }
@@ -162,7 +166,8 @@ class ListItemComponentBuilder implements ComponentBuilder {
     }
 
     final textDirection = getParagraphDirection(node.text.toPlainText());
-    final textAlignment = textDirection == TextDirection.ltr ? TextAlign.left : TextAlign.right;
+    final textAlignment =
+        textDirection == TextDirection.ltr ? TextAlign.left : TextAlign.right;
 
     return switch (node.type) {
       ListItemType.unordered => UnorderedListItemComponentViewModel(
@@ -190,8 +195,8 @@ class ListItemComponentBuilder implements ComponentBuilder {
   }
 
   @override
-  Widget? createComponent(
-      SingleColumnDocumentComponentContext componentContext, SingleColumnLayoutComponentViewModel componentViewModel) {
+  Widget? createComponent(SingleColumnDocumentComponentContext componentContext,
+      SingleColumnLayoutComponentViewModel componentViewModel) {
     if (componentViewModel is! UnorderedListItemComponentViewModel &&
         componentViewModel is! OrderedListItemComponentViewModel) {
       return null;
@@ -236,7 +241,8 @@ class ListItemComponentBuilder implements ComponentBuilder {
   }
 }
 
-abstract class ListItemComponentViewModel extends SingleColumnLayoutComponentViewModel with TextComponentViewModel {
+abstract class ListItemComponentViewModel
+    extends SingleColumnLayoutComponentViewModel with TextComponentViewModel {
   ListItemComponentViewModel({
     required super.nodeId,
     super.createdAt,
@@ -254,9 +260,11 @@ abstract class ListItemComponentViewModel extends SingleColumnLayoutComponentVie
     this.highlightWhenEmpty = false,
     TextRange? composingRegion,
     bool showComposingRegionUnderline = false,
-    UnderlineStyle spellingErrorUnderlineStyle = const SquiggleUnderlineStyle(color: Colors.red),
+    UnderlineStyle spellingErrorUnderlineStyle =
+        const SquiggleUnderlineStyle(color: Colors.red),
     List<TextRange> spellingErrors = const <TextRange>[],
-    UnderlineStyle grammarErrorUnderlineStyle = const SquiggleUnderlineStyle(color: Colors.blue),
+    UnderlineStyle grammarErrorUnderlineStyle =
+        const SquiggleUnderlineStyle(color: Colors.blue),
     List<TextRange> grammarErrors = const <TextRange>[],
   }) {
     this.composingRegion = composingRegion;
@@ -289,7 +297,8 @@ abstract class ListItemComponentViewModel extends SingleColumnLayoutComponentVie
   bool highlightWhenEmpty;
 
   @override
-  ListItemComponentViewModel internalCopy(ListItemComponentViewModel viewModel) {
+  ListItemComponentViewModel internalCopy(
+      ListItemComponentViewModel viewModel) {
     final copy = super.internalCopy(viewModel) as ListItemComponentViewModel;
 
     copy.indent = indent;
@@ -363,8 +372,10 @@ class UnorderedListItemComponentViewModel extends ListItemComponentViewModel {
   }
 
   @override
-  UnorderedListItemComponentViewModel internalCopy(UnorderedListItemComponentViewModel viewModel) {
-    final copy = super.internalCopy(viewModel) as UnorderedListItemComponentViewModel;
+  UnorderedListItemComponentViewModel internalCopy(
+      UnorderedListItemComponentViewModel viewModel) {
+    final copy =
+        super.internalCopy(viewModel) as UnorderedListItemComponentViewModel;
 
     copy
       ..indent = indent
@@ -436,8 +447,10 @@ class OrderedListItemComponentViewModel extends ListItemComponentViewModel {
   }
 
   @override
-  OrderedListItemComponentViewModel internalCopy(OrderedListItemComponentViewModel viewModel) {
-    final copy = super.internalCopy(viewModel) as OrderedListItemComponentViewModel;
+  OrderedListItemComponentViewModel internalCopy(
+      OrderedListItemComponentViewModel viewModel) {
+    final copy =
+        super.internalCopy(viewModel) as OrderedListItemComponentViewModel;
 
     copy
       ..indent = indent
@@ -457,7 +470,8 @@ class OrderedListItemComponentViewModel extends ListItemComponentViewModel {
           numeralStyle == other.numeralStyle;
 
   @override
-  int get hashCode => super.hashCode ^ ordinalValue.hashCode ^ numeralStyle.hashCode;
+  int get hashCode =>
+      super.hashCode ^ ordinalValue.hashCode ^ numeralStyle.hashCode;
 }
 
 class ListItemDotStyle {
@@ -495,7 +509,8 @@ class ListItemDotStyle {
           size == other.size;
 
   @override
-  int get hashCode => super.hashCode ^ color.hashCode ^ shape.hashCode ^ size.hashCode;
+  int get hashCode =>
+      super.hashCode ^ color.hashCode ^ shape.hashCode ^ size.hashCode;
 }
 
 /// Displays a un-ordered list item in a document.
@@ -544,10 +559,12 @@ class UnorderedListItemComponent extends StatefulWidget {
   final bool showDebugPaint;
 
   @override
-  State<UnorderedListItemComponent> createState() => _UnorderedListItemComponentState();
+  State<UnorderedListItemComponent> createState() =>
+      _UnorderedListItemComponentState();
 }
 
-class _UnorderedListItemComponentState extends State<UnorderedListItemComponent> {
+class _UnorderedListItemComponentState
+    extends State<UnorderedListItemComponent> {
   /// A [GlobalKey] that connects a [ProxyTextDocumentComponent] to its
   /// descendant [TextComponent].
   ///
@@ -570,7 +587,8 @@ class _UnorderedListItemComponentState extends State<UnorderedListItemComponent>
 
     final indentSpace = widget.indentCalculator(textStyle, widget.indent);
     final textScaler = MediaQuery.textScalerOf(context);
-    final lineHeight = textScaler.scale(textStyle.fontSize! * (textStyle.height ?? 1.25));
+    final lineHeight =
+        textScaler.scale(textStyle.fontSize! * (textStyle.height ?? 1.25));
 
     return ProxyTextDocumentComponent(
       key: widget.componentKey,
@@ -583,7 +601,9 @@ class _UnorderedListItemComponentState extends State<UnorderedListItemComponent>
             Container(
               width: indentSpace,
               decoration: BoxDecoration(
-                border: widget.showDebugPaint ? Border.all(width: 1, color: Colors.grey) : null,
+                border: widget.showDebugPaint
+                    ? Border.all(width: 1, color: Colors.grey)
+                    : null,
               ),
               child: SizedBox(
                 height: lineHeight,
@@ -631,9 +651,11 @@ enum OrderedListNumeralStyle {
   upperRoman,
 }
 
-typedef UnorderedListItemDotBuilder = Widget Function(BuildContext, UnorderedListItemComponent);
+typedef UnorderedListItemDotBuilder = Widget Function(
+    BuildContext, UnorderedListItemComponent);
 
-Widget _defaultUnorderedListItemDotBuilder(BuildContext context, UnorderedListItemComponent component) {
+Widget _defaultUnorderedListItemDotBuilder(
+    BuildContext context, UnorderedListItemComponent component) {
   // Usually, the font size is obtained via the stylesheet. But the attributions might
   // also contain a FontSizeAttribution, which overrides the stylesheet. Use the attributions
   // of the first character to determine the text style.
@@ -720,7 +742,8 @@ class OrderedListItemComponent extends StatefulWidget {
   final bool showDebugPaint;
 
   @override
-  State<OrderedListItemComponent> createState() => _OrderedListItemComponentState();
+  State<OrderedListItemComponent> createState() =>
+      _OrderedListItemComponentState();
 }
 
 class _OrderedListItemComponentState extends State<OrderedListItemComponent> {
@@ -746,7 +769,8 @@ class _OrderedListItemComponentState extends State<OrderedListItemComponent> {
 
     final indentSpace = widget.indentCalculator(textStyle, widget.indent);
     final textScaler = MediaQuery.textScalerOf(context);
-    final lineHeight = textScaler.scale(textStyle.fontSize! * (textStyle.height ?? 1.0));
+    final lineHeight =
+        textScaler.scale(textStyle.fontSize! * (textStyle.height ?? 1.0));
 
     return ProxyTextDocumentComponent(
       key: widget.componentKey,
@@ -760,7 +784,9 @@ class _OrderedListItemComponentState extends State<OrderedListItemComponent> {
               width: indentSpace,
               height: lineHeight,
               decoration: BoxDecoration(
-                border: widget.showDebugPaint ? Border.all(width: 1, color: Colors.grey) : null,
+                border: widget.showDebugPaint
+                    ? Border.all(width: 1, color: Colors.grey)
+                    : null,
               ),
               child: SizedBox(
                 height: lineHeight,
@@ -790,14 +816,16 @@ class _OrderedListItemComponentState extends State<OrderedListItemComponent> {
   }
 }
 
-typedef OrderedListItemNumeralBuilder = Widget Function(BuildContext, OrderedListItemComponent);
+typedef OrderedListItemNumeralBuilder = Widget Function(
+    BuildContext, OrderedListItemComponent);
 
 /// The standard [TextBlockIndentCalculator] used by list items in `SuperEditor`.
 double defaultListItemIndentCalculator(TextStyle textStyle, int indent) {
   return (textStyle.fontSize! * 0.60) * 4 * (indent + 1);
 }
 
-Widget _defaultOrderedListItemNumeralBuilder(BuildContext context, OrderedListItemComponent component) {
+Widget _defaultOrderedListItemNumeralBuilder(
+    BuildContext context, OrderedListItemComponent component) {
   // Usually, the font size is obtained via the stylesheet. But the attributions might
   // also contain a FontSizeAttribution, which overrides the stylesheet. Use the attributions
   // of the first character to determine the text style.
@@ -833,7 +861,8 @@ String _numeralForIndex(int numeral, OrderedListNumeralStyle numeralStyle) {
   return switch (numeralStyle) {
     OrderedListNumeralStyle.arabic => '$numeral',
     OrderedListNumeralStyle.upperRoman => _intToRoman(numeral) ?? '$numeral',
-    OrderedListNumeralStyle.lowerRoman => _intToRoman(numeral)?.toLowerCase() ?? '$numeral',
+    OrderedListNumeralStyle.lowerRoman =>
+      _intToRoman(numeral)?.toLowerCase() ?? '$numeral',
     OrderedListNumeralStyle.upperAlpha => _intToAlpha(numeral),
     OrderedListNumeralStyle.lowerAlpha => _intToAlpha(numeral).toLowerCase(),
   };
@@ -845,7 +874,8 @@ String _numeralForIndex(int numeral, OrderedListNumeralStyle numeralStyle) {
 /// vinculum notation. See more at https://en.wikipedia.org/wiki/Roman_numerals#cite_ref-Ifrah2000_52-1.
 String? _intToRoman(int number) {
   if (number <= 0) {
-    throw ArgumentError('Roman numerals are only defined for positive integers');
+    throw ArgumentError(
+        'Roman numerals are only defined for positive integers');
   }
 
   if (number > 3999) {
@@ -969,7 +999,8 @@ class IndentListItemCommand extends EditCommand {
     final node = document.getNodeById(nodeId);
     final listItem = node as ListItemNode;
     if (listItem.indent >= 6) {
-      _log.log('IndentListItemCommand', 'WARNING: Editor does not support an indent level beyond 6.');
+      _log.log('IndentListItemCommand',
+          'WARNING: Editor does not support an indent level beyond 6.');
       return;
     }
 
@@ -1045,7 +1076,8 @@ class UnIndentListItemCommand extends EditCommand {
 ///
 ///  * Inserting a newline into an empty list item converts it into a paragraph
 ///    instead of inserting a new list item.
-class InsertNewlineInListItemAtCaretCommand extends BaseInsertNewlineAtCaretCommand {
+class InsertNewlineInListItemAtCaretCommand
+    extends BaseInsertNewlineAtCaretCommand {
   const InsertNewlineInListItemAtCaretCommand(this.newNodeId);
 
   /// {@macro newNodeId}
@@ -1263,13 +1295,16 @@ class SplitListItemCommand extends EditCommand {
     final listItemNode = node as ListItemNode;
     final text = listItemNode.text;
     final startText = text.copyText(0, splitPosition.offset);
-    final endText = splitPosition.offset < text.length ? text.copyText(splitPosition.offset) : AttributedText();
+    final endText = splitPosition.offset < text.length
+        ? text.copyText(splitPosition.offset)
+        : AttributedText();
     _log.log('SplitListItemCommand', 'Splitting list item:');
     _log.log('SplitListItemCommand', ' - start text: "$startText"');
     _log.log('SplitListItemCommand', ' - end text: "$endText"');
 
     // Change the current node's content to just the text before the caret.
-    _log.log('SplitListItemCommand', ' - changing the original list item text due to split');
+    _log.log('SplitListItemCommand',
+        ' - changing the original list item text due to split');
     final updatedListItemNode = listItemNode.copyListItemWith(text: startText);
     document.replaceNodeById(
       listItemNode.id,
@@ -1301,7 +1336,8 @@ class SplitListItemCommand extends EditCommand {
     // node that was split.
     composer.setComposingRegion(null);
 
-    _log.log('SplitListItemCommand', ' - inserted new node: ${newNode.id} after old one: ${node.id}');
+    _log.log('SplitListItemCommand',
+        ' - inserted new node: ${newNode.id} after old one: ${node.id}');
 
     executor.logChanges([
       SplitListItemIntention.start(),
@@ -1339,7 +1375,9 @@ ExecutionInstruction tabToIndentListItem({
 
   final wasIndented = editContext.commonOps.indentListItem();
 
-  return wasIndented ? ExecutionInstruction.haltExecution : ExecutionInstruction.continueExecution;
+  return wasIndented
+      ? ExecutionInstruction.haltExecution
+      : ExecutionInstruction.continueExecution;
 }
 
 ExecutionInstruction shiftTabToUnIndentListItem({
@@ -1359,7 +1397,9 @@ ExecutionInstruction shiftTabToUnIndentListItem({
 
   final wasIndented = editContext.commonOps.unindentListItem();
 
-  return wasIndented ? ExecutionInstruction.haltExecution : ExecutionInstruction.continueExecution;
+  return wasIndented
+      ? ExecutionInstruction.haltExecution
+      : ExecutionInstruction.continueExecution;
 }
 
 ExecutionInstruction backspaceToUnIndentListItem({
@@ -1381,17 +1421,22 @@ ExecutionInstruction backspaceToUnIndentListItem({
     return ExecutionInstruction.continueExecution;
   }
 
-  final node = editContext.document.getNodeById(editContext.composer.selection!.extent.nodeId);
+  final node = editContext.document
+      .getNodeById(editContext.composer.selection!.extent.nodeId);
   if (node is! ListItemNode) {
     return ExecutionInstruction.continueExecution;
   }
-  if ((editContext.composer.selection!.extent.nodePosition as TextPosition).offset > 0) {
+  if ((editContext.composer.selection!.extent.nodePosition as TextPosition)
+          .offset >
+      0) {
     return ExecutionInstruction.continueExecution;
   }
 
   final wasIndented = editContext.commonOps.unindentListItem();
 
-  return wasIndented ? ExecutionInstruction.haltExecution : ExecutionInstruction.continueExecution;
+  return wasIndented
+      ? ExecutionInstruction.haltExecution
+      : ExecutionInstruction.continueExecution;
 }
 
 /// Computes the ordinal value of an ordered list item.
@@ -1407,7 +1452,9 @@ int computeListItemOrdinalValue(ListItemNode listItem, Document document) {
 
   int ordinalValue = 1;
   DocumentNode? nodeAbove = document.getNodeBeforeById(listItem.id);
-  while (nodeAbove != null && nodeAbove is ListItemNode && nodeAbove.indent >= listItem.indent) {
+  while (nodeAbove != null &&
+      nodeAbove is ListItemNode &&
+      nodeAbove.indent >= listItem.indent) {
     if (nodeAbove.indent == listItem.indent) {
       if (nodeAbove.type != ListItemType.ordered) {
         // We found an unordered list item with the same indentation level as the ordered list item.

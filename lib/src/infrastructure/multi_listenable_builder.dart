@@ -27,7 +27,9 @@ class _MultiListenableBuilderState extends State<MultiListenableBuilder> {
   void didUpdateWidget(MultiListenableBuilder oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.listenables != oldWidget.listenables) {
-      _syncListenables(oldListenables: oldWidget.listenables, newListenables: widget.listenables);
+      _syncListenables(
+          oldListenables: oldWidget.listenables,
+          newListenables: widget.listenables);
     }
   }
 

@@ -37,7 +37,8 @@ class _SuperKeyboardDemoAppState extends State<SuperKeyboardDemoApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        resizeToAvoidBottomInset: defaultTargetPlatform != TargetPlatform.android,
+        resizeToAvoidBottomInset:
+            defaultTargetPlatform != TargetPlatform.android,
         body: Center(
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 300),
@@ -81,7 +82,9 @@ class _SuperKeyboardDemoAppState extends State<SuperKeyboardDemoApp> {
                       return const SizedBox();
                     }
 
-                    return SizedBox(height: value.keyboardHeight! / MediaQuery.of(context).devicePixelRatio);
+                    return SizedBox(
+                        height: value.keyboardHeight! /
+                            MediaQuery.of(context).devicePixelRatio);
                   },
                 ),
               ],
@@ -178,7 +181,8 @@ class _SuperKeyboardDemoAppState extends State<SuperKeyboardDemoApp> {
           onChanged: (newValue) {
             setState(() {
               _isPlatformLoggingEnabled = newValue;
-              SuperKeyboard.instance.enablePlatformLogging(_isPlatformLoggingEnabled);
+              SuperKeyboard.instance
+                  .enablePlatformLogging(_isPlatformLoggingEnabled);
             });
           },
         ),

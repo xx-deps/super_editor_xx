@@ -13,7 +13,8 @@ class CupertinoPopoverToolbarAligner implements FollowerAligner {
 
   @override
   FollowerAlignment align(Rect globalLeaderRect, Size followerSize) {
-    final boundsBox = _boundsKey?.currentContext?.findRenderObject() as RenderBox?;
+    final boundsBox =
+        _boundsKey?.currentContext?.findRenderObject() as RenderBox?;
     final bounds = boundsBox != null
         ? Rect.fromPoints(
             boundsBox.localToGlobal(Offset.zero),
@@ -22,8 +23,12 @@ class CupertinoPopoverToolbarAligner implements FollowerAligner {
         : Rect.largest;
 
     late FollowerAlignment alignment;
-    if (globalLeaderRect.top - followerSize.height - _popoverToolbarMinimumDistanceFromEdge < bounds.top) {
-      OverlordLogs.cupertinoToolbar.fine(" - follower is too far to the top, switching to bottom");
+    if (globalLeaderRect.top -
+            followerSize.height -
+            _popoverToolbarMinimumDistanceFromEdge <
+        bounds.top) {
+      OverlordLogs.cupertinoToolbar
+          .fine(" - follower is too far to the top, switching to bottom");
       // The follower hit the minimum distance. Invert the follower position.
       alignment = const FollowerAlignment(
         leaderAnchor: Alignment.bottomCenter,
@@ -63,7 +68,8 @@ class CupertinoPopoverMenuAligner implements FollowerAligner {
 
   @override
   FollowerAlignment align(Rect globalLeaderRect, Size followerSize) {
-    final boundsBox = _boundsKey?.currentContext?.findRenderObject() as RenderBox?;
+    final boundsBox =
+        _boundsKey?.currentContext?.findRenderObject() as RenderBox?;
     final bounds = boundsBox != null
         ? Rect.fromPoints(
             boundsBox.localToGlobal(Offset.zero),
@@ -72,16 +78,24 @@ class CupertinoPopoverMenuAligner implements FollowerAligner {
         : Rect.largest;
 
     late FollowerAlignment alignment;
-    if (globalLeaderRect.right + followerSize.width + _popoverMenuMinimumDistanceFromEdge >= bounds.right) {
-      OverlordLogs.cupertinoMenu.fine(" - follower is too far to the right, switching to left");
+    if (globalLeaderRect.right +
+            followerSize.width +
+            _popoverMenuMinimumDistanceFromEdge >=
+        bounds.right) {
+      OverlordLogs.cupertinoMenu
+          .fine(" - follower is too far to the right, switching to left");
       // The follower hit the minimum distance. Invert the follower position.
       alignment = const FollowerAlignment(
         leaderAnchor: Alignment.centerLeft,
         followerAnchor: Alignment.centerRight,
         followerOffset: Offset(-20, 0),
       );
-    } else if (globalLeaderRect.left - followerSize.width - _popoverMenuMinimumDistanceFromEdge < bounds.left) {
-      OverlordLogs.cupertinoMenu.fine(" - follower is too far to the left, switching to right");
+    } else if (globalLeaderRect.left -
+            followerSize.width -
+            _popoverMenuMinimumDistanceFromEdge <
+        bounds.left) {
+      OverlordLogs.cupertinoMenu
+          .fine(" - follower is too far to the left, switching to right");
       // The follower hit the minimum distance. Invert the follower position.
       alignment = const FollowerAlignment(
         leaderAnchor: Alignment.centerRight,

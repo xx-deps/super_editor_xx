@@ -104,10 +104,12 @@ MutableDocument parseQuillDeltaOps(
   if (customEditor != null) {
     // Use the provided custom editor.
     if (customEditor.context.maybeDocument == null) {
-      throw Exception("The provided customEditor must contain a MutableDocument in its editables.");
+      throw Exception(
+          "The provided customEditor must contain a MutableDocument in its editables.");
     }
     if (customEditor.context.maybeComposer == null) {
-      throw Exception("The provided customEditor must contain a MutableDocumentComposer in its editables.");
+      throw Exception(
+          "The provided customEditor must contain a MutableDocumentComposer in its editables.");
     }
 
     editor = customEditor;
@@ -117,7 +119,8 @@ MutableDocument parseQuillDeltaOps(
     if (document.nodeCount > 1 ||
         document.first is! ParagraphNode ||
         (document.first as ParagraphNode).text.length > 0) {
-      throw Exception("The customEditor document must be empty (contain a single, empty ParagraphNode).");
+      throw Exception(
+          "The customEditor document must be empty (contain a single, empty ParagraphNode).");
     }
   } else {
     // Create a new, empty Super Editor document.
@@ -223,7 +226,8 @@ extension OperationParser on Operation {
     required List<BlockDeltaFormat> embedBlockFormats,
   }) {
     final document = editor.context.find<MutableDocument>(Editor.documentKey);
-    final composer = editor.context.find<MutableDocumentComposer>(Editor.composerKey);
+    final composer =
+        editor.context.find<MutableDocumentComposer>(Editor.composerKey);
 
     switch (type) {
       case DeltaOperationType.insert:
@@ -233,11 +237,13 @@ extension OperationParser on Operation {
         }
         if (data is Object) {
           // This is an embed insertion delta.
-          _doInsertMedia(editor, composer, inlineEmbedFormats, embedBlockFormats);
+          _doInsertMedia(
+              editor, composer, inlineEmbedFormats, embedBlockFormats);
         }
 
         // Merge consecutive blocks as desired by the given node types.
-        final document = editor.context.find<MutableDocument>(Editor.documentKey);
+        final document =
+            editor.context.find<MutableDocument>(Editor.documentKey);
         if (document.nodeCount < 3) {
           // Minimum of 3 nodes: block, block, newline.
           break;
@@ -245,8 +251,10 @@ extension OperationParser on Operation {
 
         // Beginning with the last non-empty node, move backwards, collecting all
         // nodes that should be merged into one.
-        final nodeBeforeTrailingNewline = document.getNodeBefore(document.last)!;
-        final blockTypeToMerge = nodeBeforeTrailingNewline.getMetadataValue(NodeMetadata.blockType);
+        final nodeBeforeTrailingNewline =
+            document.getNodeBefore(document.last)!;
+        final blockTypeToMerge =
+            nodeBeforeTrailingNewline.getMetadataValue(NodeMetadata.blockType);
         var blocksToMerge = <ParagraphNode>[];
         for (int i = document.nodeCount - 2; i >= 0; i -= 1) {
           final node = document.getNodeAt(i)!;
@@ -256,7 +264,8 @@ extension OperationParser on Operation {
 
           var shouldMerge = false;
           for (final rule in blockMergeRules) {
-            final ruleShouldMerge = rule.shouldMerge(blockTypeToMerge, node.getMetadataValue(NodeMetadata.blockType));
+            final ruleShouldMerge = rule.shouldMerge(blockTypeToMerge,
+                node.getMetadataValue(NodeMetadata.blockType));
             if (ruleShouldMerge == true) {
               // The rule says we definitely want to merge.
               shouldMerge = true;
@@ -282,15 +291,19 @@ extension OperationParser on Operation {
 
         blocksToMerge = blocksToMerge.reversed.toList();
         final mergeNode = blocksToMerge.first;
-        var nodeContentToMove = blocksToMerge[1].text.insertString(textToInsert: "\n", startOffset: 0);
+        var nodeContentToMove = blocksToMerge[1]
+            .text
+            .insertString(textToInsert: "\n", startOffset: 0);
         for (int i = 2; i < blocksToMerge.length; i += 1) {
-          nodeContentToMove =
-              nodeContentToMove.copyAndAppend(blocksToMerge[i].text.insertString(textToInsert: "\n", startOffset: 0));
+          nodeContentToMove = nodeContentToMove.copyAndAppend(blocksToMerge[i]
+              .text
+              .insertString(textToInsert: "\n", startOffset: 0));
         }
 
         editor.execute([
           InsertAttributedTextRequest(
-            DocumentPosition(nodeId: mergeNode.id, nodePosition: mergeNode.endPosition),
+            DocumentPosition(
+                nodeId: mergeNode.id, nodePosition: mergeNode.endPosition),
             nodeContentToMove,
           ),
           for (int i = 1; i < blocksToMerge.length; i += 1) //
@@ -364,7 +377,8 @@ extension OperationParser on Operation {
     // the end, and in the middle of a single text insertion.
     var text = data as String;
     var currentNodeId = composer.selection!.extent.nodeId;
-    var currentTextPosition = composer.selection!.extent.nodePosition as TextNodePosition;
+    var currentTextPosition =
+        composer.selection!.extent.nodePosition as TextNodePosition;
 
     // The included inline attributes apply to all text within this insert operation.
     final inlineAttributions = <Attribution>{};
@@ -438,7 +452,8 @@ extension OperationParser on Operation {
     }
 
     // First, try to interpret this operation as an inline embed and insert it.
-    final didInlineInsert = _maybeInsertInlineEmbed(editor, composer, inlineEmbedFormats, content);
+    final didInlineInsert =
+        _maybeInsertInlineEmbed(editor, composer, inlineEmbedFormats, content);
     if (didInlineInsert) {
       return;
     }
@@ -498,7 +513,8 @@ extension OperationParser on Operation {
   ///
   /// The distance of each unit in [count] is defined by the Delta spec. In text, a unit
   /// is a character. In media, such as videos or images, a unit is the whole media item.
-  DocumentPosition _findPositionDownstream(Document document, DocumentComposer composer, int count) {
+  DocumentPosition _findPositionDownstream(
+      Document document, DocumentComposer composer, int count) {
     var caretPosition = composer.selection!.extent;
     var selectedNode = document.getNodeById(caretPosition.nodeId)!;
     int unitsToMove = count;
@@ -511,7 +527,8 @@ extension OperationParser on Operation {
           // The caret wants to move somewhere in this paragraph. Return that position.
           return DocumentPosition(
             nodeId: selectedNode.id,
-            nodePosition: TextNodePosition(offset: currentPosition.offset + unitsToMove),
+            nodePosition:
+                TextNodePosition(offset: currentPosition.offset + unitsToMove),
           );
         }
 

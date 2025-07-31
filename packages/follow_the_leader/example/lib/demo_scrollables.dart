@@ -207,10 +207,12 @@ class _LeaderAndFollowerListItem extends StatefulWidget {
   final GlobalKey boundsKey;
 
   @override
-  State<_LeaderAndFollowerListItem> createState() => _LeaderAndFollowerListItemState();
+  State<_LeaderAndFollowerListItem> createState() =>
+      _LeaderAndFollowerListItemState();
 }
 
-class _LeaderAndFollowerListItemState extends State<_LeaderAndFollowerListItem> {
+class _LeaderAndFollowerListItemState
+    extends State<_LeaderAndFollowerListItem> {
   final _anchor = LeaderLink();
 
   late final FollowerBoundary? _viewportBoundary;
@@ -268,7 +270,8 @@ class _LeaderAndFollowerListItemState extends State<_LeaderAndFollowerListItem> 
           ),
           SizedBox.expand(
             child: DecoratedBox(
-              decoration: BoxDecoration(border: Border.all(width: 1, color: Colors.red)),
+              decoration: BoxDecoration(
+                  border: Border.all(width: 1, color: Colors.red)),
               child: FollowerFadeOutBeyondBoundary(
                 boundary: _viewportBoundary,
                 link: _anchor,
@@ -283,12 +286,14 @@ class _LeaderAndFollowerListItemState extends State<_LeaderAndFollowerListItem> 
                       TextButton(
                         // ignore: avoid_print
                         onPressed: () => print("one"),
-                        child: const Text("One", style: TextStyle(color: Colors.white)),
+                        child: const Text("One",
+                            style: TextStyle(color: Colors.white)),
                       ),
                       TextButton(
                         // ignore: avoid_print
                         onPressed: () => print("two"),
-                        child: const Text("Two", style: TextStyle(color: Colors.white)),
+                        child: const Text("Two",
+                            style: TextStyle(color: Colors.white)),
                       ),
                     ],
                   ),

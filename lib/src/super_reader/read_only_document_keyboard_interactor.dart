@@ -64,7 +64,8 @@ class ReadOnlyDocumentKeyboardInteractor extends StatelessWidget {
     readerKeyLog.finest("Handling key press: $keyEvent");
     ExecutionInstruction instruction = ExecutionInstruction.continueExecution;
     int index = 0;
-    while (instruction == ExecutionInstruction.continueExecution && index < keyboardActions.length) {
+    while (instruction == ExecutionInstruction.continueExecution &&
+        index < keyboardActions.length) {
       instruction = keyboardActions[index](
         documentContext: readerContext,
         keyEvent: keyEvent,
@@ -187,13 +188,15 @@ final expandSelectionWithLeftArrow = createShortcut(
     required SuperReaderContext documentContext,
     required KeyEvent keyEvent,
   }) {
-    if (defaultTargetPlatform == TargetPlatform.windows && HardwareKeyboard.instance.isAltPressed) {
+    if (defaultTargetPlatform == TargetPlatform.windows &&
+        HardwareKeyboard.instance.isAltPressed) {
       return ExecutionInstruction.continueExecution;
     }
 
     if (defaultTargetPlatform == TargetPlatform.linux &&
         HardwareKeyboard.instance.isAltPressed &&
-        (keyEvent.logicalKey == LogicalKeyboardKey.arrowUp || keyEvent.logicalKey == LogicalKeyboardKey.arrowDown)) {
+        (keyEvent.logicalKey == LogicalKeyboardKey.arrowUp ||
+            keyEvent.logicalKey == LogicalKeyboardKey.arrowDown)) {
       return ExecutionInstruction.continueExecution;
     }
 
@@ -205,7 +208,9 @@ final expandSelectionWithLeftArrow = createShortcut(
       retainCollapsedSelection: HardwareKeyboard.instance.isShiftPressed,
     );
 
-    return didMove ? ExecutionInstruction.haltExecution : ExecutionInstruction.continueExecution;
+    return didMove
+        ? ExecutionInstruction.haltExecution
+        : ExecutionInstruction.continueExecution;
   },
   keyPressedOrReleased: LogicalKeyboardKey.arrowLeft,
 );
@@ -215,13 +220,15 @@ final expandSelectionWithRightArrow = createShortcut(
     required SuperReaderContext documentContext,
     required KeyEvent keyEvent,
   }) {
-    if (defaultTargetPlatform == TargetPlatform.windows && HardwareKeyboard.instance.isAltPressed) {
+    if (defaultTargetPlatform == TargetPlatform.windows &&
+        HardwareKeyboard.instance.isAltPressed) {
       return ExecutionInstruction.continueExecution;
     }
 
     if (defaultTargetPlatform == TargetPlatform.linux &&
         HardwareKeyboard.instance.isAltPressed &&
-        (keyEvent.logicalKey == LogicalKeyboardKey.arrowUp || keyEvent.logicalKey == LogicalKeyboardKey.arrowDown)) {
+        (keyEvent.logicalKey == LogicalKeyboardKey.arrowUp ||
+            keyEvent.logicalKey == LogicalKeyboardKey.arrowDown)) {
       return ExecutionInstruction.continueExecution;
     }
 
@@ -233,18 +240,23 @@ final expandSelectionWithRightArrow = createShortcut(
       retainCollapsedSelection: HardwareKeyboard.instance.isShiftPressed,
     );
 
-    return didMove ? ExecutionInstruction.haltExecution : ExecutionInstruction.continueExecution;
+    return didMove
+        ? ExecutionInstruction.haltExecution
+        : ExecutionInstruction.continueExecution;
   },
   keyPressedOrReleased: LogicalKeyboardKey.arrowRight,
 );
 
 MovementModifier? _getHorizontalMovementModifier(KeyEvent keyEvent) {
-  if ((defaultTargetPlatform == TargetPlatform.windows || defaultTargetPlatform == TargetPlatform.linux) &&
+  if ((defaultTargetPlatform == TargetPlatform.windows ||
+          defaultTargetPlatform == TargetPlatform.linux) &&
       HardwareKeyboard.instance.isControlPressed) {
     return MovementModifier.word;
-  } else if (CurrentPlatform.isApple && HardwareKeyboard.instance.isMetaPressed) {
+  } else if (CurrentPlatform.isApple &&
+      HardwareKeyboard.instance.isMetaPressed) {
     return MovementModifier.line;
-  } else if (CurrentPlatform.isApple && HardwareKeyboard.instance.isAltPressed) {
+  } else if (CurrentPlatform.isApple &&
+      HardwareKeyboard.instance.isAltPressed) {
     return MovementModifier.word;
   }
 
@@ -256,11 +268,13 @@ final expandSelectionWithUpArrow = createShortcut(
     required SuperReaderContext documentContext,
     required KeyEvent keyEvent,
   }) {
-    if (defaultTargetPlatform == TargetPlatform.windows && HardwareKeyboard.instance.isAltPressed) {
+    if (defaultTargetPlatform == TargetPlatform.windows &&
+        HardwareKeyboard.instance.isAltPressed) {
       return ExecutionInstruction.continueExecution;
     }
 
-    if (defaultTargetPlatform == TargetPlatform.linux && HardwareKeyboard.instance.isAltPressed) {
+    if (defaultTargetPlatform == TargetPlatform.linux &&
+        HardwareKeyboard.instance.isAltPressed) {
       return ExecutionInstruction.continueExecution;
     }
 
@@ -270,7 +284,9 @@ final expandSelectionWithUpArrow = createShortcut(
       retainCollapsedSelection: HardwareKeyboard.instance.isShiftPressed,
     );
 
-    return didMove ? ExecutionInstruction.haltExecution : ExecutionInstruction.continueExecution;
+    return didMove
+        ? ExecutionInstruction.haltExecution
+        : ExecutionInstruction.continueExecution;
   },
   keyPressedOrReleased: LogicalKeyboardKey.arrowUp,
 );
@@ -280,11 +296,13 @@ final expandSelectionWithDownArrow = createShortcut(
     required SuperReaderContext documentContext,
     required KeyEvent keyEvent,
   }) {
-    if (defaultTargetPlatform == TargetPlatform.windows && HardwareKeyboard.instance.isAltPressed) {
+    if (defaultTargetPlatform == TargetPlatform.windows &&
+        HardwareKeyboard.instance.isAltPressed) {
       return ExecutionInstruction.continueExecution;
     }
 
-    if (defaultTargetPlatform == TargetPlatform.linux && HardwareKeyboard.instance.isAltPressed) {
+    if (defaultTargetPlatform == TargetPlatform.linux &&
+        HardwareKeyboard.instance.isAltPressed) {
       return ExecutionInstruction.continueExecution;
     }
 
@@ -294,7 +312,9 @@ final expandSelectionWithDownArrow = createShortcut(
       retainCollapsedSelection: HardwareKeyboard.instance.isShiftPressed,
     );
 
-    return didMove ? ExecutionInstruction.haltExecution : ExecutionInstruction.continueExecution;
+    return didMove
+        ? ExecutionInstruction.haltExecution
+        : ExecutionInstruction.continueExecution;
   },
   keyPressedOrReleased: LogicalKeyboardKey.arrowDown,
 );
@@ -311,11 +331,17 @@ final expandSelectionToLineStartWithHomeOnWindowsAndLinux = createShortcut(
       retainCollapsedSelection: HardwareKeyboard.instance.isShiftPressed,
     );
 
-    return didMove ? ExecutionInstruction.haltExecution : ExecutionInstruction.continueExecution;
+    return didMove
+        ? ExecutionInstruction.haltExecution
+        : ExecutionInstruction.continueExecution;
   },
   keyPressedOrReleased: LogicalKeyboardKey.home,
   isShiftPressed: true,
-  platforms: {TargetPlatform.windows, TargetPlatform.linux, TargetPlatform.fuchsia},
+  platforms: {
+    TargetPlatform.windows,
+    TargetPlatform.linux,
+    TargetPlatform.fuchsia
+  },
 );
 
 final expandSelectionToLineEndWithEndOnWindowsAndLinux = createShortcut(
@@ -330,11 +356,17 @@ final expandSelectionToLineEndWithEndOnWindowsAndLinux = createShortcut(
       retainCollapsedSelection: HardwareKeyboard.instance.isShiftPressed,
     );
 
-    return didMove ? ExecutionInstruction.haltExecution : ExecutionInstruction.continueExecution;
+    return didMove
+        ? ExecutionInstruction.haltExecution
+        : ExecutionInstruction.continueExecution;
   },
   keyPressedOrReleased: LogicalKeyboardKey.end,
   isShiftPressed: true,
-  platforms: {TargetPlatform.windows, TargetPlatform.linux, TargetPlatform.fuchsia},
+  platforms: {
+    TargetPlatform.windows,
+    TargetPlatform.linux,
+    TargetPlatform.fuchsia
+  },
 );
 
 final expandSelectionToLineStartWithCtrlAOnWindowsAndLinux = createShortcut(
@@ -349,12 +381,18 @@ final expandSelectionToLineStartWithCtrlAOnWindowsAndLinux = createShortcut(
       retainCollapsedSelection: HardwareKeyboard.instance.isShiftPressed,
     );
 
-    return didMove ? ExecutionInstruction.haltExecution : ExecutionInstruction.continueExecution;
+    return didMove
+        ? ExecutionInstruction.haltExecution
+        : ExecutionInstruction.continueExecution;
   },
   keyPressedOrReleased: LogicalKeyboardKey.keyA,
   isShiftPressed: true,
   isCtlPressed: true,
-  platforms: {TargetPlatform.windows, TargetPlatform.linux, TargetPlatform.fuchsia},
+  platforms: {
+    TargetPlatform.windows,
+    TargetPlatform.linux,
+    TargetPlatform.fuchsia
+  },
 );
 
 final expandSelectionToLineEndWithCtrlEOnWindowsAndLinux = createShortcut(
@@ -369,12 +407,18 @@ final expandSelectionToLineEndWithCtrlEOnWindowsAndLinux = createShortcut(
       retainCollapsedSelection: HardwareKeyboard.instance.isShiftPressed,
     );
 
-    return didMove ? ExecutionInstruction.haltExecution : ExecutionInstruction.continueExecution;
+    return didMove
+        ? ExecutionInstruction.haltExecution
+        : ExecutionInstruction.continueExecution;
   },
   keyPressedOrReleased: LogicalKeyboardKey.keyE,
   isShiftPressed: true,
   isCtlPressed: true,
-  platforms: {TargetPlatform.windows, TargetPlatform.linux, TargetPlatform.fuchsia},
+  platforms: {
+    TargetPlatform.windows,
+    TargetPlatform.linux,
+    TargetPlatform.fuchsia
+  },
 );
 
 final selectAllWhenCmdAIsPressedOnMac = createShortcut(
@@ -383,7 +427,9 @@ final selectAllWhenCmdAIsPressedOnMac = createShortcut(
     required KeyEvent keyEvent,
   }) {
     final didSelectAll = selectAll(documentContext.editor);
-    return didSelectAll ? ExecutionInstruction.haltExecution : ExecutionInstruction.continueExecution;
+    return didSelectAll
+        ? ExecutionInstruction.haltExecution
+        : ExecutionInstruction.continueExecution;
   },
   keyPressedOrReleased: LogicalKeyboardKey.keyA,
   isCmdPressed: true,
@@ -396,7 +442,9 @@ final selectAllWhenCtlAIsPressedOnWindowsAndLinux = createShortcut(
     required KeyEvent keyEvent,
   }) {
     final didSelectAll = selectAll(documentContext.editor);
-    return didSelectAll ? ExecutionInstruction.haltExecution : ExecutionInstruction.continueExecution;
+    return didSelectAll
+        ? ExecutionInstruction.haltExecution
+        : ExecutionInstruction.continueExecution;
   },
   keyPressedOrReleased: LogicalKeyboardKey.keyA,
   isCtlPressed: true,
@@ -491,24 +539,30 @@ ReadOnlyDocumentKeyboardAction createShortcut(
         "Invalid shortcut definition. Both onKeyUp and onKeyDown are false. This shortcut will never be triggered.");
   }
 
-  return ({required SuperReaderContext documentContext, required KeyEvent keyEvent}) {
+  return (
+      {required SuperReaderContext documentContext,
+      required KeyEvent keyEvent}) {
     if (keyEvent is KeyUpEvent && !onKeyUp) {
       return ExecutionInstruction.continueExecution;
     }
 
-    if ((keyEvent is KeyDownEvent || keyEvent is KeyRepeatEvent) && !onKeyDown) {
+    if ((keyEvent is KeyDownEvent || keyEvent is KeyRepeatEvent) &&
+        !onKeyDown) {
       return ExecutionInstruction.continueExecution;
     }
 
-    if (isCmdPressed != null && isCmdPressed != HardwareKeyboard.instance.isMetaPressed) {
+    if (isCmdPressed != null &&
+        isCmdPressed != HardwareKeyboard.instance.isMetaPressed) {
       return ExecutionInstruction.continueExecution;
     }
 
-    if (isCtlPressed != null && isCtlPressed != HardwareKeyboard.instance.isControlPressed) {
+    if (isCtlPressed != null &&
+        isCtlPressed != HardwareKeyboard.instance.isControlPressed) {
       return ExecutionInstruction.continueExecution;
     }
 
-    if (isAltPressed != null && isAltPressed != HardwareKeyboard.instance.isAltPressed) {
+    if (isAltPressed != null &&
+        isAltPressed != HardwareKeyboard.instance.isAltPressed) {
       return ExecutionInstruction.continueExecution;
     }
 
@@ -520,7 +574,8 @@ ReadOnlyDocumentKeyboardAction createShortcut(
       }
     }
 
-    if (keyPressedOrReleased != null && keyEvent.logicalKey != keyPressedOrReleased) {
+    if (keyPressedOrReleased != null &&
+        keyEvent.logicalKey != keyPressedOrReleased) {
       // Manually account for the fact that Flutter pretends that different
       // shift keys mean different things.
       if ((keyPressedOrReleased == LogicalKeyboardKey.shift ||

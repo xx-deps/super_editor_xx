@@ -71,7 +71,8 @@ class HeaderConversionReaction extends ParagraphPrefixConversionReaction {
     String match,
   ) {
     final prefixLength = match.length - 1; // -1 for the space on the end
-    late Attribution headerAttribution = _getHeaderAttributionForLevel(prefixLength);
+    late Attribution headerAttribution =
+        _getHeaderAttributionForLevel(prefixLength);
 
     final paragraphPatternSelection = DocumentSelection(
       base: DocumentPosition(
@@ -80,7 +81,8 @@ class HeaderConversionReaction extends ParagraphPrefixConversionReaction {
       ),
       extent: DocumentPosition(
         nodeId: paragraph.id,
-        nodePosition: TextNodePosition(offset: paragraph.text.toPlainText().indexOf(" ") + 1),
+        nodePosition: TextNodePosition(
+            offset: paragraph.text.toPlainText().indexOf(" ") + 1),
       ),
     );
 
@@ -117,7 +119,8 @@ typedef HeaderAttributionMapping = Attribution Function(int level);
 
 /// Converts a [ParagraphNode] to an [UnorderedListItemNode] when the
 /// user types "* " (or similar) at the start of the paragraph.
-class UnorderedListItemConversionReaction extends ParagraphPrefixConversionReaction {
+class UnorderedListItemConversionReaction
+    extends ParagraphPrefixConversionReaction {
   static final _unorderedListItemPattern = RegExp(r'^\s*[*-]\s+$');
 
   const UnorderedListItemConversionReaction();
@@ -159,7 +162,8 @@ class UnorderedListItemConversionReaction extends ParagraphPrefixConversionReact
 
 /// Converts a [ParagraphNode] to an [OrderedListItemNode] when the
 /// user types " 1. " (or similar) at the start of the paragraph.
-class OrderedListItemConversionReaction extends ParagraphPrefixConversionReaction {
+class OrderedListItemConversionReaction
+    extends ParagraphPrefixConversionReaction {
   /// Matches strings like ` 1. `, ` 2. `, ` 1) `, ` 2) `, etc.
   static final _orderedListPattern = RegExp(r'^\s*\d+[.)]\s+$');
 
@@ -181,7 +185,8 @@ class OrderedListItemConversionReaction extends ParagraphPrefixConversionReactio
   ) {
     // Extract the number from the match.
     final numberMatch = _numberRegex.firstMatch(match)!;
-    final numberTyped = int.parse(match.substring(numberMatch.start, numberMatch.end));
+    final numberTyped =
+        int.parse(match.substring(numberMatch.start, numberMatch.end));
 
     if (numberTyped > 1) {
       // Check if the user typed a number that continues the sequence of an upstream
@@ -191,14 +196,17 @@ class OrderedListItemConversionReaction extends ParagraphPrefixConversionReactio
       final document = editContext.document;
 
       final upstreamNode = document.getNodeBefore(paragraph);
-      if (upstreamNode == null || upstreamNode is! ListItemNode || upstreamNode.type != ListItemType.ordered) {
+      if (upstreamNode == null ||
+          upstreamNode is! ListItemNode ||
+          upstreamNode.type != ListItemType.ordered) {
         // There isn't an ordered list item immediately before this paragraph. Fizzle.
         return;
       }
 
       // The node immediately before this paragraph is an ordered list item. Compute its ordinal value,
       // so we can check if the user typed the next number in the sequence.
-      int upstreamListItemOrdinalValue = computeListItemOrdinalValue(upstreamNode, document);
+      int upstreamListItemOrdinalValue =
+          computeListItemOrdinalValue(upstreamNode, document);
       if (numberTyped != upstreamListItemOrdinalValue + 1) {
         // The user typed a number that doesn't continue the sequence of the upstream ordered list item.
         return;
@@ -289,7 +297,8 @@ class HorizontalRuleConversionReaction extends EditReaction {
   const HorizontalRuleConversionReaction();
 
   @override
-  void react(EditContext editorContext, RequestDispatcher requestDispatcher, List<EditEvent> changeList) {
+  void react(EditContext editorContext, RequestDispatcher requestDispatcher,
+      List<EditEvent> changeList) {
     if (changeList.length < 2) {
       // This reaction requires at least an insertion event and a selection change event.
       // There are less than two events in the the change list, therefore this reaction
@@ -305,7 +314,8 @@ class HorizontalRuleConversionReaction extends EditReaction {
     }
 
     // final edit = changeList[changeList.length - 2] as DocumentEdit;
-    final edit = changeList.reversed.firstWhere((edit) => edit is DocumentEdit) as DocumentEdit;
+    final edit = changeList.reversed.firstWhere((edit) => edit is DocumentEdit)
+        as DocumentEdit;
     if (edit.change is! TextInsertionEvent) {
       // This reaction requires that the two last events are an insertion event
       // followed by a selection change event.
@@ -314,7 +324,8 @@ class HorizontalRuleConversionReaction extends EditReaction {
     }
 
     final textInsertionEvent = edit.change as TextInsertionEvent;
-    final paragraph = document.getNodeById(textInsertionEvent.nodeId) as TextNode;
+    final paragraph =
+        document.getNodeById(textInsertionEvent.nodeId) as TextNode;
     final match = _hrPattern.firstMatch(paragraph.text.toPlainText())?.group(0);
     if (match == null) {
       return;
@@ -327,8 +338,12 @@ class HorizontalRuleConversionReaction extends EditReaction {
     requestDispatcher.execute([
       DeleteContentRequest(
         documentRange: DocumentRange(
-          start: DocumentPosition(nodeId: paragraph.id, nodePosition: const TextNodePosition(offset: 0)),
-          end: DocumentPosition(nodeId: paragraph.id, nodePosition: TextNodePosition(offset: match.length)),
+          start: DocumentPosition(
+              nodeId: paragraph.id,
+              nodePosition: const TextNodePosition(offset: 0)),
+          end: DocumentPosition(
+              nodeId: paragraph.id,
+              nodePosition: TextNodePosition(offset: match.length)),
         ),
       ),
       InsertNodeAtIndexRequest(
@@ -370,7 +385,8 @@ abstract class ParagraphPrefixConversionReaction extends EditReaction {
   RegExp get pattern;
 
   @override
-  void react(EditContext editContext, RequestDispatcher requestDispatcher, List<EditEvent> changeList) {
+  void react(EditContext editContext, RequestDispatcher requestDispatcher,
+      List<EditEvent> changeList) {
     final document = editContext.document;
     final typedText = EditInspector.findLastTextUserTyped(document, changeList);
     if (typedText == null) {
@@ -392,7 +408,8 @@ abstract class ParagraphPrefixConversionReaction extends EditReaction {
 
     // The user started a paragraph with the desired pattern. Delegate to the subclass
     // to do whatever it wants.
-    onPrefixMatched(editContext, requestDispatcher, changeList, paragraph, match);
+    onPrefixMatched(
+        editContext, requestDispatcher, changeList, paragraph, match);
   }
 
   /// Hook, called by the superclass, when the user starts the given [paragraph] with
@@ -413,7 +430,8 @@ class ImageUrlConversionReaction extends EditReaction {
   const ImageUrlConversionReaction();
 
   @override
-  void react(EditContext editContext, RequestDispatcher requestDispatcher, List<EditEvent> changeList) {
+  void react(EditContext editContext, RequestDispatcher requestDispatcher,
+      List<EditEvent> changeList) {
     if (changeList.isEmpty) {
       return;
     }
@@ -425,8 +443,9 @@ class ImageUrlConversionReaction extends EditReaction {
 
     // The user pressed "enter" at the end of a paragraph. Check if the
     // paragraph is comprised of a URL.
-    final selectionChange =
-        changeList.reversed.firstWhereOrNull((item) => item is SelectionChangeEvent) as SelectionChangeEvent?;
+    final selectionChange = changeList.reversed
+            .firstWhereOrNull((item) => item is SelectionChangeEvent)
+        as SelectionChangeEvent?;
     if (selectionChange == null || selectionChange.oldSelection == null) {
       // There was no selection change. There should be a selection change when
       // a paragraph is inserted. We don't know what's going on. Bail out.
@@ -435,7 +454,8 @@ class ImageUrlConversionReaction extends EditReaction {
     }
 
     final document = editContext.document;
-    final previousNode = document.getNodeById(selectionChange.oldSelection!.extent.nodeId);
+    final previousNode =
+        document.getNodeById(selectionChange.oldSelection!.extent.nodeId);
     if (previousNode is! ParagraphNode) {
       // The intention indicated that the user pressed "enter" from a paragraph
       // but the previously selected node isn't a paragraph. We don't know why.
@@ -451,7 +471,8 @@ class ImageUrlConversionReaction extends EditReaction {
         humanize: false,
       ),
     );
-    final int linkCount = extractedLinks.fold(0, (value, element) => element is UrlElement ? value + 1 : value);
+    final int linkCount = extractedLinks.fold(
+        0, (value, element) => element is UrlElement ? value + 1 : value);
     if (linkCount != 1) {
       // Either there aren't any URLs, or there are multiple. This reaction
       // doesn't apply.
@@ -459,7 +480,8 @@ class ImageUrlConversionReaction extends EditReaction {
       return;
     }
 
-    final url = extractedLinks.firstWhere((element) => element is UrlElement).text;
+    final url =
+        extractedLinks.firstWhere((element) => element is UrlElement).text;
     if (url != previousNode.text.toPlainText().trim()) {
       // There's more in the paragraph than just a URL. This reaction
       // doesn't apply.
@@ -479,15 +501,18 @@ class ImageUrlConversionReaction extends EditReaction {
       }
 
       // The URL is an image. Convert the node.
-      editorOpsLog.finer('The URL is an image. Converting the ParagraphNode to an ImageNode.');
+      editorOpsLog.finer(
+          'The URL is an image. Converting the ParagraphNode to an ImageNode.');
       final node = document.getNodeById(previousNode.id);
       if (node is! ParagraphNode) {
-        editorOpsLog.finer('The node has become something other than a ParagraphNode ($node). Can\'t convert node.');
+        editorOpsLog.finer(
+            'The node has become something other than a ParagraphNode ($node). Can\'t convert node.');
         return;
       }
       final currentText = node.text.toPlainText();
       if (currentText.trim() != originalText.trim()) {
-        editorOpsLog.finer('The node content changed in a non-trivial way. Aborting node conversion.');
+        editorOpsLog.finer(
+            'The node content changed in a non-trivial way. Aborting node conversion.');
         return;
       }
 
@@ -522,7 +547,8 @@ class ImageUrlConversionReaction extends EditReaction {
     }
 
     if (response.statusCode < 200 || response.statusCode >= 300) {
-      editorOpsLog.fine('Failed to load URL: ${response.statusCode} - ${response.reasonPhrase}');
+      editorOpsLog.fine(
+          'Failed to load URL: ${response.statusCode} - ${response.reasonPhrase}');
       return false;
     }
 
@@ -561,9 +587,11 @@ class LinkifyReaction extends EditReaction {
   final LinkUpdatePolicy updatePolicy;
 
   @override
-  void react(EditContext editContext, RequestDispatcher requestDispatcher, List<EditEvent> edits) {
+  void react(EditContext editContext, RequestDispatcher requestDispatcher,
+      List<EditEvent> edits) {
     final document = editContext.document;
-    final composer = editContext.find<MutableDocumentComposer>(Editor.composerKey);
+    final composer =
+        editContext.find<MutableDocumentComposer>(Editor.composerKey);
     final selection = composer.selection;
 
     bool didInsertSpace = false;
@@ -604,7 +632,8 @@ class LinkifyReaction extends EditReaction {
         }
 
         // +1 for the inserted space
-        if ((caretPosition.nodePosition as TextNodePosition).offset != linkifyCandidate.offset + 1) {
+        if ((caretPosition.nodePosition as TextNodePosition).offset !=
+            linkifyCandidate.offset + 1) {
           // The caret isn't sitting directly after the space. Whatever
           // these events represent, it doesn't represent the user typing
           // a URL and then press SPACE. Don't linkify.
@@ -614,7 +643,8 @@ class LinkifyReaction extends EditReaction {
 
         // The caret sits directly after an inserted space. Get the word before
         // the space from the document, and linkify, if it fits a schema.
-        final textNode = document.getNodeById(linkifyCandidate.nodeId) as TextNode;
+        final textNode =
+            document.getNodeById(linkifyCandidate.nodeId) as TextNode;
         _extractUpstreamWordAndLinkify(textNode.text, linkifyCandidate.offset);
       } else if ((edit is SubmitParagraphIntention && edit.isStart) ||
           (edit is SplitParagraphIntention && edit.isStart) ||
@@ -631,9 +661,11 @@ class LinkifyReaction extends EditReaction {
 
         final nextEdit = edits[i + 1];
         if (nextEdit is DocumentEdit && nextEdit.change is NodeChangeEvent) {
-          final editedNode = document.getNodeById((nextEdit.change as NodeChangeEvent).nodeId);
+          final editedNode =
+              document.getNodeById((nextEdit.change as NodeChangeEvent).nodeId);
           if (editedNode is TextNode) {
-            _extractUpstreamWordAndLinkify(editedNode.text, editedNode.text.length);
+            _extractUpstreamWordAndLinkify(
+                editedNode.text, editedNode.text.length);
           }
         }
       }
@@ -647,7 +679,8 @@ class LinkifyReaction extends EditReaction {
 
   /// Extracts a word ending at [endOffset] tries to linkify it.
   void _extractUpstreamWordAndLinkify(AttributedText text, int endOffset) {
-    final wordStartOffset = _moveOffsetByWord(text.toPlainText(), endOffset, true) ?? 0;
+    final wordStartOffset =
+        _moveOffsetByWord(text.toPlainText(), endOffset, true) ?? 0;
     final word = text.substring(wordStartOffset, endOffset);
 
     // Ensure that the preceding word doesn't already contain a full or partial
@@ -678,7 +711,8 @@ class LinkifyReaction extends EditReaction {
 
   int? _moveOffsetByWord(String text, int textOffset, bool upstream) {
     if (textOffset < 0 || textOffset > text.length) {
-      throw Exception("Index '$textOffset' is out of string range. Length: ${text.length}");
+      throw Exception(
+          "Index '$textOffset' is out of string range. Length: ${text.length}");
     }
 
     // Create a character range, initially with zero length
@@ -707,9 +741,13 @@ class LinkifyReaction extends EditReaction {
   }
 
   /// Update or remove the link attributions if edits happen at the middle of a link.
-  void _tryUpdateLinkAttribution(RequestDispatcher requestDispatcher, Document document,
-      MutableDocumentComposer composer, List<EditEvent> changeList) {
-    if (!const [LinkUpdatePolicy.remove, LinkUpdatePolicy.update].contains(updatePolicy)) {
+  void _tryUpdateLinkAttribution(
+      RequestDispatcher requestDispatcher,
+      Document document,
+      MutableDocumentComposer composer,
+      List<EditEvent> changeList) {
+    if (!const [LinkUpdatePolicy.remove, LinkUpdatePolicy.update]
+        .contains(updatePolicy)) {
       // We are configured to NOT change the attributions. Fizzle.
       return;
     }
@@ -733,7 +771,8 @@ class LinkifyReaction extends EditReaction {
 
       insertionOrDeletionEvent = editEvent.change as NodeChangeEvent;
     } else {
-      final lastSelectionEventIndex = changeList.lastIndexWhere((change) => change is SelectionChangeEvent);
+      final lastSelectionEventIndex =
+          changeList.lastIndexWhere((change) => change is SelectionChangeEvent);
       if (lastSelectionEventIndex < 1) {
         // There's no selection change event. We expect a URL change
         // to consist of an insertion or a deletion followed by a selection
@@ -743,7 +782,8 @@ class LinkifyReaction extends EditReaction {
 
       final edit = changeList[lastSelectionEventIndex - 1];
       if (edit is! DocumentEdit || //
-          (edit.change is! TextInsertionEvent && edit.change is! TextDeletedEvent)) {
+          (edit.change is! TextInsertionEvent &&
+              edit.change is! TextDeletedEvent)) {
         // The event before the selection change isn't an insertion or deletion. We
         // expect a URL change to consist of an insertion or a deletion followed by
         // a selection change. This event list doesn't fit the pattern. Fizzle.
@@ -758,26 +798,31 @@ class LinkifyReaction extends EditReaction {
     // altered text.
 
     final changedNodeId = insertionOrDeletionEvent.nodeId;
-    final changedNodeText = (document.getNodeById(changedNodeId) as TextNode).text;
+    final changedNodeText =
+        (document.getNodeById(changedNodeId) as TextNode).text;
 
     AttributionSpan? upstreamLinkAttribution;
     AttributionSpan? downstreamLinkAttribution;
 
-    final insertionOrDeletionOffset = insertionOrDeletionEvent is TextInsertionEvent
-        ? insertionOrDeletionEvent.offset
-        : (insertionOrDeletionEvent as TextDeletedEvent).offset;
+    final insertionOrDeletionOffset =
+        insertionOrDeletionEvent is TextInsertionEvent
+            ? insertionOrDeletionEvent.offset
+            : (insertionOrDeletionEvent as TextDeletedEvent).offset;
     if (insertionOrDeletionOffset > 0) {
       // Check if the upstream character has a link attribution.
       upstreamLinkAttribution = changedNodeText
           .getAttributionSpansInRange(
             attributionFilter: (attribution) => attribution is LinkAttribution,
-            range: SpanRange(insertionOrDeletionOffset - 1, insertionOrDeletionOffset - 1),
+            range: SpanRange(
+                insertionOrDeletionOffset - 1, insertionOrDeletionOffset - 1),
           )
           .firstOrNull;
     }
 
-    if ((insertionOrDeletionEvent is TextInsertionEvent && insertionOrDeletionOffset < changedNodeText.length - 1) ||
-        (insertionOrDeletionEvent is TextDeletedEvent && insertionOrDeletionOffset < changedNodeText.length)) {
+    if ((insertionOrDeletionEvent is TextInsertionEvent &&
+            insertionOrDeletionOffset < changedNodeText.length - 1) ||
+        (insertionOrDeletionEvent is TextDeletedEvent &&
+            insertionOrDeletionOffset < changedNodeText.length)) {
       // Check if the downstream character has a link attribution.
       final downstreamOffset = insertionOrDeletionEvent is TextInsertionEvent //
           ? insertionOrDeletionOffset + 1
@@ -801,7 +846,8 @@ class LinkifyReaction extends EditReaction {
     // both upstream and downstream from the edited text offset.
     final isAtMiddleOfLink = upstreamLinkAttribution != null &&
         downstreamLinkAttribution != null &&
-        upstreamLinkAttribution.attribution == downstreamLinkAttribution.attribution;
+        upstreamLinkAttribution.attribution ==
+            downstreamLinkAttribution.attribution;
 
     if (!isAtMiddleOfLink && insertionOrDeletionEvent is TextInsertionEvent) {
       // An insertion happened at an edge of the link.
@@ -810,7 +856,8 @@ class LinkifyReaction extends EditReaction {
     }
 
     final rangeToUpdate = isAtMiddleOfLink //
-        ? SpanRange(upstreamLinkAttribution.start, downstreamLinkAttribution.end)
+        ? SpanRange(
+            upstreamLinkAttribution.start, downstreamLinkAttribution.end)
         : (upstreamLinkAttribution ?? downstreamLinkAttribution!).range;
 
     // Remove the existing link attributions.
@@ -844,8 +891,10 @@ class LinkifyReaction extends EditReaction {
     // If the policy is `LinkUpdatePolicy.update` then we need to add a new
     // link attribution that reflects the edited URL text. We do that below.
     if (updatePolicy == LinkUpdatePolicy.update) {
-      final existingLinkAttribution =
-          changedNodeText.getAllAttributionsAt(rangeToUpdate.start).whereType<LinkAttribution>().firstOrNull;
+      final existingLinkAttribution = changedNodeText
+          .getAllAttributionsAt(rangeToUpdate.start)
+          .whereType<LinkAttribution>()
+          .firstOrNull;
       assert(
         existingLinkAttribution != null,
         "Tried to update a LinkAttribution after the user added/deleted character, but we couldn't find the LinkAttribution. We searched at offset ${rangeToUpdate.start} in '${changedNodeText.toPlainText()}'",
@@ -855,7 +904,9 @@ class LinkifyReaction extends EditReaction {
       // sure until runtime. So only attempt an attribution update if we found
       // the attribution.
       if (existingLinkAttribution != null) {
-        final newLinkText = changedNodeText.toPlainText().substring(rangeToUpdate.start, rangeToUpdate.end + 1);
+        final newLinkText = changedNodeText
+            .toPlainText()
+            .substring(rangeToUpdate.start, rangeToUpdate.end + 1);
         final newLinkUri = Uri.tryParse(newLinkText);
         final newScheme = newLinkUri?.scheme;
 
@@ -865,11 +916,13 @@ class LinkifyReaction extends EditReaction {
           updatedAttribution = LinkAttribution.fromUri(newLinkUri);
         } else {
           // The text doesn't include a scheme.
-          if (existingLinkAttribution.hasStructuredUri && existingLinkAttribution.uri!.scheme.isNotEmpty) {
+          if (existingLinkAttribution.hasStructuredUri &&
+              existingLinkAttribution.uri!.scheme.isNotEmpty) {
             // The existing link attribution has a structured URI, and that URI has a scheme.
             // Retain the existing scheme.
             final scheme = existingLinkAttribution.uri!.scheme;
-            updatedAttribution = LinkAttribution.fromUri(Uri.parse("$scheme://$newLinkText"));
+            updatedAttribution =
+                LinkAttribution.fromUri(Uri.parse("$scheme://$newLinkText"));
           } else {
             // The existing link attribution doesn't have a structure URI,
             // so we can't ask what scheme to use. Use the literal text as
@@ -922,7 +975,8 @@ Uri? tryToParseUrl(String word) {
       const EmailLinkifier(),
     ],
   );
-  final int emailCount = extractedEmails.fold(0, (value, element) => element is EmailElement ? value + 1 : value);
+  final int emailCount = extractedEmails.fold(
+      0, (value, element) => element is EmailElement ? value + 1 : value);
   if (emailCount == 1) {
     // Found exactly one email. Create and return a link attribution.
     final emailElement = extractedEmails.first as EmailElement;
@@ -943,7 +997,8 @@ Uri? tryToParseUrl(String word) {
       const UrlLinkifier(),
     ],
   );
-  final int linkCount = extractedLinks.fold(0, (value, element) => element is UrlElement ? value + 1 : value);
+  final int linkCount = extractedLinks.fold(
+      0, (value, element) => element is UrlElement ? value + 1 : value);
   if (linkCount == 1) {
     // Found exactly 1 URL. Create and return an attribution.
     try {
@@ -995,9 +1050,11 @@ class DashConversionReaction extends EditReaction {
   const DashConversionReaction();
 
   @override
-  void react(EditContext editorContext, RequestDispatcher requestDispatcher, List<EditEvent> changeList) {
+  void react(EditContext editorContext, RequestDispatcher requestDispatcher,
+      List<EditEvent> changeList) {
     final document = editorContext.document;
-    final composer = editorContext.find<MutableDocumentComposer>(Editor.composerKey);
+    final composer =
+        editorContext.find<MutableDocumentComposer>(Editor.composerKey);
 
     if (changeList.length < 2) {
       // This reaction requires at least an insertion event and a selection change event.
@@ -1034,8 +1091,10 @@ class DashConversionReaction extends EditReaction {
       return;
     }
 
-    final insertionNode = document.getNodeById(dashInsertionEvent.nodeId) as TextNode;
-    final upstreamCharacter = insertionNode.text.toPlainText()[dashInsertionEvent.offset - 1];
+    final insertionNode =
+        document.getNodeById(dashInsertionEvent.nodeId) as TextNode;
+    final upstreamCharacter =
+        insertionNode.text.toPlainText()[dashInsertionEvent.offset - 1];
     if (upstreamCharacter != '-') {
       return;
     }
@@ -1046,9 +1105,13 @@ class DashConversionReaction extends EditReaction {
       DeleteContentRequest(
         documentRange: DocumentRange(
           start: DocumentPosition(
-              nodeId: insertionNode.id, nodePosition: TextNodePosition(offset: dashInsertionEvent.offset - 1)),
+              nodeId: insertionNode.id,
+              nodePosition:
+                  TextNodePosition(offset: dashInsertionEvent.offset - 1)),
           end: DocumentPosition(
-              nodeId: insertionNode.id, nodePosition: TextNodePosition(offset: dashInsertionEvent.offset + 1)),
+              nodeId: insertionNode.id,
+              nodePosition:
+                  TextNodePosition(offset: dashInsertionEvent.offset + 1)),
         ),
       ),
       InsertTextRequest(
@@ -1093,7 +1156,8 @@ class EditInspector {
     for (int i = edits.length - 1; i >= 0; i -= 1) {
       if (edits[i] is DocumentEdit) {
         lastDocumentEditEvent = edits[i] as DocumentEdit;
-      } else if (lastSelectionChangeEvent == null && edits[i] is SelectionChangeEvent) {
+      } else if (lastSelectionChangeEvent == null &&
+          edits[i] is SelectionChangeEvent) {
         lastSelectionChangeEvent = edits[i] as SelectionChangeEvent;
       }
 
@@ -1116,7 +1180,8 @@ class EditInspector {
       return false;
     }
 
-    if (lastSelectionChangeEvent.newSelection!.extent.nodeId != textInsertionEvent.nodeId) {
+    if (lastSelectionChangeEvent.newSelection!.extent.nodeId !=
+        textInsertionEvent.nodeId) {
       return false;
     }
 
@@ -1131,17 +1196,24 @@ class EditInspector {
 
   /// Finds and returns the last text the user typed within the given [edit]s, or `null` if
   /// no text was typed.
-  static UserTypedText? findLastTextUserTyped(Document document, List<EditEvent> edits) {
-    final lastSpaceInsertion = edits.whereType<DocumentEdit>().lastWhereOrNull((edit) =>
-        edit.change is TextInsertionEvent && (edit.change as TextInsertionEvent).text.toPlainText().endsWith(" "));
+  static UserTypedText? findLastTextUserTyped(
+      Document document, List<EditEvent> edits) {
+    final lastSpaceInsertion = edits.whereType<DocumentEdit>().lastWhereOrNull(
+        (edit) =>
+            edit.change is TextInsertionEvent &&
+            (edit.change as TextInsertionEvent)
+                .text
+                .toPlainText()
+                .endsWith(" "));
     if (lastSpaceInsertion == null) {
       // The user didn't insert any text segment that ended with a space.
       return null;
     }
 
-    final spaceInsertionChangeIndex = edits.indexWhere((edit) => edit == lastSpaceInsertion);
-    final selectionAfterInsertionIndex =
-        edits.indexWhere((edit) => edit is SelectionChangeEvent, spaceInsertionChangeIndex);
+    final spaceInsertionChangeIndex =
+        edits.indexWhere((edit) => edit == lastSpaceInsertion);
+    final selectionAfterInsertionIndex = edits.indexWhere(
+        (edit) => edit is SelectionChangeEvent, spaceInsertionChangeIndex);
     if (selectionAfterInsertionIndex < 0) {
       // The text insertion wasn't followed by a selection change. It's not clear what this
       // means, but we can't say with confidence that the user typed the space. Perhaps the
@@ -1149,7 +1221,9 @@ class EditInspector {
       return null;
     }
 
-    final newSelection = (edits[selectionAfterInsertionIndex] as SelectionChangeEvent).newSelection;
+    final newSelection =
+        (edits[selectionAfterInsertionIndex] as SelectionChangeEvent)
+            .newSelection;
     if (newSelection == null) {
       // There's no selection, which indicates something other than the user typing.
       return null;
@@ -1166,8 +1240,10 @@ class EditInspector {
       return null;
     }
 
-    final newCaretOffset = (newSelection.extent.nodePosition as TextNodePosition).offset;
-    if (textInsertionEvent.offset + textInsertionEvent.text.length != newCaretOffset) {
+    final newCaretOffset =
+        (newSelection.extent.nodePosition as TextNodePosition).offset;
+    if (textInsertionEvent.offset + textInsertionEvent.text.length !=
+        newCaretOffset) {
       return null;
     }
 

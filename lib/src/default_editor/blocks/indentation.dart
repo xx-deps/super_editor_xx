@@ -4,4 +4,5 @@ import 'package:flutter/painting.dart';
 /// the [blockTextStyle], and the [indent] level.
 ///
 /// A text block is a document block that contains text, e.g., paragraph, list item, task.
-typedef TextBlockIndentCalculator = double Function(TextStyle blockTextStyle, int indent);
+typedef TextBlockIndentCalculator = double Function(
+    TextStyle blockTextStyle, int indent);

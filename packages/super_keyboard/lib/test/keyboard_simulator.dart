@@ -70,10 +70,12 @@ class SoftwareKeyboardHeightSimulator extends StatefulWidget {
   final Widget child;
 
   @override
-  State<SoftwareKeyboardHeightSimulator> createState() => _SoftwareKeyboardHeightSimulatorState();
+  State<SoftwareKeyboardHeightSimulator> createState() =>
+      _SoftwareKeyboardHeightSimulatorState();
 }
 
-class _SoftwareKeyboardHeightSimulatorState extends State<SoftwareKeyboardHeightSimulator>
+class _SoftwareKeyboardHeightSimulatorState
+    extends State<SoftwareKeyboardHeightSimulator>
     with SingleTickerProviderStateMixin {
   static int _nextTestKeyboardId = 1;
 
@@ -92,7 +94,9 @@ class _SoftwareKeyboardHeightSimulatorState extends State<SoftwareKeyboardHeight
         id: _testKeyboardId,
         initialKeyboardState: widget.initialKeyboardState,
         fakeKeyboardHeight: widget.keyboardHeight,
-        keyboardAnimationTime: widget.animateKeyboard ? const Duration(milliseconds: 600) : Duration.zero,
+        keyboardAnimationTime: widget.animateKeyboard
+            ? const Duration(milliseconds: 600)
+            : Duration.zero,
       );
     }
   }
@@ -101,13 +105,16 @@ class _SoftwareKeyboardHeightSimulatorState extends State<SoftwareKeyboardHeight
   void didUpdateWidget(covariant SoftwareKeyboardHeightSimulator oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (widget.animateKeyboard != oldWidget.animateKeyboard || widget.keyboardHeight != oldWidget.keyboardHeight) {
+    if (widget.animateKeyboard != oldWidget.animateKeyboard ||
+        widget.keyboardHeight != oldWidget.keyboardHeight) {
       TestSuperKeyboard.install(
         widget.tester,
         id: _testKeyboardId,
         initialKeyboardState: widget.initialKeyboardState,
         fakeKeyboardHeight: widget.keyboardHeight,
-        keyboardAnimationTime: widget.animateKeyboard ? const Duration(milliseconds: 600) : Duration.zero,
+        keyboardAnimationTime: widget.animateKeyboard
+            ? const Duration(milliseconds: 600)
+            : Duration.zero,
       );
     }
 
@@ -133,7 +140,8 @@ class _SoftwareKeyboardHeightSimulatorState extends State<SoftwareKeyboardHeight
       builder: (context, geometry, child) {
         final realMediaQuery = MediaQuery.of(context);
         final isRelevantPlatform = widget.enableForAllPlatforms ||
-            (defaultTargetPlatform == TargetPlatform.android || defaultTargetPlatform == TargetPlatform.iOS);
+            (defaultTargetPlatform == TargetPlatform.android ||
+                defaultTargetPlatform == TargetPlatform.iOS);
         final shouldSimulate = widget.isEnabled && isRelevantPlatform;
         if (!shouldSimulate) {
           return widget.child;
@@ -233,7 +241,9 @@ class TestSuperKeyboard implements SuperKeyboard {
 
     _geometry.value = MobileWindowGeometry(
       keyboardState: initialKeyboardState,
-      keyboardHeight: initialKeyboardState == KeyboardState.open ? fakeKeyboardHeight : null,
+      keyboardHeight: initialKeyboardState == KeyboardState.open
+          ? fakeKeyboardHeight
+          : null,
     );
 
     _keyboardHeightController = AnimationController(
@@ -243,7 +253,8 @@ class TestSuperKeyboard implements SuperKeyboard {
       ..addListener(() {
         _geometry.value = _geometry.value.updateWith(
           MobileWindowGeometry(
-            keyboardHeight: _keyboardHeightController.value * fakeKeyboardHeight,
+            keyboardHeight:
+                _keyboardHeightController.value * fakeKeyboardHeight,
           ),
         );
       })
@@ -283,7 +294,8 @@ class TestSuperKeyboard implements SuperKeyboard {
   }
 
   void dispose() {
-    tester.binding.defaultBinaryMessenger.setMockMessageHandler(SystemChannels.textInput.name, null);
+    tester.binding.defaultBinaryMessenger
+        .setMockMessageHandler(SystemChannels.textInput.name, null);
     _keyboardHeightController.dispose();
   }
 

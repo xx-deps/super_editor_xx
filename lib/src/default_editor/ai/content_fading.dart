@@ -44,7 +44,8 @@ class FadeInStyler extends SingleColumnLayoutStylePhase {
   bool _isFading = false;
 
   @override
-  SingleColumnLayoutViewModel style(Document document, SingleColumnLayoutViewModel viewModel) {
+  SingleColumnLayoutViewModel style(
+      Document document, SingleColumnLayoutViewModel viewModel) {
     _isFading = false;
 
     final newViewModel = SingleColumnLayoutViewModel(
@@ -66,7 +67,8 @@ class FadeInStyler extends SingleColumnLayoutStylePhase {
   /// If the given [viewModel] isn't animated, this method returns the [viewModel]
   /// unchanged, otherwise, if it is animating, then this method copies the [viewModel],
   /// updates the copy's time to the current time, and returns the copy.
-  SingleColumnLayoutComponentViewModel _updateViewModelAnimation(SingleColumnLayoutComponentViewModel viewModel) {
+  SingleColumnLayoutComponentViewModel _updateViewModelAnimation(
+      SingleColumnLayoutComponentViewModel viewModel) {
     if (viewModel is! TextComponentViewModel) {
       final createdAt = viewModel.createdAt;
       if (createdAt == null) {
@@ -93,12 +95,16 @@ class FadeInStyler extends SingleColumnLayoutStylePhase {
       return viewModel.copy()..opacity = opacity;
     }
 
-    final fadeIns = viewModel.text.getAttributionSpansByFilter((a) => a is CreatedAtAttribution).toList();
-    final fadeInAttributions = fadeIns.map((s) => s.attribution).toList().cast<CreatedAtAttribution>();
+    final fadeIns = viewModel.text
+        .getAttributionSpansByFilter((a) => a is CreatedAtAttribution)
+        .toList();
+    final fadeInAttributions =
+        fadeIns.map((s) => s.attribution).toList().cast<CreatedAtAttribution>();
     if (fadeInAttributions.isEmpty) {
       return viewModel;
     }
-    final isFading = fadeInAttributions.fold(false, (isFading, fadeIn) => isFading || _isTextFading(fadeIn.start));
+    final isFading = fadeInAttributions.fold(
+        false, (isFading, fadeIn) => isFading || _isTextFading(fadeIn.start));
     if (!isFading) {
       return viewModel;
     }
@@ -119,7 +125,8 @@ class FadeInStyler extends SingleColumnLayoutStylePhase {
       final deltaTime = DateTime.now().difference(fadeInAttribution.start);
       final opacity = deltaTime > textSnippetFadeInDuration
           ? 1.0
-          : fadeCurve.transform(deltaTime.inMilliseconds / textSnippetFadeInDuration.inMilliseconds);
+          : fadeCurve.transform(deltaTime.inMilliseconds /
+              textSnippetFadeInDuration.inMilliseconds);
       if (opacity < 1) {
         textViewModel.text.addAttribution(
           OpacityAttribution(opacity),

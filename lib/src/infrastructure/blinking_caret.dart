@@ -27,7 +27,8 @@ class BlinkingCaret extends StatefulWidget {
   BlinkingCaretState createState() => BlinkingCaretState();
 }
 
-class BlinkingCaretState extends State<BlinkingCaret> with SingleTickerProviderStateMixin {
+class BlinkingCaretState extends State<BlinkingCaret>
+    with SingleTickerProviderStateMixin {
   // Controls the blinking caret animation.
   late BlinkController _caretBlinkController;
 

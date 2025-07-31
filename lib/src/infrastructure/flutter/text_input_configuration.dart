@@ -22,7 +22,8 @@ extension TextInputConfigurationEquivalency on TextInputConfiguration {
         keyboardAppearance == other.keyboardAppearance &&
         enableIMEPersonalizedLearning == other.enableIMEPersonalizedLearning &&
         enableDeltaModel == other.enableDeltaModel &&
-        const DeepCollectionEquality().equals(allowedMimeTypes, other.allowedMimeTypes);
+        const DeepCollectionEquality()
+            .equals(allowedMimeTypes, other.allowedMimeTypes);
   }
 }
 
@@ -38,7 +39,8 @@ extension AutofillConfigurationEquivalency on AutofillConfiguration {
   bool isEquivalentTo(AutofillConfiguration other) {
     return enabled == other.enabled &&
         uniqueIdentifier == other.uniqueIdentifier &&
-        const DeepCollectionEquality().equals(autofillHints, other.autofillHints) &&
+        const DeepCollectionEquality()
+            .equals(autofillHints, other.autofillHints) &&
         hintText == other.hintText;
   }
 }

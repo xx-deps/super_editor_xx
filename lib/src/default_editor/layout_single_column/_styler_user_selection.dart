@@ -64,14 +64,18 @@ class SingleColumnLayoutSelectionStyler extends SingleColumnLayoutStylePhase {
     }
 
     _shouldDocumentShowCaret = newValue;
-    editorStyleLog.fine("Change to 'document should show caret': $_shouldDocumentShowCaret");
+    editorStyleLog.fine(
+        "Change to 'document should show caret': $_shouldDocumentShowCaret");
     markDirty();
   }
 
   @override
-  SingleColumnLayoutViewModel style(Document document, SingleColumnLayoutViewModel viewModel) {
-    editorStyleLog.finest("(Re)calculating selection view model for document layout");
-    editorStyleLog.fine("Applying selection to components: ${_selection.value}");
+  SingleColumnLayoutViewModel style(
+      Document document, SingleColumnLayoutViewModel viewModel) {
+    editorStyleLog
+        .finest("(Re)calculating selection view model for document layout");
+    editorStyleLog
+        .fine("Applying selection to components: ${_selection.value}");
     return SingleColumnLayoutViewModel(
       padding: viewModel.padding,
       componentViewModels: [
@@ -81,7 +85,8 @@ class SingleColumnLayoutSelectionStyler extends SingleColumnLayoutStylePhase {
     );
   }
 
-  SingleColumnLayoutComponentViewModel _applySelection(SingleColumnLayoutComponentViewModel viewModel) {
+  SingleColumnLayoutComponentViewModel _applySelection(
+      SingleColumnLayoutComponentViewModel viewModel) {
     final documentSelection = _selection.value;
     final node = _document.getNodeById(viewModel.nodeId)!;
 
@@ -104,23 +109,31 @@ class SingleColumnLayoutSelectionStyler extends SingleColumnLayoutStylePhase {
         //       into atomic transactions (#423)
         selectedNodes = [];
       }
-      nodeSelection =
-          _computeNodeSelection(documentSelection: documentSelection, selectedNodes: selectedNodes, node: node);
+      nodeSelection = _computeNodeSelection(
+          documentSelection: documentSelection,
+          selectedNodes: selectedNodes,
+          node: node);
     }
 
     editorStyleLog.fine("Node selection (${node.id}): $nodeSelection");
     if (node is TextNode) {
-      final textSelection = nodeSelection == null || nodeSelection.nodeSelection is! TextSelection
-          ? null
-          : nodeSelection.nodeSelection as TextSelection;
-      if (nodeSelection != null && nodeSelection.nodeSelection is! TextSelection) {
+      final textSelection =
+          nodeSelection == null || nodeSelection.nodeSelection is! TextSelection
+              ? null
+              : nodeSelection.nodeSelection as TextSelection;
+      if (nodeSelection != null &&
+          nodeSelection.nodeSelection is! TextSelection) {
         editorStyleLog.shout(
             'ERROR: Building a paragraph component but the selection is not a TextSelection. Node: ${node.id}, Selection: ${nodeSelection.nodeSelection}');
       }
-      final showCaret = _shouldDocumentShowCaret && nodeSelection != null ? nodeSelection.isExtent : false;
+      final showCaret = _shouldDocumentShowCaret && nodeSelection != null
+          ? nodeSelection.isExtent
+          : false;
       editorStyleLog.fine("Showing caret? $showCaret");
-      final highlightWhenEmpty =
-          nodeSelection == null ? false : nodeSelection.highlightWhenEmpty && _selectionStyles.highlightEmptyTextBlocks;
+      final highlightWhenEmpty = nodeSelection == null
+          ? false
+          : nodeSelection.highlightWhenEmpty &&
+              _selectionStyles.highlightEmptyTextBlocks;
 
       editorStyleLog.finer(' - ${node.id}: $nodeSelection');
       if (showCaret) {
@@ -195,7 +208,8 @@ class SingleColumnLayoutSelectionStyler extends SingleColumnLayoutStylePhase {
       final extentNodePosition = documentSelection.extent.nodePosition;
       late NodeSelection? nodeSelection;
       try {
-        nodeSelection = node.computeSelection(base: baseNodePosition, extent: extentNodePosition);
+        nodeSelection = node.computeSelection(
+            base: baseNodePosition, extent: extentNodePosition);
       } catch (exception) {
         // This situation can happen in the moment between a document change and
         // a corresponding selection change. For example: deleting an image and
@@ -222,7 +236,9 @@ class SingleColumnLayoutSelectionStyler extends SingleColumnLayoutStylePhase {
         editorStyleLog.finer('   - ${node.id}');
       }
 
-      if (selectedNodes.firstWhereOrNull((selectedNode) => selectedNode.id == node.id) == null) {
+      if (selectedNodes
+              .firstWhereOrNull((selectedNode) => selectedNode.id == node.id) ==
+          null) {
         // The document selection does not contain the node we're interested in. Return.
         editorStyleLog.finer(' - this node is not in the selection');
         return null;
@@ -237,8 +253,11 @@ class SingleColumnLayoutSelectionStyler extends SingleColumnLayoutStylePhase {
         return DocumentNodeSelection(
           nodeId: node.id,
           nodeSelection: node.computeSelection(
-            base: isBase ? documentSelection.base.nodePosition : node.endPosition,
-            extent: isBase ? node.endPosition : documentSelection.extent.nodePosition,
+            base:
+                isBase ? documentSelection.base.nodePosition : node.endPosition,
+            extent: isBase
+                ? node.endPosition
+                : documentSelection.extent.nodePosition,
           ),
           isBase: isBase,
           isExtent: !isBase,
@@ -254,14 +273,17 @@ class SingleColumnLayoutSelectionStyler extends SingleColumnLayoutStylePhase {
           nodeId: node.id,
           nodeSelection: node.computeSelection(
             base: isBase ? node.beginningPosition : node.beginningPosition,
-            extent: isBase ? documentSelection.base.nodePosition : documentSelection.extent.nodePosition,
+            extent: isBase
+                ? documentSelection.base.nodePosition
+                : documentSelection.extent.nodePosition,
           ),
           isBase: isBase,
           isExtent: !isBase,
           highlightWhenEmpty: isBase,
         );
       } else {
-        editorStyleLog.finer(' - this node is fully selected within the selection');
+        editorStyleLog
+            .finer(' - this node is fully selected within the selection');
         // Multiple nodes are selected and this node is neither the top
         // or the bottom node, therefore this entire node is selected.
         return DocumentNodeSelection(

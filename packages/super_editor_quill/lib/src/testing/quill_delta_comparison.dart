@@ -7,7 +7,8 @@ import 'package:text_table/text_table.dart';
 
 /// Creates a [Matcher] that compares an actual Quill [Delta] document
 /// to the given [expectedDocument].
-Matcher quillDocumentEquivalentTo(Delta expectedDocument) => EquivalentQuillDocumentMatcher(expectedDocument);
+Matcher quillDocumentEquivalentTo(Delta expectedDocument) =>
+    EquivalentQuillDocumentMatcher(expectedDocument);
 
 class EquivalentQuillDocumentMatcher extends Matcher {
   const EquivalentQuillDocumentMatcher(this._expectedDocument);
@@ -16,7 +17,8 @@ class EquivalentQuillDocumentMatcher extends Matcher {
 
   @override
   Description describe(Description description) {
-    return description.add("a Quill document that looks like:\n$_expectedDocument");
+    return description
+        .add("a Quill document that looks like:\n$_expectedDocument");
   }
 
   @override
@@ -51,7 +53,8 @@ class EquivalentQuillDocumentMatcher extends Matcher {
     bool nodeCountMismatch = false;
     bool nodeTypeOrContentMismatch = false;
 
-    if (_expectedDocument.operations.length != actualDocument.operations.length) {
+    if (_expectedDocument.operations.length !=
+        actualDocument.operations.length) {
       messages.add(
           "expected ${_expectedDocument.operations.length} document operations but found ${actualDocument.operations.length}");
       nodeCountMismatch = true;
@@ -59,26 +62,32 @@ class EquivalentQuillDocumentMatcher extends Matcher {
       messages.add("documents have the same number of operations");
     }
 
-    final maxOpCount = max(_expectedDocument.operations.length, actualDocument.operations.length);
+    final maxOpCount = max(
+        _expectedDocument.operations.length, actualDocument.operations.length);
     final opComparisons = List.generate(maxOpCount, (index) => ["", "", " "]);
     for (int i = 0; i < maxOpCount; i += 1) {
-      if (i < _expectedDocument.operations.length && i < actualDocument.operations.length) {
+      if (i < _expectedDocument.operations.length &&
+          i < actualDocument.operations.length) {
         opComparisons[i][0] = _expectedDocument.operations[i].describe();
         opComparisons[i][1] = actualDocument.operations[i].describe();
 
-        if (_expectedDocument.operations[i].runtimeType != actualDocument.operations[i].runtimeType) {
+        if (_expectedDocument.operations[i].runtimeType !=
+            actualDocument.operations[i].runtimeType) {
           opComparisons[i][2] = "Wrong Type";
           nodeTypeOrContentMismatch = true;
-        } else if (_expectedDocument.operations[i] != actualDocument.operations[i]) {
-          if (_expectedDocument.operations[i].value != actualDocument.operations[i].value) {
+        } else if (_expectedDocument.operations[i] !=
+            actualDocument.operations[i]) {
+          if (_expectedDocument.operations[i].value !=
+              actualDocument.operations[i].value) {
             opComparisons[i][2] = "Different value";
           } else {
             opComparisons[i][2] =
                 "Different attributes - Expected: ${_expectedDocument.operations[i].attributes}, Actual: ${actualDocument.operations[i].value}";
           }
           nodeTypeOrContentMismatch = true;
-        } else if (!const DeepCollectionEquality()
-            .equals(_expectedDocument.operations[i].attributes, actualDocument.operations[i].attributes)) {
+        } else if (!const DeepCollectionEquality().equals(
+            _expectedDocument.operations[i].attributes,
+            actualDocument.operations[i].attributes)) {
           opComparisons[i][2] = "Different attributes";
           nodeTypeOrContentMismatch = true;
         }
@@ -96,7 +105,8 @@ class EquivalentQuillDocumentMatcher extends Matcher {
     if (nodeCountMismatch || nodeTypeOrContentMismatch) {
       String messagesList = messages.join(", ");
       messagesList += "\n";
-      messagesList += const TableRenderer().render(opComparisons, columns: ["Expected", "Actual", "Difference"]);
+      messagesList += const TableRenderer()
+          .render(opComparisons, columns: ["Expected", "Actual", "Difference"]);
       return messagesList;
     }
 

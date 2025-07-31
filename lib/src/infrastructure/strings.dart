@@ -71,7 +71,8 @@ extension CharacterMovement on String {
   ///   a|💙c -> `3` (notice that we moved 2 units due to emoji length)
   ///   a💙|c -> `4`
   ///   a💙c| -> `null`
-  int? moveOffsetDownstreamByCharacter(int textOffset, {int characterCount = 1}) {
+  int? moveOffsetDownstreamByCharacter(int textOffset,
+      {int characterCount = 1}) {
     if (textOffset == length) {
       return null;
     }
@@ -81,7 +82,8 @@ extension CharacterMovement on String {
 
   int? _moveOffsetByWord(int textOffset, bool upstream) {
     if (textOffset < 0 || textOffset > length) {
-      throw Exception("Index '$textOffset' is out of string range. Length: $length");
+      throw Exception(
+          "Index '$textOffset' is out of string range. Length: $length");
     }
 
     // Create a character range, initially with zero length
@@ -109,9 +111,11 @@ extension CharacterMovement on String {
     return range.current.length;
   }
 
-  int? _moveOffsetByCharacter(int textOffset, int characterCount, bool upstream) {
+  int? _moveOffsetByCharacter(
+      int textOffset, int characterCount, bool upstream) {
     if (textOffset < 0 || textOffset > length) {
-      throw Exception("Index '$textOffset' is out of string range. Length: $length");
+      throw Exception(
+          "Index '$textOffset' is out of string range. Length: $length");
     }
 
     // Create a character range, initially with zero length
@@ -128,7 +132,9 @@ extension CharacterMovement on String {
       return remainingOffset >= 0;
     });
     // Verify that the move is possible with the requested character count
-    if (upstream ? range.current.length < characterCount : range.stringAfterLength < characterCount) {
+    if (upstream
+        ? range.current.length < characterCount
+        : range.stringAfterLength < characterCount) {
       return null;
     }
     // Expand or contract the range by the requested number of characters

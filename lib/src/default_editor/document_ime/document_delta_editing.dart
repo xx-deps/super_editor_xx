@@ -44,7 +44,8 @@ class TextDeltasDocumentEditor {
 
   /// Applies the given [textEditingDeltas] to the [Document].
   void applyDeltas(List<TextEditingDelta> textEditingDeltas) {
-    editorImeLog.finest("Applying ${textEditingDeltas.length} IME deltas to document");
+    editorImeLog
+        .finest("Applying ${textEditingDeltas.length} IME deltas to document");
 
     editorImeDeltasLog.fine("Incoming deltas:");
     for (final delta in textEditingDeltas) {
@@ -64,7 +65,8 @@ class TextDeltasDocumentEditor {
       selection: selection.value != null
           ? _serializedDoc.documentToImeSelection(selection.value!)
           : const TextSelection.collapsed(offset: -1),
-      composing: _serializedDoc.documentToImeRange(_serializedDoc.composingRegion),
+      composing:
+          _serializedDoc.documentToImeRange(_serializedDoc.composingRegion),
     );
 
     // Start an editor transaction so that all changes made during this delta
@@ -72,7 +74,8 @@ class TextDeltasDocumentEditor {
     editor.startTransaction();
 
     for (final delta in textEditingDeltas) {
-      editorImeLog.finest("---------------------------------------------------");
+      editorImeLog
+          .finest("---------------------------------------------------");
 
       editorImeLog.finest("Applying delta: $delta");
 
@@ -89,17 +92,21 @@ class TextDeltasDocumentEditor {
         editorImeLog.shout("Unknown IME delta type: ${delta.runtimeType}");
       }
 
-      editorImeLog.finest("---------------------------------------------------");
+      editorImeLog
+          .finest("---------------------------------------------------");
     }
 
     // Update the editor's IME composing region based on the composing region
     // for the last delta. If the version of our document serialized hidden
     // characters in the IME, adjust for those hidden characters before setting
     // the IME composing region.
-    editorImeLog.fine("After applying all deltas, converting the final composing region to a document range.");
-    editorImeLog.fine("Raw IME delta composing region: ${textEditingDeltas.last.composing}");
+    editorImeLog.fine(
+        "After applying all deltas, converting the final composing region to a document range.");
+    editorImeLog.fine(
+        "Raw IME delta composing region: ${textEditingDeltas.last.composing}");
 
-    DocumentRange? docComposingRegion = _calculateNewComposingRegion(textEditingDeltas);
+    DocumentRange? docComposingRegion =
+        _calculateNewComposingRegion(textEditingDeltas);
 
     if (docComposingRegion != composingRegion.value) {
       editor.execute([
@@ -127,8 +134,10 @@ class TextDeltasDocumentEditor {
       // On iOS native and Android Web, newlines are reported here and also to performAction().
       // On Android native, newlines are only reported here. So, on Android native,
       // we forward the newline action to performAction.
-      if (defaultTargetPlatform == TargetPlatform.android && !CurrentPlatform.isWeb) {
-        editorImeLog.fine("Received a newline insertion on Android. Forwarding to newline input action.");
+      if (defaultTargetPlatform == TargetPlatform.android &&
+          !CurrentPlatform.isWeb) {
+        editorImeLog.fine(
+            "Received a newline insertion on Android. Forwarding to newline input action.");
         onPerformAction(TextInputAction.newline);
       } else {
         editorImeLog.fine("Skipping insertion delta because its a newline");
@@ -140,7 +149,8 @@ class TextDeltasDocumentEditor {
       return;
     }
 
-    if (delta.textInserted == "\t" && (defaultTargetPlatform == TargetPlatform.iOS)) {
+    if (delta.textInserted == "\t" &&
+        (defaultTargetPlatform == TargetPlatform.iOS)) {
       // On iOS, tabs pressed at the the software keyboard are reported here.
       commonOps.indentListItem();
 
@@ -158,7 +168,8 @@ class TextDeltasDocumentEditor {
       affinity: delta.selection.affinity,
     );
 
-    if (delta.textInserted == ' ' && _serializedDoc.isPositionInsidePlaceholder(insertionPosition)) {
+    if (delta.textInserted == ' ' &&
+        _serializedDoc.isPositionInsidePlaceholder(insertionPosition)) {
       // The IME is trying to insert a space inside the invisible range. This is a situation that happens
       // on iOS when the user is composing a character at the beginning of a node using a korean keyboard.
       // The IME deletes the first visible character and the space from the invisible characters,
@@ -169,11 +180,12 @@ class TextDeltasDocumentEditor {
       return;
     }
 
-    editorImeLog.fine("Converting IME insertion offset into a DocumentSelection");
+    editorImeLog
+        .fine("Converting IME insertion offset into a DocumentSelection");
     final insertionSelection = _serializedDoc.imeToDocumentSelection(
       TextSelection.fromPosition(insertionPosition),
     );
-    if(insertionSelection == null){
+    if (insertionSelection == null) {
       return;
     }
     // Update the local IME value that changes with each delta.
@@ -186,7 +198,9 @@ class TextDeltasDocumentEditor {
       document,
       selection.value!,
       composingRegion.value,
-      _serializedDoc.didPrependPlaceholder ? PrependedCharacterPolicy.include : PrependedCharacterPolicy.exclude,
+      _serializedDoc.didPrependPlaceholder
+          ? PrependedCharacterPolicy.include
+          : PrependedCharacterPolicy.exclude,
     );
   }
 
@@ -202,8 +216,10 @@ class TextDeltasDocumentEditor {
       // On iOS native and Android Web, newlines are reported here and also to performAction().
       // On Android native, newlines are only reported here. So, on Android native,
       // we forward the newline action to performAction.
-      if (defaultTargetPlatform == TargetPlatform.android && !CurrentPlatform.isWeb) {
-        editorImeLog.fine("Received a newline replacement on Android. Forwarding to newline input action.");
+      if (defaultTargetPlatform == TargetPlatform.android &&
+          !CurrentPlatform.isWeb) {
+        editorImeLog.fine(
+            "Received a newline replacement on Android. Forwarding to newline input action.");
         onPerformAction(TextInputAction.newline);
       } else {
         editorImeLog.fine("Skipping replacement delta because its a newline");
@@ -211,7 +227,8 @@ class TextDeltasDocumentEditor {
       return;
     }
 
-    if (delta.replacementText == "\t" && (defaultTargetPlatform == TargetPlatform.iOS)) {
+    if (delta.replacementText == "\t" &&
+        (defaultTargetPlatform == TargetPlatform.iOS)) {
       // On iOS, tabs pressed at the the software keyboard are reported here.
       commonOps.indentListItem();
       return;
@@ -229,7 +246,9 @@ class TextDeltasDocumentEditor {
       document,
       selection.value!,
       composingRegion.value,
-      _serializedDoc.didPrependPlaceholder ? PrependedCharacterPolicy.include : PrependedCharacterPolicy.exclude,
+      _serializedDoc.didPrependPlaceholder
+          ? PrependedCharacterPolicy.include
+          : PrependedCharacterPolicy.exclude,
     );
   }
 
@@ -268,7 +287,9 @@ class TextDeltasDocumentEditor {
       editor.execute([
         ChangeSelectionRequest(
           docSelection,
-          docSelection.isCollapsed ? SelectionChangeType.placeCaret : SelectionChangeType.expandSelection,
+          docSelection.isCollapsed
+              ? SelectionChangeType.placeCaret
+              : SelectionChangeType.expandSelection,
           SelectionReason.userInteraction,
         ),
         ChangeComposingRegionRequest(docComposingRegion),
@@ -294,7 +315,8 @@ class TextDeltasDocumentEditor {
     }
 
     final extentNode = document.getNodeById(documentSelection.extent.nodeId)!;
-    final isWholeNodeSelected = documentSelection.start.nodeId == documentSelection.end.nodeId &&
+    final isWholeNodeSelected = documentSelection.start.nodeId ==
+            documentSelection.end.nodeId &&
         documentSelection.start.nodePosition == extentNode.beginningPosition &&
         documentSelection.end.nodePosition == extentNode.endPosition;
 
@@ -318,12 +340,14 @@ class TextDeltasDocumentEditor {
   }
 
   void insert(DocumentSelection insertionSelection, String textInserted) {
-    editorImeLog.fine('Inserting "$textInserted" at position "$insertionSelection"');
     editorImeLog
-        .fine("Updating the Document Composer's selection to place caret at insertion offset:\n$insertionSelection");
+        .fine('Inserting "$textInserted" at position "$insertionSelection"');
+    editorImeLog.fine(
+        "Updating the Document Composer's selection to place caret at insertion offset:\n$insertionSelection");
     final selectionBeforeInsertion = selection.value;
 
-    editorImeLog.fine("Inserting the text at the Document Composer's selection");
+    editorImeLog
+        .fine("Inserting the text at the Document Composer's selection");
     final didInsert = _insertPlainText(
       insertionSelection.extent,
       textInserted,
@@ -331,7 +355,8 @@ class TextDeltasDocumentEditor {
     editorImeLog.fine("Insertion successful? $didInsert");
 
     if (!didInsert) {
-      editorImeLog.fine("Failed to insert characters. Restoring previous selection.");
+      editorImeLog
+          .fine("Failed to insert characters. Restoring previous selection.");
       editor.execute([
         ChangeSelectionRequest(
           selectionBeforeInsertion,
@@ -346,34 +371,42 @@ class TextDeltasDocumentEditor {
     DocumentPosition insertionPosition,
     String text,
   ) {
-    editorOpsLog.fine('Attempting to insert "$text" at position: $insertionPosition');
+    editorOpsLog
+        .fine('Attempting to insert "$text" at position: $insertionPosition');
 
-    DocumentNode? insertionNode = document.getNodeById(insertionPosition.nodeId);
+    DocumentNode? insertionNode =
+        document.getNodeById(insertionPosition.nodeId);
     if (insertionNode == null) {
-      editorOpsLog.warning('Attempted to insert text using a non-existing node');
+      editorOpsLog
+          .warning('Attempted to insert text using a non-existing node');
       return false;
     }
 
     if (insertionPosition.nodePosition is UpstreamDownstreamNodePosition) {
-      editorOpsLog.fine("The selected position is an UpstreamDownstreamPosition. Inserting new paragraph first.");
+      editorOpsLog.fine(
+          "The selected position is an UpstreamDownstreamPosition. Inserting new paragraph first.");
       editor.execute([InsertNewlineAtCaretRequest()]);
 
       // After inserting a block level new line, the selection changes to another node.
       // Therefore, we need to update the insertion position.
       insertionNode = document.getNodeById(selection.value!.extent.nodeId)!;
-      insertionPosition = DocumentPosition(nodeId: insertionNode.id, nodePosition: insertionNode.endPosition);
+      insertionPosition = DocumentPosition(
+          nodeId: insertionNode.id, nodePosition: insertionNode.endPosition);
     }
 
-    if (insertionNode is! TextNode || insertionPosition.nodePosition is! TextNodePosition) {
+    if (insertionNode is! TextNode ||
+        insertionPosition.nodePosition is! TextNodePosition) {
       editorOpsLog.fine(
           "Couldn't insert text because Super Editor doesn't know how to handle a node of type: $insertionNode, with position: ${insertionPosition.nodePosition}");
       return false;
     }
 
     editorOpsLog.fine("Executing text insertion command.");
-    editorOpsLog.finer("Text before insertion: '${insertionNode.text.toPlainText()}'");
+    editorOpsLog
+        .finer("Text before insertion: '${insertionNode.text.toPlainText()}'");
     editor.execute([
-      if (selection.value != DocumentSelection.collapsed(position: insertionPosition))
+      if (selection.value !=
+          DocumentSelection.collapsed(position: insertionPosition))
         ChangeSelectionRequest(
           DocumentSelection.collapsed(position: insertionPosition),
           SelectionChangeType.placeCaret,
@@ -385,13 +418,15 @@ class TextDeltasDocumentEditor {
         attributions: composerPreferences.currentAttributions,
       ),
     ]);
-    editorOpsLog.finer("Text after insertion: '${insertionNode.text.toPlainText()}'");
+    editorOpsLog
+        .finer("Text after insertion: '${insertionNode.text.toPlainText()}'");
 
     return true;
   }
 
   void replace(TextRange replacedRange, String replacementText) {
-    final replacementSelection = _serializedDoc.imeToDocumentSelection(TextSelection(
+    final replacementSelection =
+        _serializedDoc.imeToDocumentSelection(TextSelection(
       baseOffset: replacedRange.start,
       // TODO: the delta API is wrong for TextRange.end, it should be exclusive,
       //       but it's implemented as inclusive. Change this code when Flutter
@@ -424,7 +459,8 @@ class TextDeltasDocumentEditor {
 
   void delete(TextRange deletedRange) {
     final rangeToDelete = deletedRange;
-    final docSelectionToDelete = _serializedDoc.imeToDocumentSelection(TextSelection(
+    final docSelectionToDelete =
+        _serializedDoc.imeToDocumentSelection(TextSelection(
       baseOffset: rangeToDelete.start,
       extentOffset: rangeToDelete.end,
     ));
@@ -448,7 +484,9 @@ class TextDeltasDocumentEditor {
     editor.execute([
       ChangeSelectionRequest(
         docSelectionToDelete,
-        docSelectionToDelete.isCollapsed ? SelectionChangeType.collapseSelection : SelectionChangeType.expandSelection,
+        docSelectionToDelete.isCollapsed
+            ? SelectionChangeType.collapseSelection
+            : SelectionChangeType.expandSelection,
         SelectionReason.contentChange,
       ),
       const DeleteSelectionRequest(TextAffinity.upstream),
@@ -489,7 +527,8 @@ class TextDeltasDocumentEditor {
     if (isSplittingText) {
       final nextNode = document.getNodeAfterById(selectedNode.id);
       if (nextNode != null) {
-        _updateImeRangeMappingAfterNodeSplit(originNode: selectedNode, newNode: nextNode);
+        _updateImeRangeMappingAfterNodeSplit(
+            originNode: selectedNode, newNode: nextNode);
       }
     }
   }
@@ -505,11 +544,14 @@ class TextDeltasDocumentEditor {
     final newImeValue = _nextImeValue!;
     final imeNewlineIndex = newImeValue.text.indexOf("\n");
     final topImeToDocTextRange = TextRange(start: 0, end: imeNewlineIndex);
-    final bottomImeToDocTextRange = TextRange(start: imeNewlineIndex + 1, end: newImeValue.text.length);
+    final bottomImeToDocTextRange =
+        TextRange(start: imeNewlineIndex + 1, end: newImeValue.text.length);
 
     // Update mapping from Document nodes to IME ranges.
-    _serializedDoc.docTextNodesToImeRanges[originNode.id] = topImeToDocTextRange;
-    _serializedDoc.docTextNodesToImeRanges[newNode.id] = bottomImeToDocTextRange;
+    _serializedDoc.docTextNodesToImeRanges[originNode.id] =
+        topImeToDocTextRange;
+    _serializedDoc.docTextNodesToImeRanges[newNode.id] =
+        bottomImeToDocTextRange;
 
     // Remove old mapping from IME TextRange to Document node.
     late final MapEntry<TextRange, String> oldImeToDoc;
@@ -524,8 +566,10 @@ class TextDeltasDocumentEditor {
     _serializedDoc.imeRangesToDocTextNodes.remove(oldImeToDoc.key);
 
     // Update and add mapping from IME TextRanges to Document nodes.
-    _serializedDoc.imeRangesToDocTextNodes[topImeToDocTextRange] = originNode.id;
-    _serializedDoc.imeRangesToDocTextNodes[bottomImeToDocTextRange] = newNode.id;
+    _serializedDoc.imeRangesToDocTextNodes[topImeToDocTextRange] =
+        originNode.id;
+    _serializedDoc.imeRangesToDocTextNodes[bottomImeToDocTextRange] =
+        newNode.id;
   }
 
   DocumentSelection? _calculateNewDocumentSelection(TextEditingDelta delta) {
@@ -549,7 +593,8 @@ class TextDeltasDocumentEditor {
     final lastDelta = deltas.last;
     if (CurrentPlatform.isWeb &&
         lastDelta.composing.isCollapsed &&
-        _serializedDoc.isPositionInsidePlaceholder(TextPosition(offset: lastDelta.composing.end))) {
+        _serializedDoc.isPositionInsidePlaceholder(
+            TextPosition(offset: lastDelta.composing.end))) {
       // On web, pressing CMD + LEFT ARROW generates a non-text delta moving
       // the selection, and possibly the composing region to the first character. However, the first character
       // is in a region invisible to the user. Adjust the document composing region to be the first visible character.

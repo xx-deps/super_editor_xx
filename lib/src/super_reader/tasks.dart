@@ -13,7 +13,8 @@ class ReadOnlyTaskComponentBuilder implements ComponentBuilder {
   const ReadOnlyTaskComponentBuilder();
 
   @override
-  TaskComponentViewModel? createViewModel(Document document, DocumentNode node) {
+  TaskComponentViewModel? createViewModel(
+      Document document, DocumentNode node) {
     if (node is! TaskNode) {
       return null;
     }
@@ -29,15 +30,16 @@ class ReadOnlyTaskComponentBuilder implements ComponentBuilder {
       setComplete: null,
       text: node.text,
       textDirection: textDirection,
-      textAlignment: textDirection == TextDirection.ltr ? TextAlign.left : TextAlign.right,
+      textAlignment:
+          textDirection == TextDirection.ltr ? TextAlign.left : TextAlign.right,
       textStyleBuilder: noStyleBuilder,
       selectionColor: const Color(0x00000000),
     );
   }
 
   @override
-  Widget? createComponent(
-      SingleColumnDocumentComponentContext componentContext, SingleColumnLayoutComponentViewModel componentViewModel) {
+  Widget? createComponent(SingleColumnDocumentComponentContext componentContext,
+      SingleColumnLayoutComponentViewModel componentViewModel) {
     if (componentViewModel is! TaskComponentViewModel) {
       return null;
     }

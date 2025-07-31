@@ -17,7 +17,8 @@ class AttributedTextBoundsOverlay implements SuperEditorLayerBuilder {
   final AttributionBoundsBuilder builder;
 
   @override
-  ContentLayerStatefulWidget build(BuildContext context, SuperEditorContext editContext) {
+  ContentLayerStatefulWidget build(
+      BuildContext context, SuperEditorContext editContext) {
     return AttributionBounds(
       document: editContext.document,
       layout: editContext.documentLayout,

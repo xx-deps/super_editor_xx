@@ -19,12 +19,14 @@ void main() {
       await _pumpScaffold(tester);
       await tester.tap(find.byType(BareBonesTextFieldWithInputClient));
 
-      await tester.ime.typeText("Abc💙", finder: find.byType(BareBonesTextFieldWithInputClient));
+      await tester.ime.typeText("Abc💙",
+          finder: find.byType(BareBonesTextFieldWithInputClient));
 
       expect(find.text("Abc💙"), findsOneWidget);
     });
 
-    testWidgets("replaces selected characters with new character", (tester) async {
+    testWidgets("replaces selected characters with new character",
+        (tester) async {
       await _pumpScaffold(
         tester,
         const TextEditingValue(
@@ -34,7 +36,8 @@ void main() {
       );
       await tester.tap(find.byType(BareBonesTextFieldWithInputClient));
 
-      await tester.ime.typeText("d", finder: find.byType(BareBonesTextFieldWithInputClient));
+      await tester.ime.typeText("d",
+          finder: find.byType(BareBonesTextFieldWithInputClient));
 
       expect(find.text("Ad💙"), findsOneWidget);
     });
@@ -49,12 +52,15 @@ void main() {
       );
       await tester.tap(find.byType(BareBonesTextFieldWithInputClient));
 
-      await tester.ime.backspace(finder: find.byType(BareBonesTextFieldWithInputClient));
-      await tester.ime.backspace(finder: find.byType(BareBonesTextFieldWithInputClient));
+      await tester.ime
+          .backspace(finder: find.byType(BareBonesTextFieldWithInputClient));
+      await tester.ime
+          .backspace(finder: find.byType(BareBonesTextFieldWithInputClient));
 
       // Run a 3rd backspace, which shouldn't have any effect. This ensures that our
       // simulator doesn't blow up when backspacing at the beginning of text.
-      await tester.ime.backspace(finder: find.byType(BareBonesTextFieldWithInputClient));
+      await tester.ime
+          .backspace(finder: find.byType(BareBonesTextFieldWithInputClient));
 
       expect(find.text("c💙"), findsOneWidget);
     });
@@ -72,7 +78,8 @@ void main() {
       );
       await tester.tap(find.byType(BareBonesTextFieldWithInputClient));
 
-      await tester.ime.backspace(finder: find.byType(BareBonesTextFieldWithInputClient));
+      await tester.ime
+          .backspace(finder: find.byType(BareBonesTextFieldWithInputClient));
 
       expect(find.text("A💙"), findsOneWidget);
     });
@@ -107,7 +114,8 @@ void main() {
   });
 }
 
-Future<void> _pumpScaffold(WidgetTester tester, [TextEditingValue? initialValue]) async {
+Future<void> _pumpScaffold(WidgetTester tester,
+    [TextEditingValue? initialValue]) async {
   await tester.pumpWidget(
     MaterialApp(
       home: Scaffold(

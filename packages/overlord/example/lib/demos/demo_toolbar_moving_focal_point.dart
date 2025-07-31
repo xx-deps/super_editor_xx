@@ -26,10 +26,12 @@ class ToolbarExpandingFocalPointDemo extends StatefulWidget {
   const ToolbarExpandingFocalPointDemo({super.key});
 
   @override
-  State<ToolbarExpandingFocalPointDemo> createState() => _ToolbarExpandingFocalPointDemoState();
+  State<ToolbarExpandingFocalPointDemo> createState() =>
+      _ToolbarExpandingFocalPointDemoState();
 }
 
-class _ToolbarExpandingFocalPointDemoState extends State<ToolbarExpandingFocalPointDemo>
+class _ToolbarExpandingFocalPointDemoState
+    extends State<ToolbarExpandingFocalPointDemo>
     with SingleTickerProviderStateMixin {
   final _leaderLink = LeaderLink();
   final _viewportKey = GlobalKey();
@@ -49,7 +51,8 @@ class _ToolbarExpandingFocalPointDemoState extends State<ToolbarExpandingFocalPo
   void initState() {
     super.initState();
 
-    _animationController = AnimationController(vsync: this, duration: const Duration(seconds: 1))
+    _animationController = AnimationController(
+        vsync: this, duration: const Duration(seconds: 1))
       ..addStatusListener((status) {
         switch (status) {
           case AnimationStatus.completed:
@@ -66,7 +69,8 @@ class _ToolbarExpandingFocalPointDemoState extends State<ToolbarExpandingFocalPo
         }
       })
       ..addListener(() {
-        _expansionExtent.value = lerpDouble(_startExtent, _endExtent, _animationController.value)!;
+        _expansionExtent.value =
+            lerpDouble(_startExtent, _endExtent, _animationController.value)!;
       });
   }
 
@@ -105,7 +109,9 @@ class _ToolbarExpandingFocalPointDemoState extends State<ToolbarExpandingFocalPo
               builder: (context, expansionExtent, _) {
                 return Container(
                   height: 12,
-                  width: _baseContentWidth + (2 * expansionExtent) + 2, // +2 for border
+                  width: _baseContentWidth +
+                      (2 * expansionExtent) +
+                      2, // +2 for border
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.white.withOpacity(0.1)),
                   ),

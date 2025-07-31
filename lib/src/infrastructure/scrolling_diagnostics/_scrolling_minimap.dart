@@ -33,14 +33,16 @@ class ScrollingMinimaps extends StatefulWidget {
   State<ScrollingMinimaps> createState() => _ScrollingMinimapsState();
 }
 
-class _ScrollingMinimapsState extends State<ScrollingMinimaps> with ScrollingMinimapsRepository {
+class _ScrollingMinimapsState extends State<ScrollingMinimaps>
+    with ScrollingMinimapsRepository {
   final _instrumentations = <String, ScrollableInstrumentation?>{};
 
   @override
   ScrollableInstrumentation? get(String id) => _instrumentations[id];
 
   @override
-  void put(String id, ScrollableInstrumentation? instrumentation) => _instrumentations[id] = instrumentation;
+  void put(String id, ScrollableInstrumentation? instrumentation) =>
+      _instrumentations[id] = instrumentation;
 
   @override
   Widget build(BuildContext context) {
@@ -83,9 +85,11 @@ class ScrollingMinimap extends StatefulWidget {
 
 class _ScrollingMinimapState extends State<ScrollingMinimap> {
   ScrollableInstrumentation? get _instrumentation =>
-      widget.instrumentation ?? ScrollingMinimaps.of(context)?.get(widget.minimapId!);
+      widget.instrumentation ??
+      ScrollingMinimaps.of(context)?.get(widget.minimapId!);
 
-  RenderBox? get _viewportBox => _instrumentation?.viewport.value?.findRenderObject() as RenderBox?;
+  RenderBox? get _viewportBox =>
+      _instrumentation?.viewport.value?.findRenderObject() as RenderBox?;
 
   @override
   Widget build(BuildContext context) {
@@ -127,10 +131,14 @@ class _ScrollingMinimapState extends State<ScrollingMinimap> {
               minimapScale: widget.minimapScale,
               viewportSize: viewportBox.size,
               scrollOffset: scrollPosition.pixels,
-              contentHeight: scrollPosition.hasContentDimensions ? scrollPosition.fullExtent : null,
-              viewportStartDragOffset: _instrumentation!.startDragInViewport.value,
+              contentHeight: scrollPosition.hasContentDimensions
+                  ? scrollPosition.fullExtent
+                  : null,
+              viewportStartDragOffset:
+                  _instrumentation!.startDragInViewport.value,
               viewportEndDragOffset: _instrumentation!.endDragInViewport.value,
-              contentStartDragOffset: _instrumentation!.startDragInContent.value,
+              contentStartDragOffset:
+                  _instrumentation!.startDragInContent.value,
               contentEndDragOffset: _instrumentation!.endDragInContent.value,
               scrollingDirection: _instrumentation!.scrollDirection.value,
               autoScrollingEdge: _instrumentation!.autoScrollEdge.value,
@@ -266,7 +274,8 @@ class ScrollingMinimapPainter extends CustomPainter {
       canvas.drawRect(
         Rect.fromPoints(
           _scaleOffset(Offset(0.0, -scrollOffset)),
-          _scaleOffset(Offset(viewportSize.width, contentHeight! - scrollOffset)),
+          _scaleOffset(
+              Offset(viewportSize.width, contentHeight! - scrollOffset)),
         ),
         _contentPaint,
       );
@@ -274,7 +283,8 @@ class ScrollingMinimapPainter extends CustomPainter {
 
     // Paint a border that represents the viewport.
     canvas.drawRect(
-      Rect.fromPoints(Offset.zero, _scaleOffset(viewportSize.bottomRight(Offset.zero))),
+      Rect.fromPoints(
+          Offset.zero, _scaleOffset(viewportSize.bottomRight(Offset.zero))),
       _viewportPaint,
     );
 
@@ -283,7 +293,8 @@ class ScrollingMinimapPainter extends CustomPainter {
     canvas.drawRect(
       Rect.fromPoints(
         _scaleOffset(Offset(0.0, -scrollOffset)),
-        _scaleOffset(Offset(viewportSize.width, -scrollOffset)) + const Offset(0, 2),
+        _scaleOffset(Offset(viewportSize.width, -scrollOffset)) +
+            const Offset(0, 2),
       ),
       _scrollOffsetPaint,
     );
@@ -295,7 +306,8 @@ class ScrollingMinimapPainter extends CustomPainter {
         // Paint indicator on bottom edge.
         canvas.drawRect(
           Rect.fromPoints(
-            _scaleOffset(viewportSize.bottomLeft(Offset.zero)) - const Offset(0, 20),
+            _scaleOffset(viewportSize.bottomLeft(Offset.zero)) -
+                const Offset(0, 20),
             _scaleOffset(viewportSize.bottomRight(Offset.zero)),
           ),
           _autoScrollEdgePaint,
@@ -305,7 +317,8 @@ class ScrollingMinimapPainter extends CustomPainter {
         canvas.drawRect(
           Rect.fromPoints(
             _scaleOffset(Offset.zero),
-            _scaleOffset(viewportSize.topRight(Offset.zero)) + const Offset(0, 20),
+            _scaleOffset(viewportSize.topRight(Offset.zero)) +
+                const Offset(0, 20),
           ),
           _autoScrollEdgePaint,
         );
@@ -319,7 +332,8 @@ class ScrollingMinimapPainter extends CustomPainter {
         // Paint indicator on bottom edge.
         canvas.drawRect(
           Rect.fromPoints(
-            _scaleOffset(viewportSize.bottomLeft(Offset.zero)) - const Offset(0, 2),
+            _scaleOffset(viewportSize.bottomLeft(Offset.zero)) -
+                const Offset(0, 2),
             _scaleOffset(viewportSize.bottomRight(Offset.zero)),
           ),
           _scrollingPaint,
@@ -329,7 +343,8 @@ class ScrollingMinimapPainter extends CustomPainter {
         canvas.drawRect(
           Rect.fromPoints(
             _scaleOffset(Offset.zero),
-            _scaleOffset(viewportSize.topRight(Offset.zero)) + const Offset(0, 2),
+            _scaleOffset(viewportSize.topRight(Offset.zero)) +
+                const Offset(0, 2),
           ),
           _scrollingPaint,
         );
@@ -338,16 +353,22 @@ class ScrollingMinimapPainter extends CustomPainter {
 
     // Paint a representation of the user's drag behavior in the viewport.
     if (viewportStartDragOffset != null && viewportEndDragOffset != null) {
-      canvas.drawCircle(_scaleOffset(viewportStartDragOffset!), 2, _viewportDragPaint);
-      canvas.drawCircle(_scaleOffset(viewportEndDragOffset!), 2, _viewportDragPaint);
-      canvas.drawLine(_scaleOffset(viewportStartDragOffset!), _scaleOffset(viewportEndDragOffset!), _viewportDragPaint);
+      canvas.drawCircle(
+          _scaleOffset(viewportStartDragOffset!), 2, _viewportDragPaint);
+      canvas.drawCircle(
+          _scaleOffset(viewportEndDragOffset!), 2, _viewportDragPaint);
+      canvas.drawLine(_scaleOffset(viewportStartDragOffset!),
+          _scaleOffset(viewportEndDragOffset!), _viewportDragPaint);
     }
 
     // Paint a representation of the user's drag behavior in the content.
     if (contentStartDragOffset != null && contentEndDragOffset != null) {
-      canvas.drawCircle(_scaleOffset(contentStartDragOffset!), 2, _contentDragPaint);
-      canvas.drawCircle(_scaleOffset(contentEndDragOffset!), 2, _contentDragPaint);
-      canvas.drawLine(_scaleOffset(contentStartDragOffset!), _scaleOffset(contentEndDragOffset!), _contentDragPaint);
+      canvas.drawCircle(
+          _scaleOffset(contentStartDragOffset!), 2, _contentDragPaint);
+      canvas.drawCircle(
+          _scaleOffset(contentEndDragOffset!), 2, _contentDragPaint);
+      canvas.drawLine(_scaleOffset(contentStartDragOffset!),
+          _scaleOffset(contentEndDragOffset!), _contentDragPaint);
     }
   }
 

@@ -19,7 +19,8 @@ import 'ime_decoration.dart';
 /// Ideally, this class *wouldn't* implement [TextInputConnection], but there are situations
 /// where this class needs to care about what's sent to the IME. For more information, see
 /// the [setEditingState] override in this class.
-class DocumentImeInputClient extends TextInputConnectionDecorator with TextInputClient, DeltaTextInputClient {
+class DocumentImeInputClient extends TextInputConnectionDecorator
+    with TextInputClient, DeltaTextInputClient {
   DocumentImeInputClient({
     required this.selection,
     required this.composingRegion,
@@ -117,13 +118,15 @@ class DocumentImeInputClient extends TextInputConnectionDecorator with TextInput
       // We're in the middle of applying a series of text deltas. Don't
       // send any updates to the IME because it will conflict with the
       // changes we're actively processing.
-      editorImeLog.fine("Ignoring new TextEditingValue because we're applying deltas");
+      editorImeLog
+          .fine("Ignoring new TextEditingValue because we're applying deltas");
       return;
     }
 
     editorImeLog.fine("Wants to send a value to IME: $newValue");
     editorImeLog.fine("The current local IME value: $_currentTextEditingValue");
-    editorImeLog.fine("The current platform IME value: $_currentTextEditingValue");
+    editorImeLog
+        .fine("The current platform IME value: $_currentTextEditingValue");
     if (newValue != _platformTextEditingValue) {
       // We've been given a new IME value. We compare its value to _platformTextEditingValue
       // instead of _currentTextEditingValue. Why is that?
@@ -156,7 +159,8 @@ class DocumentImeInputClient extends TextInputConnectionDecorator with TextInput
       editorImeLog.fine("$newValue");
       imeConnection.value?.setEditingState(newValue);
     } else {
-      editorImeLog.fine("Ignoring new TextEditingValue because it's the same as the existing one: $newValue");
+      editorImeLog.fine(
+          "Ignoring new TextEditingValue because it's the same as the existing one: $newValue");
     }
 
     _currentTextEditingValue = newValue;
@@ -173,7 +177,8 @@ class DocumentImeInputClient extends TextInputConnectionDecorator with TextInput
   // What the platform IME *thinks* the current value is.
   TextEditingValue _platformTextEditingValue = const TextEditingValue();
 
-  void _updatePlatformImeValueWithDeltas(List<TextEditingDelta> textEditingDeltas) {
+  void _updatePlatformImeValueWithDeltas(
+      List<TextEditingDelta> textEditingDeltas) {
     // Apply the deltas to the previous platform-side IME value, to find out
     // what the platform thinks the IME value is, right now.
     for (final delta in textEditingDeltas) {
@@ -185,7 +190,8 @@ class DocumentImeInputClient extends TextInputConnectionDecorator with TextInput
 
   @override
   void updateEditingValue(TextEditingValue value) {
-    editorImeLog.shout("Delta text input client received a non-delta TextEditingValue from OS: $value");
+    editorImeLog.shout(
+        "Delta text input client received a non-delta TextEditingValue from OS: $value");
   }
 
   @override
@@ -194,7 +200,8 @@ class DocumentImeInputClient extends TextInputConnectionDecorator with TextInput
       return;
     }
 
-    if (_isFloatingCursorVisible && textEditingDeltas.every((e) => e is TextEditingDeltaNonTextUpdate)) {
+    if (_isFloatingCursorVisible &&
+        textEditingDeltas.every((e) => e is TextEditingDeltaNonTextUpdate)) {
       // On iOS, dragging the floating cursor generates non-text deltas to update the selection.
       //
       // When dragging the floating cursor between paragraphs, we receive a non-text delta for the previously
@@ -206,7 +213,8 @@ class DocumentImeInputClient extends TextInputConnectionDecorator with TextInput
       return;
     }
 
-    if (_hasPerformedNewLineActionThisFrame && defaultTargetPlatform == TargetPlatform.iOS) {
+    if (_hasPerformedNewLineActionThisFrame &&
+        defaultTargetPlatform == TargetPlatform.iOS) {
       // On iOS, pressing the new line action button can trigger the IME to try to apply suggestions
       // after we have already processed the new line insertion. This causes the deltas related to suggestions
       // to have offsets that are invalid for us. Ignore any new deltas on the same frame and forcefully
@@ -215,13 +223,15 @@ class DocumentImeInputClient extends TextInputConnectionDecorator with TextInput
       return;
     }
 
-    editorImeLog.fine("Received edit deltas from platform: ${textEditingDeltas.length} deltas");
+    editorImeLog.fine(
+        "Received edit deltas from platform: ${textEditingDeltas.length} deltas");
     for (final delta in textEditingDeltas) {
       editorImeLog.fine("$delta");
     }
 
     final imeValueBeforeChange = currentTextEditingValue;
-    editorImeLog.fine("IME value before applying deltas: $imeValueBeforeChange");
+    editorImeLog
+        .fine("IME value before applying deltas: $imeValueBeforeChange");
 
     _isApplyingDeltas = true;
     editorImeLog.fine("===================================================");
@@ -241,41 +251,46 @@ class DocumentImeInputClient extends TextInputConnectionDecorator with TextInput
 
   void _sendDocumentToIme() {
     if (_isApplyingDeltas) {
-      editorImeLog
-          .fine("[DocumentImeInputClient] - Tried to send document to IME, but we're applying deltas. Fizzling.");
+      editorImeLog.fine(
+          "[DocumentImeInputClient] - Tried to send document to IME, but we're applying deltas. Fizzling.");
       return;
     }
 
     if (_isSendingToIme) {
-      editorImeLog
-          .warning("[DocumentImeInputClient] - Tried to send document to IME, while we're sending document to IME.");
+      editorImeLog.warning(
+          "[DocumentImeInputClient] - Tried to send document to IME, while we're sending document to IME.");
       return;
     }
 
     if (textDeltasDocumentEditor.selection.value == null) {
       // There's no selection, which means there's nothing to edit. Return.
-      editorImeLog.fine("[DocumentImeInputClient] - There's no document selection. Not sending anything to IME.");
+      editorImeLog.fine(
+          "[DocumentImeInputClient] - There's no document selection. Not sending anything to IME.");
       return;
     }
 
     _isSendingToIme = true;
-    editorImeLog.fine("[DocumentImeInputClient] - Serializing and sending document and selection to IME");
-    editorImeLog.fine("[DocumentImeInputClient] - Selection: ${textDeltasDocumentEditor.selection.value}");
-    editorImeLog.fine("[DocumentImeInputClient] - Composing region: ${textDeltasDocumentEditor.composingRegion.value}");
+    editorImeLog.fine(
+        "[DocumentImeInputClient] - Serializing and sending document and selection to IME");
+    editorImeLog.fine(
+        "[DocumentImeInputClient] - Selection: ${textDeltasDocumentEditor.selection.value}");
+    editorImeLog.fine(
+        "[DocumentImeInputClient] - Composing region: ${textDeltasDocumentEditor.composingRegion.value}");
     final imeSerialization = DocumentImeSerializer(
       textDeltasDocumentEditor.document,
       textDeltasDocumentEditor.selection.value!,
       textDeltasDocumentEditor.composingRegion.value,
     );
 
-    editorImeLog
-        .fine("[DocumentImeInputClient] - Adding invisible characters?: ${imeSerialization.didPrependPlaceholder}");
+    editorImeLog.fine(
+        "[DocumentImeInputClient] - Adding invisible characters?: ${imeSerialization.didPrependPlaceholder}");
     TextEditingValue textEditingValue = imeSerialization.toTextEditingValue();
 
     editorImeLog.fine("[DocumentImeInputClient] - Sending IME serialization:");
     editorImeLog.fine("[DocumentImeInputClient] - $textEditingValue");
     setEditingState(textEditingValue);
-    editorImeLog.fine("[DocumentImeInputClient] - Done sending document to IME");
+    editorImeLog
+        .fine("[DocumentImeInputClient] - Done sending document to IME");
 
     _isSendingToIme = false;
   }

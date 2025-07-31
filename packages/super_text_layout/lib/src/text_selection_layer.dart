@@ -54,7 +54,8 @@ class TextLayoutEmptyHighlight extends StatelessWidget {
     // We render an empty selection with a CustomPainter because from the widget
     // tree's perspective, the text box has zero width. Therefore, we use a CustomPainter
     // to ignore the layout bounds and paint our desired width.
-    final highlightHeight = textLayout!.getLineHeightAtPosition(const TextPosition(offset: -1));
+    final highlightHeight =
+        textLayout!.getLineHeightAtPosition(const TextPosition(offset: -1));
     return CustomPaint(
       painter: _EmptyHighlightPainter(
         width: highlightWidth,
@@ -157,7 +158,8 @@ class TextSelectionPainter extends CustomPainter {
       // No layout is available yet. Nothing to paint.
       return;
     }
-    if (textSelection == null || textSelection == const TextSelection.collapsed(offset: -1)) {
+    if (textSelection == null ||
+        textSelection == const TextSelection.collapsed(offset: -1)) {
       // No selection to paint. Return.
       return;
     }
@@ -186,7 +188,9 @@ class TextSelectionPainter extends CustomPainter {
         //       that line a slight width for visibility.
         rect.width > 0
             ? rrect
-            : RRect.fromRectAndRadius(Rect.fromLTWH(rect.left, rect.top, 5, rect.height), Radius.zero),
+            : RRect.fromRectAndRadius(
+                Rect.fromLTWH(rect.left, rect.top, 5, rect.height),
+                Radius.zero),
         _selectionPaint,
       );
     }

@@ -9,10 +9,12 @@ class ToolbarBouncingBallDemo extends StatefulWidget {
   const ToolbarBouncingBallDemo({super.key});
 
   @override
-  State<ToolbarBouncingBallDemo> createState() => _ToolbarBouncingBallDemoState();
+  State<ToolbarBouncingBallDemo> createState() =>
+      _ToolbarBouncingBallDemoState();
 }
 
-class _ToolbarBouncingBallDemoState extends State<ToolbarBouncingBallDemo> with SingleTickerProviderStateMixin {
+class _ToolbarBouncingBallDemoState extends State<ToolbarBouncingBallDemo>
+    with SingleTickerProviderStateMixin {
   static const double _ballRadius = 50.0;
 
   final GlobalKey _screenBoundsKey = GlobalKey();
@@ -37,14 +39,17 @@ class _ToolbarBouncingBallDemoState extends State<ToolbarBouncingBallDemo> with 
 
   /// Calculates the global offset where the menu's arrow should point.
   void _updateMenuFocalPoint() {
-    final screenBoundsBox = _screenBoundsKey.currentContext?.findRenderObject() as RenderBox?;
+    final screenBoundsBox =
+        _screenBoundsKey.currentContext?.findRenderObject() as RenderBox?;
     if (screenBoundsBox == null) {
       _globalMenuFocalPoint = Offset.zero;
       return;
     }
 
-    final focalPointInScreenBounds = _ballOffset + const Offset(_ballRadius, _ballRadius);
-    final globalLeaderOffset = screenBoundsBox.localToGlobal(focalPointInScreenBounds);
+    final focalPointInScreenBounds =
+        _ballOffset + const Offset(_ballRadius, _ballRadius);
+    final globalLeaderOffset =
+        screenBoundsBox.localToGlobal(focalPointInScreenBounds);
 
     _globalMenuFocalPoint = globalLeaderOffset;
   }

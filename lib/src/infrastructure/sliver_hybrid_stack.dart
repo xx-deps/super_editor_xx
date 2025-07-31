@@ -24,15 +24,20 @@ class SliverHybridStack extends MultiChildRenderObjectWidget {
   }
 
   @override
-  void updateRenderObject(BuildContext context, covariant RenderSliver renderObject) {
+  void updateRenderObject(
+      BuildContext context, covariant RenderSliver renderObject) {
     (renderObject as _RenderSliverHybridStack).fillViewport = fillViewport;
   }
 }
 
-class _ChildParentData extends SliverLogicalParentData with ContainerParentDataMixin<RenderObject> {}
+class _ChildParentData extends SliverLogicalParentData
+    with ContainerParentDataMixin<RenderObject> {}
 
 class _RenderSliverHybridStack extends RenderSliver
-    with ContainerRenderObjectMixin<RenderObject, ContainerParentDataMixin<RenderObject>>, RenderSliverHelpers {
+    with
+        ContainerRenderObjectMixin<RenderObject,
+            ContainerParentDataMixin<RenderObject>>,
+        RenderSliverHelpers {
   _RenderSliverHybridStack({required this.fillViewport});
 
   bool fillViewport;
@@ -43,7 +48,8 @@ class _RenderSliverHybridStack extends RenderSliver
     var child = firstChild;
     while (child != null) {
       if (child is RenderSliver) {
-        assert(sliver == null, "There can only be one sliver in a SliverHybridStack");
+        assert(sliver == null,
+            "There can only be one sliver in a SliverHybridStack");
         sliver = child;
         break;
       }
@@ -68,7 +74,8 @@ class _RenderSliverHybridStack extends RenderSliver
       scrollExtent: sliverLayoutGeometry.scrollExtent,
       paintExtent: sliverLayoutGeometry.paintExtent,
       maxPaintExtent: sliverLayoutGeometry.maxPaintExtent,
-      maxScrollObstructionExtent: sliverLayoutGeometry.maxScrollObstructionExtent,
+      maxScrollObstructionExtent:
+          sliverLayoutGeometry.maxScrollObstructionExtent,
       cacheExtent: sliverLayoutGeometry.cacheExtent,
       hasVisualOverflow: sliverLayoutGeometry.hasVisualOverflow,
     );
@@ -86,7 +93,9 @@ class _RenderSliverHybridStack extends RenderSliver
       if (child is RenderBox) {
         final childParentData = child.parentData! as SliverLogicalParentData;
         childParentData.layoutOffset = -constraints.scrollOffset;
-        if (constraints.scrollOffset == 0.0 && constraints.viewportMainAxisExtent.isFinite && fillViewport) {
+        if (constraints.scrollOffset == 0.0 &&
+            constraints.viewportMainAxisExtent.isFinite &&
+            fillViewport) {
           child.layout(
             BoxConstraints.tightFor(
               width: constraints.crossAxisExtent,
@@ -103,10 +112,17 @@ class _RenderSliverHybridStack extends RenderSliver
   }
 
   @override
-  bool hitTest(SliverHitTestResult result, {required double mainAxisPosition, required double crossAxisPosition}) {
-    if (mainAxisPosition >= 0.0 && crossAxisPosition >= 0.0 && crossAxisPosition < constraints.crossAxisExtent) {
-      if (hitTestChildren(result, mainAxisPosition: mainAxisPosition, crossAxisPosition: crossAxisPosition) ||
-          hitTestSelf(mainAxisPosition: mainAxisPosition, crossAxisPosition: crossAxisPosition)) {
+  bool hitTest(SliverHitTestResult result,
+      {required double mainAxisPosition, required double crossAxisPosition}) {
+    if (mainAxisPosition >= 0.0 &&
+        crossAxisPosition >= 0.0 &&
+        crossAxisPosition < constraints.crossAxisExtent) {
+      if (hitTestChildren(result,
+              mainAxisPosition: mainAxisPosition,
+              crossAxisPosition: crossAxisPosition) ||
+          hitTestSelf(
+              mainAxisPosition: mainAxisPosition,
+              crossAxisPosition: crossAxisPosition)) {
         result.add(SliverHitTestEntry(
           this,
           mainAxisPosition: mainAxisPosition,
@@ -198,7 +214,9 @@ class ScrollingBoxConstraints extends BoxConstraints {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    return other is ScrollingBoxConstraints && super == other && scrollOffset == other.scrollOffset;
+    return other is ScrollingBoxConstraints &&
+        super == other &&
+        scrollOffset == other.scrollOffset;
   }
 
   @override

@@ -49,14 +49,16 @@ class IOSFollowingMagnifier extends StatefulWidget {
   State<IOSFollowingMagnifier> createState() => _IOSFollowingMagnifierState();
 }
 
-class _IOSFollowingMagnifierState extends State<IOSFollowingMagnifier> with SingleTickerProviderStateMixin {
+class _IOSFollowingMagnifierState extends State<IOSFollowingMagnifier>
+    with SingleTickerProviderStateMixin {
   late final AnimationController _animationController;
 
   /// Wether or not the magnifier should be displayed.
   ///
   /// The magnifier can still be displayed event when [widget.show] is `false`
   /// because the magnifier should be visible during the exit animation.
-  bool get _shouldShowMagnifier => widget.show || _animationController.status != AnimationStatus.dismissed;
+  bool get _shouldShowMagnifier =>
+      widget.show || _animationController.status != AnimationStatus.dismissed;
 
   @override
   void initState() {
@@ -128,10 +130,12 @@ class _IOSFollowingMagnifierState extends State<IOSFollowingMagnifier> with Sing
                 widget.offsetFromFocalPoint.dy * percentage,
               ),
               animationValue: _animationController.value,
-              animationDirection:
-                  const [AnimationStatus.forward, AnimationStatus.completed].contains(_animationController.status)
-                      ? AnimationDirection.forward
-                      : AnimationDirection.reverse,
+              animationDirection: const [
+                AnimationStatus.forward,
+                AnimationStatus.completed
+              ].contains(_animationController.status)
+                  ? AnimationDirection.forward
+                  : AnimationDirection.reverse,
               borderColor: widget.handleColor ?? Theme.of(context).primaryColor,
             ),
             widget.magnifierKey,
@@ -142,9 +146,12 @@ class _IOSFollowingMagnifierState extends State<IOSFollowingMagnifier> with Sing
   }
 }
 
-typedef MagnifierBuilder = Widget Function(BuildContext, IosMagnifierViewModel magnifierInfo, [Key? magnifierKey]);
+typedef MagnifierBuilder = Widget Function(
+    BuildContext, IosMagnifierViewModel magnifierInfo,
+    [Key? magnifierKey]);
 
-Widget _roundedRectangleMagnifierBuilder(BuildContext context, IosMagnifierViewModel magnifierInfo,
+Widget _roundedRectangleMagnifierBuilder(
+        BuildContext context, IosMagnifierViewModel magnifierInfo,
         [Key? magnifierKey]) =>
     IOSRoundedRectangleMagnifyingGlass(
       key: magnifierKey,
@@ -153,7 +160,9 @@ Widget _roundedRectangleMagnifierBuilder(BuildContext context, IosMagnifierViewM
       borderColor: magnifierInfo.borderColor,
     );
 
-Widget _circleMagnifierBuilder(BuildContext context, IosMagnifierViewModel magnifierInfo, [Key? magnifierKey]) =>
+Widget _circleMagnifierBuilder(
+        BuildContext context, IosMagnifierViewModel magnifierInfo,
+        [Key? magnifierKey]) =>
     IOSCircleMagnifyingGlass(
       key: magnifierKey,
       offsetFromFocalPoint: magnifierInfo.offsetFromFocalPoint,
@@ -199,7 +208,8 @@ class IOSRoundedRectangleMagnifyingGlass extends StatelessWidget {
                   borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
                 ),
                 size: size,
-                offsetFromFocalPoint: Offset(offsetFromFocalPoint.dx, offsetFromFocalPoint.dy),
+                offsetFromFocalPoint:
+                    Offset(offsetFromFocalPoint.dx, offsetFromFocalPoint.dy),
                 magnificationScale: _magnification,
               ),
             Opacity(
@@ -207,7 +217,8 @@ class IOSRoundedRectangleMagnifyingGlass extends StatelessWidget {
               child: Container(
                 decoration: ShapeDecoration(
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
+                    borderRadius:
+                        BorderRadius.all(Radius.circular(borderRadius)),
                     side: BorderSide(
                       color: borderColor,
                       width: borderWidth,
