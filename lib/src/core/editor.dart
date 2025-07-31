@@ -1206,13 +1206,15 @@ class MutableDocument with Iterable<DocumentNode> implements Document, Editable 
   List<DocumentNode> getNodesInside(DocumentPosition position1, DocumentPosition position2) {
     final node1 = getNode(position1);
     if (node1 == null) {
-      throw Exception('No such position in document: $position1');
+      return [];
+      // throw Exception('No such position in document: $position1');
     }
     final index1 = getNodeIndexById(node1.id);
 
     final node2 = getNode(position2);
     if (node2 == null) {
-      throw Exception('No such position in document: $position2');
+      return [];
+      // throw Exception('No such position in document: $position2');
     }
     final index2 = getNodeIndexById(node2.id);
 
