@@ -2434,7 +2434,7 @@ class CommonEditorOperations {
   /// The clipboard operation is asynchronous. As a result, if the user quickly
   /// moves the caret, it's possible that the clipboard content will be pasted
   /// at the wrong spot.
-  void paste() {
+  void paste({String? customMarkdownText}) {
     DocumentPosition? pastePosition = composer.selection!.extent;
 
     // Start a transaction so that we can capture both the initial deletion behavior,
@@ -2472,6 +2472,7 @@ class CommonEditorOperations {
       editor: editor,
       composer: composer,
       pastePosition: pastePosition,
+      customMarkdownText: customMarkdownText,
     );
 
     editor.endTransaction();
@@ -2482,8 +2483,11 @@ class CommonEditorOperations {
     required Editor editor,
     required DocumentComposer composer,
     required DocumentPosition pastePosition,
+    String? customMarkdownText,
   }) async {
-    final content = (await Clipboard.getData('text/plain'))?.text ?? '';
+    final content = customMarkdownText != null
+        ? customMarkdownText
+        : (await Clipboard.getData('text/plain'))?.text ?? '';
     editor.execute([
       PasteEditorRequest(
         content: content,
