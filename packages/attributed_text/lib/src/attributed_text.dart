@@ -550,7 +550,7 @@ class AttributedText {
     _log.fine('creating new attributed text for insertion');
     final insertedText = AttributedText(textToInsert);
     final insertTextRange = SpanRange(0, textToInsert.length - 1);
-    for (dynamic attribution in applyAttributions) {
+    for (final attribution in applyAttributions) {
       insertedText.addAttribution(attribution, insertTextRange);
     }
     _log.fine('insertedText: $insertedText');
