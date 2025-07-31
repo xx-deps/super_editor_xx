@@ -1188,10 +1188,8 @@ class TextComponentState extends State<TextComponent> with DocumentComponent imp
   }
 
   @override
-  TextNodePosition? getPositionOneLineDown(NodePosition textPosition) {
-    if (textPosition is! TextNodePosition) {
-      throw Exception('Expected position of type NodePosition but received ${textPosition.runtimeType}');
-    }
+  TextNodePosition? getPositionOneLineDown(covariant TextNodePosition textPosition) {
+    
 
     final positionOneLineDown = textLayout.getPositionOneLineDown(textPosition);
     if (positionOneLineDown == null) {
