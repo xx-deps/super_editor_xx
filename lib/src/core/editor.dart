@@ -1307,23 +1307,6 @@ class MutableDocument with Iterable<DocumentNode> implements Document, Editable 
     }
   }
 
-  /// Replaces the given [oldNode] with the given [newNode]
-  @Deprecated("Use replaceNodeById() instead")
-  void replaceNode({
-    required DocumentNode oldNode,
-    required DocumentNode newNode,
-  }) {
-    final index = _nodes.indexOf(oldNode);
-
-    if (index >= 0) {
-      _nodes.removeAt(index);
-      _nodes.insert(index, newNode);
-      _refreshNodeIdCaches();
-    } else {
-      throw Exception('Could not find oldNode: ${oldNode.id}');
-    }
-  }
-
   /// Replaces the node with the given [nodeId] with the given [newNode].
   ///
   /// Throws an exception if no node exists with the given [nodeId].
