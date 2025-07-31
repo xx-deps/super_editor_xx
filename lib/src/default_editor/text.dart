@@ -66,26 +66,12 @@ class TextNode extends DocumentNode {
   }
 
   @override
-  NodePosition selectUpstreamPosition(NodePosition position1, NodePosition position2) {
-    if (position1 is! TextNodePosition) {
-      throw Exception('Expected a TextNodePosition for position1 but received a ${position1.runtimeType}');
-    }
-    if (position2 is! TextNodePosition) {
-      throw Exception('Expected a TextNodePosition for position2 but received a ${position2.runtimeType}');
-    }
-
+  NodePosition selectUpstreamPosition(covariant TextNodePosition position1, covariant TextNodePosition position2) {
     return position1.offset < position2.offset ? position1 : position2;
   }
 
   @override
-  NodePosition selectDownstreamPosition(NodePosition position1, NodePosition position2) {
-    if (position1 is! TextNodePosition) {
-      throw Exception('Expected a TextNodePosition for position1 but received a ${position1.runtimeType}');
-    }
-    if (position2 is! TextNodePosition) {
-      throw Exception('Expected a TextNodePosition for position2 but received a ${position2.runtimeType}');
-    }
-
+  NodePosition selectDownstreamPosition(covariant TextNodePosition position1, covariant TextNodePosition position2) {
     return position1.offset > position2.offset ? position1 : position2;
   }
 
@@ -1107,16 +1093,9 @@ class TextComponentState extends State<TextComponent> with DocumentComponent imp
 
   @override
   TextNodeSelection getSelectionBetween({
-    required NodePosition basePosition,
-    required NodePosition extentPosition,
+    required covariant TextNodePosition basePosition,
+    required covariant TextNodePosition extentPosition,
   }) {
-    if (basePosition is! TextNodePosition) {
-      throw Exception('Expected a basePosition of type TextNodePosition but received: $basePosition');
-    }
-    if (extentPosition is! TextNodePosition) {
-      throw Exception('Expected an extentPosition of type TextNodePosition but received: $extentPosition');
-    }
-
     return TextNodeSelection(
       baseOffset: basePosition.offset,
       extentOffset: extentPosition.offset,
@@ -1175,11 +1154,7 @@ class TextComponentState extends State<TextComponent> with DocumentComponent imp
   }
 
   @override
-  TextNodePosition? getPositionOneLineUp(NodePosition textPosition) {
-    if (textPosition is! TextNodePosition) {
-      throw Exception('Expected position of type NodePosition but received ${textPosition.runtimeType}');
-    }
-
+  TextNodePosition? getPositionOneLineUp(covariant TextNodePosition textPosition) {
     final positionOneLineUp = textLayout.getPositionOneLineUp(textPosition);
     if (positionOneLineUp == null) {
       return null;
@@ -1189,8 +1164,6 @@ class TextComponentState extends State<TextComponent> with DocumentComponent imp
 
   @override
   TextNodePosition? getPositionOneLineDown(covariant TextNodePosition textPosition) {
-    
-
     final positionOneLineDown = textLayout.getPositionOneLineDown(textPosition);
     if (positionOneLineDown == null) {
       return null;

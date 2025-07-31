@@ -1130,7 +1130,7 @@ class MutableDocument with Iterable<DocumentNode> implements Document, Editable 
 
   final _listeners = <DocumentChangeListener>[];
 
-  @override
+
   List<DocumentNode> get nodes => List.unmodifiable(_nodes);
 
   @override
