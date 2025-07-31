@@ -650,7 +650,7 @@ class _ButtonNode extends BlockNode {
   final String id;
 
   @override
-  String? copyContent(dynamic selection) => '';
+  String? copyContent(NodeSelection selection) => '';
 
   @override
   _ButtonNode copyWithAddedMetadata(Map<String, dynamic> newProperties) {

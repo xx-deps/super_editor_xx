@@ -172,8 +172,10 @@ class TextDeltasDocumentEditor {
     editorImeLog.fine("Converting IME insertion offset into a DocumentSelection");
     final insertionSelection = _serializedDoc.imeToDocumentSelection(
       TextSelection.fromPosition(insertionPosition),
-    )!;
-
+    );
+    if(insertionSelection == null){
+      return;
+    }
     // Update the local IME value that changes with each delta.
     _previousImeValue = delta.apply(_previousImeValue);
 

@@ -128,7 +128,7 @@ void main() {
       );
 
       final newNode = ParagraphNode(id: 'new', text: AttributedText());
-      document.replaceNode(oldNode: oldNode, newNode: newNode);
+      document.replaceNodeById(  oldNode.id,   newNode);
 
       // oldNode does not exist
       expect(document.contains(oldNode), false);

@@ -31,16 +31,10 @@ abstract class BlockNode extends DocumentNode {
   bool containsPosition(Object position) => position is UpstreamDownstreamNodePosition;
 
   @override
-  UpstreamDownstreamNodePosition selectUpstreamPosition(NodePosition position1, NodePosition position2) {
-    if (position1 is! UpstreamDownstreamNodePosition) {
-      throw Exception(
-          'Expected a UpstreamDownstreamNodePosition for position1 but received a ${position1.runtimeType}');
-    }
-    if (position2 is! UpstreamDownstreamNodePosition) {
-      throw Exception(
-          'Expected a UpstreamDownstreamNodePosition for position2 but received a ${position2.runtimeType}');
-    }
-
+  UpstreamDownstreamNodePosition selectUpstreamPosition(
+    covariant UpstreamDownstreamNodePosition position1,
+    covariant UpstreamDownstreamNodePosition position2,
+  ) {
     if (position1.affinity == TextAffinity.upstream || position2.affinity == TextAffinity.upstream) {
       return const UpstreamDownstreamNodePosition.upstream();
     } else {
@@ -49,16 +43,10 @@ abstract class BlockNode extends DocumentNode {
   }
 
   @override
-  UpstreamDownstreamNodePosition selectDownstreamPosition(NodePosition position1, NodePosition position2) {
-    if (position1 is! UpstreamDownstreamNodePosition) {
-      throw Exception(
-          'Expected a UpstreamDownstreamNodePosition for position1 but received a ${position1.runtimeType}');
-    }
-    if (position2 is! UpstreamDownstreamNodePosition) {
-      throw Exception(
-          'Expected a UpstreamDownstreamNodePosition for position2 but received a ${position2.runtimeType}');
-    }
-
+  UpstreamDownstreamNodePosition selectDownstreamPosition(
+    covariant UpstreamDownstreamNodePosition position1,
+    covariant UpstreamDownstreamNodePosition position2,
+  ) {
     if (position1.affinity == TextAffinity.downstream || position2.affinity == TextAffinity.downstream) {
       return const UpstreamDownstreamNodePosition.downstream();
     } else {
@@ -68,16 +56,9 @@ abstract class BlockNode extends DocumentNode {
 
   @override
   UpstreamDownstreamNodeSelection computeSelection({
-    required NodePosition base,
-    required NodePosition extent,
+    required covariant UpstreamDownstreamNodePosition base,
+    required covariant UpstreamDownstreamNodePosition extent,
   }) {
-    if (base is! UpstreamDownstreamNodePosition) {
-      throw Exception('Expected a UpstreamDownstreamNodePosition for base but received a ${base.runtimeType}');
-    }
-    if (extent is! UpstreamDownstreamNodePosition) {
-      throw Exception('Expected a UpstreamDownstreamNodePosition for extent but received a ${extent.runtimeType}');
-    }
-
     return UpstreamDownstreamNodeSelection(base: base, extent: extent);
   }
 }
@@ -150,11 +131,7 @@ class _BoxComponentState extends State<BoxComponent> with DocumentComponent {
   }
 
   @override
-  UpstreamDownstreamNodeSelection getCollapsedSelectionAt(nodePosition) {
-    if (nodePosition is! UpstreamDownstreamNodePosition) {
-      throw Exception('The given nodePosition ($nodePosition) is not compatible with BoxComponent');
-    }
-
+  UpstreamDownstreamNodeSelection getCollapsedSelectionAt(covariant UpstreamDownstreamNodePosition nodePosition) {
     return UpstreamDownstreamNodeSelection.collapsed(nodePosition);
   }
 
@@ -178,11 +155,7 @@ class _BoxComponentState extends State<BoxComponent> with DocumentComponent {
   }
 
   @override
-  Offset getOffsetForPosition(NodePosition nodePosition) {
-    if (nodePosition is! UpstreamDownstreamNodePosition) {
-      throw Exception('Expected nodePosition of type UpstreamDownstreamNodePosition but received: $nodePosition');
-    }
-
+  Offset getOffsetForPosition(covariant UpstreamDownstreamNodePosition nodePosition) {
     final myBox = context.findRenderObject() as RenderBox;
 
     if (nodePosition.affinity == TextAffinity.upstream) {
@@ -199,10 +172,10 @@ class _BoxComponentState extends State<BoxComponent> with DocumentComponent {
   }
 
   @override
-  Rect getEdgeForPosition(NodePosition nodePosition) {
+  Rect getEdgeForPosition(covariant UpstreamDownstreamNodePosition nodePosition) {
     final boundingBox = getRectForPosition(nodePosition);
 
-    final boxPosition = nodePosition as UpstreamDownstreamNodePosition;
+    final boxPosition = nodePosition;
     if (boxPosition.affinity == TextAffinity.upstream) {
       return boundingBox.leftEdge;
     } else {
@@ -215,25 +188,17 @@ class _BoxComponentState extends State<BoxComponent> with DocumentComponent {
   /// The behavior of this method is the same, regardless of whether the given
   /// [nodePosition] is `upstream` or `downstream`.
   @override
-  Rect getRectForPosition(NodePosition nodePosition) {
-    if (nodePosition is! UpstreamDownstreamNodePosition) {
-      throw Exception('Expected nodePosition of type UpstreamDownstreamNodePosition but received: $nodePosition');
-    }
-
+  Rect getRectForPosition(covariant UpstreamDownstreamNodePosition nodePosition) {
     final myBox = context.findRenderObject() as RenderBox;
 
     return Rect.fromLTWH(0, 0, myBox.size.width, myBox.size.height);
   }
 
   @override
-  Rect getRectForSelection(NodePosition basePosition, NodePosition extentPosition) {
-    if (basePosition is! UpstreamDownstreamNodePosition) {
-      throw Exception('Expected nodePosition of type UpstreamDownstreamNodePosition but received: $basePosition');
-    }
-    if (extentPosition is! UpstreamDownstreamNodePosition) {
-      throw Exception('Expected nodePosition of type UpstreamDownstreamNodePosition but received: $extentPosition');
-    }
-
+  Rect getRectForSelection(
+    covariant UpstreamDownstreamNodePosition basePosition,
+    covariant UpstreamDownstreamNodePosition extentPosition,
+  ) {
     final selection = UpstreamDownstreamNodeSelection(base: basePosition, extent: extentPosition);
     if (selection.isCollapsed) {
       return getRectForPosition(selection.extent);
@@ -256,14 +221,10 @@ class _BoxComponentState extends State<BoxComponent> with DocumentComponent {
   }
 
   @override
-  UpstreamDownstreamNodeSelection getSelectionBetween({required basePosition, required extentPosition}) {
-    if (basePosition is! UpstreamDownstreamNodePosition) {
-      throw Exception('The given basePosition ($basePosition) is not compatible with BoxComponent');
-    }
-    if (extentPosition is! UpstreamDownstreamNodePosition) {
-      throw Exception('The given extentPosition ($extentPosition) is not compatible with BoxComponent');
-    }
-
+  UpstreamDownstreamNodeSelection getSelectionBetween({
+    required covariant UpstreamDownstreamNodePosition basePosition,
+    required covariant UpstreamDownstreamNodePosition extentPosition,
+  }) {
     return UpstreamDownstreamNodeSelection(base: basePosition, extent: extentPosition);
   }
 

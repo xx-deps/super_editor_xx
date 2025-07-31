@@ -343,7 +343,8 @@ extension InspectDocumentAffinity on Document {
     } else {
       // The selection is within the same node. Ask the node which position
       // comes first.
-      affinity = extentNode.getAffinityBetween(base: base.nodePosition, extent: extent.nodePosition);
+      affinity = extentNode.getAffinityBetween(
+          base: base.nodePosition, extent: extent.nodePosition);
     }
 
     return affinity;
@@ -381,11 +382,15 @@ extension InspectDocumentSelection on Document {
           ? docPosition1
           : docPosition2;
     }
-
+    if (docPosition1 == docPosition2) return docPosition1;
     // Both document positions are in the same node. Figure out which
     // node position comes first.
-    final theNode = getNodeById(docPosition1.nodeId)!;
-    return theNode.selectUpstreamPosition(docPosition1.nodePosition, docPosition2.nodePosition) ==
+    final theNode = getNodeById(docPosition1.nodeId);
+    if (theNode == null) {
+      throw Exception('theNode is null');
+    }
+    return theNode.selectUpstreamPosition(
+                docPosition1.nodePosition, docPosition2.nodePosition) ==
             docPosition1.nodePosition
         ? docPosition1
         : docPosition2;

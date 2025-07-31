@@ -22,10 +22,7 @@ class HorizontalRuleNode extends BlockNode {
   final String id;
 
   @override
-  String? copyContent(dynamic selection) {
-    if (selection is! UpstreamDownstreamNodeSelection) {
-      throw Exception('HorizontalRuleNode can only copy content from a UpstreamDownstreamNodeSelection.');
-    }
+  String? copyContent(covariant UpstreamDownstreamNodeSelection selection) {
 
     return !selection.isCollapsed ? '---' : null;
   }
