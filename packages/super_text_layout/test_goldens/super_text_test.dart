@@ -8,7 +8,8 @@ import 'test_tools_goldens.dart';
 void main() {
   group("SuperText", () {
     group("text layout", () {
-      testGoldensOnAndroid("renders a visual reference for non-visual tests", (tester) async {
+      testGoldensOnAndroid("renders a visual reference for non-visual tests",
+          (tester) async {
         await _pumpThreeLinePlainText(tester);
         await screenMatchesGolden(tester, "SuperText-reference-render");
       });
@@ -57,7 +58,8 @@ Future<void> _pumpThreeLinePlainText(WidgetTester tester) async {
 final _textKey = GlobalKey(debugLabel: "super_text");
 
 const _threeLineSpan = TextSpan(
-  text: "This is some text. It is explicitly laid out in\n" // Line indices: 0 -> 47/48 (upstream/downstream)
+  text:
+      "This is some text. It is explicitly laid out in\n" // Line indices: 0 -> 47/48 (upstream/downstream)
       "multiple lines so that we don't need to guess\n" // Line indices: 48 ->  93/94 (upstream/downstream)
       "where the layout forces a line break", // Line indices: 94 -> 130
   style: _testTextStyle,

@@ -9,7 +9,8 @@ void main() {
   group("SuperText", () {
     group("builds layers", () {
       testGoldensOnAndroid("that can paint line boxes", (tester) async {
-        await pumpThreeLinePlainSuperText(tester, beneathBuilder: (context, textLayout) {
+        await pumpThreeLinePlainSuperText(tester,
+            beneathBuilder: (context, textLayout) {
           final lineCount = textLayout.getLineCount();
           final lineRects = <Rect>[];
           final lineColors = <Color>[];
@@ -19,12 +20,16 @@ void main() {
             // Select the line
             final lineSelection = TextSelection(
               baseOffset: textPosition.offset,
-              extentOffset: textLayout.getPositionAtEndOfLine(textPosition).offset,
+              extentOffset:
+                  textLayout.getPositionAtEndOfLine(textPosition).offset,
             );
             // Convert the line selection to a rectangle
-            lineRects.add(textLayout.getBoxesForSelection(lineSelection).first.toRect());
+            lineRects.add(
+                textLayout.getBoxesForSelection(lineSelection).first.toRect());
             // Select a color for this rectangle
-            lineColors.add(HSVColor.fromAHSV(1.0, 360.0 * (lineColors.length / lineCount), 1.0, 1.0).toColor());
+            lineColors.add(HSVColor.fromAHSV(
+                    1.0, 360.0 * (lineColors.length / lineCount), 1.0, 1.0)
+                .toColor());
 
             textPosition = textLayout.getPositionOneLineDown(textPosition);
           }
@@ -44,17 +49,20 @@ void main() {
       });
 
       testGoldensOnAndroid("that can paint character boxes", (tester) async {
-        await pumpThreeLinePlainSuperText(tester, beneathBuilder: (context, textLayout) {
+        await pumpThreeLinePlainSuperText(tester,
+            beneathBuilder: (context, textLayout) {
           final characterRects = <Rect>[];
           final characterColors = <Color>[];
 
           final textLength = threeLineTextSpan.toPlainText().length;
           for (int i = 0; i < textLength; i += 1) {
             // Get the bounding rectangle for the character
-            characterRects.add(textLayout.getCharacterBox(TextPosition(offset: i))!.toRect());
+            characterRects.add(
+                textLayout.getCharacterBox(TextPosition(offset: i))!.toRect());
             // Select a color for this character
-            characterColors
-                .add(HSVColor.fromAHSV(1.0, 360.0 * (characterColors.length / textLength), 1.0, 1.0).toColor());
+            characterColors.add(HSVColor.fromAHSV(1.0,
+                    360.0 * (characterColors.length / textLength), 1.0, 1.0)
+                .toColor());
           }
 
           return Stack(
@@ -71,14 +79,17 @@ void main() {
         await screenMatchesGolden(tester, "SuperText_layers_character-boxes");
       });
 
-      testGoldensOnAndroid("that can paint character box outlines", (tester) async {
-        await pumpThreeLinePlainSuperText(tester, beneathBuilder: (context, textLayout) {
+      testGoldensOnAndroid("that can paint character box outlines",
+          (tester) async {
+        await pumpThreeLinePlainSuperText(tester,
+            beneathBuilder: (context, textLayout) {
           final characterRects = <Rect>[];
 
           final textLength = threeLineTextSpan.toPlainText().length;
           for (int i = 0; i < textLength; i += 1) {
             // Get the bounding rectangle for the character
-            characterRects.add(textLayout.getCharacterBox(TextPosition(offset: i))!.toRect());
+            characterRects.add(
+                textLayout.getCharacterBox(TextPosition(offset: i))!.toRect());
           }
 
           return Stack(
@@ -96,15 +107,18 @@ void main() {
           );
         });
 
-        await screenMatchesGolden(tester, "SuperText_layers_character-box-outlines");
+        await screenMatchesGolden(
+            tester, "SuperText_layers_character-box-outlines");
       });
 
       testGoldensOnAndroid("that can paint carets", (tester) async {
-        await pumpThreeLinePlainSuperText(tester, beneathBuilder: (context, textLayout) {
+        await pumpThreeLinePlainSuperText(tester,
+            beneathBuilder: (context, textLayout) {
           const textPosition = TextPosition(offset: 115);
           final caretOffset = textLayout.getOffsetForCaret(textPosition);
           final caretHeight = textLayout.getHeightForCaret(textPosition)!;
-          final caretRectangle = Rect.fromPoints(caretOffset, caretOffset + Offset(2, caretHeight));
+          final caretRectangle = Rect.fromPoints(
+              caretOffset, caretOffset + Offset(2, caretHeight));
 
           return Stack(
             children: [

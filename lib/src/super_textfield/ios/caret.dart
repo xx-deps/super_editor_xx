@@ -30,7 +30,8 @@ class IOSTextFieldCaret extends StatefulWidget {
   State createState() => _IOSTextFieldCaretState();
 }
 
-class _IOSTextFieldCaretState extends State<IOSTextFieldCaret> with SingleTickerProviderStateMixin {
+class _IOSTextFieldCaretState extends State<IOSTextFieldCaret>
+    with SingleTickerProviderStateMixin {
   late BlinkController _caretBlinkController;
 
   @override
@@ -122,11 +123,18 @@ class _IOSCursorPainter extends CustomPainter {
     caretPaint.color = caretColor.withValues(alpha: blinkController.opacity);
 
     final textPosition = selection.extent;
-    double caretHeight = textLayout.getCharacterBox(textPosition)?.toRect().height ?? 0.0;
-    caretHeight = caretHeight > 0 ? caretHeight : textLayout.getHeightForCaret(textPosition) ?? 0;
-    caretHeight = caretHeight > 0 ? caretHeight : textLayout.getLineHeightAtPosition(textPosition);
+    double caretHeight =
+        textLayout.getCharacterBox(textPosition)?.toRect().height ?? 0.0;
+    caretHeight = caretHeight > 0
+        ? caretHeight
+        : textLayout.getHeightForCaret(textPosition) ?? 0;
+    caretHeight = caretHeight > 0
+        ? caretHeight
+        : textLayout.getLineHeightAtPosition(textPosition);
 
-    Offset caretOffset = isTextEmpty ? Offset.zero : textLayout.getOffsetAtPosition(textPosition);
+    Offset caretOffset = isTextEmpty
+        ? Offset.zero
+        : textLayout.getOffsetAtPosition(textPosition);
 
     if (borderRadius == BorderRadius.zero) {
       canvas.drawRect(

@@ -49,7 +49,8 @@ class UpdateComposerTextStylesReaction extends EditReaction {
           stylesToExtend == null || styleValuesToExtend == null,
           "stylesToExtend and styleValuesToExtend are the same thing - you should only provide one",
         ),
-        _styleValuesToExtend = styleValuesToExtend ?? stylesToExtend ?? defaultExtendableStyles,
+        _styleValuesToExtend =
+            styleValuesToExtend ?? stylesToExtend ?? defaultExtendableStyles,
         _styleTypesToExtend = styleTypesToExtend,
         _styleSelectorsToExtend = styleSelectorsToExtend;
 
@@ -60,9 +61,11 @@ class UpdateComposerTextStylesReaction extends EditReaction {
   DocumentSelection? _previousSelection;
 
   @override
-  void react(EditContext editContext, RequestDispatcher requestDispatcher, List<EditEvent> changeList) {
+  void react(EditContext editContext, RequestDispatcher requestDispatcher,
+      List<EditEvent> changeList) {
     final lastSelectionChange =
-        changeList.lastWhereOrNull((element) => element is SelectionChangeEvent) as SelectionChangeEvent?;
+        changeList.lastWhereOrNull((element) => element is SelectionChangeEvent)
+            as SelectionChangeEvent?;
     if (lastSelectionChange == null) {
       // The selection didn't change in this transaction.
       return;
@@ -79,13 +82,15 @@ class UpdateComposerTextStylesReaction extends EditReaction {
     }
 
     // Update our internal accounting.
-    final composer = editContext.find<MutableDocumentComposer>(Editor.composerKey);
+    final composer =
+        editContext.find<MutableDocumentComposer>(Editor.composerKey);
     _previousSelection = composer.selection;
   }
 
   void _updateComposerStylesAtCaret(EditContext editContext) {
     final document = editContext.document;
-    final composer = editContext.find<MutableDocumentComposer>(Editor.composerKey);
+    final composer =
+        editContext.find<MutableDocumentComposer>(Editor.composerKey);
 
     if (composer.selection?.extent == _previousSelection?.extent && //
         // Ignore the attributions at the caret only if the previous selection
@@ -104,8 +109,10 @@ class UpdateComposerTextStylesReaction extends EditReaction {
         previousSelectionExtent.nodePosition is TextNodePosition) {
       // The current and previous selections are text positions. Check for the situation where the two
       // selections are functionally equivalent, but the affinity changed.
-      final selectedNodePosition = selectionExtent.nodePosition as TextNodePosition;
-      final previousSelectedNodePosition = previousSelectionExtent.nodePosition as TextNodePosition;
+      final selectedNodePosition =
+          selectionExtent.nodePosition as TextNodePosition;
+      final previousSelectedNodePosition =
+          previousSelectionExtent.nodePosition as TextNodePosition;
 
       // Ignore the attributions at the caret only if the previous selection
       // was already collapsed. If the selection was expanded and the user
@@ -133,7 +140,8 @@ class UpdateComposerTextStylesReaction extends EditReaction {
       return;
     }
 
-    final textPosition = composer.selection!.extent.nodePosition as TextPosition;
+    final textPosition =
+        composer.selection!.extent.nodePosition as TextPosition;
 
     if (textPosition.offset == 0 && node.text.isEmpty) {
       return;
@@ -150,29 +158,39 @@ class UpdateComposerTextStylesReaction extends EditReaction {
       offsetWithAttributionsToExtend = textPosition.offset - 1;
     }
 
-    Set<Attribution> allAttributions = node.text.getAllAttributionsAt(offsetWithAttributionsToExtend);
+    Set<Attribution> allAttributions =
+        node.text.getAllAttributionsAt(offsetWithAttributionsToExtend);
 
     // Add desired expandable styles.
     final newStyles = {
       // Extend any attributions whose value matches a desired value.
-      ...allAttributions.where((attribution) => _styleValuesToExtend.contains(attribution)).toSet(),
+      ...allAttributions
+          .where((attribution) => _styleValuesToExtend.contains(attribution))
+          .toSet(),
       // Extend any attribution whose class type matches a desired attribution type.
       if (_styleTypesToExtend.isNotEmpty) //
-        ...allAttributions.where((attribution) => _styleTypesToExtend.contains(attribution.runtimeType)).toSet(),
+        ...allAttributions
+            .where((attribution) =>
+                _styleTypesToExtend.contains(attribution.runtimeType))
+            .toSet(),
       // Extend any attribution that's explicitly selected by a given selector.
       if (_styleSelectorsToExtend.isNotEmpty) //
         ...allAttributions
-            .where(
-                (attribution) => _styleSelectorsToExtend.firstWhereOrNull((selector) => selector(attribution)) != null)
+            .where((attribution) =>
+                _styleSelectorsToExtend
+                    .firstWhereOrNull((selector) => selector(attribution)) !=
+                null)
             .toSet(),
     };
 
     // TODO: we shouldn't have such specific behavior in here. Figure out how to generalize this.
     // Add a link attribution only if the selection sits at the middle of the link.
     // As we are dealing with a collapsed selection, we shouldn't have more than one link.
-    final linkAttribution = allAttributions.firstWhereOrNull((attribution) => attribution is LinkAttribution);
+    final linkAttribution = allAttributions
+        .firstWhereOrNull((attribution) => attribution is LinkAttribution);
     if (linkAttribution != null) {
-      final range = node.text.getAttributedRange({linkAttribution}, offsetWithAttributionsToExtend);
+      final range = node.text.getAttributedRange(
+          {linkAttribution}, offsetWithAttributionsToExtend);
 
       if (textPosition.offset > 0 &&
           offsetWithAttributionsToExtend >= range.start &&

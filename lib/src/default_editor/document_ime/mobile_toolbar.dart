@@ -39,7 +39,8 @@ class KeyboardEditingToolbar extends StatefulWidget {
   final DocumentComposer composer;
   final CommonEditorOperations commonOps;
 
-  @Deprecated("To change the brightness, wrap KeyboardEditingToolbar with a Theme, instead")
+  @Deprecated(
+      "To change the brightness, wrap KeyboardEditingToolbar with a Theme, instead")
   final Brightness? brightness;
 
   /// Whether this widget should take up empty space in the current subtree that
@@ -58,10 +59,12 @@ class KeyboardEditingToolbar extends StatefulWidget {
   State<KeyboardEditingToolbar> createState() => _KeyboardEditingToolbarState();
 }
 
-class _KeyboardEditingToolbarState extends State<KeyboardEditingToolbar> with WidgetsBindingObserver {
+class _KeyboardEditingToolbarState extends State<KeyboardEditingToolbar>
+    with WidgetsBindingObserver {
   late KeyboardEditingToolbarOperations _toolbarOps;
 
-  final _portalController = GroupedOverlayPortalController(displayPriority: OverlayGroupPriority.windowChrome);
+  final _portalController = GroupedOverlayPortalController(
+      displayPriority: OverlayGroupPriority.windowChrome);
 
   double _toolbarHeight = 0;
 
@@ -121,7 +124,8 @@ class _KeyboardEditingToolbarState extends State<KeyboardEditingToolbar> with Wi
       overlayChildBuilder: _buildToolbarOverlay,
       // Take up empty space that's as tall as the toolbar so that other content
       // doesn't layout behind it.
-      child: SizedBox(height: widget.takeUpSameSpaceAsToolbar ? _toolbarHeight : 0),
+      child: SizedBox(
+          height: widget.takeUpSameSpaceAsToolbar ? _toolbarHeight : 0),
     );
   }
 
@@ -154,13 +158,15 @@ class _KeyboardEditingToolbarState extends State<KeyboardEditingToolbar> with Wi
   Widget _buildTheming({
     required Widget child,
   }) {
-    final brightness = widget.brightness ?? MediaQuery.of(context).platformBrightness;
+    final brightness =
+        widget.brightness ?? MediaQuery.of(context).platformBrightness;
 
     return Theme(
       data: Theme.of(context).copyWith(
         brightness: brightness,
-        disabledColor:
-            brightness == Brightness.light ? Colors.black.withValues(alpha: 0.5) : Colors.white.withValues(alpha: 0.5),
+        disabledColor: brightness == Brightness.light
+            ? Colors.black.withValues(alpha: 0.5)
+            : Colors.white.withValues(alpha: 0.5),
       ),
       child: IconTheme(
         data: IconThemeData(
@@ -178,7 +184,9 @@ class _KeyboardEditingToolbarState extends State<KeyboardEditingToolbar> with Wi
       child: Container(
         width: double.infinity,
         height: 48,
-        color: Theme.of(context).brightness == Brightness.light ? const Color(0xFFDDDDDD) : const Color(0xFF222222),
+        color: Theme.of(context).brightness == Brightness.light
+            ? const Color(0xFFDDDDDD)
+            : const Color(0xFF222222),
         child: LayoutBuilder(builder: (context, constraints) {
           _onToolbarLayout(constraints.maxHeight);
 
@@ -190,36 +198,56 @@ class _KeyboardEditingToolbarState extends State<KeyboardEditingToolbar> with Wi
                   child: ListenableBuilder(
                       listenable: widget.composer,
                       builder: (context, _) {
-                        final selectedNode = widget.document.getNodeById(selection.extent.nodeId);
-                        final isSingleNodeSelected = selection.extent.nodeId == selection.base.nodeId;
+                        final selectedNode = widget.document
+                            .getNodeById(selection.extent.nodeId);
+                        final isSingleNodeSelected =
+                            selection.extent.nodeId == selection.base.nodeId;
 
                         return Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             IconButton(
-                              onPressed: selectedNode is TextNode ? _toolbarOps.toggleBold : null,
+                              onPressed: selectedNode is TextNode
+                                  ? _toolbarOps.toggleBold
+                                  : null,
                               icon: const Icon(Icons.format_bold),
-                              color: _toolbarOps.isBoldActive ? Theme.of(context).primaryColor : null,
+                              color: _toolbarOps.isBoldActive
+                                  ? Theme.of(context).primaryColor
+                                  : null,
                             ),
                             IconButton(
-                              onPressed: selectedNode is TextNode ? _toolbarOps.toggleItalics : null,
+                              onPressed: selectedNode is TextNode
+                                  ? _toolbarOps.toggleItalics
+                                  : null,
                               icon: const Icon(Icons.format_italic),
-                              color: _toolbarOps.isItalicsActive ? Theme.of(context).primaryColor : null,
+                              color: _toolbarOps.isItalicsActive
+                                  ? Theme.of(context).primaryColor
+                                  : null,
                             ),
                             IconButton(
-                              onPressed: selectedNode is TextNode ? _toolbarOps.toggleUnderline : null,
+                              onPressed: selectedNode is TextNode
+                                  ? _toolbarOps.toggleUnderline
+                                  : null,
                               icon: const Icon(Icons.format_underline),
-                              color: _toolbarOps.isUnderlineActive ? Theme.of(context).primaryColor : null,
+                              color: _toolbarOps.isUnderlineActive
+                                  ? Theme.of(context).primaryColor
+                                  : null,
                             ),
                             IconButton(
-                              onPressed: selectedNode is TextNode ? _toolbarOps.toggleStrikethrough : null,
+                              onPressed: selectedNode is TextNode
+                                  ? _toolbarOps.toggleStrikethrough
+                                  : null,
                               icon: const Icon(Icons.strikethrough_s),
-                              color: _toolbarOps.isStrikethroughActive ? Theme.of(context).primaryColor : null,
+                              color: _toolbarOps.isStrikethroughActive
+                                  ? Theme.of(context).primaryColor
+                                  : null,
                             ),
                             IconButton(
                               onPressed: isSingleNodeSelected &&
                                       (selectedNode is TextNode &&
-                                          selectedNode.getMetadataValue('blockType') != header1Attribution)
+                                          selectedNode.getMetadataValue(
+                                                  'blockType') !=
+                                              header1Attribution)
                                   ? _toolbarOps.convertToHeader1
                                   : null,
                               icon: const Icon(Icons.title),
@@ -227,7 +255,9 @@ class _KeyboardEditingToolbarState extends State<KeyboardEditingToolbar> with Wi
                             IconButton(
                               onPressed: isSingleNodeSelected &&
                                       (selectedNode is TextNode &&
-                                          selectedNode.getMetadataValue('blockType') != header2Attribution)
+                                          selectedNode.getMetadataValue(
+                                                  'blockType') !=
+                                              header2Attribution)
                                   ? _toolbarOps.convertToHeader2
                                   : null,
                               icon: const Icon(Icons.title),
@@ -235,24 +265,33 @@ class _KeyboardEditingToolbarState extends State<KeyboardEditingToolbar> with Wi
                             ),
                             IconButton(
                               onPressed: isSingleNodeSelected &&
-                                      ((selectedNode is ParagraphNode && selectedNode.hasMetadataValue('blockType')) ||
-                                          (selectedNode is TextNode && selectedNode is! ParagraphNode))
+                                      ((selectedNode is ParagraphNode &&
+                                              selectedNode.hasMetadataValue(
+                                                  'blockType')) ||
+                                          (selectedNode is TextNode &&
+                                              selectedNode is! ParagraphNode))
                                   ? _toolbarOps.convertToParagraph
                                   : null,
                               icon: const Icon(Icons.wrap_text),
                             ),
                             IconButton(
                               onPressed: isSingleNodeSelected &&
-                                      (selectedNode is TextNode && selectedNode is! ListItemNode ||
-                                          (selectedNode is ListItemNode && selectedNode.type != ListItemType.ordered))
+                                      (selectedNode is TextNode &&
+                                              selectedNode is! ListItemNode ||
+                                          (selectedNode is ListItemNode &&
+                                              selectedNode.type !=
+                                                  ListItemType.ordered))
                                   ? _toolbarOps.convertToOrderedListItem
                                   : null,
                               icon: const Icon(Icons.looks_one_rounded),
                             ),
                             IconButton(
                               onPressed: isSingleNodeSelected &&
-                                      (selectedNode is TextNode && selectedNode is! ListItemNode ||
-                                          (selectedNode is ListItemNode && selectedNode.type != ListItemType.unordered))
+                                      (selectedNode is TextNode &&
+                                              selectedNode is! ListItemNode ||
+                                          (selectedNode is ListItemNode &&
+                                              selectedNode.type !=
+                                                  ListItemType.unordered))
                                   ? _toolbarOps.convertToUnorderedListItem
                                   : null,
                               icon: const Icon(Icons.list),
@@ -261,16 +300,19 @@ class _KeyboardEditingToolbarState extends State<KeyboardEditingToolbar> with Wi
                               onPressed: isSingleNodeSelected &&
                                       selectedNode is TextNode &&
                                       (selectedNode is! ParagraphNode ||
-                                          selectedNode.getMetadataValue('blockType') != blockquoteAttribution)
+                                          selectedNode.getMetadataValue(
+                                                  'blockType') !=
+                                              blockquoteAttribution)
                                   ? _toolbarOps.convertToBlockquote
                                   : null,
                               icon: const Icon(Icons.format_quote),
                             ),
                             IconButton(
-                              onPressed:
-                                  isSingleNodeSelected && selectedNode is ParagraphNode && selectedNode.text.isEmpty
-                                      ? _toolbarOps.convertToHr
-                                      : null,
+                              onPressed: isSingleNodeSelected &&
+                                      selectedNode is ParagraphNode &&
+                                      selectedNode.text.isEmpty
+                                  ? _toolbarOps.convertToHr
+                                  : null,
                               icon: const Icon(Icons.horizontal_rule),
                             ),
                           ],
@@ -312,7 +354,8 @@ class KeyboardHeightBuilder extends StatefulWidget {
   State<KeyboardHeightBuilder> createState() => _KeyboardHeightBuilderState();
 }
 
-class _KeyboardHeightBuilderState extends State<KeyboardHeightBuilder> with WidgetsBindingObserver {
+class _KeyboardHeightBuilderState extends State<KeyboardHeightBuilder>
+    with WidgetsBindingObserver {
   double _keyboardHeight = 0;
 
   @override
@@ -329,8 +372,9 @@ class _KeyboardHeightBuilderState extends State<KeyboardHeightBuilder> with Widg
 
   @override
   void didChangeMetrics() {
-    final keyboardHeight =
-        EdgeInsets.fromViewPadding(View.of(context).viewInsets, View.of(context).devicePixelRatio).bottom;
+    final keyboardHeight = EdgeInsets.fromViewPadding(
+            View.of(context).viewInsets, View.of(context).devicePixelRatio)
+        .bottom;
     if (keyboardHeight == _keyboardHeight) {
       return;
     }
@@ -365,13 +409,16 @@ class KeyboardEditingToolbarOperations {
   bool get isBoldActive => _doesSelectionHaveAttributions({boldAttribution});
   void toggleBold() => _toggleAttributions({boldAttribution});
 
-  bool get isItalicsActive => _doesSelectionHaveAttributions({italicsAttribution});
+  bool get isItalicsActive =>
+      _doesSelectionHaveAttributions({italicsAttribution});
   void toggleItalics() => _toggleAttributions({italicsAttribution});
 
-  bool get isUnderlineActive => _doesSelectionHaveAttributions({underlineAttribution});
+  bool get isUnderlineActive =>
+      _doesSelectionHaveAttributions({underlineAttribution});
   void toggleUnderline() => _toggleAttributions({underlineAttribution});
 
-  bool get isStrikethroughActive => _doesSelectionHaveAttributions({strikethroughAttribution});
+  bool get isStrikethroughActive =>
+      _doesSelectionHaveAttributions({strikethroughAttribution});
   void toggleStrikethrough() => _toggleAttributions({strikethroughAttribution});
 
   bool _doesSelectionHaveAttributions(Set<Attribution> attributions) {
@@ -384,7 +431,8 @@ class KeyboardEditingToolbarOperations {
       return composer.preferences.currentAttributions.containsAll(attributions);
     }
 
-    return document.doesSelectedTextContainAttributions(selection, attributions);
+    return document.doesSelectedTextContainAttributions(
+        selection, attributions);
   }
 
   void _toggleAttributions(Set<Attribution> attributions) {
@@ -399,7 +447,8 @@ class KeyboardEditingToolbarOperations {
   }
 
   void convertToHeader1() {
-    final selectedNode = document.getNodeById(composer.selection!.extent.nodeId);
+    final selectedNode =
+        document.getNodeById(composer.selection!.extent.nodeId);
     if (selectedNode is! TextNode) {
       return;
     }
@@ -421,7 +470,8 @@ class KeyboardEditingToolbarOperations {
   }
 
   void convertToHeader2() {
-    final selectedNode = document.getNodeById(composer.selection!.extent.nodeId);
+    final selectedNode =
+        document.getNodeById(composer.selection!.extent.nodeId);
     if (selectedNode is! TextNode) {
       return;
     }
@@ -447,25 +497,29 @@ class KeyboardEditingToolbarOperations {
   }
 
   void convertToOrderedListItem() {
-    final selectedNode = document.getNodeById(composer.selection!.extent.nodeId)! as TextNode;
+    final selectedNode =
+        document.getNodeById(composer.selection!.extent.nodeId)! as TextNode;
 
     commonOps.convertToListItem(ListItemType.ordered, selectedNode.text);
   }
 
   void convertToUnorderedListItem() {
-    final selectedNode = document.getNodeById(composer.selection!.extent.nodeId)! as TextNode;
+    final selectedNode =
+        document.getNodeById(composer.selection!.extent.nodeId)! as TextNode;
 
     commonOps.convertToListItem(ListItemType.unordered, selectedNode.text);
   }
 
   void convertToBlockquote() {
-    final selectedNode = document.getNodeById(composer.selection!.extent.nodeId)! as TextNode;
+    final selectedNode =
+        document.getNodeById(composer.selection!.extent.nodeId)! as TextNode;
 
     commonOps.convertToBlockquote(selectedNode.text);
   }
 
   void convertToHr() {
-    final selectedNode = document.getNodeById(composer.selection!.extent.nodeId)! as TextNode;
+    final selectedNode =
+        document.getNodeById(composer.selection!.extent.nodeId)! as TextNode;
 
     editor.execute([
       ReplaceNodeRequest(

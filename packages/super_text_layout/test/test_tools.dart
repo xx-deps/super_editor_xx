@@ -45,7 +45,8 @@ Future<void> pumpEmptySuperText(
 final superTextKey = GlobalKey(debugLabel: "super_text");
 
 const threeLineTextSpan = TextSpan(
-  text: "This is some text. It is explicitly laid out in\n" // Line indices: 0 -> 47/48 (upstream/downstream)
+  text:
+      "This is some text. It is explicitly laid out in\n" // Line indices: 0 -> 47/48 (upstream/downstream)
       "multiple lines so that we don't need to guess\n" // Line indices: 48 ->  93/94 (upstream/downstream)
       "where the layout forces a line break", // Line indices: 94 -> 130
   style: _testTextStyle,

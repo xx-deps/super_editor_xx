@@ -154,7 +154,8 @@ class SuperIOSTextField extends StatefulWidget {
   /// keyboard.
   ///
   /// This property is ignored when an [imeConfiguration] is provided.
-  @Deprecated('This will be removed in a future release. Use imeConfiguration instead')
+  @Deprecated(
+      'This will be removed in a future release. Use imeConfiguration instead')
   final TextInputAction? textInputAction;
 
   /// Preferences for how the platform IME should look and behave during editing.
@@ -176,7 +177,8 @@ class SuperIOSTextField extends StatefulWidget {
 class SuperIOSTextFieldState extends State<SuperIOSTextField>
     with TickerProviderStateMixin, WidgetsBindingObserver
     implements ProseTextBlock, ImeInputOwner {
-  static const Duration _autoScrollAnimationDuration = Duration(milliseconds: 100);
+  static const Duration _autoScrollAnimationDuration =
+      Duration(milliseconds: 100);
   static const Curve _autoScrollAnimationCurve = Curves.fastOutSlowIn;
 
   final _textFieldKey = GlobalKey();
@@ -196,7 +198,8 @@ class SuperIOSTextFieldState extends State<SuperIOSTextField>
   TextDirection? _contentTextDirection;
 
   /// The text direction applied to the inner text.
-  TextDirection get _textDirection => _contentTextDirection ?? TextDirection.ltr;
+  TextDirection get _textDirection =>
+      _contentTextDirection ?? TextDirection.ltr;
 
   TextAlign get _textAlign =>
       widget.textAlign ??
@@ -234,12 +237,14 @@ class SuperIOSTextFieldState extends State<SuperIOSTextField>
         _caretBlinkController = BlinkController.withTimer();
     }
 
-    _focusNode = (widget.focusNode ?? FocusNode())..addListener(_updateSelectionAndImeConnectionOnFocusChange);
+    _focusNode = (widget.focusNode ?? FocusNode())
+      ..addListener(_updateSelectionAndImeConnectionOnFocusChange);
 
-    _textEditingController = (widget.textController ?? ImeAttributedTextEditingController())
-      ..addListener(_onTextOrSelectionChange)
-      ..onIOSFloatingCursorChange = _onFloatingCursorChange
-      ..onPerformActionPressed ??= _onPerformActionPressed;
+    _textEditingController =
+        (widget.textController ?? ImeAttributedTextEditingController())
+          ..addListener(_onTextOrSelectionChange)
+          ..onIOSFloatingCursorChange = _onFloatingCursorChange
+          ..onPerformActionPressed ??= _onPerformActionPressed;
 
     _textScrollController = TextScrollController(
       textController: _textEditingController,
@@ -260,7 +265,8 @@ class SuperIOSTextFieldState extends State<SuperIOSTextField>
       overlayController: _overlayController,
     );
 
-    _contentTextDirection = getParagraphDirection(_textEditingController.text.toPlainText());
+    _contentTextDirection =
+        getParagraphDirection(_textEditingController.text.toPlainText());
 
     WidgetsBinding.instance.addObserver(this);
 
@@ -294,7 +300,8 @@ class SuperIOSTextFieldState extends State<SuperIOSTextField>
       _textEditingController
         ..removeListener(_onTextOrSelectionChange)
         ..onIOSFloatingCursorChange = null;
-      if (_textEditingController.onPerformActionPressed == _onPerformActionPressed) {
+      if (_textEditingController.onPerformActionPressed ==
+          _onPerformActionPressed) {
         _textEditingController.onPerformActionPressed = null;
       }
 
@@ -312,7 +319,9 @@ class SuperIOSTextFieldState extends State<SuperIOSTextField>
 
     if (widget.imeConfiguration != oldWidget.imeConfiguration &&
         widget.imeConfiguration != null &&
-        (oldWidget.imeConfiguration == null || !widget.imeConfiguration!.isEquivalentTo(oldWidget.imeConfiguration!)) &&
+        (oldWidget.imeConfiguration == null ||
+            !widget.imeConfiguration!
+                .isEquivalentTo(oldWidget.imeConfiguration!)) &&
         _textEditingController.isAttachedToIme) {
       _textEditingController.updateTextInputConfiguration(
         viewId: View.of(context).viewId,
@@ -407,21 +416,25 @@ class SuperIOSTextFieldState extends State<SuperIOSTextField>
   /// to the top-left corner of the [textLayout] within this text field.
   Offset get textLayoutOffsetInField {
     final fieldBox = context.findRenderObject() as RenderBox;
-    final textLayoutBox = _textContentKey.currentContext!.findRenderObject() as RenderBox;
+    final textLayoutBox =
+        _textContentKey.currentContext!.findRenderObject() as RenderBox;
     return textLayoutBox.localToGlobal(Offset.zero, ancestor: fieldBox);
   }
 
   Rect? _getGlobalCaretRect() {
-    if (!_textEditingController.selection.isValid || !_textEditingController.selection.isCollapsed) {
+    if (!_textEditingController.selection.isValid ||
+        !_textEditingController.selection.isCollapsed) {
       // Either there's no selection, or the selection is expanded. In either case, there's no caret.
       return null;
     }
 
     final globalTextOffset =
-        (_textContentKey.currentContext!.findRenderObject() as RenderBox).localToGlobal(Offset.zero);
+        (_textContentKey.currentContext!.findRenderObject() as RenderBox)
+            .localToGlobal(Offset.zero);
 
     final caretPosition = _textEditingController.selection.extent;
-    final caretOffset = textLayout.getOffsetForCaret(caretPosition) + globalTextOffset;
+    final caretOffset =
+        textLayout.getOffsetForCaret(caretPosition) + globalTextOffset;
     final caretHeight = textLayout.getHeightForCaret(caretPosition)!;
 
     return Rect.fromLTWH(caretOffset.dx, caretOffset.dy, 1, caretHeight);
@@ -445,16 +458,19 @@ class SuperIOSTextFieldState extends State<SuperIOSTextField>
           _log.finest('Attaching TextInputClient to TextInput');
           setState(() {
             if (!_textEditingController.selection.isValid) {
-              _textEditingController.selection = TextSelection.collapsed(offset: _textEditingController.text.length);
+              _textEditingController.selection = TextSelection.collapsed(
+                  offset: _textEditingController.text.length);
             }
 
             if (widget.imeConfiguration != null) {
-              _textEditingController.attachToImeWithConfig(widget.imeConfiguration!);
+              _textEditingController
+                  .attachToImeWithConfig(widget.imeConfiguration!);
             } else {
               _textEditingController.attachToIme(
                 viewId: View.of(context).viewId,
                 textInputAction: widget.textInputAction ?? TextInputAction.done,
-                textInputType: _isMultiline ? TextInputType.multiline : TextInputType.text,
+                textInputType:
+                    _isMultiline ? TextInputType.multiline : TextInputType.text,
               );
             }
 
@@ -466,7 +482,8 @@ class SuperIOSTextFieldState extends State<SuperIOSTextField>
         _log.finest('Lost focus. Detaching TextInputClient from TextInput.');
         setState(() {
           _textEditingController.detachFromIme();
-          _textEditingController.selection = const TextSelection.collapsed(offset: -1);
+          _textEditingController.selection =
+              const TextSelection.collapsed(offset: -1);
           _textEditingController.composingRegion = TextRange.empty;
           _removeEditingOverlayControls();
         });
@@ -480,7 +497,8 @@ class SuperIOSTextFieldState extends State<SuperIOSTextField>
     }
 
     setState(() {
-      _contentTextDirection = getParagraphDirection(_textEditingController.text.toPlainText());
+      _contentTextDirection =
+          getParagraphDirection(_textEditingController.text.toPlainText());
     });
   }
 
@@ -515,7 +533,8 @@ class SuperIOSTextFieldState extends State<SuperIOSTextField>
   }
 
   void _onFloatingCursorChange(RawFloatingCursorPoint point) {
-    _floatingCursorController.updateFloatingCursor(_textContentKey.currentState!.textLayout, point);
+    _floatingCursorController.updateFloatingCursor(
+        _textContentKey.currentState!.textLayout, point);
   }
 
   /// Handles actions from the IME
@@ -545,13 +564,15 @@ class SuperIOSTextFieldState extends State<SuperIOSTextField>
     }
 
     // Compute the text field offset that should be visible to the user
-    final textFieldFocalPoint = widget.maxLines == null && _textEditingController.selection.isValid
+    final textFieldFocalPoint = widget.maxLines == null &&
+            _textEditingController.selection.isValid
         ? _textContentKey.currentState!.textLayout.getOffsetAtPosition(
             TextPosition(offset: _textEditingController.selection.extentOffset),
           )
         : Offset.zero;
 
-    final lineHeight = _textContentKey.currentState!.textLayout.getLineHeightAtPosition(
+    final lineHeight =
+        _textContentKey.currentState!.textLayout.getLineHeightAtPosition(
       TextPosition(offset: _textEditingController.selection.extentOffset),
     );
     final fieldBox = context.findRenderObject() as RenderBox;
@@ -602,12 +623,16 @@ class SuperIOSTextFieldState extends State<SuperIOSTextField>
               minLines: widget.minLines,
               maxLines: widget.maxLines,
               lineHeight: widget.lineHeight,
-              padding: EdgeInsets.only(top: widget.padding?.top ?? 0, bottom: widget.padding?.bottom ?? 0),
+              padding: EdgeInsets.only(
+                  top: widget.padding?.top ?? 0,
+                  bottom: widget.padding?.bottom ?? 0),
               perLineAutoScrollDuration: const Duration(milliseconds: 100),
               showDebugPaint: widget.showDebugPaint,
               child: FillWidthIfConstrained(
                 child: Padding(
-                  padding: EdgeInsets.only(left: widget.padding?.left ?? 0, right: widget.padding?.right ?? 0),
+                  padding: EdgeInsets.only(
+                      left: widget.padding?.left ?? 0,
+                      right: widget.padding?.right ?? 0),
                   child: CompositedTransformTarget(
                     link: _textContentLayerLink,
                     child: ListenableBuilder(
@@ -628,11 +653,13 @@ class SuperIOSTextFieldState extends State<SuperIOSTextField>
 
   Widget _buildSelectableText() {
     final textSpan = _textEditingController.text //
-        .computeInlineSpan(context, widget.textStyleBuilder, widget.inlineWidgetBuilders);
+        .computeInlineSpan(
+            context, widget.textStyleBuilder, widget.inlineWidgetBuilders);
 
     CaretStyle caretStyle = widget.caretStyle;
 
-    final caretColorOverride = _floatingCursorController.isShowingFloatingCursor ? Colors.grey : null;
+    final caretColorOverride =
+        _floatingCursorController.isShowingFloatingCursor ? Colors.grey : null;
     if (caretColorOverride != null) {
       caretStyle = caretStyle.copyWith(color: caretColorOverride);
     }
@@ -648,8 +675,13 @@ class SuperIOSTextFieldState extends State<SuperIOSTextField>
         layerBeneathBuilder: (context, textLayout) {
           final isTextEmpty = _textEditingController.text.isEmpty;
           final showHint = widget.hintBuilder != null &&
-              ((isTextEmpty && widget.hintBehavior == HintBehavior.displayHintUntilTextEntered) ||
-                  (isTextEmpty && !_focusNode.hasFocus && widget.hintBehavior == HintBehavior.displayHintUntilFocus));
+              ((isTextEmpty &&
+                      widget.hintBehavior ==
+                          HintBehavior.displayHintUntilTextEntered) ||
+                  (isTextEmpty &&
+                      !_focusNode.hasFocus &&
+                      widget.hintBehavior ==
+                          HintBehavior.displayHintUntilFocus));
 
           return Stack(
             clipBehavior: Clip.none,
@@ -664,12 +696,15 @@ class SuperIOSTextFieldState extends State<SuperIOSTextField>
                   selection: _textEditingController.selection,
                 ),
               // Underline beneath the composing region.
-              if (_textEditingController.composingRegion.isValid == true && widget.showComposingUnderline)
+              if (_textEditingController.composingRegion.isValid == true &&
+                  widget.showComposingUnderline)
                 TextUnderlineLayer(
                   textLayout: textLayout,
                   style: StraightUnderlineStyle(
                     color: widget.textStyleBuilder({}).color ?? //
-                        (Theme.of(context).brightness == Brightness.light ? Colors.black : Colors.white),
+                        (Theme.of(context).brightness == Brightness.light
+                            ? Colors.black
+                            : Colors.white),
                   ),
                   underlines: [
                     TextLayoutUnderline(
@@ -734,11 +769,13 @@ class SuperIOSTextFieldState extends State<SuperIOSTextField>
 }
 
 /// Builder that returns a widget for an iOS-style popover editing toolbar.
-typedef IOSPopoverToolbarBuilder = Widget Function(BuildContext, IOSEditingOverlayController);
+typedef IOSPopoverToolbarBuilder = Widget Function(
+    BuildContext, IOSEditingOverlayController);
 
 /// An [IOSPopoverToolbarBuilder] that displays the iOS system popover toolbar, if the version of
 /// iOS is recent enough, otherwise builds [defaultIosPopoverToolbarBuilder].
-Widget iOSSystemPopoverTextFieldToolbarWithFallback(BuildContext context, IOSEditingOverlayController controller) {
+Widget iOSSystemPopoverTextFieldToolbarWithFallback(
+    BuildContext context, IOSEditingOverlayController controller) {
   if (IOSSystemContextMenu.isSupported(context)) {
     return IOSSuperTextFieldSystemContextMenu(
       controller: controller,
@@ -749,7 +786,8 @@ Widget iOSSystemPopoverTextFieldToolbarWithFallback(BuildContext context, IOSEdi
 }
 
 /// Returns a widget for the default/standard iOS-style popover provided by Super Text Field.
-Widget defaultIosPopoverToolbarBuilder(BuildContext context, IOSEditingOverlayController controller) {
+Widget defaultIosPopoverToolbarBuilder(
+    BuildContext context, IOSEditingOverlayController controller) {
   return IOSTextEditingFloatingToolbar(
     focalPoint: controller.toolbarFocalPoint,
     onCutPressed: () {
@@ -759,7 +797,8 @@ Widget defaultIosPopoverToolbarBuilder(BuildContext context, IOSEditingOverlayCo
         return;
       }
 
-      final selectedText = selection.textInside(textController.text.toPlainText());
+      final selectedText =
+          selection.textInside(textController.text.toPlainText());
 
       textController.deleteSelectedText();
 
@@ -768,7 +807,8 @@ Widget defaultIosPopoverToolbarBuilder(BuildContext context, IOSEditingOverlayCo
     onCopyPressed: () {
       final textController = controller.textController;
       final selection = textController.selection;
-      final selectedText = selection.textInside(textController.text.toPlainText());
+      final selectedText =
+          selection.textInside(textController.text.toPlainText());
 
       Clipboard.setData(ClipboardData(text: selectedText));
     },
@@ -783,7 +823,8 @@ Widget defaultIosPopoverToolbarBuilder(BuildContext context, IOSEditingOverlayCo
       if (selection.isCollapsed) {
         textController.insertAtCaret(text: clipboardContent.text!);
       } else {
-        textController.replaceSelectionWithUnstyledText(replacementText: clipboardContent.text!);
+        textController.replaceSelectionWithUnstyledText(
+            replacementText: clipboardContent.text!);
       }
     },
   );
@@ -798,10 +839,12 @@ class IOSSuperTextFieldSystemContextMenu extends StatefulWidget {
   final IOSEditingOverlayController controller;
 
   @override
-  State<IOSSuperTextFieldSystemContextMenu> createState() => _IOSSuperTextFieldSystemContextMenuState();
+  State<IOSSuperTextFieldSystemContextMenu> createState() =>
+      _IOSSuperTextFieldSystemContextMenuState();
 }
 
-class _IOSSuperTextFieldSystemContextMenuState extends State<IOSSuperTextFieldSystemContextMenu> {
+class _IOSSuperTextFieldSystemContextMenuState
+    extends State<IOSSuperTextFieldSystemContextMenu> {
   late final SystemContextMenuController _systemContextMenuController;
 
   @override
@@ -851,7 +894,8 @@ class _IOSSuperTextFieldSystemContextMenuState extends State<IOSSuperTextFieldSy
       return;
     }
 
-    _systemContextMenuController.show(Rect.fromLTRB(topAnchor.dx, topAnchor.dy, bottomAnchor.dx, bottomAnchor.dy));
+    _systemContextMenuController.show(Rect.fromLTRB(
+        topAnchor.dx, topAnchor.dy, bottomAnchor.dx, bottomAnchor.dy));
   }
 
   @override

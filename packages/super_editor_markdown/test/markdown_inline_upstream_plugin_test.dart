@@ -17,11 +17,23 @@ void main() {
         await tester.placeCaretInParagraph(nodeId, 0);
         await tester.typeImeText("**bold**");
 
-        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(), "bold");
-        expect(SuperEditorInspector.findTextInComponent(nodeId).spans.markers.toList(), [
-          const SpanMarker(attribution: boldAttribution, offset: 0, markerType: SpanMarkerType.start),
-          const SpanMarker(attribution: boldAttribution, offset: 3, markerType: SpanMarkerType.end),
-        ]);
+        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+            "bold");
+        expect(
+            SuperEditorInspector.findTextInComponent(nodeId)
+                .spans
+                .markers
+                .toList(),
+            [
+              const SpanMarker(
+                  attribution: boldAttribution,
+                  offset: 0,
+                  markerType: SpanMarkerType.start),
+              const SpanMarker(
+                  attribution: boldAttribution,
+                  offset: 3,
+                  markerType: SpanMarkerType.end),
+            ]);
       });
 
       testWidgets("italics", (tester) async {
@@ -31,11 +43,23 @@ void main() {
         await tester.placeCaretInParagraph(nodeId, 0);
         await tester.typeImeText("*italics*");
 
-        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(), "italics");
-        expect(SuperEditorInspector.findTextInComponent(nodeId).spans.markers.toList(), [
-          const SpanMarker(attribution: italicsAttribution, offset: 0, markerType: SpanMarkerType.start),
-          const SpanMarker(attribution: italicsAttribution, offset: 6, markerType: SpanMarkerType.end),
-        ]);
+        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+            "italics");
+        expect(
+            SuperEditorInspector.findTextInComponent(nodeId)
+                .spans
+                .markers
+                .toList(),
+            [
+              const SpanMarker(
+                  attribution: italicsAttribution,
+                  offset: 0,
+                  markerType: SpanMarkerType.start),
+              const SpanMarker(
+                  attribution: italicsAttribution,
+                  offset: 6,
+                  markerType: SpanMarkerType.end),
+            ]);
       });
 
       testWidgets("strikethrough", (tester) async {
@@ -57,11 +81,23 @@ void main() {
         ], getter: imeClientGetter);
         await tester.pump();
 
-        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(), "strikethrough");
-        expect(SuperEditorInspector.findTextInComponent(nodeId).spans.markers.toList(), [
-          const SpanMarker(attribution: strikethroughAttribution, offset: 0, markerType: SpanMarkerType.start),
-          const SpanMarker(attribution: strikethroughAttribution, offset: 12, markerType: SpanMarkerType.end),
-        ]);
+        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+            "strikethrough");
+        expect(
+            SuperEditorInspector.findTextInComponent(nodeId)
+                .spans
+                .markers
+                .toList(),
+            [
+              const SpanMarker(
+                  attribution: strikethroughAttribution,
+                  offset: 0,
+                  markerType: SpanMarkerType.start),
+              const SpanMarker(
+                  attribution: strikethroughAttribution,
+                  offset: 12,
+                  markerType: SpanMarkerType.end),
+            ]);
       });
 
       testWidgets("code", (tester) async {
@@ -83,11 +119,23 @@ void main() {
         ], getter: imeClientGetter);
         await tester.pump();
 
-        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(), "code");
-        expect(SuperEditorInspector.findTextInComponent(nodeId).spans.markers.toList(), [
-          const SpanMarker(attribution: codeAttribution, offset: 0, markerType: SpanMarkerType.start),
-          const SpanMarker(attribution: codeAttribution, offset: 3, markerType: SpanMarkerType.end),
-        ]);
+        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+            "code");
+        expect(
+            SuperEditorInspector.findTextInComponent(nodeId)
+                .spans
+                .markers
+                .toList(),
+            [
+              const SpanMarker(
+                  attribution: codeAttribution,
+                  offset: 0,
+                  markerType: SpanMarkerType.start),
+              const SpanMarker(
+                  attribution: codeAttribution,
+                  offset: 3,
+                  markerType: SpanMarkerType.end),
+            ]);
       });
 
       group("unbalanced >", () {
@@ -98,8 +146,10 @@ void main() {
           await tester.placeCaretInParagraph(nodeId, 0);
           await tester.typeImeText("**token*");
 
-          expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(), "**token*");
-          expect(SuperEditorInspector.findTextInComponent(nodeId).spans.markers, isEmpty);
+          expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+              "**token*");
+          expect(SuperEditorInspector.findTextInComponent(nodeId).spans.markers,
+              isEmpty);
         });
 
         testWidgets("italics then bold", (tester) async {
@@ -109,11 +159,23 @@ void main() {
           await tester.placeCaretInParagraph(nodeId, 0);
           await tester.typeImeText("*token**");
 
-          expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(), "token*");
-          expect(SuperEditorInspector.findTextInComponent(nodeId).spans.markers.toList(), [
-            const SpanMarker(attribution: italicsAttribution, offset: 0, markerType: SpanMarkerType.start),
-            const SpanMarker(attribution: italicsAttribution, offset: 4, markerType: SpanMarkerType.end),
-          ]);
+          expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+              "token*");
+          expect(
+              SuperEditorInspector.findTextInComponent(nodeId)
+                  .spans
+                  .markers
+                  .toList(),
+              [
+                const SpanMarker(
+                    attribution: italicsAttribution,
+                    offset: 0,
+                    markerType: SpanMarkerType.start),
+                const SpanMarker(
+                    attribution: italicsAttribution,
+                    offset: 4,
+                    markerType: SpanMarkerType.end),
+              ]);
         });
       });
     });
@@ -127,11 +189,23 @@ void main() {
 
         await tester.typeImeText(" **bold**");
 
-        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(), "Hello bold");
-        expect(SuperEditorInspector.findTextInComponent(nodeId).spans.markers.toList(), [
-          const SpanMarker(attribution: boldAttribution, offset: 6, markerType: SpanMarkerType.start),
-          const SpanMarker(attribution: boldAttribution, offset: 9, markerType: SpanMarkerType.end),
-        ]);
+        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+            "Hello bold");
+        expect(
+            SuperEditorInspector.findTextInComponent(nodeId)
+                .spans
+                .markers
+                .toList(),
+            [
+              const SpanMarker(
+                  attribution: boldAttribution,
+                  offset: 6,
+                  markerType: SpanMarkerType.start),
+              const SpanMarker(
+                  attribution: boldAttribution,
+                  offset: 9,
+                  markerType: SpanMarkerType.end),
+            ]);
       });
 
       testWidgets("italics", (tester) async {
@@ -142,11 +216,23 @@ void main() {
 
         await tester.typeImeText(" *italics*");
 
-        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(), "Hello italics");
-        expect(SuperEditorInspector.findTextInComponent(nodeId).spans.markers.toList(), [
-          const SpanMarker(attribution: italicsAttribution, offset: 6, markerType: SpanMarkerType.start),
-          const SpanMarker(attribution: italicsAttribution, offset: 12, markerType: SpanMarkerType.end),
-        ]);
+        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+            "Hello italics");
+        expect(
+            SuperEditorInspector.findTextInComponent(nodeId)
+                .spans
+                .markers
+                .toList(),
+            [
+              const SpanMarker(
+                  attribution: italicsAttribution,
+                  offset: 6,
+                  markerType: SpanMarkerType.start),
+              const SpanMarker(
+                  attribution: italicsAttribution,
+                  offset: 12,
+                  markerType: SpanMarkerType.end),
+            ]);
       });
 
       testWidgets("strikethrough", (tester) async {
@@ -157,11 +243,23 @@ void main() {
 
         await tester.typeImeText(" ~strikethrough~");
 
-        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(), "Hello strikethrough");
-        expect(SuperEditorInspector.findTextInComponent(nodeId).spans.markers.toList(), [
-          const SpanMarker(attribution: strikethroughAttribution, offset: 6, markerType: SpanMarkerType.start),
-          const SpanMarker(attribution: strikethroughAttribution, offset: 18, markerType: SpanMarkerType.end),
-        ]);
+        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+            "Hello strikethrough");
+        expect(
+            SuperEditorInspector.findTextInComponent(nodeId)
+                .spans
+                .markers
+                .toList(),
+            [
+              const SpanMarker(
+                  attribution: strikethroughAttribution,
+                  offset: 6,
+                  markerType: SpanMarkerType.start),
+              const SpanMarker(
+                  attribution: strikethroughAttribution,
+                  offset: 18,
+                  markerType: SpanMarkerType.end),
+            ]);
       });
 
       group("unbalanced >", () {
@@ -172,8 +270,10 @@ void main() {
           await tester.placeCaretInParagraph(nodeId, 5);
           await tester.typeImeText(" **token*");
 
-          expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(), "Hello **token*");
-          expect(SuperEditorInspector.findTextInComponent(nodeId).spans.markers, isEmpty);
+          expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+              "Hello **token*");
+          expect(SuperEditorInspector.findTextInComponent(nodeId).spans.markers,
+              isEmpty);
         });
 
         testWidgets("italics then bold", (tester) async {
@@ -183,11 +283,23 @@ void main() {
           await tester.placeCaretInParagraph(nodeId, 5);
           await tester.typeImeText(" *token**");
 
-          expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(), "Hello token*");
-          expect(SuperEditorInspector.findTextInComponent(nodeId).spans.markers.toList(), [
-            const SpanMarker(attribution: italicsAttribution, offset: 6, markerType: SpanMarkerType.start),
-            const SpanMarker(attribution: italicsAttribution, offset: 10, markerType: SpanMarkerType.end),
-          ]);
+          expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+              "Hello token*");
+          expect(
+              SuperEditorInspector.findTextInComponent(nodeId)
+                  .spans
+                  .markers
+                  .toList(),
+              [
+                const SpanMarker(
+                    attribution: italicsAttribution,
+                    offset: 6,
+                    markerType: SpanMarkerType.start),
+                const SpanMarker(
+                    attribution: italicsAttribution,
+                    offset: 10,
+                    markerType: SpanMarkerType.end),
+              ]);
         });
       });
     });
@@ -201,8 +313,10 @@ void main() {
 
         await tester.typeImeText("**noitalics*");
 
-        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(), "**noitalics*");
-        expect((document.first as ParagraphNode).text.spans.markers.isEmpty, isTrue);
+        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+            "**noitalics*");
+        expect((document.first as ParagraphNode).text.spans.markers.isEmpty,
+            isTrue);
       });
     });
 
@@ -215,34 +329,87 @@ void main() {
       // Italics
       await tester.typeImeText(" *italics*");
 
-      expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(), "Hello italics");
-      expect(SuperEditorInspector.findTextInComponent(nodeId).spans.markers.toList(), [
-        const SpanMarker(attribution: italicsAttribution, offset: 6, markerType: SpanMarkerType.start),
-        const SpanMarker(attribution: italicsAttribution, offset: 12, markerType: SpanMarkerType.end),
-      ]);
+      expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+          "Hello italics");
+      expect(
+          SuperEditorInspector.findTextInComponent(nodeId)
+              .spans
+              .markers
+              .toList(),
+          [
+            const SpanMarker(
+                attribution: italicsAttribution,
+                offset: 6,
+                markerType: SpanMarkerType.start),
+            const SpanMarker(
+                attribution: italicsAttribution,
+                offset: 12,
+                markerType: SpanMarkerType.end),
+          ]);
 
       // Bold
       await tester.typeImeText(" and **bold**");
-      expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(), "Hello italics and bold");
-      expect(SuperEditorInspector.findTextInComponent(nodeId).spans.markers.toList(), [
-        const SpanMarker(attribution: italicsAttribution, offset: 6, markerType: SpanMarkerType.start),
-        const SpanMarker(attribution: italicsAttribution, offset: 12, markerType: SpanMarkerType.end),
-        const SpanMarker(attribution: boldAttribution, offset: 18, markerType: SpanMarkerType.start),
-        const SpanMarker(attribution: boldAttribution, offset: 21, markerType: SpanMarkerType.end),
-      ]);
+      expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+          "Hello italics and bold");
+      expect(
+          SuperEditorInspector.findTextInComponent(nodeId)
+              .spans
+              .markers
+              .toList(),
+          [
+            const SpanMarker(
+                attribution: italicsAttribution,
+                offset: 6,
+                markerType: SpanMarkerType.start),
+            const SpanMarker(
+                attribution: italicsAttribution,
+                offset: 12,
+                markerType: SpanMarkerType.end),
+            const SpanMarker(
+                attribution: boldAttribution,
+                offset: 18,
+                markerType: SpanMarkerType.start),
+            const SpanMarker(
+                attribution: boldAttribution,
+                offset: 21,
+                markerType: SpanMarkerType.end),
+          ]);
 
       // Strikethrough
       await tester.typeImeText(" and ~strikethrough~");
+      expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+          "Hello italics and bold and strikethrough");
       expect(
-          SuperEditorInspector.findTextInComponent(nodeId).toPlainText(), "Hello italics and bold and strikethrough");
-      expect(SuperEditorInspector.findTextInComponent(nodeId).spans.markers.toList(), [
-        const SpanMarker(attribution: italicsAttribution, offset: 6, markerType: SpanMarkerType.start),
-        const SpanMarker(attribution: italicsAttribution, offset: 12, markerType: SpanMarkerType.end),
-        const SpanMarker(attribution: boldAttribution, offset: 18, markerType: SpanMarkerType.start),
-        const SpanMarker(attribution: boldAttribution, offset: 21, markerType: SpanMarkerType.end),
-        const SpanMarker(attribution: strikethroughAttribution, offset: 27, markerType: SpanMarkerType.start),
-        const SpanMarker(attribution: strikethroughAttribution, offset: 39, markerType: SpanMarkerType.end),
-      ]);
+          SuperEditorInspector.findTextInComponent(nodeId)
+              .spans
+              .markers
+              .toList(),
+          [
+            const SpanMarker(
+                attribution: italicsAttribution,
+                offset: 6,
+                markerType: SpanMarkerType.start),
+            const SpanMarker(
+                attribution: italicsAttribution,
+                offset: 12,
+                markerType: SpanMarkerType.end),
+            const SpanMarker(
+                attribution: boldAttribution,
+                offset: 18,
+                markerType: SpanMarkerType.start),
+            const SpanMarker(
+                attribution: boldAttribution,
+                offset: 21,
+                markerType: SpanMarkerType.end),
+            const SpanMarker(
+                attribution: strikethroughAttribution,
+                offset: 27,
+                markerType: SpanMarkerType.start),
+            const SpanMarker(
+                attribution: strikethroughAttribution,
+                offset: 39,
+                markerType: SpanMarkerType.end),
+          ]);
     });
 
     testWidgets("preserves non-Markdown attributions", (tester) async {
@@ -275,16 +442,35 @@ void main() {
       // Add a "*" to add italics attribution through Markdown.
       await tester.placeCaretInParagraph(nodeId, 14);
       await tester.typeImeText("*");
-      expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(), "Hello italics");
-      expect(SuperEditorInspector.findTextInComponent(nodeId).spans.markers.toList(), [
-        const SpanMarker(attribution: colorAttribution, offset: 2, markerType: SpanMarkerType.start),
-        const SpanMarker(attribution: italicsAttribution, offset: 6, markerType: SpanMarkerType.start),
-        const SpanMarker(attribution: colorAttribution, offset: 9, markerType: SpanMarkerType.end),
-        const SpanMarker(attribution: italicsAttribution, offset: 12, markerType: SpanMarkerType.end),
-      ]);
+      expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+          "Hello italics");
+      expect(
+          SuperEditorInspector.findTextInComponent(nodeId)
+              .spans
+              .markers
+              .toList(),
+          [
+            const SpanMarker(
+                attribution: colorAttribution,
+                offset: 2,
+                markerType: SpanMarkerType.start),
+            const SpanMarker(
+                attribution: italicsAttribution,
+                offset: 6,
+                markerType: SpanMarkerType.start),
+            const SpanMarker(
+                attribution: colorAttribution,
+                offset: 9,
+                markerType: SpanMarkerType.end),
+            const SpanMarker(
+                attribution: italicsAttribution,
+                offset: 12,
+                markerType: SpanMarkerType.end),
+          ]);
     });
 
-    testWidgets("replicates same ambiguity behaviors as other products", (tester) async {
+    testWidgets("replicates same ambiguity behaviors as other products",
+        (tester) async {
       // This test verifies that the reaction does the same thing as Notion and Linear
       // when given a specific ambiguous input.
       final (document, _) = await _pumpScaffold(tester, "Hello");
@@ -295,40 +481,94 @@ void main() {
       // "**this*" should do nothing because the downstream syntax doesn't have a
       // balancing upstream syntax. We don't peel a single "*" out of the upstream "**".
       await tester.typeImeText(" **this*");
-      expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(), "Hello **this*");
-      expect(SuperEditorInspector.findTextInComponent(nodeId).spans.markers.toList(), isEmpty);
+      expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+          "Hello **this*");
+      expect(
+          SuperEditorInspector.findTextInComponent(nodeId)
+              .spans
+              .markers
+              .toList(),
+          isEmpty);
 
       // Type " and *" which results in a segment of "* and *". This segment shouldn't be
       // applied as Markdown because we ignore situations where the downstream syntax
       // immediately follows a space.
       await tester.typeImeText(" and *");
-      expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(), "Hello **this* and *");
-      expect(SuperEditorInspector.findTextInComponent(nodeId).spans.markers.toList(), isEmpty);
+      expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+          "Hello **this* and *");
+      expect(
+          SuperEditorInspector.findTextInComponent(nodeId)
+              .spans
+              .markers
+              .toList(),
+          isEmpty);
 
       // Surround "that" with italics "*". This should be found and applied.
       await tester.typeImeText("that*");
-      expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(), "Hello **this* and that");
-      expect(SuperEditorInspector.findTextInComponent(nodeId).spans.markers.toList(), [
-        const SpanMarker(attribution: italicsAttribution, offset: 18, markerType: SpanMarkerType.start),
-        const SpanMarker(attribution: italicsAttribution, offset: 21, markerType: SpanMarkerType.end),
-      ]);
+      expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+          "Hello **this* and that");
+      expect(
+          SuperEditorInspector.findTextInComponent(nodeId)
+              .spans
+              .markers
+              .toList(),
+          [
+            const SpanMarker(
+                attribution: italicsAttribution,
+                offset: 18,
+                markerType: SpanMarkerType.start),
+            const SpanMarker(
+                attribution: italicsAttribution,
+                offset: 21,
+                markerType: SpanMarkerType.end),
+          ]);
 
       await tester.typeImeText("*");
-      expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(), "Hello **this* and that*");
-      expect(SuperEditorInspector.findTextInComponent(nodeId).spans.markers.toList(), [
-        const SpanMarker(attribution: italicsAttribution, offset: 18, markerType: SpanMarkerType.start),
-        const SpanMarker(attribution: italicsAttribution, offset: 21, markerType: SpanMarkerType.end),
-      ]);
+      expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+          "Hello **this* and that*");
+      expect(
+          SuperEditorInspector.findTextInComponent(nodeId)
+              .spans
+              .markers
+              .toList(),
+          [
+            const SpanMarker(
+                attribution: italicsAttribution,
+                offset: 18,
+                markerType: SpanMarkerType.start),
+            const SpanMarker(
+                attribution: italicsAttribution,
+                offset: 21,
+                markerType: SpanMarkerType.end),
+          ]);
 
       // Surround "this* and that" with bold "**" on both side. This should be found and applied.
       await tester.typeImeText("*");
-      expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(), "Hello this* and that");
-      expect(SuperEditorInspector.findTextInComponent(nodeId).spans.markers.toList(), [
-        const SpanMarker(attribution: boldAttribution, offset: 6, markerType: SpanMarkerType.start),
-        const SpanMarker(attribution: italicsAttribution, offset: 16, markerType: SpanMarkerType.start),
-        const SpanMarker(attribution: italicsAttribution, offset: 19, markerType: SpanMarkerType.end),
-        const SpanMarker(attribution: boldAttribution, offset: 19, markerType: SpanMarkerType.end),
-      ]);
+      expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+          "Hello this* and that");
+      expect(
+          SuperEditorInspector.findTextInComponent(nodeId)
+              .spans
+              .markers
+              .toList(),
+          [
+            const SpanMarker(
+                attribution: boldAttribution,
+                offset: 6,
+                markerType: SpanMarkerType.start),
+            const SpanMarker(
+                attribution: italicsAttribution,
+                offset: 16,
+                markerType: SpanMarkerType.start),
+            const SpanMarker(
+                attribution: italicsAttribution,
+                offset: 19,
+                markerType: SpanMarkerType.end),
+            const SpanMarker(
+                attribution: boldAttribution,
+                offset: 19,
+                markerType: SpanMarkerType.end),
+          ]);
     });
 
     group("does not parse upstream syntax creation >", () {
@@ -340,14 +580,22 @@ void main() {
 
         await tester.typeImeText("*");
 
-        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(), "Hello *italics*");
+        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+            "Hello *italics*");
         expect(
           SuperEditorInspector.findDocumentSelection(),
           DocumentSelection.collapsed(
-            position: DocumentPosition(nodeId: nodeId, nodePosition: const TextNodePosition(offset: 7)),
+            position: DocumentPosition(
+                nodeId: nodeId,
+                nodePosition: const TextNodePosition(offset: 7)),
           ),
         );
-        expect(SuperEditorInspector.findTextInComponent(nodeId).spans.markers.toList(), isEmpty);
+        expect(
+            SuperEditorInspector.findTextInComponent(nodeId)
+                .spans
+                .markers
+                .toList(),
+            isEmpty);
       });
 
       testWidgets("bold", (tester) async {
@@ -357,24 +605,40 @@ void main() {
         await tester.placeCaretInParagraph(nodeId, 6);
 
         await tester.typeImeText("*");
-        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(), "Hello *bold**");
+        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+            "Hello *bold**");
         expect(
           SuperEditorInspector.findDocumentSelection(),
           DocumentSelection.collapsed(
-            position: DocumentPosition(nodeId: nodeId, nodePosition: const TextNodePosition(offset: 7)),
+            position: DocumentPosition(
+                nodeId: nodeId,
+                nodePosition: const TextNodePosition(offset: 7)),
           ),
         );
-        expect(SuperEditorInspector.findTextInComponent(nodeId).spans.markers.toList(), isEmpty);
+        expect(
+            SuperEditorInspector.findTextInComponent(nodeId)
+                .spans
+                .markers
+                .toList(),
+            isEmpty);
 
         await tester.typeImeText("*");
-        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(), "Hello **bold**");
+        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+            "Hello **bold**");
         expect(
           SuperEditorInspector.findDocumentSelection(),
           DocumentSelection.collapsed(
-            position: DocumentPosition(nodeId: nodeId, nodePosition: const TextNodePosition(offset: 8)),
+            position: DocumentPosition(
+                nodeId: nodeId,
+                nodePosition: const TextNodePosition(offset: 8)),
           ),
         );
-        expect(SuperEditorInspector.findTextInComponent(nodeId).spans.markers.toList(), isEmpty);
+        expect(
+            SuperEditorInspector.findTextInComponent(nodeId)
+                .spans
+                .markers
+                .toList(),
+            isEmpty);
       });
     });
 
@@ -389,8 +653,10 @@ void main() {
         await tester.typeImeText("****");
 
         // Ensure we didn't try to parse the trigger characters.
-        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(), "****");
-        expect(SuperEditorInspector.findTextInComponent(nodeId).spans.markers, isEmpty);
+        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+            "****");
+        expect(SuperEditorInspector.findTextInComponent(nodeId).spans.markers,
+            isEmpty);
       });
 
       testWidgets("italics > single trigger > star", (tester) async {
@@ -403,8 +669,10 @@ void main() {
         await tester.typeImeText("**");
 
         // Ensure we didn't try to parse the trigger characters.
-        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(), "**");
-        expect(SuperEditorInspector.findTextInComponent(nodeId).spans.markers, isEmpty);
+        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+            "**");
+        expect(SuperEditorInspector.findTextInComponent(nodeId).spans.markers,
+            isEmpty);
       });
 
       testWidgets("italics > tripple trigger > star", (tester) async {
@@ -417,8 +685,10 @@ void main() {
         await tester.typeImeText("******");
 
         // Ensure we didn't try to parse the trigger characters.
-        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(), "******");
-        expect(SuperEditorInspector.findTextInComponent(nodeId).spans.markers, isEmpty);
+        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+            "******");
+        expect(SuperEditorInspector.findTextInComponent(nodeId).spans.markers,
+            isEmpty);
       });
 
       testWidgets("italics > single trigger > underscore", (tester) async {
@@ -431,8 +701,10 @@ void main() {
         await tester.typeImeText("__");
 
         // Ensure we didn't try to parse the trigger characters.
-        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(), "__");
-        expect(SuperEditorInspector.findTextInComponent(nodeId).spans.markers, isEmpty);
+        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+            "__");
+        expect(SuperEditorInspector.findTextInComponent(nodeId).spans.markers,
+            isEmpty);
       });
 
       testWidgets("italics > tripple trigger > underscore", (tester) async {
@@ -445,8 +717,10 @@ void main() {
         await tester.typeImeText("______");
 
         // Ensure we didn't try to parse the trigger characters.
-        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(), "______");
-        expect(SuperEditorInspector.findTextInComponent(nodeId).spans.markers, isEmpty);
+        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+            "______");
+        expect(SuperEditorInspector.findTextInComponent(nodeId).spans.markers,
+            isEmpty);
       });
 
       testWidgets("strikethrough", (tester) async {
@@ -459,8 +733,10 @@ void main() {
         await tester.typeImeText("~~");
 
         // Ensure we didn't try to parse the trigger characters.
-        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(), "~~");
-        expect(SuperEditorInspector.findTextInComponent(nodeId).spans.markers, isEmpty);
+        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+            "~~");
+        expect(SuperEditorInspector.findTextInComponent(nodeId).spans.markers,
+            isEmpty);
       });
 
       testWidgets("code", (tester) async {
@@ -473,8 +749,10 @@ void main() {
         await tester.typeImeText("``");
 
         // Ensure we didn't try to parse the trigger characters.
-        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(), "``");
-        expect(SuperEditorInspector.findTextInComponent(nodeId).spans.markers, isEmpty);
+        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+            "``");
+        expect(SuperEditorInspector.findTextInComponent(nodeId).spans.markers,
+            isEmpty);
       });
     });
 
@@ -510,7 +788,9 @@ void main() {
         expect(text.getAttributionSpansByFilter((a) => true), isEmpty);
       });
 
-      testWidgets("parses Markdown link syntax and plays nice with built-in linkification reaction", (tester) async {
+      testWidgets(
+          "parses Markdown link syntax and plays nice with built-in linkification reaction",
+          (tester) async {
         final (document, _) = await _pumpScaffold(tester);
 
         final nodeId = document.first.id;
@@ -542,10 +822,12 @@ void main() {
   });
 }
 
-Future<(Document, Editor)> _pumpScaffold(WidgetTester tester, [String initialMarkdown = ""]) async {
+Future<(Document, Editor)> _pumpScaffold(WidgetTester tester,
+    [String initialMarkdown = ""]) async {
   final document = deserializeMarkdownToDocument(initialMarkdown);
   final composer = MutableDocumentComposer();
-  final editor = createDefaultDocumentEditor(document: document, composer: composer);
+  final editor =
+      createDefaultDocumentEditor(document: document, composer: composer);
 
   await tester.pumpWidget(
     MaterialApp(

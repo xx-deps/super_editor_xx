@@ -4,8 +4,10 @@ import 'package:super_editor/src/core/document.dart';
 /// [NodePosition] that either sits at the upstream edge, or the downstream edge of
 /// the given content, like sitting before or after an image.
 class UpstreamDownstreamNodePosition implements NodePosition {
-  const UpstreamDownstreamNodePosition.upstream() : affinity = TextAffinity.upstream;
-  const UpstreamDownstreamNodePosition.downstream() : affinity = TextAffinity.downstream;
+  const UpstreamDownstreamNodePosition.upstream()
+      : affinity = TextAffinity.upstream;
+  const UpstreamDownstreamNodePosition.downstream()
+      : affinity = TextAffinity.downstream;
 
   const UpstreamDownstreamNodePosition(this.affinity);
 
@@ -20,7 +22,9 @@ class UpstreamDownstreamNodePosition implements NodePosition {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is UpstreamDownstreamNodePosition && runtimeType == other.runtimeType && affinity == other.affinity;
+      other is UpstreamDownstreamNodePosition &&
+          runtimeType == other.runtimeType &&
+          affinity == other.affinity;
 
   @override
   int get hashCode => affinity.hashCode;
@@ -41,7 +45,8 @@ class UpstreamDownstreamNodeSelection implements NodeSelection {
       : base = const UpstreamDownstreamNodePosition.downstream(),
         extent = const UpstreamDownstreamNodePosition.downstream();
 
-  UpstreamDownstreamNodeSelection.collapsed(UpstreamDownstreamNodePosition position)
+  UpstreamDownstreamNodeSelection.collapsed(
+      UpstreamDownstreamNodePosition position)
       : base = position,
         extent = position;
 
@@ -56,7 +61,8 @@ class UpstreamDownstreamNodeSelection implements NodeSelection {
   bool get isCollapsed => base == extent;
 
   @override
-  String toString() => "[UpstreamDownstreamNodeSelection] - base: $base, extent: $extent";
+  String toString() =>
+      "[UpstreamDownstreamNodeSelection] - base: $base, extent: $extent";
 
   @override
   bool operator ==(Object other) =>

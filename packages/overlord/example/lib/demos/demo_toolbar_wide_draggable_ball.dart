@@ -9,10 +9,12 @@ class WideToolbarDraggableBallDemo extends StatefulWidget {
   const WideToolbarDraggableBallDemo({super.key});
 
   @override
-  State<WideToolbarDraggableBallDemo> createState() => _WideToolbarDraggableBallDemoState();
+  State<WideToolbarDraggableBallDemo> createState() =>
+      _WideToolbarDraggableBallDemoState();
 }
 
-class _WideToolbarDraggableBallDemoState extends State<WideToolbarDraggableBallDemo> {
+class _WideToolbarDraggableBallDemoState
+    extends State<WideToolbarDraggableBallDemo> {
   static const double _draggableBallRadius = 50.0;
 
   final GlobalKey _screenBoundsKey = GlobalKey();
@@ -51,14 +53,17 @@ class _WideToolbarDraggableBallDemoState extends State<WideToolbarDraggableBallD
 
   /// Calculates the global offset where the menu's arrow should point.
   void _updateMenuFocalPoint() {
-    final screenBoundsBox = _screenBoundsKey.currentContext?.findRenderObject() as RenderBox?;
+    final screenBoundsBox =
+        _screenBoundsKey.currentContext?.findRenderObject() as RenderBox?;
     if (screenBoundsBox == null) {
       _globalMenuFocalPoint = Offset.zero;
       return;
     }
 
-    final focalPointInScreenBounds = _ballOffset + const Offset(_draggableBallRadius, _draggableBallRadius);
-    final globalLeaderOffset = screenBoundsBox.localToGlobal(focalPointInScreenBounds);
+    final focalPointInScreenBounds =
+        _ballOffset + const Offset(_draggableBallRadius, _draggableBallRadius);
+    final globalLeaderOffset =
+        screenBoundsBox.localToGlobal(focalPointInScreenBounds);
 
     _globalMenuFocalPoint = globalLeaderOffset;
   }

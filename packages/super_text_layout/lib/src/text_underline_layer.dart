@@ -24,13 +24,16 @@ class TextUnderlineLayer extends StatefulWidget {
 }
 
 @visibleForTesting
-class TextUnderlineLayerState extends State<TextUnderlineLayer> with TickerProviderStateMixin {
+class TextUnderlineLayerState extends State<TextUnderlineLayer>
+    with TickerProviderStateMixin {
   List<LineSegment> _computeUnderlineLineSegments() {
     final lineSegments = <LineSegment>[];
     for (final underline in widget.underlines) {
       // Convert selection bounding boxes into underline line segments.
       final boxes = widget.textLayout.getBoxesForSelection(
-        TextSelection(baseOffset: underline.range.start, extentOffset: underline.range.end),
+        TextSelection(
+            baseOffset: underline.range.start,
+            extentOffset: underline.range.end),
         boxHeightStyle: BoxHeightStyle.max,
       );
       final lineSegmentsForRange = <LineSegment>[];
@@ -140,7 +143,8 @@ class StraightUnderlinePainter extends CustomPainter {
       ..strokeWidth = thickness
       ..strokeCap = capType;
     for (final underline in _underlines) {
-      canvas.drawLine(underline.start + Offset(0, offset), underline.end + Offset(0, offset), linePaint);
+      canvas.drawLine(underline.start + Offset(0, offset),
+          underline.end + Offset(0, offset), linePaint);
     }
   }
 
@@ -150,7 +154,8 @@ class StraightUnderlinePainter extends CustomPainter {
         thickness != oldDelegate.thickness ||
         capType != oldDelegate.capType ||
         offset != oldDelegate.offset ||
-        !const DeepCollectionEquality().equals(_underlines, oldDelegate._underlines);
+        !const DeepCollectionEquality()
+            .equals(_underlines, oldDelegate._underlines);
   }
 }
 
@@ -204,11 +209,15 @@ class DottedUnderlinePainter extends CustomPainter {
 
     final dotPaint = Paint()..color = color;
     for (final underline in _underlines) {
-      final dotCount = ((underline.end.dx - underline.start.dx) / (dotDiameter + dotSpace)).floor();
+      final dotCount =
+          ((underline.end.dx - underline.start.dx) / (dotDiameter + dotSpace))
+              .floor();
 
       // Draw the dots.
-      final delta = Offset(dotDiameter + dotSpace, (underline.end.dy - underline.start.dy) / dotCount);
-      Offset offset = underline.start + Offset(dotDiameter / 2, 0) + Offset(0, this.offset);
+      final delta = Offset(dotDiameter + dotSpace,
+          (underline.end.dy - underline.start.dy) / dotCount);
+      Offset offset =
+          underline.start + Offset(dotDiameter / 2, 0) + Offset(0, this.offset);
       for (int i = 0; i < dotCount; i += 1) {
         canvas.drawCircle(offset, dotDiameter / 2, dotPaint);
         offset = offset + delta;
@@ -222,7 +231,8 @@ class DottedUnderlinePainter extends CustomPainter {
         dotDiameter != oldDelegate.dotDiameter ||
         dotSpace != oldDelegate.dotSpace ||
         offset != oldDelegate.offset ||
-        !const DeepCollectionEquality().equals(_underlines, oldDelegate._underlines);
+        !const DeepCollectionEquality()
+            .equals(_underlines, oldDelegate._underlines);
   }
 }
 
@@ -290,7 +300,8 @@ class SquiggleUnderlinePainter extends CustomPainter {
 
     for (final underline in _underlines) {
       // Draw the squiggle.
-      Offset offset = underline.start + Offset(delta.dy / 2, 0) + Offset(0, this.offset);
+      Offset offset =
+          underline.start + Offset(delta.dy / 2, 0) + Offset(0, this.offset);
       int nextDirection = -1;
       while (offset.dx <= underline.end.dx) {
         // Calculate the endpoint of this jagged squiggle segment.
@@ -313,7 +324,8 @@ class SquiggleUnderlinePainter extends CustomPainter {
         jaggedDeltaX != oldDelegate.jaggedDeltaX ||
         jaggedDeltaY != oldDelegate.jaggedDeltaY ||
         offset != oldDelegate.offset ||
-        !const DeepCollectionEquality().equals(_underlines, oldDelegate._underlines);
+        !const DeepCollectionEquality()
+            .equals(_underlines, oldDelegate._underlines);
   }
 }
 
@@ -326,7 +338,10 @@ class LineSegment {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is LineSegment && runtimeType == other.runtimeType && start == other.start && end == other.end;
+      other is LineSegment &&
+          runtimeType == other.runtimeType &&
+          start == other.start &&
+          end == other.end;
 
   @override
   int get hashCode => start.hashCode ^ end.hashCode;

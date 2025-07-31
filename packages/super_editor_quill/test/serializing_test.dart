@@ -37,11 +37,13 @@ void main() {
           nodes: [
             ParagraphNode(
               id: "1",
-              text: AttributedText("This paragraph is followed by a multiline header:"),
+              text: AttributedText(
+                  "This paragraph is followed by a multiline header:"),
             ),
             ParagraphNode(
               id: "2",
-              text: AttributedText("This is a header\nThis is line two\nThis is line three"),
+              text: AttributedText(
+                  "This is a header\nThis is line two\nThis is line three"),
               metadata: const {
                 "blockType": header1Attribution,
               },
@@ -50,7 +52,10 @@ void main() {
         ).toQuillDeltas();
 
         final expectedDeltas = Delta.fromJson([
-          {"insert": "This paragraph is followed by a multiline header:\nThis is a header"},
+          {
+            "insert":
+                "This paragraph is followed by a multiline header:\nThis is a header"
+          },
           {
             "attributes": {"header": 1},
             "insert": "\n",
@@ -79,11 +84,13 @@ void main() {
           nodes: [
             ParagraphNode(
               id: "1",
-              text: AttributedText("This paragraph is followed by a multiline blockquote:"),
+              text: AttributedText(
+                  "This paragraph is followed by a multiline blockquote:"),
             ),
             ParagraphNode(
               id: "2",
-              text: AttributedText("This is a blockquote\nThis is line two\nThis is line three"),
+              text: AttributedText(
+                  "This is a blockquote\nThis is line two\nThis is line three"),
               metadata: const {
                 "blockType": blockquoteAttribution,
               },
@@ -92,7 +99,10 @@ void main() {
         ).toQuillDeltas();
 
         final expectedDeltas = Delta.fromJson([
-          {"insert": "This paragraph is followed by a multiline blockquote:\nThis is a blockquote"},
+          {
+            "insert":
+                "This paragraph is followed by a multiline blockquote:\nThis is a blockquote"
+          },
           {
             "attributes": {"blockquote": true},
             "insert": "\n",
@@ -120,11 +130,13 @@ void main() {
           nodes: [
             ParagraphNode(
               id: "1",
-              text: AttributedText("This paragraph is followed by a multiline code block:"),
+              text: AttributedText(
+                  "This paragraph is followed by a multiline code block:"),
             ),
             ParagraphNode(
               id: "2",
-              text: AttributedText("This is a code block\nThis is line two\nThis is line three"),
+              text: AttributedText(
+                  "This is a code block\nThis is line two\nThis is line three"),
               metadata: const {
                 "blockType": codeAttribution,
               },
@@ -133,7 +145,10 @@ void main() {
         ).toQuillDeltas();
 
         final expectedDeltas = Delta.fromJson([
-          {"insert": "This paragraph is followed by a multiline code block:\nThis is a code block"},
+          {
+            "insert":
+                "This paragraph is followed by a multiline code block:\nThis is a code block"
+          },
           {
             "attributes": {"code-block": "plain"},
             "insert": "\n",
@@ -187,7 +202,9 @@ void main() {
           "ops": [
             {"insert": "This is paragraph 1\n"},
             {
-              "insert": {"video": "https://quilljs.com/assets/videos/video.mp4"},
+              "insert": {
+                "video": "https://quilljs.com/assets/videos/video.mp4"
+              },
             },
             {"insert": "This is paragraph 2\n"},
           ]
@@ -255,12 +272,30 @@ void main() {
                 "Inline embed @John Smith and bold and italics",
                 AttributedSpans(
                   attributions: [
-                    const SpanMarker(attribution: userMentionAttribution, offset: 13, markerType: SpanMarkerType.start),
-                    const SpanMarker(attribution: userMentionAttribution, offset: 23, markerType: SpanMarkerType.end),
-                    const SpanMarker(attribution: boldAttribution, offset: 29, markerType: SpanMarkerType.start),
-                    const SpanMarker(attribution: boldAttribution, offset: 32, markerType: SpanMarkerType.end),
-                    const SpanMarker(attribution: italicsAttribution, offset: 38, markerType: SpanMarkerType.start),
-                    const SpanMarker(attribution: italicsAttribution, offset: 44, markerType: SpanMarkerType.end),
+                    const SpanMarker(
+                        attribution: userMentionAttribution,
+                        offset: 13,
+                        markerType: SpanMarkerType.start),
+                    const SpanMarker(
+                        attribution: userMentionAttribution,
+                        offset: 23,
+                        markerType: SpanMarkerType.end),
+                    const SpanMarker(
+                        attribution: boldAttribution,
+                        offset: 29,
+                        markerType: SpanMarkerType.start),
+                    const SpanMarker(
+                        attribution: boldAttribution,
+                        offset: 32,
+                        markerType: SpanMarkerType.end),
+                    const SpanMarker(
+                        attribution: italicsAttribution,
+                        offset: 38,
+                        markerType: SpanMarkerType.start),
+                    const SpanMarker(
+                        attribution: italicsAttribution,
+                        offset: 44,
+                        markerType: SpanMarkerType.end),
                   ],
                 ),
               ),
@@ -307,8 +342,10 @@ void main() {
                   "Before images >< in between images >< after images.",
                   null,
                   {
-                    15: const _InlineImage("http://www.somedomain.com/image1.png"),
-                    37: const _InlineImage("http://www.somedomain.com/image2.png"),
+                    15: const _InlineImage(
+                        "http://www.somedomain.com/image1.png"),
+                    37: const _InlineImage(
+                        "http://www.somedomain.com/image2.png"),
                   },
                 ),
               ),
@@ -349,8 +386,10 @@ void main() {
                   " < Text between images > ",
                   null,
                   {
-                    0: const _InlineImage("http://www.somedomain.com/image1.png"),
-                    26: const _InlineImage("http://www.somedomain.com/image2.png"),
+                    0: const _InlineImage(
+                        "http://www.somedomain.com/image1.png"),
+                    26: const _InlineImage(
+                        "http://www.somedomain.com/image2.png"),
                   },
                 ),
               ),
@@ -403,9 +442,12 @@ void main() {
                     ],
                   ),
                   {
-                    20: const _InlineImage("http://www.somedomain.com/image1.png"),
-                    29: const _InlineImage("http://www.somedomain.com/image2.png"),
-                    38: const _InlineImage("http://www.somedomain.com/image3.png"),
+                    20: const _InlineImage(
+                        "http://www.somedomain.com/image1.png"),
+                    29: const _InlineImage(
+                        "http://www.somedomain.com/image2.png"),
+                    38: const _InlineImage(
+                        "http://www.somedomain.com/image3.png"),
                   },
                 ),
               ),
@@ -482,7 +524,10 @@ void main() {
         );
 
         final expectedDeltas = Delta.fromJson([
-          {"insert": "This is a regular paragraph.\nThis is a banner (a custom block style)."},
+          {
+            "insert":
+                "This is a regular paragraph.\nThis is a banner (a custom block style)."
+          },
           {
             "insert": "\n",
             "attributes": {
@@ -498,7 +543,8 @@ void main() {
 }
 
 const _serializersWithInlineEmbeds = [
-  ParagraphDeltaSerializer(inlineEmbedDeltaSerializers: _inlineEmbedSerializers),
+  ParagraphDeltaSerializer(
+      inlineEmbedDeltaSerializers: _inlineEmbedSerializers),
   ListItemDeltaSerializer(inlineEmbedDeltaSerializers: _inlineEmbedSerializers),
   TaskDeltaSerializer(inlineEmbedDeltaSerializers: _inlineEmbedSerializers),
   imageDeltaSerializer,
@@ -516,10 +562,13 @@ class _InlineImageEmbedSerializer implements InlineEmbedDeltaSerializer {
   const _InlineImageEmbedSerializer();
 
   @override
-  bool serializeText(String text, Set<Attribution> attributions, Delta deltas) => false;
+  bool serializeText(
+          String text, Set<Attribution> attributions, Delta deltas) =>
+      false;
 
   @override
-  bool serializeInlinePlaceholder(Object placeholder, Map<String, dynamic> attributes, Delta deltas) {
+  bool serializeInlinePlaceholder(
+      Object placeholder, Map<String, dynamic> attributes, Delta deltas) {
     if (placeholder is! _InlineImage) {
       return false;
     }
@@ -569,7 +618,9 @@ class _UserTagInlineEmbedSerializer implements InlineEmbedDeltaSerializer {
   }
 
   @override
-  bool serializeInlinePlaceholder(Object placeholder, Map<String, dynamic> attributes, Delta deltas) => false;
+  bool serializeInlinePlaceholder(
+          Object placeholder, Map<String, dynamic> attributes, Delta deltas) =>
+      false;
 }
 
 class _UserTagAttribution implements Attribution {
@@ -588,7 +639,9 @@ class _UserTagAttribution implements Attribution {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is _UserTagAttribution && runtimeType == other.runtimeType && userId == other.userId;
+      other is _UserTagAttribution &&
+          runtimeType == other.runtimeType &&
+          userId == other.userId;
 
   @override
   int get hashCode => userId.hashCode;

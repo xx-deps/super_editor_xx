@@ -28,7 +28,8 @@ class BouncingBallSandbox extends StatefulWidget {
   State<BouncingBallSandbox> createState() => _BouncingBallSandboxState();
 }
 
-class _BouncingBallSandboxState extends State<BouncingBallSandbox> with SingleTickerProviderStateMixin {
+class _BouncingBallSandboxState extends State<BouncingBallSandbox>
+    with SingleTickerProviderStateMixin {
   /// Initial velocity of the leader.
   final Offset _initialVelocity = const Offset(300, 300);
 
@@ -70,7 +71,10 @@ class _BouncingBallSandboxState extends State<BouncingBallSandbox> with SingleTi
     final dt = elapsed.inMilliseconds - _lastElapsed!.inMilliseconds;
     _lastElapsed = elapsed;
 
-    final bounds = (widget.boundsKey.currentContext?.findRenderObject() as RenderBox?)?.size ?? Size.zero;
+    final bounds =
+        (widget.boundsKey.currentContext?.findRenderObject() as RenderBox?)
+                ?.size ??
+            Size.zero;
 
     // Offset where the leader hits the right edge.
     final maximumLeaderHorizontalOffset = bounds.width - _ballRadius * 2;

@@ -7,10 +7,12 @@ class ToolbarWithScrollingFocalPointDemo extends StatefulWidget {
   const ToolbarWithScrollingFocalPointDemo({super.key});
 
   @override
-  State<ToolbarWithScrollingFocalPointDemo> createState() => _ToolbarWithScrollingFocalPointDemoState();
+  State<ToolbarWithScrollingFocalPointDemo> createState() =>
+      _ToolbarWithScrollingFocalPointDemoState();
 }
 
-class _ToolbarWithScrollingFocalPointDemoState extends State<ToolbarWithScrollingFocalPointDemo> {
+class _ToolbarWithScrollingFocalPointDemoState
+    extends State<ToolbarWithScrollingFocalPointDemo> {
   final _leaderLink = LeaderLink();
   final _viewportKey = GlobalKey();
 
@@ -23,7 +25,8 @@ class _ToolbarWithScrollingFocalPointDemoState extends State<ToolbarWithScrollin
             children: [
               const Spacer(),
               ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 300, maxHeight: 500),
+                constraints:
+                    const BoxConstraints(maxWidth: 300, maxHeight: 500),
                 child: ColoredBox(
                   key: _viewportKey,
                   color: Colors.black.withOpacity(0.2),

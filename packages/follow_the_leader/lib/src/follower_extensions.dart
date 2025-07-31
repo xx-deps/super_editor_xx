@@ -66,6 +66,7 @@ class FollowerFadeOutBeyondBoundary extends StatelessWidget {
       return false;
     }
 
-    return boundary!.containsRect(link.offset! & (link.leaderSize! * (link.scale ?? 1.0)));
+    return boundary!
+        .containsRect(link.offset! & (link.leaderSize! * (link.scale ?? 1.0)));
   }
 }

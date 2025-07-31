@@ -15,7 +15,8 @@ class MultiLevelMenuController with ChangeNotifier {
 
   void activate(MenuPath menuPath) {
     if (_visiblePath == null || !menuPath.isSubPathOf(_visiblePath!)) {
-      debugPrint("WARNING: Can't activate path because it's not a sub-path of the visible path.");
+      debugPrint(
+          "WARNING: Can't activate path because it's not a sub-path of the visible path.");
       debugPrint(" - desired active path: ${menuPath.serialize()}");
       debugPrint(" - visible path: ${_visiblePath?.serialize()}");
       return;
@@ -95,7 +96,8 @@ class MenuPath {
 
   MenuPath append(String component) => MenuPath([..._path, component]);
 
-  MenuPath appendAll(List<String> components) => MenuPath([..._path, ...components]);
+  MenuPath appendAll(List<String> components) =>
+      MenuPath([..._path, ...components]);
 
   String serialize() => _path.join(" > ");
 

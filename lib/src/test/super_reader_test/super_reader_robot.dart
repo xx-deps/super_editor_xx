@@ -11,24 +11,30 @@ import 'package:super_editor/super_editor.dart';
 extension SuperReaderRobot on WidgetTester {
   /// Simulates a double tap at the given [offset] within the paragraph with the given
   /// [nodeId].
-  Future<void> doubleTapInParagraph(String nodeId, int offset, [Finder? superReaderFinder]) async {
+  Future<void> doubleTapInParagraph(String nodeId, int offset,
+      [Finder? superReaderFinder]) async {
     await _tapInParagraph(nodeId, offset, 2, superReaderFinder);
   }
 
   /// Simulates a triple tap at the given [offset] within the paragraph with the given
   /// [nodeId].
-  Future<void> tripleTapInParagraph(String nodeId, int offset, [Finder? superReaderFinder]) async {
+  Future<void> tripleTapInParagraph(String nodeId, int offset,
+      [Finder? superReaderFinder]) async {
     await _tapInParagraph(nodeId, offset, 3, superReaderFinder);
   }
 
-  Future<void> _tapInParagraph(String nodeId, int offset, int tapCount, [Finder? superReaderFinder]) async {
+  Future<void> _tapInParagraph(String nodeId, int offset, int tapCount,
+      [Finder? superReaderFinder]) async {
     late final Finder layoutFinder;
     if (superReaderFinder != null) {
-      layoutFinder = find.descendant(of: superReaderFinder, matching: find.byType(SingleColumnDocumentLayout));
+      layoutFinder = find.descendant(
+          of: superReaderFinder,
+          matching: find.byType(SingleColumnDocumentLayout));
     } else {
       layoutFinder = find.byType(SingleColumnDocumentLayout);
     }
-    final documentLayoutElement = layoutFinder.evaluate().single as StatefulElement;
+    final documentLayoutElement =
+        layoutFinder.evaluate().single as StatefulElement;
     final documentLayout = documentLayoutElement.state as DocumentLayout;
 
     // Collect the various text UI artifacts needed to find the
@@ -41,8 +47,10 @@ extension SuperReaderRobot on WidgetTester {
       textComponentKey = componentState.widget.key as GlobalKey;
     }
 
-    final textLayout = (textComponentKey.currentState as TextComponentState).textLayout;
-    final textRenderBox = textComponentKey.currentContext!.findRenderObject() as RenderBox;
+    final textLayout =
+        (textComponentKey.currentState as TextComponentState).textLayout;
+    final textRenderBox =
+        textComponentKey.currentContext!.findRenderObject() as RenderBox;
 
     // Calculate the global tap position based on the TextLayout and desired
     // TextPosition.
@@ -52,8 +60,10 @@ extension SuperReaderRobot on WidgetTester {
     // top of the line. In general, we could use the caret height to choose a vertical
     // offset, but the caret height is null when the text is empty. So we use a
     // hard-coded value, instead.
-    final localTapOffset = textLayout.getOffsetForCaret(position) + const Offset(0, 5);
-    final globalTapOffset = localTapOffset + textRenderBox.localToGlobal(Offset.zero);
+    final localTapOffset =
+        textLayout.getOffsetForCaret(position) + const Offset(0, 5);
+    final globalTapOffset =
+        localTapOffset + textRenderBox.localToGlobal(Offset.zero);
 
     // TODO: check that the tap offset is visible within the viewport. Add option to
     // auto-scroll, or throw exception when it's not tappable.
@@ -70,10 +80,12 @@ extension SuperReaderRobot on WidgetTester {
   /// Taps at the center of the content at the given [position] within a [SuperReader].
   ///
   /// {@macro superreader_finder}
-  Future<void> tapAtDocumentPosition(DocumentPosition position, [Finder? superReaderFinder]) async {
+  Future<void> tapAtDocumentPosition(DocumentPosition position,
+      [Finder? superReaderFinder]) async {
     final documentLayout = _findDocumentLayout(superReaderFinder);
     final positionRectInDoc = documentLayout.getRectForPosition(position)!;
-    final globalTapOffset = documentLayout.getAncestorOffsetFromDocumentOffset(positionRectInDoc.center);
+    final globalTapOffset = documentLayout
+        .getAncestorOffsetFromDocumentOffset(positionRectInDoc.center);
 
     await tapAt(globalTapOffset);
   }
@@ -112,26 +124,31 @@ extension SuperReaderRobot on WidgetTester {
       if (delta.dx < 0) {
         // We're dragging up and left. To capture the content at `from`,
         // drag from bottom right.
-        dragStartOffset = documentLayout.getAncestorOffsetFromDocumentOffset(dragStartRect.bottomRight);
+        dragStartOffset = documentLayout
+            .getAncestorOffsetFromDocumentOffset(dragStartRect.bottomRight);
       } else {
         // We're dragging up and right. To capture the content at `from`,
         // drag from bottom left.
-        dragStartOffset = documentLayout.getAncestorOffsetFromDocumentOffset(dragStartRect.bottomLeft);
+        dragStartOffset = documentLayout
+            .getAncestorOffsetFromDocumentOffset(dragStartRect.bottomLeft);
       }
     } else {
       if (delta.dx < 0) {
         // We're dragging down and left. To capture the content at `from`,
         // drag from top right.
-        dragStartOffset = documentLayout.getAncestorOffsetFromDocumentOffset(dragStartRect.topRight);
+        dragStartOffset = documentLayout
+            .getAncestorOffsetFromDocumentOffset(dragStartRect.topRight);
       } else {
         // We're dragging down and right. To capture the content at `from`,
         // drag from top left.
-        dragStartOffset = documentLayout.getAncestorOffsetFromDocumentOffset(dragStartRect.topLeft);
+        dragStartOffset = documentLayout
+            .getAncestorOffsetFromDocumentOffset(dragStartRect.topLeft);
       }
     }
 
     final deviceKind = pointerDeviceKind ??
-        (defaultTargetPlatform == TargetPlatform.iOS || defaultTargetPlatform == TargetPlatform.android
+        (defaultTargetPlatform == TargetPlatform.iOS ||
+                defaultTargetPlatform == TargetPlatform.android
             ? PointerDeviceKind.touch
             : PointerDeviceKind.mouse);
 
@@ -169,9 +186,12 @@ extension SuperReaderRobot on WidgetTester {
 
     // Find the global offset to start the drag gesture.
     Rect dragStartRect = documentLayout.getRectForPosition(from)!.deflate(1);
-    final globalDocTopLeft = documentLayout.getGlobalOffsetFromDocumentOffset(Offset.zero);
-    dragStartRect = dragStartRect.translate(globalDocTopLeft.dx, globalDocTopLeft.dy);
-    final dragStartOffset = startAlignmentWithinPosition.withinRect(dragStartRect);
+    final globalDocTopLeft =
+        documentLayout.getGlobalOffsetFromDocumentOffset(Offset.zero);
+    dragStartRect =
+        dragStartRect.translate(globalDocTopLeft.dx, globalDocTopLeft.dy);
+    final dragStartOffset =
+        startAlignmentWithinPosition.withinRect(dragStartRect);
 
     // Simulate the drag.
     final gesture = await startGesture(dragStartOffset, kind: deviceKind);
@@ -197,13 +217,17 @@ extension SuperReaderRobot on WidgetTester {
   Future<TestGesture> pressDownOnDownstreamMobileHandle() async {
     final handleElement = find
         .byWidgetPredicate((widget) =>
-            (widget is AndroidSelectionHandle && widget.handleType == HandleType.downstream) ||
-            (widget is IOSSelectionHandle && widget.handleType == HandleType.downstream))
+            (widget is AndroidSelectionHandle &&
+                widget.handleType == HandleType.downstream) ||
+            (widget is IOSSelectionHandle &&
+                widget.handleType == HandleType.downstream))
         .evaluate()
         .firstOrNull;
-    assert(handleElement != null, "Tried to press down on downstream handle but no handle was found.");
+    assert(handleElement != null,
+        "Tried to press down on downstream handle but no handle was found.");
     final renderHandle = handleElement!.renderObject as RenderBox;
-    final handleCenter = renderHandle.localToGlobal(renderHandle.size.center(Offset.zero));
+    final handleCenter =
+        renderHandle.localToGlobal(renderHandle.size.center(Offset.zero));
 
     final gesture = await startGesture(handleCenter);
     return gesture;
@@ -212,13 +236,17 @@ extension SuperReaderRobot on WidgetTester {
   Future<TestGesture> pressDownOnUpstreamMobileHandle() async {
     final handleElement = find
         .byWidgetPredicate((widget) =>
-            (widget is AndroidSelectionHandle && widget.handleType == HandleType.upstream) ||
-            (widget is IOSSelectionHandle && widget.handleType == HandleType.upstream))
+            (widget is AndroidSelectionHandle &&
+                widget.handleType == HandleType.upstream) ||
+            (widget is IOSSelectionHandle &&
+                widget.handleType == HandleType.upstream))
         .evaluate()
         .firstOrNull;
-    assert(handleElement != null, "Tried to press down on upstream handle but no handle was found.");
+    assert(handleElement != null,
+        "Tried to press down on upstream handle but no handle was found.");
     final renderHandle = handleElement!.renderObject as RenderBox;
-    final handleCenter = renderHandle.localToGlobal(renderHandle.size.center(Offset.zero));
+    final handleCenter =
+        renderHandle.localToGlobal(renderHandle.size.center(Offset.zero));
 
     final gesture = await startGesture(handleCenter);
     return gesture;
@@ -227,11 +255,14 @@ extension SuperReaderRobot on WidgetTester {
   DocumentLayout _findDocumentLayout([Finder? superReaderFinder]) {
     late final Finder layoutFinder;
     if (superReaderFinder != null) {
-      layoutFinder = find.descendant(of: superReaderFinder, matching: find.byType(SingleColumnDocumentLayout));
+      layoutFinder = find.descendant(
+          of: superReaderFinder,
+          matching: find.byType(SingleColumnDocumentLayout));
     } else {
       layoutFinder = find.byType(SingleColumnDocumentLayout);
     }
-    final documentLayoutElement = layoutFinder.evaluate().single as StatefulElement;
+    final documentLayoutElement =
+        layoutFinder.evaluate().single as StatefulElement;
     return documentLayoutElement.state as DocumentLayout;
   }
 }

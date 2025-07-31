@@ -67,7 +67,8 @@ class SuperText extends StatefulWidget {
 class SuperTextState extends ProseTextState<SuperText> with ProseTextBlock {
   final _textLayoutKey = GlobalKey();
   @override
-  ProseTextLayout get textLayout => RenderSuperTextLayout.textLayoutFrom(_textLayoutKey)!;
+  ProseTextLayout get textLayout =>
+      RenderSuperTextLayout.textLayoutFrom(_textLayoutKey)!;
 
   int _textBuildCount = 0;
   @visibleForTesting
@@ -79,7 +80,8 @@ class SuperTextState extends ProseTextState<SuperText> with ProseTextBlock {
   @override
   Widget build(BuildContext context) {
     if (kDebugMode) {
-      if (widget.debugTrackTextBuilds || SuperTextAnalytics.of(context)?.trackBuilds == true) {
+      if (widget.debugTrackTextBuilds ||
+          SuperTextAnalytics.of(context)?.trackBuilds == true) {
         _textBuildCount += 1;
       }
     }
@@ -170,7 +172,8 @@ class _SuperTextLayout extends MultiChildRenderObjectWidget {
   }
 
   @override
-  void updateRenderObject(BuildContext context, RenderSuperTextLayout renderObject) {
+  void updateRenderObject(
+      BuildContext context, RenderSuperTextLayout renderObject) {
     renderObject.state = state;
   }
 }
@@ -184,7 +187,8 @@ class RenderSuperTextLayout extends RenderBox
   /// Returns the [ProseTextLayout] within a [SuperText] that's connected
   /// to the given [key].
   static ProseTextLayout? textLayoutFrom(GlobalKey key) {
-    final renderTextLayout = key.currentContext?.findRenderObject() as RenderSuperTextLayout?;
+    final renderTextLayout =
+        key.currentContext?.findRenderObject() as RenderSuperTextLayout?;
     if (renderTextLayout == null || renderTextLayout.state._paragraph == null) {
       return null;
     }
@@ -255,7 +259,8 @@ class RenderSuperTextLayout extends RenderBox
 
   @override
   void performLayout() {
-    layoutLog.finest("Running SuperText layout. Incoming constraints: $constraints");
+    layoutLog
+        .finest("Running SuperText layout. Incoming constraints: $constraints");
     final children = getChildrenAsList();
     final background = children[0];
     final text = children[1];
@@ -267,10 +272,12 @@ class RenderSuperTextLayout extends RenderBox
 
     final layerConstraints = BoxConstraints.tight(text.size);
 
-    layoutLog.finer("Laying out SuperText background layer. Constraints: $layerConstraints");
+    layoutLog.finer(
+        "Laying out SuperText background layer. Constraints: $layerConstraints");
     background.layout(layerConstraints);
 
-    layoutLog.finer("Laying out SuperText foreground layer. Constraints: $layerConstraints");
+    layoutLog.finer(
+        "Laying out SuperText foreground layer. Constraints: $layerConstraints");
     foreground.layout(layerConstraints);
 
     size = text.size;
@@ -331,7 +338,8 @@ class LayoutAwareRichText extends RichText {
   }
 
   @override
-  void updateRenderObject(BuildContext context, RenderLayoutAwareParagraph renderObject) {
+  void updateRenderObject(
+      BuildContext context, RenderLayoutAwareParagraph renderObject) {
     assert(textDirection != null || debugCheckHasDirectionality(context));
     renderObject
       ..text = text
@@ -446,7 +454,8 @@ class RenderLayoutAwareParagraph extends RenderParagraph {
   final _textPainter = TextPainter();
 }
 
-typedef SuperTextLayerBuilder = Widget Function(BuildContext, TextLayout textLayout);
+typedef SuperTextLayerBuilder = Widget Function(
+    BuildContext, TextLayout textLayout);
 
 /// A [SuperTextLayerBuilder] that combines multiple other layers into a single
 /// layer, to be displayed above or beneath [SuperText].

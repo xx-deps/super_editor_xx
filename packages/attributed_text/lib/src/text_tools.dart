@@ -24,7 +24,8 @@ int getCharacterEndBounds(String text, int startingCodePointIndex) {
     return text.length;
   }
 
-  final CharacterRange range = CharacterRange.at(text, 0, startingCodePointIndex);
+  final CharacterRange range =
+      CharacterRange.at(text, 0, startingCodePointIndex);
   // If index is not on a character boundary, return the next character
   // boundary.
   if (range.current.length != startingCodePointIndex) {

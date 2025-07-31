@@ -30,13 +30,15 @@ TextStyle defaultTextFieldStyleBuilder(Set<Attribution> attributions) {
       newStyle = newStyle.copyWith(
         decoration: newStyle.decoration == null
             ? TextDecoration.underline
-            : TextDecoration.combine([TextDecoration.underline, newStyle.decoration!]),
+            : TextDecoration.combine(
+                [TextDecoration.underline, newStyle.decoration!]),
       );
     } else if (attribution == strikethroughAttribution) {
       newStyle = newStyle.copyWith(
         decoration: newStyle.decoration == null
             ? TextDecoration.lineThrough
-            : TextDecoration.combine([TextDecoration.lineThrough, newStyle.decoration!]),
+            : TextDecoration.combine(
+                [TextDecoration.lineThrough, newStyle.decoration!]),
       );
     } else if (attribution is ColorAttribution) {
       newStyle = newStyle.copyWith(

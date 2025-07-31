@@ -88,7 +88,8 @@ class GoldenTestCommand extends Command {
 
     final dirs = _findAllTestDirectories(testBaseDirectory);
 
-    final volumeMappings = _generateFailureDirectoriesMappings(packageDirectory, dirs);
+    final volumeMappings =
+        _generateFailureDirectoriesMappings(packageDirectory, dirs);
 
     // Runs the container.
     //
@@ -132,12 +133,14 @@ class GoldenTestCommand extends Command {
   /// [testDirectories] must be a list of relative paths to the working directory.
   ///
   /// This mappings are used so when a failure happens, the failure images are save in the host OS.
-  List<String> _generateFailureDirectoriesMappings(String packageDirectory, List<String> testDirectories) {
+  List<String> _generateFailureDirectoriesMappings(
+      String packageDirectory, List<String> testDirectories) {
     final mappings = <String>[];
 
     for (final dir in testDirectories) {
       mappings.add('-v');
-      mappings.add('${Directory.current.path}/$dir/failures:/golden_tester/$packageDirectory/$dir/failures');
+      mappings.add(
+          '${Directory.current.path}/$dir/failures:/golden_tester/$packageDirectory/$dir/failures');
     }
 
     return mappings;

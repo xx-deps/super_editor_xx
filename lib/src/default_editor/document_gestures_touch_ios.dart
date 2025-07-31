@@ -58,7 +58,8 @@ class SuperEditorIosControlsScope extends InheritedWidget {
     final data = maybeRootOf(context);
 
     if (data == null) {
-      throw Exception("Tried to depend upon the root SuperEditorIosControlsScope but no such ancestor widget exists.");
+      throw Exception(
+          "Tried to depend upon the root SuperEditorIosControlsScope but no such ancestor widget exists.");
     }
 
     return data;
@@ -68,7 +69,8 @@ class SuperEditorIosControlsScope extends InheritedWidget {
     InheritedElement? root;
 
     context.visitAncestorElements((element) {
-      if (element is! InheritedElement || element.widget is! SuperEditorIosControlsScope) {
+      if (element is! InheritedElement ||
+          element.widget is! SuperEditorIosControlsScope) {
         // Keep visiting.
         return true;
       }
@@ -93,10 +95,15 @@ class SuperEditorIosControlsScope extends InheritedWidget {
   /// Finds the nearest [SuperEditorIosControlsScope] in the widget tree, above the given
   /// [context], and returns its associated [SuperEditorIosControlsController].
   static SuperEditorIosControlsController nearestOf(BuildContext context) =>
-      context.dependOnInheritedWidgetOfExactType<SuperEditorIosControlsScope>()!.controller;
+      context
+          .dependOnInheritedWidgetOfExactType<SuperEditorIosControlsScope>()!
+          .controller;
 
-  static SuperEditorIosControlsController? maybeNearestOf(BuildContext context) =>
-      context.dependOnInheritedWidgetOfExactType<SuperEditorIosControlsScope>()?.controller;
+  static SuperEditorIosControlsController? maybeNearestOf(
+          BuildContext context) =>
+      context
+          .dependOnInheritedWidgetOfExactType<SuperEditorIosControlsScope>()
+          ?.controller;
 
   const SuperEditorIosControlsScope({
     super.key,
@@ -122,7 +129,8 @@ class SuperEditorIosControlsController {
     this.magnifierBuilder,
     this.toolbarBuilder,
     this.createOverlayControlsClipper,
-  }) : floatingCursorController = floatingCursorController ?? FloatingCursorController();
+  }) : floatingCursorController =
+            floatingCursorController ?? FloatingCursorController();
 
   void dispose() {
     floatingCursorController.dispose();
@@ -158,7 +166,8 @@ class SuperEditorIosControlsController {
   void doNotBlinkCaret() => _shouldCaretBlink.value = false;
 
   /// {@macro are_selection_handles_allowed}
-  ValueListenable<bool> get areSelectionHandlesAllowed => _areSelectionHandlesAllowed;
+  ValueListenable<bool> get areSelectionHandlesAllowed =>
+      _areSelectionHandlesAllowed;
   final _areSelectionHandlesAllowed = ValueNotifier<bool>(true);
 
   /// Temporarily prevents any selection handles from being displayed.
@@ -174,7 +183,8 @@ class SuperEditorIosControlsController {
   /// Reports the [HandleType] of the handle being dragged by the user.
   ///
   /// If no drag handle is being dragged, this value is `null`.
-  final ValueNotifier<HandleType?> handleBeingDragged = ValueNotifier<HandleType?>(null);
+  final ValueNotifier<HandleType?> handleBeingDragged =
+      ValueNotifier<HandleType?>(null);
 
   /// Controls the iOS floating cursor.
   late final FloatingCursorController floatingCursorController;
@@ -190,7 +200,8 @@ class SuperEditorIosControlsController {
   void hideMagnifier() => _shouldShowMagnifier.value = false;
 
   /// Toggles [shouldShowMagnifier].
-  void toggleMagnifier() => _shouldShowMagnifier.value = !_shouldShowMagnifier.value;
+  void toggleMagnifier() =>
+      _shouldShowMagnifier.value = !_shouldShowMagnifier.value;
 
   /// Link to a location where a magnifier should be focused.
   final magnifierFocalPoint = LeaderLink();
@@ -232,7 +243,8 @@ class SuperEditorIosControlsController {
   /// If no clipper factory method is provided, then the overlay controls
   /// will be allowed to appear anywhere in the overlay in which they sit
   /// (probably the entire screen).
-  final CustomClipper<Rect> Function(BuildContext overlayContext)? createOverlayControlsClipper;
+  final CustomClipper<Rect> Function(BuildContext overlayContext)?
+      createOverlayControlsClipper;
 }
 
 /// Document gesture interactor that's designed for iOS touch input, e.g.,
@@ -392,15 +404,19 @@ class _IosDocumentTouchInteractorState extends State<IosDocumentTouchInteractor>
     _lastInsets = view.viewInsets;
 
     if (_controlsController != null) {
-      _controlsController!.floatingCursorController.removeListener(_floatingCursorListener);
+      _controlsController!.floatingCursorController
+          .removeListener(_floatingCursorListener);
       _controlsController!.floatingCursorController.cursorGeometryInViewport
           .removeListener(_onFloatingCursorGeometryChange);
     }
     _controlsController = SuperEditorIosControlsScope.rootOf(context);
-    _controlsController!.floatingCursorController.addListener(_floatingCursorListener);
-    _controlsController!.floatingCursorController.cursorGeometryInViewport.addListener(_onFloatingCursorGeometryChange);
+    _controlsController!.floatingCursorController
+        .addListener(_floatingCursorListener);
+    _controlsController!.floatingCursorController.cursorGeometryInViewport
+        .addListener(_onFloatingCursorGeometryChange);
 
-    _ancestorScrollPosition = context.findAncestorScrollableWithVerticalScroll?.position;
+    _ancestorScrollPosition =
+        context.findAncestorScrollableWithVerticalScroll?.position;
   }
 
   @override
@@ -417,7 +433,8 @@ class _IosDocumentTouchInteractorState extends State<IosDocumentTouchInteractor>
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
 
-    _controlsController!.floatingCursorController.removeListener(_floatingCursorListener);
+    _controlsController!.floatingCursorController
+        .removeListener(_floatingCursorListener);
     _controlsController!.floatingCursorController.cursorGeometryInViewport
         .removeListener(_onFloatingCursorGeometryChange);
 
@@ -463,13 +480,19 @@ class _IosDocumentTouchInteractorState extends State<IosDocumentTouchInteractor>
 
     // Calculate the y-value of the selection extent side of the selected content so that we
     // can ensure they're visible.
-    final selectionRectInDocumentLayout =
-        widget.getDocumentLayout().getRectForSelection(selection.base, selection.extent)!;
-    final extentOffsetInViewport = widget.document.getAffinityForSelection(selection) == TextAffinity.downstream
-        ? _documentOffsetToViewportOffset(selectionRectInDocumentLayout.bottomCenter)
-        : _documentOffsetToViewportOffset(selectionRectInDocumentLayout.topCenter);
+    final selectionRectInDocumentLayout = widget
+        .getDocumentLayout()
+        .getRectForSelection(selection.base, selection.extent)!;
+    final extentOffsetInViewport =
+        widget.document.getAffinityForSelection(selection) ==
+                TextAffinity.downstream
+            ? _documentOffsetToViewportOffset(
+                selectionRectInDocumentLayout.bottomCenter)
+            : _documentOffsetToViewportOffset(
+                selectionRectInDocumentLayout.topCenter);
 
-    widget.dragHandleAutoScroller.value?.ensureOffsetIsVisible(extentOffsetInViewport);
+    widget.dragHandleAutoScroller.value
+        ?.ensureOffsetIsVisible(extentOffsetInViewport);
   }
 
   void _onDocumentChange(_) {
@@ -497,7 +520,8 @@ class _IosDocumentTouchInteractorState extends State<IosDocumentTouchInteractor>
   /// If this widget doesn't have an ancestor `Scrollable`, then this
   /// widget includes a `ScrollView` and the `ScrollView`'s position
   /// is returned.
-  ScrollPosition get scrollPosition => _ancestorScrollPosition ?? widget.scrollController.position;
+  ScrollPosition get scrollPosition =>
+      _ancestorScrollPosition ?? widget.scrollController.position;
 
   /// Returns the `RenderBox` for the scrolling viewport.
   ///
@@ -510,12 +534,14 @@ class _IosDocumentTouchInteractorState extends State<IosDocumentTouchInteractor>
   RenderBox get viewportBox => context.findViewportBox();
 
   Offset _documentOffsetToViewportOffset(Offset documentOffset) {
-    final globalOffset = _docLayout.getGlobalOffsetFromDocumentOffset(documentOffset);
+    final globalOffset =
+        _docLayout.getGlobalOffsetFromDocumentOffset(documentOffset);
     return viewportBox.globalToLocal(globalOffset);
   }
 
   /// Returns the render box for the interactor gesture detector.
-  RenderBox get interactorBox => _interactor.currentContext!.findRenderObject() as RenderBox;
+  RenderBox get interactorBox =>
+      _interactor.currentContext!.findRenderObject() as RenderBox;
 
   /// Converts the given [interactorOffset] from the [DocumentInteractor]'s coordinate
   /// space to the [DocumentLayout]'s coordinate space.
@@ -555,8 +581,10 @@ class _IosDocumentTouchInteractorState extends State<IosDocumentTouchInteractor>
   // Runs when a tap down has lasted long enough to signify a long-press.
   void _onLongPressDown() {
     final interactorOffset = interactorBox.globalToLocal(_globalTapDownOffset!);
-    final tapDownDocumentOffset = _interactorOffsetToDocumentOffset(interactorOffset);
-    final tapDownDocumentPosition = _docLayout.getDocumentPositionNearestToOffset(tapDownDocumentOffset);
+    final tapDownDocumentOffset =
+        _interactorOffsetToDocumentOffset(interactorOffset);
+    final tapDownDocumentPosition =
+        _docLayout.getDocumentPositionNearestToOffset(tapDownDocumentOffset);
     if (tapDownDocumentPosition == null) {
       return;
     }
@@ -628,12 +656,14 @@ class _IosDocumentTouchInteractorState extends State<IosDocumentTouchInteractor>
     final selection = widget.selection.value;
     if (selection != null &&
         !selection.isCollapsed &&
-        (_isOverBaseHandle(details.localPosition) || _isOverExtentHandle(details.localPosition))) {
+        (_isOverBaseHandle(details.localPosition) ||
+            _isOverExtentHandle(details.localPosition))) {
       _controlsController!.toggleToolbar();
       return;
     }
 
-    final docPosition = _docLayout.getDocumentPositionNearestToOffset(docOffset);
+    final docPosition =
+        _docLayout.getDocumentPositionNearestToOffset(docOffset);
     editorGesturesLog.fine(" - tapped document position: $docPosition");
     if (docPosition != null &&
         selection != null &&
@@ -664,7 +694,8 @@ class _IosDocumentTouchInteractorState extends State<IosDocumentTouchInteractor>
       final didTapOnExistingSelection = selection != null &&
           selection.isCollapsed &&
           selection.extent.nodeId == docPosition.nodeId &&
-          selection.extent.nodePosition.isEquivalentTo(docPosition.nodePosition);
+          selection.extent.nodePosition
+              .isEquivalentTo(docPosition.nodePosition);
 
       if (didTapOnExistingSelection && widget.isImeConnected.value) {
         // Toggle the toolbar display when the user taps on the collapsed caret,
@@ -688,7 +719,8 @@ class _IosDocumentTouchInteractorState extends State<IosDocumentTouchInteractor>
           widget.openSoftwareKeyboard();
         }
       } else {
-        final tappedComponent = _docLayout.getComponentByNodeId(adjustedSelectionPosition.nodeId)!;
+        final tappedComponent =
+            _docLayout.getComponentByNodeId(adjustedSelectionPosition.nodeId)!;
         if (!tappedComponent.isVisualSelectionSupported()) {
           // The user tapped a non-selectable component.
           // Place the document selection at the nearest selectable node
@@ -698,7 +730,8 @@ class _IosDocumentTouchInteractorState extends State<IosDocumentTouchInteractor>
             document: widget.document,
             documentLayoutResolver: widget.getDocumentLayout,
             currentSelection: widget.selection.value,
-            startingNode: widget.document.getNodeById(adjustedSelectionPosition.nodeId)!,
+            startingNode:
+                widget.document.getNodeById(adjustedSelectionPosition.nodeId)!,
           );
           return;
         } else {
@@ -722,18 +755,22 @@ class _IosDocumentTouchInteractorState extends State<IosDocumentTouchInteractor>
     widget.focusNode.requestFocus();
   }
 
-  DocumentPosition _moveTapPositionToWordBoundary(DocumentPosition docPosition) {
-    if (!SuperEditorIosControlsScope.rootOf(context).useIosSelectionHeuristics) {
+  DocumentPosition _moveTapPositionToWordBoundary(
+      DocumentPosition docPosition) {
+    if (!SuperEditorIosControlsScope.rootOf(context)
+        .useIosSelectionHeuristics) {
       // iOS-style adjustments aren't desired. Don't adjust th given position.
       return docPosition;
     }
 
-    final text = (widget.document.getNodeById(docPosition.nodeId) as TextNode).text;
+    final text =
+        (widget.document.getNodeById(docPosition.nodeId) as TextNode).text;
     final tapOffset = (docPosition.nodePosition as TextNodePosition).offset;
     if (tapOffset == text.length) {
       return docPosition;
     }
-    final adjustedSelectionOffset = IosHeuristics.adjustTapOffset(text.toPlainText(), tapOffset);
+    final adjustedSelectionOffset =
+        IosHeuristics.adjustTapOffset(text.toPlainText(), tapOffset);
 
     return DocumentPosition(
       nodeId: docPosition.nodeId,
@@ -766,14 +803,17 @@ class _IosDocumentTouchInteractorState extends State<IosDocumentTouchInteractor>
     final selection = widget.selection.value;
     if (selection != null &&
         !selection.isCollapsed &&
-        (_isOverBaseHandle(details.localPosition) || _isOverExtentHandle(details.localPosition))) {
+        (_isOverBaseHandle(details.localPosition) ||
+            _isOverExtentHandle(details.localPosition))) {
       return;
     }
 
-    final docPosition = _docLayout.getDocumentPositionNearestToOffset(docOffset);
+    final docPosition =
+        _docLayout.getDocumentPositionNearestToOffset(docOffset);
     editorGesturesLog.fine(" - tapped document position: $docPosition");
     if (docPosition != null) {
-      final tappedComponent = _docLayout.getComponentByNodeId(docPosition.nodeId)!;
+      final tappedComponent =
+          _docLayout.getComponentByNodeId(docPosition.nodeId)!;
       if (!tappedComponent.isVisualSelectionSupported()) {
         return;
       }
@@ -857,10 +897,12 @@ class _IosDocumentTouchInteractorState extends State<IosDocumentTouchInteractor>
       }
     }
 
-    final docPosition = _docLayout.getDocumentPositionNearestToOffset(docOffset);
+    final docPosition =
+        _docLayout.getDocumentPositionNearestToOffset(docOffset);
     editorGesturesLog.fine(" - tapped document position: $docPosition");
     if (docPosition != null) {
-      final tappedComponent = _docLayout.getComponentByNodeId(docPosition.nodeId)!;
+      final tappedComponent =
+          _docLayout.getComponentByNodeId(docPosition.nodeId)!;
       if (!tappedComponent.isVisualSelectionSupported()) {
         return;
       }
@@ -901,7 +943,8 @@ class _IosDocumentTouchInteractorState extends State<IosDocumentTouchInteractor>
     _tapDownLongPressTimer?.cancel();
 
     if (widget.contentTapHandlers != null) {
-      final docOffset = _interactorOffsetToDocumentOffset(details.localPosition);
+      final docOffset =
+          _interactorOffsetToDocumentOffset(details.localPosition);
       for (final handler in widget.contentTapHandlers!) {
         final result = handler.onPanStart(
           DocumentTapDetails(
@@ -930,7 +973,8 @@ class _IosDocumentTouchInteractorState extends State<IosDocumentTouchInteractor>
       _dragMode = DragMode.longPress;
       _dragHandleType = null;
       _longPressStrategy!.onLongPressDragStart();
-    } else if (selection.isCollapsed && _isOverCollapsedHandle(details.localPosition)) {
+    } else if (selection.isCollapsed &&
+        _isOverCollapsedHandle(details.localPosition)) {
       _dragMode = DragMode.collapsed;
       _dragHandleType = HandleType.collapsed;
     } else if (_isOverBaseHandle(details.localPosition)) {
@@ -982,7 +1026,8 @@ class _IosDocumentTouchInteractorState extends State<IosDocumentTouchInteractor>
     final baseRect = _docLayout.getRectForPosition(basePosition)!;
     // The following caretRect offset and size were chosen empirically, based
     // on trying to drag the handle from various locations near the handle.
-    final caretRect = Rect.fromLTWH(baseRect.left - 24, baseRect.top - 24, 48, baseRect.height + 48);
+    final caretRect = Rect.fromLTWH(
+        baseRect.left - 24, baseRect.top - 24, 48, baseRect.height + 48);
 
     final docOffset = _interactorOffsetToDocumentOffset(interactorOffset);
     return caretRect.contains(docOffset);
@@ -997,7 +1042,8 @@ class _IosDocumentTouchInteractorState extends State<IosDocumentTouchInteractor>
     final extentRect = _docLayout.getRectForPosition(extentPosition)!;
     // The following caretRect offset and size were chosen empirically, based
     // on trying to drag the handle from various locations near the handle.
-    final caretRect = Rect.fromLTWH(extentRect.left - 24, extentRect.top, 48, extentRect.height + 32);
+    final caretRect = Rect.fromLTWH(
+        extentRect.left - 24, extentRect.top, 48, extentRect.height + 32);
 
     final docOffset = _interactorOffsetToDocumentOffset(interactorOffset);
     return caretRect.contains(docOffset);
@@ -1005,7 +1051,8 @@ class _IosDocumentTouchInteractorState extends State<IosDocumentTouchInteractor>
 
   void _onPanUpdate(DragUpdateDetails details) {
     if (widget.contentTapHandlers != null) {
-      final docOffset = _interactorOffsetToDocumentOffset(details.localPosition);
+      final docOffset =
+          _interactorOffsetToDocumentOffset(details.localPosition);
       for (final handler in widget.contentTapHandlers!) {
         final result = handler.onPanUpdate(
           DocumentTapDetails(
@@ -1025,16 +1072,20 @@ class _IosDocumentTouchInteractorState extends State<IosDocumentTouchInteractor>
     _globalDragOffset = details.globalPosition;
 
     _dragEndInInteractor = interactorBox.globalToLocal(details.globalPosition);
-    final dragEndInViewport = _interactorOffsetToViewportOffset(_dragEndInInteractor!);
+    final dragEndInViewport =
+        _interactorOffsetToViewportOffset(_dragEndInInteractor!);
 
     if (_isLongPressInProgress) {
       final fingerDragDelta = _globalDragOffset! - _globalStartDragOffset!;
       final scrollDelta = _dragStartScrollOffset! - scrollPosition.pixels;
-      final fingerDocumentOffset = _docLayout.getDocumentOffsetFromAncestorOffset(details.globalPosition);
-      final fingerDocumentPosition = _docLayout.getDocumentPositionNearestToOffset(
+      final fingerDocumentOffset = _docLayout
+          .getDocumentOffsetFromAncestorOffset(details.globalPosition);
+      final fingerDocumentPosition =
+          _docLayout.getDocumentPositionNearestToOffset(
         _startDragPositionOffset! + fingerDragDelta - Offset(0, scrollDelta),
       );
-      _longPressStrategy!.onLongPressDragUpdate(fingerDocumentOffset, fingerDocumentPosition);
+      _longPressStrategy!
+          .onLongPressDragUpdate(fingerDocumentOffset, fingerDocumentPosition);
     } else {
       _updateSelectionForNewDragHandleLocation();
     }
@@ -1050,8 +1101,8 @@ class _IosDocumentTouchInteractorState extends State<IosDocumentTouchInteractor>
   void _updateSelectionForNewDragHandleLocation() {
     final docDragDelta = _globalDragOffset! - _globalStartDragOffset!;
     final dragScrollDelta = _dragStartScrollOffset! - scrollPosition.pixels;
-    final docDragPosition = _docLayout
-        .getDocumentPositionNearestToOffset(_startDragPositionOffset! + docDragDelta - Offset(0, dragScrollDelta));
+    final docDragPosition = _docLayout.getDocumentPositionNearestToOffset(
+        _startDragPositionOffset! + docDragDelta - Offset(0, dragScrollDelta));
     if (docDragPosition == null) {
       return;
     }
@@ -1096,7 +1147,8 @@ class _IosDocumentTouchInteractorState extends State<IosDocumentTouchInteractor>
 
   void _onPanEnd(DragEndDetails details) {
     if (widget.contentTapHandlers != null) {
-      final docOffset = _interactorOffsetToDocumentOffset(details.localPosition);
+      final docOffset =
+          _interactorOffsetToDocumentOffset(details.localPosition);
       for (final handler in widget.contentTapHandlers!) {
         final result = handler.onPanEnd(
           DocumentTapDetails(
@@ -1196,9 +1248,12 @@ class _IosDocumentTouchInteractorState extends State<IosDocumentTouchInteractor>
       return;
     }
 
-    final dragEndInDoc = _interactorOffsetToDocumentOffset(_dragEndInInteractor!);
-    final dragPosition = _docLayout.getDocumentPositionNearestToOffset(dragEndInDoc);
-    editorGesturesLog.finest("Selecting new position during drag: $dragPosition");
+    final dragEndInDoc =
+        _interactorOffsetToDocumentOffset(_dragEndInInteractor!);
+    final dragPosition =
+        _docLayout.getDocumentPositionNearestToOffset(dragEndInDoc);
+    editorGesturesLog
+        .finest("Selecting new position during drag: $dragPosition");
 
     if (dragPosition == null) {
       return;
@@ -1244,7 +1299,8 @@ class _IosDocumentTouchInteractorState extends State<IosDocumentTouchInteractor>
     required DocumentPosition docPosition,
     required DocumentLayout docLayout,
   }) {
-    final newSelection = getWordSelection(docPosition: docPosition, docLayout: docLayout);
+    final newSelection =
+        getWordSelection(docPosition: docPosition, docLayout: docLayout);
     if (newSelection != null) {
       _select(newSelection);
       return true;
@@ -1268,7 +1324,8 @@ class _IosDocumentTouchInteractorState extends State<IosDocumentTouchInteractor>
     required DocumentPosition docPosition,
     required DocumentLayout docLayout,
   }) {
-    final newSelection = getParagraphSelection(docPosition: docPosition, docLayout: docLayout);
+    final newSelection =
+        getParagraphSelection(docPosition: docPosition, docLayout: docLayout);
     if (newSelection != null) {
       widget.editor.execute([
         ChangeSelectionRequest(
@@ -1294,7 +1351,8 @@ class _IosDocumentTouchInteractorState extends State<IosDocumentTouchInteractor>
   }
 
   void _onFloatingCursorGeometryChange() {
-    final cursorGeometry = _controlsController!.floatingCursorController.cursorGeometryInViewport.value;
+    final cursorGeometry = _controlsController!
+        .floatingCursorController.cursorGeometryInViewport.value;
     if (cursorGeometry == null) {
       return;
     }
@@ -1328,14 +1386,19 @@ class _IosDocumentTouchInteractorState extends State<IosDocumentTouchInteractor>
 
     if (_globalTapDownOffset != null) {
       // A drag isn't happening. Magnify the position that the user tapped.
-      final interactorOffset = interactorBox.globalToLocal(_globalTapDownOffset!);
-      final tapDownDocumentOffset = _interactorOffsetToDocumentOffset(interactorOffset);
-      docPositionToMagnify = _docLayout.getDocumentPositionNearestToOffset(tapDownDocumentOffset);
+      final interactorOffset =
+          interactorBox.globalToLocal(_globalTapDownOffset!);
+      final tapDownDocumentOffset =
+          _interactorOffsetToDocumentOffset(interactorOffset);
+      docPositionToMagnify =
+          _docLayout.getDocumentPositionNearestToOffset(tapDownDocumentOffset);
     } else {
       final docDragDelta = _globalDragOffset! - _globalStartDragOffset!;
       final dragScrollDelta = _dragStartScrollOffset! - scrollPosition.pixels;
-      docPositionToMagnify = _docLayout
-          .getDocumentPositionNearestToOffset(_startDragPositionOffset! + docDragDelta - Offset(0, dragScrollDelta));
+      docPositionToMagnify = _docLayout.getDocumentPositionNearestToOffset(
+          _startDragPositionOffset! +
+              docDragDelta -
+              Offset(0, dragScrollDelta));
     }
 
     final centerOfContentAtOffset = _interactorOffsetToDocumentOffset(
@@ -1348,13 +1411,16 @@ class _IosDocumentTouchInteractorState extends State<IosDocumentTouchInteractor>
   void _updateDragStartLocation(Offset globalOffset) {
     _globalStartDragOffset = globalOffset;
     final handleOffsetInInteractor = interactorBox.globalToLocal(globalOffset);
-    _dragStartInDoc = _interactorOffsetToDocumentOffset(handleOffsetInInteractor);
+    _dragStartInDoc =
+        _interactorOffsetToDocumentOffset(handleOffsetInInteractor);
 
     final selection = widget.selection.value;
     if (_dragHandleType != null && selection != null) {
       _startDragPositionOffset = _docLayout
           .getRectForPosition(
-            _dragHandleType == HandleType.upstream ? selection.base : selection.extent,
+            _dragHandleType == HandleType.upstream
+                ? selection.base
+                : selection.extent,
           )!
           .center;
     } else {
@@ -1398,7 +1464,8 @@ class _IosDocumentTouchInteractorState extends State<IosDocumentTouchInteractor>
         RawGestureDetector(
           behavior: HitTestBehavior.opaque,
           gestures: <Type, GestureRecognizerFactory>{
-            TapSequenceGestureRecognizer: GestureRecognizerFactoryWithHandlers<TapSequenceGestureRecognizer>(
+            TapSequenceGestureRecognizer: GestureRecognizerFactoryWithHandlers<
+                TapSequenceGestureRecognizer>(
               () => TapSequenceGestureRecognizer(),
               (TapSequenceGestureRecognizer recognizer) {
                 recognizer
@@ -1418,7 +1485,8 @@ class _IosDocumentTouchInteractorState extends State<IosDocumentTouchInteractor>
           key: _interactor,
           behavior: HitTestBehavior.translucent,
           gestures: <Type, GestureRecognizerFactory>{
-            EagerPanGestureRecognizer: GestureRecognizerFactoryWithHandlers<EagerPanGestureRecognizer>(
+            EagerPanGestureRecognizer:
+                GestureRecognizerFactoryWithHandlers<EagerPanGestureRecognizer>(
               () => EagerPanGestureRecognizer(),
               (EagerPanGestureRecognizer instance) {
                 instance
@@ -1426,9 +1494,11 @@ class _IosDocumentTouchInteractorState extends State<IosDocumentTouchInteractor>
                     if (_globalTapDownOffset == null) {
                       return false;
                     }
-                    final panDown = interactorBox.globalToLocal(_globalTapDownOffset!);
-                    final isOverHandle =
-                        _isOverBaseHandle(panDown) || _isOverExtentHandle(panDown) || _isOverCollapsedHandle(panDown);
+                    final panDown =
+                        interactorBox.globalToLocal(_globalTapDownOffset!);
+                    final isOverHandle = _isOverBaseHandle(panDown) ||
+                        _isOverExtentHandle(panDown) ||
+                        _isOverCollapsedHandle(panDown);
                     final res = isOverHandle || _isLongPressInProgress;
                     return res;
                   }
@@ -1506,12 +1576,15 @@ class SuperEditorIosToolbarOverlayManager extends StatefulWidget {
   final Widget child;
 
   @override
-  State<SuperEditorIosToolbarOverlayManager> createState() => SuperEditorIosToolbarOverlayManagerState();
+  State<SuperEditorIosToolbarOverlayManager> createState() =>
+      SuperEditorIosToolbarOverlayManagerState();
 }
 
 @visibleForTesting
-class SuperEditorIosToolbarOverlayManagerState extends State<SuperEditorIosToolbarOverlayManager> {
-  final OverlayPortalController _overlayPortalController = OverlayPortalController();
+class SuperEditorIosToolbarOverlayManagerState
+    extends State<SuperEditorIosToolbarOverlayManager> {
+  final OverlayPortalController _overlayPortalController =
+      OverlayPortalController();
   SuperEditorIosControlsController? _controlsController;
 
   @override
@@ -1523,7 +1596,8 @@ class SuperEditorIosToolbarOverlayManagerState extends State<SuperEditorIosToolb
   }
 
   @visibleForTesting
-  bool get wantsToDisplayToolbar => _controlsController!.shouldShowToolbar.value;
+  bool get wantsToDisplayToolbar =>
+      _controlsController!.shouldShowToolbar.value;
 
   @override
   Widget build(BuildContext context) {
@@ -1545,9 +1619,11 @@ class SuperEditorIosToolbarOverlayManagerState extends State<SuperEditorIosToolb
       child: IosFloatingToolbarOverlay(
         shouldShowToolbar: _controlsController!.shouldShowToolbar,
         toolbarFocalPoint: _controlsController!.toolbarFocalPoint,
-        floatingToolbarBuilder:
-            _controlsController!.toolbarBuilder ?? widget.defaultToolbarBuilder ?? (_, __, ___) => const SizedBox(),
-        createOverlayControlsClipper: _controlsController!.createOverlayControlsClipper,
+        floatingToolbarBuilder: _controlsController!.toolbarBuilder ??
+            widget.defaultToolbarBuilder ??
+            (_, __, ___) => const SizedBox(),
+        createOverlayControlsClipper:
+            _controlsController!.createOverlayControlsClipper,
         showDebugPaint: false,
       ),
     );
@@ -1565,17 +1641,21 @@ class SuperEditorIosMagnifierOverlayManager extends StatefulWidget {
   final Widget child;
 
   @override
-  State<SuperEditorIosMagnifierOverlayManager> createState() => SuperEditorIosMagnifierOverlayManagerState();
+  State<SuperEditorIosMagnifierOverlayManager> createState() =>
+      SuperEditorIosMagnifierOverlayManagerState();
 }
 
 @visibleForTesting
-class SuperEditorIosMagnifierOverlayManagerState extends State<SuperEditorIosMagnifierOverlayManager>
+class SuperEditorIosMagnifierOverlayManagerState
+    extends State<SuperEditorIosMagnifierOverlayManager>
     with SingleTickerProviderStateMixin {
-  final OverlayPortalController _overlayPortalController = OverlayPortalController();
+  final OverlayPortalController _overlayPortalController =
+      OverlayPortalController();
   SuperEditorIosControlsController? _controlsController;
 
   @visibleForTesting
-  bool get wantsToDisplayMagnifier => _controlsController!.shouldShowMagnifier.value;
+  bool get wantsToDisplayMagnifier =>
+      _controlsController!.shouldShowMagnifier.value;
 
   @override
   void didChangeDependencies() {
@@ -1626,8 +1706,8 @@ class SuperEditorIosMagnifierOverlayManagerState extends State<SuperEditorIosMag
     );
   }
 
-  Widget _buildDefaultMagnifier(
-      BuildContext context, Key magnifierKey, LeaderLink magnifierFocalPoint, bool isVisible) {
+  Widget _buildDefaultMagnifier(BuildContext context, Key magnifierKey,
+      LeaderLink magnifierFocalPoint, bool isVisible) {
     if (CurrentPlatform.isWeb) {
       // Defer to the browser to display overlay controls on mobile.
       return const SizedBox();
@@ -1640,7 +1720,8 @@ class SuperEditorIosMagnifierOverlayManagerState extends State<SuperEditorIosMag
       // The magnifier is centered with the focal point. Translate it so that it sits
       // above the focal point and leave a few pixels between the bottom of the magnifier
       // and the focal point. This value was chosen empirically.
-      offsetFromFocalPoint: Offset(0, (-defaultIosMagnifierSize.height / 2) - 20),
+      offsetFromFocalPoint:
+          Offset(0, (-defaultIosMagnifierSize.height / 2) - 20),
       handleColor: _controlsController!.handleColor,
     );
   }
@@ -1687,7 +1768,8 @@ class _EditorFloatingCursorState extends State<EditorFloatingCursor> {
   Offset? _initialFloatingCursorOffsetInViewport;
   Offset? _floatingCursorFocalPointInViewport;
   Offset? _floatingCursorFocalPointInDocument;
-  double _floatingCursorHeight = FloatingCursorPolicies.defaultFloatingCursorHeight;
+  double _floatingCursorHeight =
+      FloatingCursorPolicies.defaultFloatingCursorHeight;
 
   @override
   void initState() {
@@ -1707,10 +1789,12 @@ class _EditorFloatingCursorState extends State<EditorFloatingCursor> {
     super.didChangeDependencies();
 
     if (_controlsContext != null) {
-      _controlsContext!.floatingCursorController.removeListener(_floatingCursorListener);
+      _controlsContext!.floatingCursorController
+          .removeListener(_floatingCursorListener);
     }
     _controlsContext = SuperEditorIosControlsScope.rootOf(context);
-    _controlsContext!.floatingCursorController.addListener(_floatingCursorListener);
+    _controlsContext!.floatingCursorController
+        .addListener(_floatingCursorListener);
   }
 
   @override
@@ -1741,7 +1825,8 @@ class _EditorFloatingCursorState extends State<EditorFloatingCursor> {
   RenderBox get viewportBox => context.findViewportBox();
 
   Offset _documentOffsetToViewportOffset(Offset documentOffset) {
-    final globalOffset = _docLayout.getGlobalOffsetFromDocumentOffset(documentOffset);
+    final globalOffset =
+        _docLayout.getGlobalOffsetFromDocumentOffset(documentOffset);
     return viewportBox.globalToLocal(globalOffset);
   }
 
@@ -1758,12 +1843,17 @@ class _EditorFloatingCursorState extends State<EditorFloatingCursor> {
     }
 
     final initialSelectionExtent = widget.selection.value!.extent;
-    final nearestPositionRect = _docLayout.getRectForPosition(initialSelectionExtent)!;
+    final nearestPositionRect =
+        _docLayout.getRectForPosition(initialSelectionExtent)!;
     final verticalCenterOfCaret = nearestPositionRect.center;
-    final initialFloatingCursorOffsetInDocument = verticalCenterOfCaret + const Offset(-1, 0);
-    _initialFloatingCursorOffsetInViewport = _documentOffsetToViewportOffset(initialFloatingCursorOffsetInDocument);
-    _floatingCursorFocalPointInViewport = _initialFloatingCursorOffsetInViewport!;
-    _floatingCursorFocalPointInDocument = _viewportOffsetToDocumentOffset(_floatingCursorFocalPointInViewport!);
+    final initialFloatingCursorOffsetInDocument =
+        verticalCenterOfCaret + const Offset(-1, 0);
+    _initialFloatingCursorOffsetInViewport =
+        _documentOffsetToViewportOffset(initialFloatingCursorOffsetInDocument);
+    _floatingCursorFocalPointInViewport =
+        _initialFloatingCursorOffsetInViewport!;
+    _floatingCursorFocalPointInDocument =
+        _viewportOffsetToDocumentOffset(_floatingCursorFocalPointInViewport!);
 
     _controlsContext!.hideToolbar();
     _controlsContext!.hideMagnifier();
@@ -1784,21 +1874,27 @@ class _EditorFloatingCursorState extends State<EditorFloatingCursor> {
     if (!widget.selection.value!.isCollapsed) {
       // This shouldn't happen. An expanded selection should be collapsed for
       // we get to movement methods.
-      editorIosFloatingCursorLog
-          .shout("Floating cursor move reported with an expanded selection. The selection should be collapsed!");
+      editorIosFloatingCursorLog.shout(
+          "Floating cursor move reported with an expanded selection. The selection should be collapsed!");
     }
 
     // Update our floating cursor focal point trackers.
-    final cursorViewportFocalPointUnbounded = _initialFloatingCursorOffsetInViewport! + offset;
-    editorIosFloatingCursorLog.finer(" - unbounded cursor focal point: $cursorViewportFocalPointUnbounded");
+    final cursorViewportFocalPointUnbounded =
+        _initialFloatingCursorOffsetInViewport! + offset;
+    editorIosFloatingCursorLog.finer(
+        " - unbounded cursor focal point: $cursorViewportFocalPointUnbounded");
 
     final viewportHeight = viewportBox.size.height;
-    _floatingCursorFocalPointInViewport =
-        Offset(cursorViewportFocalPointUnbounded.dx, cursorViewportFocalPointUnbounded.dy.clamp(0, viewportHeight));
-    editorIosFloatingCursorLog.finer(" - bounded cursor focal point: $_floatingCursorFocalPointInViewport");
+    _floatingCursorFocalPointInViewport = Offset(
+        cursorViewportFocalPointUnbounded.dx,
+        cursorViewportFocalPointUnbounded.dy.clamp(0, viewportHeight));
+    editorIosFloatingCursorLog.finer(
+        " - bounded cursor focal point: $_floatingCursorFocalPointInViewport");
 
-    _floatingCursorFocalPointInDocument = _viewportOffsetToDocumentOffset(_floatingCursorFocalPointInViewport!);
-    editorIosFloatingCursorLog.finer(" - floating cursor offset in document: $_floatingCursorFocalPointInDocument");
+    _floatingCursorFocalPointInDocument =
+        _viewportOffsetToDocumentOffset(_floatingCursorFocalPointInViewport!);
+    editorIosFloatingCursorLog.finer(
+        " - floating cursor offset in document: $_floatingCursorFocalPointInDocument");
 
     // Calculate an updated floating cursor rectangle and document selection.
     _updateFloatingCursorGeometryForCurrentFloatingCursorFocalPoint();
@@ -1821,31 +1917,44 @@ class _EditorFloatingCursorState extends State<EditorFloatingCursor> {
   /// those changes must be made to the focal point before calling this method. This
   /// method doesn't update or alter the focal point.
   void _updateFloatingCursorGeometryForCurrentFloatingCursorFocalPoint() {
-    final focalPointInDocument = _viewportOffsetToDocumentOffset(_floatingCursorFocalPointInViewport!);
-    final nearestDocumentPosition = _docLayout.getDocumentPositionNearestToOffset(focalPointInDocument)!;
-    editorIosFloatingCursorLog.finer(" - nearest position to floating cursor: $nearestDocumentPosition");
+    final focalPointInDocument =
+        _viewportOffsetToDocumentOffset(_floatingCursorFocalPointInViewport!);
+    final nearestDocumentPosition =
+        _docLayout.getDocumentPositionNearestToOffset(focalPointInDocument)!;
+    editorIosFloatingCursorLog.finer(
+        " - nearest position to floating cursor: $nearestDocumentPosition");
 
     if (nearestDocumentPosition.nodePosition is TextNodePosition) {
-      final nearestPositionRect = _docLayout.getRectForPosition(nearestDocumentPosition)!;
+      final nearestPositionRect =
+          _docLayout.getRectForPosition(nearestDocumentPosition)!;
       _floatingCursorHeight = nearestPositionRect.height;
 
-      final distance = _floatingCursorFocalPointInDocument! - nearestPositionRect.topLeft + const Offset(1.0, 0.0);
+      final distance = _floatingCursorFocalPointInDocument! -
+          nearestPositionRect.topLeft +
+          const Offset(1.0, 0.0);
       _controlsContext!.floatingCursorController.isNearText.value =
-          distance.dx.abs() <= FloatingCursorPolicies.maximumDistanceToBeNearText;
+          distance.dx.abs() <=
+              FloatingCursorPolicies.maximumDistanceToBeNearText;
     } else {
-      final nearestComponent = _docLayout.getComponentByNodeId(nearestDocumentPosition.nodeId)!;
-      _floatingCursorHeight = (nearestComponent.context.findRenderObject() as RenderBox).size.height;
+      final nearestComponent =
+          _docLayout.getComponentByNodeId(nearestDocumentPosition.nodeId)!;
+      _floatingCursorHeight =
+          (nearestComponent.context.findRenderObject() as RenderBox)
+              .size
+              .height;
       _controlsContext!.floatingCursorController.isNearText.value = false;
     }
 
-    _controlsContext!.floatingCursorController.cursorGeometryInViewport.value = Rect.fromLTWH(
+    _controlsContext!.floatingCursorController.cursorGeometryInViewport.value =
+        Rect.fromLTWH(
       _floatingCursorFocalPointInViewport!.dx,
       _floatingCursorFocalPointInViewport!.dy - (_floatingCursorHeight / 2),
       FloatingCursorPolicies.defaultFloatingCursorWidth,
       _floatingCursorHeight,
     );
 
-    _controlsContext!.floatingCursorController.cursorGeometryInDocument.value = Rect.fromLTWH(
+    _controlsContext!.floatingCursorController.cursorGeometryInDocument.value =
+        Rect.fromLTWH(
       _floatingCursorFocalPointInDocument!.dx,
       _floatingCursorFocalPointInDocument!.dy - (_floatingCursorHeight / 2),
       FloatingCursorPolicies.defaultFloatingCursorWidth,
@@ -1859,17 +1968,22 @@ class _EditorFloatingCursorState extends State<EditorFloatingCursor> {
   /// Inspects the viewport focal point offset of the floating cursor, finds the nearest position
   /// in the document, and moves the selection to that position.
   void _selectPositionUnderFloatingCursor() {
-    editorIosFloatingCursorLog.finer("Updating document selection based on floating cursor focal point.");
-    final floatingCursorRectInViewport = _controlsContext!.floatingCursorController.cursorGeometryInViewport.value;
+    editorIosFloatingCursorLog.finer(
+        "Updating document selection based on floating cursor focal point.");
+    final floatingCursorRectInViewport = _controlsContext!
+        .floatingCursorController.cursorGeometryInViewport.value;
     if (floatingCursorRectInViewport == null) {
-      editorIosFloatingCursorLog.finer(" - the floating cursor rect is null. Not selecting anything.");
+      editorIosFloatingCursorLog.finer(
+          " - the floating cursor rect is null. Not selecting anything.");
       return;
     }
 
     final nearestDocumentPosition = _docLayout
-        .getDocumentPositionNearestToOffset(_viewportOffsetToDocumentOffset(floatingCursorRectInViewport.center))!;
+        .getDocumentPositionNearestToOffset(_viewportOffsetToDocumentOffset(
+            floatingCursorRectInViewport.center))!;
 
-    editorIosFloatingCursorLog.finer(" - selecting nearest position: $nearestDocumentPosition");
+    editorIosFloatingCursorLog
+        .finer(" - selecting nearest position: $nearestDocumentPosition");
     _selectPosition(nearestDocumentPosition);
   }
 
@@ -1889,8 +2003,10 @@ class _EditorFloatingCursorState extends State<EditorFloatingCursor> {
   void _onFloatingCursorStop() {
     editorIosFloatingCursorLog.fine("Floating cursor stopped.");
     _controlsContext!.floatingCursorController.isNearText.value = false;
-    _controlsContext!.floatingCursorController.cursorGeometryInViewport.value = null;
-    _controlsContext!.floatingCursorController.cursorGeometryInDocument.value = null;
+    _controlsContext!.floatingCursorController.cursorGeometryInViewport.value =
+        null;
+    _controlsContext!.floatingCursorController.cursorGeometryInDocument.value =
+        null;
 
     _floatingCursorFocalPointInDocument = null;
     _floatingCursorFocalPointInViewport = null;
@@ -1914,7 +2030,8 @@ class _EditorFloatingCursorState extends State<EditorFloatingCursor> {
 
   Widget _buildFloatingCursor() {
     return ValueListenableBuilder<Rect?>(
-      valueListenable: _controlsContext!.floatingCursorController.cursorGeometryInDocument,
+      valueListenable:
+          _controlsContext!.floatingCursorController.cursorGeometryInDocument,
       builder: (context, floatingCursorRect, child) {
         if (floatingCursorRect == null) {
           return const SizedBox();
@@ -1936,7 +2053,8 @@ class _EditorFloatingCursorState extends State<EditorFloatingCursor> {
 /// A [SuperEditorDocumentLayerBuilder] that builds a [IosToolbarFocalPointDocumentLayer], which
 /// positions a `Leader` widget around the document selection, as a focal point for an
 /// iOS floating toolbar.
-class SuperEditorIosToolbarFocalPointDocumentLayerBuilder implements SuperEditorLayerBuilder {
+class SuperEditorIosToolbarFocalPointDocumentLayerBuilder
+    implements SuperEditorLayerBuilder {
   const SuperEditorIosToolbarFocalPointDocumentLayerBuilder({
     // ignore: unused_element
     this.showDebugLeaderBounds = false,
@@ -1946,8 +2064,10 @@ class SuperEditorIosToolbarFocalPointDocumentLayerBuilder implements SuperEditor
   final bool showDebugLeaderBounds;
 
   @override
-  ContentLayerWidget build(BuildContext context, SuperEditorContext editorContext) {
-    if (defaultTargetPlatform != TargetPlatform.iOS || SuperEditorIosControlsScope.maybeNearestOf(context) == null) {
+  ContentLayerWidget build(
+      BuildContext context, SuperEditorContext editorContext) {
+    if (defaultTargetPlatform != TargetPlatform.iOS ||
+        SuperEditorIosControlsScope.maybeNearestOf(context) == null) {
       // There's no controls scope. This probably means SuperEditor is configured with
       // a non-iOS gesture mode. Build nothing.
       return const ContentLayerProxyWidget(child: EmptyBox());
@@ -1956,7 +2076,8 @@ class SuperEditorIosToolbarFocalPointDocumentLayerBuilder implements SuperEditor
     return IosToolbarFocalPointDocumentLayer(
       document: editorContext.document,
       selection: editorContext.composer.selectionNotifier,
-      toolbarFocalPointLink: SuperEditorIosControlsScope.rootOf(context).toolbarFocalPoint,
+      toolbarFocalPointLink:
+          SuperEditorIosControlsScope.rootOf(context).toolbarFocalPoint,
       showDebugLeaderBounds: showDebugLeaderBounds,
     );
   }
@@ -1964,7 +2085,8 @@ class SuperEditorIosToolbarFocalPointDocumentLayerBuilder implements SuperEditor
 
 /// A [SuperEditorLayerBuilder], which builds a [IosHandlesDocumentLayer],
 /// which displays iOS-style caret and handles.
-class SuperEditorIosHandlesDocumentLayerBuilder implements SuperEditorLayerBuilder {
+class SuperEditorIosHandlesDocumentLayerBuilder
+    implements SuperEditorLayerBuilder {
   const SuperEditorIosHandlesDocumentLayerBuilder({
     this.handleColor,
     this.caretWidth,
@@ -1979,8 +2101,10 @@ class SuperEditorIosHandlesDocumentLayerBuilder implements SuperEditorLayerBuild
   final double? handleBallDiameter;
 
   @override
-  ContentLayerWidget build(BuildContext context, SuperEditorContext editContext) {
-    if (defaultTargetPlatform != TargetPlatform.iOS || SuperEditorIosControlsScope.maybeNearestOf(context) == null) {
+  ContentLayerWidget build(
+      BuildContext context, SuperEditorContext editContext) {
+    if (defaultTargetPlatform != TargetPlatform.iOS ||
+        SuperEditorIosControlsScope.maybeNearestOf(context) == null) {
       // There's no controls scope. This probably means SuperEditor is configured with
       // a non-iOS gesture mode. Build nothing.
       return const ContentLayerProxyWidget(child: EmptyBox());
@@ -2000,7 +2124,9 @@ class SuperEditorIosHandlesDocumentLayerBuilder implements SuperEditorLayerBuild
       },
       areSelectionHandlesAllowed: controlsController.areSelectionHandlesAllowed,
       handleBeingDragged: controlsController.handleBeingDragged,
-      handleColor: handleColor ?? controlsController.handleColor ?? Theme.of(context).primaryColor,
+      handleColor: handleColor ??
+          controlsController.handleColor ??
+          Theme.of(context).primaryColor,
       caretWidth: caretWidth ?? 2,
       handleBallDiameter: handleBallDiameter ?? defaultIosHandleBallDiameter,
       shouldCaretBlink: controlsController.shouldCaretBlink,

@@ -67,23 +67,31 @@ class AndroidTextFieldDragHandleSelectionStrategy {
   _SelectionModifier? _selectionModifier;
 
   /// Clients should call this method when a drag handle gesture is initially recognized.
-  void onHandlePanStart(DragStartDetails details, DocumentSelection initialSelection, HandleType handleType) {
+  void onHandlePanStart(DragStartDetails details,
+      DocumentSelection initialSelection, HandleType handleType) {
     _lastSelection = initialSelection;
 
     if (handleType == HandleType.collapsed && !_lastSelection!.isCollapsed) {
-      throw Exception("Tried to drag a collapsed Android handle but the selection is expanded.");
+      throw Exception(
+          "Tried to drag a collapsed Android handle but the selection is expanded.");
     }
     if (handleType != HandleType.collapsed && _lastSelection!.isCollapsed) {
-      throw Exception("Tried to drag an expanded Android handle but the selection is collapsed.");
+      throw Exception(
+          "Tried to drag an expanded Android handle but the selection is collapsed.");
     }
     _dragHandleType = handleType;
 
-    final isSelectionDownstream = initialSelection.hasDownstreamAffinity(_document);
+    final isSelectionDownstream =
+        initialSelection.hasDownstreamAffinity(_document);
     late final DocumentPosition selectionBoundPosition;
     if (isSelectionDownstream) {
-      selectionBoundPosition = handleType == HandleType.upstream ? initialSelection.base : initialSelection.extent;
+      selectionBoundPosition = handleType == HandleType.upstream
+          ? initialSelection.base
+          : initialSelection.extent;
     } else {
-      selectionBoundPosition = handleType == HandleType.upstream ? initialSelection.extent : initialSelection.base;
+      selectionBoundPosition = handleType == HandleType.upstream
+          ? initialSelection.extent
+          : initialSelection.base;
     }
 
     _currentFocalPoint = _docLayout.getAncestorOffsetFromDocumentOffset(
@@ -126,10 +134,13 @@ class AndroidTextFieldDragHandleSelectionStrategy {
       return;
     }
 
-    final nearestPositionTextOffset = (nearestPosition.nodePosition as TextNodePosition).offset;
-    final previousNearestPositionTextOffset = (_lastFocalPosition!.nodePosition as TextNodePosition).offset;
+    final nearestPositionTextOffset =
+        (nearestPosition.nodePosition as TextNodePosition).offset;
+    final previousNearestPositionTextOffset =
+        (_lastFocalPosition!.nodePosition as TextNodePosition).offset;
 
-    final didFocalPointStayInSameNode = _lastFocalPosition!.nodeId == nearestPosition.nodeId;
+    final didFocalPointStayInSameNode =
+        _lastFocalPosition!.nodeId == nearestPosition.nodeId;
 
     final didFocalPointMoveToDownstreamNode = _document.getAffinityBetween(
               base: _lastFocalPosition!,
@@ -146,22 +157,27 @@ class AndroidTextFieldDragHandleSelectionStrategy {
         !didFocalPointStayInSameNode;
 
     final didFocalPointMoveDownstream = didFocalPointMoveToDownstreamNode ||
-        (didFocalPointStayInSameNode && nearestPositionTextOffset > previousNearestPositionTextOffset) ||
+        (didFocalPointStayInSameNode &&
+            nearestPositionTextOffset > previousNearestPositionTextOffset) ||
         (didFocalPointStayInSameNode && details.delta.dx > 0);
 
     final didFocalPointMoveUpstream = didFocalPointMoveToUpstreamNode ||
-        (didFocalPointStayInSameNode && nearestPositionTextOffset < previousNearestPositionTextOffset) ||
+        (didFocalPointStayInSameNode &&
+            nearestPositionTextOffset < previousNearestPositionTextOffset) ||
         (didFocalPointStayInSameNode && details.delta.dx < 0);
 
     _lastFocalPosition = nearestPosition;
 
     if (_currentDragDirection == null) {
       // The user just started dragging the handle.
-      _currentDragDirection = didFocalPointMoveDownstream ? TextAffinity.downstream : TextAffinity.upstream;
+      _currentDragDirection = didFocalPointMoveDownstream
+          ? TextAffinity.downstream
+          : TextAffinity.upstream;
 
       if (_dragHandleType == HandleType.upstream && didFocalPointMoveUpstream) {
         _selectionModifier = _SelectionModifier.word;
-      } else if (_dragHandleType == HandleType.downstream && didFocalPointMoveDownstream) {
+      } else if (_dragHandleType == HandleType.downstream &&
+          didFocalPointMoveDownstream) {
         _selectionModifier = _SelectionModifier.word;
       } else {
         _selectionModifier = _SelectionModifier.character;
@@ -170,23 +186,33 @@ class AndroidTextFieldDragHandleSelectionStrategy {
       // Check if the user started dragging the handle in the opposite direction.
       late TextAffinity newDragDirection;
       if (_currentDragDirection == TextAffinity.upstream) {
-        newDragDirection = didFocalPointMoveDownstream ? TextAffinity.downstream : TextAffinity.upstream;
+        newDragDirection = didFocalPointMoveDownstream
+            ? TextAffinity.downstream
+            : TextAffinity.upstream;
       } else {
-        newDragDirection = didFocalPointMoveUpstream ? TextAffinity.upstream : TextAffinity.downstream;
+        newDragDirection = didFocalPointMoveUpstream
+            ? TextAffinity.upstream
+            : TextAffinity.downstream;
       }
 
       // Invert the drag handle type if the selection has upstream affinity.
-      final newEffectiveHandleType = _lastSelection!.hasDownstreamAffinity(_document) //
-          ? _dragHandleType!
-          : (_dragHandleType == HandleType.upstream ? HandleType.downstream : HandleType.upstream);
+      final newEffectiveHandleType =
+          _lastSelection!.hasDownstreamAffinity(_document) //
+              ? _dragHandleType!
+              : (_dragHandleType == HandleType.upstream
+                  ? HandleType.downstream
+                  : HandleType.upstream);
 
-      if (newDragDirection != _currentDragDirection || newEffectiveHandleType != _effectiveDragHandleType) {
+      if (newDragDirection != _currentDragDirection ||
+          newEffectiveHandleType != _effectiveDragHandleType) {
         _currentDragDirection = newDragDirection;
         _effectiveDragHandleType = newEffectiveHandleType;
 
-        if (_effectiveDragHandleType == HandleType.downstream && newDragDirection == TextAffinity.downstream) {
+        if (_effectiveDragHandleType == HandleType.downstream &&
+            newDragDirection == TextAffinity.downstream) {
           _selectionModifier = _SelectionModifier.word;
-        } else if (_effectiveDragHandleType == HandleType.upstream && newDragDirection == TextAffinity.upstream) {
+        } else if (_effectiveDragHandleType == HandleType.upstream &&
+            newDragDirection == TextAffinity.upstream) {
           _selectionModifier = _SelectionModifier.word;
         } else {
           _selectionModifier = _SelectionModifier.character;
@@ -196,14 +222,20 @@ class AndroidTextFieldDragHandleSelectionStrategy {
 
     final rangeToExpandSelection = _selectionModifier == _SelectionModifier.word
         ? _dragHandleType == _effectiveDragHandleType
-            ? getWordSelection(docPosition: nearestPosition, docLayout: _docLayout)
-            : _flipSelection(getWordSelection(docPosition: nearestPosition, docLayout: _docLayout)!)
+            ? getWordSelection(
+                docPosition: nearestPosition, docLayout: _docLayout)
+            : _flipSelection(getWordSelection(
+                docPosition: nearestPosition, docLayout: _docLayout)!)
         : DocumentSelection.collapsed(position: nearestPosition);
 
     if (rangeToExpandSelection != null) {
       _lastSelection = _lastSelection!.copyWith(
-        base: _dragHandleType == HandleType.upstream ? rangeToExpandSelection.base : _lastSelection!.base,
-        extent: _dragHandleType == HandleType.downstream ? rangeToExpandSelection.extent : _lastSelection!.extent,
+        base: _dragHandleType == HandleType.upstream
+            ? rangeToExpandSelection.base
+            : _lastSelection!.base,
+        extent: _dragHandleType == HandleType.downstream
+            ? rangeToExpandSelection.extent
+            : _lastSelection!.extent,
       );
       _select(_lastSelection!);
     }

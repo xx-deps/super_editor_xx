@@ -169,7 +169,8 @@ class TextBlockDeltaSerializer implements DeltaSerializer {
 
     final textByLine = textBlock.text.split("\n");
     for (int i = 0; i < textByLine.length; i += 1) {
-      _serializeLine(deltas, blockFormats, inlineEmbedDeltaSerializers, textByLine[i]);
+      _serializeLine(
+          deltas, blockFormats, inlineEmbedDeltaSerializers, textByLine[i]);
     }
 
     return true;
@@ -190,13 +191,17 @@ class TextBlockDeltaSerializer implements DeltaSerializer {
 
     for (int i = 0; i < spans.length; i += 1) {
       final span = spans[i];
-      final spanText = line.copyText(span.start, line.isNotEmpty ? span.end + 1 : span.end);
-      final spanPlainText = line.toPlainText().substring(span.start, line.isNotEmpty ? span.end + 1 : span.end);
+      final spanText =
+          line.copyText(span.start, line.isNotEmpty ? span.end + 1 : span.end);
+      final spanPlainText = line
+          .toPlainText()
+          .substring(span.start, line.isNotEmpty ? span.end + 1 : span.end);
 
       // Attempt to serialize this text span as an inline embed.
       bool didSerializeAsInlineEmbed = false;
       for (final inlineEmbedSerializer in inlineEmbedDeltaSerializers) {
-        didSerializeAsInlineEmbed = inlineEmbedSerializer.serializeText(spanPlainText, span.attributions, deltas);
+        didSerializeAsInlineEmbed = inlineEmbedSerializer.serializeText(
+            spanPlainText, span.attributions, deltas);
         if (didSerializeAsInlineEmbed) {
           // This span was successfully serialized as an inline embed. Skip remaining
           // inline embed serializers.
@@ -236,7 +241,8 @@ class TextBlockDeltaSerializer implements DeltaSerializer {
         if (item is! String) {
           // This is an inline placeholder. Try to embed it.
           for (final inlineSerializer in inlineEmbedDeltaSerializers) {
-            final didSerialize = inlineSerializer.serializeInlinePlaceholder(item, inlineAttributes, deltas);
+            final didSerialize = inlineSerializer.serializeInlinePlaceholder(
+                item, inlineAttributes, deltas);
             if (didSerialize) {
               // We successfully serialized the placeholder. We're done with this item.
               continue;
@@ -255,8 +261,11 @@ class TextBlockDeltaSerializer implements DeltaSerializer {
         );
 
         final previousDelta = deltas.operations.lastOrNull;
-        if (previousDelta != null && !previousDelta.hasBlockFormats && newDelta.canMergeWith(previousDelta)) {
-          deltas.operations[deltas.operations.length - 1] = newDelta.mergeWith(previousDelta);
+        if (previousDelta != null &&
+            !previousDelta.hasBlockFormats &&
+            newDelta.canMergeWith(previousDelta)) {
+          deltas.operations[deltas.operations.length - 1] =
+              newDelta.mergeWith(previousDelta);
           continue;
         }
 
@@ -271,10 +280,14 @@ class TextBlockDeltaSerializer implements DeltaSerializer {
 
     // We didn't have a natural trailing newline. Insert a newline as per the
     // Delta spec.
-    final newlineDelta = Operation.insert("\n", blockFormats.isNotEmpty ? blockFormats : null);
-    final previousDelta = deltas.operations.isNotEmpty ? deltas.operations[deltas.operations.length - 1] : null;
+    final newlineDelta =
+        Operation.insert("\n", blockFormats.isNotEmpty ? blockFormats : null);
+    final previousDelta = deltas.operations.isNotEmpty
+        ? deltas.operations[deltas.operations.length - 1]
+        : null;
     if (previousDelta != null && newlineDelta.canMergeWith(previousDelta)) {
-      deltas.operations[deltas.operations.length - 1] = newlineDelta.mergeWith(previousDelta);
+      deltas.operations[deltas.operations.length - 1] =
+          newlineDelta.mergeWith(previousDelta);
     } else {
       deltas.operations.add(newlineDelta);
     }
@@ -328,7 +341,8 @@ class TextBlockDeltaSerializer implements DeltaSerializer {
   /// inline text attributes, returning all attributes in a map that should be set as
   /// the "attributes" in an insertion delta.
   @protected
-  Map<String, dynamic> getInlineAttributesFor(Set<Attribution> superEditorAttributions) {
+  Map<String, dynamic> getInlineAttributesFor(
+      Set<Attribution> superEditorAttributions) {
     final attributes = <String, dynamic>{};
 
     for (final attribution in superEditorAttributions) {
@@ -357,11 +371,13 @@ class TextBlockDeltaSerializer implements DeltaSerializer {
         continue;
       }
       if (attribution is ColorAttribution) {
-        attributes["color"] = "#${attribution.color.value.toRadixString(16).substring(2)}";
+        attributes["color"] =
+            "#${attribution.color.value.toRadixString(16).substring(2)}";
         continue;
       }
       if (attribution is BackgroundColorAttribution) {
-        attributes["background"] = "#${attribution.color.value.toRadixString(16).substring(2)}";
+        attributes["background"] =
+            "#${attribution.color.value.toRadixString(16).substring(2)}";
         continue;
       }
       if (attribution is FontFamilyAttribution) {
@@ -421,7 +437,8 @@ class FunctionalDeltaSerializer implements DeltaSerializer {
   bool serialize(DocumentNode node, Delta deltas) => _delegate(node, deltas);
 }
 
-typedef DeltaSerializerDelegate = bool Function(DocumentNode node, Delta deltas);
+typedef DeltaSerializerDelegate = bool Function(
+    DocumentNode node, Delta deltas);
 
 /// Serializes some part of a [MutableDocument] to a Quill Delta document.
 ///
@@ -447,7 +464,8 @@ abstract interface class InlineEmbedDeltaSerializer {
   /// Tries to serialize the given inline [placeholder] into the given [deltas].
   ///
   /// If this serialize doesn't apply to the given [placeholder], nothing happens.
-  bool serializeInlinePlaceholder(Object placeholder, Map<String, dynamic> attributes, Delta deltas);
+  bool serializeInlinePlaceholder(
+      Object placeholder, Map<String, dynamic> attributes, Delta deltas);
 }
 
 extension DeltaSerialization on Operation {
@@ -486,7 +504,8 @@ extension DeltaSerialization on Operation {
     }
 
     // If the attributes are equivalent then we can merge the text deltas.
-    if (const DeepCollectionEquality().equals(previousDelta.attributes, attributes)) {
+    if (const DeepCollectionEquality()
+        .equals(previousDelta.attributes, attributes)) {
       return true;
     }
     if (previousDelta.attributes == null && attributes!.isEmpty) {

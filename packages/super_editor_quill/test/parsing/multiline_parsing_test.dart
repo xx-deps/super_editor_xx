@@ -14,10 +14,14 @@ void main() {
       );
 
       expect((document.getNodeAt(0)! as TextNode).text.toPlainText(), "");
-      expect((document.getNodeAt(1)! as TextNode).text.toPlainText(), "Line one");
-      expect((document.getNodeAt(2)! as TextNode).text.toPlainText(), "Line two");
-      expect((document.getNodeAt(3)! as TextNode).text.toPlainText(), "Line three");
-      expect((document.getNodeAt(4)! as TextNode).text.toPlainText(), "Line four");
+      expect(
+          (document.getNodeAt(1)! as TextNode).text.toPlainText(), "Line one");
+      expect(
+          (document.getNodeAt(2)! as TextNode).text.toPlainText(), "Line two");
+      expect((document.getNodeAt(3)! as TextNode).text.toPlainText(),
+          "Line three");
+      expect(
+          (document.getNodeAt(4)! as TextNode).text.toPlainText(), "Line four");
       expect((document.getNodeAt(5)! as TextNode).text.toPlainText(), "");
       expect((document.getNodeAt(6)! as TextNode).text.toPlainText(), "");
 
@@ -60,8 +64,12 @@ void main() {
             (document.getNodeAt(0)! as ParagraphNode).text.toPlainText(),
             "This is a blockquote\nThis is line two",
           );
-          expect((document.getNodeAt(0)! as ParagraphNode).getMetadataValue("blockType"), blockquoteAttribution);
-          expect((document.getNodeAt(1)! as ParagraphNode).text.toPlainText(), "");
+          expect(
+              (document.getNodeAt(0)! as ParagraphNode)
+                  .getMetadataValue("blockType"),
+              blockquoteAttribution);
+          expect(
+              (document.getNodeAt(1)! as ParagraphNode).text.toPlainText(), "");
           expect(document.nodeCount, 2);
         });
 
@@ -100,9 +108,16 @@ void main() {
             (document.getNodeAt(2)! as ParagraphNode).text.toPlainText(),
             "This is line two",
           );
-          expect((document.getNodeAt(0)! as ParagraphNode).getMetadataValue("blockType"), blockquoteAttribution);
-          expect((document.getNodeAt(1)! as ParagraphNode).text.toPlainText(), "");
-          expect((document.getNodeAt(2)! as ParagraphNode).getMetadataValue("blockType"), blockquoteAttribution);
+          expect(
+              (document.getNodeAt(0)! as ParagraphNode)
+                  .getMetadataValue("blockType"),
+              blockquoteAttribution);
+          expect(
+              (document.getNodeAt(1)! as ParagraphNode).text.toPlainText(), "");
+          expect(
+              (document.getNodeAt(2)! as ParagraphNode)
+                  .getMetadataValue("blockType"),
+              blockquoteAttribution);
           expect(document.nodeCount, 4);
         });
 
@@ -137,8 +152,12 @@ void main() {
             (document.getNodeAt(0)! as ParagraphNode).text.toPlainText(),
             "This is a code block\nThis is line two\nThis is line three",
           );
-          expect((document.getNodeAt(0)! as ParagraphNode).getMetadataValue("blockType"), codeAttribution);
-          expect((document.getNodeAt(1)! as ParagraphNode).text.toPlainText(), "");
+          expect(
+              (document.getNodeAt(0)! as ParagraphNode)
+                  .getMetadataValue("blockType"),
+              codeAttribution);
+          expect(
+              (document.getNodeAt(1)! as ParagraphNode).text.toPlainText(), "");
           expect(document.nodeCount, 2);
         });
 
@@ -173,9 +192,16 @@ void main() {
             (document.getNodeAt(2)! as ParagraphNode).text.toPlainText(),
             "This is line two",
           );
-          expect((document.getNodeAt(0)! as ParagraphNode).getMetadataValue("blockType"), codeAttribution);
-          expect((document.getNodeAt(1)! as ParagraphNode).text.toPlainText(), "");
-          expect((document.getNodeAt(2)! as ParagraphNode).getMetadataValue("blockType"), codeAttribution);
+          expect(
+              (document.getNodeAt(0)! as ParagraphNode)
+                  .getMetadataValue("blockType"),
+              codeAttribution);
+          expect(
+              (document.getNodeAt(1)! as ParagraphNode).text.toPlainText(), "");
+          expect(
+              (document.getNodeAt(2)! as ParagraphNode)
+                  .getMetadataValue("blockType"),
+              codeAttribution);
           expect(document.nodeCount, 4);
         });
       });

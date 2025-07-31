@@ -121,7 +121,8 @@ class ContentLayersElement extends RenderObjectElement {
   ContentLayers get widget => super.widget as ContentLayers;
 
   @override
-  RenderContentLayers get renderObject => super.renderObject as RenderContentLayers;
+  RenderContentLayers get renderObject =>
+      super.renderObject as RenderContentLayers;
 
   @override
   void mount(Element? parent, Object? newSlot) {
@@ -136,7 +137,8 @@ class ContentLayersElement extends RenderObjectElement {
       _onBuildListeners.add(_onBuildScheduled);
     }
 
-    _content = inflateWidget(widget.content(_onContentBuildScheduled), _contentSlot);
+    _content =
+        inflateWidget(widget.content(_onContentBuildScheduled), _contentSlot);
   }
 
   @override
@@ -195,7 +197,8 @@ class ContentLayersElement extends RenderObjectElement {
     SchedulerBinding.instance.scheduleFrameCallback((timeStamp) {
       contentLayersLog.finer("SCHEDULED FRAME CALLBACK");
       if (!mounted) {
-        contentLayersLog.finer("We've unmounted since the end of the frame. Fizzling.");
+        contentLayersLog
+            .finer("We've unmounted since the end of the frame. Fizzling.");
         return;
       }
 
@@ -203,7 +206,8 @@ class ContentLayersElement extends RenderObjectElement {
       final isAnyLayerDirty = _isAnyLayerDirty();
 
       if (isContentDirty && isAnyLayerDirty) {
-        contentLayersLog.fine("Marking needs build because content and at least one layer are both dirty.");
+        contentLayersLog.fine(
+            "Marking needs build because content and at least one layer are both dirty.");
         _temporarilyForgetLayers();
       }
     });
@@ -217,13 +221,15 @@ class ContentLayersElement extends RenderObjectElement {
 
     contentLayersLog.finer("Checking underlays");
     for (final underlay in _underlays) {
-      contentLayersLog.finer(() => " - Is underlay ($underlay) subtree dirty? ${_isSubtreeDirty(underlay)}");
+      contentLayersLog.finer(() =>
+          " - Is underlay ($underlay) subtree dirty? ${_isSubtreeDirty(underlay)}");
       hasDirtyElements = hasDirtyElements || _isSubtreeDirty(underlay);
     }
 
     contentLayersLog.finer("Checking overlays");
     for (final overlay in _overlays) {
-      contentLayersLog.finer(() => " - Is overlay ($overlay) subtree dirty? ${_isSubtreeDirty(overlay)}");
+      contentLayersLog.finer(() =>
+          " - Is overlay ($overlay) subtree dirty? ${_isSubtreeDirty(overlay)}");
       hasDirtyElements = hasDirtyElements || _isSubtreeDirty(overlay);
     }
 
@@ -274,25 +280,29 @@ class ContentLayersElement extends RenderObjectElement {
   /// Builds the underlays and overlays.
   void buildLayers() {
     contentLayersLog.finer("ContentLayersElement - (re)building layers");
-    final List<Element> underlays = List<Element>.filled(widget.underlays.length, _NullElement.instance);
+    final List<Element> underlays =
+        List<Element>.filled(widget.underlays.length, _NullElement.instance);
     for (int i = 0; i < underlays.length; i += 1) {
       late final Element child;
       if (i > _underlays.length - 1) {
         child = inflateWidget(widget.underlays[i](this), _UnderlaySlot(i));
       } else {
-        child = super.updateChild(_underlays[i], widget.underlays[i](this), _UnderlaySlot(i))!;
+        child = super.updateChild(
+            _underlays[i], widget.underlays[i](this), _UnderlaySlot(i))!;
       }
       underlays[i] = child;
     }
     _underlays = underlays;
 
-    final List<Element> overlays = List<Element>.filled(widget.overlays.length, _NullElement.instance);
+    final List<Element> overlays =
+        List<Element>.filled(widget.overlays.length, _NullElement.instance);
     for (int i = 0; i < overlays.length; i += 1) {
       late final Element child;
       if (i > _overlays.length - 1) {
         child = inflateWidget(widget.overlays[i](this), _OverlaySlot(i));
       } else {
-        child = super.updateChild(_overlays[i], widget.overlays[i](this), _OverlaySlot(i))!;
+        child = super.updateChild(
+            _overlays[i], widget.overlays[i](this), _OverlaySlot(i))!;
       }
       overlays[i] = child;
     }
@@ -317,7 +327,8 @@ class ContentLayersElement extends RenderObjectElement {
   /// from retaining information across builds, thus defeating the purpose of using
   /// a `StatefulWidget`.
   void _temporarilyForgetLayers() {
-    contentLayersLog.finer("ContentLayersElement - temporarily forgetting layers");
+    contentLayersLog
+        .finer("ContentLayersElement - temporarily forgetting layers");
     for (final underlay in _underlays) {
       // Calling super.forgetChild directly to avoid adding it to _forgottenChildren.
       // We're doing this to prevent the children from building, but not from
@@ -380,12 +391,15 @@ class ContentLayersElement extends RenderObjectElement {
   }
 
   @override
-  void moveRenderObjectChild(RenderObject child, Object? oldSlot, Object? newSlot) {
+  void moveRenderObjectChild(
+      RenderObject child, Object? oldSlot, Object? newSlot) {
     assert(child.parent == renderObject);
     assert(oldSlot != null);
     assert(newSlot != null);
-    assert(_isContentLayersSlot(oldSlot!), "Invalid ContentLayers slot: $oldSlot");
-    assert(_isContentLayersSlot(newSlot!), "Invalid ContentLayers slot: $newSlot");
+    assert(
+        _isContentLayersSlot(oldSlot!), "Invalid ContentLayers slot: $oldSlot");
+    assert(
+        _isContentLayersSlot(newSlot!), "Invalid ContentLayers slot: $newSlot");
 
     // Can't move renderBox children to and from content slot (which is a sliver)
     if (oldSlot == _contentSlot || newSlot == _contentSlot) {
@@ -447,12 +461,14 @@ class ContentLayersElement extends RenderObjectElement {
         FlutterError.reportError(
           FlutterErrorDetails(
             exception: FlutterError.fromParts(<DiagnosticsNode>[
-              ErrorSummary('The children of `ContentLayersElement` must each have an associated render object.'),
+              ErrorSummary(
+                  'The children of `ContentLayersElement` must each have an associated render object.'),
               ErrorHint(
                 'This typically means that the `${newChild.widget}` or its children\n'
                 'are not a subtype of `RenderObjectWidget`.',
               ),
-              newChild.describeElement('The following element does not have an associated render object'),
+              newChild.describeElement(
+                  'The following element does not have an associated render object'),
               DiagnosticsDebugCreator(DebugCreator(newChild)),
             ]),
           ),
@@ -538,7 +554,8 @@ class RenderContentLayers extends RenderSliver with RenderSliverHelpers {
     }
 
     for (int i = 0; i < _underlays.length; i += 1) {
-      childDiagnostics.add(_underlays[i].toDiagnosticsNode(name: "underlay-$i"));
+      childDiagnostics
+          .add(_underlays[i].toDiagnosticsNode(name: "underlay-$i"));
     }
     for (int i = 0; i < _overlays.length; i += 1) {
       childDiagnostics.add(_overlays[i].toDiagnosticsNode(name: "overlay-#$i"));
@@ -638,7 +655,8 @@ class RenderContentLayers extends RenderSliver with RenderSliverHelpers {
       scrollExtent: sliverLayoutGeometry.scrollExtent,
       paintExtent: sliverLayoutGeometry.paintExtent,
       maxPaintExtent: sliverLayoutGeometry.maxPaintExtent,
-      maxScrollObstructionExtent: sliverLayoutGeometry.maxScrollObstructionExtent,
+      maxScrollObstructionExtent:
+          sliverLayoutGeometry.maxScrollObstructionExtent,
       cacheExtent: sliverLayoutGeometry.cacheExtent,
       hasVisualOverflow: sliverLayoutGeometry.hasVisualOverflow,
     );
@@ -660,7 +678,8 @@ class RenderContentLayers extends RenderSliver with RenderSliverHelpers {
     });
     contentLayersLog.finer("Done building layers");
 
-    contentLayersLog.fine("Laying out layers (${_underlays.length} underlays, ${_overlays.length} overlays)");
+    contentLayersLog.fine(
+        "Laying out layers (${_underlays.length} underlays, ${_overlays.length} overlays)");
     // Layout the layers below and above the content.
     final layerConstraints = ScrollingBoxConstraints(
       minWidth: constraints.crossAxisExtent,
@@ -704,15 +723,18 @@ class RenderContentLayers extends RenderSliver with RenderSliverHelpers {
 
     // First, hit-test overlays.
     for (final overlay in _overlays) {
-      didHit =
-          hitTestBoxChild(boxResult, overlay, mainAxisPosition: mainAxisPosition, crossAxisPosition: crossAxisPosition);
+      didHit = hitTestBoxChild(boxResult, overlay,
+          mainAxisPosition: mainAxisPosition,
+          crossAxisPosition: crossAxisPosition);
       if (didHit) {
         return true;
       }
     }
 
     // Second, hit-test the content.
-    didHit = _content!.hitTest(result, mainAxisPosition: mainAxisPosition, crossAxisPosition: crossAxisPosition);
+    didHit = _content!.hitTest(result,
+        mainAxisPosition: mainAxisPosition,
+        crossAxisPosition: crossAxisPosition);
     if (didHit) {
       return true;
     }
@@ -720,7 +742,8 @@ class RenderContentLayers extends RenderSliver with RenderSliverHelpers {
     // Third, hit-test the underlays.
     for (final underlay in _underlays) {
       didHit = hitTestBoxChild(boxResult, underlay,
-          mainAxisPosition: mainAxisPosition, crossAxisPosition: crossAxisPosition);
+          mainAxisPosition: mainAxisPosition,
+          crossAxisPosition: crossAxisPosition);
       if (didHit) {
         return true;
       }
@@ -775,7 +798,8 @@ class RenderContentLayers extends RenderSliver with RenderSliverHelpers {
   }
 }
 
-bool _isContentLayersSlot(Object slot) => slot == _contentSlot || slot is _UnderlaySlot || slot is _OverlaySlot;
+bool _isContentLayersSlot(Object slot) =>
+    slot == _contentSlot || slot is _UnderlaySlot || slot is _OverlaySlot;
 
 const _contentSlot = "content";
 
@@ -820,7 +844,8 @@ class _NullWidget extends Widget {
 }
 
 /// A widget builder, which builds a [ContentLayerWidget].
-typedef ContentLayerWidgetBuilder = ContentLayerWidget Function(BuildContext context);
+typedef ContentLayerWidgetBuilder = ContentLayerWidget Function(
+    BuildContext context);
 
 /// A widget that can be displayed as a layer in a [ContentLayers] widget.
 ///
@@ -853,7 +878,8 @@ class EmptyContentLayer extends ContentLayerStatelessWidget {
   const EmptyContentLayer({super.key});
 
   @override
-  Widget doBuild(BuildContext context, Element? contentElement, RenderObject? contentLayout) {
+  Widget doBuild(BuildContext context, Element? contentElement,
+      RenderObject? contentLayout) {
     return const SizedBox();
   }
 }
@@ -874,14 +900,16 @@ class ContentLayerProxyWidget extends ContentLayerStatelessWidget {
   final Widget child;
 
   @override
-  Widget doBuild(BuildContext context, Element? contentElement, RenderObject? contentLayout) {
+  Widget doBuild(BuildContext context, Element? contentElement,
+      RenderObject? contentLayout) {
     return child;
   }
 }
 
 /// Widget that builds a stateless [ContentLayers] layer, which is given access
 /// to the ancestor [ContentLayers] content [Element] and [RenderObject].
-abstract class ContentLayerStatelessWidget extends StatelessWidget implements ContentLayerWidget {
+abstract class ContentLayerStatelessWidget extends StatelessWidget
+    implements ContentLayerWidget {
   const ContentLayerStatelessWidget({super.key});
 
   @override
@@ -894,7 +922,8 @@ abstract class ContentLayerStatelessWidget extends StatelessWidget implements Co
   }
 
   @protected
-  Widget doBuild(BuildContext context, Element? contentElement, RenderObject? contentLayout);
+  Widget doBuild(BuildContext context, Element? contentElement,
+      RenderObject? contentLayout);
 }
 
 /// Widget that builds a stateful [ContentLayers] layer, which is given access
@@ -902,7 +931,8 @@ abstract class ContentLayerStatelessWidget extends StatelessWidget implements Co
 ///
 /// See [ContentLayerState] for information about why a special type of [StatefulWidget]
 /// is required for use within [ContentLayers].
-abstract class ContentLayerStatefulWidget<LayoutDataType> extends StatefulWidget implements ContentLayerWidget {
+abstract class ContentLayerStatefulWidget<LayoutDataType> extends StatefulWidget
+    implements ContentLayerWidget {
   const ContentLayerStatefulWidget({super.key});
 
   @override
@@ -986,8 +1016,8 @@ extension on Element {
 /// A [ContentLayerState] should NOT implement [build] - that implementation is
 /// handled on your behalf, and it coordinates between [computeLayoutData] and
 /// [doBuild].
-abstract class ContentLayerState<WidgetType extends ContentLayerStatefulWidget, LayoutDataType>
-    extends State<WidgetType> {
+abstract class ContentLayerState<WidgetType extends ContentLayerStatefulWidget,
+    LayoutDataType> extends State<WidgetType> {
   @protected
   LayoutDataType? get layoutData => _layoutData;
   LayoutDataType? _layoutData;
@@ -1000,7 +1030,8 @@ abstract class ContentLayerState<WidgetType extends ContentLayerStatefulWidget, 
     final contentElement = contentLayers?._content;
     final contentLayout = contentElement?.findRenderObject();
 
-    if (contentLayers != null && !contentLayers.renderObject.contentNeedsLayout) {
+    if (contentLayers != null &&
+        !contentLayers.renderObject.contentNeedsLayout) {
       _layoutData = computeLayoutData(contentElement, contentLayout);
     }
 
@@ -1012,7 +1043,8 @@ abstract class ContentLayerState<WidgetType extends ContentLayerStatefulWidget, 
   ///
   /// Subclasses can choose what action to take when the [contentElement] or [contentLayout]
   /// are `null`, and therefore unavailable.
-  LayoutDataType? computeLayoutData(Element? contentElement, RenderObject? contentLayout);
+  LayoutDataType? computeLayoutData(
+      Element? contentElement, RenderObject? contentLayout);
 
   /// Composes and returns the subtree for this widget.
   ///
@@ -1024,4 +1056,5 @@ abstract class ContentLayerState<WidgetType extends ContentLayerStatefulWidget, 
   Widget doBuild(BuildContext context, LayoutDataType? layoutData);
 }
 
-class _ChildParentData extends SliverLogicalParentData with ContainerParentDataMixin<RenderObject> {}
+class _ChildParentData extends SliverLogicalParentData
+    with ContainerParentDataMixin<RenderObject> {}

@@ -24,7 +24,9 @@ class CreatedAtAttribution implements Attribution {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is CreatedAtAttribution && runtimeType == other.runtimeType && start == other.start;
+      other is CreatedAtAttribution &&
+          runtimeType == other.runtimeType &&
+          start == other.start;
 
   @override
   int get hashCode => start.hashCode;

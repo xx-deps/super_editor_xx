@@ -59,13 +59,15 @@ abstract class DocumentComposer with ChangeNotifier {
   /// along with the reason that the selection changed.
   ///
   /// Listen to this [Stream] when the selection reason is needed. Otherwise, use [selectionNotifier].
-  Stream<DocumentSelectionChange> get selectionChanges => _streamController.stream;
+  Stream<DocumentSelectionChange> get selectionChanges =>
+      _streamController.stream;
   late StreamController<DocumentSelectionChange> _streamController;
 
   /// Notifies whenever the current [DocumentSelection] changes.
   ///
   /// If the selection change reason is needed, use [selectionChanges] instead.
-  ValueListenable<DocumentSelection?> get selectionNotifier => _selectionNotifier;
+  ValueListenable<DocumentSelection?> get selectionNotifier =>
+      _selectionNotifier;
   final _selectionNotifier = PausableValueNotifier<DocumentSelection?>(null);
 
   /// The current composing region, which signifies spans of text
@@ -113,7 +115,8 @@ class MutableDocumentComposer extends DocumentComposer implements Editable {
   /// Sets the current [selection] for a [Document].
   ///
   /// [reason] represents what caused the selection change to happen.
-  void setSelectionWithReason(DocumentSelection? newSelection, [Object reason = SelectionReason.userInteraction]) {
+  void setSelectionWithReason(DocumentSelection? newSelection,
+      [Object reason = SelectionReason.userInteraction]) {
     if (_isInTransaction && newSelection != _latestSelectionChange?.selection) {
       _didChangeSelectionDuringTransaction = true;
     }
@@ -136,7 +139,8 @@ class MutableDocumentComposer extends DocumentComposer implements Editable {
     _composingRegion.value = newComposingRegion;
   }
 
-  void setIsInteractionMode(bool newValue) => _isInInteractionMode.value = newValue;
+  void setIsInteractionMode(bool newValue) =>
+      _isInInteractionMode.value = newValue;
 
   @override
   void onTransactionStart() {
@@ -153,7 +157,8 @@ class MutableDocumentComposer extends DocumentComposer implements Editable {
     _isInTransaction = false;
 
     _selectionNotifier.resumeNotifications();
-    if (_latestSelectionChange != null && _didChangeSelectionDuringTransaction) {
+    if (_latestSelectionChange != null &&
+        _didChangeSelectionDuringTransaction) {
       _streamController.sink.add(_latestSelectionChange!);
     }
     _composingRegion.resumeNotifications();
@@ -255,15 +260,18 @@ class PushCaretRequest extends ChangeSelectionRequest {
   PushCaretRequest(
     DocumentPosition newPosition,
     this.direction,
-  ) : super(DocumentSelection.collapsed(position: newPosition), SelectionChangeType.pushCaret,
-            SelectionReason.userInteraction);
+  ) : super(DocumentSelection.collapsed(position: newPosition),
+            SelectionChangeType.pushCaret, SelectionReason.userInteraction);
 
   final TextAffinity direction;
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      super == other && other is PushCaretRequest && runtimeType == other.runtimeType && direction == other.direction;
+      super == other &&
+          other is PushCaretRequest &&
+          runtimeType == other.runtimeType &&
+          direction == other.direction;
 
   @override
   int get hashCode => super.hashCode ^ direction.hashCode;
@@ -279,7 +287,8 @@ class PushCaretRequest extends ChangeSelectionRequest {
 class ExpandSelectionRequest extends ChangeSelectionRequest {
   const ExpandSelectionRequest(
     DocumentSelection newSelection,
-  ) : super(newSelection, SelectionChangeType.expandSelection, SelectionReason.userInteraction);
+  ) : super(newSelection, SelectionChangeType.expandSelection,
+            SelectionReason.userInteraction);
 }
 
 /// A [ChangeSelectionRequest] that represents a user's desire to collapse an existing selection
@@ -334,7 +343,11 @@ class ChangeSelectionRequest implements EditRequest {
           reason == other.reason;
 
   @override
-  int get hashCode => newSelection.hashCode ^ notifyListeners.hashCode ^ changeType.hashCode ^ reason.hashCode;
+  int get hashCode =>
+      newSelection.hashCode ^
+      notifyListeners.hashCode ^
+      changeType.hashCode ^
+      reason.hashCode;
 }
 
 /// An [EditCommand] that changes the [DocumentSelection] in the [DocumentComposer]
@@ -409,19 +422,23 @@ class SelectionChangeEvent extends EditEvent {
     }
 
     if (newSelection!.isCollapsed) {
-      buffer.write(" (at ${newSelection!.extent.nodeId} - ${newSelection!.extent.nodePosition}");
+      buffer.write(
+          " (at ${newSelection!.extent.nodeId} - ${newSelection!.extent.nodePosition}");
       return buffer.toString();
     }
 
     buffer
       ..writeln("")
-      ..writeln(" - from: ${newSelection!.base.nodeId} - ${newSelection!.base.nodePosition}")
-      ..write(" - to: ${newSelection!.extent.nodeId} - ${newSelection!.extent.nodePosition}");
+      ..writeln(
+          " - from: ${newSelection!.base.nodeId} - ${newSelection!.base.nodePosition}")
+      ..write(
+          " - to: ${newSelection!.extent.nodeId} - ${newSelection!.extent.nodePosition}");
     return buffer.toString();
   }
 
   @override
-  String toString() => "[SelectionChangeEvent] - New selection: $newSelection, change type: $changeType";
+  String toString() =>
+      "[SelectionChangeEvent] - New selection: $newSelection, change type: $changeType";
 }
 
 /// A [EditEvent] that represents a change to the user's composing region within a document.
@@ -438,7 +455,8 @@ class ComposingRegionChangeEvent extends EditEvent {
   String describe() => "Composing - ${newComposingRegion ?? "empty"}";
 
   @override
-  String toString() => "[ComposingRegionChangeEvent] - New composing region: $newComposingRegion";
+  String toString() =>
+      "[ComposingRegionChangeEvent] - New composing region: $newComposingRegion";
 }
 
 /// Represents a change of a [DocumentSelection].
@@ -458,7 +476,9 @@ class DocumentSelectionChange {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is DocumentSelectionChange && selection == other.selection && reason == other.reason;
+      other is DocumentSelectionChange &&
+          selection == other.selection &&
+          reason == other.reason;
 
   @override
   int get hashCode => (selection?.hashCode ?? 0) ^ reason.hashCode;
@@ -584,7 +604,9 @@ class ChangeInteractionModeCommand extends EditCommand {
 
   @override
   void execute(EditContext context, CommandExecutor executor) {
-    context.find<MutableDocumentComposer>(Editor.composerKey).setIsInteractionMode(isInteractionModeDesired);
+    context
+        .find<MutableDocumentComposer>(Editor.composerKey)
+        .setIsInteractionMode(isInteractionModeDesired);
   }
 }
 

@@ -13,10 +13,12 @@ class SuperKeyboardIOSBuilder extends StatefulWidget {
   final Widget Function(BuildContext, MobileWindowGeometry) builder;
 
   @override
-  State<SuperKeyboardIOSBuilder> createState() => _SuperKeyboardIOSBuilderState();
+  State<SuperKeyboardIOSBuilder> createState() =>
+      _SuperKeyboardIOSBuilderState();
 }
 
-class _SuperKeyboardIOSBuilderState extends State<SuperKeyboardIOSBuilder> implements SuperKeyboardIOSListener {
+class _SuperKeyboardIOSBuilderState extends State<SuperKeyboardIOSBuilder>
+    implements SuperKeyboardIOSListener {
   @override
   void initState() {
     super.initState();
@@ -79,15 +81,19 @@ class SuperKeyboardIOS {
   final _methodChannel = const MethodChannel('super_keyboard_ios');
 
   ValueListenable<MobileWindowGeometry> get geometry => _geometry;
-  final _geometry = ValueNotifier<MobileWindowGeometry>(const MobileWindowGeometry());
+  final _geometry =
+      ValueNotifier<MobileWindowGeometry>(const MobileWindowGeometry());
 
   final _listeners = <SuperKeyboardIOSListener>{};
-  void addListener(SuperKeyboardIOSListener listener) => _listeners.add(listener);
-  void removeListener(SuperKeyboardIOSListener listener) => _listeners.remove(listener);
+  void addListener(SuperKeyboardIOSListener listener) =>
+      _listeners.add(listener);
+  void removeListener(SuperKeyboardIOSListener listener) =>
+      _listeners.remove(listener);
 
   Future<void> _onPlatformMessage(MethodCall message) async {
     assert(() {
-      log.fine("iOS platform message: '${message.method}', args: ${message.arguments}");
+      log.fine(
+          "iOS platform message: '${message.method}', args: ${message.arguments}");
       return true;
     }());
 
@@ -97,8 +103,10 @@ class SuperKeyboardIOS {
         _geometry.value = _geometry.value.updateWith(
           MobileWindowGeometry(
             keyboardState: KeyboardState.opening,
-            keyboardHeight: (message.arguments?["keyboardHeight"] as num?)?.toDouble(),
-            bottomPadding: (message.arguments?["bottomPadding"] as num?)?.toDouble(),
+            keyboardHeight:
+                (message.arguments?["keyboardHeight"] as num?)?.toDouble(),
+            bottomPadding:
+                (message.arguments?["bottomPadding"] as num?)?.toDouble(),
           ),
         );
 
@@ -111,8 +119,10 @@ class SuperKeyboardIOS {
         _geometry.value = _geometry.value.updateWith(
           MobileWindowGeometry(
             keyboardState: KeyboardState.open,
-            keyboardHeight: (message.arguments?["keyboardHeight"] as num?)?.toDouble(),
-            bottomPadding: (message.arguments?["bottomPadding"] as num?)?.toDouble(),
+            keyboardHeight:
+                (message.arguments?["keyboardHeight"] as num?)?.toDouble(),
+            bottomPadding:
+                (message.arguments?["bottomPadding"] as num?)?.toDouble(),
           ),
         );
 
@@ -121,15 +131,18 @@ class SuperKeyboardIOS {
         }
         break;
       case "keyboardWillChangeFrame":
-        log.finest("keyboardWillChangeFrame - keyboard type: ${message.arguments['keyboardType']}");
+        log.finest(
+            "keyboardWillChangeFrame - keyboard type: ${message.arguments['keyboardType']}");
         break;
       case "keyboardWillHide":
         log.finest("keyboardWillHide");
         _geometry.value = _geometry.value.updateWith(
           MobileWindowGeometry(
             keyboardState: KeyboardState.closing,
-            keyboardHeight: (message.arguments?["keyboardHeight"] as num?)?.toDouble(),
-            bottomPadding: (message.arguments?["bottomPadding"] as num?)?.toDouble(),
+            keyboardHeight:
+                (message.arguments?["keyboardHeight"] as num?)?.toDouble(),
+            bottomPadding:
+                (message.arguments?["bottomPadding"] as num?)?.toDouble(),
           ),
         );
 
@@ -142,8 +155,10 @@ class SuperKeyboardIOS {
         _geometry.value = _geometry.value.updateWith(
           MobileWindowGeometry(
             keyboardState: KeyboardState.closed,
-            keyboardHeight: (message.arguments?["keyboardHeight"] as num?)?.toDouble(),
-            bottomPadding: (message.arguments?["bottomPadding"] as num?)?.toDouble(),
+            keyboardHeight:
+                (message.arguments?["keyboardHeight"] as num?)?.toDouble(),
+            bottomPadding:
+                (message.arguments?["bottomPadding"] as num?)?.toDouble(),
           ),
         );
 

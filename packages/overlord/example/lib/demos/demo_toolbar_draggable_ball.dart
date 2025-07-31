@@ -9,7 +9,8 @@ class ToolbarDraggableBallDemo extends StatefulWidget {
   const ToolbarDraggableBallDemo({super.key});
 
   @override
-  State<ToolbarDraggableBallDemo> createState() => _ToolbarDraggableBallDemoState();
+  State<ToolbarDraggableBallDemo> createState() =>
+      _ToolbarDraggableBallDemoState();
 }
 
 class _ToolbarDraggableBallDemoState extends State<ToolbarDraggableBallDemo> {
@@ -51,14 +52,17 @@ class _ToolbarDraggableBallDemoState extends State<ToolbarDraggableBallDemo> {
 
   /// Calculates the global offset where the menu's arrow should point.
   void _updateMenuFocalPoint() {
-    final screenBoundsBox = _screenBoundsKey.currentContext?.findRenderObject() as RenderBox?;
+    final screenBoundsBox =
+        _screenBoundsKey.currentContext?.findRenderObject() as RenderBox?;
     if (screenBoundsBox == null) {
       _globalMenuFocalPoint = Offset.zero;
       return;
     }
 
-    final focalPointInScreenBounds = _ballOffset + const Offset(_draggableBallRadius, _draggableBallRadius);
-    final globalLeaderOffset = screenBoundsBox.localToGlobal(focalPointInScreenBounds);
+    final focalPointInScreenBounds =
+        _ballOffset + const Offset(_draggableBallRadius, _draggableBallRadius);
+    final globalLeaderOffset =
+        screenBoundsBox.localToGlobal(focalPointInScreenBounds);
 
     _globalMenuFocalPoint = globalLeaderOffset;
   }

@@ -11,7 +11,8 @@ void main() {
       );
       await expectLater(
         find.byType(MaterialApp),
-        matchesGoldenFile("goldens/follower_static_initial-placement_in-bounds_center.png"),
+        matchesGoldenFile(
+            "goldens/follower_static_initial-placement_in-bounds_center.png"),
       );
     });
 
@@ -19,7 +20,8 @@ void main() {
       // Variants tests four corners of alignment.
       await _pumpBoundedFollowerScenario(
         widgetTester,
-        leaderAlignment: _CornerAlignmentBeyondBoundaryVariant.currentAlignment!,
+        leaderAlignment:
+            _CornerAlignmentBeyondBoundaryVariant.currentAlignment!,
         constrainFollowerToBoundary: true,
       );
       await expectLater(
@@ -29,11 +31,14 @@ void main() {
       );
     }, variant: const _CornerAlignmentBeyondBoundaryVariant());
 
-    testWidgets("fade out when they are entirely outside of boundary with a fade policy", (widgetTester) async {
+    testWidgets(
+        "fade out when they are entirely outside of boundary with a fade policy",
+        (widgetTester) async {
       // Variants tests four corners of alignment.
       await _pumpBoundedFollowerScenario(
         widgetTester,
-        leaderAlignment: _CornerAlignmentBeyondBoundaryVariant.currentAlignment!,
+        leaderAlignment:
+            _CornerAlignmentBeyondBoundaryVariant.currentAlignment!,
         fadeOutBeyondBoundary: true,
       );
       await expectLater(
@@ -43,11 +48,14 @@ void main() {
       );
     }, variant: const _CornerAlignmentBeyondBoundaryVariant());
 
-    testWidgets("don't fade when they partially overlap boundary with a fade policy", (widgetTester) async {
+    testWidgets(
+        "don't fade when they partially overlap boundary with a fade policy",
+        (widgetTester) async {
       // Variants tests four corners of alignment.
       await _pumpBoundedFollowerScenario(
         widgetTester,
-        leaderAlignment: _CornerAlignmentPartialOverlapVariant.currentAlignment!,
+        leaderAlignment:
+            _CornerAlignmentPartialOverlapVariant.currentAlignment!,
         fadeOutBeyondBoundary: true,
       );
 

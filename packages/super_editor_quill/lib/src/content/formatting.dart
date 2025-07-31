@@ -26,7 +26,9 @@ class NamedFontSizeAttribution implements Attribution {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is NamedFontSizeAttribution && runtimeType == other.runtimeType && fontSizeName == other.fontSizeName;
+      other is NamedFontSizeAttribution &&
+          runtimeType == other.runtimeType &&
+          fontSizeName == other.fontSizeName;
 
   @override
   int get hashCode => fontSizeName.hashCode;

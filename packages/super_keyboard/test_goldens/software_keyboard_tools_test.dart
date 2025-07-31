@@ -10,7 +10,8 @@ void main() {
         "Software Keyboard Opens/Closes",
         fileName: "keyboard-tools_keyboard-widget_opens-and-closes",
         layout: const AnimationTimelineSceneLayout(
-          rowBreakPolicy: AnimationTimelineRowBreak.beforeItemDescription("Start"),
+          rowBreakPolicy:
+              AnimationTimelineRowBreak.beforeItemDescription("Start"),
         ),
         // Size of an iPhone 16 (DIP).
         windowSize: const Size(393, 852),

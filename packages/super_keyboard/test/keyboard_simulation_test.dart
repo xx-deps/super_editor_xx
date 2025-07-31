@@ -17,7 +17,8 @@ void main() {
       );
 
       // Ensure the keyboard is closed, initially.
-      expect(SuperKeyboard.instance.mobileGeometry.value.keyboardState, KeyboardState.closed);
+      expect(SuperKeyboard.instance.mobileGeometry.value.keyboardState,
+          KeyboardState.closed);
       expect(_calculateKeyboardHeight(screenKey, contentKey), 0.0);
 
       // Focus the text field to open the keyboard.
@@ -28,15 +29,18 @@ void main() {
       //       move forward. I don't know why.
       await tester.pump(const Duration(milliseconds: 16));
       await tester.pump(const Duration(milliseconds: 16));
-      expect(SuperKeyboard.instance.mobileGeometry.value.keyboardState, KeyboardState.opening);
-      expect(_calculateKeyboardHeight(screenKey, contentKey), lessThan(_keyboardHeight));
+      expect(SuperKeyboard.instance.mobileGeometry.value.keyboardState,
+          KeyboardState.opening);
+      expect(_calculateKeyboardHeight(screenKey, contentKey),
+          lessThan(_keyboardHeight));
       expect(_calculateKeyboardHeight(screenKey, contentKey), greaterThan(0));
 
       // Let the keyboard finish opening.
       await tester.pumpAndSettle();
 
       // Ensure that the keyboard is fully open.
-      expect(SuperKeyboard.instance.mobileGeometry.value.keyboardState, KeyboardState.open);
+      expect(SuperKeyboard.instance.mobileGeometry.value.keyboardState,
+          KeyboardState.open);
       expect(_calculateKeyboardHeight(screenKey, contentKey), _keyboardHeight);
 
       // Tap outside the text field to unfocus it.
@@ -47,15 +51,18 @@ void main() {
       //       move forward. I don't know why.
       await tester.pump(const Duration(milliseconds: 16));
       await tester.pump(const Duration(milliseconds: 16));
-      expect(SuperKeyboard.instance.mobileGeometry.value.keyboardState, KeyboardState.closing);
-      expect(_calculateKeyboardHeight(screenKey, contentKey), lessThan(_keyboardHeight));
+      expect(SuperKeyboard.instance.mobileGeometry.value.keyboardState,
+          KeyboardState.closing);
+      expect(_calculateKeyboardHeight(screenKey, contentKey),
+          lessThan(_keyboardHeight));
       expect(_calculateKeyboardHeight(screenKey, contentKey), greaterThan(0));
 
       // Let the keyboard finish closing.
       await tester.pumpAndSettle();
 
       // Ensure that the keyboard is fully closed.
-      expect(SuperKeyboard.instance.mobileGeometry.value.keyboardState, KeyboardState.closed);
+      expect(SuperKeyboard.instance.mobileGeometry.value.keyboardState,
+          KeyboardState.closed);
       expect(_calculateKeyboardHeight(screenKey, contentKey), 0.0);
     });
 

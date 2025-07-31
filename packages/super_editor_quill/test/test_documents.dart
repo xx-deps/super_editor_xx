@@ -170,18 +170,46 @@ MutableDocument createAllTextStylesSuperEditorDocument() {
           "Samples of styles: bold, italics, underline, strikethrough, text color, background color, font change, link",
           AttributedSpans(
             attributions: [
-              const SpanMarker(attribution: boldAttribution, offset: 19, markerType: SpanMarkerType.start),
-              const SpanMarker(attribution: boldAttribution, offset: 22, markerType: SpanMarkerType.end),
-              const SpanMarker(attribution: italicsAttribution, offset: 25, markerType: SpanMarkerType.start),
-              const SpanMarker(attribution: italicsAttribution, offset: 31, markerType: SpanMarkerType.end),
-              const SpanMarker(attribution: underlineAttribution, offset: 34, markerType: SpanMarkerType.start),
-              const SpanMarker(attribution: underlineAttribution, offset: 42, markerType: SpanMarkerType.end),
-              const SpanMarker(attribution: strikethroughAttribution, offset: 45, markerType: SpanMarkerType.start),
-              const SpanMarker(attribution: strikethroughAttribution, offset: 57, markerType: SpanMarkerType.end),
               const SpanMarker(
-                  attribution: ColorAttribution(Color(0xFFe60000)), offset: 60, markerType: SpanMarkerType.start),
+                  attribution: boldAttribution,
+                  offset: 19,
+                  markerType: SpanMarkerType.start),
               const SpanMarker(
-                  attribution: ColorAttribution(Color(0xFFe60000)), offset: 69, markerType: SpanMarkerType.end),
+                  attribution: boldAttribution,
+                  offset: 22,
+                  markerType: SpanMarkerType.end),
+              const SpanMarker(
+                  attribution: italicsAttribution,
+                  offset: 25,
+                  markerType: SpanMarkerType.start),
+              const SpanMarker(
+                  attribution: italicsAttribution,
+                  offset: 31,
+                  markerType: SpanMarkerType.end),
+              const SpanMarker(
+                  attribution: underlineAttribution,
+                  offset: 34,
+                  markerType: SpanMarkerType.start),
+              const SpanMarker(
+                  attribution: underlineAttribution,
+                  offset: 42,
+                  markerType: SpanMarkerType.end),
+              const SpanMarker(
+                  attribution: strikethroughAttribution,
+                  offset: 45,
+                  markerType: SpanMarkerType.start),
+              const SpanMarker(
+                  attribution: strikethroughAttribution,
+                  offset: 57,
+                  markerType: SpanMarkerType.end),
+              const SpanMarker(
+                  attribution: ColorAttribution(Color(0xFFe60000)),
+                  offset: 60,
+                  markerType: SpanMarkerType.start),
+              const SpanMarker(
+                  attribution: ColorAttribution(Color(0xFFe60000)),
+                  offset: 69,
+                  markerType: SpanMarkerType.end),
               const SpanMarker(
                   attribution: BackgroundColorAttribution(Color(0xFFe60000)),
                   offset: 72,
@@ -191,33 +219,75 @@ MutableDocument createAllTextStylesSuperEditorDocument() {
                   offset: 87,
                   markerType: SpanMarkerType.end),
               const SpanMarker(
-                  attribution: FontFamilyAttribution("serif"), offset: 90, markerType: SpanMarkerType.start),
+                  attribution: FontFamilyAttribution("serif"),
+                  offset: 90,
+                  markerType: SpanMarkerType.start),
               const SpanMarker(
-                  attribution: FontFamilyAttribution("serif"), offset: 100, markerType: SpanMarkerType.end),
+                  attribution: FontFamilyAttribution("serif"),
+                  offset: 100,
+                  markerType: SpanMarkerType.end),
               const SpanMarker(
-                  attribution: LinkAttribution("google.com"), offset: 103, markerType: SpanMarkerType.start),
-              const SpanMarker(attribution: LinkAttribution("google.com"), offset: 106, markerType: SpanMarkerType.end),
+                  attribution: LinkAttribution("google.com"),
+                  offset: 103,
+                  markerType: SpanMarkerType.start),
+              const SpanMarker(
+                  attribution: LinkAttribution("google.com"),
+                  offset: 106,
+                  markerType: SpanMarkerType.end),
             ],
           ),
         ),
       ),
       ParagraphNode(id: "3", text: AttributedText("")),
       ParagraphNode(id: "4", text: AttributedText("Left aligned")),
-      ParagraphNode(id: "5", text: AttributedText("Center aligned"), metadata: const {"textAlign": "center"}),
-      ParagraphNode(id: "6", text: AttributedText("Right aligned"), metadata: const {"textAlign": "right"}),
-      ParagraphNode(id: "7", text: AttributedText("Justified"), metadata: const {"textAlign": "justify"}),
+      ParagraphNode(
+          id: "5",
+          text: AttributedText("Center aligned"),
+          metadata: const {"textAlign": "center"}),
+      ParagraphNode(
+          id: "6",
+          text: AttributedText("Right aligned"),
+          metadata: const {"textAlign": "right"}),
+      ParagraphNode(
+          id: "7",
+          text: AttributedText("Justified"),
+          metadata: const {"textAlign": "justify"}),
       ParagraphNode(id: "8", text: AttributedText("")),
-      ListItemNode(id: "9", itemType: ListItemType.ordered, text: AttributedText("Ordered item 1")),
-      ListItemNode(id: "10", itemType: ListItemType.ordered, text: AttributedText("Ordered item 2")),
+      ListItemNode(
+          id: "9",
+          itemType: ListItemType.ordered,
+          text: AttributedText("Ordered item 1")),
+      ListItemNode(
+          id: "10",
+          itemType: ListItemType.ordered,
+          text: AttributedText("Ordered item 2")),
       ParagraphNode(id: "11", text: AttributedText("")),
-      ListItemNode(id: "12", itemType: ListItemType.unordered, text: AttributedText("Unordered item 1")),
-      ListItemNode(id: "13", itemType: ListItemType.unordered, text: AttributedText("Unordered item 2")),
+      ListItemNode(
+          id: "12",
+          itemType: ListItemType.unordered,
+          text: AttributedText("Unordered item 1")),
+      ListItemNode(
+          id: "13",
+          itemType: ListItemType.unordered,
+          text: AttributedText("Unordered item 2")),
       ParagraphNode(id: "14", text: AttributedText("")),
-      TaskNode(id: "15", text: AttributedText("I'm a task that's incomplete"), isComplete: false),
-      TaskNode(id: "16", text: AttributedText("I'm a task that's complete"), isComplete: true),
+      TaskNode(
+          id: "15",
+          text: AttributedText("I'm a task that's incomplete"),
+          isComplete: false),
+      TaskNode(
+          id: "16",
+          text: AttributedText("I'm a task that's complete"),
+          isComplete: true),
       ParagraphNode(id: "17", text: AttributedText("")),
-      ParagraphNode(id: "18", text: AttributedText("I'm an indented paragraph at level 1"), indent: 1),
-      ParagraphNode(id: "19", text: AttributedText("I'm a paragraph indented at level 2"), indent: 2),
+      ParagraphNode(
+          id: "18",
+          text: AttributedText("I'm an indented paragraph at level 1"),
+          indent: 1),
+      ParagraphNode(
+          id: "19",
+          text: AttributedText("I'm a paragraph indented at level 2"),
+          indent: 2),
       ParagraphNode(id: "20", text: AttributedText("")),
       ParagraphNode(
         id: "21",
@@ -225,8 +295,14 @@ MutableDocument createAllTextStylesSuperEditorDocument() {
           "Some contentThis is a subscript",
           AttributedSpans(
             attributions: [
-              const SpanMarker(attribution: subscriptAttribution, offset: 12, markerType: SpanMarkerType.start),
-              const SpanMarker(attribution: subscriptAttribution, offset: 30, markerType: SpanMarkerType.end),
+              const SpanMarker(
+                  attribution: subscriptAttribution,
+                  offset: 12,
+                  markerType: SpanMarkerType.start),
+              const SpanMarker(
+                  attribution: subscriptAttribution,
+                  offset: 30,
+                  markerType: SpanMarkerType.end),
             ],
           ),
         ),
@@ -237,8 +313,14 @@ MutableDocument createAllTextStylesSuperEditorDocument() {
           "Some contentThis is a superscript",
           AttributedSpans(
             attributions: [
-              const SpanMarker(attribution: superscriptAttribution, offset: 12, markerType: SpanMarkerType.start),
-              const SpanMarker(attribution: superscriptAttribution, offset: 32, markerType: SpanMarkerType.end),
+              const SpanMarker(
+                  attribution: superscriptAttribution,
+                  offset: 12,
+                  markerType: SpanMarkerType.start),
+              const SpanMarker(
+                  attribution: superscriptAttribution,
+                  offset: 32,
+                  markerType: SpanMarkerType.end),
             ],
           ),
         ),
@@ -251,9 +333,13 @@ MutableDocument createAllTextStylesSuperEditorDocument() {
           AttributedSpans(
             attributions: [
               const SpanMarker(
-                  attribution: NamedFontSizeAttribution("huge"), offset: 0, markerType: SpanMarkerType.start),
+                  attribution: NamedFontSizeAttribution("huge"),
+                  offset: 0,
+                  markerType: SpanMarkerType.start),
               const SpanMarker(
-                  attribution: NamedFontSizeAttribution("huge"), offset: 3, markerType: SpanMarkerType.end),
+                  attribution: NamedFontSizeAttribution("huge"),
+                  offset: 3,
+                  markerType: SpanMarkerType.end),
             ],
           ),
         ),
@@ -265,9 +351,13 @@ MutableDocument createAllTextStylesSuperEditorDocument() {
           AttributedSpans(
             attributions: [
               const SpanMarker(
-                  attribution: NamedFontSizeAttribution("large"), offset: 0, markerType: SpanMarkerType.start),
+                  attribution: NamedFontSizeAttribution("large"),
+                  offset: 0,
+                  markerType: SpanMarkerType.start),
               const SpanMarker(
-                  attribution: NamedFontSizeAttribution("large"), offset: 4, markerType: SpanMarkerType.end),
+                  attribution: NamedFontSizeAttribution("large"),
+                  offset: 4,
+                  markerType: SpanMarkerType.end),
             ],
           ),
         ),
@@ -279,9 +369,13 @@ MutableDocument createAllTextStylesSuperEditorDocument() {
           AttributedSpans(
             attributions: [
               const SpanMarker(
-                  attribution: NamedFontSizeAttribution("small"), offset: 0, markerType: SpanMarkerType.start),
+                  attribution: NamedFontSizeAttribution("small"),
+                  offset: 0,
+                  markerType: SpanMarkerType.start),
               const SpanMarker(
-                  attribution: NamedFontSizeAttribution("small"), offset: 4, markerType: SpanMarkerType.end),
+                  attribution: NamedFontSizeAttribution("small"),
+                  offset: 4,
+                  markerType: SpanMarkerType.end),
             ],
           ),
         ),

@@ -12,7 +12,8 @@ ExecutionInstruction pasteMarkdownOnCmdAndCtrlV({
     return ExecutionInstruction.continueExecution;
   }
 
-  if (!keyEvent.isPrimaryShortcutKeyPressed || keyEvent.logicalKey != LogicalKeyboardKey.keyV) {
+  if (!keyEvent.isPrimaryShortcutKeyPressed ||
+      keyEvent.logicalKey != LogicalKeyboardKey.keyV) {
     return ExecutionInstruction.continueExecution;
   }
   if (editContext.composer.selection == null) {
@@ -42,7 +43,8 @@ Future<void> pasteMarkdown({
 }) async {
   // Delete all currently selected content.
   if (!composer.selection!.isCollapsed) {
-    final pastePosition = CommonEditorOperations.getDocumentPositionAfterExpandedDeletion(
+    final pastePosition =
+        CommonEditorOperations.getDocumentPositionAfterExpandedDeletion(
       document: document,
       selection: composer.selection!,
     );

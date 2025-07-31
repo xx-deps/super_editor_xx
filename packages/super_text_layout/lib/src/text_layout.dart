@@ -99,7 +99,8 @@ abstract class TextLayout {
 
   /// Returns a [TextSelection] that surrounds the given [startingPosition] and expands
   /// outward until the given [expansion] chooses to stop expanding.
-  TextSelection expandSelection(TextPosition startingPosition, TextExpansion expansion, TextAffinity affinity);
+  TextSelection expandSelection(TextPosition startingPosition,
+      TextExpansion expansion, TextAffinity affinity);
 }
 
 /// A block of text (probably a widget's State object) that includes a
@@ -134,7 +135,8 @@ abstract mixin class ProseTextBlock {
 /// declarations to declare their [State] type without needing access to every
 /// different widget's [State] class, so long as any such widget's [State] class
 /// extends this class.
-abstract class ProseTextState<T extends StatefulWidget> extends State<T> with ProseTextBlock {}
+abstract class ProseTextState<T extends StatefulWidget> extends State<T>
+    with ProseTextBlock {}
 
 /// A [TextLayout] that includes queries that pertain specifically to
 /// prose-style text, i.e., regular human-to-human text - not code,
@@ -155,14 +157,17 @@ abstract class ProseTextLayout extends TextLayout {
 
 /// Function that expands from a given [startingPosition] to an expanded
 /// [TextSelection], based on some expansion decision behavior.
-typedef TextExpansion = TextSelection Function(String text, TextPosition startingPosition, TextAffinity affinity);
+typedef TextExpansion = TextSelection Function(
+    String text, TextPosition startingPosition, TextAffinity affinity);
 
 /// [TextExpansion] function that expands from [startingPosition] in both directions
 /// to select a single paragraph.
-TextSelection paragraphExpansionFilter(String text, TextPosition startingPosition, TextAffinity affinity) {
+TextSelection paragraphExpansionFilter(
+    String text, TextPosition startingPosition, TextAffinity affinity) {
   // If the given position falls directly on a newline then return
   // just the newline character as the paragraph selection.
-  if (startingPosition.offset < text.length && text[startingPosition.offset] == '\n') {
+  if (startingPosition.offset < text.length &&
+      text[startingPosition.offset] == '\n') {
     return TextSelection.collapsed(offset: startingPosition.offset);
   }
 
@@ -256,7 +261,8 @@ class RenderParagraphProseTextLayout implements ProseTextLayout {
     // If no text is currently displayed, we can't use a character box
     // to measure, but we may be able to use related metrics.
     if (_textLength == 0) {
-      final estimatedLineHeight = _renderParagraph.getFullHeightForCaret(position);
+      final estimatedLineHeight =
+          _renderParagraph.getFullHeightForCaret(position);
       return estimatedLineHeight * lineHeightMultiplier;
     }
 
@@ -311,7 +317,8 @@ class RenderParagraphProseTextLayout implements ProseTextLayout {
       // character caret height instead of the one computed for given position (which is smaller than
       // it should be, due to the bug). Since the position sits after the last character, the upstream
       // character is the space itself.
-      return _renderParagraph.getFullHeightForCaret(TextPosition(offset: _textLength - 1));
+      return _renderParagraph
+          .getFullHeightForCaret(TextPosition(offset: _textLength - 1));
     }
 
     return _renderParagraph.getFullHeightForCaret(position);
@@ -342,12 +349,15 @@ class RenderParagraphProseTextLayout implements ProseTextLayout {
 
     final plainText = _richText.toPlainText();
     if (plainText.isEmpty) {
-      final lineHeightEstimate = _renderParagraph.getFullHeightForCaret(const TextPosition(offset: 0));
+      final lineHeightEstimate =
+          _renderParagraph.getFullHeightForCaret(const TextPosition(offset: 0));
       return TextBox.fromLTRBD(0, 0, 0, lineHeightEstimate, TextDirection.ltr);
     }
 
     // Ensure that the given TextPosition does not exceed available text length.
-    var characterPosition = position.offset >= plainText.length ? TextPosition(offset: plainText.length - 1) : position;
+    var characterPosition = position.offset >= plainText.length
+        ? TextPosition(offset: plainText.length - 1)
+        : position;
 
     var boxes = _renderParagraph.getBoxesForSelection(TextSelection(
       baseOffset: characterPosition.offset,
@@ -400,7 +410,8 @@ class RenderParagraphProseTextLayout implements ProseTextLayout {
     // Note: add half the line height to the current offset to help deal with
     //       line heights that aren't accurate.
     final positionOffset =
-        renderParagraph.getOffsetForCaret(currentPosition, Rect.zero) + Offset(0, estimatedLineHeight / 2);
+        renderParagraph.getOffsetForCaret(currentPosition, Rect.zero) +
+            Offset(0, estimatedLineHeight / 2);
     final endOfLineOffset = Offset(0, positionOffset.dy);
     return renderParagraph.getPositionForOffset(endOfLineOffset);
   }
@@ -416,8 +427,10 @@ class RenderParagraphProseTextLayout implements ProseTextLayout {
     // Note: add half the line height to the current offset to help deal with
     //       line heights that aren't accurate.
     final positionOffset =
-        renderParagraph.getOffsetForCaret(currentPosition, Rect.zero) + Offset(0, estimatedLineHeight / 2);
-    final endOfLineOffset = Offset(renderParagraph.size.width, positionOffset.dy);
+        renderParagraph.getOffsetForCaret(currentPosition, Rect.zero) +
+            Offset(0, estimatedLineHeight / 2);
+    final endOfLineOffset =
+        Offset(renderParagraph.size.width, positionOffset.dy);
     return renderParagraph.getPositionForOffset(endOfLineOffset);
   }
 
@@ -433,7 +446,8 @@ class RenderParagraphProseTextLayout implements ProseTextLayout {
     // Note: add half the line height to the current offset to help deal with
     //       line heights that aren't accurate.
     final currentSelectionOffset =
-        renderParagraph.getOffsetForCaret(currentPosition, Rect.zero) + Offset(0, lineHeight / 2);
+        renderParagraph.getOffsetForCaret(currentPosition, Rect.zero) +
+            Offset(0, lineHeight / 2);
     final oneLineUpOffset = currentSelectionOffset - Offset(0, lineHeight);
 
     if (oneLineUpOffset.dy < 0) {
@@ -456,7 +470,8 @@ class RenderParagraphProseTextLayout implements ProseTextLayout {
     // Note: add half the line height to the current offset to help deal with
     //       line heights that aren't accurate.
     final currentSelectionOffset =
-        renderParagraph.getOffsetForCaret(currentPosition, Rect.zero) + Offset(0, lineHeight / 2);
+        renderParagraph.getOffsetForCaret(currentPosition, Rect.zero) +
+            Offset(0, lineHeight / 2);
     final oneLineDownOffset = currentSelectionOffset + Offset(0, lineHeight);
 
     if (oneLineDownOffset.dy > renderParagraph.size.height) {
@@ -488,7 +503,8 @@ class RenderParagraphProseTextLayout implements ProseTextLayout {
   }
 
   @override
-  TextSelection expandSelection(TextPosition position, TextExpansion expansion, TextAffinity affinity) {
+  TextSelection expandSelection(
+      TextPosition position, TextExpansion expansion, TextAffinity affinity) {
     return expansion(_richText.toPlainText(), position, affinity);
   }
 

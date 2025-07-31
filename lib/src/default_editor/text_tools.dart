@@ -36,8 +36,10 @@ DocumentSelection? getWordSelection({
 
   // Create a new TextNodePosition to ensure that we're searching with downstream affinity, for consistent results.
   final searchPosition = TextNodePosition(offset: nodePosition.offset);
-  final TextSelection wordTextSelection = (component as TextComposable).getWordSelectionAt(searchPosition);
-  final wordNodeSelection = TextNodeSelection.fromTextSelection(wordTextSelection);
+  final TextSelection wordTextSelection =
+      (component as TextComposable).getWordSelectionAt(searchPosition);
+  final wordNodeSelection =
+      TextNodeSelection.fromTextSelection(wordTextSelection);
 
   _log.log('getWordSelection', ' - word selection: $wordNodeSelection');
   return DocumentSelection(
@@ -101,7 +103,8 @@ DocumentSelection? getParagraphSelection({
     return null;
   }
 
-  final paragraphNodeSelection = (component as TextComposable).getContiguousTextSelectionAt(nodePosition);
+  final paragraphNodeSelection =
+      (component as TextComposable).getContiguousTextSelectionAt(nodePosition);
 
   return DocumentSelection(
     base: DocumentPosition(
@@ -150,7 +153,8 @@ final RegExp _rtlRegExp = RegExp(r'[\u0591-\u07FF\uFB1D-\uFDFD\uFE70-\uFEFC]');
 TextDirection getParagraphDirection(String text) {
   text = text.trim();
 
-  if (text.isNotEmpty && _rtlRegExp.hasMatch(String.fromCharCode(text.runes.first))) {
+  if (text.isNotEmpty &&
+      _rtlRegExp.hasMatch(String.fromCharCode(text.runes.first))) {
     return TextDirection.rtl;
   } else {
     return TextDirection.ltr;

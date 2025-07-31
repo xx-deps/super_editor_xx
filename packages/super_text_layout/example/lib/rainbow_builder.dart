@@ -15,7 +15,8 @@ class RainbowBuilder extends StatefulWidget {
   State<RainbowBuilder> createState() => _RainbowBuilderState();
 }
 
-class _RainbowBuilderState extends State<RainbowBuilder> with SingleTickerProviderStateMixin {
+class _RainbowBuilderState extends State<RainbowBuilder>
+    with SingleTickerProviderStateMixin {
   static const _colorDegreesPerSecond = 60.0;
 
   late final Ticker _ticker;

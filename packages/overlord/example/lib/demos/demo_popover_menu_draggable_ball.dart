@@ -9,10 +9,12 @@ class PopoverMenuDraggableBallDemo extends StatefulWidget {
   const PopoverMenuDraggableBallDemo({super.key});
 
   @override
-  State<PopoverMenuDraggableBallDemo> createState() => _PopoverMenuDraggableBallDemoState();
+  State<PopoverMenuDraggableBallDemo> createState() =>
+      _PopoverMenuDraggableBallDemoState();
 }
 
-class _PopoverMenuDraggableBallDemoState extends State<PopoverMenuDraggableBallDemo> {
+class _PopoverMenuDraggableBallDemoState
+    extends State<PopoverMenuDraggableBallDemo> {
   static const double _menuWidth = 100;
   static const double _draggableBallRadius = 50.0;
 
@@ -52,14 +54,17 @@ class _PopoverMenuDraggableBallDemoState extends State<PopoverMenuDraggableBallD
 
   /// Calculates the global offset where the menu's arrow should point.
   void _updateMenuFocalPoint() {
-    final screenBoundsBox = _screenBoundsKey.currentContext?.findRenderObject() as RenderBox?;
+    final screenBoundsBox =
+        _screenBoundsKey.currentContext?.findRenderObject() as RenderBox?;
     if (screenBoundsBox == null) {
       _globalMenuFocalPoint = Offset.zero;
       return;
     }
 
-    final focalPointInScreenBounds = _draggableOffset + const Offset(_draggableBallRadius, _draggableBallRadius);
-    final globalLeaderOffset = screenBoundsBox.localToGlobal(focalPointInScreenBounds);
+    final focalPointInScreenBounds = _draggableOffset +
+        const Offset(_draggableBallRadius, _draggableBallRadius);
+    final globalLeaderOffset =
+        screenBoundsBox.localToGlobal(focalPointInScreenBounds);
 
     _globalMenuFocalPoint = globalLeaderOffset;
   }

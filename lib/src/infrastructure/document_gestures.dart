@@ -26,7 +26,10 @@ class AxisOffset {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is AxisOffset && runtimeType == other.runtimeType && leading == other.leading && trailing == other.trailing;
+      other is AxisOffset &&
+          runtimeType == other.runtimeType &&
+          leading == other.leading &&
+          trailing == other.trailing;
 
   @override
   int get hashCode => leading.hashCode ^ trailing.hashCode;

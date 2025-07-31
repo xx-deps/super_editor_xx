@@ -85,7 +85,8 @@ class LeaderLink with ChangeNotifier {
     }
 
     final leaderOriginOnScreenVec = leaderToScreen!.transform3(Vector3.zero());
-    final leaderOriginOnScreen = Offset(leaderOriginOnScreenVec.x, leaderOriginOnScreenVec.y);
+    final leaderOriginOnScreen =
+        Offset(leaderOriginOnScreenVec.x, leaderOriginOnScreenVec.y);
     final offsetInLeader = alignment.alongSize(leaderSize! * scale!);
     return leaderOriginOnScreen + offsetInLeader;
   }
@@ -108,7 +109,8 @@ class LeaderLink with ChangeNotifier {
 
   @override
   void notifyListeners() {
-    if (WidgetsBinding.instance.schedulerPhase == SchedulerPhase.persistentCallbacks) {
+    if (WidgetsBinding.instance.schedulerPhase ==
+        SchedulerPhase.persistentCallbacks) {
       // We're in the middle of a layout and paint phase. Notify listeners
       // at the end of the frame.
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
@@ -153,7 +155,8 @@ class LeaderLink with ChangeNotifier {
   }
 
   @override
-  String toString() => '${describeIdentity(this)}(${leader != null ? "<linked>" : "<dangling>"})';
+  String toString() =>
+      '${describeIdentity(this)}(${leader != null ? "<linked>" : "<dangling>"})';
 }
 
 /// A handle provided by [LeaderLink.registerFollower] to a calling

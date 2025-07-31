@@ -48,7 +48,8 @@ void main() {
       await screenMatchesGolden(tester, "TextSelectionLayer_partial-selection");
     });
 
-    testGoldensOnAndroid("paints an empty highlight when text is empty", (tester) async {
+    testGoldensOnAndroid("paints an empty highlight when text is empty",
+        (tester) async {
       await pumpEmptySuperText(
         tester,
         beneathBuilder: (context, textLayout) {
@@ -59,10 +60,12 @@ void main() {
         },
       );
 
-      await screenMatchesGolden(tester, "TextSelectionLayer_small-highlight-when-empty");
+      await screenMatchesGolden(
+          tester, "TextSelectionLayer_small-highlight-when-empty");
     });
 
-    testGoldensOnAndroid("paints no selection when text is empty", (tester) async {
+    testGoldensOnAndroid("paints no selection when text is empty",
+        (tester) async {
       await pumpEmptySuperText(
         tester,
         beneathBuilder: (context, textLayout) {
@@ -74,7 +77,8 @@ void main() {
         },
       );
 
-      await screenMatchesGolden(tester, "TextSelectionLayer_no-selection-when-empty");
+      await screenMatchesGolden(
+          tester, "TextSelectionLayer_no-selection-when-empty");
     });
   });
 
@@ -99,7 +103,8 @@ void main() {
         },
       );
 
-      await screenMatchesGolden(tester, "TextSelectionLayer_full-selection-border-radius");
+      await screenMatchesGolden(
+          tester, "TextSelectionLayer_full-selection-border-radius");
     });
 
     testGoldensOnAndroid("paints a partial text selection", (tester) async {
@@ -117,10 +122,12 @@ void main() {
         },
       );
 
-      await screenMatchesGolden(tester, "TextSelectionLayer_partial-selection-border-radius");
+      await screenMatchesGolden(
+          tester, "TextSelectionLayer_partial-selection-border-radius");
     });
 
-    testGoldensOnAndroid("paints an empty highlight when text is empty", (tester) async {
+    testGoldensOnAndroid("paints an empty highlight when text is empty",
+        (tester) async {
       await pumpEmptySuperText(
         tester,
         beneathBuilder: (context, textLayout) {
@@ -131,10 +138,12 @@ void main() {
         },
       );
 
-      await screenMatchesGolden(tester, "TextSelectionLayer_small-highlight-when-empty-border-radius");
+      await screenMatchesGolden(tester,
+          "TextSelectionLayer_small-highlight-when-empty-border-radius");
     });
 
-    testGoldensOnAndroid("paints no selection when text is empty", (tester) async {
+    testGoldensOnAndroid("paints no selection when text is empty",
+        (tester) async {
       await pumpEmptySuperText(
         tester,
         beneathBuilder: (context, textLayout) {
@@ -146,7 +155,8 @@ void main() {
         },
       );
 
-      await screenMatchesGolden(tester, "TextSelectionLayer_no-selection-when-empty-border-radius");
+      await screenMatchesGolden(
+          tester, "TextSelectionLayer_no-selection-when-empty-border-radius");
     });
   });
 }

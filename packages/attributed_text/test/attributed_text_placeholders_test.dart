@@ -273,8 +273,14 @@ void main() {
           'Hello world',
           AttributedSpans(
             attributions: [
-              const SpanMarker(attribution: ExpectedSpans.bold, offset: 0, markerType: SpanMarkerType.start),
-              const SpanMarker(attribution: ExpectedSpans.bold, offset: 12, markerType: SpanMarkerType.end),
+              const SpanMarker(
+                  attribution: ExpectedSpans.bold,
+                  offset: 0,
+                  markerType: SpanMarkerType.start),
+              const SpanMarker(
+                  attribution: ExpectedSpans.bold,
+                  offset: 12,
+                  markerType: SpanMarkerType.end),
             ],
           ),
           {
@@ -289,7 +295,8 @@ void main() {
         expect(
           ranges,
           [
-            const AttributionSpan(attribution: ExpectedSpans.bold, start: 0, end: 12),
+            const AttributionSpan(
+                attribution: ExpectedSpans.bold, start: 0, end: 12),
           ],
         );
       });
@@ -302,8 +309,14 @@ void main() {
               "",
               AttributedSpans(
                 attributions: const [
-                  SpanMarker(attribution: _bold, offset: 0, markerType: SpanMarkerType.start),
-                  SpanMarker(attribution: _bold, offset: 0, markerType: SpanMarkerType.end),
+                  SpanMarker(
+                      attribution: _bold,
+                      offset: 0,
+                      markerType: SpanMarkerType.start),
+                  SpanMarker(
+                      attribution: _bold,
+                      offset: 0,
+                      markerType: SpanMarkerType.end),
                 ],
               ),
               {
@@ -313,8 +326,14 @@ void main() {
               "",
               AttributedSpans(
                 attributions: const [
-                  SpanMarker(attribution: _bold, offset: 0, markerType: SpanMarkerType.start),
-                  SpanMarker(attribution: _bold, offset: 0, markerType: SpanMarkerType.end),
+                  SpanMarker(
+                      attribution: _bold,
+                      offset: 0,
+                      markerType: SpanMarkerType.start),
+                  SpanMarker(
+                      attribution: _bold,
+                      offset: 0,
+                      markerType: SpanMarkerType.end),
                 ],
               ),
               {
@@ -329,8 +348,14 @@ void main() {
               "",
               AttributedSpans(
                 attributions: const [
-                  SpanMarker(attribution: _bold, offset: 1, markerType: SpanMarkerType.start),
-                  SpanMarker(attribution: _bold, offset: 2, markerType: SpanMarkerType.end),
+                  SpanMarker(
+                      attribution: _bold,
+                      offset: 1,
+                      markerType: SpanMarkerType.start),
+                  SpanMarker(
+                      attribution: _bold,
+                      offset: 2,
+                      markerType: SpanMarkerType.end),
                 ],
               ),
               {
@@ -342,8 +367,14 @@ void main() {
               "",
               AttributedSpans(
                 attributions: const [
-                  SpanMarker(attribution: _bold, offset: 1, markerType: SpanMarkerType.start),
-                  SpanMarker(attribution: _bold, offset: 2, markerType: SpanMarkerType.end),
+                  SpanMarker(
+                      attribution: _bold,
+                      offset: 1,
+                      markerType: SpanMarkerType.start),
+                  SpanMarker(
+                      attribution: _bold,
+                      offset: 2,
+                      markerType: SpanMarkerType.end),
                 ],
               ),
               {
@@ -360,8 +391,14 @@ void main() {
               "Hello, world!",
               AttributedSpans(
                 attributions: const [
-                  SpanMarker(attribution: _bold, offset: 0, markerType: SpanMarkerType.start),
-                  SpanMarker(attribution: _bold, offset: 5, markerType: SpanMarkerType.end),
+                  SpanMarker(
+                      attribution: _bold,
+                      offset: 0,
+                      markerType: SpanMarkerType.start),
+                  SpanMarker(
+                      attribution: _bold,
+                      offset: 5,
+                      markerType: SpanMarkerType.end),
                 ],
               ),
               {
@@ -371,8 +408,14 @@ void main() {
               "Hello, world!",
               AttributedSpans(
                 attributions: const [
-                  SpanMarker(attribution: _bold, offset: 0, markerType: SpanMarkerType.start),
-                  SpanMarker(attribution: _bold, offset: 5, markerType: SpanMarkerType.end),
+                  SpanMarker(
+                      attribution: _bold,
+                      offset: 0,
+                      markerType: SpanMarkerType.start),
+                  SpanMarker(
+                      attribution: _bold,
+                      offset: 5,
+                      markerType: SpanMarkerType.end),
                 ],
               ),
               {
@@ -470,8 +513,14 @@ void main() {
             "",
             AttributedSpans(
               attributions: const [
-                SpanMarker(attribution: _bold, offset: 0, markerType: SpanMarkerType.start),
-                SpanMarker(attribution: _bold, offset: 0, markerType: SpanMarkerType.end),
+                SpanMarker(
+                    attribution: _bold,
+                    offset: 0,
+                    markerType: SpanMarkerType.start),
+                SpanMarker(
+                    attribution: _bold,
+                    offset: 0,
+                    markerType: SpanMarkerType.end),
               ],
             ),
             {
@@ -560,8 +609,14 @@ void main() {
           AttributedText(
             "Hello",
             AttributedSpans(attributions: const [
-              SpanMarker(attribution: ExpectedSpans.bold, offset: 1, markerType: SpanMarkerType.start),
-              SpanMarker(attribution: ExpectedSpans.bold, offset: 5, markerType: SpanMarkerType.end),
+              SpanMarker(
+                  attribution: ExpectedSpans.bold,
+                  offset: 1,
+                  markerType: SpanMarkerType.start),
+              SpanMarker(
+                  attribution: ExpectedSpans.bold,
+                  offset: 5,
+                  markerType: SpanMarkerType.end),
             ]),
             {
               0: const _FakePlaceholder("leading"),
@@ -572,8 +627,14 @@ void main() {
           AttributedText(
             "Hello, world!",
             AttributedSpans(attributions: const [
-              SpanMarker(attribution: ExpectedSpans.bold, offset: 1, markerType: SpanMarkerType.start),
-              SpanMarker(attribution: ExpectedSpans.bold, offset: 5, markerType: SpanMarkerType.end),
+              SpanMarker(
+                  attribution: ExpectedSpans.bold,
+                  offset: 1,
+                  markerType: SpanMarkerType.start),
+              SpanMarker(
+                  attribution: ExpectedSpans.bold,
+                  offset: 5,
+                  markerType: SpanMarkerType.end),
             ]),
             {
               0: const _FakePlaceholder("leading"),
@@ -590,8 +651,14 @@ void main() {
           AttributedText(
             "Hello",
             AttributedSpans(attributions: const [
-              SpanMarker(attribution: ExpectedSpans.bold, offset: 0, markerType: SpanMarkerType.start),
-              SpanMarker(attribution: ExpectedSpans.bold, offset: 4, markerType: SpanMarkerType.end),
+              SpanMarker(
+                  attribution: ExpectedSpans.bold,
+                  offset: 0,
+                  markerType: SpanMarkerType.start),
+              SpanMarker(
+                  attribution: ExpectedSpans.bold,
+                  offset: 4,
+                  markerType: SpanMarkerType.end),
             ]),
             {
               5: const _FakePlaceholder("trailing"),
@@ -602,8 +669,14 @@ void main() {
           AttributedText(
             "Hello, world!",
             AttributedSpans(attributions: const [
-              SpanMarker(attribution: ExpectedSpans.bold, offset: 0, markerType: SpanMarkerType.start),
-              SpanMarker(attribution: ExpectedSpans.bold, offset: 4, markerType: SpanMarkerType.end),
+              SpanMarker(
+                  attribution: ExpectedSpans.bold,
+                  offset: 0,
+                  markerType: SpanMarkerType.start),
+              SpanMarker(
+                  attribution: ExpectedSpans.bold,
+                  offset: 4,
+                  markerType: SpanMarkerType.end),
             ]),
             {
               5: const _FakePlaceholder("trailing"),
@@ -669,7 +742,8 @@ void main() {
         );
 
         expect(
-          AttributedText("Hello").insertPlaceholder(5, const _FakePlaceholder("only")),
+          AttributedText("Hello")
+              .insertPlaceholder(5, const _FakePlaceholder("only")),
           AttributedText("Hello", null, {
             5: const _FakePlaceholder("only"),
           }),
@@ -683,8 +757,14 @@ void main() {
           "Hello, World!",
           AttributedSpans(
             attributions: const [
-              SpanMarker(attribution: _bold, offset: 0, markerType: SpanMarkerType.start),
-              SpanMarker(attribution: _bold, offset: 4, markerType: SpanMarkerType.end),
+              SpanMarker(
+                  attribution: _bold,
+                  offset: 0,
+                  markerType: SpanMarkerType.start),
+              SpanMarker(
+                  attribution: _bold,
+                  offset: 4,
+                  markerType: SpanMarkerType.end),
             ],
           ),
           {
@@ -705,8 +785,14 @@ void main() {
           "Hello, World!",
           AttributedSpans(
             attributions: const [
-              SpanMarker(attribution: _bold, offset: 0, markerType: SpanMarkerType.start),
-              SpanMarker(attribution: _bold, offset: 5, markerType: SpanMarkerType.end),
+              SpanMarker(
+                  attribution: _bold,
+                  offset: 0,
+                  markerType: SpanMarkerType.start),
+              SpanMarker(
+                  attribution: _bold,
+                  offset: 5,
+                  markerType: SpanMarkerType.end),
             ],
           ),
           {
@@ -717,8 +803,14 @@ void main() {
           "Helrld!",
           AttributedSpans(
             attributions: const [
-              SpanMarker(attribution: _bold, offset: 0, markerType: SpanMarkerType.start),
-              SpanMarker(attribution: _bold, offset: 2, markerType: SpanMarkerType.end),
+              SpanMarker(
+                  attribution: _bold,
+                  offset: 0,
+                  markerType: SpanMarkerType.start),
+              SpanMarker(
+                  attribution: _bold,
+                  offset: 2,
+                  markerType: SpanMarkerType.end),
             ],
           ),
         ),
@@ -731,10 +823,22 @@ void main() {
           'Hello world',
           AttributedSpans(
             attributions: [
-              const SpanMarker(attribution: ExpectedSpans.bold, offset: 0, markerType: SpanMarkerType.start),
-              const SpanMarker(attribution: ExpectedSpans.bold, offset: 11, markerType: SpanMarkerType.end),
-              const SpanMarker(attribution: ExpectedSpans.underline, offset: 12, markerType: SpanMarkerType.start),
-              const SpanMarker(attribution: ExpectedSpans.underline, offset: 12, markerType: SpanMarkerType.end),
+              const SpanMarker(
+                  attribution: ExpectedSpans.bold,
+                  offset: 0,
+                  markerType: SpanMarkerType.start),
+              const SpanMarker(
+                  attribution: ExpectedSpans.bold,
+                  offset: 11,
+                  markerType: SpanMarkerType.end),
+              const SpanMarker(
+                  attribution: ExpectedSpans.underline,
+                  offset: 12,
+                  markerType: SpanMarkerType.start),
+              const SpanMarker(
+                  attribution: ExpectedSpans.underline,
+                  offset: 12,
+                  markerType: SpanMarkerType.end),
             ],
           ),
           {
@@ -768,7 +872,10 @@ class _FakePlaceholder {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) || other is _FakePlaceholder && runtimeType == other.runtimeType && name == other.name;
+      identical(this, other) ||
+      other is _FakePlaceholder &&
+          runtimeType == other.runtimeType &&
+          name == other.name;
 
   @override
   int get hashCode => name.hashCode;

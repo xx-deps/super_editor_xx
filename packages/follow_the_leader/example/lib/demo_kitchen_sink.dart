@@ -114,7 +114,9 @@ class _KitchenSinkDemoState extends State<KitchenSinkDemo> {
     if (_pinOffset.value == null) {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         setState(() {
-          _pinOffset.value = (context.findRenderObject() as RenderBox).size.center(Offset.zero);
+          _pinOffset.value = (context.findRenderObject() as RenderBox)
+              .size
+              .center(Offset.zero);
         });
       });
     }
@@ -156,7 +158,8 @@ class _KitchenSinkDemoState extends State<KitchenSinkDemo> {
 
   Widget _buildInnerBounds() {
     return Padding(
-      padding: const EdgeInsets.only(left: 100, right: 100, top: 75, bottom: 175),
+      padding:
+          const EdgeInsets.only(left: 100, right: 100, top: 75, bottom: 175),
       child: DecoratedBox(
         key: _innerBoundsKey,
         decoration: BoxDecoration(
@@ -315,7 +318,8 @@ class _KitchenSinkDemoState extends State<KitchenSinkDemo> {
     return _CircleButton(
       isActive: !_fadeBeyondBoundary,
       icon: Icons.account_circle,
-      tooltip: _fadeBeyondBoundary ? "Don't fade at boundary" : "Fade at boundary",
+      tooltip:
+          _fadeBeyondBoundary ? "Don't fade at boundary" : "Fade at boundary",
       onPressed: _toggleFadeBeyondBoundary,
     );
   }
@@ -504,7 +508,9 @@ class _CircleButton extends StatelessWidget {
       height: 36,
       child: FloatingActionButton(
         mini: true,
-        backgroundColor: isActive ? Colors.white.withOpacity(0.2) : Colors.white.withOpacity(0.1),
+        backgroundColor: isActive
+            ? Colors.white.withOpacity(0.2)
+            : Colors.white.withOpacity(0.1),
         tooltip: tooltip,
         onPressed: onPressed,
         child: Icon(
@@ -538,7 +544,9 @@ class _CircleRadioButton extends StatelessWidget {
       height: 36,
       child: FloatingActionButton(
         mini: true,
-        backgroundColor: isActive ? Colors.white.withOpacity(0.2) : Colors.white.withOpacity(0.1),
+        backgroundColor: isActive
+            ? Colors.white.withOpacity(0.2)
+            : Colors.white.withOpacity(0.1),
         tooltip: tooltip,
         onPressed: isActive ? () => onPressed() : null,
         child: Icon(
@@ -607,9 +615,12 @@ class _PinState extends State<_Pin> with SingleTickerProviderStateMixin {
             height: 16,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              border:
-                  Border.all(width: 2, color: Colors.white.withOpacity(lerpDouble(0.5, 0.2, _pulseController.value)!)),
-              color: Colors.white.withOpacity(lerpDouble(0.25, 0.1, _pulseController.value)!),
+              border: Border.all(
+                  width: 2,
+                  color: Colors.white.withOpacity(
+                      lerpDouble(0.5, 0.2, _pulseController.value)!)),
+              color: Colors.white
+                  .withOpacity(lerpDouble(0.25, 0.1, _pulseController.value)!),
             ),
           );
         },

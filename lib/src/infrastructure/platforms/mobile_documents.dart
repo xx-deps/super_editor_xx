@@ -255,7 +255,8 @@ typedef DocumentMagnifierBuilder = Widget Function(
 /// lets both the document component and the overall document gesture interactor both respond to the touch
 /// event. As a result, if a user long-presses on a component to re-order it, that long-press also triggers
 /// the long-press text selection behavior within the standard document interactor.
-@Deprecated("Don't use this unless you're Superlist. This will be removed ASAP. See issue #1547.")
+@Deprecated(
+    "Don't use this unless you're Superlist. This will be removed ASAP. See issue #1547.")
 bool disableLongPressSelectionForSuperlist = false;
 
 /// Controls the display and position of a magnifier and a floating toolbar.
@@ -287,7 +288,8 @@ class MagnifierAndToolbarController with ChangeNotifier {
   ///
   /// The toolbar should not be displayed if this is `false`, even if
   /// [shouldDisplayToolbar] is `true`.
-  bool get isToolbarPositioned => _toolbarTopAnchor != null && _toolbarBottomAnchor != null;
+  bool get isToolbarPositioned =>
+      _toolbarTopAnchor != null && _toolbarBottomAnchor != null;
 
   /// The point about which the floating toolbar should focus, when the toolbar
   /// appears above the selected content.
@@ -324,7 +326,8 @@ class MagnifierAndToolbarController with ChangeNotifier {
     required Offset topAnchor,
     required Offset bottomAnchor,
   }) {
-    if (topAnchor != _toolbarTopAnchor || bottomAnchor != _toolbarBottomAnchor) {
+    if (topAnchor != _toolbarTopAnchor ||
+        bottomAnchor != _toolbarBottomAnchor) {
       _toolbarTopAnchor = topAnchor;
       _toolbarBottomAnchor = bottomAnchor;
       notifyListeners();
@@ -511,7 +514,8 @@ class DragHandleAutoScroller {
   ///
   /// Does nothing, if the given [offsetInViewport] is already visible within the viewport boundary.
   void ensureOffsetIsVisible(Offset offsetInViewport) {
-    editorGesturesLog.fine("Ensuring content offset is visible in scrollable: $offsetInViewport");
+    editorGesturesLog.fine(
+        "Ensuring content offset is visible in scrollable: $offsetInViewport");
 
     final scrollPosition = _getScrollPosition();
     final currentScrollOffset = scrollPosition.pixels;
@@ -523,24 +527,30 @@ class DragHandleAutoScroller {
 
     if (offsetInViewport.dy < _dragAutoScrollBoundary.leading) {
       // The offset is above the leading boundary. We need to scroll up
-      editorGesturesLog.fine("The scrollable needs to scroll up to make offset visible.");
+      editorGesturesLog
+          .fine("The scrollable needs to scroll up to make offset visible.");
 
       // If currentScrollOffset isn't greater than zero it means we are already
       // at the top edge of the scrollable, so we can't scroll further up.
       if (currentScrollOffset > 0.0) {
-        final clampedVisibleScrollOffset =
-            (currentScrollOffset + (offsetInViewport.dy - _dragAutoScrollBoundary.leading)).clamp(min, max);
+        final clampedVisibleScrollOffset = (currentScrollOffset +
+                (offsetInViewport.dy - _dragAutoScrollBoundary.leading))
+            .clamp(min, max);
         scrollPosition.jumpTo(clampedVisibleScrollOffset);
       }
-    } else if (offsetInViewport.dy > _getViewportBox().size.height - _dragAutoScrollBoundary.trailing) {
+    } else if (offsetInViewport.dy >
+        _getViewportBox().size.height - _dragAutoScrollBoundary.trailing) {
       // The offset is below the trailing boundary. We need to scroll down
-      editorGesturesLog.fine('The scrollable needs to scroll down to make offset visible.');
+      editorGesturesLog
+          .fine('The scrollable needs to scroll down to make offset visible.');
       if (currentScrollOffset < scrollPosition.maxScrollExtent) {
         // We want to scroll further to show the offset, and there's still more scrollable
         // distance below. Scroll to where the offset sits at the trailing boundary.
-        final jumpDeltaToShowOffset =
-            offsetInViewport.dy + _dragAutoScrollBoundary.trailing - _getViewportBox().size.height;
-        scrollPosition.jumpTo((currentScrollOffset + jumpDeltaToShowOffset).clamp(min, max));
+        final jumpDeltaToShowOffset = offsetInViewport.dy +
+            _dragAutoScrollBoundary.trailing -
+            _getViewportBox().size.height;
+        scrollPosition.jumpTo(
+            (currentScrollOffset + jumpDeltaToShowOffset).clamp(min, max));
       }
     }
   }
@@ -567,20 +577,25 @@ class DragHandleAutoScroller {
       editorGesturesLog.finest('Metrics say we should try to scroll up');
 
       final leadingScrollBoundary = _dragAutoScrollBoundary.leading;
-      final gutterAmount = dragEndInViewport.dy.clamp(0.0, leadingScrollBoundary);
-      final speedPercent = (1.0 - (gutterAmount / leadingScrollBoundary)).clamp(0.0, 1.0);
+      final gutterAmount =
+          dragEndInViewport.dy.clamp(0.0, leadingScrollBoundary);
+      final speedPercent =
+          (1.0 - (gutterAmount / leadingScrollBoundary)).clamp(0.0, 1.0);
 
       _autoScroller.startScrollingUp(speedPercent);
     } else {
       _autoScroller.stopScrollingUp();
     }
 
-    if (_getViewportBox().size.height - dragEndInViewport.dy < _dragAutoScrollBoundary.trailing &&
+    if (_getViewportBox().size.height - dragEndInViewport.dy <
+            _dragAutoScrollBoundary.trailing &&
         _getScrollPosition().pixels < _getScrollPosition().maxScrollExtent) {
       editorGesturesLog.finest('Metrics say we should try to scroll down');
 
       final trailingScrollBoundary = _dragAutoScrollBoundary.trailing;
-      final gutterAmount = (_getViewportBox().size.height - dragEndInViewport.dy).clamp(0.0, trailingScrollBoundary);
+      final gutterAmount =
+          (_getViewportBox().size.height - dragEndInViewport.dy)
+              .clamp(0.0, trailingScrollBoundary);
       final speedPercent = 1.0 - (gutterAmount / trailingScrollBoundary);
 
       _autoScroller.startScrollingDown(speedPercent);

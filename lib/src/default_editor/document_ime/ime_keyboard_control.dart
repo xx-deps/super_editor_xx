@@ -34,7 +34,8 @@ class SoftwareKeyboardOpener extends StatefulWidget {
   State<SoftwareKeyboardOpener> createState() => _SoftwareKeyboardOpenerState();
 }
 
-class _SoftwareKeyboardOpenerState extends State<SoftwareKeyboardOpener> implements SoftwareKeyboardControllerDelegate {
+class _SoftwareKeyboardOpenerState extends State<SoftwareKeyboardOpener>
+    implements SoftwareKeyboardControllerDelegate {
   @override
   void initState() {
     super.initState();
@@ -71,7 +72,8 @@ class _SoftwareKeyboardOpenerState extends State<SoftwareKeyboardOpener> impleme
     required int viewId,
   }) {
     editorImeLog.finest("[SoftwareKeyboard] - showing keyboard");
-    widget.imeConnection.value ??= TextInput.attach(widget.createImeClient(), widget.createImeConfiguration());
+    widget.imeConnection.value ??= TextInput.attach(
+        widget.createImeClient(), widget.createImeConfiguration());
     widget.imeConnection.value!.show();
   }
 
@@ -107,7 +109,8 @@ class SoftwareKeyboardController {
   /// Attaches this controller to a delegate that knows how to open and
   /// close the software keyboard.
   void attach(SoftwareKeyboardControllerDelegate delegate) {
-    editorImeLog.finer("[SoftwareKeyboardController] - Attaching to delegate: $delegate");
+    editorImeLog.finer(
+        "[SoftwareKeyboardController] - Attaching to delegate: $delegate");
     _delegate = delegate;
   }
 
@@ -116,7 +119,8 @@ class SoftwareKeyboardController {
   /// This controller can't open or close the software keyboard while
   /// detached from a delegate that knows how to make that happen.
   void detach() {
-    editorImeLog.finer("[SoftwareKeyboardController] - Detaching from delegate: $_delegate");
+    editorImeLog.finer(
+        "[SoftwareKeyboardController] - Detaching from delegate: $_delegate");
     _delegate = null;
   }
 

@@ -8,7 +8,8 @@ class UnknownComponentBuilder implements ComponentBuilder {
   const UnknownComponentBuilder();
 
   @override
-  SingleColumnLayoutComponentViewModel? createViewModel(Document document, DocumentNode node) {
+  SingleColumnLayoutComponentViewModel? createViewModel(
+      Document document, DocumentNode node) {
     return _UnknownViewModel(
       nodeId: node.id,
       createdAt: node.metadata[NodeMetadata.createdAt],
@@ -17,9 +18,10 @@ class UnknownComponentBuilder implements ComponentBuilder {
   }
 
   @override
-  Widget? createComponent(
-      SingleColumnDocumentComponentContext componentContext, SingleColumnLayoutComponentViewModel componentViewModel) {
-    editorLayoutLog.warning("Building component widget for unknown component: $componentViewModel");
+  Widget? createComponent(SingleColumnDocumentComponentContext componentContext,
+      SingleColumnLayoutComponentViewModel componentViewModel) {
+    editorLayoutLog.warning(
+        "Building component widget for unknown component: $componentViewModel");
     return UnknownComponent(
       key: componentContext.componentKey,
     );

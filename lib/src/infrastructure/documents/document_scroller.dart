@@ -62,9 +62,11 @@ class DocumentScroller {
 
   final _scrollChangeListeners = <VoidCallback>{};
 
-  void addScrollChangeListener(VoidCallback listener) => _scrollChangeListeners.add(listener);
+  void addScrollChangeListener(VoidCallback listener) =>
+      _scrollChangeListeners.add(listener);
 
-  void removeScrollChangeListener(VoidCallback listener) => _scrollChangeListeners.remove(listener);
+  void removeScrollChangeListener(VoidCallback listener) =>
+      _scrollChangeListeners.remove(listener);
 
   void _notifyScrollChangeListeners() {
     for (final listener in _scrollChangeListeners) {

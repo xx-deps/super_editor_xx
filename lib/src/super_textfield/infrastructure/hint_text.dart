@@ -33,7 +33,8 @@ class StyledHintBuilder {
 
   Widget build(BuildContext context) {
     return Text.rich(
-      hintText?.computeTextSpan(hintTextStyleBuilder) ?? TextSpan(text: "", style: hintTextStyleBuilder({})),
+      hintText?.computeTextSpan(hintTextStyleBuilder) ??
+          TextSpan(text: "", style: hintTextStyleBuilder({})),
     );
   }
 }

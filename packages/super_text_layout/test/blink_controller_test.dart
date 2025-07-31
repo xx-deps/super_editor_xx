@@ -7,12 +7,12 @@ void main() {
       bool hasNotifiedItsListener = false;
 
       final blinkController = BlinkController(tickerProvider: tester);
-      blinkController.addListener(() { 
+      blinkController.addListener(() {
         hasNotifiedItsListener = true;
-      });      
-      
+      });
+
       blinkController.stopBlinking();
-      
+
       // Ensure that the callback was called
       expect(hasNotifiedItsListener, true);
     });
@@ -21,23 +21,21 @@ void main() {
       // Configure BlinkController to animate, otherwise it won't blink
       BlinkController.indeterminateAnimationsEnabled = true;
 
-      bool hasNotifiedItsListeners = false;      
-      
-      final blinkController = BlinkController(
-        tickerProvider: tester
-      );      
+      bool hasNotifiedItsListeners = false;
+
+      final blinkController = BlinkController(tickerProvider: tester);
       blinkController.stopBlinking();
 
-      blinkController.addListener(() { 
+      blinkController.addListener(() {
         hasNotifiedItsListeners = true;
-      });      
-      
+      });
+
       blinkController.startBlinking();
 
       // Ensure that the callback was called
       expect(hasNotifiedItsListeners, true);
 
-      // Release the ticker      
+      // Release the ticker
       blinkController.stopBlinking();
       BlinkController.indeterminateAnimationsEnabled = false;
     });
@@ -49,30 +47,28 @@ void main() {
       const flashPeriod = Duration(milliseconds: 500);
 
       int notificationCount = 0;
-      
-      final blinkController = BlinkController(
-        tickerProvider: tester, 
-        flashPeriod: flashPeriod
-      );
-      blinkController.addListener(() { 
+
+      final blinkController =
+          BlinkController(tickerProvider: tester, flashPeriod: flashPeriod);
+      blinkController.addListener(() {
         notificationCount++;
-      });      
-      
+      });
+
       blinkController.startBlinking();
 
-      // Ensure that the callback was called before the first blink 
+      // Ensure that the callback was called before the first blink
       expect(notificationCount, 1);
-      
+
       // Trigger the first frame, otherwise we get a zero elapsedTime in the _onTick method
       await tester.pump();
       // Trigger a frame with an ellapsed time greater than the flashPeriod,
       // so the controller should change its visible state and notify its listeners
       await tester.pump(flashPeriod + const Duration(milliseconds: 1));
-    
+
       // Ensure that the callback was called a second time
       expect(notificationCount, 2);
 
-      // Release the ticker      
+      // Release the ticker
       blinkController.stopBlinking();
       BlinkController.indeterminateAnimationsEnabled = false;
     });

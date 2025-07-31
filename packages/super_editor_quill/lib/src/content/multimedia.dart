@@ -15,7 +15,11 @@ class VideoNode extends UrlMediaNode {
 
   @override
   DocumentNode copy() {
-    return VideoNode(id: id, url: url, altText: altText, blockAttribution: blockquoteAttribution);
+    return VideoNode(
+        id: id,
+        url: url,
+        altText: altText,
+        blockAttribution: blockquoteAttribution);
   }
 }
 
@@ -33,7 +37,11 @@ class AudioNode extends UrlMediaNode {
 
   @override
   DocumentNode copy() {
-    return AudioNode(id: id, url: url, altText: altText, blockAttribution: blockquoteAttribution);
+    return AudioNode(
+        id: id,
+        url: url,
+        altText: altText,
+        blockAttribution: blockquoteAttribution);
   }
 }
 
@@ -51,7 +59,11 @@ class FileNode extends UrlMediaNode {
 
   @override
   DocumentNode copy() {
-    return FileNode(id: id, url: url, altText: altText, blockAttribution: blockquoteAttribution);
+    return FileNode(
+        id: id,
+        url: url,
+        altText: altText,
+        blockAttribution: blockquoteAttribution);
   }
 }
 
@@ -84,7 +96,9 @@ class UrlMediaNode extends BlockNode {
 
   @override
   bool hasEquivalentContent(DocumentNode other) {
-    return other is UrlMediaNode && url == other.url && altText == other.altText;
+    return other is UrlMediaNode &&
+        url == other.url &&
+        altText == other.altText;
   }
 
   @override
@@ -112,7 +126,8 @@ class UrlMediaNode extends BlockNode {
     return UrlMediaNode(
       id: id ?? this.id,
       url: url ?? this.url,
-      blockAttribution: blockAttribution ?? this.metadata[NodeMetadata.blockType],
+      blockAttribution:
+          blockAttribution ?? this.metadata[NodeMetadata.blockType],
       metadata: metadata ?? this.metadata,
     );
   }

@@ -218,8 +218,11 @@ class _MenuListState extends State<MenuList> {
       return KeyEventResult.ignored;
     }
 
-    if (!const [LogicalKeyboardKey.arrowUp, LogicalKeyboardKey.arrowDown, LogicalKeyboardKey.enter]
-        .contains(event.logicalKey)) {
+    if (!const [
+      LogicalKeyboardKey.arrowUp,
+      LogicalKeyboardKey.arrowDown,
+      LogicalKeyboardKey.enter
+    ].contains(event.logicalKey)) {
       return KeyEventResult.ignored;
     }
 
@@ -232,7 +235,8 @@ class _MenuListState extends State<MenuList> {
       return KeyEventResult.handled;
     }
 
-    if (event.logicalKey == LogicalKeyboardKey.arrowDown && activeIndex < widget.menu.length - 1) {
+    if (event.logicalKey == LogicalKeyboardKey.arrowDown &&
+        activeIndex < widget.menu.length - 1) {
       setState(() {
         _activateItemAt(activeIndex + 1);
       });
@@ -246,7 +250,8 @@ class _MenuListState extends State<MenuList> {
     return KeyEventResult.ignored;
   }
 
-  int get _activeIndex => _activeItemKey != null ? _keysInOrder.indexOf(_activeItemKey!) : -1;
+  int get _activeIndex =>
+      _activeItemKey != null ? _keysInOrder.indexOf(_activeItemKey!) : -1;
 
   void _activateItemAt(int index) {
     _activeItemKey = _menuItemsToKeys[widget.menu.getItemAt(index)]!;
@@ -356,7 +361,8 @@ class _MenuListItemState extends State<MenuListItem> {
 
   void _onMenuChange() {
     if (widget.menuItem.subMenu != null &&
-        widget.menuController.visiblePath?.containsPath(widget.menuItem.path) == true) {
+        widget.menuController.visiblePath?.containsPath(widget.menuItem.path) ==
+            true) {
       _popoverController.open();
     } else {
       _popoverController.close();
@@ -427,7 +433,8 @@ class _MenuListItemState extends State<MenuListItem> {
                     ),
                   ),
                 if (widget.menuItem.subMenu != null) //
-                  Icon(Icons.arrow_right, size: 18, color: Colors.white.withOpacity(0.3)),
+                  Icon(Icons.arrow_right,
+                      size: 18, color: Colors.white.withOpacity(0.3)),
               ],
             ),
           ),
@@ -622,10 +629,12 @@ class MenuGroup {
       countToGo -= group.length;
     }
 
-    throw Exception("Couldn't find list item $index in groupedItems: $groupedItems");
+    throw Exception(
+        "Couldn't find list item $index in groupedItems: $groupedItems");
   }
 
-  int get length => groupedItems.fold(0, (count, group) => count + group.length);
+  int get length =>
+      groupedItems.fold(0, (count, group) => count + group.length);
 }
 
 class MenuItem {

@@ -48,10 +48,12 @@ class SuperEditorHardwareKeyHandler extends StatefulWidget {
   final Widget child;
 
   @override
-  State<SuperEditorHardwareKeyHandler> createState() => _SuperEditorHardwareKeyHandlerState();
+  State<SuperEditorHardwareKeyHandler> createState() =>
+      _SuperEditorHardwareKeyHandlerState();
 }
 
-class _SuperEditorHardwareKeyHandlerState extends State<SuperEditorHardwareKeyHandler> {
+class _SuperEditorHardwareKeyHandlerState
+    extends State<SuperEditorHardwareKeyHandler> {
   late FocusNode _focusNode;
 
   @override
@@ -80,7 +82,8 @@ class _SuperEditorHardwareKeyHandlerState extends State<SuperEditorHardwareKeyHa
     editorKeyLog.finest("Handling key press: $keyEvent");
     ExecutionInstruction instruction = ExecutionInstruction.continueExecution;
     int index = 0;
-    while (instruction == ExecutionInstruction.continueExecution && index < widget.keyboardActions.length) {
+    while (instruction == ExecutionInstruction.continueExecution &&
+        index < widget.keyboardActions.length) {
       instruction = widget.keyboardActions[index](
         editContext: widget.editContext,
         keyEvent: keyEvent,

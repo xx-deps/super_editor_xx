@@ -6,7 +6,8 @@ import 'package:super_editor/super_editor.dart';
 /// a [LinkAttribution].
 class SuperTextFieldLaunchLinkTapHandler extends SuperTextFieldTapHandler {
   @override
-  MouseCursor? mouseCursorForContentHover(SuperTextFieldGestureDetails details) {
+  MouseCursor? mouseCursorForContentHover(
+      SuperTextFieldGestureDetails details) {
     final linkAttribution = _getLinkAttribution(details);
     if (linkAttribution == null) {
       return null;
@@ -31,7 +32,8 @@ class SuperTextFieldLaunchLinkTapHandler extends SuperTextFieldTapHandler {
 
   /// Returns the [LinkAttribution] at the given [details.textOffset], if any.
   LinkAttribution? _getLinkAttribution(SuperTextFieldGestureDetails details) {
-    final textPosition = details.textLayout.getPositionNearestToOffset(details.textOffset);
+    final textPosition =
+        details.textLayout.getPositionNearestToOffset(details.textOffset);
 
     final attributions = details.textController.text //
         .getAllAttributionsAt(textPosition.offset)

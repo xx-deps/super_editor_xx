@@ -60,7 +60,9 @@ class TaskNode extends TextNode {
 
   @override
   bool hasEquivalentContent(DocumentNode other) {
-    return other is TaskNode && isComplete == other.isComplete && text == other.text;
+    return other is TaskNode &&
+        isComplete == other.isComplete &&
+        text == other.text;
   }
 
   TaskNode copyTaskWith({
@@ -158,7 +160,8 @@ class TaskComponentBuilder implements ComponentBuilder {
   final Editor _editor;
 
   @override
-  TaskComponentViewModel? createViewModel(Document document, DocumentNode node) {
+  TaskComponentViewModel? createViewModel(
+      Document document, DocumentNode node) {
     if (node is! TaskNode) {
       return null;
     }
@@ -181,15 +184,16 @@ class TaskComponentBuilder implements ComponentBuilder {
       },
       text: node.text,
       textDirection: textDirection,
-      textAlignment: textDirection == TextDirection.ltr ? TextAlign.left : TextAlign.right,
+      textAlignment:
+          textDirection == TextDirection.ltr ? TextAlign.left : TextAlign.right,
       textStyleBuilder: noStyleBuilder,
       selectionColor: const Color(0x00000000),
     );
   }
 
   @override
-  Widget? createComponent(
-      SingleColumnDocumentComponentContext componentContext, SingleColumnLayoutComponentViewModel componentViewModel) {
+  Widget? createComponent(SingleColumnDocumentComponentContext componentContext,
+      SingleColumnLayoutComponentViewModel componentViewModel) {
     if (componentViewModel is! TaskComponentViewModel) {
       return null;
     }
@@ -207,7 +211,8 @@ class TaskComponentBuilder implements ComponentBuilder {
 /// various properties in the view model. For example, one phase applies
 /// all [StyleRule]s, and another phase configures content selection
 /// and caret appearance.
-class TaskComponentViewModel extends SingleColumnLayoutComponentViewModel with TextComponentViewModel {
+class TaskComponentViewModel extends SingleColumnLayoutComponentViewModel
+    with TextComponentViewModel {
   TaskComponentViewModel({
     required super.nodeId,
     super.createdAt,
@@ -228,9 +233,11 @@ class TaskComponentViewModel extends SingleColumnLayoutComponentViewModel with T
     this.highlightWhenEmpty = false,
     TextRange? composingRegion,
     bool showComposingRegionUnderline = false,
-    UnderlineStyle spellingErrorUnderlineStyle = const SquiggleUnderlineStyle(color: Colors.red),
+    UnderlineStyle spellingErrorUnderlineStyle =
+        const SquiggleUnderlineStyle(color: Colors.red),
     List<TextRange> spellingErrors = const <TextRange>[],
-    UnderlineStyle grammarErrorUnderlineStyle = const SquiggleUnderlineStyle(color: Colors.blue),
+    UnderlineStyle grammarErrorUnderlineStyle =
+        const SquiggleUnderlineStyle(color: Colors.blue),
     List<TextRange> grammarErrors = const <TextRange>[],
   }) {
     this.composingRegion = composingRegion;
@@ -307,7 +314,11 @@ class TaskComponentViewModel extends SingleColumnLayoutComponentViewModel with T
           isComplete == other.isComplete;
 
   @override
-  int get hashCode => super.hashCode ^ textViewModelHashCode ^ indent.hashCode ^ isComplete.hashCode;
+  int get hashCode =>
+      super.hashCode ^
+      textViewModelHashCode ^
+      indent.hashCode ^
+      isComplete.hashCode;
 }
 
 /// The standard [TextBlockIndentCalculator] used by tasks in `SuperEditor`.
@@ -337,14 +348,16 @@ class TaskComponent extends StatefulWidget {
   State<TaskComponent> createState() => _TaskComponentState();
 }
 
-class _TaskComponentState extends State<TaskComponent> with ProxyDocumentComponent<TaskComponent>, ProxyTextComposable {
+class _TaskComponentState extends State<TaskComponent>
+    with ProxyDocumentComponent<TaskComponent>, ProxyTextComposable {
   final _textKey = GlobalKey();
 
   @override
   GlobalKey<State<StatefulWidget>> get childDocumentComponentKey => _textKey;
 
   @override
-  TextComposable get childTextComposable => childDocumentComponentKey.currentState as TextComposable;
+  TextComposable get childTextComposable =>
+      childDocumentComponentKey.currentState as TextComposable;
 
   /// Computes the [TextStyle] for this task's inner [TextComponent].
   TextStyle _computeStyles(Set<Attribution> attributions) {
@@ -354,7 +367,8 @@ class _TaskComponentState extends State<TaskComponent> with ProxyDocumentCompone
         ? style.copyWith(
             decoration: style.decoration == null
                 ? TextDecoration.lineThrough
-                : TextDecoration.combine([TextDecoration.lineThrough, style.decoration!]),
+                : TextDecoration.combine(
+                    [TextDecoration.lineThrough, style.decoration!]),
           )
         : style;
   }
@@ -414,7 +428,8 @@ ExecutionInstruction enterToInsertNewTask({
   }
 
   // We only care about ENTER.
-  if (keyEvent.logicalKey != LogicalKeyboardKey.enter && keyEvent.logicalKey != LogicalKeyboardKey.numpadEnter) {
+  if (keyEvent.logicalKey != LogicalKeyboardKey.enter &&
+      keyEvent.logicalKey != LogicalKeyboardKey.numpadEnter) {
     return ExecutionInstruction.continueExecution;
   }
 
@@ -456,12 +471,15 @@ ExecutionInstruction backspaceToConvertTaskToParagraph({
     return ExecutionInstruction.continueExecution;
   }
 
-  final node = editContext.document.getNodeById(editContext.composer.selection!.extent.nodeId);
+  final node = editContext.document
+      .getNodeById(editContext.composer.selection!.extent.nodeId);
   if (node is! TaskNode) {
     return ExecutionInstruction.continueExecution;
   }
 
-  if ((editContext.composer.selection!.extent.nodePosition as TextPosition).offset > 0) {
+  if ((editContext.composer.selection!.extent.nodePosition as TextPosition)
+          .offset >
+      0) {
     // The selection isn't at the beginning.
     return ExecutionInstruction.continueExecution;
   }
@@ -501,7 +519,8 @@ ExecutionInstruction tabToIndentTask({
     return ExecutionInstruction.continueExecution;
   }
 
-  final node = editContext.document.getNodeById(editContext.composer.selection!.extent.nodeId);
+  final node = editContext.document
+      .getNodeById(editContext.composer.selection!.extent.nodeId);
   if (node is! TaskNode) {
     return ExecutionInstruction.continueExecution;
   }
@@ -555,7 +574,8 @@ ExecutionInstruction shiftTabToUnIndentTask({
     return ExecutionInstruction.continueExecution;
   }
 
-  final node = editContext.document.getNodeById(editContext.composer.selection!.extent.nodeId);
+  final node = editContext.document
+      .getNodeById(editContext.composer.selection!.extent.nodeId);
   if (node is! TaskNode) {
     return ExecutionInstruction.continueExecution;
   }
@@ -595,11 +615,14 @@ ExecutionInstruction backspaceToUnIndentTask({
     return ExecutionInstruction.continueExecution;
   }
 
-  final node = editContext.document.getNodeById(editContext.composer.selection!.extent.nodeId);
+  final node = editContext.document
+      .getNodeById(editContext.composer.selection!.extent.nodeId);
   if (node is! TaskNode) {
     return ExecutionInstruction.continueExecution;
   }
-  if ((editContext.composer.selection!.extent.nodePosition as TextPosition).offset > 0) {
+  if ((editContext.composer.selection!.extent.nodePosition as TextPosition)
+          .offset >
+      0) {
     // Backspace should only un-indent if the caret is at the start of the text.
     return ExecutionInstruction.continueExecution;
   }
@@ -626,7 +649,8 @@ ExecutionInstruction backspaceToUnIndentTask({
 ///
 ///  * Inserting a newline into an empty task converts it into a paragraph instead of
 ///    inserting a new task.
-class InsertNewlineInTaskAtCaretCommand extends BaseInsertNewlineAtCaretCommand {
+class InsertNewlineInTaskAtCaretCommand
+    extends BaseInsertNewlineAtCaretCommand {
   const InsertNewlineInTaskAtCaretCommand(this.newNodeId);
 
   /// {@macro newNodeId}
@@ -863,7 +887,8 @@ class SplitExistingTaskCommand extends EditCommand {
   @override
   void execute(EditContext editContext, CommandExecutor executor) {
     final document = editContext.document;
-    final composer = editContext.find<MutableDocumentComposer>(Editor.composerKey);
+    final composer =
+        editContext.find<MutableDocumentComposer>(Editor.composerKey);
     final selection = composer.selection;
 
     // We only care when the caret sits at the end of a TaskNode.
@@ -890,12 +915,14 @@ class SplitExistingTaskCommand extends EditCommand {
 
     // Remove the text after the caret from the currently selected TaskNode.
     final updatedNode = node.copyTextNodeWith(
-      text: node.text.removeRegion(startOffset: splitOffset, endOffset: node.text.length),
+      text: node.text
+          .removeRegion(startOffset: splitOffset, endOffset: node.text.length),
     );
     document.replaceNodeById(node.id, updatedNode);
 
     // Insert a new TextNode after the currently selected TaskNode.
-    document.insertNodeAfter(existingNodeId: updatedNode.id, newNode: newTaskNode);
+    document.insertNodeAfter(
+        existingNodeId: updatedNode.id, newNode: newTaskNode);
 
     // Move the caret to the beginning of the new TaskNode.
     final oldSelection = composer.selection;
@@ -907,7 +934,8 @@ class SplitExistingTaskCommand extends EditCommand {
       ),
     );
 
-    composer.setSelectionWithReason(newSelection, SelectionReason.userInteraction);
+    composer.setSelectionWithReason(
+        newSelection, SelectionReason.userInteraction);
     composer.setComposingRegion(null);
 
     executor.logChanges([
@@ -916,7 +944,8 @@ class SplitExistingTaskCommand extends EditCommand {
         NodeChangeEvent(node.id),
       ),
       DocumentEdit(
-        NodeInsertedEvent(newTaskNode.id, document.getNodeIndexById(newTaskNode.id)),
+        NodeInsertedEvent(
+            newTaskNode.id, document.getNodeIndexById(newTaskNode.id)),
       ),
       SelectionChangeEvent(
         oldSelection: oldSelection,
@@ -1103,10 +1132,13 @@ class SetTaskIndentCommand extends EditCommand {
 
 class UpdateSubTaskIndentAfterTaskDeletionReaction extends EditReaction {
   @override
-  void modifyContent(EditContext editorContext, RequestDispatcher requestDispatcher, List<EditEvent> changeList) {
+  void modifyContent(EditContext editorContext,
+      RequestDispatcher requestDispatcher, List<EditEvent> changeList) {
     final didDeleteTask = changeList
         .whereType<DocumentEdit>()
-        .where((edit) => edit.change is NodeRemovedEvent && (edit.change as NodeRemovedEvent).removedNode is TaskNode)
+        .where((edit) =>
+            edit.change is NodeRemovedEvent &&
+            (edit.change as NodeRemovedEvent).removedNode is TaskNode)
         .isNotEmpty;
     if (!didDeleteTask) {
       // No tasks were deleted, so there are no task indentations to fix.

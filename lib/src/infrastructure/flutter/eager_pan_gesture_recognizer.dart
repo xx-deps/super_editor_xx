@@ -23,8 +23,10 @@ class EagerPanGestureRecognizer extends DragGestureRecognizer {
   @override
   bool isFlingGesture(VelocityEstimate estimate, PointerDeviceKind kind) {
     final minVelocity = minFlingVelocity ?? kMinFlingVelocity;
-    final minDistance = minFlingDistance ?? computeHitSlop(kind, gestureSettings);
-    return estimate.pixelsPerSecond.distanceSquared > minVelocity * minVelocity &&
+    final minDistance =
+        minFlingDistance ?? computeHitSlop(kind, gestureSettings);
+    return estimate.pixelsPerSecond.distanceSquared >
+            minVelocity * minVelocity &&
         estimate.offset.distanceSquared > minDistance * minDistance;
   }
 
@@ -36,12 +38,14 @@ class EagerPanGestureRecognizer extends DragGestureRecognizer {
   }
 
   @override
-  DragEndDetails? considerFling(VelocityEstimate estimate, PointerDeviceKind kind) {
+  DragEndDetails? considerFling(
+      VelocityEstimate estimate, PointerDeviceKind kind) {
     if (!isFlingGesture(estimate, kind)) {
       return null;
     }
     final maxVelocity = maxFlingVelocity ?? kMaxFlingVelocity;
-    final dy = clampDouble(estimate.pixelsPerSecond.dy, -maxVelocity, maxVelocity);
+    final dy =
+        clampDouble(estimate.pixelsPerSecond.dy, -maxVelocity, maxVelocity);
     return DragEndDetails(
       velocity: Velocity(pixelsPerSecond: Offset(0, dy)),
       primaryVelocity: dy,
@@ -51,11 +55,13 @@ class EagerPanGestureRecognizer extends DragGestureRecognizer {
   }
 
   @override
-  bool hasSufficientGlobalDistanceToAccept(PointerDeviceKind pointerDeviceKind, double? deviceTouchSlop) {
+  bool hasSufficientGlobalDistanceToAccept(
+      PointerDeviceKind pointerDeviceKind, double? deviceTouchSlop) {
     // Flutter's PanGestureRecognizer uses the pan slop, which is twice bigger than the hit slop,
     // to determine if the gesture should be accepted. Use the same distance used by the
     // VerticalDragGestureRecognizer.
-    final res = globalDistanceMoved.abs() > computeHitSlop(pointerDeviceKind, gestureSettings);
+    final res = globalDistanceMoved.abs() >
+        computeHitSlop(pointerDeviceKind, gestureSettings);
     if (res && shouldAccept != null) {
       return shouldAccept!();
     } else {

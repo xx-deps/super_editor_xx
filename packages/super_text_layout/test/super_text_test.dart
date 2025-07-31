@@ -23,7 +23,8 @@ void main() {
                   TextLayoutSelectionHighlight(
                     textLayout: textLayout,
                     style: _primaryHighlightStyle,
-                    selection: const TextSelection(baseOffset: 11, extentOffset: 21),
+                    selection:
+                        const TextSelection(baseOffset: 11, extentOffset: 21),
                   ),
                 ],
               );
@@ -49,7 +50,8 @@ void main() {
       expect(didBuildLayerAbove, isTrue);
     });
 
-    testWidgets("doesn't rebuild text layout when text stays the same", (tester) async {
+    testWidgets("doesn't rebuild text layout when text stays the same",
+        (tester) async {
       int layerAboveBuildCount = 0;
       int highlightBuildCount = 0;
       int layerBeneathBuildCount = 0;
@@ -84,7 +86,8 @@ void main() {
                         TextLayoutSelectionHighlight(
                           textLayout: textLayout,
                           style: _primaryHighlightStyle,
-                          selection: const TextSelection(baseOffset: 11, extentOffset: 21),
+                          selection: const TextSelection(
+                              baseOffset: 11, extentOffset: 21),
                         ),
                       ],
                     );
@@ -117,7 +120,9 @@ void main() {
       );
 
       // Ensure that the SuperText has built exactly 1 time to start off.
-      final superTextState1 = (find.byKey(superTextKey).evaluate().first as StatefulElement).state as SuperTextState;
+      final superTextState1 =
+          (find.byKey(superTextKey).evaluate().first as StatefulElement).state
+              as SuperTextState;
       expect(superTextState1.textBuildCount, 1);
       expect(layerBeneathBuildCount, 1);
       expect(highlightBuildCount, 1);
@@ -134,7 +139,9 @@ void main() {
       await tester.pumpAndSettle();
 
       // Ensure that the text within SuperText didn't rebuild since the last check.
-      final superTextState2 = (find.byKey(superTextKey).evaluate().first as StatefulElement).state as SuperTextState;
+      final superTextState2 =
+          (find.byKey(superTextKey).evaluate().first as StatefulElement).state
+              as SuperTextState;
       // We need to make sure the State objects remained the same because if the
       // original State object was replaced with a new one then the build count
       // will still read `1`, despite two builds taking place.
@@ -230,7 +237,8 @@ void main() {
           await _pumpThreeLinePlainText(tester);
 
           final textLayout = RenderSuperTextLayout.textLayoutFrom(_textKey)!;
-          final textBox = _textKey.currentContext!.findRenderObject() as RenderBox;
+          final textBox =
+              _textKey.currentContext!.findRenderObject() as RenderBox;
 
           final firstLineEstimatedMiddle = textBox.size.height / 6;
           expect(
@@ -239,13 +247,15 @@ void main() {
           );
 
           expect(
-            textLayout.getPositionAtOffset(Offset(textBox.size.width / 2, firstLineEstimatedMiddle)),
+            textLayout.getPositionAtOffset(
+                Offset(textBox.size.width / 2, firstLineEstimatedMiddle)),
             const TextPosition(offset: 24, affinity: TextAffinity.downstream),
           );
 
           expect(
             // Note: an offset == textBox width is considered "outside" the text
-            textLayout.getPositionAtOffset(Offset(textBox.size.width - 1, firstLineEstimatedMiddle)),
+            textLayout.getPositionAtOffset(
+                Offset(textBox.size.width - 1, firstLineEstimatedMiddle)),
             const TextPosition(offset: 47, affinity: TextAffinity.upstream),
           );
         });
@@ -254,22 +264,26 @@ void main() {
           await _pumpThreeLinePlainText(tester);
 
           final textLayout = RenderSuperTextLayout.textLayoutFrom(_textKey)!;
-          final textBox = _textKey.currentContext!.findRenderObject() as RenderBox;
+          final textBox =
+              _textKey.currentContext!.findRenderObject() as RenderBox;
 
           final secondLineEstimatedMiddle = (textBox.size.height / 6) * 3;
           expect(
-            textLayout.getPositionAtOffset(Offset(1, secondLineEstimatedMiddle)),
+            textLayout
+                .getPositionAtOffset(Offset(1, secondLineEstimatedMiddle)),
             const TextPosition(offset: 48),
           );
 
           expect(
-            textLayout.getPositionAtOffset(Offset(textBox.size.width / 2, secondLineEstimatedMiddle)),
+            textLayout.getPositionAtOffset(
+                Offset(textBox.size.width / 2, secondLineEstimatedMiddle)),
             const TextPosition(offset: 71, affinity: TextAffinity.downstream),
           );
 
           expect(
             // Note: an offset == textBox width is considered "outside" the text
-            textLayout.getPositionAtOffset(Offset(textBox.size.width - 1, secondLineEstimatedMiddle)),
+            textLayout.getPositionAtOffset(
+                Offset(textBox.size.width - 1, secondLineEstimatedMiddle)),
             const TextPosition(offset: 93, affinity: TextAffinity.upstream),
           );
         });
@@ -278,7 +292,8 @@ void main() {
           await _pumpThreeLinePlainText(tester);
 
           final textLayout = RenderSuperTextLayout.textLayoutFrom(_textKey)!;
-          final textBox = _textKey.currentContext!.findRenderObject() as RenderBox;
+          final textBox =
+              _textKey.currentContext!.findRenderObject() as RenderBox;
 
           final thirdLineEstimatedMiddle = (textBox.size.height / 6) * 5;
           expect(
@@ -287,13 +302,15 @@ void main() {
           );
 
           expect(
-            textLayout.getPositionAtOffset(Offset(textBox.size.width / 2, thirdLineEstimatedMiddle)),
+            textLayout.getPositionAtOffset(
+                Offset(textBox.size.width / 2, thirdLineEstimatedMiddle)),
             const TextPosition(offset: 116, affinity: TextAffinity.upstream),
           );
 
           expect(
             // Note: an offset == textBox width is considered "outside" the text
-            textLayout.getPositionAtOffset(Offset(textBox.size.width - 1, thirdLineEstimatedMiddle)),
+            textLayout.getPositionAtOffset(
+                Offset(textBox.size.width - 1, thirdLineEstimatedMiddle)),
             const TextPosition(offset: 130, affinity: TextAffinity.upstream),
           );
         });
@@ -304,23 +321,27 @@ void main() {
           await _pumpThreeLinePlainText(tester);
 
           final textLayout = RenderSuperTextLayout.textLayoutFrom(_textKey)!;
-          final textBox = _textKey.currentContext!.findRenderObject() as RenderBox;
+          final textBox =
+              _textKey.currentContext!.findRenderObject() as RenderBox;
 
           final firstLineEstimatedMiddle = textBox.size.height / 6;
           expect(
-            textLayout.getPositionNearestToOffset(Offset(0, firstLineEstimatedMiddle)),
+            textLayout.getPositionNearestToOffset(
+                Offset(0, firstLineEstimatedMiddle)),
             const TextPosition(offset: 0),
           );
 
           final secondLineEstimatedMiddle = (textBox.size.height / 6) * 3;
           expect(
-            textLayout.getPositionNearestToOffset(Offset(0, secondLineEstimatedMiddle)),
+            textLayout.getPositionNearestToOffset(
+                Offset(0, secondLineEstimatedMiddle)),
             const TextPosition(offset: 48),
           );
 
           final thirdLineEstimatedMiddle = (textBox.size.height / 6) * 5;
           expect(
-            textLayout.getPositionNearestToOffset(Offset(0, thirdLineEstimatedMiddle)),
+            textLayout.getPositionNearestToOffset(
+                Offset(0, thirdLineEstimatedMiddle)),
             const TextPosition(offset: 94),
           );
         });
@@ -329,23 +350,27 @@ void main() {
           await _pumpThreeLinePlainText(tester);
 
           final textLayout = RenderSuperTextLayout.textLayoutFrom(_textKey)!;
-          final textBox = _textKey.currentContext!.findRenderObject() as RenderBox;
+          final textBox =
+              _textKey.currentContext!.findRenderObject() as RenderBox;
 
           final firstLineEstimatedMiddle = textBox.size.height / 6;
           expect(
-            textLayout.getPositionNearestToOffset(Offset(800, firstLineEstimatedMiddle)),
+            textLayout.getPositionNearestToOffset(
+                Offset(800, firstLineEstimatedMiddle)),
             const TextPosition(offset: 47, affinity: TextAffinity.upstream),
           );
 
           final secondLineEstimatedMiddle = (textBox.size.height / 6) * 3;
           expect(
-            textLayout.getPositionNearestToOffset(Offset(800, secondLineEstimatedMiddle)),
+            textLayout.getPositionNearestToOffset(
+                Offset(800, secondLineEstimatedMiddle)),
             const TextPosition(offset: 93, affinity: TextAffinity.upstream),
           );
 
           final thirdLineEstimatedMiddle = (textBox.size.height / 6) * 5;
           expect(
-            textLayout.getPositionNearestToOffset(Offset(800, thirdLineEstimatedMiddle)),
+            textLayout.getPositionNearestToOffset(
+                Offset(800, thirdLineEstimatedMiddle)),
             const TextPosition(offset: 130, affinity: TextAffinity.upstream),
           );
         });
@@ -354,7 +379,8 @@ void main() {
           await _pumpThreeLinePlainText(tester);
 
           final textLayout = RenderSuperTextLayout.textLayoutFrom(_textKey)!;
-          final textBox = _textKey.currentContext!.findRenderObject() as RenderBox;
+          final textBox =
+              _textKey.currentContext!.findRenderObject() as RenderBox;
 
           expect(
             textLayout.getPositionNearestToOffset(const Offset(0, -50)),
@@ -362,12 +388,14 @@ void main() {
           );
 
           expect(
-            textLayout.getPositionNearestToOffset(Offset(textBox.size.width / 2, -50)),
+            textLayout.getPositionNearestToOffset(
+                Offset(textBox.size.width / 2, -50)),
             const TextPosition(offset: 24, affinity: TextAffinity.downstream),
           );
 
           expect(
-            textLayout.getPositionNearestToOffset(Offset(textBox.size.width, -50)),
+            textLayout
+                .getPositionNearestToOffset(Offset(textBox.size.width, -50)),
             const TextPosition(offset: 47, affinity: TextAffinity.upstream),
           );
         });
@@ -376,20 +404,24 @@ void main() {
           await _pumpThreeLinePlainText(tester);
 
           final textLayout = RenderSuperTextLayout.textLayoutFrom(_textKey)!;
-          final textBox = _textKey.currentContext!.findRenderObject() as RenderBox;
+          final textBox =
+              _textKey.currentContext!.findRenderObject() as RenderBox;
 
           expect(
-            textLayout.getPositionNearestToOffset(Offset(0, textBox.size.height + 50)),
+            textLayout.getPositionNearestToOffset(
+                Offset(0, textBox.size.height + 50)),
             const TextPosition(offset: 94),
           );
 
           expect(
-            textLayout.getPositionNearestToOffset(Offset(textBox.size.width / 2, textBox.size.height + 50)),
+            textLayout.getPositionNearestToOffset(
+                Offset(textBox.size.width / 2, textBox.size.height + 50)),
             const TextPosition(offset: 116, affinity: TextAffinity.upstream),
           );
 
           expect(
-            textLayout.getPositionNearestToOffset(Offset(textBox.size.width, textBox.size.height + 50)),
+            textLayout.getPositionNearestToOffset(
+                Offset(textBox.size.width, textBox.size.height + 50)),
             const TextPosition(offset: 130, affinity: TextAffinity.upstream),
           );
         });
@@ -447,7 +479,9 @@ void main() {
             await _pumpThreeLinePlainText(tester);
 
             final textLayout = RenderSuperTextLayout.textLayoutFrom(_textKey)!;
-            expect(textLayout.getPositionOneLineUp(const TextPosition(offset: 5)), null);
+            expect(
+                textLayout.getPositionOneLineUp(const TextPosition(offset: 5)),
+                null);
           });
 
           testWidgets("from the last line", (tester) async {
@@ -466,7 +500,10 @@ void main() {
             await _pumpThreeLinePlainText(tester);
 
             final textLayout = RenderSuperTextLayout.textLayoutFrom(_textKey)!;
-            expect(textLayout.getPositionOneLineDown(const TextPosition(offset: 100)), null);
+            expect(
+                textLayout
+                    .getPositionOneLineDown(const TextPosition(offset: 100)),
+                null);
           });
 
           testWidgets("from the first line", (tester) async {
@@ -509,14 +546,16 @@ Future<void> _pumpEmptyText(WidgetTester tester) async {
 final _textKey = GlobalKey(debugLabel: "super_text");
 
 const _threeLineSpan = TextSpan(
-  text: "This is some text. It is explicitly laid out in\n" // Line indices: 0 -> 47/48 (upstream/downstream)
+  text:
+      "This is some text. It is explicitly laid out in\n" // Line indices: 0 -> 47/48 (upstream/downstream)
       "multiple lines so that we don't need to guess\n" // Line indices: 48 ->  93/94 (upstream/downstream)
       "where the layout forces a line break", // Line indices: 94 -> 130
   style: _testTextStyle,
 );
 
 const _oneLineSpan = TextSpan(
-  text: "This is some text. It is explicitly laid out in", // Line indices: 0 -> 46/47 (upstream/downstream)
+  text:
+      "This is some text. It is explicitly laid out in", // Line indices: 0 -> 46/47 (upstream/downstream)
   style: _testTextStyle,
 );
 

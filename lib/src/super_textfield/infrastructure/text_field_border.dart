@@ -76,4 +76,5 @@ class TextFieldBorderState {
   final bool hasError;
 }
 
-typedef TextFieldBorderBuilder = BoxDecoration Function(TextFieldBorderState borderState);
+typedef TextFieldBorderBuilder = BoxDecoration Function(
+    TextFieldBorderState borderState);

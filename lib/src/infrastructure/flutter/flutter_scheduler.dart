@@ -17,20 +17,24 @@ extension Scheduler on WidgetsBinding {
   ///
   /// When [runAsSoonAsPossible] is called *during* a Flutter build phase, [action] is
   /// executed at the end of the current frame with [addPostFrameCallback].
-  void runAsSoonAsPossible(VoidCallback action, {String debugLabel = "anonymous action"}) {
+  void runAsSoonAsPossible(VoidCallback action,
+      {String debugLabel = "anonymous action"}) {
     schedulerLog.finest("Running action as soon as possible: '$debugLabel'.");
     if (schedulerPhase == SchedulerPhase.persistentCallbacks) {
       // The Flutter pipeline is in the middle of a build phase. Schedule the desired
       // action for the end of the current frame.
-      schedulerLog.finest("Scheduling another frame to run '$debugLabel' because Flutter is building widgets right now.");
+      schedulerLog.finest(
+          "Scheduling another frame to run '$debugLabel' because Flutter is building widgets right now.");
       addPostFrameCallback((timeStamp) {
-        schedulerLog.finest("Flutter is done building widgets. Running '$debugLabel' at the end of the frame.");
+        schedulerLog.finest(
+            "Flutter is done building widgets. Running '$debugLabel' at the end of the frame.");
         action();
       });
     } else {
       // The Flutter pipeline isn't building widgets right now. Execute the action
       // immediately.
-      schedulerLog.finest("Flutter isn't building widgets right now. Running '$debugLabel' immediately.");
+      schedulerLog.finest(
+          "Flutter isn't building widgets right now. Running '$debugLabel' immediately.");
       action();
     }
   }

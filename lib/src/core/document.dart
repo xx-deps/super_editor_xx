@@ -84,7 +84,8 @@ abstract class Document implements Iterable<DocumentNode> {
 
   /// Returns all [DocumentNode]s from [position1] to [position2], including
   /// the nodes at [position1] and [position2].
-  List<DocumentNode> getNodesInside(DocumentPosition position1, DocumentPosition position2);
+  List<DocumentNode> getNodesInside(
+      DocumentPosition position1, DocumentPosition position2);
 
   /// Returns [true] if the content in the [other] document is equivalent to
   /// the content in this document, ignoring any details that are unrelated
@@ -215,7 +216,10 @@ class NodeRemovedEvent extends NodeDocumentChange {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) || other is NodeRemovedEvent && runtimeType == other.runtimeType && nodeId == other.nodeId;
+      identical(this, other) ||
+      other is NodeRemovedEvent &&
+          runtimeType == other.runtimeType &&
+          nodeId == other.nodeId;
 
   @override
   int get hashCode => nodeId.hashCode;
@@ -240,7 +244,10 @@ class NodeChangeEvent extends NodeDocumentChange {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) || other is NodeChangeEvent && runtimeType == other.runtimeType && nodeId == other.nodeId;
+      identical(this, other) ||
+      other is NodeChangeEvent &&
+          runtimeType == other.runtimeType &&
+          nodeId == other.nodeId;
 
   @override
   int get hashCode => nodeId.hashCode;
@@ -299,7 +306,9 @@ class DocumentPosition {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is DocumentPosition && nodeId == other.nodeId && nodePosition == other.nodePosition;
+      other is DocumentPosition &&
+          nodeId == other.nodeId &&
+          nodePosition == other.nodePosition;
 
   @override
   int get hashCode => nodeId.hashCode ^ nodePosition.hashCode;
@@ -480,7 +489,9 @@ extension InspectNodeAffinity on DocumentNode {
     required NodePosition base,
     required NodePosition extent,
   }) {
-    return base == selectUpstreamPosition(base, extent) ? TextAffinity.downstream : TextAffinity.upstream;
+    return base == selectUpstreamPosition(base, extent)
+        ? TextAffinity.downstream
+        : TextAffinity.upstream;
   }
 }
 

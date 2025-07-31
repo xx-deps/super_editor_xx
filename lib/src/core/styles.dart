@@ -52,7 +52,8 @@ class Stylesheet {
       documentPadding: documentPadding ?? this.documentPadding,
       inlineTextStyler: inlineTextStyler ?? this.inlineTextStyler,
       inlineWidgetBuilders: inlineWidgetBuilders ?? this.inlineWidgetBuilders,
-      selectedTextColorStrategy: selectedTextColorStrategy ?? this.selectedTextColorStrategy,
+      selectedTextColorStrategy:
+          selectedTextColorStrategy ?? this.selectedTextColorStrategy,
       rules: [
         ...addRulesBefore,
         ...(rules ?? this.rules),
@@ -79,7 +80,8 @@ typedef SelectedTextColorStrategy = Color Function({
 });
 
 /// Adjusts the given [existingStyle] based on the given [attributions].
-typedef AttributionStyleAdjuster = TextStyle Function(Set<Attribution> attributions, TextStyle existingStyle);
+typedef AttributionStyleAdjuster = TextStyle Function(
+    Set<Attribution> attributions, TextStyle existingStyle);
 
 /// A single style rule within a [Stylesheet].
 ///
@@ -175,7 +177,9 @@ class BlockSelector {
   /// Returns `true` if this selector matches the block for the given [node], or
   /// `false`, otherwise.
   bool matches(Document document, DocumentNode node) {
-    if (_blockType != null && (node.getMetadataValue("blockType") as NamedAttribution?)?.name != _blockType) {
+    if (_blockType != null &&
+        (node.getMetadataValue("blockType") as NamedAttribution?)?.name !=
+            _blockType) {
       return false;
     }
 
@@ -186,7 +190,9 @@ class BlockSelector {
     if (_precedingBlockType != null) {
       final nodeBefore = document.getNodeBefore(node);
       if (nodeBefore == null ||
-          (nodeBefore.getMetadataValue("blockType") as NamedAttribution?)?.name != _precedingBlockType) {
+          (nodeBefore.getMetadataValue("blockType") as NamedAttribution?)
+                  ?.name !=
+              _precedingBlockType) {
         return false;
       }
     }
@@ -194,7 +200,9 @@ class BlockSelector {
     if (_followingBlockType != null) {
       final nodeAfter = document.getNodeAfter(node);
       if (nodeAfter == null ||
-          (nodeAfter.getMetadataValue("blockType") as NamedAttribution?)?.name != _followingBlockType) {
+          (nodeAfter.getMetadataValue("blockType") as NamedAttribution?)
+                  ?.name !=
+              _followingBlockType) {
         return false;
       }
     }
@@ -274,7 +282,8 @@ class CascadingPadding {
   final double? top;
   final double? bottom;
 
-  CascadingPadding applyOnTopOf(CascadingPadding other) => CascadingPadding.only(
+  CascadingPadding applyOnTopOf(CascadingPadding other) =>
+      CascadingPadding.only(
         left: left ?? other.left,
         right: right ?? other.right,
         top: top ?? other.top,
@@ -299,7 +308,8 @@ class CascadingPadding {
           bottom == other.bottom;
 
   @override
-  int get hashCode => left.hashCode ^ right.hashCode ^ top.hashCode ^ bottom.hashCode;
+  int get hashCode =>
+      left.hashCode ^ right.hashCode ^ top.hashCode ^ bottom.hashCode;
 }
 
 /// Styles applied to the user's selection, e.g., selected text.
@@ -325,7 +335,8 @@ class SelectionStyles {
           highlightEmptyTextBlocks == other.highlightEmptyTextBlocks;
 
   @override
-  int get hashCode => selectionColor.hashCode ^ highlightEmptyTextBlocks.hashCode;
+  int get hashCode =>
+      selectionColor.hashCode ^ highlightEmptyTextBlocks.hashCode;
 }
 
 /// The keys to the style metadata used by a [StyleRule].
@@ -359,7 +370,8 @@ class Styles {
 
   /// Applies an [UnderlineStyle] to the composing region, e.g., the word
   /// the user is currently editing on mobile.
-  static const String composingRegionUnderlineStyle = 'composingRegionUnderlineStyle';
+  static const String composingRegionUnderlineStyle =
+      'composingRegionUnderlineStyle';
 
   /// Whether to show an underline beneath the text that is currently in
   /// the composing region.
@@ -367,10 +379,12 @@ class Styles {
   /// It's common for Android to show an underline beneath the composing region.
   /// Showing an underline may not be expected on desktop. With this property app
   /// developers can make that choice for themselves.
-  static const String showComposingRegionUnderline = 'showComposingRegionUnderline';
+  static const String showComposingRegionUnderline =
+      'showComposingRegionUnderline';
 
   /// Applies an [UnderlineStyle] to all spelling errors in a text node.
-  static const String spellingErrorUnderlineStyle = 'spellingErrorUnderlineStyle';
+  static const String spellingErrorUnderlineStyle =
+      'spellingErrorUnderlineStyle';
 
   /// Applies an [UnderlineStyle] to all grammar errors in a text node.
   static const String grammarErrorUnderlineStyle = 'grammarErrorUnderlineStyle';

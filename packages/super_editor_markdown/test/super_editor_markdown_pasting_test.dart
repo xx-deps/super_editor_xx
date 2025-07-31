@@ -12,7 +12,8 @@ import 'test_tools.dart';
 
 void main() {
   group("SuperEditor > pasting markdown >", () {
-    testWidgetsOnArbitraryDesktop("can paste into an empty document", (tester) async {
+    testWidgetsOnArbitraryDesktop("can paste into an empty document",
+        (tester) async {
       final document = MutableDocument.empty("1");
       final composer = MutableDocumentComposer();
       final editor = Editor(
@@ -72,7 +73,9 @@ void main() {
       expect(documentMarkdown, _fullDocumentMarkdown);
     });
 
-    testWidgetsOnArbitraryDesktop("can paste at the beginning of a document (without merging text)", (tester) async {
+    testWidgetsOnArbitraryDesktop(
+        "can paste at the beginning of a document (without merging text)",
+        (tester) async {
       final (editor, document, composer) = await _pumpSuperEditor(
         tester,
         deserializeMarkdownToDocument('''
@@ -116,7 +119,9 @@ This is the document that exists before Markdown is pasted.''',
       );
     });
 
-    testWidgetsOnArbitraryDesktop("can paste at the beginning of a document (with merging text)", (tester) async {
+    testWidgetsOnArbitraryDesktop(
+        "can paste at the beginning of a document (with merging text)",
+        (tester) async {
       final (_, document, composer) = await _pumpSuperEditor(
         tester,
         deserializeMarkdownToDocument('''
@@ -159,10 +164,13 @@ This is the document that exists before Markdown is pasted.''',
       );
     });
 
-    testWidgetsOnArbitraryDesktop("can paste in the middle of a document and merge both sides of text", (tester) async {
+    testWidgetsOnArbitraryDesktop(
+        "can paste in the middle of a document and merge both sides of text",
+        (tester) async {
       final (_, document, composer) = await _pumpSuperEditor(
         tester,
-        deserializeMarkdownToDocument('''This is a paragraph that will split >< here and continue.'''),
+        deserializeMarkdownToDocument(
+            '''This is a paragraph that will split >< here and continue.'''),
       );
 
       // Place the caret between chevrons ">|<"
@@ -194,10 +202,12 @@ Aenean mattis ante justo, quis sollicitudin metus interdum id.< here and continu
       );
     });
 
-    testWidgetsOnArbitraryDesktop("can paste a text snippet within a single paragraph", (tester) async {
+    testWidgetsOnArbitraryDesktop(
+        "can paste a text snippet within a single paragraph", (tester) async {
       final (_, document, composer) = await _pumpSuperEditor(
         tester,
-        deserializeMarkdownToDocument('''This is a paragraph that will add text >< here and continue.'''),
+        deserializeMarkdownToDocument(
+            '''This is a paragraph that will add text >< here and continue.'''),
       );
 
       // Place the caret between chevrons ">|<".
@@ -225,7 +235,8 @@ Aenean mattis ante justo, quis sollicitudin metus interdum id.< here and continu
       );
     });
 
-    testWidgetsOnArbitraryDesktop("can paste an image in the middle of a paragraph", (tester) async {
+    testWidgetsOnArbitraryDesktop(
+        "can paste an image in the middle of a paragraph", (tester) async {
       final (_, document, composer) = await _pumpSuperEditor(
         tester,
         deserializeMarkdownToDocument(
@@ -243,7 +254,8 @@ Aenean mattis ante justo, quis sollicitudin metus interdum id.< here and continu
       // Simulate the user copying a markdown snippet.
       tester
         ..simulateClipboard()
-        ..setSimulatedClipboardContent("![A Fake Test Image](https://flutter.dev/logo.png)");
+        ..setSimulatedClipboardContent(
+            "![A Fake Test Image](https://flutter.dev/logo.png)");
 
       // Paste the markdown content into the empty document.
       await tester.pressCmdV();
@@ -261,7 +273,9 @@ Aenean mattis ante justo, quis sollicitudin metus interdum id.< here and continu
       );
     });
 
-    testWidgetsOnArbitraryDesktop("can paste at the end of a document (without merging text)", (tester) async {
+    testWidgetsOnArbitraryDesktop(
+        "can paste at the end of a document (without merging text)",
+        (tester) async {
       final (_, document, composer) = await _pumpSuperEditor(
         tester,
         deserializeMarkdownToDocument('''
@@ -273,7 +287,8 @@ This is the document that exists before Markdown is pasted.
 
       // Place the caret at the end of the existing document.
       final lastParagraph = document.last as TextNode;
-      await tester.placeCaretInParagraph(lastParagraph.id, lastParagraph.endPosition.offset);
+      await tester.placeCaretInParagraph(
+          lastParagraph.id, lastParagraph.endPosition.offset);
 
       // Ensure that the document has the caret.
       expect(composer.selection, isNotNull);
@@ -306,7 +321,9 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus sed sagittis 
       );
     });
 
-    testWidgetsOnArbitraryDesktop("can paste at the end of a document (with merging text)", (tester) async {
+    testWidgetsOnArbitraryDesktop(
+        "can paste at the end of a document (with merging text)",
+        (tester) async {
       final (_, document, composer) = await _pumpSuperEditor(
         tester,
         deserializeMarkdownToDocument('''
@@ -318,7 +335,8 @@ This is the document that exists before Markdown is pasted.
 
       // Place the caret at the end of the existing document.
       final lastParagraph = document.last as TextNode;
-      await tester.placeCaretInParagraph(lastParagraph.id, lastParagraph.endPosition.offset);
+      await tester.placeCaretInParagraph(
+          lastParagraph.id, lastParagraph.endPosition.offset);
 
       // Ensure that the document has the caret.
       expect(composer.selection, isNotNull);
@@ -369,11 +387,17 @@ Aenean mattis ante justo, quis sollicitudin metus interdum id.''',
       await tester.pressCmdV();
 
       // Ensure that the Markdown link was linkified.
-      expect(SuperEditorInspector.findTextInComponent(paragraph.id).toPlainText(), "Hello link");
+      expect(
+          SuperEditorInspector.findTextInComponent(paragraph.id).toPlainText(),
+          "Hello link");
       const expectedAttribution = LinkAttribution("www.google.com");
-      expect(SuperEditorInspector.findTextInComponent(paragraph.id).getAttributionSpansByFilter((a) => true), {
-        const AttributionSpan(attribution: expectedAttribution, start: 6, end: 9),
-      });
+      expect(
+          SuperEditorInspector.findTextInComponent(paragraph.id)
+              .getAttributionSpansByFilter((a) => true),
+          {
+            const AttributionSpan(
+                attribution: expectedAttribution, start: 6, end: 9),
+          });
       expect(
         SuperEditorInspector.findDocumentSelection(),
         DocumentSelection.collapsed(
@@ -392,7 +416,8 @@ Aenean mattis ante justo, quis sollicitudin metus interdum id.''',
 Future<(Editor, MutableDocument, MutableDocumentComposer)> _pumpSuperEditor(
     WidgetTester tester, MutableDocument document) async {
   final composer = MutableDocumentComposer();
-  final editor = createDefaultDocumentEditor(document: document, composer: composer);
+  final editor =
+      createDefaultDocumentEditor(document: document, composer: composer);
 
   await tester.pumpWidget(
     MaterialApp(
@@ -405,7 +430,8 @@ Future<(Editor, MutableDocument, MutableDocumentComposer)> _pumpSuperEditor(
           ],
           componentBuilders: [
             TaskComponentBuilder(editor),
-            const FakeImageComponentBuilder(size: Size(800, 400)), // Size doesn't matter.
+            const FakeImageComponentBuilder(
+                size: Size(800, 400)), // Size doesn't matter.
             ...defaultComponentBuilders,
           ],
         ),

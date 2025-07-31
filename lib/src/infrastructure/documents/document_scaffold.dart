@@ -38,14 +38,17 @@ class DocumentScaffold<ContextType> extends StatefulWidget {
 
   /// Builder that creates a gesture interaction widget, which is displayed
   /// beneath the document, at the same size as the viewport.
-  final Widget Function(BuildContext context, {required Widget child}) gestureBuilder;
+  final Widget Function(BuildContext context, {required Widget child})
+      gestureBuilder;
 
   /// Builds the text input widget, if applicable. The text input system is placed
   /// above the gesture system and beneath viewport decoration.
-  final Widget Function(BuildContext context, {required Widget child})? textInputBuilder;
+  final Widget Function(BuildContext context, {required Widget child})?
+      textInputBuilder;
 
   /// Builds platform specific viewport decoration (such as toolbar overlay manager or magnifier overlay manager).
-  final Widget Function(BuildContext context, {required Widget child}) viewportDecorationBuilder;
+  final Widget Function(BuildContext context, {required Widget child})
+      viewportDecorationBuilder;
 
   /// Controls scrolling when this [DocumentScaffold] adds its own `Scrollable`, but
   /// doesn't provide scrolling control when this [DocumentScaffold] uses an ancestor

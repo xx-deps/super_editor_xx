@@ -12,10 +12,12 @@ class CharacterRainbowSuperText extends StatefulWidget {
   final TextSpan text;
 
   @override
-  State<CharacterRainbowSuperText> createState() => _CharacterRainbowSuperTextState();
+  State<CharacterRainbowSuperText> createState() =>
+      _CharacterRainbowSuperTextState();
 }
 
-class _CharacterRainbowSuperTextState extends State<CharacterRainbowSuperText> with SingleTickerProviderStateMixin {
+class _CharacterRainbowSuperTextState extends State<CharacterRainbowSuperText>
+    with SingleTickerProviderStateMixin {
   final _startingColor = ValueNotifier<double>(0.0);
   final _colorVelocity = -1.0; // Degrees to spin the color wheel per frame.
   late Ticker _ticker;
@@ -50,12 +52,18 @@ class _CharacterRainbowSuperTextState extends State<CharacterRainbowSuperText> w
               final textLength = widget.text.toPlainText().length;
               for (int i = 0; i < textLength; i += 1) {
                 // Get the bounding rectangle for the character
-                characterRects.add(textLayout.getCharacterBox(TextPosition(offset: i))?.toRect() ??
+                characterRects.add(textLayout
+                        .getCharacterBox(TextPosition(offset: i))
+                        ?.toRect() ??
                     Rect.fromLTRB(0, 0, 0, textLayout.estimatedLineHeight));
                 // Select a color for this character
                 final colorWheelDegrees =
-                    ((360.0 * (characterColors.length / textLength)) + _startingColor.value) % 360;
-                characterColors.add(HSVColor.fromAHSV(1.0, colorWheelDegrees, 1.0, 1.0).toColor());
+                    ((360.0 * (characterColors.length / textLength)) +
+                            _startingColor.value) %
+                        360;
+                characterColors.add(
+                    HSVColor.fromAHSV(1.0, colorWheelDegrees, 1.0, 1.0)
+                        .toColor());
               }
 
               return Stack(

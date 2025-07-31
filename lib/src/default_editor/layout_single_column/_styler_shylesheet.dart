@@ -31,7 +31,8 @@ class SingleColumnStylesheetStyler extends SingleColumnLayoutStylePhase {
   }
 
   @override
-  SingleColumnLayoutViewModel style(Document document, SingleColumnLayoutViewModel viewModel) {
+  SingleColumnLayoutViewModel style(
+      Document document, SingleColumnLayoutViewModel viewModel) {
     return SingleColumnLayoutViewModel(
       padding: _stylesheet.documentPadding ?? viewModel.padding,
       componentViewModels: [
@@ -82,7 +83,8 @@ class SingleColumnStylesheetStyler extends SingleColumnLayoutStylePhase {
 
         if (oldValue is TextStyle && newValue is TextStyle) {
           existingStyles[entry.key] = oldValue.merge(newValue);
-        } else if (oldValue is CascadingPadding && newValue is CascadingPadding) {
+        } else if (oldValue is CascadingPadding &&
+            newValue is CascadingPadding) {
           existingStyles[entry.key] = newValue.applyOnTopOf(oldValue);
         }
       } else {

@@ -125,7 +125,8 @@ class CupertinoPopoverToolbar extends StatefulWidget {
   final List<Widget>? children;
 
   @override
-  State<CupertinoPopoverToolbar> createState() => _CupertinoPopoverToolbarState();
+  State<CupertinoPopoverToolbar> createState() =>
+      _CupertinoPopoverToolbarState();
 }
 
 class _CupertinoPopoverToolbarState extends State<CupertinoPopoverToolbar> {
@@ -179,7 +180,9 @@ class _CupertinoPopoverToolbarState extends State<CupertinoPopoverToolbar> {
       onPressed: _controller.previous,
       child: Icon(
         Icons.chevron_left,
-        color: _controller.isFirstPage ? widget.inactiveButtonTextColor : widget.activeButtonTextColor,
+        color: _controller.isFirstPage
+            ? widget.inactiveButtonTextColor
+            : widget.activeButtonTextColor,
       ),
     );
   }
@@ -196,7 +199,9 @@ class _CupertinoPopoverToolbarState extends State<CupertinoPopoverToolbar> {
       onPressed: _controller.next,
       child: Icon(
         Icons.chevron_right,
-        color: _controller.isLastPage ? widget.inactiveButtonTextColor : widget.activeButtonTextColor,
+        color: _controller.isLastPage
+            ? widget.inactiveButtonTextColor
+            : widget.activeButtonTextColor,
       ),
     );
   }
@@ -295,7 +300,8 @@ class _IosToolbarMenuContent extends MultiChildRenderObjectWidget {
   }
 
   @override
-  void updateRenderObject(BuildContext context, covariant _RenderIosPagedMenu renderObject) {
+  void updateRenderObject(
+      BuildContext context, covariant _RenderIosPagedMenu renderObject) {
     renderObject
       ..controller = controller
       ..height = height
@@ -456,8 +462,10 @@ class _RenderIosPagedMenu extends RenderBox
     if (_hasMultiplePages) {
       // Computes previous button position.
       final previousButton = children.first;
-      final previousButtonParentData = previousButton.parentData as _IosPagerParentData;
-      previousButtonParentData.offset = Offset(accumulatedWith, (effectiveHeight - previousButton.size.height) / 2);
+      final previousButtonParentData =
+          previousButton.parentData as _IosPagerParentData;
+      previousButtonParentData.offset = Offset(
+          accumulatedWith, (effectiveHeight - previousButton.size.height) / 2);
 
       // Update current width.
       accumulatedWith += previousButton.size.width;
@@ -468,7 +476,8 @@ class _RenderIosPagedMenu extends RenderBox
       final child = children[i];
       final childSize = child.size;
       final childParentData = child.parentData as _IosPagerParentData;
-      childParentData.offset = Offset(accumulatedWith, (effectiveHeight - childSize.height) / 2);
+      childParentData.offset =
+          Offset(accumulatedWith, (effectiveHeight - childSize.height) / 2);
 
       // Update current width.
       accumulatedWith += childSize.width;
@@ -477,8 +486,10 @@ class _RenderIosPagedMenu extends RenderBox
     if (_hasMultiplePages) {
       // Computes next button position.
       final nextButton = children.last;
-      final nextButtonButtonParentData = nextButton.parentData as _IosPagerParentData;
-      nextButtonButtonParentData.offset = Offset(accumulatedWith, (effectiveHeight - nextButton.size.height) / 2);
+      final nextButtonButtonParentData =
+          nextButton.parentData as _IosPagerParentData;
+      nextButtonButtonParentData.offset = Offset(
+          accumulatedWith, (effectiveHeight - nextButton.size.height) / 2);
 
       // Update current width.
       accumulatedWith += nextButton.size.width;
@@ -569,7 +580,8 @@ class _RenderIosPagedMenu extends RenderBox
     return false;
   }
 
-  bool _hitTestChild(BoxHitTestResult result, {required Offset position, required RenderBox child}) {
+  bool _hitTestChild(BoxHitTestResult result,
+      {required Offset position, required RenderBox child}) {
     final childParentData = child.parentData! as _IosPagerParentData;
 
     return result.addWithPaintOffset(
@@ -613,11 +625,15 @@ class _RenderIosPagedMenu extends RenderBox
 
       final childSize = child.getDryLayout(constraints);
 
-      final requiredWidthWithoutNavigationButtons = currentPageWidth + childSize.width;
-      final requiredWidthWithNavigationButtons = requiredWidthWithoutNavigationButtons + buttonsWidth;
+      final requiredWidthWithoutNavigationButtons =
+          currentPageWidth + childSize.width;
+      final requiredWidthWithNavigationButtons =
+          requiredWidthWithoutNavigationButtons + buttonsWidth;
 
       if ((requiredWidthWithNavigationButtons > constraints.maxWidth) &&
-          !(requiredWidthWithoutNavigationButtons <= constraints.maxWidth && isLastChild && pages.length == 1)) {
+          !(requiredWidthWithoutNavigationButtons <= constraints.maxWidth &&
+              isLastChild &&
+              pages.length == 1)) {
         pages.add(
           _MenuPageInfo(
             startingIndex: currentPageStartingIndex,

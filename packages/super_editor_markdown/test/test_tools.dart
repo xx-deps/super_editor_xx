@@ -11,13 +11,14 @@ class FakeImageComponentBuilder implements ComponentBuilder {
   final Size size;
 
   @override
-  SingleColumnLayoutComponentViewModel? createViewModel(Document document, DocumentNode node) {
+  SingleColumnLayoutComponentViewModel? createViewModel(
+      Document document, DocumentNode node) {
     return null;
   }
 
   @override
-  Widget? createComponent(
-      SingleColumnDocumentComponentContext componentContext, SingleColumnLayoutComponentViewModel componentViewModel) {
+  Widget? createComponent(SingleColumnDocumentComponentContext componentContext,
+      SingleColumnLayoutComponentViewModel componentViewModel) {
     if (componentViewModel is! ImageComponentViewModel) {
       return null;
     }
@@ -25,7 +26,8 @@ class FakeImageComponentBuilder implements ComponentBuilder {
     return ImageComponent(
       componentKey: componentContext.componentKey,
       imageUrl: componentViewModel.imageUrl,
-      selection: componentViewModel.selection?.nodeSelection as UpstreamDownstreamNodeSelection?,
+      selection: componentViewModel.selection?.nodeSelection
+          as UpstreamDownstreamNodeSelection?,
       selectionColor: componentViewModel.selectionColor,
       imageBuilder: (context, imageUrl) => SizedBox(
         height: size.height,

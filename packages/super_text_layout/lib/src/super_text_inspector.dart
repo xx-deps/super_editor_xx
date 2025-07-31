@@ -14,7 +14,8 @@ class SuperTextInspector {
   /// finds it `byType`. To specify one [SuperText] among many, pass a [finder].
   /// {@endtemplate}
   static TextScaler findTextScaler([Finder? finder]) {
-    final element = (finder ?? find.byType(SuperText)).evaluate().single as StatefulElement;
+    final element =
+        (finder ?? find.byType(SuperText)).evaluate().single as StatefulElement;
     final superText = element.widget as SuperText;
 
     final renderLayoutAwareRichText = find

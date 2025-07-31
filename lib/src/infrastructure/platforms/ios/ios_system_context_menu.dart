@@ -87,7 +87,8 @@ class _IOSSystemContextMenuState extends State<IOSSystemContextMenu> {
   }
 
   void _onLeaderChanged() {
-    if (widget.leaderLink.offset == null || widget.leaderLink.leaderSize == null) {
+    if (widget.leaderLink.offset == null ||
+        widget.leaderLink.leaderSize == null) {
       return;
     }
 
@@ -97,7 +98,8 @@ class _IOSSystemContextMenuState extends State<IOSSystemContextMenu> {
   }
 
   void _positionSystemMenu() {
-    _systemContextMenuController.show(widget.leaderLink.offset! & widget.leaderLink.leaderSize!);
+    _systemContextMenuController
+        .show(widget.leaderLink.offset! & widget.leaderLink.leaderSize!);
   }
 
   @override

@@ -17,7 +17,10 @@ extension QuillDelta on MutableDocument {
     final deltaDocument = Delta();
 
     for (final node in this) {
-      if (node is ParagraphNode && node == last && node.text.isEmpty && nodeCount > 1) {
+      if (node is ParagraphNode &&
+          node == last &&
+          node.text.isEmpty &&
+          nodeCount > 1) {
         // This final, empty paragraph in the document represents the final
         // newline "\n" in the Delta document. But, due to how we serialize
         // deltas, the node/delta before this one already inserted a newline,
@@ -37,7 +40,8 @@ extension QuillDelta on MutableDocument {
       }
 
       if (!didSerialize) {
-        throw Exception("Failed to serialize Document to Quill Deltas. Couldn't find a serializer for node: $node");
+        throw Exception(
+            "Failed to serialize Document to Quill Deltas. Couldn't find a serializer for node: $node");
       }
     }
 
