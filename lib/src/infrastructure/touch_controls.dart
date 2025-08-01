@@ -14,9 +14,7 @@ enum HandleType {
 
 /// Configuration used to display a toolbar.
 class ToolbarConfig {
-  ToolbarConfig({
-    required this.focalPoint,
-  });
+  ToolbarConfig({required this.focalPoint});
 
   /// The desired point where a toolbar arrow should point to.
   ///

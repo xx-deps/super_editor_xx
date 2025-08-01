@@ -90,8 +90,8 @@ class _IOSCursorPainter extends CustomPainter {
     required this.selection,
     required this.caretColor,
     required this.isTextEmpty,
-  })  : caretPaint = Paint(),
-        super(repaint: blinkController);
+  }) : caretPaint = Paint(),
+       super(repaint: blinkController);
 
   final BlinkController blinkController;
   final TextLayout textLayout;

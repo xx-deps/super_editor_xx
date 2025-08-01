@@ -7,8 +7,13 @@ import '../../test_tools_goldens.dart';
 
 void main() {
   group('SuperEditor', () {
-    testGoldensOnAndroid('displays paragraphs with different alignments', (tester) async {
-      await tester.createDocument().withCustomContent(_createParagraphTestDoc()).pump();
+    testGoldensOnAndroid('displays paragraphs with different alignments', (
+      tester,
+    ) async {
+      await tester
+          .createDocument()
+          .withCustomContent(_createParagraphTestDoc())
+          .pump();
 
       await screenMatchesGolden(tester, 'paragraph_alignments');
     });
@@ -20,12 +25,8 @@ MutableDocument _createParagraphTestDoc() {
     nodes: [
       ParagraphNode(
         id: Editor.createNodeId(),
-        text: AttributedText(
-          'Various paragraph formations',
-        ),
-        metadata: {
-          'blockType': header1Attribution,
-        },
+        text: AttributedText('Various paragraph formations'),
+        metadata: {'blockType': header1Attribution},
       ),
       ParagraphNode(
         id: Editor.createNodeId(),
@@ -38,18 +39,14 @@ MutableDocument _createParagraphTestDoc() {
         text: AttributedText(
           'This is a short\nparagraph of text\nthat is center aligned',
         ),
-        metadata: {
-          'textAlign': 'center',
-        },
+        metadata: {'textAlign': 'center'},
       ),
       ParagraphNode(
         id: Editor.createNodeId(),
         text: AttributedText(
           'This is a short\nparagraph of text\nthat is right aligned',
         ),
-        metadata: {
-          'textAlign': 'right',
-        },
+        metadata: {'textAlign': 'right'},
       ),
       ParagraphNode(
         id: Editor.createNodeId(),

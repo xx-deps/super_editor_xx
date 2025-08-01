@@ -7,8 +7,8 @@ import 'package:super_text_layout/super_text_layout.dart';
 /// appearance on desktop.
 abstract class SuperTextFieldTapHandler {
   MouseCursor? mouseCursorForContentHover(
-          SuperTextFieldGestureDetails details) =>
-      null;
+    SuperTextFieldGestureDetails details,
+  ) => null;
 
   TapHandlingInstruction onTapDown(SuperTextFieldGestureDetails details) =>
       TapHandlingInstruction.continueHandling;
@@ -20,8 +20,8 @@ abstract class SuperTextFieldTapHandler {
       TapHandlingInstruction.continueHandling;
 
   TapHandlingInstruction onDoubleTapDown(
-          SuperTextFieldGestureDetails details) =>
-      TapHandlingInstruction.continueHandling;
+    SuperTextFieldGestureDetails details,
+  ) => TapHandlingInstruction.continueHandling;
 
   TapHandlingInstruction onDoubleTapUp(SuperTextFieldGestureDetails details) =>
       TapHandlingInstruction.continueHandling;
@@ -30,8 +30,8 @@ abstract class SuperTextFieldTapHandler {
       TapHandlingInstruction.continueHandling;
 
   TapHandlingInstruction onTripleTapDown(
-          SuperTextFieldGestureDetails details) =>
-      TapHandlingInstruction.continueHandling;
+    SuperTextFieldGestureDetails details,
+  ) => TapHandlingInstruction.continueHandling;
 
   TapHandlingInstruction onTripleTapUp(SuperTextFieldGestureDetails details) =>
       TapHandlingInstruction.continueHandling;
@@ -40,12 +40,12 @@ abstract class SuperTextFieldTapHandler {
       TapHandlingInstruction.continueHandling;
 
   TapHandlingInstruction onSecondaryTapDown(
-          SuperTextFieldGestureDetails details) =>
-      TapHandlingInstruction.continueHandling;
+    SuperTextFieldGestureDetails details,
+  ) => TapHandlingInstruction.continueHandling;
 
   TapHandlingInstruction onSecondaryTapUp(
-          SuperTextFieldGestureDetails details) =>
-      TapHandlingInstruction.continueHandling;
+    SuperTextFieldGestureDetails details,
+  ) => TapHandlingInstruction.continueHandling;
 
   TapHandlingInstruction onSecondaryTapCancel() =>
       TapHandlingInstruction.continueHandling;

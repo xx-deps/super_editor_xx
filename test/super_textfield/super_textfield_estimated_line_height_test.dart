@@ -6,7 +6,9 @@ import 'package:super_editor/super_editor.dart';
 
 void main() {
   group('SuperTextField', () {
-    testWidgetsOnArbitraryDesktop('computes line height for empty field', (tester) async {
+    testWidgetsOnArbitraryDesktop('computes line height for empty field', (
+      tester,
+    ) async {
       // We need to load the app fonts, because using Ahem the estimated line height
       // is always equal to the true line height.
       await loadAppFonts();
@@ -17,7 +19,9 @@ void main() {
       await tester.pumpAndSettle();
 
       // When the text field is displaying only the hint, the line height is estimated.
-      final heightWithHintText = tester.getSize(find.byType(SuperTextField)).height;
+      final heightWithHintText = tester
+          .getSize(find.byType(SuperTextField))
+          .height;
 
       // Change the text, this should recompute viewport height.
       controller.text = AttributedText('Leave a message');
@@ -27,12 +31,18 @@ void main() {
       final heightWithText = tester.getSize(find.byType(SuperTextField)).height;
 
       // Ensure the text field has ~ the same height when it's empty and when it has content
-      expect((heightWithHintText - heightWithText).abs(), lessThanOrEqualTo(3e-1));
+      expect(
+        (heightWithHintText - heightWithText).abs(),
+        lessThanOrEqualTo(3e-1),
+      );
     });
   });
 }
 
-Future<void> _pumpScaffold(WidgetTester tester, {required AttributedTextEditingController controller}) async {
+Future<void> _pumpScaffold(
+  WidgetTester tester, {
+  required AttributedTextEditingController controller,
+}) async {
   await tester.pumpWidget(
     MaterialApp(
       home: Scaffold(
@@ -51,10 +61,8 @@ Future<void> _pumpScaffold(WidgetTester tester, {required AttributedTextEditingC
           hintBehavior: HintBehavior.displayHintUntilTextEntered,
           minLines: 1,
           maxLines: null,
-          textStyleBuilder: (_) => const TextStyle(
-            fontSize: 16,
-            fontFamily: 'Roboto',
-          ),
+          textStyleBuilder: (_) =>
+              const TextStyle(fontSize: 16, fontFamily: 'Roboto'),
         ),
       ),
     ),

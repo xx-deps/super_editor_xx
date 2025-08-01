@@ -9,7 +9,9 @@ import '../supereditor_test_tools.dart';
 
 void main() {
   group('SuperEditor horizontal rule component', () {
-    testWidgetsOnAllPlatforms('inserts a paragraph when typing at the end', (tester) async {
+    testWidgetsOnAllPlatforms('inserts a paragraph when typing at the end', (
+      tester,
+    ) async {
       final testContext = await tester
           .createDocument() //
           .fromMarkdown('''
@@ -36,7 +38,10 @@ Paragraph 2
       expect(document.nodeCount, 4);
       final insertedNode = document.getNodeAt(2)!;
       expect(insertedNode, isA<ParagraphNode>());
-      expect((insertedNode as ParagraphNode).text.toPlainText(), 'new paragraph');
+      expect(
+        (insertedNode as ParagraphNode).text.toPlainText(),
+        'new paragraph',
+      );
       expect(
         SuperEditorInspector.findDocumentSelection(),
         DocumentSelection.collapsed(
@@ -48,7 +53,9 @@ Paragraph 2
       );
     });
 
-    testWidgetsOnAllPlatforms('inserts a paragraph when typing at the beginning', (tester) async {
+    testWidgetsOnAllPlatforms('inserts a paragraph when typing at the beginning', (
+      tester,
+    ) async {
       final testContext = await tester
           .createDocument() //
           .fromMarkdown('''
@@ -75,7 +82,10 @@ Paragraph 2
       expect(document.nodeCount, 4);
       final insertedNode = document.getNodeAt(1)!;
       expect(insertedNode, isA<ParagraphNode>());
-      expect((insertedNode as ParagraphNode).text.toPlainText(), 'new paragraph');
+      expect(
+        (insertedNode as ParagraphNode).text.toPlainText(),
+        'new paragraph',
+      );
       expect(
         SuperEditorInspector.findDocumentSelection(),
         DocumentSelection.collapsed(

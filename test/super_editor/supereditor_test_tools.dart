@@ -27,8 +27,13 @@ extension DocumentTester on WidgetTester {
   /// Pumps a new [SuperEditor] using an existing [configuration].
   ///
   /// Use this method to simulate a [SuperEditor] whose widget tree changes.
-  TestSuperEditorConfigurator updateDocument(SuperEditorTestConfiguration configuration) {
-    return TestSuperEditorConfigurator._fromExistingConfiguration(this, configuration);
+  TestSuperEditorConfigurator updateDocument(
+    SuperEditorTestConfiguration configuration,
+  ) {
+    return TestSuperEditorConfigurator._fromExistingConfiguration(
+      this,
+      configuration,
+    );
   }
 }
 
@@ -63,10 +68,7 @@ class TestDocumentSelector {
   }
 
   TestSuperEditorConfigurator withSingleParagraph() {
-    return TestSuperEditorConfigurator._(
-      _widgetTester,
-      singleParagraphDoc(),
-    );
+    return TestSuperEditorConfigurator._(_widgetTester, singleParagraphDoc());
   }
 
   TestSuperEditorConfigurator withSingleShortParagraph() {
@@ -84,43 +86,41 @@ class TestDocumentSelector {
   }
 
   TestSuperEditorConfigurator withTwoEmptyParagraphs() {
-    return TestSuperEditorConfigurator._(
-      _widgetTester,
-      twoParagraphEmptyDoc(),
-    );
+    return TestSuperEditorConfigurator._(_widgetTester, twoParagraphEmptyDoc());
   }
 
   TestSuperEditorConfigurator withLongTextContent() {
-    return TestSuperEditorConfigurator._(
-      _widgetTester,
-      longTextDoc(),
-    );
+    return TestSuperEditorConfigurator._(_widgetTester, longTextDoc());
   }
 
   TestSuperEditorConfigurator withLongDoc() {
-    return TestSuperEditorConfigurator._(
-      _widgetTester,
-      longDoc(),
-    );
+    return TestSuperEditorConfigurator._(_widgetTester, longDoc());
   }
 }
 
 /// Builder that configures and pumps a [SuperEditor] widget.
 class TestSuperEditorConfigurator {
-  TestSuperEditorConfigurator._fromExistingConfiguration(this._widgetTester, this._config);
+  TestSuperEditorConfigurator._fromExistingConfiguration(
+    this._widgetTester,
+    this._config,
+  );
 
   TestSuperEditorConfigurator._(this._widgetTester, MutableDocument document)
-      : _config = SuperEditorTestConfiguration(_widgetTester, document);
+    : _config = SuperEditorTestConfiguration(_widgetTester, document);
 
   final WidgetTester _widgetTester;
   final SuperEditorTestConfiguration _config;
 
-  TestSuperEditorConfigurator withAddedRequestHandlers(List<EditRequestHandler> addedRequestHandlers) {
+  TestSuperEditorConfigurator withAddedRequestHandlers(
+    List<EditRequestHandler> addedRequestHandlers,
+  ) {
     _config.addedRequestHandlers.addAll(addedRequestHandlers);
     return this;
   }
 
-  TestSuperEditorConfigurator withAddedReactions(List<EditReaction> addedReactions) {
+  TestSuperEditorConfigurator withAddedReactions(
+    List<EditReaction> addedReactions,
+  ) {
     _config.addedReactions.addAll(addedReactions);
     return this;
   }
@@ -159,7 +159,9 @@ class TestSuperEditorConfigurator {
 
   /// Configures the [SuperEditor] with the given selection [policies], which dictate the interactions
   /// between selection and other details, such as focus change.
-  TestSuperEditorConfigurator withSelectionPolicies(SuperEditorSelectionPolicies policies) {
+  TestSuperEditorConfigurator withSelectionPolicies(
+    SuperEditorSelectionPolicies policies,
+  ) {
     _config.selectionPolicies = policies;
     return this;
   }
@@ -180,7 +182,8 @@ class TestSuperEditorConfigurator {
     bool? displayCaretWithExpandedSelection,
   }) {
     if (displayCaretWithExpandedSelection != null) {
-      _config.displayCaretWithExpandedSelection = displayCaretWithExpandedSelection;
+      _config.displayCaretWithExpandedSelection =
+          displayCaretWithExpandedSelection;
     }
     return this;
   }
@@ -211,7 +214,9 @@ class TestSuperEditorConfigurator {
   }
 
   /// Configures the [SuperEditor]'s [SoftwareKeyboardController].
-  TestSuperEditorConfigurator withSoftwareKeyboardController(SoftwareKeyboardController controller) {
+  TestSuperEditorConfigurator withSoftwareKeyboardController(
+    SoftwareKeyboardController controller,
+  ) {
     _config.softwareKeyboardController = controller;
     return this;
   }
@@ -238,21 +243,27 @@ class TestSuperEditorConfigurator {
   }
 
   /// Configures the way in which the user interacts with the IME, e.g., brightness, autocorrection, etc.
-  TestSuperEditorConfigurator withImeConfiguration(SuperEditorImeConfiguration configuration) {
+  TestSuperEditorConfigurator withImeConfiguration(
+    SuperEditorImeConfiguration configuration,
+  ) {
     _config.imeConfiguration = configuration;
     return this;
   }
 
   /// Configures the [SuperEditor] to intercept and override desired IME signals, as
   /// determined by the given [imeOverrides].
-  TestSuperEditorConfigurator withImeOverrides(DeltaTextInputClientDecorator imeOverrides) {
+  TestSuperEditorConfigurator withImeOverrides(
+    DeltaTextInputClientDecorator imeOverrides,
+  ) {
     _config.imeOverrides = imeOverrides;
     return this;
   }
 
   /// Configures the [SuperEditor] with the given [isImeConnected] notifier, which allows test
   /// code to listen for changes to the IME connection from within [SuperEditor].
-  TestSuperEditorConfigurator withImeConnectionNotifier(ValueNotifier<bool>? isImeConnected) {
+  TestSuperEditorConfigurator withImeConnectionNotifier(
+    ValueNotifier<bool>? isImeConnected,
+  ) {
     _config.isImeConnected = isImeConnected ?? ValueNotifier<bool>(false);
     return this;
   }
@@ -267,7 +278,9 @@ class TestSuperEditorConfigurator {
   }
 
   /// Configures the [SuperEditor] to use the given selector [handlers].
-  TestSuperEditorConfigurator withSelectorHandlers(Map<String, SuperEditorSelectorHandler> handlers) {
+  TestSuperEditorConfigurator withSelectorHandlers(
+    Map<String, SuperEditorSelectorHandler> handlers,
+  ) {
     _config.selectorHandlers = handlers;
     return this;
   }
@@ -283,7 +296,9 @@ class TestSuperEditorConfigurator {
     return this;
   }
 
-  TestSuperEditorConfigurator withHistoryGroupingPolicy(HistoryGroupingPolicy policy) {
+  TestSuperEditorConfigurator withHistoryGroupingPolicy(
+    HistoryGroupingPolicy policy,
+  ) {
     _config.historyGroupPolicy = policy;
     return this;
   }
@@ -295,13 +310,17 @@ class TestSuperEditorConfigurator {
   }
 
   /// Configures the [SuperEditor] to use only the given [componentBuilders]
-  TestSuperEditorConfigurator withComponentBuilders(List<ComponentBuilder>? componentBuilders) {
+  TestSuperEditorConfigurator withComponentBuilders(
+    List<ComponentBuilder>? componentBuilders,
+  ) {
     _config.componentBuilders = componentBuilders;
     return this;
   }
 
   /// Configures the [SuperEditor] to use a custom widget tree above [SuperEditor].
-  TestSuperEditorConfigurator withCustomWidgetTreeBuilder(WidgetTreeBuilder? builder) {
+  TestSuperEditorConfigurator withCustomWidgetTreeBuilder(
+    WidgetTreeBuilder? builder,
+  ) {
     _config.widgetTreeBuilder = builder;
     return this;
   }
@@ -315,7 +334,9 @@ class TestSuperEditorConfigurator {
   }
 
   /// Configures the [SuperEditor] to use the given [scrollController]
-  TestSuperEditorConfigurator withScrollController(ScrollController? scrollController) {
+  TestSuperEditorConfigurator withScrollController(
+    ScrollController? scrollController,
+  ) {
     _config.scrollController = scrollController;
     return this;
   }
@@ -333,25 +354,33 @@ class TestSuperEditorConfigurator {
   }
 
   /// Configures the [SuperEditor] to use the given [builder] as its android toolbar builder.
-  TestSuperEditorConfigurator withAndroidToolbarBuilder(DocumentFloatingToolbarBuilder? builder) {
+  TestSuperEditorConfigurator withAndroidToolbarBuilder(
+    DocumentFloatingToolbarBuilder? builder,
+  ) {
     _config.androidToolbarBuilder = builder;
     return this;
   }
 
   /// Configures the [SuperEditor] to use the given [builder] as its android collapsed handle builder.
-  TestSuperEditorConfigurator withAndroidCollapsedHandleBuilder(DocumentCollapsedHandleBuilder? builder) {
+  TestSuperEditorConfigurator withAndroidCollapsedHandleBuilder(
+    DocumentCollapsedHandleBuilder? builder,
+  ) {
     _config.androidCollapsedHandleBuilder = builder;
     return this;
   }
 
   /// Configures the [SuperEditor] to use the given [builder] as its android expanded handles builder.
-  TestSuperEditorConfigurator withAndroidExpandedHandlesBuilder(DocumentExpandedHandlesBuilder? builder) {
+  TestSuperEditorConfigurator withAndroidExpandedHandlesBuilder(
+    DocumentExpandedHandlesBuilder? builder,
+  ) {
     _config.androidExpandedHandlesBuilder = builder;
     return this;
   }
 
   /// Configures the [SuperEditor] to use the given [builder] as its iOS toolbar builder.
-  TestSuperEditorConfigurator withiOSToolbarBuilder(DocumentFloatingToolbarBuilder? builder) {
+  TestSuperEditorConfigurator withiOSToolbarBuilder(
+    DocumentFloatingToolbarBuilder? builder,
+  ) {
     _config.iOSToolbarBuilder = builder;
     return this;
   }
@@ -371,7 +400,9 @@ class TestSuperEditorConfigurator {
 
   /// Adds the given component builders to the list of component builders that are
   /// used to render the document layout in the pumped [SuperEditor].
-  TestSuperEditorConfigurator withAddedComponents(List<ComponentBuilder> newComponents) {
+  TestSuperEditorConfigurator withAddedComponents(
+    List<ComponentBuilder> newComponents,
+  ) {
     _config.addedComponents.addAll(newComponents);
     return this;
   }
@@ -396,7 +427,8 @@ class TestSuperEditorConfigurator {
 
   /// Configures the [SuperEditor] to use only the given [tapDelegateFactories].
   TestSuperEditorConfigurator withTapDelegateFactories(
-      List<SuperEditorContentTapDelegateFactory>? tapDelegateFactories) {
+    List<SuperEditorContentTapDelegateFactory>? tapDelegateFactories,
+  ) {
     _config.tapDelegateFactories = tapDelegateFactories;
     return this;
   }
@@ -433,9 +465,7 @@ class TestSuperEditorConfigurator {
   /// and then call [WidgetTester.pump] with the returned [Widget].
   Future<TestDocumentContext> pump() async {
     final testDocumentContext = _createTestDocumentContext();
-    await _widgetTester.pumpWidget(
-      _build(testDocumentContext).widget,
-    );
+    await _widgetTester.pumpWidget(_build(testDocumentContext).widget);
     return testDocumentContext;
   }
 
@@ -454,18 +484,15 @@ class TestSuperEditorConfigurator {
   ///
   /// If no [TestDocumentContext] is provided, one will be created based on the current
   /// configuration of this class.
-  ConfiguredSuperEditorWidget _build([TestDocumentContext? testDocumentContext]) {
+  ConfiguredSuperEditorWidget _build([
+    TestDocumentContext? testDocumentContext,
+  ]) {
     final context = testDocumentContext ?? _createTestDocumentContext();
     final superEditor = _buildConstrainedContent(
-      _buildAncestorScrollable(
-        child: _buildSuperEditor(context),
-      ),
+      _buildAncestorScrollable(child: _buildSuperEditor(context)),
     );
 
-    return ConfiguredSuperEditorWidget(
-      context,
-      _buildWidgetTree(superEditor),
-    );
+    return ConfiguredSuperEditorWidget(context, _buildWidgetTree(superEditor));
   }
 
   /// Creates a [TestDocumentContext] based on the configurations in this class.
@@ -479,15 +506,19 @@ class TestSuperEditorConfigurator {
 
     final layoutKey = _config.layoutKey!;
     final focusNode = _config.focusNode ?? FocusNode();
-    final composer = MutableDocumentComposer(initialSelection: _config.selection);
-    final editor = createDefaultDocumentEditor(
-      document: _config.document,
-      composer: composer,
-      historyGroupingPolicy: _config.historyGroupPolicy ?? neverMergePolicy,
-      isHistoryEnabled: _config.isHistoryEnabled,
-    )
-      ..requestHandlers.insertAll(0, _config.addedRequestHandlers)
-      ..reactionPipeline.insertAll(0, _config.addedReactions);
+    final composer = MutableDocumentComposer(
+      initialSelection: _config.selection,
+    );
+    final editor =
+        createDefaultDocumentEditor(
+            document: _config.document,
+            composer: composer,
+            historyGroupingPolicy:
+                _config.historyGroupPolicy ?? neverMergePolicy,
+            isHistoryEnabled: _config.isHistoryEnabled,
+          )
+          ..requestHandlers.insertAll(0, _config.addedRequestHandlers)
+          ..reactionPipeline.insertAll(0, _config.addedReactions);
 
     return TestDocumentContext._(
       focusNode: focusNode,
@@ -519,7 +550,10 @@ class TestSuperEditorConfigurator {
         child: Scaffold(
           appBar: _config.appBarHeight != null
               ? PreferredSize(
-                  preferredSize: ui.Size(double.infinity, _config.appBarHeight!),
+                  preferredSize: ui.Size(
+                    double.infinity,
+                    _config.appBarHeight!,
+                  ),
                   child: SafeArea(
                     child: SizedBox(
                       height: _config.appBarHeight!,
@@ -539,9 +573,7 @@ class TestSuperEditorConfigurator {
     );
   }
 
-  Widget _buildSimulatedSoftwareKeyboard({
-    required Widget child,
-  }) {
+  Widget _buildSimulatedSoftwareKeyboard({required Widget child}) {
     return SoftwareKeyboardHeightSimulator(
       tester: _config.tester,
       isEnabled: _config.simulateSoftwareKeyboardInsets,
@@ -574,9 +606,7 @@ class TestSuperEditorConfigurator {
 
     return CustomScrollView(
       controller: _config.scrollController,
-      slivers: [
-        child,
-      ],
+      slivers: [child],
     );
   }
 
@@ -612,14 +642,17 @@ class _TestSuperEditorState extends State<_TestSuperEditor> {
     super.initState();
 
     _iOsControlsController = SuperEditorIosControlsController(
-      useIosSelectionHeuristics: widget.testConfiguration.useIosSelectionHeuristics,
+      useIosSelectionHeuristics:
+          widget.testConfiguration.useIosSelectionHeuristics,
       toolbarBuilder: widget.testConfiguration.iOSToolbarBuilder,
     );
 
     _androidControlsController = SuperEditorAndroidControlsController(
       toolbarBuilder: widget.testConfiguration.androidToolbarBuilder,
-      collapsedHandleBuilder: widget.testConfiguration.androidCollapsedHandleBuilder,
-      expandedHandlesBuilder: widget.testConfiguration.androidExpandedHandlesBuilder,
+      collapsedHandleBuilder:
+          widget.testConfiguration.androidCollapsedHandleBuilder,
+      expandedHandlesBuilder:
+          widget.testConfiguration.androidExpandedHandlesBuilder,
     );
   }
 
@@ -659,14 +692,20 @@ class _TestSuperEditorState extends State<_TestSuperEditor> {
       autofocus: widget.testConfiguration.autoFocus,
       tapRegionGroupId: widget.testConfiguration.tapRegionGroupId,
       contentTapDelegateFactories:
-          widget.testConfiguration.tapDelegateFactories ?? [superEditorLaunchLinkTapHandlerFactory],
+          widget.testConfiguration.tapDelegateFactories ??
+          [superEditorLaunchLinkTapHandlerFactory],
       editor: widget.testDocumentContext.editor,
       documentLayoutKey: widget.testDocumentContext.layoutKey,
       inputSource: widget.testConfiguration.inputSource,
-      selectionPolicies: widget.testConfiguration.selectionPolicies ?? const SuperEditorSelectionPolicies(),
+      selectionPolicies:
+          widget.testConfiguration.selectionPolicies ??
+          const SuperEditorSelectionPolicies(),
       selectionStyle: widget.testConfiguration.selectionStyles,
-      softwareKeyboardController: widget.testConfiguration.softwareKeyboardController,
-      imePolicies: widget.testConfiguration.imePolicies ?? const SuperEditorImePolicies(),
+      softwareKeyboardController:
+          widget.testConfiguration.softwareKeyboardController,
+      imePolicies:
+          widget.testConfiguration.imePolicies ??
+          const SuperEditorImePolicies(),
       imeConfiguration: widget.testConfiguration.imeConfiguration,
       imeOverrides: widget.testConfiguration.imeOverrides,
       isImeConnected: widget.testConfiguration.isImeConnected,
@@ -682,8 +721,10 @@ class _TestSuperEditorState extends State<_TestSuperEditor> {
       stylesheet: widget.testConfiguration.stylesheet,
       componentBuilders: [
         ...widget.testConfiguration.addedComponents,
-        ...(widget.testConfiguration.componentBuilders ?? defaultComponentBuilders),
-        if (widget.testConfiguration.componentBuilders == null) TaskComponentBuilder(widget.testDocumentContext.editor)
+        ...(widget.testConfiguration.componentBuilders ??
+            defaultComponentBuilders),
+        if (widget.testConfiguration.componentBuilders == null)
+          TaskComponentBuilder(widget.testDocumentContext.editor),
       ],
       scrollController: widget.testConfiguration.scrollController,
       documentOverlayBuilders: _createOverlayBuilders(),
@@ -731,7 +772,8 @@ class _TestSuperEditorState extends State<_TestSuperEditor> {
 
       // Displays caret for typical desktop use-cases.
       DefaultCaretOverlayBuilder(
-        displayCaretWithExpandedSelection: widget.testConfiguration.displayCaretWithExpandedSelection,
+        displayCaretWithExpandedSelection:
+            widget.testConfiguration.displayCaretWithExpandedSelection,
         caretStyle: widget.testConfiguration.caretStyle ?? const CaretStyle(),
       ),
     ];
@@ -825,7 +867,9 @@ class TestDocumentContext {
   final MutableDocumentComposer composer;
   final Editor editor;
   SuperEditorContext findEditContext() =>
-      ((find.byType(SuperEditor).evaluate().first as StatefulElement).state as SuperEditorState).editContext;
+      ((find.byType(SuperEditor).evaluate().first as StatefulElement).state
+              as SuperEditorState)
+          .editContext;
 
   final SuperEditorTestConfiguration configuration;
 }
@@ -837,7 +881,8 @@ class ConfiguredSuperEditorWidget {
   final Widget widget;
 }
 
-Matcher equalsMarkdown(String markdown) => DocumentEqualsMarkdownMatcher(markdown);
+Matcher equalsMarkdown(String markdown) =>
+    DocumentEqualsMarkdownMatcher(markdown);
 
 class DocumentEqualsMarkdownMatcher extends Matcher {
   const DocumentEqualsMarkdownMatcher(this._expectedMarkdown);
@@ -846,7 +891,9 @@ class DocumentEqualsMarkdownMatcher extends Matcher {
 
   @override
   Description describe(Description description) {
-    return description.add("given Document has equivalent content to the given markdown");
+    return description.add(
+      "given Document has equivalent content to the given markdown",
+    );
   }
 
   @override
@@ -898,11 +945,19 @@ class DocumentEqualsMarkdownMatcher extends Matcher {
       return null;
     }
 
-    return stringMatcher.describeMismatch(actualMarkdown, StringDescription(), matchState, false).toString();
+    return stringMatcher
+        .describeMismatch(
+          actualMarkdown,
+          StringDescription(),
+          matchState,
+          false,
+        )
+        .toString();
   }
 }
 
-Matcher documentEquivalentTo(Document expectedDocument) => EquivalentDocumentMatcher(expectedDocument);
+Matcher documentEquivalentTo(Document expectedDocument) =>
+    EquivalentDocumentMatcher(expectedDocument);
 
 class EquivalentDocumentMatcher extends Matcher {
   const EquivalentDocumentMatcher(this._expectedDocument);
@@ -911,7 +966,9 @@ class EquivalentDocumentMatcher extends Matcher {
 
   @override
   Description describe(Description description) {
-    return description.add("given Document has equivalent content to expected Document");
+    return description.add(
+      "given Document has equivalent content to expected Document",
+    );
   }
 
   @override
@@ -959,33 +1016,56 @@ class EquivalentDocumentMatcher extends Matcher {
     bool nodeTypeOrContentMismatch = false;
 
     if (_expectedDocument.nodeCount != actualDocument.nodeCount) {
-      messages.add("expected ${_expectedDocument.nodeCount} document nodes but found ${actualDocument.nodeCount}");
+      messages.add(
+        "expected ${_expectedDocument.nodeCount} document nodes but found ${actualDocument.nodeCount}",
+      );
       nodeCountMismatch = true;
     } else {
       messages.add("document have the same number of nodes");
     }
 
-    final maxNodeCount = max(_expectedDocument.nodeCount, actualDocument.nodeCount);
-    final nodeComparisons = List.generate(maxNodeCount, (index) => ["", "", " "]);
+    final maxNodeCount = max(
+      _expectedDocument.nodeCount,
+      actualDocument.nodeCount,
+    );
+    final nodeComparisons = List.generate(
+      maxNodeCount,
+      (index) => ["", "", " "],
+    );
     for (int i = 0; i < maxNodeCount; i += 1) {
       if (i < _expectedDocument.nodeCount && i < actualDocument.nodeCount) {
-        nodeComparisons[i][0] = _expectedDocument.getNodeAt(i)!.runtimeType.toString();
-        nodeComparisons[i][1] = actualDocument.getNodeAt(i)!.runtimeType.toString();
+        nodeComparisons[i][0] = _expectedDocument
+            .getNodeAt(i)!
+            .runtimeType
+            .toString();
+        nodeComparisons[i][1] = actualDocument
+            .getNodeAt(i)!
+            .runtimeType
+            .toString();
 
-        if (_expectedDocument.getNodeAt(i)!.runtimeType != actualDocument.getNodeAt(i)!.runtimeType) {
+        if (_expectedDocument.getNodeAt(i)!.runtimeType !=
+            actualDocument.getNodeAt(i)!.runtimeType) {
           nodeComparisons[i][2] = "Wrong Type";
           nodeTypeOrContentMismatch = true;
-        } else if (!_expectedDocument.getNodeAt(i)!.hasEquivalentContent(actualDocument.getNodeAt(i)!)) {
+        } else if (!_expectedDocument
+            .getNodeAt(i)!
+            .hasEquivalentContent(actualDocument.getNodeAt(i)!)) {
           nodeComparisons[i][2] = "Different Content";
           nodeTypeOrContentMismatch = true;
         }
       } else if (i < _expectedDocument.nodeCount) {
-        nodeComparisons[i][0] = _expectedDocument.getNodeAt(i)!.runtimeType.toString();
+        nodeComparisons[i][0] = _expectedDocument
+            .getNodeAt(i)!
+            .runtimeType
+            .toString();
         nodeComparisons[i][1] = "NA";
         nodeComparisons[i][2] = "Missing Node";
       } else if (i < actualDocument.nodeCount) {
         nodeComparisons[i][0] = "NA";
-        nodeComparisons[i][1] = actualDocument.getNodeAt(i)!.runtimeType.toString();
+        nodeComparisons[i][1] = actualDocument
+            .getNodeAt(i)!
+            .runtimeType
+            .toString();
         nodeComparisons[i][2] = "Missing Node";
       }
     }
@@ -993,7 +1073,10 @@ class EquivalentDocumentMatcher extends Matcher {
     if (nodeCountMismatch || nodeTypeOrContentMismatch) {
       String messagesList = messages.join(", ");
       messagesList += "\n";
-      messagesList += const TableRenderer().render(nodeComparisons, columns: ["Expected", "Actual", "Difference"]);
+      messagesList += const TableRenderer().render(
+        nodeComparisons,
+        columns: ["Expected", "Actual", "Difference"],
+      );
       return messagesList;
     }
 
@@ -1004,10 +1087,7 @@ class EquivalentDocumentMatcher extends Matcher {
 /// A [ComponentBuilder] which builds an [ImageComponent] that always renders
 /// images as a [SizedBox] with the given [size].
 class FakeImageComponentBuilder implements ComponentBuilder {
-  const FakeImageComponentBuilder({
-    required this.size,
-    this.fillColor,
-  });
+  const FakeImageComponentBuilder({required this.size, this.fillColor});
 
   /// The size of the image component.
   final ui.Size size;
@@ -1016,13 +1096,18 @@ class FakeImageComponentBuilder implements ComponentBuilder {
   final Color? fillColor;
 
   @override
-  SingleColumnLayoutComponentViewModel? createViewModel(Document document, DocumentNode node) {
+  SingleColumnLayoutComponentViewModel? createViewModel(
+    Document document,
+    DocumentNode node,
+  ) {
     return null;
   }
 
   @override
   Widget? createComponent(
-      SingleColumnDocumentComponentContext componentContext, SingleColumnLayoutComponentViewModel componentViewModel) {
+    SingleColumnDocumentComponentContext componentContext,
+    SingleColumnLayoutComponentViewModel componentViewModel,
+  ) {
     if (componentViewModel is! ImageComponentViewModel) {
       return null;
     }
@@ -1030,14 +1115,13 @@ class FakeImageComponentBuilder implements ComponentBuilder {
     return ImageComponent(
       componentKey: componentContext.componentKey,
       imageUrl: componentViewModel.imageUrl,
-      selection: componentViewModel.selection?.nodeSelection as UpstreamDownstreamNodeSelection?,
+      selection:
+          componentViewModel.selection?.nodeSelection
+              as UpstreamDownstreamNodeSelection?,
       selectionColor: componentViewModel.selectionColor,
       imageBuilder: (context, imageUrl) => ColoredBox(
         color: fillColor ?? Colors.transparent,
-        child: SizedBox(
-          height: size.height,
-          width: size.width,
-        ),
+        child: SizedBox(height: size.height, width: size.width),
       ),
     );
   }
@@ -1047,7 +1131,10 @@ class FakeImageComponentBuilder implements ComponentBuilder {
 /// [TaskNode] in a document.
 class ExpandingTaskComponentBuilder extends ComponentBuilder {
   @override
-  SingleColumnLayoutComponentViewModel? createViewModel(Document document, DocumentNode node) {
+  SingleColumnLayoutComponentViewModel? createViewModel(
+    Document document,
+    DocumentNode node,
+  ) {
     if (node is! TaskNode) {
       return null;
     }
@@ -1065,7 +1152,9 @@ class ExpandingTaskComponentBuilder extends ComponentBuilder {
 
   @override
   Widget? createComponent(
-      SingleColumnDocumentComponentContext componentContext, SingleColumnLayoutComponentViewModel componentViewModel) {
+    SingleColumnDocumentComponentContext componentContext,
+    SingleColumnLayoutComponentViewModel componentViewModel,
+  ) {
     if (componentViewModel is! TaskComponentViewModel) {
       return null;
     }
@@ -1079,10 +1168,7 @@ class ExpandingTaskComponentBuilder extends ComponentBuilder {
 
 /// A task component which expands its height when it's selected.
 class ExpandingTaskComponent extends StatefulWidget {
-  const ExpandingTaskComponent({
-    super.key,
-    required this.viewModel,
-  });
+  const ExpandingTaskComponent({super.key, required this.viewModel});
 
   final TaskComponentViewModel viewModel;
 
@@ -1098,7 +1184,8 @@ class _ExpandingTaskComponentState extends State<ExpandingTaskComponent>
   GlobalKey<State<StatefulWidget>> get childDocumentComponentKey => _textKey;
 
   @override
-  TextComposable get childTextComposable => childDocumentComponentKey.currentState as TextComposable;
+  TextComposable get childTextComposable =>
+      childDocumentComponentKey.currentState as TextComposable;
 
   @override
   Widget build(BuildContext context) {
@@ -1114,7 +1201,7 @@ class _ExpandingTaskComponentState extends State<ExpandingTaskComponent>
           highlightWhenEmpty: widget.viewModel.highlightWhenEmpty,
         ),
         if (widget.viewModel.selection != null) //
-          const SizedBox(height: 20)
+          const SizedBox(height: 20),
       ],
     );
   }
@@ -1159,7 +1246,11 @@ class FakeSuperEditorScroller implements DocumentScroller {
   void jumpBy(double delta) => throw UnimplementedError();
 
   @override
-  void animateTo(double to, {required Duration duration, Curve curve = Curves.easeInOut}) => throw UnimplementedError();
+  void animateTo(
+    double to, {
+    required Duration duration,
+    Curve curve = Curves.easeInOut,
+  }) => throw UnimplementedError();
 
   @override
   void attach(ScrollPosition scrollPosition) => throw UnimplementedError();
@@ -1168,8 +1259,10 @@ class FakeSuperEditorScroller implements DocumentScroller {
   void detach() => throw UnimplementedError();
 
   @override
-  void addScrollChangeListener(ui.VoidCallback listener) => throw UnimplementedError();
+  void addScrollChangeListener(ui.VoidCallback listener) =>
+      throw UnimplementedError();
 
   @override
-  void removeScrollChangeListener(ui.VoidCallback listener) => throw UnimplementedError();
+  void removeScrollChangeListener(ui.VoidCallback listener) =>
+      throw UnimplementedError();
 }

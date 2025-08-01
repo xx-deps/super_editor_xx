@@ -12,10 +12,8 @@ import 'package:super_text_layout/super_text_layout.dart';
 /// associated text and it should have the same width and
 /// height as the text it corresponds with.
 class IOSFloatingCursor extends StatelessWidget {
-  const IOSFloatingCursor({
-    Key? key,
-    required this.controller,
-  }) : super(key: key);
+  const IOSFloatingCursor({Key? key, required this.controller})
+    : super(key: key);
 
   final FloatingCursorController controller;
 
@@ -83,18 +81,23 @@ class FloatingCursorController with ChangeNotifier {
   double get floatingCursorHeight => _floatingCursorHeight;
 
   void updateFloatingCursor(
-      TextLayout textLayout, RawFloatingCursorPoint point) {
+    TextLayout textLayout,
+    RawFloatingCursorPoint point,
+  ) {
     switch (point.state) {
       case FloatingCursorDragState.Start:
-        _floatingCursorStartOffset =
-            textLayout.getOffsetAtPosition(_textController.selection.extent);
+        _floatingCursorStartOffset = textLayout.getOffsetAtPosition(
+          _textController.selection.extent,
+        );
         _floatingCursorCurrentOffset = point.offset;
 
         final textPosition = textLayout.getPositionNearestToOffset(
-            _floatingCursorStartOffset! + _floatingCursorCurrentOffset!);
+          _floatingCursorStartOffset! + _floatingCursorCurrentOffset!,
+        );
 
-        _floatingCursorHeight =
-            textLayout.getLineHeightAtPosition(textPosition);
+        _floatingCursorHeight = textLayout.getLineHeightAtPosition(
+          textPosition,
+        );
 
         _textController.selection = TextSelection.collapsed(
           offset: textPosition.offset,
@@ -104,10 +107,12 @@ class FloatingCursorController with ChangeNotifier {
         _floatingCursorCurrentOffset = point.offset;
 
         final textPosition = textLayout.getPositionNearestToOffset(
-            _floatingCursorStartOffset! + _floatingCursorCurrentOffset!);
+          _floatingCursorStartOffset! + _floatingCursorCurrentOffset!,
+        );
 
-        _floatingCursorHeight =
-            textLayout.getLineHeightAtPosition(textPosition);
+        _floatingCursorHeight = textLayout.getLineHeightAtPosition(
+          textPosition,
+        );
 
         _textController.selection = TextSelection.collapsed(
           offset: textPosition.offset,

@@ -29,7 +29,9 @@ void main() {
       expect(didTriggerAncestorShortcut, false);
     });
 
-    testWidgetsOnDesktop("defers to ancestor Shortcut widgets when requested", (tester) async {
+    testWidgetsOnDesktop("defers to ancestor Shortcut widgets when requested", (
+      tester,
+    ) async {
       int ancestorTriggerCount = 0;
       await _pumpShortcutsAndSuperTextField(
         tester,
@@ -71,13 +73,13 @@ Future<void> _pumpShortcutsAndSuperTextField(
           shortcuts: {
             // These activators should only trigger when the child
             // SuperEditor explicitly ignores these keys.
-            const SingleActivator(LogicalKeyboardKey.enter): _VoidCallbackIntent(onShortcut),
-            const SingleActivator(LogicalKeyboardKey.arrowRight, shift: true): _VoidCallbackIntent(onShortcut),
+            const SingleActivator(LogicalKeyboardKey.enter):
+                _VoidCallbackIntent(onShortcut),
+            const SingleActivator(LogicalKeyboardKey.arrowRight, shift: true):
+                _VoidCallbackIntent(onShortcut),
           },
           child: Actions(
-            actions: {
-              _VoidCallbackIntent: _VoidCallbackAction(),
-            },
+            actions: {_VoidCallbackIntent: _VoidCallbackAction()},
             child: SizedBox(
               width: 300,
               child: SuperTextField(

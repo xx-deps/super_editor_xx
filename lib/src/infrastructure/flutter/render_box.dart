@@ -5,9 +5,7 @@ import 'package:flutter/rendering.dart';
 extension AxisAlignedBoxes on RenderBox {
   /// Returns this [RenderBox]'s bounds in the global coordinate space.
   Rect get globalRect => Rect.fromPoints(
-        localToGlobal(Offset.zero),
-        localToGlobal(
-          Offset(size.width, size.height),
-        ),
-      );
+    localToGlobal(Offset.zero),
+    localToGlobal(Offset(size.width, size.height)),
+  );
 }

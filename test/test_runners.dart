@@ -8,7 +8,12 @@ import 'package:super_editor/src/infrastructure/platforms/platform.dart';
 import 'package:super_editor/src/infrastructure/text_input.dart';
 
 @isTestGroup
-void groupWithLogging(String description, logging.Level logLevel, Set<logging.Logger> loggers, VoidCallback body) {
+void groupWithLogging(
+  String description,
+  logging.Level logLevel,
+  Set<logging.Logger> loggers,
+  VoidCallback body,
+) {
   initLoggers(logLevel, loggers);
 
   group(description, body);
@@ -74,21 +79,26 @@ void testWidgetsOnMacWeb(
   bool skip = false,
   TestVariant<Object?> variant = const DefaultTestVariant(),
 }) {
-  testWidgets("$description (on MAC Web)", (tester) async {
-    debugDefaultTargetPlatformOverride = TargetPlatform.macOS;
-    debugIsWebOverride = WebPlatformOverride.web;
+  testWidgets(
+    "$description (on MAC Web)",
+    (tester) async {
+      debugDefaultTargetPlatformOverride = TargetPlatform.macOS;
+      debugIsWebOverride = WebPlatformOverride.web;
 
-    tester.view
-      ..devicePixelRatio = 1.0
-      ..platformDispatcher.textScaleFactorTestValue = 1.0;
+      tester.view
+        ..devicePixelRatio = 1.0
+        ..platformDispatcher.textScaleFactorTestValue = 1.0;
 
-    try {
-      await test(tester);
-    } finally {
-      debugDefaultTargetPlatformOverride = null;
-      debugIsWebOverride = null;
-    }
-  }, variant: variant, skip: skip);
+      try {
+        await test(tester);
+      } finally {
+        debugDefaultTargetPlatformOverride = null;
+        debugIsWebOverride = null;
+      }
+    },
+    variant: variant,
+    skip: skip,
+  );
 }
 
 /// A widget test that runs a variant for Mac and iOS.
@@ -121,17 +131,22 @@ void testWidgetsOnWebIos(
   bool skip = false,
   TestVariant<Object?> variant = const DefaultTestVariant(),
 }) {
-  testWidgets("$description (on iOS Web)", (tester) async {
-    debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
-    debugIsWebOverride = WebPlatformOverride.web;
+  testWidgets(
+    "$description (on iOS Web)",
+    (tester) async {
+      debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+      debugIsWebOverride = WebPlatformOverride.web;
 
-    try {
-      await test(tester);
-    } finally {
-      debugDefaultTargetPlatformOverride = null;
-      debugIsWebOverride = null;
-    }
-  }, variant: variant, skip: skip);
+      try {
+        await test(tester);
+      } finally {
+        debugDefaultTargetPlatformOverride = null;
+        debugIsWebOverride = null;
+      }
+    },
+    variant: variant,
+    skip: skip,
+  );
 }
 
 @isTestGroup
@@ -152,17 +167,22 @@ void testWidgetsOnWebAndroid(
   bool skip = false,
   TestVariant<Object?> variant = const DefaultTestVariant(),
 }) {
-  testWidgets("$description (on Android Web)", (tester) async {
-    debugDefaultTargetPlatformOverride = TargetPlatform.android;
-    debugIsWebOverride = WebPlatformOverride.web;
+  testWidgets(
+    "$description (on Android Web)",
+    (tester) async {
+      debugDefaultTargetPlatformOverride = TargetPlatform.android;
+      debugIsWebOverride = WebPlatformOverride.web;
 
-    try {
-      await test(tester);
-    } finally {
-      debugDefaultTargetPlatformOverride = null;
-      debugIsWebOverride = null;
-    }
-  }, variant: variant, skip: skip);
+      try {
+        await test(tester);
+      } finally {
+        debugDefaultTargetPlatformOverride = null;
+        debugIsWebOverride = null;
+      }
+    },
+    variant: variant,
+    skip: skip,
+  );
 }
 
 @isTestGroup
@@ -172,21 +192,26 @@ void testWidgetsOnWindowsWeb(
   bool skip = false,
   TestVariant<Object?> variant = const DefaultTestVariant(),
 }) {
-  testWidgets("$description (on Windows Web)", (tester) async {
-    debugDefaultTargetPlatformOverride = TargetPlatform.windows;
-    debugIsWebOverride = WebPlatformOverride.web;
+  testWidgets(
+    "$description (on Windows Web)",
+    (tester) async {
+      debugDefaultTargetPlatformOverride = TargetPlatform.windows;
+      debugIsWebOverride = WebPlatformOverride.web;
 
-    tester.view
-      ..devicePixelRatio = 1.0
-      ..platformDispatcher.textScaleFactorTestValue = 1.0;
+      tester.view
+        ..devicePixelRatio = 1.0
+        ..platformDispatcher.textScaleFactorTestValue = 1.0;
 
-    try {
-      await test(tester);
-    } finally {
-      debugDefaultTargetPlatformOverride = null;
-      debugIsWebOverride = null;
-    }
-  }, variant: variant, skip: skip);
+      try {
+        await test(tester);
+      } finally {
+        debugDefaultTargetPlatformOverride = null;
+        debugIsWebOverride = null;
+      }
+    },
+    variant: variant,
+    skip: skip,
+  );
 }
 
 @isTestGroup
@@ -196,21 +221,26 @@ void testWidgetsOnLinuxWeb(
   bool skip = false,
   TestVariant<Object?> variant = const DefaultTestVariant(),
 }) {
-  testWidgets("$description (on Linux Web)", (tester) async {
-    debugDefaultTargetPlatformOverride = TargetPlatform.linux;
-    debugIsWebOverride = WebPlatformOverride.web;
+  testWidgets(
+    "$description (on Linux Web)",
+    (tester) async {
+      debugDefaultTargetPlatformOverride = TargetPlatform.linux;
+      debugIsWebOverride = WebPlatformOverride.web;
 
-    tester.view
-      ..devicePixelRatio = 1.0
-      ..platformDispatcher.textScaleFactorTestValue = 1.0;
+      tester.view
+        ..devicePixelRatio = 1.0
+        ..platformDispatcher.textScaleFactorTestValue = 1.0;
 
-    try {
-      await test(tester);
-    } finally {
-      debugDefaultTargetPlatformOverride = null;
-      debugIsWebOverride = null;
-    }
-  }, variant: variant, skip: skip);
+      try {
+        await test(tester);
+      } finally {
+        debugDefaultTargetPlatformOverride = null;
+        debugIsWebOverride = null;
+      }
+    },
+    variant: variant,
+    skip: skip,
+  );
 }
 
 /// A widget test that runs a variant for every desktop platform, e.g.,
@@ -238,7 +268,9 @@ void testAllInputsOnAllPlatforms(
   InputModeTesterCallback test, {
   bool skip = false,
 }) {
-  testWidgetsOnAllPlatforms("$description (keyboard)", (WidgetTester tester) async {
+  testWidgetsOnAllPlatforms("$description (keyboard)", (
+    WidgetTester tester,
+  ) async {
     await test(tester, inputSource: TextInputSource.keyboard);
   }, skip: skip);
 
@@ -294,16 +326,21 @@ void testAllInputsOnWindowsAndLinux(
   InputModeTesterCallback test, {
   bool skip = false,
 }) {
-  testWidgetsOnWindowsAndLinux("$description (keyboard)", (WidgetTester tester) async {
+  testWidgetsOnWindowsAndLinux("$description (keyboard)", (
+    WidgetTester tester,
+  ) async {
     await test(tester, inputSource: TextInputSource.keyboard);
   }, skip: skip);
 
-  testWidgetsOnWindowsAndLinux("$description (IME)", (WidgetTester tester) async {
+  testWidgetsOnWindowsAndLinux("$description (IME)", (
+    WidgetTester tester,
+  ) async {
     await test(tester, inputSource: TextInputSource.ime);
   }, skip: skip);
 }
 
-typedef InputModeTesterCallback = Future<void> Function(
-  WidgetTester widgetTester, {
-  required TextInputSource inputSource,
-});
+typedef InputModeTesterCallback =
+    Future<void> Function(
+      WidgetTester widgetTester, {
+      required TextInputSource inputSource,
+    });

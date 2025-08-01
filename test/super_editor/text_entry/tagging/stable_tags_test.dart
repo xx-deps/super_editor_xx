@@ -11,10 +11,7 @@ void main() {
   group("SuperEditor stable tags >", () {
     group("composing >", () {
       testWidgetsOnAllPlatforms("starts with a trigger", (tester) async {
-        await _pumpTestEditor(
-          tester,
-          singleParagraphEmptyDoc(),
-        );
+        await _pumpTestEditor(tester, singleParagraphEmptyDoc());
         await tester.placeCaretInParagraph("1", 0);
 
         // Compose a stable tag.
@@ -29,11 +26,10 @@ void main() {
         );
       });
 
-      testWidgetsOnAllPlatforms("can start at the beginning of a paragraph", (tester) async {
-        await _pumpTestEditor(
-          tester,
-          singleParagraphEmptyDoc(),
-        );
+      testWidgetsOnAllPlatforms("can start at the beginning of a paragraph", (
+        tester,
+      ) async {
+        await _pumpTestEditor(tester, singleParagraphEmptyDoc());
         await tester.placeCaretInParagraph("1", 0);
 
         // Compose a stable tag.
@@ -53,10 +49,7 @@ void main() {
           tester,
           MutableDocument(
             nodes: [
-              ParagraphNode(
-                id: "1",
-                text: AttributedText("before  after"),
-              ),
+              ParagraphNode(id: "1", text: AttributedText("before  after")),
             ],
           ),
         );
@@ -76,44 +69,44 @@ void main() {
         );
       });
 
-      testWidgetsOnAllPlatforms("can start at the beginning of an existing word", (tester) async {
+      testWidgetsOnAllPlatforms(
+        "can start at the beginning of an existing word",
+        (tester) async {
+          await _pumpTestEditor(
+            tester,
+            MutableDocument(
+              nodes: [
+                ParagraphNode(
+                  id: "1",
+                  text: AttributedText("before john after"),
+                ),
+              ],
+            ),
+          );
+
+          // Place the caret at "before |john"
+          await tester.placeCaretInParagraph("1", 7);
+
+          // Type the trigger to start composing a tag.
+          await tester.typeImeText("@");
+
+          // Ensure that "@john" was attributed.
+          final text = SuperEditorInspector.findTextInComponent("1");
+          expect(text.text, "before @john after");
+          expect(
+            text.getAttributedRange({stableTagComposingAttribution}, 7),
+            const SpanRange(7, 11),
+          );
+        },
+      );
+
+      testWidgetsOnAllPlatforms("by default does not continue after a space", (
+        tester,
+      ) async {
         await _pumpTestEditor(
           tester,
           MutableDocument(
-            nodes: [
-              ParagraphNode(
-                id: "1",
-                text: AttributedText("before john after"),
-              ),
-            ],
-          ),
-        );
-
-        // Place the caret at "before |john"
-        await tester.placeCaretInParagraph("1", 7);
-
-        // Type the trigger to start composing a tag.
-        await tester.typeImeText("@");
-
-        // Ensure that "@john" was attributed.
-        final text = SuperEditorInspector.findTextInComponent("1");
-        expect(text.text, "before @john after");
-        expect(
-          text.getAttributedRange({stableTagComposingAttribution}, 7),
-          const SpanRange(7, 11),
-        );
-      });
-
-      testWidgetsOnAllPlatforms("by default does not continue after a space", (tester) async {
-        await _pumpTestEditor(
-          tester,
-          MutableDocument(
-            nodes: [
-              ParagraphNode(
-                id: "1",
-                text: AttributedText("before "),
-              ),
-            ],
+            nodes: [ParagraphNode(id: "1", text: AttributedText("before "))],
           ),
         );
 
@@ -129,25 +122,24 @@ void main() {
         expect(text.toPlainText(), "before @john after");
         expect(
           text.getAttributionSpansInRange(
-            attributionFilter: (attribution) => attribution == stableTagComposingAttribution,
+            attributionFilter: (attribution) =>
+                attribution == stableTagComposingAttribution,
             range: const SpanRange(0, 18),
           ),
           isEmpty,
         );
       });
 
-      testWidgetsOnAllPlatforms("can be configured to continue after a space", (tester) async {
+      testWidgetsOnAllPlatforms("can be configured to continue after a space", (
+        tester,
+      ) async {
         await _pumpTestEditor(
-            tester,
-            MutableDocument(
-              nodes: [
-                ParagraphNode(
-                  id: "1",
-                  text: AttributedText("before "),
-                ),
-              ],
-            ),
-            const TagRule(trigger: "@"));
+          tester,
+          MutableDocument(
+            nodes: [ParagraphNode(id: "1", text: AttributedText("before "))],
+          ),
+          const TagRule(trigger: "@"),
+        );
 
         // Place the caret at "before |"
         await tester.placeCaretInParagraph("1", 7);
@@ -169,7 +161,9 @@ void main() {
         text = SuperEditorInspector.findTextInComponent("1");
         expect(text.toPlainText(), "before @john after");
         expect(
-          text.getAttributionSpansByFilter((a) => a == stableTagComposingAttribution),
+          text.getAttributionSpansByFilter(
+            (a) => a == stableTagComposingAttribution,
+          ),
           {
             const AttributionSpan(
               attribution: stableTagComposingAttribution,
@@ -180,145 +174,136 @@ void main() {
         );
       });
 
-      testWidgetsOnAllPlatforms("continues when user expands the selection upstream", (tester) async {
+      testWidgetsOnAllPlatforms(
+        "continues when user expands the selection upstream",
+        (tester) async {
+          await _pumpTestEditor(
+            tester,
+            MutableDocument(
+              nodes: [
+                ParagraphNode(id: "1", text: AttributedText("before ")),
+                ParagraphNode(id: "2", text: AttributedText()),
+              ],
+            ),
+          );
+
+          // Place the caret at "before |"
+          await tester.placeCaretInParagraph("1", 7);
+
+          // Compose a stable tag.
+          await tester.typeImeText("@john");
+
+          // Expand the selection to "before @joh|n|"
+          await tester.pressShiftLeftArrow();
+          expect(
+            SuperEditorInspector.findDocumentSelection(),
+            const DocumentSelection(
+              base: DocumentPosition(
+                nodeId: "1",
+                nodePosition: TextNodePosition(offset: 12),
+              ),
+              extent: DocumentPosition(
+                nodeId: "1",
+                nodePosition: TextNodePosition(offset: 11),
+              ),
+            ),
+          );
+
+          // Ensure we're still composing
+          AttributedText text = SuperEditorInspector.findTextInComponent("1");
+          expect(
+            text.getAttributedRange({stableTagComposingAttribution}, 7),
+            const SpanRange(7, 11),
+          );
+
+          // Expand the selection to "before |@john|"
+          await tester.pressShiftLeftArrow();
+          await tester.pressShiftLeftArrow();
+          await tester.pressShiftLeftArrow();
+          await tester.pressShiftLeftArrow();
+
+          // Ensure we're still composing
+          text = SuperEditorInspector.findTextInComponent("1");
+          expect(
+            text.getAttributedRange({stableTagComposingAttribution}, 7),
+            const SpanRange(7, 11),
+          );
+
+          // Expand the selection to "befor|e @john|"
+          await tester.pressShiftLeftArrow();
+          await tester.pressShiftLeftArrow();
+
+          // Ensure we're still composing
+          text = SuperEditorInspector.findTextInComponent("1");
+          expect(
+            text.getAttributedRange({stableTagComposingAttribution}, 7),
+            const SpanRange(7, 11),
+          );
+        },
+      );
+
+      testWidgetsOnAllPlatforms(
+        "continues when user expands the selection downstream",
+        (tester) async {
+          await _pumpTestEditor(
+            tester,
+            MutableDocument(
+              nodes: [
+                ParagraphNode(id: "1", text: AttributedText("before  after")),
+                ParagraphNode(id: "2", text: AttributedText()),
+              ],
+            ),
+          );
+
+          // Place the caret at "before | after"
+          await tester.placeCaretInParagraph("1", 7);
+
+          // Compose a stable tag.
+          await tester.typeImeText("@john");
+
+          // Move the caret to "before @|john".
+          await tester.pressLeftArrow();
+          await tester.pressLeftArrow();
+          await tester.pressLeftArrow();
+          await tester.pressLeftArrow();
+
+          // Expand the selection to "before @|john a|fter"
+          await tester.pressShiftRightArrow();
+          await tester.pressShiftRightArrow();
+          await tester.pressShiftRightArrow();
+          await tester.pressShiftRightArrow();
+          await tester.pressShiftRightArrow();
+          await tester.pressShiftRightArrow();
+          expect(
+            SuperEditorInspector.findDocumentSelection(),
+            const DocumentSelection(
+              base: DocumentPosition(
+                nodeId: "1",
+                nodePosition: TextNodePosition(offset: 8),
+              ),
+              extent: DocumentPosition(
+                nodeId: "1",
+                nodePosition: TextNodePosition(offset: 14),
+              ),
+            ),
+          );
+
+          // Ensure we're still composing
+          AttributedText text = SuperEditorInspector.findTextInComponent("1");
+          expect(
+            text.getAttributedRange({stableTagComposingAttribution}, 7),
+            const SpanRange(7, 11),
+          );
+        },
+      );
+
+      testWidgetsOnAllPlatforms("cancels composing when the user presses ESC", (
+        tester,
+      ) async {
         await _pumpTestEditor(
           tester,
           MutableDocument(
-            nodes: [
-              ParagraphNode(
-                id: "1",
-                text: AttributedText("before "),
-              ),
-              ParagraphNode(
-                id: "2",
-                text: AttributedText(),
-              ),
-            ],
-          ),
-        );
-
-        // Place the caret at "before |"
-        await tester.placeCaretInParagraph("1", 7);
-
-        // Compose a stable tag.
-        await tester.typeImeText("@john");
-
-        // Expand the selection to "before @joh|n|"
-        await tester.pressShiftLeftArrow();
-        expect(
-          SuperEditorInspector.findDocumentSelection(),
-          const DocumentSelection(
-            base: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 12),
-            ),
-            extent: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 11),
-            ),
-          ),
-        );
-
-        // Ensure we're still composing
-        AttributedText text = SuperEditorInspector.findTextInComponent("1");
-        expect(
-          text.getAttributedRange({stableTagComposingAttribution}, 7),
-          const SpanRange(7, 11),
-        );
-
-        // Expand the selection to "before |@john|"
-        await tester.pressShiftLeftArrow();
-        await tester.pressShiftLeftArrow();
-        await tester.pressShiftLeftArrow();
-        await tester.pressShiftLeftArrow();
-
-        // Ensure we're still composing
-        text = SuperEditorInspector.findTextInComponent("1");
-        expect(
-          text.getAttributedRange({stableTagComposingAttribution}, 7),
-          const SpanRange(7, 11),
-        );
-
-        // Expand the selection to "befor|e @john|"
-        await tester.pressShiftLeftArrow();
-        await tester.pressShiftLeftArrow();
-
-        // Ensure we're still composing
-        text = SuperEditorInspector.findTextInComponent("1");
-        expect(
-          text.getAttributedRange({stableTagComposingAttribution}, 7),
-          const SpanRange(7, 11),
-        );
-      });
-
-      testWidgetsOnAllPlatforms("continues when user expands the selection downstream", (tester) async {
-        await _pumpTestEditor(
-          tester,
-          MutableDocument(
-            nodes: [
-              ParagraphNode(
-                id: "1",
-                text: AttributedText("before  after"),
-              ),
-              ParagraphNode(
-                id: "2",
-                text: AttributedText(),
-              ),
-            ],
-          ),
-        );
-
-        // Place the caret at "before | after"
-        await tester.placeCaretInParagraph("1", 7);
-
-        // Compose a stable tag.
-        await tester.typeImeText("@john");
-
-        // Move the caret to "before @|john".
-        await tester.pressLeftArrow();
-        await tester.pressLeftArrow();
-        await tester.pressLeftArrow();
-        await tester.pressLeftArrow();
-
-        // Expand the selection to "before @|john a|fter"
-        await tester.pressShiftRightArrow();
-        await tester.pressShiftRightArrow();
-        await tester.pressShiftRightArrow();
-        await tester.pressShiftRightArrow();
-        await tester.pressShiftRightArrow();
-        await tester.pressShiftRightArrow();
-        expect(
-          SuperEditorInspector.findDocumentSelection(),
-          const DocumentSelection(
-            base: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 8),
-            ),
-            extent: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 14),
-            ),
-          ),
-        );
-
-        // Ensure we're still composing
-        AttributedText text = SuperEditorInspector.findTextInComponent("1");
-        expect(
-          text.getAttributedRange({stableTagComposingAttribution}, 7),
-          const SpanRange(7, 11),
-        );
-      });
-
-      testWidgetsOnAllPlatforms("cancels composing when the user presses ESC", (tester) async {
-        await _pumpTestEditor(
-          tester,
-          MutableDocument(
-            nodes: [
-              ParagraphNode(
-                id: "1",
-                text: AttributedText("before "),
-              ),
-            ],
+            nodes: [ParagraphNode(id: "1", text: AttributedText("before "))],
           ),
         );
 
@@ -342,7 +327,8 @@ void main() {
         text = SuperEditorInspector.findTextInComponent("1");
         expect(
           text.getAttributionSpansInRange(
-            attributionFilter: (attribution) => attribution == stableTagComposingAttribution,
+            attributionFilter: (attribution) =>
+                attribution == stableTagComposingAttribution,
             range: const SpanRange(0, 7),
           ),
           isEmpty,
@@ -360,7 +346,8 @@ void main() {
         expect(text.toPlainText(), "before @j");
         expect(
           text.getAttributionSpansInRange(
-            attributionFilter: (attribution) => attribution == stableTagComposingAttribution,
+            attributionFilter: (attribution) =>
+                attribution == stableTagComposingAttribution,
             range: const SpanRange(0, 8),
           ),
           isEmpty,
@@ -378,14 +365,16 @@ void main() {
         expect(text.toPlainText(), "before @j ");
         expect(
           text.getAttributionSpansInRange(
-            attributionFilter: (attribution) => attribution == stableTagComposingAttribution,
+            attributionFilter: (attribution) =>
+                attribution == stableTagComposingAttribution,
             range: const SpanRange(0, 9),
           ),
           isEmpty,
         );
         expect(
           text.getAttributionSpansInRange(
-            attributionFilter: (attribution) => attribution is CommittedStableTagAttribution,
+            attributionFilter: (attribution) =>
+                attribution is CommittedStableTagAttribution,
             range: const SpanRange(0, 9),
           ),
           isEmpty,
@@ -396,61 +385,63 @@ void main() {
         );
       });
 
-      testWidgetsOnAllPlatforms("only notifies tag index listeners when tags change", (tester) async {
-        final testContext = await _pumpTestEditor(
-          tester,
-          singleParagraphEmptyDoc(),
-        );
-        await tester.placeCaretInParagraph("1", 0);
+      testWidgetsOnAllPlatforms(
+        "only notifies tag index listeners when tags change",
+        (tester) async {
+          final testContext = await _pumpTestEditor(
+            tester,
+            singleParagraphEmptyDoc(),
+          );
+          await tester.placeCaretInParagraph("1", 0);
 
-        // Listen for tag notifications.
-        int tagNotificationCount = 0;
-        testContext.editor.context.stableTagIndex.addListener(() {
-          tagNotificationCount += 1;
-        });
+          // Listen for tag notifications.
+          int tagNotificationCount = 0;
+          testContext.editor.context.stableTagIndex.addListener(() {
+            tagNotificationCount += 1;
+          });
 
-        // Type some non tag text.
-        await tester.typeImeText("hello ");
+          // Type some non tag text.
+          await tester.typeImeText("hello ");
 
-        // Ensure that no tag notifications were sent, because the typed text
-        // has no tag artifacts.
-        expect(tagNotificationCount, 0);
+          // Ensure that no tag notifications were sent, because the typed text
+          // has no tag artifacts.
+          expect(tagNotificationCount, 0);
 
-        // Start a tag.
-        await tester.typeImeText("@");
+          // Start a tag.
+          await tester.typeImeText("@");
 
-        // Ensure that no tag notifications were sent, because we haven't completed
-        // a tag.
-        expect(tagNotificationCount, 0);
+          // Ensure that no tag notifications were sent, because we haven't completed
+          // a tag.
+          expect(tagNotificationCount, 0);
 
-        // Create and update a tag.
-        await tester.typeImeText("world ");
+          // Create and update a tag.
+          await tester.typeImeText("world ");
 
-        // Ensure that we received a notification when the tag was committed.
-        expect(tagNotificationCount, 1);
+          // Ensure that we received a notification when the tag was committed.
+          expect(tagNotificationCount, 1);
 
-        // Delete the committed tag.
-        await tester.pressBackspace();
-        await tester.pressBackspace();
+          // Delete the committed tag.
+          await tester.pressBackspace();
+          await tester.pressBackspace();
 
-        // Ensure that we received a notification when the tag was deleted.
-        expect(tagNotificationCount, 2);
+          // Ensure that we received a notification when the tag was deleted.
+          expect(tagNotificationCount, 2);
 
-        // Create a tag and then cancel it.
-        await tester.typeImeText("@cancelled");
-        await tester.pressEscape();
+          // Create a tag and then cancel it.
+          await tester.typeImeText("@cancelled");
+          await tester.pressEscape();
 
-        // Ensure that we received a notification when the tag was cancelled.
-        expect(tagNotificationCount, 3);
-      });
+          // Ensure that we received a notification when the tag was cancelled.
+          expect(tagNotificationCount, 3);
+        },
+      );
     });
 
     group("commits >", () {
-      testWidgetsOnAllPlatforms("at the beginning of a paragraph", (tester) async {
-        await _pumpTestEditor(
-          tester,
-          singleParagraphEmptyDoc(),
-        );
+      testWidgetsOnAllPlatforms("at the beginning of a paragraph", (
+        tester,
+      ) async {
+        await _pumpTestEditor(tester, singleParagraphEmptyDoc());
 
         // Place the caret in the empty paragraph.
         await tester.placeCaretInParagraph("1", 0);
@@ -462,20 +453,21 @@ void main() {
         final text = SuperEditorInspector.findTextInComponent("1");
         expect(text.toPlainText(), "@john after");
         expect(
-          text.getAttributedRange({const CommittedStableTagAttribution("john")}, 0),
+          text.getAttributedRange({
+            const CommittedStableTagAttribution("john"),
+          }, 0),
           const SpanRange(0, 4),
         );
       });
 
-      testWidgetsOnAllPlatforms("at the beginning of an existing word", (tester) async {
+      testWidgetsOnAllPlatforms("at the beginning of an existing word", (
+        tester,
+      ) async {
         await _pumpTestEditor(
           tester,
           MutableDocument(
             nodes: [
-              ParagraphNode(
-                id: "1",
-                text: AttributedText("before john after"),
-              ),
+              ParagraphNode(id: "1", text: AttributedText("before john after")),
             ],
           ),
         );
@@ -493,7 +485,9 @@ void main() {
         final text = SuperEditorInspector.findTextInComponent("1");
         expect(text.text, "before @john after");
         expect(
-          text.getAttributedRange({const CommittedStableTagAttribution("john")}, 7),
+          text.getAttributedRange({
+            const CommittedStableTagAttribution("john"),
+          }, 7),
           const SpanRange(7, 11),
         );
       });
@@ -502,12 +496,7 @@ void main() {
         await _pumpTestEditor(
           tester,
           MutableDocument(
-            nodes: [
-              ParagraphNode(
-                id: "1",
-                text: AttributedText("before "),
-              ),
-            ],
+            nodes: [ParagraphNode(id: "1", text: AttributedText("before "))],
           ),
         );
 
@@ -521,24 +510,22 @@ void main() {
         final text = SuperEditorInspector.findTextInComponent("1");
         expect(text.toPlainText(), "before @john after");
         expect(
-          text.getAttributedRange({const CommittedStableTagAttribution("john")}, 7),
+          text.getAttributedRange({
+            const CommittedStableTagAttribution("john"),
+          }, 7),
           const SpanRange(7, 11),
         );
       });
 
-      testWidgetsOnAllPlatforms("at end of text when user moves the caret", (tester) async {
+      testWidgetsOnAllPlatforms("at end of text when user moves the caret", (
+        tester,
+      ) async {
         await _pumpTestEditor(
           tester,
           MutableDocument(
             nodes: [
-              ParagraphNode(
-                id: "1",
-                text: AttributedText("before "),
-              ),
-              ParagraphNode(
-                id: "2",
-                text: AttributedText(),
-              ),
+              ParagraphNode(id: "1", text: AttributedText("before ")),
+              ParagraphNode(id: "2", text: AttributedText()),
             ],
           ),
         );
@@ -563,116 +550,113 @@ void main() {
         final text = SuperEditorInspector.findTextInComponent("1");
         expect(text.toPlainText(), "before @john");
         expect(
-          text.getAttributedRange({const CommittedStableTagAttribution("john")}, 7),
+          text.getAttributedRange({
+            const CommittedStableTagAttribution("john"),
+          }, 7),
           const SpanRange(7, 11),
         );
       });
 
-      testWidgetsOnAllPlatforms("when upstream selection collapses outside of tag", (tester) async {
-        await _pumpTestEditor(
-          tester,
-          MutableDocument(
-            nodes: [
-              ParagraphNode(
-                id: "1",
-                text: AttributedText("before "),
-              ),
-              ParagraphNode(
-                id: "2",
-                text: AttributedText(),
-              ),
-            ],
-          ),
-        );
+      testWidgetsOnAllPlatforms(
+        "when upstream selection collapses outside of tag",
+        (tester) async {
+          await _pumpTestEditor(
+            tester,
+            MutableDocument(
+              nodes: [
+                ParagraphNode(id: "1", text: AttributedText("before ")),
+                ParagraphNode(id: "2", text: AttributedText()),
+              ],
+            ),
+          );
 
-        // Place the caret at "before |"
-        await tester.placeCaretInParagraph("1", 7);
+          // Place the caret at "before |"
+          await tester.placeCaretInParagraph("1", 7);
 
-        // Compose a stable tag.
-        await tester.typeImeText("@john");
+          // Compose a stable tag.
+          await tester.typeImeText("@john");
 
-        // Expand the selection to "befor|e @john|"
-        await tester.pressShiftLeftArrow();
-        await tester.pressShiftLeftArrow();
-        await tester.pressShiftLeftArrow();
-        await tester.pressShiftLeftArrow();
-        await tester.pressShiftLeftArrow();
-        await tester.pressShiftLeftArrow();
-        await tester.pressShiftLeftArrow();
+          // Expand the selection to "befor|e @john|"
+          await tester.pressShiftLeftArrow();
+          await tester.pressShiftLeftArrow();
+          await tester.pressShiftLeftArrow();
+          await tester.pressShiftLeftArrow();
+          await tester.pressShiftLeftArrow();
+          await tester.pressShiftLeftArrow();
+          await tester.pressShiftLeftArrow();
 
-        // Collapse the selection to the upstream position.
-        await tester.pressLeftArrow();
+          // Collapse the selection to the upstream position.
+          await tester.pressLeftArrow();
 
-        // Ensure that the stable tag was submitted.
-        final text = SuperEditorInspector.findTextInComponent("1");
-        expect(text.toPlainText(), "before @john");
-        expect(
-          text.getAttributedRange({const CommittedStableTagAttribution("john")}, 7),
-          const SpanRange(7, 11),
-        );
-      });
+          // Ensure that the stable tag was submitted.
+          final text = SuperEditorInspector.findTextInComponent("1");
+          expect(text.toPlainText(), "before @john");
+          expect(
+            text.getAttributedRange({
+              const CommittedStableTagAttribution("john"),
+            }, 7),
+            const SpanRange(7, 11),
+          );
+        },
+      );
 
-      testWidgetsOnAllPlatforms("when downstream selection collapses outside of tag", (tester) async {
-        await _pumpTestEditor(
-          tester,
-          MutableDocument(
-            nodes: [
-              ParagraphNode(
-                id: "1",
-                text: AttributedText("before  after"),
-              ),
-              ParagraphNode(
-                id: "2",
-                text: AttributedText(),
-              ),
-            ],
-          ),
-        );
+      testWidgetsOnAllPlatforms(
+        "when downstream selection collapses outside of tag",
+        (tester) async {
+          await _pumpTestEditor(
+            tester,
+            MutableDocument(
+              nodes: [
+                ParagraphNode(id: "1", text: AttributedText("before  after")),
+                ParagraphNode(id: "2", text: AttributedText()),
+              ],
+            ),
+          );
 
-        // Place the caret at "before | after"
-        await tester.placeCaretInParagraph("1", 7);
+          // Place the caret at "before | after"
+          await tester.placeCaretInParagraph("1", 7);
 
-        // Compose a stable tag.
-        await tester.typeImeText("@john");
+          // Compose a stable tag.
+          await tester.typeImeText("@john");
 
-        // Move caret to "before @|john after"
-        await tester.pressLeftArrow();
-        await tester.pressLeftArrow();
-        await tester.pressLeftArrow();
-        await tester.pressLeftArrow();
+          // Move caret to "before @|john after"
+          await tester.pressLeftArrow();
+          await tester.pressLeftArrow();
+          await tester.pressLeftArrow();
+          await tester.pressLeftArrow();
 
-        // Expand the selection to "before @|john a|fter"
-        await tester.pressShiftRightArrow();
-        await tester.pressShiftRightArrow();
-        await tester.pressShiftRightArrow();
-        await tester.pressShiftRightArrow();
-        await tester.pressShiftRightArrow();
-        await tester.pressShiftRightArrow();
+          // Expand the selection to "before @|john a|fter"
+          await tester.pressShiftRightArrow();
+          await tester.pressShiftRightArrow();
+          await tester.pressShiftRightArrow();
+          await tester.pressShiftRightArrow();
+          await tester.pressShiftRightArrow();
+          await tester.pressShiftRightArrow();
 
-        // Collapse the selection to the downstream position.
-        await tester.pressRightArrow();
+          // Collapse the selection to the downstream position.
+          await tester.pressRightArrow();
 
-        // Ensure that the stable tag was submitted.
-        final text = SuperEditorInspector.findTextInComponent("1");
-        expect(text.toPlainText(), "before @john after");
-        expect(
-          text.getAttributedRange({const CommittedStableTagAttribution("john")}, 7),
-          const SpanRange(7, 11),
-        );
-      });
+          // Ensure that the stable tag was submitted.
+          final text = SuperEditorInspector.findTextInComponent("1");
+          expect(text.toPlainText(), "before @john after");
+          expect(
+            text.getAttributedRange({
+              const CommittedStableTagAttribution("john"),
+            }, 7),
+            const SpanRange(7, 11),
+          );
+        },
+      );
     });
 
     group("committed >", () {
-      testWidgetsOnAllPlatforms("prevents user tapping to place caret in tag", (tester) async {
+      testWidgetsOnAllPlatforms("prevents user tapping to place caret in tag", (
+        tester,
+      ) async {
         await _pumpTestEditor(
           tester,
           MutableDocument(
-            nodes: [
-              ParagraphNode(
-                id: "1",
-                text: AttributedText("before "),
-              ),
-            ],
+            nodes: [ParagraphNode(id: "1", text: AttributedText("before "))],
           ),
         );
 
@@ -711,16 +695,13 @@ void main() {
         );
       });
 
-      testWidgetsOnAllPlatforms("selects entire tag when double tapped", (tester) async {
+      testWidgetsOnAllPlatforms("selects entire tag when double tapped", (
+        tester,
+      ) async {
         await _pumpTestEditor(
           tester,
           MutableDocument(
-            nodes: [
-              ParagraphNode(
-                id: "1",
-                text: AttributedText("before "),
-              ),
-            ],
+            nodes: [ParagraphNode(id: "1", text: AttributedText("before "))],
           ),
         );
 
@@ -749,16 +730,13 @@ void main() {
         );
       });
 
-      testWidgetsOnAllPlatforms("pushes caret downstream around the tag", (tester) async {
+      testWidgetsOnAllPlatforms("pushes caret downstream around the tag", (
+        tester,
+      ) async {
         await _pumpTestEditor(
           tester,
           MutableDocument(
-            nodes: [
-              ParagraphNode(
-                id: "1",
-                text: AttributedText("before "),
-              ),
-            ],
+            nodes: [ParagraphNode(id: "1", text: AttributedText("before "))],
           ),
         );
 
@@ -788,16 +766,13 @@ void main() {
         );
       });
 
-      testWidgetsOnAllPlatforms("pushes caret upstream around the tag", (tester) async {
+      testWidgetsOnAllPlatforms("pushes caret upstream around the tag", (
+        tester,
+      ) async {
         await _pumpTestEditor(
           tester,
           MutableDocument(
-            nodes: [
-              ParagraphNode(
-                id: "1",
-                text: AttributedText("before "),
-              ),
-            ],
+            nodes: [ParagraphNode(id: "1", text: AttributedText("before "))],
           ),
         );
 
@@ -827,388 +802,386 @@ void main() {
         );
       });
 
-      testWidgetsOnAllPlatforms("pushes expanding downstream selection around the tag", (tester) async {
-        await _pumpTestEditor(
-          tester,
-          MutableDocument(
-            nodes: [
-              ParagraphNode(
-                id: "1",
-                text: AttributedText("before "),
+      testWidgetsOnAllPlatforms(
+        "pushes expanding downstream selection around the tag",
+        (tester) async {
+          await _pumpTestEditor(
+            tester,
+            MutableDocument(
+              nodes: [ParagraphNode(id: "1", text: AttributedText("before "))],
+            ),
+          );
+
+          // Place the caret at "before |"
+          await tester.placeCaretInParagraph("1", 7);
+
+          // Compose and submit a stable tag.
+          await tester.typeImeText("@john after");
+
+          // Place the caret at "befor|e @john after"
+          await tester.placeCaretInParagraph("1", 5);
+
+          // Expand downstream until we push one character into the tag.
+          await tester.pressShiftRightArrow();
+          await tester.pressShiftRightArrow();
+          await tester.pressShiftRightArrow();
+
+          // Ensure that the extent was pushed beyond the end of the tag.
+          expect(
+            SuperEditorInspector.findDocumentSelection(),
+            const DocumentSelection(
+              base: DocumentPosition(
+                nodeId: "1",
+                nodePosition: TextNodePosition(offset: 5),
               ),
-            ],
-          ),
-        );
-
-        // Place the caret at "before |"
-        await tester.placeCaretInParagraph("1", 7);
-
-        // Compose and submit a stable tag.
-        await tester.typeImeText("@john after");
-
-        // Place the caret at "befor|e @john after"
-        await tester.placeCaretInParagraph("1", 5);
-
-        // Expand downstream until we push one character into the tag.
-        await tester.pressShiftRightArrow();
-        await tester.pressShiftRightArrow();
-        await tester.pressShiftRightArrow();
-
-        // Ensure that the extent was pushed beyond the end of the tag.
-        expect(
-          SuperEditorInspector.findDocumentSelection(),
-          const DocumentSelection(
-            base: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 5),
-            ),
-            extent: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 12),
-            ),
-          ),
-        );
-      });
-
-      testWidgetsOnAllPlatforms("pushes expanding upstream selection around the tag", (tester) async {
-        await _pumpTestEditor(
-          tester,
-          MutableDocument(
-            nodes: [
-              ParagraphNode(
-                id: "1",
-                text: AttributedText("before "),
+              extent: DocumentPosition(
+                nodeId: "1",
+                nodePosition: TextNodePosition(offset: 12),
               ),
-            ],
-          ),
-        );
-
-        // Place the caret at "before |"
-        await tester.placeCaretInParagraph("1", 7);
-
-        // Compose and submit a stable tag.
-        await tester.typeImeText("@john after");
-
-        // Place the caret at "before @john a|fter"
-        await tester.placeCaretInParagraph("1", 14);
-
-        // Expand upstream until we push one character into the tag.
-        await tester.pressShiftLeftArrow();
-        await tester.pressShiftLeftArrow();
-        await tester.pressShiftLeftArrow();
-
-        // Ensure that the extent was pushed beyond the beginning of the tag.
-        expect(
-          SuperEditorInspector.findDocumentSelection(),
-          const DocumentSelection(
-            base: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 14),
             ),
-            extent: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 7),
-            ),
-          ),
-        );
-      });
+          );
+        },
+      );
 
-      testWidgetsOnAllPlatforms("deletes entire tag when deleting a character upstream", (tester) async {
-        await _pumpTestEditor(
-          tester,
-          MutableDocument(
-            nodes: [
-              ParagraphNode(
-                id: "1",
-                text: AttributedText("before "),
+      testWidgetsOnAllPlatforms(
+        "pushes expanding upstream selection around the tag",
+        (tester) async {
+          await _pumpTestEditor(
+            tester,
+            MutableDocument(
+              nodes: [ParagraphNode(id: "1", text: AttributedText("before "))],
+            ),
+          );
+
+          // Place the caret at "before |"
+          await tester.placeCaretInParagraph("1", 7);
+
+          // Compose and submit a stable tag.
+          await tester.typeImeText("@john after");
+
+          // Place the caret at "before @john a|fter"
+          await tester.placeCaretInParagraph("1", 14);
+
+          // Expand upstream until we push one character into the tag.
+          await tester.pressShiftLeftArrow();
+          await tester.pressShiftLeftArrow();
+          await tester.pressShiftLeftArrow();
+
+          // Ensure that the extent was pushed beyond the beginning of the tag.
+          expect(
+            SuperEditorInspector.findDocumentSelection(),
+            const DocumentSelection(
+              base: DocumentPosition(
+                nodeId: "1",
+                nodePosition: TextNodePosition(offset: 14),
               ),
-            ],
-          ),
-        );
-
-        // Place the caret at "before |"
-        await tester.placeCaretInParagraph("1", 7);
-
-        // Compose and submit a stable tag.
-        await tester.typeImeText("@john after");
-
-        // Place the caret at "before @john| after"
-        await tester.placeCaretInParagraph("1", 12);
-
-        // Press BACKSPACE to delete a character upstream.
-        await tester.pressBackspace();
-
-        // Ensure that the entire user tag was deleted.
-        expect(SuperEditorInspector.findTextInComponent("1").toPlainText(), "before  after");
-        expect(
-          SuperEditorInspector.findDocumentSelection(),
-          const DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 7),
-            ),
-          ),
-        );
-      });
-
-      testWidgetsOnAllPlatforms("deletes entire tag when deleting a character downstream", (tester) async {
-        await _pumpTestEditor(
-          tester,
-          MutableDocument(
-            nodes: [
-              ParagraphNode(
-                id: "1",
-                text: AttributedText("before "),
+              extent: DocumentPosition(
+                nodeId: "1",
+                nodePosition: TextNodePosition(offset: 7),
               ),
-            ],
-          ),
-        );
-
-        // Place the caret at "before |"
-        await tester.placeCaretInParagraph("1", 7);
-
-        // Compose and submit a stable tag.
-        await tester.typeImeText("@john after");
-
-        // Place the caret at "before |@john after"
-        await tester.placeCaretInParagraph("1", 7);
-
-        // Press DELETE to delete a character downstream.
-        await tester.pressDelete();
-
-        // Ensure that the entire user tag was deleted.
-        expect(SuperEditorInspector.findTextInComponent("1").toPlainText(), "before  after");
-        expect(
-          SuperEditorInspector.findDocumentSelection(),
-          const DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 7),
             ),
-          ),
-        );
-      });
+          );
+        },
+      );
 
-      testWidgetsOnAllPlatforms("deletes second tag and leaves first tag alone", (tester) async {
-        await _pumpTestEditor(
-          tester,
-          MutableDocument.empty("1"),
-        );
-
-        await tester.placeCaretInParagraph("1", 0);
-
-        // Compose two tags within text
-        await tester.typeImeText("one @john two @sally three");
-
-        // Place the caret at "one @john two @sally| three"
-        await tester.placeCaretInParagraph("1", 20);
-
-        // Delete the 2nd tag.
-        await tester.pressBackspace();
-
-        // Ensure the 2nd tag was deleted, and the 1st tag remains.
-        expect(SuperEditorInspector.findTextInComponent("1").toPlainText(), "one @john two  three");
-        expect(
-          SuperEditorInspector.findDocumentSelection(),
-          const DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 14),
+      testWidgetsOnAllPlatforms(
+        "deletes entire tag when deleting a character upstream",
+        (tester) async {
+          await _pumpTestEditor(
+            tester,
+            MutableDocument(
+              nodes: [ParagraphNode(id: "1", text: AttributedText("before "))],
             ),
-          ),
-        );
-      });
+          );
 
-      testWidgetsOnAllPlatforms("deletes multiple tags when partially selected in the same node", (tester) async {
-        final context = await _pumpTestEditor(
-          tester,
-          MutableDocument(
-            nodes: [
-              ParagraphNode(
-                id: "1",
-                text: AttributedText("one "),
+          // Place the caret at "before |"
+          await tester.placeCaretInParagraph("1", 7);
+
+          // Compose and submit a stable tag.
+          await tester.typeImeText("@john after");
+
+          // Place the caret at "before @john| after"
+          await tester.placeCaretInParagraph("1", 12);
+
+          // Press BACKSPACE to delete a character upstream.
+          await tester.pressBackspace();
+
+          // Ensure that the entire user tag was deleted.
+          expect(
+            SuperEditorInspector.findTextInComponent("1").toPlainText(),
+            "before  after",
+          );
+          expect(
+            SuperEditorInspector.findDocumentSelection(),
+            const DocumentSelection.collapsed(
+              position: DocumentPosition(
+                nodeId: "1",
+                nodePosition: TextNodePosition(offset: 7),
               ),
-            ],
-          ),
-        );
-
-        // Place the caret at "one |"
-        await tester.placeCaretInParagraph("1", 4);
-
-        // Compose and submit two stable tags.
-        await tester.typeImeText("@john two @sally three");
-
-        // Expand the selection "one @jo|hn two @sa|lly three"
-        (context.findEditContext().composer as MutableDocumentComposer).setSelectionWithReason(
-          const DocumentSelection(
-            base: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 7),
             ),
-            extent: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 17),
+          );
+        },
+      );
+
+      testWidgetsOnAllPlatforms(
+        "deletes entire tag when deleting a character downstream",
+        (tester) async {
+          await _pumpTestEditor(
+            tester,
+            MutableDocument(
+              nodes: [ParagraphNode(id: "1", text: AttributedText("before "))],
             ),
-          ),
-          SelectionReason.userInteraction,
-        );
+          );
 
-        // Delete the selected content, which will leave two partial user tags.
-        await tester.pressBackspace();
+          // Place the caret at "before |"
+          await tester.placeCaretInParagraph("1", 7);
 
-        // Ensure that both user tags were completely deleted.
-        expect(SuperEditorInspector.findTextInComponent("1").toPlainText(), "one  three");
-        expect(
-          SuperEditorInspector.findDocumentSelection(),
-          const DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 4),
-            ),
-          ),
-        );
-      });
+          // Compose and submit a stable tag.
+          await tester.typeImeText("@john after");
 
-      testWidgetsOnAllPlatforms("deletes multiple tags when partially selected across multiple nodes", (tester) async {
-        final context = await _pumpTestEditor(
-          tester,
-          MutableDocument(
-            nodes: [
-              ParagraphNode(
-                id: "1",
-                text: AttributedText(),
+          // Place the caret at "before |@john after"
+          await tester.placeCaretInParagraph("1", 7);
+
+          // Press DELETE to delete a character downstream.
+          await tester.pressDelete();
+
+          // Ensure that the entire user tag was deleted.
+          expect(
+            SuperEditorInspector.findTextInComponent("1").toPlainText(),
+            "before  after",
+          );
+          expect(
+            SuperEditorInspector.findDocumentSelection(),
+            const DocumentSelection.collapsed(
+              position: DocumentPosition(
+                nodeId: "1",
+                nodePosition: TextNodePosition(offset: 7),
               ),
-              ParagraphNode(
-                id: "2",
-                text: AttributedText(),
+            ),
+          );
+        },
+      );
+
+      testWidgetsOnAllPlatforms(
+        "deletes second tag and leaves first tag alone",
+        (tester) async {
+          await _pumpTestEditor(tester, MutableDocument.empty("1"));
+
+          await tester.placeCaretInParagraph("1", 0);
+
+          // Compose two tags within text
+          await tester.typeImeText("one @john two @sally three");
+
+          // Place the caret at "one @john two @sally| three"
+          await tester.placeCaretInParagraph("1", 20);
+
+          // Delete the 2nd tag.
+          await tester.pressBackspace();
+
+          // Ensure the 2nd tag was deleted, and the 1st tag remains.
+          expect(
+            SuperEditorInspector.findTextInComponent("1").toPlainText(),
+            "one @john two  three",
+          );
+          expect(
+            SuperEditorInspector.findDocumentSelection(),
+            const DocumentSelection.collapsed(
+              position: DocumentPosition(
+                nodeId: "1",
+                nodePosition: TextNodePosition(offset: 14),
               ),
-            ],
-          ),
-        );
-
-        // Place the caret in the first paragraph and insert a user tag.
-        await tester.placeCaretInParagraph("1", 0);
-        await tester.typeImeText("one @john two");
-
-        // Move the caret to the second paragraph and insert a second user tag.
-        await tester.placeCaretInParagraph("2", 0);
-        await tester.typeImeText("three @sally four");
-
-        // Expand the selection to "one @jo|hn two\nthree @sa|lly three"
-        (context.findEditContext().composer as MutableDocumentComposer).setSelectionWithReason(
-          const DocumentSelection(
-            base: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 7),
             ),
-            extent: DocumentPosition(
-              nodeId: "2",
-              nodePosition: TextNodePosition(offset: 9),
-            ),
-          ),
-          SelectionReason.userInteraction,
-        );
+          );
+        },
+      );
 
-        // Delete the selected content, which will leave two partial user tags.
-        await tester.pressBackspace();
-
-        // Ensure that both user tags were completely deleted.
-        expect(SuperEditorInspector.findTextInComponent("1").toPlainText(), "one  four");
-        expect(
-          SuperEditorInspector.findDocumentSelection(),
-          const DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 4),
+      testWidgetsOnAllPlatforms(
+        "deletes multiple tags when partially selected in the same node",
+        (tester) async {
+          final context = await _pumpTestEditor(
+            tester,
+            MutableDocument(
+              nodes: [ParagraphNode(id: "1", text: AttributedText("one "))],
             ),
-          ),
-        );
-      });
+          );
+
+          // Place the caret at "one |"
+          await tester.placeCaretInParagraph("1", 4);
+
+          // Compose and submit two stable tags.
+          await tester.typeImeText("@john two @sally three");
+
+          // Expand the selection "one @jo|hn two @sa|lly three"
+          (context.findEditContext().composer as MutableDocumentComposer)
+              .setSelectionWithReason(
+                const DocumentSelection(
+                  base: DocumentPosition(
+                    nodeId: "1",
+                    nodePosition: TextNodePosition(offset: 7),
+                  ),
+                  extent: DocumentPosition(
+                    nodeId: "1",
+                    nodePosition: TextNodePosition(offset: 17),
+                  ),
+                ),
+                SelectionReason.userInteraction,
+              );
+
+          // Delete the selected content, which will leave two partial user tags.
+          await tester.pressBackspace();
+
+          // Ensure that both user tags were completely deleted.
+          expect(
+            SuperEditorInspector.findTextInComponent("1").toPlainText(),
+            "one  three",
+          );
+          expect(
+            SuperEditorInspector.findDocumentSelection(),
+            const DocumentSelection.collapsed(
+              position: DocumentPosition(
+                nodeId: "1",
+                nodePosition: TextNodePosition(offset: 4),
+              ),
+            ),
+          );
+        },
+      );
+
+      testWidgetsOnAllPlatforms(
+        "deletes multiple tags when partially selected across multiple nodes",
+        (tester) async {
+          final context = await _pumpTestEditor(
+            tester,
+            MutableDocument(
+              nodes: [
+                ParagraphNode(id: "1", text: AttributedText()),
+                ParagraphNode(id: "2", text: AttributedText()),
+              ],
+            ),
+          );
+
+          // Place the caret in the first paragraph and insert a user tag.
+          await tester.placeCaretInParagraph("1", 0);
+          await tester.typeImeText("one @john two");
+
+          // Move the caret to the second paragraph and insert a second user tag.
+          await tester.placeCaretInParagraph("2", 0);
+          await tester.typeImeText("three @sally four");
+
+          // Expand the selection to "one @jo|hn two\nthree @sa|lly three"
+          (context.findEditContext().composer as MutableDocumentComposer)
+              .setSelectionWithReason(
+                const DocumentSelection(
+                  base: DocumentPosition(
+                    nodeId: "1",
+                    nodePosition: TextNodePosition(offset: 7),
+                  ),
+                  extent: DocumentPosition(
+                    nodeId: "2",
+                    nodePosition: TextNodePosition(offset: 9),
+                  ),
+                ),
+                SelectionReason.userInteraction,
+              );
+
+          // Delete the selected content, which will leave two partial user tags.
+          await tester.pressBackspace();
+
+          // Ensure that both user tags were completely deleted.
+          expect(
+            SuperEditorInspector.findTextInComponent("1").toPlainText(),
+            "one  four",
+          );
+          expect(
+            SuperEditorInspector.findDocumentSelection(),
+            const DocumentSelection.collapsed(
+              position: DocumentPosition(
+                nodeId: "1",
+                nodePosition: TextNodePosition(offset: 4),
+              ),
+            ),
+          );
+        },
+      );
     });
 
     group("emoji >", () {
-      testWidgetsOnAllPlatforms("can be typed as first character of a paragraph without crashing the editor",
-          (tester) async {
-        // Ensure we can type an emoji as first character without crashing
-        // https://github.com/superlistapp/super_editor/issues/1863
-        await _pumpTestEditor(
-          tester,
-          singleParagraphEmptyDoc(),
-        );
+      testWidgetsOnAllPlatforms(
+        "can be typed as first character of a paragraph without crashing the editor",
+        (tester) async {
+          // Ensure we can type an emoji as first character without crashing
+          // https://github.com/superlistapp/super_editor/issues/1863
+          await _pumpTestEditor(tester, singleParagraphEmptyDoc());
 
-        // Place the caret at the beginning of the paragraph.
-        await tester.placeCaretInParagraph("1", 0);
+          // Place the caret at the beginning of the paragraph.
+          await tester.placeCaretInParagraph("1", 0);
 
-        // Type an emoji as first character 💙
-        await tester.typeImeText("💙");
+          // Type an emoji as first character 💙
+          await tester.typeImeText("💙");
 
-        expect(
-          SuperEditorInspector.findDocumentSelection(),
-          const DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 2),
-            ),
-          ),
-        );
-
-        final text = SuperEditorInspector.findTextInComponent("1");
-        expect(text.toPlainText(), "💙");
-      });
-
-      testWidgetsOnAllPlatforms("caret can move around emoji without breaking editor", (tester) async {
-        // We are doing this to ensure the plugin doesn't make the editor crash when moving caret around emoji.
-        await _pumpTestEditor(
-          tester,
-          MutableDocument(
-            nodes: [
-              ParagraphNode(
-                id: "1",
-                text: AttributedText("💙"),
+          expect(
+            SuperEditorInspector.findDocumentSelection(),
+            const DocumentSelection.collapsed(
+              position: DocumentPosition(
+                nodeId: "1",
+                nodePosition: TextNodePosition(offset: 2),
               ),
-            ],
-          ),
-        );
-
-        // Place the caret before the emoji: |💙
-        await tester.placeCaretInParagraph("1", 0);
-
-        // Place the caret after the emoji: 💙|
-        await tester.pressRightArrow();
-
-        expect(
-          SuperEditorInspector.findDocumentSelection(),
-          const DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 2),
             ),
-          ),
-        );
+          );
 
-        // Move the caret back to initial position, before the emoji: |💙.
-        await tester.pressLeftArrow();
+          final text = SuperEditorInspector.findTextInComponent("1");
+          expect(text.toPlainText(), "💙");
+        },
+      );
 
-        expect(
-          SuperEditorInspector.findDocumentSelection(),
-          const DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 0),
+      testWidgetsOnAllPlatforms(
+        "caret can move around emoji without breaking editor",
+        (tester) async {
+          // We are doing this to ensure the plugin doesn't make the editor crash when moving caret around emoji.
+          await _pumpTestEditor(
+            tester,
+            MutableDocument(
+              nodes: [ParagraphNode(id: "1", text: AttributedText("💙"))],
             ),
-          ),
-        );
+          );
 
-        // Ensure the paragraph string is well formed: 💙
-        final text = SuperEditorInspector.findTextInComponent("1");
-        expect(text.toPlainText(), "💙");
-      });
+          // Place the caret before the emoji: |💙
+          await tester.placeCaretInParagraph("1", 0);
+
+          // Place the caret after the emoji: 💙|
+          await tester.pressRightArrow();
+
+          expect(
+            SuperEditorInspector.findDocumentSelection(),
+            const DocumentSelection.collapsed(
+              position: DocumentPosition(
+                nodeId: "1",
+                nodePosition: TextNodePosition(offset: 2),
+              ),
+            ),
+          );
+
+          // Move the caret back to initial position, before the emoji: |💙.
+          await tester.pressLeftArrow();
+
+          expect(
+            SuperEditorInspector.findDocumentSelection(),
+            const DocumentSelection.collapsed(
+              position: DocumentPosition(
+                nodeId: "1",
+                nodePosition: TextNodePosition(offset: 0),
+              ),
+            ),
+          );
+
+          // Ensure the paragraph string is well formed: 💙
+          final text = SuperEditorInspector.findTextInComponent("1");
+          expect(text.toPlainText(), "💙");
+        },
+      );
 
       testWidgetsOnAllPlatforms("can be captured with trigger", (tester) async {
-        await _pumpTestEditor(
-          tester,
-          singleParagraphEmptyDoc(),
-        );
+        await _pumpTestEditor(tester, singleParagraphEmptyDoc());
 
         // Place the caret at the beginning of the paragraph.
         await tester.placeCaretInParagraph("1", 0);
@@ -1222,8 +1195,11 @@ void main() {
 
         // Ensure the composing tag includes the emoji.
         expect(
-          SuperEditorInspector.findTextInComponent("1")
-              .getAttributionSpansByFilter((a) => a == stableTagComposingAttribution),
+          SuperEditorInspector.findTextInComponent(
+            "1",
+          ).getAttributionSpansByFilter(
+            (a) => a == stableTagComposingAttribution,
+          ),
           {
             const AttributionSpan(
               attribution: stableTagComposingAttribution,
@@ -1238,8 +1214,11 @@ void main() {
 
         // Ensure the committed tag is the emoji and the composing tag is removed
         expect(
-          SuperEditorInspector.findTextInComponent("1")
-              .getAttributionSpansByFilter((a) => a is CommittedStableTagAttribution),
+          SuperEditorInspector.findTextInComponent(
+            "1",
+          ).getAttributionSpansByFilter(
+            (a) => a is CommittedStableTagAttribution,
+          ),
           {
             const AttributionSpan(
               attribution: CommittedStableTagAttribution("💙"),
@@ -1254,12 +1233,7 @@ void main() {
         await _pumpTestEditor(
           tester,
           MutableDocument(
-            nodes: [
-              ParagraphNode(
-                id: "1",
-                text: AttributedText("💙"),
-              ),
-            ],
+            nodes: [ParagraphNode(id: "1", text: AttributedText("💙"))],
           ),
         );
 
@@ -1275,8 +1249,11 @@ void main() {
 
         // Ensure the tag was committed with the emoji.
         expect(
-          SuperEditorInspector.findTextInComponent("1")
-              .getAttributionSpansByFilter((a) => a == stableTagComposingAttribution),
+          SuperEditorInspector.findTextInComponent(
+            "1",
+          ).getAttributionSpansByFilter(
+            (a) => a == stableTagComposingAttribution,
+          ),
           {
             const AttributionSpan(
               attribution: stableTagComposingAttribution,
@@ -1287,11 +1264,10 @@ void main() {
         );
       });
 
-      testWidgetsOnAllPlatforms("can be used in the middle of a tag", (tester) async {
-        await _pumpTestEditor(
-          tester,
-          singleParagraphEmptyDoc(),
-        );
+      testWidgetsOnAllPlatforms("can be used in the middle of a tag", (
+        tester,
+      ) async {
+        await _pumpTestEditor(tester, singleParagraphEmptyDoc());
 
         // Place the caret at the beginning of the paragraph.
         await tester.placeCaretInParagraph("1", 0);
@@ -1301,11 +1277,16 @@ void main() {
 
         // Ensure the tag was committed with the emoji.
         expect(
-          SuperEditorInspector.findTextInComponent("1")
-              .getAttributionSpansByFilter((a) => a is CommittedStableTagAttribution),
+          SuperEditorInspector.findTextInComponent(
+            "1",
+          ).getAttributionSpansByFilter(
+            (a) => a is CommittedStableTagAttribution,
+          ),
           {
             const AttributionSpan(
-              attribution: CommittedStableTagAttribution("Flutter💙SuperEditor"),
+              attribution: CommittedStableTagAttribution(
+                "Flutter💙SuperEditor",
+              ),
               start: 0,
               end: 20,
             ),
@@ -1324,8 +1305,6 @@ Future<TestDocumentContext> _pumpTestEditor(
   return await tester
       .createDocument()
       .withCustomContent(document)
-      .withPlugin(StableTagPlugin(
-        tagRule: tagRule,
-      ))
+      .withPlugin(StableTagPlugin(tagRule: tagRule))
       .pump();
 }

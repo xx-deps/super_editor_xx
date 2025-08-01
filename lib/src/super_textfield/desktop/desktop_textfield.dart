@@ -76,11 +76,12 @@ class SuperDesktopTextField extends StatefulWidget {
     this.selectorHandlers,
     this.tapHandlers = const [],
     List<TextFieldKeyboardHandler>? keyboardHandlers,
-  })  : keyboardHandlers = keyboardHandlers ??
-            (inputSource == TextInputSource.keyboard
-                ? defaultTextFieldKeyboardHandlers
-                : defaultTextFieldImeKeyboardHandlers),
-        super(key: key);
+  }) : keyboardHandlers =
+           keyboardHandlers ??
+           (inputSource == TextInputSource.keyboard
+               ? defaultTextFieldKeyboardHandlers
+               : defaultTextFieldImeKeyboardHandlers),
+       super(key: key);
 
   final FocusNode? focusNode;
 
@@ -155,7 +156,8 @@ class SuperDesktopTextField extends StatefulWidget {
   ///
   /// This property is ignored when an [imeConfiguration] is provided.
   @Deprecated(
-      'This will be removed in a future release. Use imeConfiguration instead')
+    'This will be removed in a future release. Use imeConfiguration instead',
+  )
   final TextInputAction? textInputAction;
 
   /// Preferences for how the platform IME should look and behave during editing.
@@ -212,24 +214,27 @@ class SuperDesktopTextFieldState extends State<SuperDesktopTextField>
 
     _controller = widget.textController != null
         ? widget.textController is ImeAttributedTextEditingController
-            ? (widget.textController as ImeAttributedTextEditingController)
-            : ImeAttributedTextEditingController(
-                controller: widget.textController,
-                disposeClientController: false)
+              ? (widget.textController as ImeAttributedTextEditingController)
+              : ImeAttributedTextEditingController(
+                  controller: widget.textController,
+                  disposeClientController: false,
+                )
         : ImeAttributedTextEditingController();
     _controller.addListener(_onSelectionOrContentChange);
 
     _scrollController = ScrollController();
-    _textFieldScroller = TextFieldScroller() //
-      ..attach(_scrollController);
+    _textFieldScroller =
+        TextFieldScroller() //
+          ..attach(_scrollController);
 
     _createTextFieldContext();
 
     // Check if we need to update the selection.
     _updateSelectionAndComposingRegionOnFocusChange();
 
-    _contentTextDirection =
-        getParagraphDirection(_controller.text.toPlainText());
+    _contentTextDirection = getParagraphDirection(
+      _controller.text.toPlainText(),
+    );
   }
 
   @override
@@ -237,8 +242,9 @@ class SuperDesktopTextFieldState extends State<SuperDesktopTextField>
     super.didUpdateWidget(oldWidget);
 
     if (widget.focusNode != oldWidget.focusNode) {
-      _focusNode
-          .removeListener(_updateSelectionAndComposingRegionOnFocusChange);
+      _focusNode.removeListener(
+        _updateSelectionAndComposingRegionOnFocusChange,
+      );
       if (oldWidget.focusNode == null) {
         _focusNode.dispose();
       }
@@ -259,10 +265,11 @@ class SuperDesktopTextFieldState extends State<SuperDesktopTextField>
       }
       _controller = widget.textController != null
           ? widget.textController is ImeAttributedTextEditingController
-              ? (widget.textController as ImeAttributedTextEditingController)
-              : ImeAttributedTextEditingController(
-                  controller: widget.textController,
-                  disposeClientController: false)
+                ? (widget.textController as ImeAttributedTextEditingController)
+                : ImeAttributedTextEditingController(
+                    controller: widget.textController,
+                    disposeClientController: false,
+                  )
           : ImeAttributedTextEditingController();
 
       _controller.addListener(_onSelectionOrContentChange);
@@ -340,8 +347,9 @@ class SuperDesktopTextFieldState extends State<SuperDesktopTextField>
     if (_focusNode.hasFocus &&
         !_hasFocus &&
         _controller.selection.extentOffset == -1) {
-      _controller.selection =
-          TextSelection.collapsed(offset: _controller.text.length);
+      _controller.selection = TextSelection.collapsed(
+        offset: _controller.text.length,
+      );
     }
     if (!_focusNode.hasFocus) {
       // We lost focus. Clear the composing region.
@@ -361,8 +369,9 @@ class SuperDesktopTextFieldState extends State<SuperDesktopTextField>
     // Even though we calling `onNextFrame`, it doesn't necessarily mean
     // a new frame will be scheduled. Call setState to ensure the text direction is updated.
     setState(() {
-      _contentTextDirection =
-          getParagraphDirection(_controller.text.toPlainText());
+      _contentTextDirection = getParagraphDirection(
+        _controller.text.toPlainText(),
+      );
     });
   }
 
@@ -406,8 +415,9 @@ class SuperDesktopTextFieldState extends State<SuperDesktopTextField>
       return 0;
     }
 
-    final offsetAtEndOfText = textLayout
-        .getOffsetAtPosition(TextPosition(offset: _controller.text.length));
+    final offsetAtEndOfText = textLayout.getOffsetAtPosition(
+      TextPosition(offset: _controller.text.length),
+    );
     int lineCount = (offsetAtEndOfText.dy / _getEstimatedLineHeight()).ceil();
 
     if (_controller.text.toPlainText().endsWith('\n')) {
@@ -429,7 +439,7 @@ class SuperDesktopTextFieldState extends State<SuperDesktopTextField>
     final lineHeight = _controller.text.isEmpty || textLayout == null
         ? 0.0
         : textLayout.getHeightForCaret(const TextPosition(offset: 0)) ??
-            textLayout.getLineHeightAtPosition(const TextPosition(offset: 0));
+              textLayout.getLineHeightAtPosition(const TextPosition(offset: 0));
     if (lineHeight > 0) {
       return lineHeight;
     }
@@ -478,10 +488,7 @@ class SuperDesktopTextFieldState extends State<SuperDesktopTextField>
             onRightClick: widget.onRightClick,
             tapHandlers: widget.tapHandlers,
             child: MultiListenableBuilder(
-              listenables: {
-                _focusNode,
-                _controller,
-              },
+              listenables: {_focusNode, _controller},
               builder: (context) {
                 return _buildDecoration(
                   child: SuperTextFieldScrollview(
@@ -513,9 +520,7 @@ class SuperDesktopTextFieldState extends State<SuperDesktopTextField>
     );
   }
 
-  Widget _buildDecoration({
-    required Widget child,
-  }) {
+  Widget _buildDecoration({required Widget child}) {
     return widget.decorationBuilder != null
         ? widget.decorationBuilder!(context, child)
         : child;
@@ -560,13 +565,17 @@ class SuperDesktopTextFieldState extends State<SuperDesktopTextField>
       child: SuperText(
         key: _textKey,
         richText: _controller.text.computeInlineSpan(
-            context, widget.textStyleBuilder, widget.inlineWidgetBuilders),
+          context,
+          widget.textStyleBuilder,
+          widget.inlineWidgetBuilders,
+        ),
         textAlign: _textAlign,
         textDirection: _textDirection,
         textScaler: _textScaler,
         layerBeneathBuilder: (context, textLayout) {
           final isTextEmpty = _controller.text.isEmpty;
-          final showHint = widget.hintBuilder != null &&
+          final showHint =
+              widget.hintBuilder != null &&
               ((isTextEmpty &&
                       widget.hintBehavior ==
                           HintBehavior.displayHintUntilTextEntered) ||
@@ -590,7 +599,8 @@ class SuperDesktopTextFieldState extends State<SuperDesktopTextField>
                 TextUnderlineLayer(
                   textLayout: textLayout,
                   style: StraightUnderlineStyle(
-                    color: widget.textStyleBuilder({}).color ?? //
+                    color:
+                        widget.textStyleBuilder({}).color ?? //
                         (Theme.of(context).brightness == Brightness.light
                             ? Colors.black
                             : Colors.white),
@@ -713,8 +723,8 @@ class _SuperTextFieldGestureInteractorState
   }
 
   void _updateMouseCursor(Offset globalPosition) {
-    final localPosition =
-        (context.findRenderObject() as RenderBox).globalToLocal(globalPosition);
+    final localPosition = (context.findRenderObject() as RenderBox)
+        .globalToLocal(globalPosition);
     final textOffset = _getTextOffset(localPosition);
 
     for (final handler in widget.tapHandlers) {
@@ -762,12 +772,16 @@ class _SuperTextFieldGestureInteractorState
     final tapTextPosition = _getPositionNearestToTextOffset(textOffset);
     _log.finer("Tap text position: $tapTextPosition");
 
-    final expandSelection = HardwareKeyboard.instance.logicalKeysPressed
-            .contains(LogicalKeyboardKey.shiftLeft) ||
-        HardwareKeyboard.instance.logicalKeysPressed
-            .contains(LogicalKeyboardKey.shiftRight) ||
-        HardwareKeyboard.instance.logicalKeysPressed
-            .contains(LogicalKeyboardKey.shift);
+    final expandSelection =
+        HardwareKeyboard.instance.logicalKeysPressed.contains(
+          LogicalKeyboardKey.shiftLeft,
+        ) ||
+        HardwareKeyboard.instance.logicalKeysPressed.contains(
+          LogicalKeyboardKey.shiftRight,
+        ) ||
+        HardwareKeyboard.instance.logicalKeysPressed.contains(
+          LogicalKeyboardKey.shift,
+        );
 
     setState(() {
       widget.textController.selection = expandSelection
@@ -779,7 +793,8 @@ class _SuperTextFieldGestureInteractorState
       widget.textController.composingRegion = TextRange.empty;
 
       _log.finer(
-          "New text field selection: ${widget.textController.selection}");
+        "New text field selection: ${widget.textController.selection}",
+      );
     });
 
     widget.focusNode.requestFocus();
@@ -841,8 +856,9 @@ class _SuperTextFieldGestureInteractorState
 
     if (tapTextPosition != null) {
       setState(() {
-        widget.textController.selection =
-            _textLayout.getWordSelectionAt(tapTextPosition);
+        widget.textController.selection = _textLayout.getWordSelectionAt(
+          tapTextPosition,
+        );
       });
     } else {
       _clearSelection();
@@ -911,8 +927,10 @@ class _SuperTextFieldGestureInteractorState
 
     if (tapTextPosition != null) {
       setState(() {
-        widget.textController.selection =
-            _getParagraphSelectionAt(tapTextPosition, TextAffinity.downstream);
+        widget.textController.selection = _getParagraphSelectionAt(
+          tapTextPosition,
+          TextAffinity.downstream,
+        );
       });
     } else {
       _clearSelection();
@@ -993,8 +1011,11 @@ class _SuperTextFieldGestureInteractorState
         return;
       }
     }
-    widget.onRightClick
-        ?.call(context, widget.textController, details.localPosition);
+    widget.onRightClick?.call(
+      context,
+      widget.textController,
+      details.localPosition,
+    );
   }
 
   void _onRightClickCancel() {
@@ -1020,8 +1041,12 @@ class _SuperTextFieldGestureInteractorState
     _dragStartInViewport = details.localPosition;
     _dragStartInText = _getTextOffset(_dragStartInViewport!);
 
-    _dragRectInViewport =
-        Rect.fromLTWH(_dragStartInViewport!.dx, _dragStartInViewport!.dy, 1, 1);
+    _dragRectInViewport = Rect.fromLTWH(
+      _dragStartInViewport!.dx,
+      _dragStartInViewport!.dy,
+      1,
+      1,
+    );
 
     widget.focusNode.requestFocus();
   }
@@ -1042,8 +1067,10 @@ class _SuperTextFieldGestureInteractorState
     setState(() {
       _dragEndInViewport = details.localPosition;
       _dragEndInText = _getTextOffset(_dragEndInViewport!);
-      _dragRectInViewport =
-          Rect.fromPoints(_dragStartInViewport!, _dragEndInViewport!);
+      _dragRectInViewport = Rect.fromPoints(
+        _dragStartInViewport!,
+        _dragEndInViewport!,
+      );
       _log.finer('_onPanUpdate - drag rect: $_dragRectInViewport');
       _updateDragSelection();
 
@@ -1089,19 +1116,25 @@ class _SuperTextFieldGestureInteractorState
     }
 
     setState(() {
-      final startDragOffset =
-          _getPositionNearestToTextOffset(_dragStartInText!).offset;
-      final endDragOffset =
-          _getPositionNearestToTextOffset(_dragEndInText!).offset;
+      final startDragOffset = _getPositionNearestToTextOffset(
+        _dragStartInText!,
+      ).offset;
+      final endDragOffset = _getPositionNearestToTextOffset(
+        _dragEndInText!,
+      ).offset;
       final affinity = startDragOffset <= endDragOffset
           ? TextAffinity.downstream
           : TextAffinity.upstream;
 
       if (_selectionType == _SelectionType.paragraph) {
         final baseParagraphSelection = _getParagraphSelectionAt(
-            TextPosition(offset: startDragOffset), affinity);
+          TextPosition(offset: startDragOffset),
+          affinity,
+        );
         final extentParagraphSelection = _getParagraphSelectionAt(
-            TextPosition(offset: endDragOffset), affinity);
+          TextPosition(offset: endDragOffset),
+          affinity,
+        );
 
         widget.textController.selection = _combineSelections(
           baseParagraphSelection,
@@ -1109,10 +1142,12 @@ class _SuperTextFieldGestureInteractorState
           affinity,
         );
       } else if (_selectionType == _SelectionType.word) {
-        final baseParagraphSelection = _textLayout
-            .getWordSelectionAt(TextPosition(offset: startDragOffset));
-        final extentParagraphSelection =
-            _textLayout.getWordSelectionAt(TextPosition(offset: endDragOffset));
+        final baseParagraphSelection = _textLayout.getWordSelectionAt(
+          TextPosition(offset: startDragOffset),
+        );
+        final extentParagraphSelection = _textLayout.getWordSelectionAt(
+          TextPosition(offset: endDragOffset),
+        );
 
         widget.textController.selection = _combineSelections(
           baseParagraphSelection,
@@ -1146,8 +1181,9 @@ class _SuperTextFieldGestureInteractorState
 
   void _clearSelection() {
     setState(() {
-      widget.textController.selection =
-          const TextSelection.collapsed(offset: -1);
+      widget.textController.selection = const TextSelection.collapsed(
+        offset: -1,
+      );
     });
   }
 
@@ -1164,7 +1200,8 @@ class _SuperTextFieldGestureInteractorState
   void _scrollIfNearBoundary() {
     if (_dragEndInViewport == null) {
       _log.finer(
-          "_scrollIfNearBoundary - Can't scroll near boundary because _dragEndInViewport is null");
+        "_scrollIfNearBoundary - Can't scroll near boundary because _dragEndInViewport is null",
+      );
       assert(_dragEndInViewport != null);
       return;
     }
@@ -1212,7 +1249,8 @@ class _SuperTextFieldGestureInteractorState
   void _startScrollingToStart() {
     if (_dragEndInViewport == null) {
       _log.finer(
-          "_scrollUp - Can't scroll up because _dragEndInViewport is null");
+        "_scrollUp - Can't scroll up because _dragEndInViewport is null",
+      );
       assert(_dragEndInViewport != null);
       return;
     }
@@ -1231,14 +1269,17 @@ class _SuperTextFieldGestureInteractorState
   void _startScrollingToEnd() {
     if (_dragEndInViewport == null) {
       _log.finer(
-          "_scrollDown - Can't scroll down because _dragEndInViewport is null");
+        "_scrollDown - Can't scroll down because _dragEndInViewport is null",
+      );
       assert(_dragEndInViewport != null);
       return;
     }
 
     final editorBox = context.findRenderObject() as RenderBox;
-    final gutterAmount = (editorBox.size.height - _dragEndInViewport!.dy)
-        .clamp(0.0, _dragGutterExtent);
+    final gutterAmount = (editorBox.size.height - _dragEndInViewport!.dy).clamp(
+      0.0,
+      _dragGutterExtent,
+    );
     final speedPercent = 1.0 - (gutterAmount / _dragGutterExtent);
     final scrollAmount = ui.lerpDouble(0, _maxDragSpeed, speedPercent)!;
 
@@ -1254,7 +1295,9 @@ class _SuperTextFieldGestureInteractorState
     // TODO: remove access to _textScroll.widget
     final newScrollOffset = (_textScroll.widget.scrollController.offset + delta)
         .clamp(
-            0.0, _textScroll.widget.scrollController.position.maxScrollExtent);
+          0.0,
+          _textScroll.widget.scrollController.position.maxScrollExtent,
+        );
     _textScroll.widget.scrollController.jumpTo(newScrollOffset);
     _updateDragSelection();
   }
@@ -1277,9 +1320,14 @@ class _SuperTextFieldGestureInteractorState
   }
 
   TextSelection _getParagraphSelectionAt(
-      TextPosition textPosition, TextAffinity affinity) {
+    TextPosition textPosition,
+    TextAffinity affinity,
+  ) {
     return _textLayout.expandSelection(
-        textPosition, paragraphExpansionFilter, affinity);
+      textPosition,
+      paragraphExpansionFilter,
+      affinity,
+    );
   }
 
   TextPosition _getPositionNearestToTextOffset(Offset textOffset) {
@@ -1306,47 +1354,45 @@ class _SuperTextFieldGestureInteractorState
         child: RawGestureDetector(
           behavior: HitTestBehavior.translucent,
           gestures: <Type, GestureRecognizerFactory>{
-            TapSequenceGestureRecognizer: GestureRecognizerFactoryWithHandlers<
-                TapSequenceGestureRecognizer>(
-              () => TapSequenceGestureRecognizer(),
-              (TapSequenceGestureRecognizer recognizer) {
-                recognizer
-                  ..onTapDown = _onTapDown
-                  ..onTapUp = _onTapUp
-                  ..onTapCancel = _onTapCancel
-                  ..onDoubleTapDown = _onDoubleTapDown
-                  ..onDoubleTapUp = _onDoubleTapUp
-                  ..onDoubleTap = _onDoubleTap
-                  ..onDoubleTapCancel = _onDoubleTapCancel
-                  ..onTripleTapDown = _onTripleTapDown
-                  ..onTripleTapUp = _onTripleTapUp
-                  ..onTripleTapCancel = _onTripleTapCancel
-                  ..onTripleTap = _onTripleTap
-                  ..gestureSettings = gestureSettings;
-              },
-            ),
+            TapSequenceGestureRecognizer:
+                GestureRecognizerFactoryWithHandlers<
+                  TapSequenceGestureRecognizer
+                >(() => TapSequenceGestureRecognizer(), (
+                  TapSequenceGestureRecognizer recognizer,
+                ) {
+                  recognizer
+                    ..onTapDown = _onTapDown
+                    ..onTapUp = _onTapUp
+                    ..onTapCancel = _onTapCancel
+                    ..onDoubleTapDown = _onDoubleTapDown
+                    ..onDoubleTapUp = _onDoubleTapUp
+                    ..onDoubleTap = _onDoubleTap
+                    ..onDoubleTapCancel = _onDoubleTapCancel
+                    ..onTripleTapDown = _onTripleTapDown
+                    ..onTripleTapUp = _onTripleTapUp
+                    ..onTripleTapCancel = _onTripleTapCancel
+                    ..onTripleTap = _onTripleTap
+                    ..gestureSettings = gestureSettings;
+                }),
             PanGestureRecognizer:
                 GestureRecognizerFactoryWithHandlers<PanGestureRecognizer>(
-              () => PanGestureRecognizer(),
-              (PanGestureRecognizer recognizer) {
-                recognizer
-                  ..onStart = _onPanStart
-                  ..onUpdate = _onPanUpdate
-                  ..onEnd = _onPanEnd
-                  ..onCancel = _onPanCancel
-                  ..gestureSettings = gestureSettings;
-              },
-            ),
+                  () => PanGestureRecognizer(),
+                  (PanGestureRecognizer recognizer) {
+                    recognizer
+                      ..onStart = _onPanStart
+                      ..onUpdate = _onPanUpdate
+                      ..onEnd = _onPanEnd
+                      ..onCancel = _onPanCancel
+                      ..gestureSettings = gestureSettings;
+                  },
+                ),
           },
           child: Listener(
             onPointerHover: _onMouseMove,
             child: ValueListenableBuilder(
               valueListenable: _mouseCursor,
               builder: (context, mouseCursor, child) {
-                return MouseRegion(
-                  cursor: mouseCursor,
-                  child: child,
-                );
+                return MouseRegion(cursor: mouseCursor, child: child);
               },
               child: widget.child,
             ),
@@ -1453,7 +1499,8 @@ class _SuperTextFieldKeyboardInteractorState
 
   KeyEventResult _onKeyPressed(FocusNode focusNode, KeyEvent keyEvent) {
     _log.fine(
-        '_onKeyPressed - keyEvent: ${keyEvent.logicalKey}, character: ${keyEvent.character}');
+      '_onKeyPressed - keyEvent: ${keyEvent.logicalKey}, character: ${keyEvent.character}',
+    );
     if (keyEvent is! KeyDownEvent && keyEvent is! KeyRepeatEvent) {
       _log.finer('_onKeyPressed - not a "down" event. Ignoring.');
       return KeyEventResult.ignored;
@@ -1592,10 +1639,12 @@ class _SuperTextFieldImeInteractorState
   void didUpdateWidget(SuperTextFieldImeInteractor oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.focusNode != oldWidget.focusNode) {
-      oldWidget.focusNode
-          .removeListener(_updateSelectionAndImeConnectionOnFocusChange);
-      widget.focusNode
-          .addListener(_updateSelectionAndImeConnectionOnFocusChange);
+      oldWidget.focusNode.removeListener(
+        _updateSelectionAndImeConnectionOnFocusChange,
+      );
+      widget.focusNode.addListener(
+        _updateSelectionAndImeConnectionOnFocusChange,
+      );
 
       if (widget.focusNode.hasFocus) {
         // We got an already focused FocusNode, we need to attach to the IME.
@@ -1610,8 +1659,9 @@ class _SuperTextFieldImeInteractorState
       if (_textController.onPerformSelector == _onPerformSelector) {
         _textController.onPerformSelector = null;
       }
-      _textController.inputConnectionNotifier
-          .removeListener(_onImeConnectionChanged);
+      _textController.inputConnectionNotifier.removeListener(
+        _onImeConnectionChanged,
+      );
 
       _textController = widget.textFieldContext.imeController!
         ..inputConnectionNotifier.addListener(_onImeConnectionChanged)
@@ -1622,8 +1672,9 @@ class _SuperTextFieldImeInteractorState
     if (widget.imeConfiguration != oldWidget.imeConfiguration &&
         widget.imeConfiguration != null &&
         (oldWidget.imeConfiguration == null ||
-            !widget.imeConfiguration!
-                .isEquivalentTo(oldWidget.imeConfiguration!)) &&
+            !widget.imeConfiguration!.isEquivalentTo(
+              oldWidget.imeConfiguration!,
+            )) &&
         _textController.isAttachedToIme) {
       _textController.updateTextInputConfiguration(
         viewId: View.of(context).viewId,
@@ -1639,10 +1690,12 @@ class _SuperTextFieldImeInteractorState
 
   @override
   void dispose() {
-    widget.focusNode
-        .removeListener(_updateSelectionAndImeConnectionOnFocusChange);
-    _textController.inputConnectionNotifier
-        .removeListener(_onImeConnectionChanged);
+    widget.focusNode.removeListener(
+      _updateSelectionAndImeConnectionOnFocusChange,
+    );
+    _textController.inputConnectionNotifier.removeListener(
+      _onImeConnectionChanged,
+    );
     if (_textController.onPerformSelector == _onPerformSelector) {
       _textController.onPerformSelector = null;
     }
@@ -1658,8 +1711,9 @@ class _SuperTextFieldImeInteractorState
         _log.finest('Attaching TextInputClient to TextInput');
         setState(() {
           if (!_textController.selection.isValid) {
-            _textController.selection =
-                TextSelection.collapsed(offset: _textController.text.length);
+            _textController.selection = TextSelection.collapsed(
+              offset: _textController.text.length,
+            );
           }
 
           if (widget.imeConfiguration != null) {
@@ -1670,7 +1724,8 @@ class _SuperTextFieldImeInteractorState
               textInputType: widget.isMultiline
                   ? TextInputType.multiline
                   : TextInputType.text,
-              textInputAction: widget.textInputAction ??
+              textInputAction:
+                  widget.textInputAction ??
                   (widget.isMultiline
                       ? TextInputAction.newline
                       : TextInputAction.done),
@@ -1730,7 +1785,9 @@ class _SuperTextFieldImeInteractorState
     }
 
     _textController.inputConnectionNotifier.value!.setEditableSizeAndTransform(
-        renderBox.size, renderBox.getTransformTo(null));
+      renderBox.size,
+      renderBox.getTransformTo(null),
+    );
   }
 
   void _reportCaretRectToIme() {
@@ -1793,14 +1850,16 @@ class _SuperTextFieldImeInteractorState
     final position = TextPosition(offset: selection.baseOffset);
     final textLayout = text.textLayout;
     final caretOffset = textLayout.getOffsetForCaret(position);
-    final caretHeight = textLayout.getHeightForCaret(position) ??
+    final caretHeight =
+        textLayout.getHeightForCaret(position) ??
         textLayout.estimatedLineHeight;
     final caretRect = caretOffset & Size(1, caretHeight);
 
     // Convert the coordinates from the text layout space to the text field space.
     final textRenderBox = text.context.findRenderObject() as RenderBox;
-    final textOffset =
-        renderBox.globalToLocal(textRenderBox.localToGlobal(Offset.zero));
+    final textOffset = renderBox.globalToLocal(
+      textRenderBox.localToGlobal(Offset.zero),
+    );
     final caretOffsetInTextFieldSpace = caretRect.shift(textOffset);
 
     return caretOffsetInTextFieldSpace;
@@ -1965,27 +2024,33 @@ class SuperTextFieldScrollviewState extends State<SuperTextFieldScrollview>
     final textBox =
         widget.textKey.currentContext!.findRenderObject() as RenderBox;
     // Note: the textBoxOffset will be negative.
-    final textBoxOffset =
-        textBox.globalToLocal(Offset.zero, ancestor: viewportBox);
+    final textBoxOffset = textBox.globalToLocal(
+      Offset.zero,
+      ancestor: viewportBox,
+    );
 
-    final selectionExtentOffsetInText =
-        _textLayout.getOffsetAtPosition(selection.extent);
+    final selectionExtentOffsetInText = _textLayout.getOffsetAtPosition(
+      selection.extent,
+    );
 
     const gutterExtent = 0; // _dragGutterExtent
 
     final beyondLeftViewportEdge = min(
-            -textBoxOffset.dx + selectionExtentOffsetInText.dx - gutterExtent,
-            0)
-        .abs();
+      -textBoxOffset.dx + selectionExtentOffsetInText.dx - gutterExtent,
+      0,
+    ).abs();
     final beyondRightViewportEdge = max(
-        (-textBoxOffset.dx + selectionExtentOffsetInText.dx + gutterExtent) -
-            viewportBox.size.width,
-        0);
+      (-textBoxOffset.dx + selectionExtentOffsetInText.dx + gutterExtent) -
+          viewportBox.size.width,
+      0,
+    );
 
     if (beyondLeftViewportEdge > 0) {
       final newScrollPosition =
-          (widget.scrollController.offset - beyondLeftViewportEdge)
-              .clamp(0.0, widget.scrollController.position.maxScrollExtent);
+          (widget.scrollController.offset - beyondLeftViewportEdge).clamp(
+            0.0,
+            widget.scrollController.position.maxScrollExtent,
+          );
 
       widget.scrollController.animateTo(
         newScrollPosition,
@@ -1994,8 +2059,10 @@ class SuperTextFieldScrollviewState extends State<SuperTextFieldScrollview>
       );
     } else if (beyondRightViewportEdge > 0) {
       final newScrollPosition =
-          (beyondRightViewportEdge + widget.scrollController.offset)
-              .clamp(0.0, widget.scrollController.position.maxScrollExtent);
+          (beyondRightViewportEdge + widget.scrollController.offset).clamp(
+            0.0,
+            widget.scrollController.position.maxScrollExtent,
+          );
 
       widget.scrollController.animateTo(
         newScrollPosition,
@@ -2014,8 +2081,8 @@ class SuperTextFieldScrollviewState extends State<SuperTextFieldScrollview>
     final extentOffset = _textLayout.getOffsetAtPosition(selection.extent);
 
     const gutterExtent = 0; // _dragGutterExtent
-    final extentLineIndex =
-        (extentOffset.dy / widget.estimatedLineHeight).round();
+    final extentLineIndex = (extentOffset.dy / widget.estimatedLineHeight)
+        .round();
 
     final firstCharY =
         _textLayout.getCharacterBox(const TextPosition(offset: 0))?.top ?? 0.0;
@@ -2023,50 +2090,60 @@ class SuperTextFieldScrollviewState extends State<SuperTextFieldScrollview>
 
     final myBox = context.findRenderObject() as RenderBox;
     final beyondTopExtent = min<double>(
-            extentOffset.dy - //
-                widget.scrollController.offset -
-                gutterExtent -
-                (isAtFirstLine
-                    ? _textLayout.getLineHeightAtPosition(selection.extent) / 2
-                    : 0),
-            0)
-        .abs();
+      extentOffset.dy - //
+          widget.scrollController.offset -
+          gutterExtent -
+          (isAtFirstLine
+              ? _textLayout.getLineHeightAtPosition(selection.extent) / 2
+              : 0),
+      0,
+    ).abs();
 
-    final lastCharY = _textLayout
+    final lastCharY =
+        _textLayout
             .getCharacterBox(
-                TextPosition(offset: widget.textController.text.length - 1))
+              TextPosition(offset: widget.textController.text.length - 1),
+            )
             ?.top ??
         0.0;
     final isAtLastLine = extentOffset.dy == lastCharY;
 
     final beyondBottomExtent = max<double>(
-        ((extentLineIndex + 1) * widget.estimatedLineHeight) -
-            myBox.size.height -
-            widget.scrollController.offset +
-            gutterExtent +
-            (isAtLastLine
-                ? _textLayout.getLineHeightAtPosition(selection.extent) / 2
-                : 0) +
-            (widget.estimatedLineHeight /
-                2), // manual adjustment to avoid line getting half cut off
-        0);
+      ((extentLineIndex + 1) * widget.estimatedLineHeight) -
+          myBox.size.height -
+          widget.scrollController.offset +
+          gutterExtent +
+          (isAtLastLine
+              ? _textLayout.getLineHeightAtPosition(selection.extent) / 2
+              : 0) +
+          (widget.estimatedLineHeight /
+              2), // manual adjustment to avoid line getting half cut off
+      0,
+    );
 
     _log.finer('_ensureSelectionExtentIsVisible - Ensuring extent is visible.');
     _log.finer(
-        '_ensureSelectionExtentIsVisible    - interaction size: ${myBox.size}');
+      '_ensureSelectionExtentIsVisible    - interaction size: ${myBox.size}',
+    );
     _log.finer(
-        '_ensureSelectionExtentIsVisible    - scroll extent: ${widget.scrollController.offset}');
+      '_ensureSelectionExtentIsVisible    - scroll extent: ${widget.scrollController.offset}',
+    );
     _log.finer(
-        '_ensureSelectionExtentIsVisible    - extent rect: $extentOffset');
+      '_ensureSelectionExtentIsVisible    - extent rect: $extentOffset',
+    );
     _log.finer(
-        '_ensureSelectionExtentIsVisible    - beyond top: $beyondTopExtent');
+      '_ensureSelectionExtentIsVisible    - beyond top: $beyondTopExtent',
+    );
     _log.finer(
-        '_ensureSelectionExtentIsVisible    - beyond bottom: $beyondBottomExtent');
+      '_ensureSelectionExtentIsVisible    - beyond bottom: $beyondBottomExtent',
+    );
 
     if (beyondTopExtent > 0) {
       final newScrollPosition =
-          (widget.scrollController.offset - beyondTopExtent)
-              .clamp(0.0, widget.scrollController.position.maxScrollExtent);
+          (widget.scrollController.offset - beyondTopExtent).clamp(
+            0.0,
+            widget.scrollController.position.maxScrollExtent,
+          );
 
       widget.scrollController.animateTo(
         newScrollPosition,
@@ -2075,8 +2152,10 @@ class SuperTextFieldScrollviewState extends State<SuperTextFieldScrollview>
       );
     } else if (beyondBottomExtent > 0) {
       final newScrollPosition =
-          (beyondBottomExtent + widget.scrollController.offset)
-              .clamp(0.0, widget.scrollController.position.maxScrollExtent);
+          (beyondBottomExtent + widget.scrollController.offset).clamp(
+            0.0,
+            widget.scrollController.position.maxScrollExtent,
+          );
 
       widget.scrollController.animateTo(
         newScrollPosition,
@@ -2115,8 +2194,9 @@ class SuperTextFieldScrollviewState extends State<SuperTextFieldScrollview>
       return;
     }
 
-    widget.scrollController.position
-        .jumpTo(widget.scrollController.offset - _scrollAmountPerFrame);
+    widget.scrollController.position.jumpTo(
+      widget.scrollController.offset - _scrollAmountPerFrame,
+    );
   }
 
   void startScrollingToEnd({required double amountPerFrame}) {
@@ -2149,8 +2229,9 @@ class SuperTextFieldScrollviewState extends State<SuperTextFieldScrollview>
       return;
     }
 
-    widget.scrollController.position
-        .jumpTo(widget.scrollController.offset + _scrollAmountPerFrame);
+    widget.scrollController.position.jumpTo(
+      widget.scrollController.offset + _scrollAmountPerFrame,
+    );
   }
 
   /// Animates the scroll position like a ballistic particle with friction, beginning
@@ -2212,8 +2293,12 @@ class SuperTextFieldScrollviewState extends State<SuperTextFieldScrollview>
   }
 }
 
-typedef RightClickListener = void Function(BuildContext textFieldContext,
-    AttributedTextEditingController textController, Offset textFieldOffset);
+typedef RightClickListener =
+    void Function(
+      BuildContext textFieldContext,
+      AttributedTextEditingController textController,
+      Offset textFieldOffset,
+    );
 
 enum _SelectionType {
   /// The selection bound is set on a per-character basis.
@@ -2271,15 +2356,17 @@ enum TextFieldKeyboardHandlerResult {
   notHandled,
 }
 
-typedef TextFieldKeyboardHandler = TextFieldKeyboardHandlerResult Function({
-  required SuperTextFieldContext textFieldContext,
-  required KeyEvent keyEvent,
-});
+typedef TextFieldKeyboardHandler =
+    TextFieldKeyboardHandlerResult Function({
+      required SuperTextFieldContext textFieldContext,
+      required KeyEvent keyEvent,
+    });
 
 /// A [TextFieldKeyboardHandler] that reports [TextFieldKeyboardHandlerResult.blocked]
 /// for any key combination that matches one of the given [keys].
 TextFieldKeyboardHandler ignoreTextFieldKeyCombos(
-    List<ShortcutActivator> keys) {
+  List<ShortcutActivator> keys,
+) {
   return ({
     required SuperTextFieldContext textFieldContext,
     required KeyEvent keyEvent,
@@ -2478,8 +2565,8 @@ class DefaultSuperTextFieldKeyboardHandlers {
     keyEvent.logicalKey == LogicalKeyboardKey.keyA
         ? moveLeft = true
         : keyEvent.logicalKey == LogicalKeyboardKey.keyE
-            ? moveLeft = false
-            : null;
+        ? moveLeft = false
+        : null;
 
     textFieldContext.controller.moveCaretHorizontally(
       textLayout: textFieldContext.getTextLayout(),
@@ -2538,7 +2625,8 @@ class DefaultSuperTextFieldKeyboardHandlers {
 
     if (keyEvent.logicalKey == LogicalKeyboardKey.arrowLeft) {
       _log.finer(
-          'moveUpDownLeftAndRightWithArrowKeys - handling left arrow key');
+        'moveUpDownLeftAndRightWithArrowKeys - handling left arrow key',
+      );
 
       MovementModifier? movementModifier;
       if ((defaultTargetPlatform == TargetPlatform.windows ||
@@ -2561,7 +2649,8 @@ class DefaultSuperTextFieldKeyboardHandlers {
       );
     } else if (keyEvent.logicalKey == LogicalKeyboardKey.arrowRight) {
       _log.finer(
-          'moveUpDownLeftAndRightWithArrowKeys - handling right arrow key');
+        'moveUpDownLeftAndRightWithArrowKeys - handling right arrow key',
+      );
 
       MovementModifier? movementModifier;
       if ((defaultTargetPlatform == TargetPlatform.windows ||
@@ -2591,7 +2680,8 @@ class DefaultSuperTextFieldKeyboardHandlers {
       );
     } else if (keyEvent.logicalKey == LogicalKeyboardKey.arrowDown) {
       _log.finer(
-          'moveUpDownLeftAndRightWithArrowKeys - handling down arrow key');
+        'moveUpDownLeftAndRightWithArrowKeys - handling down arrow key',
+      );
       textFieldContext.controller.moveCaretVertically(
         textLayout: textFieldContext.getTextLayout(),
         expandSelection: HardwareKeyboard.instance.isShiftPressed,
@@ -2685,7 +2775,7 @@ class DefaultSuperTextFieldKeyboardHandlers {
   /// Deletes text between the beginning of the line and the caret, when the user
   /// presses CMD + Backspace, or CTL + Backspace.
   static TextFieldKeyboardHandlerResult
-      deleteTextOnLineBeforeCaretWhenShortcutKeyAndBackspaceIsPressed({
+  deleteTextOnLineBeforeCaretWhenShortcutKeyAndBackspaceIsPressed({
     required SuperTextFieldContext textFieldContext,
     required KeyEvent keyEvent,
   }) {
@@ -2705,7 +2795,8 @@ class DefaultSuperTextFieldKeyboardHandlers {
     if (textFieldContext
             .getTextLayout()
             .getPositionAtStartOfLine(
-                textFieldContext.controller.selection.extent)
+              textFieldContext.controller.selection.extent,
+            )
             .offset ==
         textFieldContext.controller.selection.extentOffset) {
       // The caret is sitting at the beginning of a line. There's nothing for us to
@@ -2715,14 +2806,15 @@ class DefaultSuperTextFieldKeyboardHandlers {
     }
 
     textFieldContext.controller.deleteTextOnLineBeforeCaret(
-        textLayout: textFieldContext.getTextLayout());
+      textLayout: textFieldContext.getTextLayout(),
+    );
 
     return TextFieldKeyboardHandlerResult.handled;
   }
 
   /// [deleteTextWhenBackspaceOrDeleteIsPressed] deletes single characters when delete or backspace is pressed.
   static TextFieldKeyboardHandlerResult
-      deleteTextWhenBackspaceOrDeleteIsPressed({
+  deleteTextWhenBackspaceOrDeleteIsPressed({
     required SuperTextFieldContext textFieldContext,
     ProseTextLayout? textLayout,
     required KeyEvent keyEvent,
@@ -2738,7 +2830,8 @@ class DefaultSuperTextFieldKeyboardHandlers {
 
     if (textFieldContext.controller.selection.isCollapsed) {
       textFieldContext.controller.deleteCharacter(
-          isBackspace ? TextAffinity.upstream : TextAffinity.downstream);
+        isBackspace ? TextAffinity.upstream : TextAffinity.downstream,
+      );
     } else {
       textFieldContext.controller.deleteSelectedText();
     }
@@ -2748,7 +2841,7 @@ class DefaultSuperTextFieldKeyboardHandlers {
 
   /// [deleteWordWhenAltBackSpaceIsPressedOnMac] deletes single words when Alt+Backspace is pressed on Mac.
   static TextFieldKeyboardHandlerResult
-      deleteWordWhenAltBackSpaceIsPressedOnMac({
+  deleteWordWhenAltBackSpaceIsPressedOnMac({
     required SuperTextFieldContext textFieldContext,
     required KeyEvent keyEvent,
   }) {
@@ -2765,14 +2858,16 @@ class DefaultSuperTextFieldKeyboardHandlers {
     }
 
     _deleteUpstreamWord(
-        textFieldContext.controller, textFieldContext.getTextLayout());
+      textFieldContext.controller,
+      textFieldContext.getTextLayout(),
+    );
 
     return TextFieldKeyboardHandlerResult.handled;
   }
 
   /// [deleteWordWhenAltBackSpaceIsPressedOnMac] deletes single words when Ctl+Backspace is pressed on Windows/Linux.
   static TextFieldKeyboardHandlerResult
-      deleteWordWhenCtlBackSpaceIsPressedOnWindowsAndLinux({
+  deleteWordWhenCtlBackSpaceIsPressedOnWindowsAndLinux({
     required SuperTextFieldContext textFieldContext,
     required KeyEvent keyEvent,
   }) {
@@ -2790,13 +2885,17 @@ class DefaultSuperTextFieldKeyboardHandlers {
     }
 
     _deleteUpstreamWord(
-        textFieldContext.controller, textFieldContext.getTextLayout());
+      textFieldContext.controller,
+      textFieldContext.getTextLayout(),
+    );
 
     return TextFieldKeyboardHandlerResult.handled;
   }
 
   static void _deleteUpstreamWord(
-      AttributedTextEditingController controller, ProseTextLayout textLayout) {
+    AttributedTextEditingController controller,
+    ProseTextLayout textLayout,
+  ) {
     if (!controller.selection.isCollapsed) {
       controller.deleteSelectedText();
       return;
@@ -2906,7 +3005,7 @@ class DefaultSuperTextFieldKeyboardHandlers {
   /// Scrolls the text field if it has scrollable content, if not then scrolls to the
   /// top of the ancestor scrollable content if one's present.
   static TextFieldKeyboardHandlerResult
-      scrollToBeginningOfDocumentOnCtrlOrCmdAndHome({
+  scrollToBeginningOfDocumentOnCtrlOrCmdAndHome({
     required SuperTextFieldContext textFieldContext,
     required KeyEvent keyEvent,
   }) {
@@ -2929,8 +3028,9 @@ class DefaultSuperTextFieldKeyboardHandlers {
       return TextFieldKeyboardHandlerResult.notHandled;
     }
 
-    final bool scrolled =
-        _scrollToBeginningOfDocument(textFieldContext: textFieldContext);
+    final bool scrolled = _scrollToBeginningOfDocument(
+      textFieldContext: textFieldContext,
+    );
 
     /// If scrolled, mark the key event as 'handled', otherwise 'notHandled' to give other
     /// key handlers opportunity to handle the key event.
@@ -2967,8 +3067,9 @@ class DefaultSuperTextFieldKeyboardHandlers {
       return TextFieldKeyboardHandlerResult.notHandled;
     }
 
-    final bool scrolled =
-        _scrollToEndOfDocument(textFieldContext: textFieldContext);
+    final bool scrolled = _scrollToEndOfDocument(
+      textFieldContext: textFieldContext,
+    );
 
     /// If scrolled, mark the key event as 'handled', otherwise 'notHandled' to give other
     /// key handlers opportunity to handle the key event.
@@ -2983,7 +3084,7 @@ class DefaultSuperTextFieldKeyboardHandlers {
   /// Scrolls the text field if it has scrollable content, if not then scrolls to the
   /// top of the ancestor scrollable content if one's present.
   static TextFieldKeyboardHandlerResult
-      scrollToBeginningOfDocumentOnHomeOnMacOrWeb({
+  scrollToBeginningOfDocumentOnHomeOnMacOrWeb({
     required SuperTextFieldContext textFieldContext,
     required KeyEvent keyEvent,
   }) {
@@ -3000,8 +3101,9 @@ class DefaultSuperTextFieldKeyboardHandlers {
       return TextFieldKeyboardHandlerResult.notHandled;
     }
 
-    final bool scrolled =
-        _scrollToBeginningOfDocument(textFieldContext: textFieldContext);
+    final bool scrolled = _scrollToBeginningOfDocument(
+      textFieldContext: textFieldContext,
+    );
 
     /// If scrolled, mark the key event as 'handled', otherwise 'notHandled' to give other
     /// key handlers opportunity to handle the key event.
@@ -3032,8 +3134,9 @@ class DefaultSuperTextFieldKeyboardHandlers {
       return TextFieldKeyboardHandlerResult.notHandled;
     }
 
-    final bool scrolled =
-        _scrollToEndOfDocument(textFieldContext: textFieldContext);
+    final bool scrolled = _scrollToEndOfDocument(
+      textFieldContext: textFieldContext,
+    );
 
     /// If scrolled, mark the key event as 'handled', otherwise 'notHandled' to give other
     /// key handlers opportunity to handle the key event.
@@ -3108,72 +3211,67 @@ class _EstimatedLineHeight {
 }
 
 /// A callback to handle a `performSelector` call.
-typedef SuperTextFieldSelectorHandler = void Function({
-  required SuperTextFieldContext textFieldContext,
-});
+typedef SuperTextFieldSelectorHandler =
+    void Function({required SuperTextFieldContext textFieldContext});
 
 const defaultTextFieldSelectorHandlers =
     <String, SuperTextFieldSelectorHandler>{
-  // Control.
-  MacOsSelectors.insertTab: _moveFocusNext,
-  MacOsSelectors.cancelOperation: _giveUpFocus,
+      // Control.
+      MacOsSelectors.insertTab: _moveFocusNext,
+      MacOsSelectors.cancelOperation: _giveUpFocus,
 
-  // Caret movement.
-  MacOsSelectors.moveLeft: _moveCaretUpstream,
-  MacOsSelectors.moveRight: _moveCaretDownstream,
-  MacOsSelectors.moveUp: _moveCaretUp,
-  MacOsSelectors.moveDown: _moveCaretDown,
-  MacOsSelectors.moveForward: _moveCaretDownstream,
-  MacOsSelectors.moveBackward: _moveCaretUpstream,
-  MacOsSelectors.moveWordLeft: _moveWordUpstream,
-  MacOsSelectors.moveWordRight: _moveWordDownstream,
-  MacOsSelectors.moveToLeftEndOfLine: _moveLineBeginning,
-  MacOsSelectors.moveToRightEndOfLine: _moveLineEnd,
+      // Caret movement.
+      MacOsSelectors.moveLeft: _moveCaretUpstream,
+      MacOsSelectors.moveRight: _moveCaretDownstream,
+      MacOsSelectors.moveUp: _moveCaretUp,
+      MacOsSelectors.moveDown: _moveCaretDown,
+      MacOsSelectors.moveForward: _moveCaretDownstream,
+      MacOsSelectors.moveBackward: _moveCaretUpstream,
+      MacOsSelectors.moveWordLeft: _moveWordUpstream,
+      MacOsSelectors.moveWordRight: _moveWordDownstream,
+      MacOsSelectors.moveToLeftEndOfLine: _moveLineBeginning,
+      MacOsSelectors.moveToRightEndOfLine: _moveLineEnd,
 
-  // Selection expanding.
-  MacOsSelectors.moveLeftAndModifySelection: _expandSelectionUpstream,
-  MacOsSelectors.moveRightAndModifySelection: _expandSelectionDownstream,
-  MacOsSelectors.moveUpAndModifySelection: _expandSelectionLineUp,
-  MacOsSelectors.moveDownAndModifySelection: _expandSelectionLineDown,
-  MacOsSelectors.moveWordLeftAndModifySelection: _expandSelectionWordUpstream,
-  MacOsSelectors.moveWordRightAndModifySelection:
-      _expandSelectionWordDownstream,
-  MacOsSelectors.moveToLeftEndOfLineAndModifySelection:
-      _expandSelectionLineUpstream,
-  MacOsSelectors.moveToRightEndOfLineAndModifySelection:
-      _expandSelectionLineDownstream,
+      // Selection expanding.
+      MacOsSelectors.moveLeftAndModifySelection: _expandSelectionUpstream,
+      MacOsSelectors.moveRightAndModifySelection: _expandSelectionDownstream,
+      MacOsSelectors.moveUpAndModifySelection: _expandSelectionLineUp,
+      MacOsSelectors.moveDownAndModifySelection: _expandSelectionLineDown,
+      MacOsSelectors.moveWordLeftAndModifySelection:
+          _expandSelectionWordUpstream,
+      MacOsSelectors.moveWordRightAndModifySelection:
+          _expandSelectionWordDownstream,
+      MacOsSelectors.moveToLeftEndOfLineAndModifySelection:
+          _expandSelectionLineUpstream,
+      MacOsSelectors.moveToRightEndOfLineAndModifySelection:
+          _expandSelectionLineDownstream,
 
-  // Deletion.
-  MacOsSelectors.deleteBackward: _deleteUpstream,
-  MacOsSelectors.deleteForward: _deleteDownstream,
-  MacOsSelectors.deleteWordBackward: _deleteWordUpstream,
-  MacOsSelectors.deleteWordForward: _deleteWordDownstream,
-  MacOsSelectors.deleteToBeginningOfLine: _deleteToBeginningOfLine,
-  MacOsSelectors.deleteToEndOfLine: _deleteToEndOfLine,
-  MacOsSelectors.deleteBackwardByDecomposingPreviousCharacter: _deleteUpstream,
+      // Deletion.
+      MacOsSelectors.deleteBackward: _deleteUpstream,
+      MacOsSelectors.deleteForward: _deleteDownstream,
+      MacOsSelectors.deleteWordBackward: _deleteWordUpstream,
+      MacOsSelectors.deleteWordForward: _deleteWordDownstream,
+      MacOsSelectors.deleteToBeginningOfLine: _deleteToBeginningOfLine,
+      MacOsSelectors.deleteToEndOfLine: _deleteToEndOfLine,
+      MacOsSelectors.deleteBackwardByDecomposingPreviousCharacter:
+          _deleteUpstream,
 
-  // Scrolling.
-  MacOsSelectors.scrollToBeginningOfDocument: _scrollToBeginningOfDocument,
-  MacOsSelectors.scrollToEndOfDocument: _scrollToEndOfDocument,
-  MacOsSelectors.scrollPageUp: _scrollPageUp,
-  MacOsSelectors.scrollPageDown: _scrollPageDown,
-};
+      // Scrolling.
+      MacOsSelectors.scrollToBeginningOfDocument: _scrollToBeginningOfDocument,
+      MacOsSelectors.scrollToEndOfDocument: _scrollToEndOfDocument,
+      MacOsSelectors.scrollPageUp: _scrollPageUp,
+      MacOsSelectors.scrollPageDown: _scrollPageDown,
+    };
 
-void _giveUpFocus({
-  required SuperTextFieldContext textFieldContext,
-}) {
+void _giveUpFocus({required SuperTextFieldContext textFieldContext}) {
   textFieldContext.focusNode.unfocus();
 }
 
-void _moveFocusNext({
-  required SuperTextFieldContext textFieldContext,
-}) {
+void _moveFocusNext({required SuperTextFieldContext textFieldContext}) {
   textFieldContext.focusNode.nextFocus();
 }
 
-void _moveCaretUpstream({
-  required SuperTextFieldContext textFieldContext,
-}) {
+void _moveCaretUpstream({required SuperTextFieldContext textFieldContext}) {
   textFieldContext.controller.moveCaretHorizontally(
     textLayout: textFieldContext.getTextLayout(),
     moveLeft: true,
@@ -3182,9 +3280,7 @@ void _moveCaretUpstream({
   );
 }
 
-void _moveCaretDownstream({
-  required SuperTextFieldContext textFieldContext,
-}) {
+void _moveCaretDownstream({required SuperTextFieldContext textFieldContext}) {
   textFieldContext.controller.moveCaretHorizontally(
     textLayout: textFieldContext.getTextLayout(),
     moveLeft: false,
@@ -3193,9 +3289,7 @@ void _moveCaretDownstream({
   );
 }
 
-void _moveCaretUp({
-  required SuperTextFieldContext textFieldContext,
-}) {
+void _moveCaretUp({required SuperTextFieldContext textFieldContext}) {
   textFieldContext.controller.moveCaretVertically(
     textLayout: textFieldContext.getTextLayout(),
     moveUp: true,
@@ -3203,9 +3297,7 @@ void _moveCaretUp({
   );
 }
 
-void _moveCaretDown({
-  required SuperTextFieldContext textFieldContext,
-}) {
+void _moveCaretDown({required SuperTextFieldContext textFieldContext}) {
   textFieldContext.controller.moveCaretVertically(
     textLayout: textFieldContext.getTextLayout(),
     moveUp: false,
@@ -3213,9 +3305,7 @@ void _moveCaretDown({
   );
 }
 
-void _moveWordUpstream({
-  required SuperTextFieldContext textFieldContext,
-}) {
+void _moveWordUpstream({required SuperTextFieldContext textFieldContext}) {
   textFieldContext.controller.moveCaretHorizontally(
     textLayout: textFieldContext.getTextLayout(),
     moveLeft: true,
@@ -3224,9 +3314,7 @@ void _moveWordUpstream({
   );
 }
 
-void _moveWordDownstream({
-  required SuperTextFieldContext textFieldContext,
-}) {
+void _moveWordDownstream({required SuperTextFieldContext textFieldContext}) {
   textFieldContext.controller.moveCaretHorizontally(
     textLayout: textFieldContext.getTextLayout(),
     moveLeft: false,
@@ -3235,9 +3323,7 @@ void _moveWordDownstream({
   );
 }
 
-void _moveLineBeginning({
-  required SuperTextFieldContext textFieldContext,
-}) {
+void _moveLineBeginning({required SuperTextFieldContext textFieldContext}) {
   textFieldContext.controller.moveCaretHorizontally(
     textLayout: textFieldContext.getTextLayout(),
     moveLeft: true,
@@ -3246,9 +3332,7 @@ void _moveLineBeginning({
   );
 }
 
-void _moveLineEnd({
-  required SuperTextFieldContext textFieldContext,
-}) {
+void _moveLineEnd({required SuperTextFieldContext textFieldContext}) {
   textFieldContext.controller.moveCaretHorizontally(
     textLayout: textFieldContext.getTextLayout(),
     moveLeft: false,
@@ -3279,9 +3363,7 @@ void _expandSelectionDownstream({
   );
 }
 
-void _expandSelectionLineUp({
-  required SuperTextFieldContext textFieldContext,
-}) {
+void _expandSelectionLineUp({required SuperTextFieldContext textFieldContext}) {
   textFieldContext.controller.moveCaretVertically(
     textLayout: textFieldContext.getTextLayout(),
     moveUp: true,
@@ -3343,9 +3425,7 @@ void _expandSelectionLineDownstream({
   );
 }
 
-void _deleteUpstream({
-  required SuperTextFieldContext textFieldContext,
-}) {
+void _deleteUpstream({required SuperTextFieldContext textFieldContext}) {
   if (textFieldContext.controller.selection.isCollapsed) {
     textFieldContext.controller.deleteCharacter(TextAffinity.upstream);
   } else {
@@ -3353,9 +3433,7 @@ void _deleteUpstream({
   }
 }
 
-void _deleteDownstream({
-  required SuperTextFieldContext textFieldContext,
-}) {
+void _deleteDownstream({required SuperTextFieldContext textFieldContext}) {
   if (textFieldContext.controller.selection.isCollapsed) {
     textFieldContext.controller.deleteCharacter(TextAffinity.downstream);
   } else {
@@ -3363,9 +3441,7 @@ void _deleteDownstream({
   }
 }
 
-void _deleteWordUpstream({
-  required SuperTextFieldContext textFieldContext,
-}) {
+void _deleteWordUpstream({required SuperTextFieldContext textFieldContext}) {
   if (!textFieldContext.controller.selection.isCollapsed) {
     textFieldContext.controller.deleteSelectedText();
     return;
@@ -3380,9 +3456,7 @@ void _deleteWordUpstream({
   textFieldContext.controller.deleteSelectedText();
 }
 
-void _deleteWordDownstream({
-  required SuperTextFieldContext textFieldContext,
-}) {
+void _deleteWordDownstream({required SuperTextFieldContext textFieldContext}) {
   if (!textFieldContext.controller.selection.isCollapsed) {
     textFieldContext.controller.deleteSelectedText();
     return;
@@ -3409,7 +3483,8 @@ void _deleteToBeginningOfLine({
   if (textFieldContext
           .getTextLayout()
           .getPositionAtStartOfLine(
-              textFieldContext.controller.selection.extent)
+            textFieldContext.controller.selection.extent,
+          )
           .offset ==
       textFieldContext.controller.selection.extentOffset) {
     // The caret is sitting at the beginning of a line. There's nothing for us to
@@ -3419,12 +3494,11 @@ void _deleteToBeginningOfLine({
   }
 
   textFieldContext.controller.deleteTextOnLineBeforeCaret(
-      textLayout: textFieldContext.getTextLayout());
+    textLayout: textFieldContext.getTextLayout(),
+  );
 }
 
-void _deleteToEndOfLine({
-  required SuperTextFieldContext textFieldContext,
-}) {
+void _deleteToEndOfLine({required SuperTextFieldContext textFieldContext}) {
   if (!textFieldContext.controller.selection.isCollapsed) {
     textFieldContext.controller.deleteSelection();
     return;
@@ -3440,8 +3514,9 @@ void _deleteToEndOfLine({
     return;
   }
 
-  textFieldContext.controller
-      .deleteTextOnLineAfterCaret(textLayout: textFieldContext.getTextLayout());
+  textFieldContext.controller.deleteTextOnLineAfterCaret(
+    textLayout: textFieldContext.getTextLayout(),
+  );
 }
 
 /// Scrolls to the top of the textfield.
@@ -3455,7 +3530,9 @@ bool _scrollToBeginningOfDocument({
 }) {
   final TextFieldScroller textFieldScroller = textFieldContext.scroller;
   final ScrollPosition? ancestorScrollable = textFieldContext
-      .textFieldBuildContext.findAncestorScrollableWithVerticalScroll?.position;
+      .textFieldBuildContext
+      .findAncestorScrollableWithVerticalScroll
+      ?.position;
 
   if (textFieldScroller.maxScrollExtent == 0 && ancestorScrollable == null) {
     // The text field doesn't have any scrollable content. There is no ancestor
@@ -3496,12 +3573,12 @@ bool _scrollToBeginningOfDocument({
 /// scrollable to its end.
 ///
 /// Returns `true` if the scroll is performed, otherwise false.
-bool _scrollToEndOfDocument({
-  required SuperTextFieldContext textFieldContext,
-}) {
+bool _scrollToEndOfDocument({required SuperTextFieldContext textFieldContext}) {
   final TextFieldScroller textFieldScroller = textFieldContext.scroller;
   final ScrollPosition? ancestorScrollable = textFieldContext
-      .textFieldBuildContext.findAncestorScrollableWithVerticalScroll?.position;
+      .textFieldBuildContext
+      .findAncestorScrollableWithVerticalScroll
+      ?.position;
 
   if (textFieldScroller.maxScrollExtent == 0 && ancestorScrollable == null) {
     // The text field doesn't have any scrollable content. There is no ancestor
@@ -3548,12 +3625,12 @@ bool _scrollToEndOfDocument({
 /// scrollable up by its viewport height.
 ///
 /// Returns `true` if the scroll is performed, otherwise false.
-bool _scrollPageUp({
-  required SuperTextFieldContext textFieldContext,
-}) {
+bool _scrollPageUp({required SuperTextFieldContext textFieldContext}) {
   final TextFieldScroller textFieldScroller = textFieldContext.scroller;
   final ScrollPosition? ancestorScrollable = textFieldContext
-      .textFieldBuildContext.findAncestorScrollableWithVerticalScroll?.position;
+      .textFieldBuildContext
+      .findAncestorScrollableWithVerticalScroll
+      ?.position;
 
   if (textFieldScroller.maxScrollExtent == 0 && ancestorScrollable == null) {
     // No scrollable content within `SuperDesktopField` and ancestor scrollable
@@ -3581,8 +3658,10 @@ bool _scrollPageUp({
 
   // Scroll up ancestor scrollable by viewport height.
   ancestorScrollable.animateTo(
-    max(ancestorScrollable.pixels - ancestorScrollable.viewportDimension,
-        ancestorScrollable.minScrollExtent),
+    max(
+      ancestorScrollable.pixels - ancestorScrollable.viewportDimension,
+      ancestorScrollable.minScrollExtent,
+    ),
     duration: const Duration(milliseconds: 150),
     curve: Curves.decelerate,
   );
@@ -3596,12 +3675,12 @@ bool _scrollPageUp({
 /// scrollable down by its viewport height.
 ///
 /// Returns `true` if the scroll is performed, otherwise false.
-bool _scrollPageDown({
-  required SuperTextFieldContext textFieldContext,
-}) {
+bool _scrollPageDown({required SuperTextFieldContext textFieldContext}) {
   final TextFieldScroller textFieldScroller = textFieldContext.scroller;
   final ScrollPosition? ancestorScrollable = textFieldContext
-      .textFieldBuildContext.findAncestorScrollableWithVerticalScroll?.position;
+      .textFieldBuildContext
+      .findAncestorScrollableWithVerticalScroll
+      ?.position;
 
   if (textFieldScroller.maxScrollExtent == 0 && ancestorScrollable == null) {
     // No scrollable content within `SuperDesktopField` and ancestor scrollable
@@ -3629,8 +3708,10 @@ bool _scrollPageDown({
 
   // Scroll down ancestor scrollable by viewport height.
   ancestorScrollable.animateTo(
-    min(ancestorScrollable.pixels + ancestorScrollable.viewportDimension,
-        ancestorScrollable.maxScrollExtent),
+    min(
+      ancestorScrollable.pixels + ancestorScrollable.viewportDimension,
+      ancestorScrollable.maxScrollExtent,
+    ),
     duration: const Duration(milliseconds: 150),
     curve: Curves.decelerate,
   );

@@ -9,7 +9,9 @@ import '../reader_test_tools.dart';
 void main() {
   group("SuperReader > iOS > overlay controls >", () {
     group("on device and web > shows ", () {
-      testWidgetsOnIosDeviceAndWeb("upstream and downstream handles", (tester) async {
+      testWidgetsOnIosDeviceAndWeb("upstream and downstream handles", (
+        tester,
+      ) async {
         await _pumpApp(tester);
 
         // Create an expanded selection.
@@ -17,12 +19,21 @@ void main() {
 
         // Ensure we have an expanded selection.
         expect(SuperReaderInspector.findDocumentSelection(), isNotNull);
-        expect(SuperReaderInspector.findDocumentSelection()!.isCollapsed, isFalse);
+        expect(
+          SuperReaderInspector.findDocumentSelection()!.isCollapsed,
+          isFalse,
+        );
 
         // Ensure expanded handles are visible, but caret isn't.
         expect(SuperReaderInspector.findMobileCaret(), findsNothing);
-        expect(SuperReaderInspector.findMobileUpstreamDragHandle(), findsOneWidget);
-        expect(SuperReaderInspector.findMobileDownstreamDragHandle(), findsOneWidget);
+        expect(
+          SuperReaderInspector.findMobileUpstreamDragHandle(),
+          findsOneWidget,
+        );
+        expect(
+          SuperReaderInspector.findMobileDownstreamDragHandle(),
+          findsOneWidget,
+        );
       });
     });
 
@@ -35,7 +46,10 @@ void main() {
           await tester.longPressDownInParagraph("1", 1);
 
           // Ensure the magnifier is wanted AND visible.
-          expect(SuperReaderInspector.wantsMobileMagnifierToBeVisible(), isTrue);
+          expect(
+            SuperReaderInspector.wantsMobileMagnifierToBeVisible(),
+            isTrue,
+          );
           expect(SuperReaderInspector.isMobileMagnifierVisible(), isTrue);
         });
 
@@ -47,7 +61,10 @@ void main() {
 
           // Ensure we have an expanded selection.
           expect(SuperReaderInspector.findDocumentSelection(), isNotNull);
-          expect(SuperReaderInspector.findDocumentSelection()!.isCollapsed, isFalse);
+          expect(
+            SuperReaderInspector.findDocumentSelection()!.isCollapsed,
+            isFalse,
+          );
 
           // Ensure that the toolbar is desired AND displayed.
           expect(SuperReaderInspector.wantsMobileToolbarToBeVisible(), isTrue);
@@ -65,7 +82,10 @@ void main() {
           await tester.longPressDownInParagraph("1", 1);
 
           // Ensure the magnifier is desired, but not displayed.
-          expect(SuperReaderInspector.wantsMobileMagnifierToBeVisible(), isTrue);
+          expect(
+            SuperReaderInspector.wantsMobileMagnifierToBeVisible(),
+            isTrue,
+          );
           expect(SuperReaderInspector.isMobileMagnifierVisible(), isFalse);
         });
 
@@ -77,7 +97,10 @@ void main() {
 
           // Ensure we have an expanded selection.
           expect(SuperReaderInspector.findDocumentSelection(), isNotNull);
-          expect(SuperReaderInspector.findDocumentSelection()!.isCollapsed, isFalse);
+          expect(
+            SuperReaderInspector.findDocumentSelection()!.isCollapsed,
+            isFalse,
+          );
 
           // Ensure that the toolbar is desired, but not displayed.
           expect(SuperReaderInspector.wantsMobileToolbarToBeVisible(), isTrue);

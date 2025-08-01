@@ -8,7 +8,9 @@ import '../../test_tools_goldens.dart';
 
 void main() {
   group("SuperEditor > Android > overlay controls >", () {
-    testGoldensOnAndroid("confines magnifier within screen bounds", (tester) async {
+    testGoldensOnAndroid("confines magnifier within screen bounds", (
+      tester,
+    ) async {
       tester.view
         ..devicePixelRatio = 1.0
         ..platformDispatcher.textScaleFactorTestValue = 1.0
@@ -19,10 +21,13 @@ void main() {
       await tester //
           .createDocument()
           .withSingleParagraph()
-          .useStylesheet(Stylesheet(
-            rules: defaultStylesheet.rules,
-            inlineTextStyler: (attributions, style) => _textStyleBuilder(attributions),
-          ))
+          .useStylesheet(
+            Stylesheet(
+              rules: defaultStylesheet.rules,
+              inlineTextStyler: (attributions, style) =>
+                  _textStyleBuilder(attributions),
+            ),
+          )
           .pump();
 
       // Place the caret at "Duis aute|" (line 6).
@@ -38,7 +43,10 @@ void main() {
       await tester.pump();
       await expectLater(
         find.byType(MaterialApp),
-        matchesGoldenFileWithPixelAllowance("goldens/supereditor_android_magnifier_screen_edges.png", 52),
+        matchesGoldenFileWithPixelAllowance(
+          "goldens/supereditor_android_magnifier_screen_edges.png",
+          52,
+        ),
       );
 
       // Release the gesture.

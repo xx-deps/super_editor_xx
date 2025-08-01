@@ -17,7 +17,10 @@ void main() {
         await tester.pumpAndSettle();
         await tester.typeKeyboardText("Hello, World!");
 
-        expect(SuperTextFieldInspector.findText().toPlainText(), "Hello, World!");
+        expect(
+          SuperTextFieldInspector.findText().toPlainText(),
+          "Hello, World!",
+        );
       });
 
       testWidgets("symbol characters", (tester) async {
@@ -33,15 +36,16 @@ void main() {
       testWidgets("in middle of existing text", (tester) async {
         await _pumpDesktopScaffold(
           tester,
-          AttributedTextEditingController(
-            text: AttributedText("hello world"),
-          ),
+          AttributedTextEditingController(text: AttributedText("hello world")),
         );
         await tester.placeCaretInSuperTextField(6);
         await tester.pumpAndSettle();
         await tester.typeKeyboardText("new ");
 
-        expect(SuperTextFieldInspector.findText().toPlainText(), "hello new world");
+        expect(
+          SuperTextFieldInspector.findText().toPlainText(),
+          "hello new world",
+        );
       });
 
       testWidgets("doesn't support Android", (tester) async {
@@ -67,7 +71,10 @@ void main() {
   });
 }
 
-Future<void> _pumpDesktopScaffold(WidgetTester tester, [AttributedTextEditingController? controller]) async {
+Future<void> _pumpDesktopScaffold(
+  WidgetTester tester, [
+  AttributedTextEditingController? controller,
+]) async {
   debugDefaultTargetPlatformOverride = TargetPlatform.macOS;
 
   await _pumpScaffold(
@@ -82,7 +89,10 @@ Future<void> _pumpDesktopScaffold(WidgetTester tester, [AttributedTextEditingCon
   debugDefaultTargetPlatformOverride = null;
 }
 
-Future<void> _pumpAndroidScaffold(WidgetTester tester, [ImeAttributedTextEditingController? controller]) async {
+Future<void> _pumpAndroidScaffold(
+  WidgetTester tester, [
+  ImeAttributedTextEditingController? controller,
+]) async {
   debugDefaultTargetPlatformOverride = TargetPlatform.android;
 
   await _pumpScaffold(
@@ -98,7 +108,10 @@ Future<void> _pumpAndroidScaffold(WidgetTester tester, [ImeAttributedTextEditing
   debugDefaultTargetPlatformOverride = null;
 }
 
-Future<void> _pumpIOSScaffold(WidgetTester tester, [ImeAttributedTextEditingController? controller]) async {
+Future<void> _pumpIOSScaffold(
+  WidgetTester tester, [
+  ImeAttributedTextEditingController? controller,
+]) async {
   debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
 
   await _pumpScaffold(
@@ -118,12 +131,7 @@ Future<void> _pumpScaffold(WidgetTester tester, Widget textField) async {
   await tester.pumpWidget(
     MaterialApp(
       home: Scaffold(
-        body: Center(
-          child: SizedBox(
-            width: 300,
-            child: textField,
-          ),
-        ),
+        body: Center(child: SizedBox(width: 300, child: textField)),
       ),
     ),
   );

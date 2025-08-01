@@ -28,10 +28,7 @@ void main() {
                     return Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(4),
-                        border: Border.all(
-                          color: Colors.blue,
-                          width: 1,
-                        ),
+                        border: Border.all(color: Colors.blue, width: 1),
                       ),
                       child: child,
                     );
@@ -51,7 +48,10 @@ void main() {
         ),
       );
 
-      await tester.placeCaretInSuperTextField(0, find.byType(SuperDesktopTextField));
+      await tester.placeCaretInSuperTextField(
+        0,
+        find.byType(SuperDesktopTextField),
+      );
       await screenMatchesGolden(tester, 'super_textfield_font_height');
     });
   });

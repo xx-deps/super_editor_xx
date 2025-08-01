@@ -7,19 +7,24 @@ import 'supereditor_test_tools.dart';
 
 void main() {
   group("SuperEditor smoke test", () {
-    testWidgets("writes a document with multiple types of content", (tester) async {
+    testWidgets("writes a document with multiple types of content", (
+      tester,
+    ) async {
       // Configure and render an empty document.
-      final testDocContext = await tester //
-          .createDocument()
-          .withSingleEmptyParagraph()
-          .forDesktop()
-          .withInputSource(TextInputSource.keyboard)
-          .pump();
+      final testDocContext =
+          await tester //
+              .createDocument()
+              .withSingleEmptyParagraph()
+              .forDesktop()
+              .withInputSource(TextInputSource.keyboard)
+              .pump();
 
       await tester.placeCaretInParagraph("1", 0);
 
       // Type the first paragraph.
-      await tester.typeKeyboardText("This is the first paragraph of the document.");
+      await tester.typeKeyboardText(
+        "This is the first paragraph of the document.",
+      );
       await tester.pressEnter();
 
       // Type a blockquote.
@@ -67,9 +72,15 @@ void main() {
 
 final _expectedDocument = MutableDocument(
   nodes: [
-    ParagraphNode(id: "1", text: AttributedText("This is the first paragraph of the document.")),
     ParagraphNode(
-        id: "2", text: AttributedText("This is a blockquote."), metadata: {'blockType': blockquoteAttribution}),
+      id: "1",
+      text: AttributedText("This is the first paragraph of the document."),
+    ),
+    ParagraphNode(
+      id: "2",
+      text: AttributedText("This is a blockquote."),
+      metadata: {'blockType': blockquoteAttribution},
+    ),
     ParagraphNode(id: "3", text: AttributedText("This is an ordered list.")),
     ListItemNode.ordered(id: "4", text: AttributedText("item 1")),
     ListItemNode.ordered(id: "5", text: AttributedText("item 2")),

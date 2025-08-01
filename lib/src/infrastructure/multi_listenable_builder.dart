@@ -28,8 +28,9 @@ class _MultiListenableBuilderState extends State<MultiListenableBuilder> {
     super.didUpdateWidget(oldWidget);
     if (widget.listenables != oldWidget.listenables) {
       _syncListenables(
-          oldListenables: oldWidget.listenables,
-          newListenables: widget.listenables);
+        oldListenables: oldWidget.listenables,
+        newListenables: widget.listenables,
+      );
     }
   }
 

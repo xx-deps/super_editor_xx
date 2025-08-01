@@ -33,7 +33,10 @@ void main() {
         // Ensure the text is colored orange.
         for (int i = 0; i <= 9; i++) {
           expect(
-            SuperTextFieldInspector.findRichText().getSpanForPosition(TextPosition(offset: i))!.style!.color,
+            SuperTextFieldInspector.findRichText()
+                .getSpanForPosition(TextPosition(offset: i))!
+                .style!
+                .color,
             Colors.orange,
           );
         }
@@ -63,13 +66,19 @@ void main() {
 
         // Ensure the first span is colored black.
         expect(
-          SuperTextFieldInspector.findRichText().getSpanForPosition(const TextPosition(offset: 0))!.style!.color,
+          SuperTextFieldInspector.findRichText()
+              .getSpanForPosition(const TextPosition(offset: 0))!
+              .style!
+              .color,
           Colors.black,
         );
 
         // Ensure the second span is colored orange.
         expect(
-          SuperTextFieldInspector.findRichText().getSpanForPosition(const TextPosition(offset: 5))!.style!.color,
+          SuperTextFieldInspector.findRichText()
+              .getSpanForPosition(const TextPosition(offset: 5))!
+              .style!
+              .color,
           Colors.orange,
         );
       });
@@ -86,9 +95,7 @@ Future<void> _pumpTestApp(
     MaterialApp(
       home: Scaffold(
         body: SuperTextField(
-          textController: AttributedTextEditingController(
-            text: text,
-          ),
+          textController: AttributedTextEditingController(text: text),
         ),
       ),
     ),

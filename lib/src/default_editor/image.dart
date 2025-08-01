@@ -17,8 +17,9 @@ class ImageNode extends BlockNode {
     this.altText = '',
     super.metadata,
   }) {
-    initAddToMetadata(
-        {NodeMetadata.blockType: const NamedAttribution("image")});
+    initAddToMetadata({
+      NodeMetadata.blockType: const NamedAttribution("image"),
+    });
   }
 
   @override
@@ -61,10 +62,7 @@ class ImageNode extends BlockNode {
       imageUrl: imageUrl,
       expectedBitmapSize: expectedBitmapSize,
       altText: altText,
-      metadata: {
-        ...metadata,
-        ...newProperties,
-      },
+      metadata: {...metadata, ...newProperties},
     );
   }
 
@@ -86,9 +84,7 @@ class ImageNode extends BlockNode {
       imageUrl: imageUrl,
       expectedBitmapSize: expectedBitmapSize,
       altText: altText,
-      metadata: {
-        ...metadata,
-      },
+      metadata: {...metadata},
     );
   }
 
@@ -121,7 +117,9 @@ class ImageComponentBuilder implements ComponentBuilder {
 
   @override
   SingleColumnLayoutComponentViewModel? createViewModel(
-      Document document, DocumentNode node) {
+    Document document,
+    DocumentNode node,
+  ) {
     if (node is! ImageNode) {
       return null;
     }
@@ -136,8 +134,10 @@ class ImageComponentBuilder implements ComponentBuilder {
   }
 
   @override
-  Widget? createComponent(SingleColumnDocumentComponentContext componentContext,
-      SingleColumnLayoutComponentViewModel componentViewModel) {
+  Widget? createComponent(
+    SingleColumnDocumentComponentContext componentContext,
+    SingleColumnLayoutComponentViewModel componentViewModel,
+  ) {
     if (componentViewModel is! ImageComponentViewModel) {
       return null;
     }
@@ -146,8 +146,9 @@ class ImageComponentBuilder implements ComponentBuilder {
       componentKey: componentContext.componentKey,
       imageUrl: componentViewModel.imageUrl,
       expectedSize: componentViewModel.expectedSize,
-      selection: componentViewModel.selection?.nodeSelection
-          as UpstreamDownstreamNodeSelection?,
+      selection:
+          componentViewModel.selection?.nodeSelection
+              as UpstreamDownstreamNodeSelection?,
       selectionColor: componentViewModel.selectionColor,
       opacity: componentViewModel.opacity,
     );
@@ -257,8 +258,7 @@ class ImageComponent extends StatelessWidget {
                   : Image.network(
                       imageUrl,
                       fit: BoxFit.contain,
-                      frameBuilder:
-                          (context, child, frame, wasSynchronouslyLoaded) {
+                      frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
                         if (frame != null) {
                           // The image is already loaded. Use the image as is.
                           return child;
@@ -301,10 +301,13 @@ class ExpectedSize {
   final int? width;
   final int? height;
 
-  double get aspectRatio => height != null //
+  double get aspectRatio =>
+      height !=
+          null //
       ? (width ?? 0) / height!
       : throw UnsupportedError(
-          "Can't compute the aspect ratio with a null height");
+          "Can't compute the aspect ratio with a null height",
+        );
 
   @override
   bool operator ==(Object other) =>

@@ -192,11 +192,23 @@ const goldenSizeSmall = Size(600, 400);
 /// irrelevant mismatches, it's often more convenient to work in terms of pixels. This
 /// matcher lets developers specify a maximum pixel mismatch count, instead of relying on
 /// percentage differences across the entire golden image.
-MatchesGoldenFile matchesGoldenFileWithPixelAllowance(Object key, int maxPixelMismatchCount, {int? version}) {
+MatchesGoldenFile matchesGoldenFileWithPixelAllowance(
+  Object key,
+  int maxPixelMismatchCount, {
+  int? version,
+}) {
   if (key is Uri) {
-    return MatchesGoldenFileWithPixelAllowance(key, maxPixelMismatchCount, version);
+    return MatchesGoldenFileWithPixelAllowance(
+      key,
+      maxPixelMismatchCount,
+      version,
+    );
   } else if (key is String) {
-    return MatchesGoldenFileWithPixelAllowance.forStringPath(key, maxPixelMismatchCount, version);
+    return MatchesGoldenFileWithPixelAllowance.forStringPath(
+      key,
+      maxPixelMismatchCount,
+      version,
+    );
   }
   throw ArgumentError('Unexpected type for golden file: ${key.runtimeType}');
 }
@@ -213,15 +225,22 @@ class MatchesGoldenFileWithPixelAllowance extends MatchesGoldenFile {
   ///
   /// The [key] URI should be a relative path from the executing test's
   /// directory to the golden file, e.g., "goldens/my-golden-name.png".
-  MatchesGoldenFileWithPixelAllowance(super.key, this._maxPixelMismatchCount, [super.version]);
+  MatchesGoldenFileWithPixelAllowance(
+    super.key,
+    this._maxPixelMismatchCount, [
+    super.version,
+  ]);
 
   /// Creates a [MatchesGoldenFileWithPixelAllowance] that looks for a golden
   /// file at the relative [path].
   ///
   /// The [path] should be relative to the executing test's directory, e.g.,
   /// "goldens/my-golden-name.png".
-  MatchesGoldenFileWithPixelAllowance.forStringPath(String path, this._maxPixelMismatchCount, [int? version])
-      : super.forStringPath(path, version);
+  MatchesGoldenFileWithPixelAllowance.forStringPath(
+    String path,
+    this._maxPixelMismatchCount, [
+    int? version,
+  ]) : super.forStringPath(path, version);
 
   final int _maxPixelMismatchCount;
 
@@ -248,12 +267,10 @@ class MatchesGoldenFileWithPixelAllowance extends MatchesGoldenFile {
 /// to be different between the golden image file and the test image file, and
 /// still pass.
 class PixelDiffGoldenComparator extends LocalFileComparator {
-  PixelDiffGoldenComparator(
-    String testBaseDirectory, {
-    required int pixelCount,
-  })  : _testBaseDirectory = testBaseDirectory,
-        _maxPixelMismatchCount = pixelCount,
-        super(Uri.parse(testBaseDirectory));
+  PixelDiffGoldenComparator(String testBaseDirectory, {required int pixelCount})
+    : _testBaseDirectory = testBaseDirectory,
+      _maxPixelMismatchCount = pixelCount,
+      super(Uri.parse(testBaseDirectory));
 
   @override
   Uri get basedir => Uri.parse(_testBaseDirectory);
@@ -290,7 +307,8 @@ class PixelDiffGoldenComparator extends LocalFileComparator {
     // Paint the golden diffs and images to failure files.
     await generateFailureOutput(result, golden, basedir);
     throw FlutterError(
-        "Pixel test failed. ${result.diffPercent.toStringAsFixed(2)}% diff, $pixelMismatchCount pixel count diff (max allowed pixel mismatch count is $_maxPixelMismatchCount)");
+      "Pixel test failed. ${result.diffPercent.toStringAsFixed(2)}% diff, $pixelMismatchCount pixel count diff (max allowed pixel mismatch count is $_maxPixelMismatchCount)",
+    );
   }
 
   @override
@@ -304,5 +322,6 @@ class PixelDiffGoldenComparator extends LocalFileComparator {
     return goldenBytes;
   }
 
-  File _getGoldenFile(Uri golden) => File(path.join(_testBaseDirectory, path.fromUri(golden.path)));
+  File _getGoldenFile(Uri golden) =>
+      File(path.join(_testBaseDirectory, path.fromUri(golden.path)));
 }

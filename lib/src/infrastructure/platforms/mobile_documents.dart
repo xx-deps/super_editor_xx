@@ -52,13 +52,14 @@ class DocumentKeys {
 ///   );
 /// }
 /// ```
-typedef DocumentCollapsedHandleBuilder = Widget Function(
-  BuildContext, {
-  required Key handleKey,
-  required LeaderLink focalPoint,
-  required DocumentHandleGestureDelegate gestureDelegate,
-  required bool shouldShow,
-});
+typedef DocumentCollapsedHandleBuilder =
+    Widget Function(
+      BuildContext, {
+      required Key handleKey,
+      required LeaderLink focalPoint,
+      required DocumentHandleGestureDelegate gestureDelegate,
+      required bool shouldShow,
+    });
 
 /// Builds a full-screen display of a set of expanded drag handles, with the handles positioned near the
 /// [upstreamFocalPoint] and [downstreamFocalPoint], respectively, and with the handles attached to the
@@ -124,16 +125,17 @@ typedef DocumentCollapsedHandleBuilder = Widget Function(
 ///   );
 /// }
 /// ```
-typedef DocumentExpandedHandlesBuilder = Widget Function(
-  BuildContext, {
-  required Key upstreamHandleKey,
-  required LeaderLink upstreamFocalPoint,
-  required DocumentHandleGestureDelegate upstreamGestureDelegate,
-  required Key downstreamHandleKey,
-  required LeaderLink downstreamFocalPoint,
-  required DocumentHandleGestureDelegate downstreamGestureDelegate,
-  required bool shouldShow,
-});
+typedef DocumentExpandedHandlesBuilder =
+    Widget Function(
+      BuildContext, {
+      required Key upstreamHandleKey,
+      required LeaderLink upstreamFocalPoint,
+      required DocumentHandleGestureDelegate upstreamGestureDelegate,
+      required Key downstreamHandleKey,
+      required LeaderLink downstreamFocalPoint,
+      required DocumentHandleGestureDelegate downstreamGestureDelegate,
+      required bool shouldShow,
+    });
 
 /// Delegate for handling gestures on a document handle.
 ///
@@ -206,11 +208,12 @@ class DocumentHandleGestureDelegate {
 ///   );
 /// }
 /// ```
-typedef DocumentFloatingToolbarBuilder = Widget Function(
-  BuildContext context,
-  Key mobileToolbarKey,
-  LeaderLink focalPoint,
-);
+typedef DocumentFloatingToolbarBuilder =
+    Widget Function(
+      BuildContext context,
+      Key mobileToolbarKey,
+      LeaderLink focalPoint,
+    );
 
 /// Builds a full-screen magnifier display, with the magnifier following the given [focalPoint],
 /// and with the magnifier attached to the given [magnifierKey].
@@ -243,8 +246,13 @@ typedef DocumentFloatingToolbarBuilder = Widget Function(
 ///   );
 /// }
 /// ```
-typedef DocumentMagnifierBuilder = Widget Function(
-    BuildContext, Key magnifierKey, LeaderLink focalPoint, bool isVisible);
+typedef DocumentMagnifierBuilder =
+    Widget Function(
+      BuildContext,
+      Key magnifierKey,
+      LeaderLink focalPoint,
+      bool isVisible,
+    );
 
 /// Global flag that disables long-press selection for Android and iOS, as a hack for Superlist, because
 /// Superlist has a custom long-press behavior per-component.
@@ -256,7 +264,8 @@ typedef DocumentMagnifierBuilder = Widget Function(
 /// event. As a result, if a user long-presses on a component to re-order it, that long-press also triggers
 /// the long-press text selection behavior within the standard document interactor.
 @Deprecated(
-    "Don't use this unless you're Superlist. This will be removed ASAP. See issue #1547.")
+  "Don't use this unless you're Superlist. This will be removed ASAP. See issue #1547.",
+)
 bool disableLongPressSelectionForSuperlist = false;
 
 /// Controls the display and position of a magnifier and a floating toolbar.
@@ -374,8 +383,8 @@ class GestureEditingController with ChangeNotifier {
     required this.selectionLinks,
     required MagnifierAndToolbarController overlayController,
     required LeaderLink magnifierFocalPointLink,
-  })  : _magnifierFocalPointLink = magnifierFocalPointLink,
-        _overlayController = overlayController {
+  }) : _magnifierFocalPointLink = magnifierFocalPointLink,
+       _overlayController = overlayController {
     _overlayController.addListener(_toolbarChanged);
   }
 
@@ -490,10 +499,10 @@ class DragHandleAutoScroller {
     required AxisOffset dragAutoScrollBoundary,
     required ScrollPosition Function() getScrollPosition,
     required RenderBox Function() getViewportBox,
-  })  : _autoScroller = AutoScroller(vsync: vsync),
-        _dragAutoScrollBoundary = dragAutoScrollBoundary,
-        _getScrollPosition = getScrollPosition,
-        _getViewportBox = getViewportBox;
+  }) : _autoScroller = AutoScroller(vsync: vsync),
+       _dragAutoScrollBoundary = dragAutoScrollBoundary,
+       _getScrollPosition = getScrollPosition,
+       _getViewportBox = getViewportBox;
 
   void dispose() {
     _autoScroller.dispose();
@@ -515,7 +524,8 @@ class DragHandleAutoScroller {
   /// Does nothing, if the given [offsetInViewport] is already visible within the viewport boundary.
   void ensureOffsetIsVisible(Offset offsetInViewport) {
     editorGesturesLog.fine(
-        "Ensuring content offset is visible in scrollable: $offsetInViewport");
+      "Ensuring content offset is visible in scrollable: $offsetInViewport",
+    );
 
     final scrollPosition = _getScrollPosition();
     final currentScrollOffset = scrollPosition.pixels;
@@ -527,30 +537,35 @@ class DragHandleAutoScroller {
 
     if (offsetInViewport.dy < _dragAutoScrollBoundary.leading) {
       // The offset is above the leading boundary. We need to scroll up
-      editorGesturesLog
-          .fine("The scrollable needs to scroll up to make offset visible.");
+      editorGesturesLog.fine(
+        "The scrollable needs to scroll up to make offset visible.",
+      );
 
       // If currentScrollOffset isn't greater than zero it means we are already
       // at the top edge of the scrollable, so we can't scroll further up.
       if (currentScrollOffset > 0.0) {
-        final clampedVisibleScrollOffset = (currentScrollOffset +
-                (offsetInViewport.dy - _dragAutoScrollBoundary.leading))
-            .clamp(min, max);
+        final clampedVisibleScrollOffset =
+            (currentScrollOffset +
+                    (offsetInViewport.dy - _dragAutoScrollBoundary.leading))
+                .clamp(min, max);
         scrollPosition.jumpTo(clampedVisibleScrollOffset);
       }
     } else if (offsetInViewport.dy >
         _getViewportBox().size.height - _dragAutoScrollBoundary.trailing) {
       // The offset is below the trailing boundary. We need to scroll down
-      editorGesturesLog
-          .fine('The scrollable needs to scroll down to make offset visible.');
+      editorGesturesLog.fine(
+        'The scrollable needs to scroll down to make offset visible.',
+      );
       if (currentScrollOffset < scrollPosition.maxScrollExtent) {
         // We want to scroll further to show the offset, and there's still more scrollable
         // distance below. Scroll to where the offset sits at the trailing boundary.
-        final jumpDeltaToShowOffset = offsetInViewport.dy +
+        final jumpDeltaToShowOffset =
+            offsetInViewport.dy +
             _dragAutoScrollBoundary.trailing -
             _getViewportBox().size.height;
         scrollPosition.jumpTo(
-            (currentScrollOffset + jumpDeltaToShowOffset).clamp(min, max));
+          (currentScrollOffset + jumpDeltaToShowOffset).clamp(min, max),
+        );
       }
     }
   }
@@ -569,18 +584,20 @@ class DragHandleAutoScroller {
   ///  1. [startAutoScrollHandleMonitoring]
   ///  2. 1+ calls to [updateAutoScrollHandleMonitoring]
   ///  3. [stopAutoScrollHandleMonitoring]
-  void updateAutoScrollHandleMonitoring({
-    required Offset dragEndInViewport,
-  }) {
+  void updateAutoScrollHandleMonitoring({required Offset dragEndInViewport}) {
     if (dragEndInViewport.dy < _dragAutoScrollBoundary.leading &&
         _getScrollPosition().pixels > _getScrollPosition().minScrollExtent) {
       editorGesturesLog.finest('Metrics say we should try to scroll up');
 
       final leadingScrollBoundary = _dragAutoScrollBoundary.leading;
-      final gutterAmount =
-          dragEndInViewport.dy.clamp(0.0, leadingScrollBoundary);
-      final speedPercent =
-          (1.0 - (gutterAmount / leadingScrollBoundary)).clamp(0.0, 1.0);
+      final gutterAmount = dragEndInViewport.dy.clamp(
+        0.0,
+        leadingScrollBoundary,
+      );
+      final speedPercent = (1.0 - (gutterAmount / leadingScrollBoundary)).clamp(
+        0.0,
+        1.0,
+      );
 
       _autoScroller.startScrollingUp(speedPercent);
     } else {
@@ -594,8 +611,10 @@ class DragHandleAutoScroller {
 
       final trailingScrollBoundary = _dragAutoScrollBoundary.trailing;
       final gutterAmount =
-          (_getViewportBox().size.height - dragEndInViewport.dy)
-              .clamp(0.0, trailingScrollBoundary);
+          (_getViewportBox().size.height - dragEndInViewport.dy).clamp(
+            0.0,
+            trailingScrollBoundary,
+          );
       final speedPercent = 1.0 - (gutterAmount / trailingScrollBoundary);
 
       _autoScroller.startScrollingDown(speedPercent);

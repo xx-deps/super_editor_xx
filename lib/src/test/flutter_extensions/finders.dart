@@ -15,7 +15,8 @@ extension Finders on CommonFinders {
   ///
   StateType? state<StateType extends State>([Finder? subtreeScope]) {
     final elementFinder = find.byElementPredicate(
-        (element) => element is StatefulElement && element.state is StateType);
+      (element) => element is StatefulElement && element.state is StateType,
+    );
     final Finder stateFinder = subtreeScope != null
         ? find.descendant(of: subtreeScope, matching: elementFinder)
         : elementFinder;
@@ -23,7 +24,8 @@ extension Finders on CommonFinders {
     final finderResult = stateFinder.evaluate();
     if (finderResult.length > 1) {
       throw Exception(
-          "Expected to find no more than one $StateType, but found ${finderResult.length}");
+        "Expected to find no more than one $StateType, but found ${finderResult.length}",
+      );
     }
     if (finderResult.isEmpty) {
       return null;

@@ -114,8 +114,7 @@ class _KitchenSinkDemoState extends State<KitchenSinkDemo> {
     if (_pinOffset.value == null) {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         setState(() {
-          _pinOffset.value = (context.findRenderObject() as RenderBox)
-              .size
+          _pinOffset.value = (context.findRenderObject() as RenderBox).size
               .center(Offset.zero);
         });
       });
@@ -132,23 +131,11 @@ class _KitchenSinkDemoState extends State<KitchenSinkDemo> {
           color: const Color(0xFF222222),
           child: Stack(
             children: [
-              Positioned.fill(
-                child: _buildInnerBounds(),
-              ),
+              Positioned.fill(child: _buildInnerBounds()),
               _pinOffset.value != null
-                  ? BuildInOrder(
-                      children: [
-                        _buildPin(),
-                        _buildMenuFollower(),
-                      ],
-                    )
+                  ? BuildInOrder(children: [_buildPin(), _buildMenuFollower()])
                   : const SizedBox(),
-              Positioned(
-                left: 0,
-                right: 0,
-                bottom: 0,
-                child: _buildControls(),
-              ),
+              Positioned(left: 0, right: 0, bottom: 0, child: _buildControls()),
             ],
           ),
         ),
@@ -158,8 +145,12 @@ class _KitchenSinkDemoState extends State<KitchenSinkDemo> {
 
   Widget _buildInnerBounds() {
     return Padding(
-      padding:
-          const EdgeInsets.only(left: 100, right: 100, top: 75, bottom: 175),
+      padding: const EdgeInsets.only(
+        left: 100,
+        right: 100,
+        top: 75,
+        bottom: 175,
+      ),
       child: DecoratedBox(
         key: _innerBoundsKey,
         decoration: BoxDecoration(
@@ -180,10 +171,7 @@ class _KitchenSinkDemoState extends State<KitchenSinkDemo> {
               top: _pinOffset.value!.dy,
               child: FractionalTranslation(
                 translation: const Offset(-0.5, -0.5),
-                child: Leader(
-                  link: _pinLink,
-                  child: const _Pin(),
-                ),
+                child: Leader(link: _pinLink, child: const _Pin()),
               ),
             ),
           ],
@@ -227,11 +215,7 @@ class _KitchenSinkDemoState extends State<KitchenSinkDemo> {
   Widget _buildMenu() {
     switch (_menuType) {
       case _MenuType.smallPopover:
-        return Container(
-          width: 100,
-          height: 54,
-          color: Colors.red,
-        );
+        return Container(width: 100, height: 54, color: Colors.red);
       case _MenuType.iOSToolbar:
         return CupertinoPopoverToolbar(
           focalPoint: LeaderMenuFocalPoint(link: _pinLink),
@@ -248,10 +232,7 @@ class _KitchenSinkDemoState extends State<KitchenSinkDemo> {
               child: Text(
                 'Popover Content',
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                ),
+                style: TextStyle(color: Colors.white, fontSize: 20),
               ),
             ),
           ),
@@ -318,8 +299,9 @@ class _KitchenSinkDemoState extends State<KitchenSinkDemo> {
     return _CircleButton(
       isActive: !_fadeBeyondBoundary,
       icon: Icons.account_circle,
-      tooltip:
-          _fadeBeyondBoundary ? "Don't fade at boundary" : "Fade at boundary",
+      tooltip: _fadeBeyondBoundary
+          ? "Don't fade at boundary"
+          : "Fade at boundary",
       onPressed: _toggleFadeBeyondBoundary,
     );
   }
@@ -572,30 +554,28 @@ class _PinState extends State<_Pin> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    _pulseController = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 1),
-    )
-      ..addStatusListener((status) {
-        switch (status) {
-          case AnimationStatus.dismissed:
-            // Start over.
-            if (mounted) {
-              _pulseController.forward();
+    _pulseController =
+        AnimationController(vsync: this, duration: const Duration(seconds: 1))
+          ..addStatusListener((status) {
+            switch (status) {
+              case AnimationStatus.dismissed:
+                // Start over.
+                if (mounted) {
+                  _pulseController.forward();
+                }
+                break;
+              case AnimationStatus.completed:
+                if (mounted) {
+                  _pulseController.reverse();
+                }
+                break;
+              case AnimationStatus.forward:
+              case AnimationStatus.reverse:
+                // no-op
+                break;
             }
-            break;
-          case AnimationStatus.completed:
-            if (mounted) {
-              _pulseController.reverse();
-            }
-            break;
-          case AnimationStatus.forward:
-          case AnimationStatus.reverse:
-            // no-op
-            break;
-        }
-      })
-      ..forward();
+          })
+          ..forward();
   }
 
   @override
@@ -616,11 +596,14 @@ class _PinState extends State<_Pin> with SingleTickerProviderStateMixin {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               border: Border.all(
-                  width: 2,
-                  color: Colors.white.withOpacity(
-                      lerpDouble(0.5, 0.2, _pulseController.value)!)),
-              color: Colors.white
-                  .withOpacity(lerpDouble(0.25, 0.1, _pulseController.value)!),
+                width: 2,
+                color: Colors.white.withOpacity(
+                  lerpDouble(0.5, 0.2, _pulseController.value)!,
+                ),
+              ),
+              color: Colors.white.withOpacity(
+                lerpDouble(0.25, 0.1, _pulseController.value)!,
+              ),
             ),
           );
         },
@@ -629,17 +612,9 @@ class _PinState extends State<_Pin> with SingleTickerProviderStateMixin {
   }
 }
 
-enum _FollowerConstraint {
-  none,
-  screen,
-  bounds,
-}
+enum _FollowerConstraint { none, screen, bounds }
 
-enum _MenuType {
-  smallPopover,
-  iOSToolbar,
-  iOSMenu,
-}
+enum _MenuType { smallPopover, iOSToolbar, iOSMenu }
 
 enum _FollowerDirection {
   up,

@@ -14,11 +14,14 @@ Future<void> main() async {
             ParagraphNode(
               id: 'paragraph',
               text: AttributedText(' make me bold '),
-            )
+            ),
           ],
         );
         final composer = MutableDocumentComposer();
-        final editor = createDefaultDocumentEditor(document: document, composer: composer);
+        final editor = createDefaultDocumentEditor(
+          document: document,
+          composer: composer,
+        );
 
         final request = ToggleTextAttributionsRequest(
           documentRange: const DocumentSelection(
@@ -50,7 +53,6 @@ Future<void> main() async {
     });
 
     group('TextComposable text entry', () {
-
       test('it does nothing when nothing is selected', () async {
         final editContext = _createEditContext();
 
@@ -147,7 +149,9 @@ Future<void> main() async {
         expect(result, ExecutionInstruction.continueExecution);
       });
 
-      testWidgets('it does nothing when the key doesn\'t have a character', (WidgetTester tester) async {
+      testWidgets('it does nothing when the key doesn\'t have a character', (
+        WidgetTester tester,
+      ) async {
         final editContext = _createEditContext();
 
         // Add a paragraph to the document.
@@ -190,7 +194,8 @@ Future<void> main() async {
         result = anyCharacterToInsertInTextContent(
           editContext: editContext,
           keyEvent: const KeyDownEvent(
-            character: '', // Empirically, pressing enter sends '' as the character instead of null
+            character:
+                '', // Empirically, pressing enter sends '' as the character instead of null
             logicalKey: LogicalKeyboardKey.enter,
             physicalKey: PhysicalKeyboardKey.enter,
             timeStamp: Duration.zero,
@@ -245,7 +250,9 @@ Future<void> main() async {
         );
       });
 
-      testWidgets('it inserts a non-English character', (WidgetTester tester) async {
+      testWidgets('it inserts a non-English character', (
+        WidgetTester tester,
+      ) async {
         final editContext = _createEditContext();
 
         // Add a paragraph to the document.
@@ -293,10 +300,7 @@ Future<void> main() async {
     group('TextNode', () {
       group('computeSelection', () {
         test('throws if passed other types of NodePosition', () {
-          final node = TextNode(
-            id: 'text node',
-            text: AttributedText('text'),
-          );
+          final node = TextNode(id: 'text node', text: AttributedText('text'));
           expect(
             () => node.computeSelection(
               base: const UpstreamDownstreamNodePosition.upstream(),
@@ -307,10 +311,7 @@ Future<void> main() async {
         });
 
         test('preserves the affinity of extent', () {
-          final node = TextNode(
-            id: 'text node',
-            text: AttributedText('text'),
-          );
+          final node = TextNode(id: 'text node', text: AttributedText('text'));
 
           final selectionWithUpstream = node.computeSelection(
             base: const TextNodePosition(
@@ -342,21 +343,39 @@ Future<void> main() async {
     group('TextNodeSelection', () {
       group('get base', () {
         test('preserves affinity', () {
-          const selectionWithUpstream = TextNodeSelection.collapsed(offset: 0, affinity: TextAffinity.upstream);
+          const selectionWithUpstream = TextNodeSelection.collapsed(
+            offset: 0,
+            affinity: TextAffinity.upstream,
+          );
           expect(selectionWithUpstream.base.affinity, TextAffinity.upstream);
 
-          const selectionWithDownstream = TextNodeSelection.collapsed(offset: 0, affinity: TextAffinity.downstream);
-          expect(selectionWithDownstream.base.affinity, TextAffinity.downstream);
+          const selectionWithDownstream = TextNodeSelection.collapsed(
+            offset: 0,
+            affinity: TextAffinity.downstream,
+          );
+          expect(
+            selectionWithDownstream.base.affinity,
+            TextAffinity.downstream,
+          );
         });
       });
 
       group('get extent', () {
         test('preserves affinity', () {
-          const selectionWithUpstream = TextNodeSelection.collapsed(offset: 0, affinity: TextAffinity.upstream);
+          const selectionWithUpstream = TextNodeSelection.collapsed(
+            offset: 0,
+            affinity: TextAffinity.upstream,
+          );
           expect(selectionWithUpstream.extent.affinity, TextAffinity.upstream);
 
-          const selectionWithDownstream = TextNodeSelection.collapsed(offset: 0, affinity: TextAffinity.downstream);
-          expect(selectionWithDownstream.extent.affinity, TextAffinity.downstream);
+          const selectionWithDownstream = TextNodeSelection.collapsed(
+            offset: 0,
+            affinity: TextAffinity.downstream,
+          );
+          expect(
+            selectionWithDownstream.extent.affinity,
+            TextAffinity.downstream,
+          );
         });
       });
     });
@@ -366,7 +385,10 @@ Future<void> main() async {
 SuperEditorContext _createEditContext() {
   final document = MutableDocument();
   final composer = MutableDocumentComposer();
-  final documentEditor = createDefaultDocumentEditor(document: document, composer: composer);
+  final documentEditor = createDefaultDocumentEditor(
+    document: document,
+    composer: composer,
+  );
   final fakeLayout = FakeDocumentLayout();
   return SuperEditorContext(
     editorFocusNode: FocusNode(),

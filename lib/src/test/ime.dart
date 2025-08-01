@@ -21,11 +21,16 @@ DeltaTextInputClient imeClientGetter([Finder? finder]) {
 
   // There should only be one ImeInputOwner in the tree, or within the `finder`.
   // Find it and return its IME client.
-  final element = (finder ??
-          find.byElementPredicate((element) =>
-              element is StatefulElement && element.state is ImeInputOwner))
-      .evaluate()
-      .single as StatefulElement;
+  final element =
+      (finder ??
+                  find.byElementPredicate(
+                    (element) =>
+                        element is StatefulElement &&
+                        element.state is ImeInputOwner,
+                  ))
+              .evaluate()
+              .single
+          as StatefulElement;
   final owner = element.state as ImeInputOwner;
   return owner.imeClient;
 }

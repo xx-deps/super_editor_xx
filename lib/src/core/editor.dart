@@ -12,20 +12,13 @@ import 'package:uuid/uuid.dart';
 import 'package:super_editor/src/core/document.dart';
 import 'package:super_editor/src/core/document_composer.dart';
 
-enum CustomEditorEvent {
-  cut,
-  copy,
-  paste,
-}
+enum CustomEditorEvent { cut, copy, paste }
 
 class CustomEditorEventData {
   final CustomEditorEvent event;
   final String? text;
 
-  CustomEditorEventData({
-    required this.event,
-    this.text,
-  });
+  CustomEditorEventData({required this.event, this.text});
 }
 
 /// Editor for a document editing experience.
@@ -76,9 +69,9 @@ class Editor implements RequestDispatcher {
     List<EditReaction>? reactionPipeline,
     List<EditListener>? listeners,
     this.isHistoryEnabled = false,
-  })  : requestHandlers = requestHandlers ?? [],
-        reactionPipeline = reactionPipeline ?? [],
-        _changeListeners = listeners ?? [] {
+  }) : requestHandlers = requestHandlers ?? [],
+       reactionPipeline = reactionPipeline ?? [],
+       _changeListeners = listeners ?? [] {
     context = EditContext(editables);
     _commandExecutor = _DocumentEditorCommandExecutor(context);
     _customEventController =
@@ -220,7 +213,9 @@ class Editor implements RequestDispatcher {
         _history.add(_transaction!);
       } else {
         final mergeChoice = historyGroupingPolicy.shouldMergeLatestTransaction(
-            _transaction!, _history.last);
+          _transaction!,
+          _history.last,
+        );
         switch (mergeChoice) {
           case TransactionMerge.noOpinion:
           case TransactionMerge.doNotMerge:
@@ -268,8 +263,9 @@ class Editor implements RequestDispatcher {
   void execute(List<EditRequest> requests) {
     if (requests.isEmpty) {
       // No changes were requested. Don't waste time starting and ending transactions, etc.
-      editorEditsLog
-          .warning("Tried to execute requests without providing any requests");
+      editorEditsLog.warning(
+        "Tried to execute requests without providing any requests",
+      );
       return;
     }
 
@@ -324,7 +320,8 @@ class Editor implements RequestDispatcher {
     }
 
     throw Exception(
-        "Could not handle EditorRequest. DocumentEditor doesn't have a handler that recognizes the request: $request");
+      "Could not handle EditorRequest. DocumentEditor doesn't have a handler that recognizes the request: $request",
+    );
   }
 
   List<EditEvent> _executeCommand(EditCommand command) {
@@ -411,8 +408,9 @@ class Editor implements RequestDispatcher {
     for (final transaction in _history) {
       editorEditsLog.finer(" - transaction");
       for (final command in transaction.commands) {
-        editorEditsLog
-            .finer("   - ${command.runtimeType}: ${command.describe()}");
+        editorEditsLog.finer(
+          "   - ${command.runtimeType}: ${command.describe()}",
+        );
       }
     }
     editorEditsLog.finer("---");
@@ -436,7 +434,8 @@ class Editor implements RequestDispatcher {
 
     // Replay all history except for the most recent command transaction.
     editorEditsLog.finer(
-        "Replaying all command history except for the most recent transaction...");
+      "Replaying all command history except for the most recent transaction...",
+    );
     final changeEvents = <EditEvent>[];
     for (final commandTransaction in _history) {
       for (final command in commandTransaction.commands) {
@@ -502,18 +501,30 @@ class Editor implements RequestDispatcher {
   }
 
   void cut({String? customMarkdownText}) {
-    _customEventController.add(CustomEditorEventData(
-        event: CustomEditorEvent.cut, text: customMarkdownText));
+    _customEventController.add(
+      CustomEditorEventData(
+        event: CustomEditorEvent.cut,
+        text: customMarkdownText,
+      ),
+    );
   }
 
   void copy({String? customMarkdownText}) {
-    _customEventController.add(CustomEditorEventData(
-        event: CustomEditorEvent.copy, text: customMarkdownText));
+    _customEventController.add(
+      CustomEditorEventData(
+        event: CustomEditorEvent.copy,
+        text: customMarkdownText,
+      ),
+    );
   }
 
   void paste({String? customMarkdownText}) {
-    _customEventController.add(CustomEditorEventData(
-        event: CustomEditorEvent.paste, text: customMarkdownText));
+    _customEventController.add(
+      CustomEditorEventData(
+        event: CustomEditorEvent.paste,
+        text: customMarkdownText,
+      ),
+    );
   }
 
   void _notifyListeners(List<EditEvent> changeList) {
@@ -526,12 +537,10 @@ class Editor implements RequestDispatcher {
 }
 
 /// The merge policies that are used in the standard [Editor] construction.
-const defaultMergePolicy = HistoryGroupingPolicyList(
-  [
-    mergeRepeatSelectionChangesPolicy,
-    mergeRapidTextInputPolicy,
-  ],
-);
+const defaultMergePolicy = HistoryGroupingPolicyList([
+  mergeRepeatSelectionChangesPolicy,
+  mergeRapidTextInputPolicy,
+]);
 
 abstract interface class HistoryGroupingPolicy {
   TransactionMerge shouldMergeLatestTransaction(
@@ -547,7 +556,9 @@ enum TransactionMerge {
   replacePrevious;
 
   static TransactionMerge chooseMoreConservative(
-      TransactionMerge a, TransactionMerge b) {
+    TransactionMerge a,
+    TransactionMerge b,
+  ) {
     if (a == b) {
       // They're the same. It doesn't matter.
       return a;
@@ -602,14 +613,18 @@ class HistoryGroupingPolicyList implements HistoryGroupingPolicy {
 
     for (final policy in policies) {
       final newMergeChoice = policy.shouldMergeLatestTransaction(
-          newTransaction, previousTransaction);
+        newTransaction,
+        previousTransaction,
+      );
       if (newMergeChoice == TransactionMerge.doNotMerge) {
         // A policy has explicitly requested not to merge. Don't merge.
         return TransactionMerge.doNotMerge;
       }
 
       mostConservativeChoice = TransactionMerge.chooseMoreConservative(
-          mostConservativeChoice, newMergeChoice);
+        mostConservativeChoice,
+        newMergeChoice,
+      );
     }
 
     return mostConservativeChoice;
@@ -623,9 +638,9 @@ class _NeverMergePolicy implements HistoryGroupingPolicy {
 
   @override
   TransactionMerge shouldMergeLatestTransaction(
-          CommandTransaction newTransaction,
-          CommandTransaction previousTransaction) =>
-      TransactionMerge.doNotMerge;
+    CommandTransaction newTransaction,
+    CommandTransaction previousTransaction,
+  ) => TransactionMerge.doNotMerge;
 }
 
 const mergeRepeatSelectionChangesPolicy = MergeRepeatSelectionChangesPolicy();
@@ -635,12 +650,15 @@ class MergeRepeatSelectionChangesPolicy implements HistoryGroupingPolicy {
 
   @override
   TransactionMerge shouldMergeLatestTransaction(
-      CommandTransaction newTransaction,
-      CommandTransaction previousTransaction) {
+    CommandTransaction newTransaction,
+    CommandTransaction previousTransaction,
+  ) {
     final isNewTransactionAllSelectionAndComposing = newTransaction.changes
-        .where((change) =>
-            change is! SelectionChangeEvent &&
-            change is! ComposingRegionChangeEvent)
+        .where(
+          (change) =>
+              change is! SelectionChangeEvent &&
+              change is! ComposingRegionChangeEvent,
+        )
         .isEmpty;
 
     if (!isNewTransactionAllSelectionAndComposing) {
@@ -651,9 +669,11 @@ class MergeRepeatSelectionChangesPolicy implements HistoryGroupingPolicy {
 
     final isPreviousTransactionAllSelectionAndComposing = previousTransaction
         .changes
-        .where((change) =>
-            change is! SelectionChangeEvent &&
-            change is! ComposingRegionChangeEvent)
+        .where(
+          (change) =>
+              change is! SelectionChangeEvent &&
+              change is! ComposingRegionChangeEvent,
+        )
         .isEmpty;
 
     if (!isPreviousTransactionAllSelectionAndComposing) {
@@ -674,26 +694,32 @@ class MergeRepeatSelectionChangesPolicy implements HistoryGroupingPolicy {
 const mergeRapidTextInputPolicy = MergeRapidTextInputPolicy();
 
 class MergeRapidTextInputPolicy implements HistoryGroupingPolicy {
-  const MergeRapidTextInputPolicy(
-      [this._maxMergeTime = const Duration(milliseconds: 100)]);
+  const MergeRapidTextInputPolicy([
+    this._maxMergeTime = const Duration(milliseconds: 100),
+  ]);
 
   final Duration _maxMergeTime;
 
   @override
   TransactionMerge shouldMergeLatestTransaction(
-      CommandTransaction newTransaction,
-      CommandTransaction previousTransaction) {
+    CommandTransaction newTransaction,
+    CommandTransaction previousTransaction,
+  ) {
     final newContentEvents = newTransaction.changes
-        .where((change) =>
-            change is! SelectionChangeEvent &&
-            change is! ComposingRegionChangeEvent)
+        .where(
+          (change) =>
+              change is! SelectionChangeEvent &&
+              change is! ComposingRegionChangeEvent,
+        )
         .toList();
     if (newContentEvents.isEmpty) {
       return TransactionMerge.noOpinion;
     }
     final newTextInsertionEvents = newContentEvents
-        .where((change) =>
-            change is DocumentEdit && change.change is TextInsertionEvent)
+        .where(
+          (change) =>
+              change is DocumentEdit && change.change is TextInsertionEvent,
+        )
         .toList();
     if (newTextInsertionEvents.length != newContentEvents.length) {
       // There were 1+ new content changes that weren't text input. Don't merge transactions.
@@ -704,24 +730,29 @@ class MergeRapidTextInputPolicy implements HistoryGroupingPolicy {
 
     // Check that the previous transaction was also all text input.
     final previousContentEvents = previousTransaction.changes
-        .where((change) =>
-            change is! SelectionChangeEvent &&
-            change is! ComposingRegionChangeEvent)
+        .where(
+          (change) =>
+              change is! SelectionChangeEvent &&
+              change is! ComposingRegionChangeEvent,
+        )
         .toList();
     if (previousContentEvents.isEmpty) {
       return TransactionMerge.noOpinion;
     }
     final previousTextInsertionEvents = previousContentEvents
-        .where((change) =>
-            change is DocumentEdit && change.change is TextInsertionEvent)
+        .where(
+          (change) =>
+              change is DocumentEdit && change.change is TextInsertionEvent,
+        )
         .toList();
     if (previousTextInsertionEvents.length != previousContentEvents.length) {
       // There were 1+ new content changes that weren't text input. Don't merge transactions.
       return TransactionMerge.noOpinion;
     }
 
-    if (newTransaction.firstChangeTime
-            .difference(previousTransaction.lastChangeTime) >
+    if (newTransaction.firstChangeTime.difference(
+          previousTransaction.lastChangeTime,
+        ) >
         _maxMergeTime) {
       // The text insertions were far enough apart in time that we don't want to merge them.
       return TransactionMerge.noOpinion;
@@ -735,8 +766,8 @@ class MergeRapidTextInputPolicy implements HistoryGroupingPolicy {
 
 class CommandTransaction {
   CommandTransaction(this.commands, this.firstChangeTime)
-      : changes = <EditEvent>[],
-        lastChangeTime = firstChangeTime;
+    : changes = <EditEvent>[],
+      lastChangeTime = firstChangeTime;
 
   final List<EditCommand> commands;
   final List<EditEvent> changes;
@@ -859,15 +890,19 @@ class EditContext {
   T find<T extends Editable>(String id) {
     if (!_resources.containsKey(id)) {
       editorLog.shout(
-          "Tried to find an editor resource for the ID '$id', but there's no resource with that ID.");
+        "Tried to find an editor resource for the ID '$id', but there's no resource with that ID.",
+      );
       throw Exception(
-          "Tried to find an editor resource for the ID '$id', but there's no resource with that ID.");
+        "Tried to find an editor resource for the ID '$id', but there's no resource with that ID.",
+      );
     }
     if (_resources[id] is! T) {
       editorLog.shout(
-          "Tried to find an editor resource of type '$T' for ID '$id', but the resource with that ID is of type '${_resources[id].runtimeType}");
+        "Tried to find an editor resource of type '$T' for ID '$id', but the resource with that ID is of type '${_resources[id].runtimeType}",
+      );
       throw Exception(
-          "Tried to find an editor resource of type '$T' for ID '$id', but the resource with that ID is of type '${_resources[id].runtimeType}");
+        "Tried to find an editor resource of type '$T' for ID '$id', but the resource with that ID is of type '${_resources[id].runtimeType}",
+      );
     }
 
     return _resources[id] as T;
@@ -882,9 +917,11 @@ class EditContext {
 
     if (_resources[id] is! T) {
       editorLog.shout(
-          "Tried to find an editor resource of type '$T' for ID '$id', but the resource with that ID is of type '${_resources[id].runtimeType}");
+        "Tried to find an editor resource of type '$T' for ID '$id', but the resource with that ID is of type '${_resources[id].runtimeType}",
+      );
       throw Exception(
-          "Tried to find an editor resource of type '$T' for ID '$id', but the resource with that ID is of type '${_resources[id].runtimeType}");
+        "Tried to find an editor resource of type '$T' for ID '$id', but the resource with that ID is of type '${_resources[id].runtimeType}",
+      );
     }
 
     return _resources[id] as T;
@@ -934,8 +971,10 @@ class EditorCommandQueue {
   bool get hasCommands => _commandBacklog.isNotEmpty;
 
   void prepareForExecution() {
-    assert(_activeCommandExpansionQueue.isEmpty,
-        "Tried to prepare for command execution but there are already commands in the active queue. Did you forget to call onCommandExecutionComplete?");
+    assert(
+      _activeCommandExpansionQueue.isEmpty,
+      "Tried to prepare for command execution but there are already commands in the active queue. Did you forget to call onCommandExecutionComplete?",
+    );
 
     // Set the active command to the next command in the backlog.
     _activeCommand = _commandBacklog.removeAt(0);
@@ -971,8 +1010,8 @@ class EditorCommandQueue {
 /// Factory method that creates and returns an [EditCommand] that can handle
 /// the given [EditRequest], or `null` if this handler doesn't apply to the given
 /// [EditRequest].
-typedef EditRequestHandler = EditCommand? Function(
-    Editor editor, EditRequest request);
+typedef EditRequestHandler =
+    EditCommand? Function(Editor editor, EditRequest request);
 
 /// An action that a [Editor] should execute.
 abstract class EditRequest {
@@ -1024,8 +1063,11 @@ abstract class EditReaction {
   /// tied directly to the content and shouldn't stand on its own.
   ///
   /// To execute actions that are undone on their own, use [react].
-  void modifyContent(EditContext editorContext,
-      RequestDispatcher requestDispatcher, List<EditEvent> changeList) {}
+  void modifyContent(
+    EditContext editorContext,
+    RequestDispatcher requestDispatcher,
+    List<EditEvent> changeList,
+  ) {}
 
   /// Executes additional [actions] in a new standalone transaction.
   ///
@@ -1034,35 +1076,44 @@ abstract class EditReaction {
   ///
   /// To execute additional actions that are undone at the same time as the preceding
   /// changes, use [modifyContent].
-  void react(EditContext editorContext, RequestDispatcher requestDispatcher,
-      List<EditEvent> changeList) {}
+  void react(
+    EditContext editorContext,
+    RequestDispatcher requestDispatcher,
+    List<EditEvent> changeList,
+  ) {}
 }
 
 /// An [EditReaction] that delegates its reaction to a given callback function.
 class FunctionalEditReaction extends EditReaction {
-  FunctionalEditReaction({
-    Reaction? modifyContent,
-    Reaction? react,
-  })  : _modifyContent = modifyContent,
-        _react = react,
-        assert(modifyContent != null || react != null);
+  FunctionalEditReaction({Reaction? modifyContent, Reaction? react})
+    : _modifyContent = modifyContent,
+      _react = react,
+      assert(modifyContent != null || react != null);
 
   final Reaction? _modifyContent;
   final Reaction? _react;
 
   @override
-  void modifyContent(EditContext editorContext,
-          RequestDispatcher requestDispatcher, List<EditEvent> changeList) =>
-      _modifyContent?.call(editorContext, requestDispatcher, changeList);
+  void modifyContent(
+    EditContext editorContext,
+    RequestDispatcher requestDispatcher,
+    List<EditEvent> changeList,
+  ) => _modifyContent?.call(editorContext, requestDispatcher, changeList);
 
   @override
-  void react(EditContext editorContext, RequestDispatcher requestDispatcher,
-          List<EditEvent> changeList) =>
-      _react?.call(editorContext, requestDispatcher, changeList);
+  void react(
+    EditContext editorContext,
+    RequestDispatcher requestDispatcher,
+    List<EditEvent> changeList,
+  ) => _react?.call(editorContext, requestDispatcher, changeList);
 }
 
-typedef Reaction = void Function(EditContext editorContext,
-    RequestDispatcher requestDispatcher, List<EditEvent> changeList);
+typedef Reaction =
+    void Function(
+      EditContext editorContext,
+      RequestDispatcher requestDispatcher,
+      List<EditEvent> changeList,
+    );
 
 /// An object that's notified with a change list from one or more
 /// commands that were just executed within a [Editor].
@@ -1145,9 +1196,7 @@ class MutableDocument
   ///
   /// Initializes the content of this [MutableDocument] with the given [nodes],
   /// if provided, or empty content otherwise.
-  MutableDocument({
-    List<DocumentNode>? nodes,
-  }) : _nodes = nodes ?? [] {
+  MutableDocument({List<DocumentNode>? nodes}) : _nodes = nodes ?? [] {
     _refreshNodeIdCaches();
 
     _latestNodesSnapshot = List.from(_nodes);
@@ -1266,7 +1315,9 @@ class MutableDocument
 
   @override
   List<DocumentNode> getNodesInside(
-      DocumentPosition position1, DocumentPosition position2) {
+    DocumentPosition position1,
+    DocumentPosition position2,
+  ) {
     final node1 = getNode(position1);
     if (node1 == null) {
       return [];
@@ -1375,10 +1426,7 @@ class MutableDocument
   /// Replaces the node with the given [nodeId] with the given [newNode].
   ///
   /// Throws an exception if no node exists with the given [nodeId].
-  void replaceNodeById(
-    String nodeId,
-    DocumentNode newNode,
-  ) {
+  void replaceNodeById(String nodeId, DocumentNode newNode) {
     final index = getNodeIndexById(nodeId);
 
     if (index >= 0) {
@@ -1438,8 +1486,10 @@ class MutableDocument
 
   @override
   void onTransactionEnd(List<EditEvent> edits) {
-    final documentChanges =
-        edits.whereType<DocumentEdit>().map((edit) => edit.change).toList();
+    final documentChanges = edits
+        .whereType<DocumentEdit>()
+        .map((edit) => edit.change)
+        .toList();
     if (documentChanges.isEmpty && !_didReset) {
       return;
     }

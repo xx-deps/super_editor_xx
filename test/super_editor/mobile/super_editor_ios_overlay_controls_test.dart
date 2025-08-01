@@ -12,7 +12,9 @@ import '../supereditor_test_tools.dart';
 
 void main() {
   group("SuperEditor > iOS > overlay controls >", () {
-    testWidgetsOnIos("hides all controls when placing the caret", (tester) async {
+    testWidgetsOnIos("hides all controls when placing the caret", (
+      tester,
+    ) async {
       await _pumpSingleParagraphApp(tester);
 
       // Place the caret.
@@ -104,7 +106,9 @@ void main() {
       await tester.pump(const Duration(milliseconds: 100));
     });
 
-    testWidgetsOnIos("shows toolbar when selection is expanded", (tester) async {
+    testWidgetsOnIos("shows toolbar when selection is expanded", (
+      tester,
+    ) async {
       await _pumpSingleParagraphApp(tester);
 
       // Select a word.
@@ -115,7 +119,9 @@ void main() {
       expect(SuperEditorInspector.isMobileMagnifierVisible(), isFalse);
     });
 
-    testWidgetsOnIos("hides toolbar when tapping on expanded selection", (tester) async {
+    testWidgetsOnIos("hides toolbar when tapping on expanded selection", (
+      tester,
+    ) async {
       await _pumpSingleParagraphApp(tester);
 
       // Select a word.
@@ -152,7 +158,9 @@ void main() {
       expect(SuperEditorInspector.isMobileToolbarVisible(), isFalse);
     });
 
-    testWidgetsOnIos("shows magnifier when dragging expanded handle", (tester) async {
+    testWidgetsOnIos("shows magnifier when dragging expanded handle", (
+      tester,
+    ) async {
       await _pumpSingleParagraphApp(tester);
 
       // Select a word.
@@ -174,51 +182,64 @@ void main() {
       await tester.pump(const Duration(milliseconds: 100));
     });
 
-    testWidgetsOnIos("hides expanded handles and toolbar when deleting an expanded selection", (tester) async {
-      // Configure BlinkController to animate, otherwise it won't blink. We want to make sure
-      // the caret blinks after deleting the content.
-      BlinkController.indeterminateAnimationsEnabled = true;
-      addTearDown(() => BlinkController.indeterminateAnimationsEnabled = false);
+    testWidgetsOnIos(
+      "hides expanded handles and toolbar when deleting an expanded selection",
+      (tester) async {
+        // Configure BlinkController to animate, otherwise it won't blink. We want to make sure
+        // the caret blinks after deleting the content.
+        BlinkController.indeterminateAnimationsEnabled = true;
+        addTearDown(
+          () => BlinkController.indeterminateAnimationsEnabled = false,
+        );
 
-      await _pumpSingleParagraphApp(tester);
+        await _pumpSingleParagraphApp(tester);
 
-      // Double tap to select "Lorem".
-      await tester.doubleTapInParagraph("1", 1);
-      await tester.pump();
+        // Double tap to select "Lorem".
+        await tester.doubleTapInParagraph("1", 1);
+        await tester.pump();
 
-      // Ensure the toolbar and the drag handles are visible.
-      expect(SuperEditorInspector.isMobileToolbarVisible(), isTrue);
-      expect(SuperEditorInspector.findMobileExpandedDragHandles(), findsNWidgets(2));
+        // Ensure the toolbar and the drag handles are visible.
+        expect(SuperEditorInspector.isMobileToolbarVisible(), isTrue);
+        expect(
+          SuperEditorInspector.findMobileExpandedDragHandles(),
+          findsNWidgets(2),
+        );
 
-      // Press backspace to delete the word "Lorem" while the expanded handles are visible.
-      await tester.ime.backspace(getter: imeClientGetter);
+        // Press backspace to delete the word "Lorem" while the expanded handles are visible.
+        await tester.ime.backspace(getter: imeClientGetter);
 
-      // Ensure the toolbar and the drag handles were hidden.
-      expect(SuperEditorInspector.isMobileToolbarVisible(), isFalse);
-      expect(SuperEditorInspector.findMobileExpandedDragHandles(), findsNothing);
+        // Ensure the toolbar and the drag handles were hidden.
+        expect(SuperEditorInspector.isMobileToolbarVisible(), isFalse);
+        expect(
+          SuperEditorInspector.findMobileExpandedDragHandles(),
+          findsNothing,
+        );
 
-      // Ensure caret is blinking.
+        // Ensure caret is blinking.
 
-      expect(SuperEditorInspector.isCaretVisible(), true);
+        expect(SuperEditorInspector.isCaretVisible(), true);
 
-      // Duration to switch between visible and invisible.
-      final flashPeriod = SuperEditorInspector.caretFlashPeriod();
+        // Duration to switch between visible and invisible.
+        final flashPeriod = SuperEditorInspector.caretFlashPeriod();
 
-      // Trigger a frame with an ellapsed time equal to the flashPeriod,
-      // so the caret should change from visible to invisible.
-      await tester.pump(flashPeriod);
+        // Trigger a frame with an ellapsed time equal to the flashPeriod,
+        // so the caret should change from visible to invisible.
+        await tester.pump(flashPeriod);
 
-      // Ensure caret is invisible after the flash period.
-      expect(SuperEditorInspector.isCaretVisible(), false);
+        // Ensure caret is invisible after the flash period.
+        expect(SuperEditorInspector.isCaretVisible(), false);
 
-      // Trigger another frame to make caret visible again.
-      await tester.pump(flashPeriod);
+        // Trigger another frame to make caret visible again.
+        await tester.pump(flashPeriod);
 
-      // Ensure caret is visible.
-      expect(SuperEditorInspector.isCaretVisible(), true);
-    });
+        // Ensure caret is visible.
+        expect(SuperEditorInspector.isCaretVisible(), true);
+      },
+    );
 
-    testWidgetsOnIos("keeps current selection when tapping on caret", (tester) async {
+    testWidgetsOnIos("keeps current selection when tapping on caret", (
+      tester,
+    ) async {
       await _pumpSingleParagraphApp(tester);
 
       // Tap at "consectetur|" to place the caret.
@@ -227,12 +248,14 @@ void main() {
       // Ensure that the selection was placed at the end of the word.
       expect(
         SuperEditorInspector.findDocumentSelection(),
-        selectionEquivalentTo(const DocumentSelection.collapsed(
-          position: DocumentPosition(
-            nodeId: "1",
-            nodePosition: TextNodePosition(offset: 39),
+        selectionEquivalentTo(
+          const DocumentSelection.collapsed(
+            position: DocumentPosition(
+              nodeId: "1",
+              nodePosition: TextNodePosition(offset: 39),
+            ),
           ),
-        )),
+        ),
       );
 
       // Press and drag the caret to "con|sectetur" because dragging is the only way
@@ -250,12 +273,14 @@ void main() {
       // Ensure that the selection moved to "con|sectetur".
       expect(
         SuperEditorInspector.findDocumentSelection(),
-        selectionEquivalentTo(const DocumentSelection.collapsed(
-          position: DocumentPosition(
-            nodeId: "1",
-            nodePosition: TextNodePosition(offset: 32),
+        selectionEquivalentTo(
+          const DocumentSelection.collapsed(
+            position: DocumentPosition(
+              nodeId: "1",
+              nodePosition: TextNodePosition(offset: 32),
+            ),
           ),
-        )),
+        ),
       );
 
       // Ensure the toolbar is not visible.
@@ -267,12 +292,14 @@ void main() {
       // Ensure the selection was kept at "con|sectetur".
       expect(
         SuperEditorInspector.findDocumentSelection(),
-        selectionEquivalentTo(const DocumentSelection.collapsed(
-          position: DocumentPosition(
-            nodeId: "1",
-            nodePosition: TextNodePosition(offset: 32),
+        selectionEquivalentTo(
+          const DocumentSelection.collapsed(
+            position: DocumentPosition(
+              nodeId: "1",
+              nodePosition: TextNodePosition(offset: 32),
+            ),
           ),
-        )),
+        ),
       );
 
       // Ensure the toolbar is visible.
@@ -288,14 +315,22 @@ void main() {
 
         // Ensure we have a collapsed selection.
         expect(SuperEditorInspector.findDocumentSelection(), isNotNull);
-        expect(SuperEditorInspector.findDocumentSelection()!.isCollapsed, isTrue);
+        expect(
+          SuperEditorInspector.findDocumentSelection()!.isCollapsed,
+          isTrue,
+        );
 
         // Ensure caret (and only caret) is visible.
         expect(SuperEditorInspector.findMobileCaret(), findsOneWidget);
-        expect(SuperEditorInspector.findMobileExpandedDragHandles(), findsNothing);
+        expect(
+          SuperEditorInspector.findMobileExpandedDragHandles(),
+          findsNothing,
+        );
       });
 
-      testWidgetsOnIosDeviceAndWeb("upstream and downstream handles", (tester) async {
+      testWidgetsOnIosDeviceAndWeb("upstream and downstream handles", (
+        tester,
+      ) async {
         await _pumpSingleParagraphApp(tester);
 
         // Create an expanded selection.
@@ -303,12 +338,21 @@ void main() {
 
         // Ensure we have an expanded selection.
         expect(SuperEditorInspector.findDocumentSelection(), isNotNull);
-        expect(SuperEditorInspector.findDocumentSelection()!.isCollapsed, isFalse);
+        expect(
+          SuperEditorInspector.findDocumentSelection()!.isCollapsed,
+          isFalse,
+        );
 
         // Ensure expanded handles are visible, but caret isn't.
         expect(SuperEditorInspector.findMobileCaret(), findsNothing);
-        expect(SuperEditorInspector.findMobileUpstreamDragHandle(), findsOneWidget);
-        expect(SuperEditorInspector.findMobileDownstreamDragHandle(), findsOneWidget);
+        expect(
+          SuperEditorInspector.findMobileUpstreamDragHandle(),
+          findsOneWidget,
+        );
+        expect(
+          SuperEditorInspector.findMobileDownstreamDragHandle(),
+          findsOneWidget,
+        );
       });
     });
 
@@ -321,7 +365,10 @@ void main() {
           await tester.longPressDownInParagraph("1", 1);
 
           // Ensure the magnifier is wanted AND visible.
-          expect(SuperEditorInspector.wantsMobileMagnifierToBeVisible(), isTrue);
+          expect(
+            SuperEditorInspector.wantsMobileMagnifierToBeVisible(),
+            isTrue,
+          );
           expect(SuperEditorInspector.isMobileMagnifierVisible(), isTrue);
         });
 
@@ -333,7 +380,10 @@ void main() {
 
           // Ensure we have an expanded selection.
           expect(SuperEditorInspector.findDocumentSelection(), isNotNull);
-          expect(SuperEditorInspector.findDocumentSelection()!.isCollapsed, isFalse);
+          expect(
+            SuperEditorInspector.findDocumentSelection()!.isCollapsed,
+            isFalse,
+          );
 
           // Ensure that the toolbar is desired AND displayed.
           expect(SuperEditorInspector.wantsMobileToolbarToBeVisible(), isTrue);
@@ -351,7 +401,10 @@ void main() {
           await tester.longPressDownInParagraph("1", 1);
 
           // Ensure the magnifier is desired, but not displayed.
-          expect(SuperEditorInspector.wantsMobileMagnifierToBeVisible(), isTrue);
+          expect(
+            SuperEditorInspector.wantsMobileMagnifierToBeVisible(),
+            isTrue,
+          );
           expect(SuperEditorInspector.isMobileMagnifierVisible(), isFalse);
         });
 
@@ -363,7 +416,10 @@ void main() {
 
           // Ensure we have an expanded selection.
           expect(SuperEditorInspector.findDocumentSelection(), isNotNull);
-          expect(SuperEditorInspector.findDocumentSelection()!.isCollapsed, isFalse);
+          expect(
+            SuperEditorInspector.findDocumentSelection()!.isCollapsed,
+            isFalse,
+          );
 
           // Ensure that the toolbar is desired, but not displayed.
           expect(SuperEditorInspector.wantsMobileToolbarToBeVisible(), isTrue);

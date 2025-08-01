@@ -20,11 +20,7 @@ import 'package:flutter/widgets.dart';
 ///       child: child,
 ///     )
 class IntentBlocker extends StatelessWidget {
-  const IntentBlocker({
-    super.key,
-    required this.intents,
-    required this.child,
-  });
+  const IntentBlocker({super.key, required this.intents, required this.child});
 
   /// The types of intents that should be blocked.
   final Set<Type> intents;
@@ -44,9 +40,7 @@ class IntentBlocker extends StatelessWidget {
         ...actions,
         // Flutter might dispatch Intents individually or as a group. We want
         // to also block any desired Intents when they are inside a group.
-        PrioritizedIntents: _BlockIntentInsideGroupAction(
-          intents: intents,
-        )
+        PrioritizedIntents: _BlockIntentInsideGroupAction(intents: intents),
       },
       child: child,
     );
@@ -82,10 +76,7 @@ class IntentBlocker extends StatelessWidget {
 ///
 /// See [WidgetsApp.defaultShortcuts] for the list of keybindings that Flutter
 /// adds by default.
-final Set<Type> nonAppleBlockedIntents = {
-  ActivateIntent,
-  ScrollIntent,
-};
+final Set<Type> nonAppleBlockedIntents = {ActivateIntent, ScrollIntent};
 
 /// A set of [Intent]s, which Flutter dispatches by default on Apple
 /// platforms (macOS and iOS), that should have its associated
@@ -144,9 +135,7 @@ final Set<Type> appleBlockedIntents = {
 ///       child: child,
 ///     );
 class _BlockIntentInsideGroupAction extends Action<PrioritizedIntents> {
-  _BlockIntentInsideGroupAction({
-    required this.intents,
-  });
+  _BlockIntentInsideGroupAction({required this.intents});
 
   final Set<Type> intents;
 

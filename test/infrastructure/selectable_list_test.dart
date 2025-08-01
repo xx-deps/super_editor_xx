@@ -6,7 +6,9 @@ import 'package:super_editor/src/infrastructure/selectable_list.dart';
 
 void main() {
   group('ItemSelectionList', () {
-    testWidgetsOnAllPlatforms('changes active item down with DOWN ARROW', (tester) async {
+    testWidgetsOnAllPlatforms('changes active item down with DOWN ARROW', (
+      tester,
+    ) async {
       String? activeItem;
 
       await _pumpItemSelectionListTestApp(
@@ -35,7 +37,9 @@ void main() {
       expect(activeItem, 'Item1');
     });
 
-    testWidgetsOnAllPlatforms('changes active item up with UP ARROW', (tester) async {
+    testWidgetsOnAllPlatforms('changes active item up with UP ARROW', (
+      tester,
+    ) async {
       String? activeItem;
 
       await _pumpItemSelectionListTestApp(
@@ -64,7 +68,9 @@ void main() {
       expect(activeItem, 'Item3');
     });
 
-    testWidgetsOnAllPlatforms('selects the active item on ENTER', (tester) async {
+    testWidgetsOnAllPlatforms('selects the active item on ENTER', (
+      tester,
+    ) async {
       String? selectedValue;
 
       await _pumpItemSelectionListTestApp(
@@ -83,21 +89,24 @@ void main() {
       expect(selectedValue, 'Item1');
     });
 
-    testWidgetsOnAllPlatforms('clears selected item on ENTER without an active item', (tester) async {
-      String? selectedValue = '';
+    testWidgetsOnAllPlatforms(
+      'clears selected item on ENTER without an active item',
+      (tester) async {
+        String? selectedValue = '';
 
-      await _pumpItemSelectionListTestApp(
-        tester,
-        onItemSelected: (s) => selectedValue = s,
-      );
+        await _pumpItemSelectionListTestApp(
+          tester,
+          onItemSelected: (s) => selectedValue = s,
+        );
 
-      // Press ENTER without an active item.
-      await tester.pressEnter();
-      await tester.pump();
+        // Press ENTER without an active item.
+        await tester.pressEnter();
+        await tester.pump();
 
-      // Ensure the selected item was set to null.
-      expect(selectedValue, isNull);
-    });
+        // Ensure the selected item was set to null.
+        expect(selectedValue, isNull);
+      },
+    );
 
     testWidgetsOnAllPlatforms('calls onCancel on ESC', (tester) async {
       String? selectedValue;
@@ -121,18 +130,21 @@ void main() {
       expect(selectedValue, isNull);
     });
 
-    testWidgetsOnAllPlatforms('isn\'t scrollable if all items fit on screen', (tester) async {
-      await _pumpItemSelectionListTestApp(
-        tester,
-        onItemSelected: (s) {},
-      );
+    testWidgetsOnAllPlatforms('isn\'t scrollable if all items fit on screen', (
+      tester,
+    ) async {
+      await _pumpItemSelectionListTestApp(tester, onItemSelected: (s) {});
 
       // Ensure the list isn't scrollable.
-      final dropdownButonState = tester.state<ItemSelectionListState<String>>(find.byType(ItemSelectionList<String>));
+      final dropdownButonState = tester.state<ItemSelectionListState<String>>(
+        find.byType(ItemSelectionList<String>),
+      );
       expect(dropdownButonState.scrollController.position.maxScrollExtent, 0.0);
     });
 
-    testWidgetsOnAllPlatforms('is scrollable if items don\'t fit on screen', (tester) async {
+    testWidgetsOnAllPlatforms('is scrollable if items don\'t fit on screen', (
+      tester,
+    ) async {
       await _pumpItemSelectionListTestApp(
         tester,
         onItemSelected: (s) {},
@@ -140,8 +152,13 @@ void main() {
       );
 
       // Ensure the list is scrollable.
-      final dropdownButonState = tester.state<ItemSelectionListState<String>>(find.byType(ItemSelectionList<String>));
-      expect(dropdownButonState.scrollController.position.maxScrollExtent, greaterThan(0.0));
+      final dropdownButonState = tester.state<ItemSelectionListState<String>>(
+        find.byType(ItemSelectionList<String>),
+      );
+      expect(
+        dropdownButonState.scrollController.position.maxScrollExtent,
+        greaterThan(0.0),
+      );
     });
   });
 }
@@ -169,10 +186,8 @@ Future<void> _pumpItemSelectionListTestApp(
             onItemSelected: onItemSelected,
             onItemActivated: onItemActivated,
             onCancel: onCancel,
-            itemBuilder: (context, item, isActive, onTap) => TextButton(
-              onPressed: onTap,
-              child: Text(item),
-            ),
+            itemBuilder: (context, item, isActive, onTap) =>
+                TextButton(onPressed: onTap, child: Text(item)),
           ),
         ),
       ),

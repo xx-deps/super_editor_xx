@@ -32,8 +32,10 @@ ExecutionInstruction scrollOnPageUpKeyPress({
   final scroller = editContext.scroller;
 
   scroller.animateTo(
-    max(scroller.scrollOffset - scroller.viewportDimension,
-        scroller.minScrollExtent),
+    max(
+      scroller.scrollOffset - scroller.viewportDimension,
+      scroller.minScrollExtent,
+    ),
     duration: const Duration(milliseconds: 150),
     curve: Curves.decelerate,
   );
@@ -58,8 +60,10 @@ ExecutionInstruction scrollOnPageDownKeyPress({
   final scroller = editContext.scroller;
 
   scroller.animateTo(
-    min(scroller.scrollOffset + scroller.viewportDimension,
-        scroller.maxScrollExtent),
+    min(
+      scroller.scrollOffset + scroller.viewportDimension,
+      scroller.maxScrollExtent,
+    ),
     duration: const Duration(milliseconds: 150),
     curve: Curves.decelerate,
   );
@@ -168,16 +172,12 @@ ExecutionInstruction toggleInteractionModeWhenCmdOrCtrlPressed({
       !editContext.composer.isInInteractionMode.value) {
     editorKeyLog.fine("Activating editor interaction mode");
     editContext.editor.execute([
-      const ChangeInteractionModeRequest(
-        isInteractionModeDesired: true,
-      ),
+      const ChangeInteractionModeRequest(isInteractionModeDesired: true),
     ]);
   } else if (editContext.composer.isInInteractionMode.value) {
     editorKeyLog.fine("De-activating editor interaction mode");
     editContext.editor.execute([
-      const ChangeInteractionModeRequest(
-        isInteractionModeDesired: false,
-      ),
+      const ChangeInteractionModeRequest(isInteractionModeDesired: false),
     ]);
   }
 
@@ -410,8 +410,9 @@ ExecutionInstruction anyCharacterOrDestructiveKeyToDeleteSelection({
 
   final isDestructiveKey =
       keyEvent.logicalKey == LogicalKeyboardKey.backspace ||
-          keyEvent.logicalKey == LogicalKeyboardKey.delete;
-  final isCharacterKey = keyEvent.character != null &&
+      keyEvent.logicalKey == LogicalKeyboardKey.delete;
+  final isCharacterKey =
+      keyEvent.character != null &&
       keyEvent.character != '' &&
       !isKeyEventCharacterBlacklisted(keyEvent.character);
 
@@ -473,8 +474,9 @@ ExecutionInstruction mergeNodeWithNextWhenDeleteIsPressed({
     return ExecutionInstruction.continueExecution;
   }
 
-  final node = editContext.document
-      .getNodeById(editContext.composer.selection!.extent.nodeId);
+  final node = editContext.document.getNodeById(
+    editContext.composer.selection!.extent.nodeId,
+  );
   if (node is! TextNode) {
     return ExecutionInstruction.continueExecution;
   }
@@ -491,10 +493,7 @@ ExecutionInstruction mergeNodeWithNextWhenDeleteIsPressed({
 
   // Send edit command.
   editContext.editor.execute([
-    CombineParagraphsRequest(
-      firstNodeId: node.id,
-      secondNodeId: nextNode.id,
-    ),
+    CombineParagraphsRequest(firstNodeId: node.id, secondNodeId: nextNode.id),
     // Place the cursor at the point where the text came together.
     ChangeSelectionRequest(
       DocumentSelection.collapsed(
@@ -519,10 +518,7 @@ ExecutionInstruction moveUpAndDownWithArrowKeys({
     return ExecutionInstruction.continueExecution;
   }
 
-  const arrowKeys = [
-    LogicalKeyboardKey.arrowUp,
-    LogicalKeyboardKey.arrowDown,
-  ];
+  const arrowKeys = [LogicalKeyboardKey.arrowUp, LogicalKeyboardKey.arrowDown];
   if (!arrowKeys.contains(keyEvent.logicalKey)) {
     return ExecutionInstruction.continueExecution;
   }
@@ -557,10 +553,12 @@ ExecutionInstruction moveUpAndDownWithArrowKeys({
     } else if (CurrentPlatform.isApple &&
         HardwareKeyboard.instance.isMetaPressed) {
       didMove = editContext.commonOps.moveSelectionToBeginningOfDocument(
-          expand: HardwareKeyboard.instance.isShiftPressed);
+        expand: HardwareKeyboard.instance.isShiftPressed,
+      );
     } else {
-      didMove = editContext.commonOps
-          .moveCaretUp(expand: HardwareKeyboard.instance.isShiftPressed);
+      didMove = editContext.commonOps.moveCaretUp(
+        expand: HardwareKeyboard.instance.isShiftPressed,
+      );
     }
   } else {
     if (CurrentPlatform.isApple && HardwareKeyboard.instance.isAltPressed) {
@@ -571,10 +569,12 @@ ExecutionInstruction moveUpAndDownWithArrowKeys({
     } else if (CurrentPlatform.isApple &&
         HardwareKeyboard.instance.isMetaPressed) {
       didMove = editContext.commonOps.moveSelectionToEndOfDocument(
-          expand: HardwareKeyboard.instance.isShiftPressed);
+        expand: HardwareKeyboard.instance.isShiftPressed,
+      );
     } else {
-      didMove = editContext.commonOps
-          .moveCaretDown(expand: HardwareKeyboard.instance.isShiftPressed);
+      didMove = editContext.commonOps.moveCaretDown(
+        expand: HardwareKeyboard.instance.isShiftPressed,
+      );
     }
   }
 
@@ -739,8 +739,10 @@ ExecutionInstruction moveToStartOrEndOfLineWithArrowKeysOnWeb({
   }
 
   if ((CurrentPlatform.isApple && !HardwareKeyboard.instance.isMetaPressed) ||
-      (const [TargetPlatform.windows, TargetPlatform.linux]
-              .contains(defaultTargetPlatform) &&
+      (const [
+            TargetPlatform.windows,
+            TargetPlatform.linux,
+          ].contains(defaultTargetPlatform) &&
           !HardwareKeyboard.instance.isControlPressed)) {
     // CMD or CTRL is not pressed.
     return ExecutionInstruction.continueExecution;

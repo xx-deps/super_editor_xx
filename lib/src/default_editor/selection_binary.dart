@@ -39,7 +39,7 @@ class BinaryNodePosition implements NodePosition {
 class BinarySelection implements NodeSelection {
   const BinarySelection.all() : position = const BinaryNodePosition.included();
   const BinarySelection.none()
-      : position = const BinaryNodePosition.notIncluded();
+    : position = const BinaryNodePosition.notIncluded();
 
   final BinaryNodePosition position;
 

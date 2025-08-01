@@ -48,7 +48,7 @@ class IosFloatingToolbarOverlay extends StatefulWidget {
   /// will be allowed to appear anywhere in the overlay in which they sit
   /// (probably the entire screen).
   final CustomClipper<Rect> Function(BuildContext overlayContext)?
-      createOverlayControlsClipper;
+  createOverlayControlsClipper;
 
   /// Builder that constructs the floating toolbar that's displayed above
   /// selected text.
@@ -75,8 +75,9 @@ class _IosFloatingToolbarOverlayState extends State<IosFloatingToolbarOverlay>
           // Remove the keyboard from the space that we occupy so that
           // clipping calculations apply to the expected visual borders,
           // instead of applying underneath the keyboard.
-          padding:
-              EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom),
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.viewInsetsOf(context).bottom,
+          ),
           child: ClipRect(
             clipper: widget.createOverlayControlsClipper?.call(context),
             child: SizedBox(
@@ -117,7 +118,10 @@ class _IosFloatingToolbarOverlayState extends State<IosFloatingToolbarOverlay>
           devicePixelRatio: MediaQuery.devicePixelRatioOf(context),
         ),
         child: widget.floatingToolbarBuilder(
-            context, DocumentKeys.mobileToolbar, widget.toolbarFocalPoint),
+          context,
+          DocumentKeys.mobileToolbar,
+          widget.toolbarFocalPoint,
+        ),
       ),
     );
   }
@@ -163,10 +167,7 @@ class IosDocumentGestureEditingController extends GestureEditingController {
   /// Updates the caret's size and position.
   ///
   /// The [top] offset is in the document layout's coordinate space.
-  void updateCaret({
-    Offset? top,
-    double? height,
-  }) {
+  void updateCaret({Offset? top, double? height}) {
     bool changed = false;
     if (top != null) {
       _caretTop = top;
@@ -346,9 +347,9 @@ class FloatingCursorListener {
     VoidCallback? onStart,
     void Function(Offset?)? onMove,
     VoidCallback? onStop,
-  })  : _onStart = onStart,
-        _onMove = onMove,
-        _onStop = onStop;
+  }) : _onStart = onStart,
+       _onMove = onMove,
+       _onStop = onStop;
 
   final VoidCallback? _onStart;
   final void Function(Offset?)? _onMove;
@@ -443,15 +444,19 @@ class _IosToolbarFocalPointDocumentLayerState
   }
 
   @override
-  Rect? computeLayoutDataWithDocumentLayout(BuildContext contentLayersContext,
-      BuildContext documentContext, DocumentLayout documentLayout) {
+  Rect? computeLayoutDataWithDocumentLayout(
+    BuildContext contentLayersContext,
+    BuildContext documentContext,
+    DocumentLayout documentLayout,
+  ) {
     final documentSelection = widget.selection.value;
     if (documentSelection == null) {
       return null;
     }
 
-    final selectedComponent = documentLayout
-        .getComponentByNodeId(widget.selection.value!.extent.nodeId);
+    final selectedComponent = documentLayout.getComponentByNodeId(
+      widget.selection.value!.extent.nodeId,
+    );
     if (selectedComponent == null) {
       // Assume that we're in a momentary transitive state where the document layout
       // just gained or lost a component. We expect this method to run again in a moment
@@ -525,8 +530,11 @@ class IosHandlesDocumentLayer extends DocumentLayoutLayerStatefulWidget {
   final ValueListenable<DocumentSelection?> selection;
 
   final void Function(
-          DocumentSelection?, SelectionChangeType, String selectionReason)
-      changeSelection;
+    DocumentSelection?,
+    SelectionChangeType,
+    String selectionReason,
+  )
+  changeSelection;
 
   /// {@macro are_selection_handles_allowed}
   final ValueListenable<bool>? areSelectionHandlesAllowed;
@@ -557,13 +565,17 @@ class IosHandlesDocumentLayer extends DocumentLayoutLayerStatefulWidget {
 
   @override
   DocumentLayoutLayerState<IosHandlesDocumentLayer, DocumentSelectionLayout>
-      createState() => IosControlsDocumentLayerState();
+  createState() => IosControlsDocumentLayerState();
 }
 
 @visibleForTesting
-class IosControlsDocumentLayerState extends DocumentLayoutLayerState<
-    IosHandlesDocumentLayer,
-    DocumentSelectionLayout> with SingleTickerProviderStateMixin {
+class IosControlsDocumentLayerState
+    extends
+        DocumentLayoutLayerState<
+          IosHandlesDocumentLayer,
+          DocumentSelectionLayout
+        >
+    with SingleTickerProviderStateMixin {
   // These global keys are assigned to each draggable handle to
   // prevent a strange dragging issue.
   //
@@ -590,8 +602,9 @@ class IosControlsDocumentLayerState extends DocumentLayoutLayerState<
 
     widget.selection.addListener(_onSelectionChange);
     widget.shouldCaretBlink.addListener(_onBlinkModeChange);
-    widget.floatingCursorController?.isActive
-        .addListener(_onFloatingCursorActivationChange);
+    widget.floatingCursorController?.isActive.addListener(
+      _onFloatingCursorActivationChange,
+    );
     widget.handleBeingDragged?.addListener(_onDragChanged);
 
     _onBlinkModeChange();
@@ -612,10 +625,12 @@ class IosControlsDocumentLayerState extends DocumentLayoutLayerState<
     }
 
     if (widget.floatingCursorController != oldWidget.floatingCursorController) {
-      oldWidget.floatingCursorController?.isActive
-          .removeListener(_onFloatingCursorActivationChange);
-      widget.floatingCursorController?.isActive
-          .addListener(_onFloatingCursorActivationChange);
+      oldWidget.floatingCursorController?.isActive.removeListener(
+        _onFloatingCursorActivationChange,
+      );
+      widget.floatingCursorController?.isActive.addListener(
+        _onFloatingCursorActivationChange,
+      );
     }
 
     if (widget.handleBeingDragged != oldWidget.handleBeingDragged) {
@@ -628,8 +643,9 @@ class IosControlsDocumentLayerState extends DocumentLayoutLayerState<
   void dispose() {
     widget.selection.removeListener(_onSelectionChange);
     widget.shouldCaretBlink.removeListener(_onBlinkModeChange);
-    widget.floatingCursorController?.isActive
-        .removeListener(_onFloatingCursorActivationChange);
+    widget.floatingCursorController?.isActive.removeListener(
+      _onFloatingCursorActivationChange,
+    );
     widget.handleBeingDragged?.removeListener(_onDragChanged);
 
     _caretBlinkController.dispose();
@@ -716,15 +732,17 @@ class IosControlsDocumentLayerState extends DocumentLayoutLayerState<
   /// expanded selection based on the given [position], computes the box for that
   /// selection, and returns the edge of the selection box.
   Rect _computeRectForExpandedHandle(DocumentPosition position) {
-    final component =
-        widget.documentLayout.getComponentByNodeId(position.nodeId);
+    final component = widget.documentLayout.getComponentByNodeId(
+      position.nodeId,
+    );
     if (component == null) {
       return Rect.zero;
     }
 
     // Check if we have a position to the right of the current position within the same node.
-    NodePosition? extentNodePosition =
-        component.movePositionRight(position.nodePosition);
+    NodePosition? extentNodePosition = component.movePositionRight(
+      position.nodePosition,
+    );
     bool isExtentDownstream = extentNodePosition != null;
 
     if (extentNodePosition == null) {
@@ -759,9 +777,10 @@ class IosControlsDocumentLayerState extends DocumentLayoutLayerState<
 
   @override
   DocumentSelectionLayout? computeLayoutDataWithDocumentLayout(
-      BuildContext contentLayersContext,
-      BuildContext documentContext,
-      DocumentLayout documentLayout) {
+    BuildContext contentLayersContext,
+    BuildContext documentContext,
+    DocumentLayout documentLayout,
+  ) {
     final selection = widget.selection.value;
     if (selection == null) {
       return null;
@@ -805,18 +824,20 @@ class IosControlsDocumentLayerState extends DocumentLayoutLayerState<
         );
       }
 
-      return DocumentSelectionLayout(
-        caret: caretRect,
-      );
+      return DocumentSelectionLayout(caret: caretRect);
     } else {
       return DocumentSelectionLayout(
         upstream: _computeRectForExpandedHandle(
-          widget.document
-              .selectUpstreamPosition(selection.base, selection.extent),
+          widget.document.selectUpstreamPosition(
+            selection.base,
+            selection.extent,
+          ),
         ),
         downstream: _computeRectForExpandedHandle(
-          widget.document
-              .selectDownstreamPosition(selection.base, selection.extent),
+          widget.document.selectDownstreamPosition(
+            selection.base,
+            selection.extent,
+          ),
         ),
         expandedSelectionBounds: documentLayout.getRectForSelection(
           selection.base,
@@ -830,7 +851,9 @@ class IosControlsDocumentLayerState extends DocumentLayoutLayerState<
   Widget doBuild(BuildContext context, DocumentSelectionLayout? layoutData) {
     return IgnorePointer(
       child: SizedBox.expand(
-        child: layoutData != null //
+        child:
+            layoutData !=
+                null //
             ? _buildHandles(layoutData)
             : const SizedBox(),
       ),
@@ -839,8 +862,9 @@ class IosControlsDocumentLayerState extends DocumentLayoutLayerState<
 
   Widget _buildHandles(DocumentSelectionLayout layoutData) {
     if (widget.selection.value == null) {
-      editorGesturesLog
-          .finer("Not building overlay handles because there's no selection.");
+      editorGesturesLog.finer(
+        "Not building overlay handles because there's no selection.",
+      );
       return const SizedBox.shrink();
     }
 
@@ -863,9 +887,7 @@ class IosControlsDocumentLayerState extends DocumentLayoutLayerState<
     );
   }
 
-  Widget _buildCollapsedHandle({
-    required Rect caret,
-  }) {
+  Widget _buildCollapsedHandle({required Rect caret}) {
     return Positioned(
       key: _collapsedHandleKey,
       left: caret.left,
@@ -875,7 +897,7 @@ class IosControlsDocumentLayerState extends DocumentLayoutLayerState<
           if (widget.floatingCursorController != null) ...{
             widget.floatingCursorController!.isActive,
             widget.floatingCursorController!.isNearText,
-          }
+          },
         },
         builder: (context) {
           final isShowingFloatingCursor =
@@ -912,7 +934,8 @@ class IosControlsDocumentLayerState extends DocumentLayoutLayerState<
       left: upstream.left,
       // Move the handle up so the ball is above the selected area and add half
       // of the radius to make the ball overlap the selected area.
-      top: upstream.top -
+      top:
+          upstream.top -
           selectionHighlightBoxVerticalExpansion +
           (shouldShowBall ? (ballRadius / 2) - widget.handleBallDiameter : 0.0),
       child: FractionalTranslation(
@@ -921,7 +944,8 @@ class IosControlsDocumentLayerState extends DocumentLayoutLayerState<
           key: DocumentKeys.upstreamHandle,
           color: widget.handleColor,
           handleType: HandleType.upstream,
-          caretHeight: upstream.height +
+          caretHeight:
+              upstream.height +
               (selectionHighlightBoxVerticalExpansion * 2) -
               (ballRadius / 2),
           caretWidth: widget.caretWidth,
@@ -936,9 +960,11 @@ class IosControlsDocumentLayerState extends DocumentLayoutLayerState<
     required Color debugColor,
   }) {
     final ballRadius =
-        widget.handleBeingDragged?.value == HandleType.downstream //
-            ? 0.0
-            : widget.handleBallDiameter / 2;
+        widget.handleBeingDragged?.value ==
+            HandleType
+                .downstream //
+        ? 0.0
+        : widget.handleBallDiameter / 2;
 
     return Positioned(
       key: _downstreamHandleKey,
@@ -950,7 +976,8 @@ class IosControlsDocumentLayerState extends DocumentLayoutLayerState<
           key: DocumentKeys.downstreamHandle,
           color: widget.handleColor,
           handleType: HandleType.downstream,
-          caretHeight: downstream.height +
+          caretHeight:
+              downstream.height +
               (selectionHighlightBoxVerticalExpansion * 2) -
               (ballRadius / 2),
           caretWidth: widget.caretWidth,

@@ -8,32 +8,112 @@ import '../../test_tools_goldens.dart';
 
 void main() {
   group("SuperEditor > text entry > composing region >", () {
-    testGoldensOnAndroid("is underlined in paragraph", _showsUnderlineInParagraph, windowSize: goldenSizeLongStrip);
-    testGoldensOnAndroid("is underlined in blockquote", _showsUnderlineInBlockquote, windowSize: goldenSizeLongStrip);
-    testGoldensOnAndroid("is underlined in list item", _showsUnderlineInListItem, windowSize: goldenSizeLongStrip);
-    testGoldensOnAndroid("is underlined in task", _showsUnderlineInTask, windowSize: goldenSizeLongStrip);
+    testGoldensOnAndroid(
+      "is underlined in paragraph",
+      _showsUnderlineInParagraph,
+      windowSize: goldenSizeLongStrip,
+    );
+    testGoldensOnAndroid(
+      "is underlined in blockquote",
+      _showsUnderlineInBlockquote,
+      windowSize: goldenSizeLongStrip,
+    );
+    testGoldensOnAndroid(
+      "is underlined in list item",
+      _showsUnderlineInListItem,
+      windowSize: goldenSizeLongStrip,
+    );
+    testGoldensOnAndroid(
+      "is underlined in task",
+      _showsUnderlineInTask,
+      windowSize: goldenSizeLongStrip,
+    );
 
-    testGoldensOniOS("is underlined in paragraph", _showsUnderlineInParagraph, windowSize: goldenSizeLongStrip);
-    testGoldensOniOS("is underlined in blockquote", _showsUnderlineInBlockquote, windowSize: goldenSizeLongStrip);
-    testGoldensOniOS("is underlined in list item", _showsUnderlineInListItem, windowSize: goldenSizeLongStrip);
-    testGoldensOniOS("is underlined in task", _showsUnderlineInTask, windowSize: goldenSizeLongStrip);
+    testGoldensOniOS(
+      "is underlined in paragraph",
+      _showsUnderlineInParagraph,
+      windowSize: goldenSizeLongStrip,
+    );
+    testGoldensOniOS(
+      "is underlined in blockquote",
+      _showsUnderlineInBlockquote,
+      windowSize: goldenSizeLongStrip,
+    );
+    testGoldensOniOS(
+      "is underlined in list item",
+      _showsUnderlineInListItem,
+      windowSize: goldenSizeLongStrip,
+    );
+    testGoldensOniOS(
+      "is underlined in task",
+      _showsUnderlineInTask,
+      windowSize: goldenSizeLongStrip,
+    );
 
-    testGoldensOnMac("is underlined in paragraph", _showsUnderlineInParagraph, windowSize: goldenSizeLongStrip);
-    testGoldensOnMac("is underlined in blockquote", _showsUnderlineInBlockquote, windowSize: goldenSizeLongStrip);
-    testGoldensOnMac("is underlined in list item", _showsUnderlineInListItem, windowSize: goldenSizeLongStrip);
-    testGoldensOnMac("is underlined in task", _showsUnderlineInTask, windowSize: goldenSizeLongStrip);
+    testGoldensOnMac(
+      "is underlined in paragraph",
+      _showsUnderlineInParagraph,
+      windowSize: goldenSizeLongStrip,
+    );
+    testGoldensOnMac(
+      "is underlined in blockquote",
+      _showsUnderlineInBlockquote,
+      windowSize: goldenSizeLongStrip,
+    );
+    testGoldensOnMac(
+      "is underlined in list item",
+      _showsUnderlineInListItem,
+      windowSize: goldenSizeLongStrip,
+    );
+    testGoldensOnMac(
+      "is underlined in task",
+      _showsUnderlineInTask,
+      windowSize: goldenSizeLongStrip,
+    );
   });
 
   group("SuperEditor > text entry > composing region >", () {
-    testGoldensOnWindows("shows nothing in paragraph", _showsNothingInParagraph, windowSize: goldenSizeLongStrip);
-    testGoldensOnWindows("shows nothing in blockquote", _showsNothingInBlockquote, windowSize: goldenSizeLongStrip);
-    testGoldensOnWindows("shows nothing in list item", _showsNothingInListItem, windowSize: goldenSizeLongStrip);
-    testGoldensOnWindows("shows nothing in task", _showsNothingInTask, windowSize: goldenSizeLongStrip);
+    testGoldensOnWindows(
+      "shows nothing in paragraph",
+      _showsNothingInParagraph,
+      windowSize: goldenSizeLongStrip,
+    );
+    testGoldensOnWindows(
+      "shows nothing in blockquote",
+      _showsNothingInBlockquote,
+      windowSize: goldenSizeLongStrip,
+    );
+    testGoldensOnWindows(
+      "shows nothing in list item",
+      _showsNothingInListItem,
+      windowSize: goldenSizeLongStrip,
+    );
+    testGoldensOnWindows(
+      "shows nothing in task",
+      _showsNothingInTask,
+      windowSize: goldenSizeLongStrip,
+    );
 
-    testGoldensOnLinux("shows nothing in paragraph", _showsNothingInParagraph, windowSize: goldenSizeLongStrip);
-    testGoldensOnLinux("shows nothing in blockquote", _showsNothingInBlockquote, windowSize: goldenSizeLongStrip);
-    testGoldensOnLinux("shows nothing in list item", _showsNothingInListItem, windowSize: goldenSizeLongStrip);
-    testGoldensOnLinux("shows nothing in task", _showsNothingInTask, windowSize: goldenSizeLongStrip);
+    testGoldensOnLinux(
+      "shows nothing in paragraph",
+      _showsNothingInParagraph,
+      windowSize: goldenSizeLongStrip,
+    );
+    testGoldensOnLinux(
+      "shows nothing in blockquote",
+      _showsNothingInBlockquote,
+      windowSize: goldenSizeLongStrip,
+    );
+    testGoldensOnLinux(
+      "shows nothing in list item",
+      _showsNothingInListItem,
+      windowSize: goldenSizeLongStrip,
+    );
+    testGoldensOnLinux(
+      "shows nothing in task",
+      _showsNothingInTask,
+      windowSize: goldenSizeLongStrip,
+    );
   });
 }
 
@@ -201,33 +281,45 @@ Future<void> _showsNothingInTask(WidgetTester tester) async {
   );
 }
 
-Future<(Editor, Document)> _pumpScaffold(WidgetTester tester, String contentMarkdown) async {
+Future<(Editor, Document)> _pumpScaffold(
+  WidgetTester tester,
+  String contentMarkdown,
+) async {
   // TODO: Whenever we're able to create a TaskComponentBuilder without passing the Editor, refactor
   //       this setup to look like a normal SuperEditor test.
   final document = deserializeMarkdownToDocument(contentMarkdown);
   final composer = MutableDocumentComposer();
-  final editor = createDefaultDocumentEditor(document: document, composer: composer);
+  final editor = createDefaultDocumentEditor(
+    document: document,
+    composer: composer,
+  );
 
-  await tester.pumpWidget(MaterialApp(
-    home: Scaffold(
-      body: Center(
-        child: SuperEditor(
-          editor: editor,
-          componentBuilders: [
-            TaskComponentBuilder(editor),
-            ...defaultComponentBuilders,
-          ],
-          stylesheet: _stylesheet,
+  await tester.pumpWidget(
+    MaterialApp(
+      home: Scaffold(
+        body: Center(
+          child: SuperEditor(
+            editor: editor,
+            componentBuilders: [
+              TaskComponentBuilder(editor),
+              ...defaultComponentBuilders,
+            ],
+            stylesheet: _stylesheet,
+          ),
         ),
       ),
+      debugShowCheckedModeBanner: false,
     ),
-    debugShowCheckedModeBanner: false,
-  ));
+  );
 
   return (editor, document);
 }
 
-Future<void> _simulateComposingRegion(WidgetTester tester, Editor editor, Document document) async {
+Future<void> _simulateComposingRegion(
+  WidgetTester tester,
+  Editor editor,
+  Document document,
+) async {
   final nodeId = document.first.id;
   editor.execute([
     ChangeSelectionRequest(
@@ -256,7 +348,11 @@ Future<void> _simulateComposingRegion(WidgetTester tester, Editor editor, Docume
   await tester.pumpAndSettle();
 }
 
-Future<void> _clearComposingRegion(WidgetTester tester, Editor editor, Document document) async {
+Future<void> _clearComposingRegion(
+  WidgetTester tester,
+  Editor editor,
+  Document document,
+) async {
   final nodeId = document.first.id;
   editor.execute([
     ChangeSelectionRequest(
@@ -285,11 +381,7 @@ const _taskMarkdown = "- [ ] Typing with composing a";
 final _stylesheet = defaultStylesheet.copyWith(
   addRulesAfter: [
     StyleRule(BlockSelector.all, (doc, node) {
-      return {
-        Styles.textStyle: const TextStyle(
-          fontFamily: 'Roboto',
-        ),
-      };
-    })
+      return {Styles.textStyle: const TextStyle(fontFamily: 'Roboto')};
+    }),
   ],
 );

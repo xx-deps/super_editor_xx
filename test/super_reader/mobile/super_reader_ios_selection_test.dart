@@ -18,8 +18,13 @@ void main() {
               .createDocument()
               // "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod...",
               .withSingleParagraph()
-              .withiOSToolbarBuilder((context, mobileToolbarKey, focalPoint) =>
-                  IOSTextEditingFloatingToolbar(key: mobileToolbarKey, focalPoint: focalPoint))
+              .withiOSToolbarBuilder(
+                (context, mobileToolbarKey, focalPoint) =>
+                    IOSTextEditingFloatingToolbar(
+                      key: mobileToolbarKey,
+                      focalPoint: focalPoint,
+                    ),
+              )
               .pump();
 
           // Ensure that no overlay controls are visible.
@@ -58,8 +63,13 @@ void main() {
               .createDocument()
               // "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod...",
               .withSingleParagraph()
-              .withiOSToolbarBuilder((context, mobileToolbarKey, focalPoint) =>
-                  IOSTextEditingFloatingToolbar(key: mobileToolbarKey, focalPoint: focalPoint))
+              .withiOSToolbarBuilder(
+                (context, mobileToolbarKey, focalPoint) =>
+                    IOSTextEditingFloatingToolbar(
+                      key: mobileToolbarKey,
+                      focalPoint: focalPoint,
+                    ),
+              )
               .pump();
 
           // Long press on the middle of "do|lor".
@@ -96,157 +106,179 @@ void main() {
           expect(SuperReaderInspector.findDocumentSelection(), wordSelection);
         });
 
-        testWidgetsOnIos("selects by word when dragging upstream and then back downstream", (tester) async {
-          await tester
-              .createDocument()
-              // "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod...",
-              .withSingleParagraph()
-              .withiOSToolbarBuilder((context, mobileToolbarKey, focalPoint) =>
-                  IOSTextEditingFloatingToolbar(key: mobileToolbarKey, focalPoint: focalPoint))
-              .pump();
+        testWidgetsOnIos(
+          "selects by word when dragging upstream and then back downstream",
+          (tester) async {
+            await tester
+                .createDocument()
+                // "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod...",
+                .withSingleParagraph()
+                .withiOSToolbarBuilder(
+                  (context, mobileToolbarKey, focalPoint) =>
+                      IOSTextEditingFloatingToolbar(
+                        key: mobileToolbarKey,
+                        focalPoint: focalPoint,
+                      ),
+                )
+                .pump();
 
-          // Long press on the middle of "do|lor".
-          final gesture = await tester.longPressDownInParagraph("1", 14);
-          await tester.pumpAndSettle();
+            // Long press on the middle of "do|lor".
+            final gesture = await tester.longPressDownInParagraph("1", 14);
+            await tester.pumpAndSettle();
 
-          // Ensure the word was selected.
-          const wordSelection = DocumentSelection(
-            base: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 12),
-            ),
-            extent: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 17),
-            ),
-          );
-          expect(SuperReaderInspector.findDocumentSelection(), wordSelection);
-
-          // Ensure the drag handles and magnifier are visible, but the toolbar isn't.
-          expect(find.byType(IOSSelectionHandle), findsNWidgets(2));
-          expect(find.byType(IOSRoundedRectangleMagnifyingGlass), findsOneWidget);
-          expect(find.byType(IOSTextEditingFloatingToolbar), findsNothing);
-
-          // Drag upstream to the end of the previous word.
-          // "Lorem ipsu|m dolor sit amet"
-          //            ^ position 10
-          //
-          // We do this with manual distances because the attempt to look up character
-          // offsets was producing unpredictable results.
-          const dragIncrementCount = 10;
-          const upstreamDragDistance = -130 / dragIncrementCount;
-          for (int i = 0; i < dragIncrementCount; i += 1) {
-            await gesture.moveBy(const Offset(upstreamDragDistance, 0));
-            await tester.pump();
-          }
-
-          // Ensure the original word and upstream word are both selected.
-          expect(
-            SuperReaderInspector.findDocumentSelection(),
-            const DocumentSelection(
-              base: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 6),
-              ),
-              extent: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 17),
-              ),
-            ),
-          );
-
-          // Drag back towards the original long-press offset.
-          //
-          // We do this with manual distances because the attempt to look up character
-          // offsets was producing unpredictable results.
-          const downstreamDragDistance = 100 / dragIncrementCount;
-          for (int i = 0; i < dragIncrementCount; i += 1) {
-            await gesture.moveBy(const Offset(downstreamDragDistance, 0));
-            await tester.pump();
-          }
-
-          // Ensure that only the original word is selected.
-          expect(SuperReaderInspector.findDocumentSelection(), wordSelection);
-
-          // Release the gesture so the test system doesn't complain.
-          gesture.up();
-        });
-
-        testWidgetsOnIos("selects by word when dragging downstream and then back upstream", (tester) async {
-          await tester
-              .createDocument()
-              // "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod...",
-              .withSingleParagraph()
-              .withiOSToolbarBuilder((context, mobileToolbarKey, focalPoint) =>
-                  IOSTextEditingFloatingToolbar(key: mobileToolbarKey, focalPoint: focalPoint))
-              .pump();
-
-          // Long press on the middle of "do|lor".
-          final gesture = await tester.longPressDownInParagraph("1", 14);
-          await tester.pumpAndSettle();
-
-          // Ensure the word was selected.
-          const wordSelection = DocumentSelection(
-            base: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 12),
-            ),
-            extent: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 17),
-            ),
-          );
-          expect(SuperReaderInspector.findDocumentSelection(), wordSelection);
-
-          // Ensure the drag handles and magnifier are visible, but the toolbar isn't.
-          expect(find.byType(IOSSelectionHandle), findsNWidgets(2));
-          expect(find.byType(IOSRoundedRectangleMagnifyingGlass), findsOneWidget);
-          expect(find.byType(IOSTextEditingFloatingToolbar), findsNothing);
-
-          // Drag downstream to the beginning of the next word.
-          // "Lorem ipsum dolor s|it amet"
-          //                     ^ position 19
-          //
-          // We do this with manual distances because the attempt to look up character
-          // offsets was producing unpredictable results.
-          const dragIncrementCount = 10;
-          const downstreamDragDistance = 80 / dragIncrementCount;
-          for (int i = 0; i < dragIncrementCount; i += 1) {
-            await gesture.moveBy(const Offset(downstreamDragDistance, 0));
-            await tester.pump();
-          }
-
-          // Ensure the original word and downstream word are both selected.
-          expect(
-            SuperReaderInspector.findDocumentSelection(),
-            const DocumentSelection(
+            // Ensure the word was selected.
+            const wordSelection = DocumentSelection(
               base: DocumentPosition(
                 nodeId: "1",
                 nodePosition: TextNodePosition(offset: 12),
               ),
               extent: DocumentPosition(
                 nodeId: "1",
-                nodePosition: TextNodePosition(offset: 21),
+                nodePosition: TextNodePosition(offset: 17),
               ),
-            ),
-          );
+            );
+            expect(SuperReaderInspector.findDocumentSelection(), wordSelection);
 
-          // Drag back towards the original long-press offset.
-          //
-          // We do this with manual distances because the attempt to look up character
-          // offsets was producing unpredictable results.
-          const upstreamDragDistance = -40 / dragIncrementCount;
-          for (int i = 0; i < dragIncrementCount; i += 1) {
-            await gesture.moveBy(const Offset(upstreamDragDistance, 0));
-            await tester.pump();
-          }
+            // Ensure the drag handles and magnifier are visible, but the toolbar isn't.
+            expect(find.byType(IOSSelectionHandle), findsNWidgets(2));
+            expect(
+              find.byType(IOSRoundedRectangleMagnifyingGlass),
+              findsOneWidget,
+            );
+            expect(find.byType(IOSTextEditingFloatingToolbar), findsNothing);
 
-          // Ensure that only the original word is selected.
-          expect(SuperReaderInspector.findDocumentSelection(), wordSelection);
+            // Drag upstream to the end of the previous word.
+            // "Lorem ipsu|m dolor sit amet"
+            //            ^ position 10
+            //
+            // We do this with manual distances because the attempt to look up character
+            // offsets was producing unpredictable results.
+            const dragIncrementCount = 10;
+            const upstreamDragDistance = -130 / dragIncrementCount;
+            for (int i = 0; i < dragIncrementCount; i += 1) {
+              await gesture.moveBy(const Offset(upstreamDragDistance, 0));
+              await tester.pump();
+            }
 
-          // Release the gesture so the test system doesn't complain.
-          gesture.up();
-        });
+            // Ensure the original word and upstream word are both selected.
+            expect(
+              SuperReaderInspector.findDocumentSelection(),
+              const DocumentSelection(
+                base: DocumentPosition(
+                  nodeId: "1",
+                  nodePosition: TextNodePosition(offset: 6),
+                ),
+                extent: DocumentPosition(
+                  nodeId: "1",
+                  nodePosition: TextNodePosition(offset: 17),
+                ),
+              ),
+            );
+
+            // Drag back towards the original long-press offset.
+            //
+            // We do this with manual distances because the attempt to look up character
+            // offsets was producing unpredictable results.
+            const downstreamDragDistance = 100 / dragIncrementCount;
+            for (int i = 0; i < dragIncrementCount; i += 1) {
+              await gesture.moveBy(const Offset(downstreamDragDistance, 0));
+              await tester.pump();
+            }
+
+            // Ensure that only the original word is selected.
+            expect(SuperReaderInspector.findDocumentSelection(), wordSelection);
+
+            // Release the gesture so the test system doesn't complain.
+            gesture.up();
+          },
+        );
+
+        testWidgetsOnIos(
+          "selects by word when dragging downstream and then back upstream",
+          (tester) async {
+            await tester
+                .createDocument()
+                // "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod...",
+                .withSingleParagraph()
+                .withiOSToolbarBuilder(
+                  (context, mobileToolbarKey, focalPoint) =>
+                      IOSTextEditingFloatingToolbar(
+                        key: mobileToolbarKey,
+                        focalPoint: focalPoint,
+                      ),
+                )
+                .pump();
+
+            // Long press on the middle of "do|lor".
+            final gesture = await tester.longPressDownInParagraph("1", 14);
+            await tester.pumpAndSettle();
+
+            // Ensure the word was selected.
+            const wordSelection = DocumentSelection(
+              base: DocumentPosition(
+                nodeId: "1",
+                nodePosition: TextNodePosition(offset: 12),
+              ),
+              extent: DocumentPosition(
+                nodeId: "1",
+                nodePosition: TextNodePosition(offset: 17),
+              ),
+            );
+            expect(SuperReaderInspector.findDocumentSelection(), wordSelection);
+
+            // Ensure the drag handles and magnifier are visible, but the toolbar isn't.
+            expect(find.byType(IOSSelectionHandle), findsNWidgets(2));
+            expect(
+              find.byType(IOSRoundedRectangleMagnifyingGlass),
+              findsOneWidget,
+            );
+            expect(find.byType(IOSTextEditingFloatingToolbar), findsNothing);
+
+            // Drag downstream to the beginning of the next word.
+            // "Lorem ipsum dolor s|it amet"
+            //                     ^ position 19
+            //
+            // We do this with manual distances because the attempt to look up character
+            // offsets was producing unpredictable results.
+            const dragIncrementCount = 10;
+            const downstreamDragDistance = 80 / dragIncrementCount;
+            for (int i = 0; i < dragIncrementCount; i += 1) {
+              await gesture.moveBy(const Offset(downstreamDragDistance, 0));
+              await tester.pump();
+            }
+
+            // Ensure the original word and downstream word are both selected.
+            expect(
+              SuperReaderInspector.findDocumentSelection(),
+              const DocumentSelection(
+                base: DocumentPosition(
+                  nodeId: "1",
+                  nodePosition: TextNodePosition(offset: 12),
+                ),
+                extent: DocumentPosition(
+                  nodeId: "1",
+                  nodePosition: TextNodePosition(offset: 21),
+                ),
+              ),
+            );
+
+            // Drag back towards the original long-press offset.
+            //
+            // We do this with manual distances because the attempt to look up character
+            // offsets was producing unpredictable results.
+            const upstreamDragDistance = -40 / dragIncrementCount;
+            for (int i = 0; i < dragIncrementCount; i += 1) {
+              await gesture.moveBy(const Offset(upstreamDragDistance, 0));
+              await tester.pump();
+            }
+
+            // Ensure that only the original word is selected.
+            expect(SuperReaderInspector.findDocumentSelection(), wordSelection);
+
+            // Release the gesture so the test system doesn't complain.
+            gesture.up();
+          },
+        );
       });
 
       group("horizontal drag", () {
@@ -280,7 +312,9 @@ void main() {
       });
 
       group("vertical drag", () {
-        testWidgetsOnIos("scrolls the reader after a horizontal drag", (tester) async {
+        testWidgetsOnIos("scrolls the reader after a horizontal drag", (
+          tester,
+        ) async {
           final scrollController = ScrollController();
 
           await tester //
@@ -317,22 +351,24 @@ void main() {
     });
 
     group('within ancestor scrollable', () {
-      testWidgetsOnIos("expands selection when dragging horizontally", (tester) async {
+      testWidgetsOnIos("expands selection when dragging horizontally", (
+        tester,
+      ) async {
         final testContext = await tester
             .createDocument()
-            .fromMarkdown(
-              '''
+            .fromMarkdown('''
 SuperEditor containing a
 paragraph that spans 
-multiple lines.''',
-            )
+multiple lines.''')
             .insideCustomScrollView()
             .pump();
 
         final paragraphNode = testContext.document.first as ParagraphNode;
 
         // Double tap to select "SuperEditor".
-        await SuperReaderRobot(tester).doubleTapInParagraph(paragraphNode.id, 0);
+        await SuperReaderRobot(
+          tester,
+        ).doubleTapInParagraph(paragraphNode.id, 0);
 
         // Drag from "SuperEdito|r" a distance long enough to go through the entire first line.
         await SuperReaderRobot(tester).dragSelectDocumentFromPositionByOffset(
@@ -361,22 +397,24 @@ multiple lines.''',
         );
       });
 
-      testWidgetsOnIos("expands selection when dragging vertically", (tester) async {
+      testWidgetsOnIos("expands selection when dragging vertically", (
+        tester,
+      ) async {
         final testContext = await tester
             .createDocument()
-            .fromMarkdown(
-              '''
+            .fromMarkdown('''
 SuperEditor containing a
 paragraph that spans 
-multiple lines.''',
-            )
+multiple lines.''')
             .insideCustomScrollView()
             .pump();
 
         final paragraphNode = testContext.document.first as ParagraphNode;
 
         // Double tap to select "SuperEditor".
-        await SuperReaderRobot(tester).doubleTapInParagraph(paragraphNode.id, 0);
+        await SuperReaderRobot(
+          tester,
+        ).doubleTapInParagraph(paragraphNode.id, 0);
 
         // Drag from "SuperEdito|r" a distance long enough to go to the last line.
         await SuperReaderRobot(tester).dragSelectDocumentFromPositionByOffset(

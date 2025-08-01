@@ -6,8 +6,8 @@ import 'package:super_editor/src/infrastructure/_logging.dart';
 /// with a span of text.
 ///
 /// The [attributions] set may be empty.
-typedef AttributionStyleBuilder = TextStyle Function(
-    Set<Attribution> attributions);
+typedef AttributionStyleBuilder =
+    TextStyle Function(Set<Attribution> attributions);
 
 extension ToSpanRange on TextRange {
   SpanRange toSpanRange() => SpanRange(start, end);
@@ -91,11 +91,7 @@ extension ComputeTextSpan on AttributedText {
       }
     }
 
-    return TextSpan(
-      text: "",
-      children: inlineSpans,
-      style: styleBuilder({}),
-    );
+    return TextSpan(text: "", children: inlineSpans, style: styleBuilder({}));
   }
 
   /// Returns a Flutter [TextSpan] that is styled based on the
@@ -104,7 +100,8 @@ extension ComputeTextSpan on AttributedText {
   /// The given [styleBuilder] interprets the meaning of every
   /// attribution and constructs [TextStyle]s accordingly.
   @Deprecated(
-      "Use computeInlineSpan() instead, which adds support for inline widgets.")
+    "Use computeInlineSpan() instead, which adds support for inline widgets.",
+  )
   TextSpan computeTextSpan(AttributionStyleBuilder styleBuilder) {
     attributionsLog.fine('text length: ${text.length}');
     attributionsLog.fine('attributions used to compute spans:');
@@ -118,19 +115,17 @@ extension ComputeTextSpan on AttributedText {
 
     final collapsedSpans = spans.collapseSpans(contentLength: text.length);
     final textSpans = collapsedSpans
-        .map((attributedSpan) => TextSpan(
-              text:
-                  text.substring(attributedSpan.start, attributedSpan.end + 1),
-              style: styleBuilder(attributedSpan.attributions),
-            ))
+        .map(
+          (attributedSpan) => TextSpan(
+            text: text.substring(attributedSpan.start, attributedSpan.end + 1),
+            style: styleBuilder(attributedSpan.attributions),
+          ),
+        )
         .toList();
 
     return textSpans.length == 1
         ? textSpans.first
-        : TextSpan(
-            children: textSpans,
-            style: styleBuilder({}),
-          );
+        : TextSpan(children: textSpans, style: styleBuilder({}));
   }
 }
 
@@ -145,11 +140,12 @@ typedef InlineWidgetBuilderChain = List<InlineWidgetBuilder>;
 ///
 /// The given [textStyle] is the style applied to the text in the vicinity
 /// of the placeholder.
-typedef InlineWidgetBuilder = Widget? Function(
-  BuildContext context,
-  TextStyle textStyle,
-  Object placeholder,
-);
+typedef InlineWidgetBuilder =
+    Widget? Function(
+      BuildContext context,
+      TextStyle textStyle,
+      Object placeholder,
+    );
 
 /// A [WidgetSpan] that does not re-layout its child changed.
 ///

@@ -23,7 +23,10 @@ class AndroidTextEditingFloatingToolbar extends StatelessWidget {
     final brightness = Theme.of(context).brightness;
     return Theme(
       data: ThemeData(
-        colorScheme: brightness == Brightness.light //
+        colorScheme:
+            brightness ==
+                Brightness
+                    .light //
             ? const ColorScheme.light(primary: Colors.black)
             : const ColorScheme.dark(primary: Colors.white),
       ),
@@ -31,32 +34,23 @@ class AndroidTextEditingFloatingToolbar extends StatelessWidget {
         key: floatingToolbarKey,
         borderRadius: BorderRadius.circular(1),
         elevation: 1,
-        color: brightness == Brightness.dark //
+        color:
+            brightness ==
+                Brightness
+                    .dark //
             ? androidToolbarDarkBackgroundColor
             : androidToolbarLightBackgroundColor,
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             if (onCutPressed != null)
-              _buildButton(
-                onPressed: onCutPressed!,
-                title: 'Cut',
-              ),
+              _buildButton(onPressed: onCutPressed!, title: 'Cut'),
             if (onCopyPressed != null)
-              _buildButton(
-                onPressed: onCopyPressed!,
-                title: 'Copy',
-              ),
+              _buildButton(onPressed: onCopyPressed!, title: 'Copy'),
             if (onPastePressed != null)
-              _buildButton(
-                onPressed: onPastePressed!,
-                title: 'Paste',
-              ),
+              _buildButton(onPressed: onPastePressed!, title: 'Paste'),
             if (onSelectAllPressed != null)
-              _buildButton(
-                onPressed: onSelectAllPressed!,
-                title: 'Select All',
-              ),
+              _buildButton(onPressed: onSelectAllPressed!, title: 'Select All'),
           ],
         ),
       ),
@@ -74,10 +68,7 @@ class AndroidTextEditingFloatingToolbar extends StatelessWidget {
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: Text(
-          title,
-          style: const TextStyle(fontSize: 14),
-        ),
+        child: Text(title, style: const TextStyle(fontSize: 14)),
       ),
     );
   }

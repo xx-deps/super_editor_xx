@@ -72,7 +72,4 @@ class DocumentTapDetails {
   final Offset globalOffset;
 }
 
-enum TapHandlingInstruction {
-  halt,
-  continueHandling,
-}
+enum TapHandlingInstruction { halt, continueHandling }

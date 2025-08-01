@@ -85,7 +85,9 @@ abstract class Document implements Iterable<DocumentNode> {
   /// Returns all [DocumentNode]s from [position1] to [position2], including
   /// the nodes at [position1] and [position2].
   List<DocumentNode> getNodesInside(
-      DocumentPosition position1, DocumentPosition position2);
+    DocumentPosition position1,
+    DocumentPosition position2,
+  );
 
   /// Returns [true] if the content in the [other] document is equivalent to
   /// the content in this document, ignoring any details that are unrelated
@@ -278,10 +280,7 @@ class DocumentPosition {
   ///   nodePosition: TextNodePosition(offset: 1),
   /// );
   /// ```
-  const DocumentPosition({
-    required this.nodeId,
-    required this.nodePosition,
-  });
+  const DocumentPosition({required this.nodeId, required this.nodePosition});
 
   /// ID of a [DocumentNode] within a [Document].
   final String nodeId;
@@ -315,10 +314,7 @@ class DocumentPosition {
 
   /// Creates a new [DocumentPosition] based on the current position, with the
   /// provided parameters overridden.
-  DocumentPosition copyWith({
-    String? nodeId,
-    NodePosition? nodePosition,
-  }) {
+  DocumentPosition copyWith({String? nodeId, NodePosition? nodePosition}) {
     return DocumentPosition(
       nodeId: nodeId ?? this.nodeId,
       nodePosition: nodePosition ?? this.nodePosition,
@@ -334,9 +330,7 @@ class DocumentPosition {
 /// A single content node within a [Document].
 @immutable
 abstract class DocumentNode {
-  DocumentNode({
-    Map<String, dynamic>? metadata,
-  }) {
+  DocumentNode({Map<String, dynamic>? metadata}) {
     // We construct a new map here, instead of directly assigning from the
     // constructor, because we need to make sure that `_metadata` is mutable.
     _metadata = {

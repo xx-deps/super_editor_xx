@@ -20,10 +20,13 @@ void main() {
       await tester //
           .createDocument()
           .withSingleParagraph()
-          .useStylesheet(Stylesheet(
-            rules: defaultStylesheet.rules,
-            inlineTextStyler: (attributions, style) => _textStyleBuilder(attributions),
-          ))
+          .useStylesheet(
+            Stylesheet(
+              rules: defaultStylesheet.rules,
+              inlineTextStyler: (attributions, style) =>
+                  _textStyleBuilder(attributions),
+            ),
+          )
           .pump();
 
       // Place the caret at "Duis aute|" (line 6).
@@ -36,7 +39,10 @@ void main() {
         await tester.pump();
       }
 
-      await screenMatchesGolden(tester, 'supereditor_ios_magnifier_screen_edges');
+      await screenMatchesGolden(
+        tester,
+        'supereditor_ios_magnifier_screen_edges',
+      );
 
       // Resolve the gesture so that we don't have pending gesture timers.
       await gesture.up();

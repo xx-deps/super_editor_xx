@@ -14,10 +14,14 @@ void main() {
       // Note: This covers cases on mobile as well, so separated tests for mobile
       // is not necessary
       group('recognizes links in pasted code', () {
-        testWidgetsOnMac('when pasting into an empty paragraph', (tester) async {
+        testWidgetsOnMac('when pasting into an empty paragraph', (
+          tester,
+        ) async {
           tester
             ..simulateClipboard()
-            ..setSimulatedClipboardContent("Link: https://flutter.dev and link: https://pub.dev");
+            ..setSimulatedClipboardContent(
+              "Link: https://flutter.dev and link: https://pub.dev",
+            );
 
           // Configure and render a document.
           await tester //
@@ -43,16 +47,20 @@ void main() {
         testWidgetsOnMac('when pasting at the start of text', (tester) async {
           tester
             ..simulateClipboard()
-            ..setSimulatedClipboardContent("Link: https://flutter.dev and link: https://pub.dev");
+            ..setSimulatedClipboardContent(
+              "Link: https://flutter.dev and link: https://pub.dev",
+            );
 
           // Configure and render a document.
           await tester
               .createDocument()
-              .withCustomContent(MutableDocument(
-                nodes: [
-                  ParagraphNode(id: "1", text: AttributedText("Some text")),
-                ],
-              ))
+              .withCustomContent(
+                MutableDocument(
+                  nodes: [
+                    ParagraphNode(id: "1", text: AttributedText("Some text")),
+                  ],
+                ),
+              )
               .forDesktop()
               .pump();
 
@@ -73,16 +81,20 @@ void main() {
         testWidgetsOnMac('when pasting in the middle of text', (tester) async {
           tester
             ..simulateClipboard()
-            ..setSimulatedClipboardContent("Link: https://flutter.dev and link: https://pub.dev");
+            ..setSimulatedClipboardContent(
+              "Link: https://flutter.dev and link: https://pub.dev",
+            );
 
           // Configure and render a document.
           await tester
               .createDocument()
-              .withCustomContent(MutableDocument(
-                nodes: [
-                  ParagraphNode(id: "1", text: AttributedText("Some text")),
-                ],
-              ))
+              .withCustomContent(
+                MutableDocument(
+                  nodes: [
+                    ParagraphNode(id: "1", text: AttributedText("Some text")),
+                  ],
+                ),
+              )
               .forDesktop()
               .pump();
 
@@ -103,16 +115,20 @@ void main() {
         testWidgetsOnMac('when pasting at the end of text', (tester) async {
           tester
             ..simulateClipboard()
-            ..setSimulatedClipboardContent("Link: https://flutter.dev and link: https://pub.dev");
+            ..setSimulatedClipboardContent(
+              "Link: https://flutter.dev and link: https://pub.dev",
+            );
 
           // Configure and render a document.
           await tester
               .createDocument()
-              .withCustomContent(MutableDocument(
-                nodes: [
-                  ParagraphNode(id: "1", text: AttributedText("Some text")),
-                ],
-              ))
+              .withCustomContent(
+                MutableDocument(
+                  nodes: [
+                    ParagraphNode(id: "1", text: AttributedText("Some text")),
+                  ],
+                ),
+              )
               .forDesktop()
               .pump();
 
@@ -150,7 +166,9 @@ void main() {
           // Ensure that the link is unchanged
           expect(
             SuperEditorInspector.findDocument(),
-            equalsMarkdown("Link: [https://flutter.dev](https://flutter.dev)[https://google.com](https://google.com)"),
+            equalsMarkdown(
+              "Link: [https://flutter.dev](https://flutter.dev)[https://google.com](https://google.com)",
+            ),
           );
         });
 
@@ -174,11 +192,15 @@ void main() {
           // Ensure that the link is unchanged
           expect(
             SuperEditorInspector.findDocument(),
-            equalsMarkdown("[https://google.com](https://google.com)Link: [https://flutter.dev](https://flutter.dev)"),
+            equalsMarkdown(
+              "[https://google.com](https://google.com)Link: [https://flutter.dev](https://flutter.dev)",
+            ),
           );
         });
 
-        testWidgetsOnMac('when pasting in the middle of a link', (tester) async {
+        testWidgetsOnMac('when pasting in the middle of a link', (
+          tester,
+        ) async {
           tester
             ..simulateClipboard()
             ..setSimulatedClipboardContent("Link: https://flutter.dev");
@@ -201,7 +223,8 @@ void main() {
             // Notice that the pasted text splits the existing link. Each
             // piece of the existing link continues to link to the full URL.
             equalsMarkdown(
-                "[https://g](https://google.com)Link: [https://flutter.dev](https://flutter.dev)[oogle.com](https://google.com)"),
+              "[https://g](https://google.com)Link: [https://flutter.dev](https://flutter.dev)[oogle.com](https://google.com)",
+            ),
           );
         });
       });
@@ -231,7 +254,7 @@ MutableDocument _singleParagraphWithLinkDoc() {
             ],
           ),
         ),
-      )
+      ),
     ],
   );
 }

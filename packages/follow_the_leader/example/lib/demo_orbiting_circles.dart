@@ -79,10 +79,7 @@ class _OrbitingCirclesDemoState extends State<OrbitingCirclesDemo> {
       top: 0,
       child: Follower.withOffset(
         link: _link,
-        offset: Offset(
-          radius * cos(radians),
-          radius * sin(radians),
-        ),
+        offset: Offset(radius * cos(radians), radius * sin(radians)),
         boundary: ScreenFollowerBoundary(
           screenSize: MediaQuery.of(context).size,
           devicePixelRatio: MediaQuery.of(context).devicePixelRatio,

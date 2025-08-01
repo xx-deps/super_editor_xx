@@ -11,11 +11,7 @@ void main() {
         child: Center(
           child: Leader(
             link: link,
-            child: Container(
-              width: 25,
-              height: 25,
-              color: Colors.red,
-            ),
+            child: Container(width: 25, height: 25, color: Colors.red),
           ),
         ),
       );
@@ -27,11 +23,7 @@ void main() {
       final link = LeaderLink();
       await _pumpScaffold(
         widgetTester: widgetTester,
-        child: Center(
-          child: Leader(
-            link: link,
-          ),
-        ),
+        child: Center(child: Leader(link: link)),
       );
 
       // Reaching this point without an error is the success condition.
@@ -48,21 +40,13 @@ void main() {
             Center(
               child: Leader(
                 link: link,
-                child: Container(
-                  width: 25,
-                  height: 25,
-                  color: Colors.red,
-                ),
+                child: Container(width: 25, height: 25, color: Colors.red),
               ),
             ),
             Follower.withOffset(
               link: link,
               offset: const Offset(0, -50),
-              child: Container(
-                width: 50,
-                height: 50,
-                color: Colors.blue,
-              ),
+              child: Container(width: 50, height: 50, color: Colors.blue),
             ),
           ],
         ),
@@ -77,15 +61,8 @@ void main() {
         widgetTester: widgetTester,
         child: Stack(
           children: [
-            Center(
-              child: Leader(
-                link: link,
-              ),
-            ),
-            Follower.withOffset(
-              link: link,
-              offset: const Offset(0, -50),
-            ),
+            Center(child: Leader(link: link)),
+            Follower.withOffset(link: link, offset: const Offset(0, -50)),
           ],
         ),
       );
@@ -103,23 +80,19 @@ void main() {
           children: [
             Center(
               child: ValueListenableBuilder(
-                  valueListenable: showLeader,
-                  builder: (context, value, child) {
-                    // Don't build the Leader. Make the Follower and orphan.
-                    if (!showLeader.value) {
-                      return const SizedBox();
-                    }
+                valueListenable: showLeader,
+                builder: (context, value, child) {
+                  // Don't build the Leader. Make the Follower and orphan.
+                  if (!showLeader.value) {
+                    return const SizedBox();
+                  }
 
-                    // Build the Leader.
-                    return Leader(
-                      link: link,
-                    );
-                  }),
+                  // Build the Leader.
+                  return Leader(link: link);
+                },
+              ),
             ),
-            Follower.withOffset(
-              link: link,
-              offset: const Offset(0, -50),
-            ),
+            Follower.withOffset(link: link, offset: const Offset(0, -50)),
           ],
         ),
       );
@@ -141,11 +114,5 @@ Future<void> _pumpScaffold({
   required WidgetTester widgetTester,
   required Widget child,
 }) async {
-  await widgetTester.pumpWidget(
-    MaterialApp(
-      home: Scaffold(
-        body: child,
-      ),
-    ),
-  );
+  await widgetTester.pumpWidget(MaterialApp(home: Scaffold(body: child)));
 }

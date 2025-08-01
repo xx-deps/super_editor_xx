@@ -17,8 +17,11 @@ abstract class DocumentLayoutLayerStatelessWidget
   const DocumentLayoutLayerStatelessWidget({super.key});
 
   @override
-  Widget doBuild(BuildContext context, Element? contentElement,
-      RenderObject? contentLayout) {
+  Widget doBuild(
+    BuildContext context,
+    Element? contentElement,
+    RenderObject? contentLayout,
+  ) {
     if (contentElement == null ||
         contentElement is! StatefulElement ||
         contentElement.state is! DocumentLayout) {
@@ -26,12 +29,16 @@ abstract class DocumentLayoutLayerStatelessWidget
     }
 
     return buildWithDocumentLayout(
-        context, contentElement.state as DocumentLayout);
+      context,
+      contentElement.state as DocumentLayout,
+    );
   }
 
   @protected
   Widget buildWithDocumentLayout(
-      BuildContext context, DocumentLayout documentLayout);
+    BuildContext context,
+    DocumentLayout documentLayout,
+  );
 }
 
 /// A [ContentLayerStatefulWidget] that expects a content layer [Element] that
@@ -47,11 +54,15 @@ abstract class DocumentLayoutLayerStatefulWidget
 }
 
 abstract class DocumentLayoutLayerState<
-    WidgetType extends ContentLayerStatefulWidget,
-    LayoutDataType> extends ContentLayerState<WidgetType, LayoutDataType> {
+  WidgetType extends ContentLayerStatefulWidget,
+  LayoutDataType
+>
+    extends ContentLayerState<WidgetType, LayoutDataType> {
   @override
   LayoutDataType? computeLayoutData(
-      Element? contentElement, RenderObject? contentLayout) {
+    Element? contentElement,
+    RenderObject? contentLayout,
+  ) {
     if (contentElement == null ||
         contentElement is! StatefulElement ||
         contentElement.state is! DocumentLayout) {
@@ -59,12 +70,16 @@ abstract class DocumentLayoutLayerState<
     }
 
     return computeLayoutDataWithDocumentLayout(
-        context, contentElement, contentElement.state as DocumentLayout);
+      context,
+      contentElement,
+      contentElement.state as DocumentLayout,
+    );
   }
 
   @protected
   LayoutDataType? computeLayoutDataWithDocumentLayout(
-      BuildContext contentLayersContext,
-      BuildContext documentContext,
-      DocumentLayout documentLayout);
+    BuildContext contentLayersContext,
+    BuildContext documentContext,
+    DocumentLayout documentLayout,
+  );
 }

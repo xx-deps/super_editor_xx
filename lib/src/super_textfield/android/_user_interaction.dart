@@ -236,7 +236,7 @@ class AndroidTextFieldTouchInteractorState
     final didTapOnExistingSelection = previousSelection.isCollapsed
         ? tapTextPosition == previousSelection.extent
         : tapTextPosition.offset >= previousSelection.start &&
-            tapTextPosition.offset <= previousSelection.end;
+              tapTextPosition.offset <= previousSelection.end;
 
     if (didTapOnExistingSelection && previousSelection.isCollapsed) {
       // Toggle the toolbar display when the user taps on the collapsed caret.
@@ -276,8 +276,9 @@ class AndroidTextFieldTouchInteractorState
     final tapTextPosition = _getTextPositionAtOffset(localOffset);
     if (tapTextPosition == null) {
       // This situation indicates the user tapped in empty space
-      widget.textController.selection =
-          TextSelection.collapsed(offset: widget.textController.text.length);
+      widget.textController.selection = TextSelection.collapsed(
+        offset: widget.textController.text.length,
+      );
     } else {
       // Update the text selection to a collapsed selection where the user tapped.
       widget.textController.selection = tapTextPosition.offset >= 0
@@ -394,11 +395,15 @@ class AndroidTextFieldTouchInteractorState
       }
     }
 
-    final tapTextPosition =
-        _textLayout.getPositionAtOffset(details.localPosition)!;
+    final tapTextPosition = _textLayout.getPositionAtOffset(
+      details.localPosition,
+    )!;
 
     widget.textController.selection = _textLayout.expandSelection(
-        tapTextPosition, paragraphExpansionFilter, TextAffinity.downstream);
+      tapTextPosition,
+      paragraphExpansionFilter,
+      TextAffinity.downstream,
+    );
 
     if (widget.textController.selection.isCollapsed) {
       // The selection is collapsed. The collapsed handle should disappear
@@ -577,8 +582,8 @@ class AndroidTextFieldTouchInteractorState
       return const TextPosition(offset: -1);
     }
 
-    final globalOffset =
-        (context.findRenderObject() as RenderBox).localToGlobal(localOffset);
+    final globalOffset = (context.findRenderObject() as RenderBox)
+        .localToGlobal(localOffset);
     final textOffset =
         (widget.textKey.currentContext!.findRenderObject() as RenderBox)
             .globalToLocal(globalOffset);
@@ -641,48 +646,49 @@ class AndroidTextFieldTouchInteractorState
       child: RawGestureDetector(
         behavior: HitTestBehavior.translucent,
         gestures: <Type, GestureRecognizerFactory>{
-          TapSequenceGestureRecognizer: GestureRecognizerFactoryWithHandlers<
-              TapSequenceGestureRecognizer>(
-            () => TapSequenceGestureRecognizer(),
-            (TapSequenceGestureRecognizer recognizer) {
-              recognizer
-                ..onTapDown = _onTapDown
-                ..onTapUp = _onTapUp
-                ..onTapCancel = _onTapCancel
-                ..onDoubleTapDown = _onDoubleTapDown
-                ..onDoubleTapUp = _onDoubleTapUp
-                ..onDoubleTapCancel = _onDoubleTapCancel
-                ..onTripleTapDown = _onTripleTapDown
-                ..onTripleTapUp = _onTripleTapUp
-                ..onTripleTapCancel = _onTripleTapCancel
-                ..gestureSettings = gestureSettings;
-            },
-          ),
+          TapSequenceGestureRecognizer:
+              GestureRecognizerFactoryWithHandlers<
+                TapSequenceGestureRecognizer
+              >(() => TapSequenceGestureRecognizer(), (
+                TapSequenceGestureRecognizer recognizer,
+              ) {
+                recognizer
+                  ..onTapDown = _onTapDown
+                  ..onTapUp = _onTapUp
+                  ..onTapCancel = _onTapCancel
+                  ..onDoubleTapDown = _onDoubleTapDown
+                  ..onDoubleTapUp = _onDoubleTapUp
+                  ..onDoubleTapCancel = _onDoubleTapCancel
+                  ..onTripleTapDown = _onTripleTapDown
+                  ..onTripleTapUp = _onTripleTapUp
+                  ..onTripleTapCancel = _onTripleTapCancel
+                  ..gestureSettings = gestureSettings;
+              }),
           LongPressGestureRecognizer:
               GestureRecognizerFactoryWithHandlers<LongPressGestureRecognizer>(
-            () => LongPressGestureRecognizer(),
-            (LongPressGestureRecognizer recognizer) {
-              recognizer
-                ..onLongPress = _onLongPress
-                ..gestureSettings = gestureSettings;
-            },
-          ),
+                () => LongPressGestureRecognizer(),
+                (LongPressGestureRecognizer recognizer) {
+                  recognizer
+                    ..onLongPress = _onLongPress
+                    ..gestureSettings = gestureSettings;
+                },
+              ),
           PanGestureRecognizer:
               GestureRecognizerFactoryWithHandlers<PanGestureRecognizer>(
-            () => PanGestureRecognizer(),
-            (PanGestureRecognizer recognizer) {
-              recognizer
-                ..onStart = widget.focusNode.hasFocus ? _onPanStart : null
-                ..onUpdate = widget.focusNode.hasFocus ? _onPanUpdate : null
-                ..onEnd = widget.focusNode.hasFocus || _isDraggingCaret
-                    ? _onPanEnd
-                    : null
-                ..onCancel = widget.focusNode.hasFocus || _isDraggingCaret
-                    ? _onPanCancel
-                    : null
-                ..gestureSettings = gestureSettings;
-            },
-          ),
+                () => PanGestureRecognizer(),
+                (PanGestureRecognizer recognizer) {
+                  recognizer
+                    ..onStart = widget.focusNode.hasFocus ? _onPanStart : null
+                    ..onUpdate = widget.focusNode.hasFocus ? _onPanUpdate : null
+                    ..onEnd = widget.focusNode.hasFocus || _isDraggingCaret
+                        ? _onPanEnd
+                        : null
+                    ..onCancel = widget.focusNode.hasFocus || _isDraggingCaret
+                        ? _onPanCancel
+                        : null
+                    ..gestureSettings = gestureSettings;
+                },
+              ),
         },
       ),
     );
@@ -705,7 +711,7 @@ class AndroidTextFieldTouchInteractorState
     final extentOffsetInText = _textLayout.getOffsetAtPosition(extentPosition);
     final extentLineHeight =
         _textLayout.getCharacterBox(extentPosition)?.toRect().height ??
-            _textLayout.estimatedLineHeight;
+        _textLayout.estimatedLineHeight;
     final extentGlobalOffset =
         (widget.textKey.currentContext!.findRenderObject() as RenderBox)
             .localToGlobal(extentOffsetInText);

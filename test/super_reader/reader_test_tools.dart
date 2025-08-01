@@ -47,38 +47,23 @@ class TestDocumentSelector {
   }
 
   TestDocumentConfigurator withSingleEmptyParagraph() {
-    return TestDocumentConfigurator._(
-      _widgetTester,
-      singleParagraphEmptyDoc(),
-    );
+    return TestDocumentConfigurator._(_widgetTester, singleParagraphEmptyDoc());
   }
 
   TestDocumentConfigurator withSingleParagraph() {
-    return TestDocumentConfigurator._(
-      _widgetTester,
-      singleParagraphDoc(),
-    );
+    return TestDocumentConfigurator._(_widgetTester, singleParagraphDoc());
   }
 
   TestDocumentConfigurator withSingleParagraphShort() {
-    return TestDocumentConfigurator._(
-      _widgetTester,
-      singleParagraphShortDoc(),
-    );
+    return TestDocumentConfigurator._(_widgetTester, singleParagraphShortDoc());
   }
 
   TestDocumentConfigurator withTwoEmptyParagraphs() {
-    return TestDocumentConfigurator._(
-      _widgetTester,
-      twoParagraphEmptyDoc(),
-    );
+    return TestDocumentConfigurator._(_widgetTester, twoParagraphEmptyDoc());
   }
 
   TestDocumentConfigurator withLongTextContent() {
-    return TestDocumentConfigurator._(
-      _widgetTester,
-      longTextDoc(),
-    );
+    return TestDocumentConfigurator._(_widgetTester, longTextDoc());
   }
 }
 
@@ -141,19 +126,25 @@ class TestDocumentConfigurator {
   }
 
   /// Configures the [SuperReader] to use only the given [componentBuilders]
-  TestDocumentConfigurator withComponentBuilders(List<ComponentBuilder>? componentBuilders) {
+  TestDocumentConfigurator withComponentBuilders(
+    List<ComponentBuilder>? componentBuilders,
+  ) {
     _componentBuilders = componentBuilders;
     return this;
   }
 
   /// Configures the [SuperReader] to use a custom widget tree above [SuperReader].
-  TestDocumentConfigurator withCustomWidgetTreeBuilder(WidgetTreeBuilder? builder) {
+  TestDocumentConfigurator withCustomWidgetTreeBuilder(
+    WidgetTreeBuilder? builder,
+  ) {
     _widgetTreeBuilder = builder;
     return this;
   }
 
   /// Configures the [SuperReader] to use the given [scrollController]
-  TestDocumentConfigurator withScrollController(ScrollController? scrollController) {
+  TestDocumentConfigurator withScrollController(
+    ScrollController? scrollController,
+  ) {
     _scrollController = scrollController;
     return this;
   }
@@ -193,7 +184,9 @@ class TestDocumentConfigurator {
   }
 
   /// Configures the [SuperEditor] to use the given [builder] as its iOS toolbar builder.
-  TestDocumentConfigurator withiOSToolbarBuilder(DocumentFloatingToolbarBuilder? builder) {
+  TestDocumentConfigurator withiOSToolbarBuilder(
+    DocumentFloatingToolbarBuilder? builder,
+  ) {
     _iOSToolbarBuilder = builder;
     return this;
   }
@@ -220,7 +213,9 @@ class TestDocumentConfigurator {
 
   /// Adds the given component builders to the list of component builders that are
   /// used to render the document layout in the pumped [SuperReader].
-  TestDocumentConfigurator withAddedComponents(List<ComponentBuilder> newComponents) {
+  TestDocumentConfigurator withAddedComponents(
+    List<ComponentBuilder> newComponents,
+  ) {
     _addedComponents.addAll(newComponents);
     return this;
   }
@@ -297,9 +292,7 @@ class TestDocumentConfigurator {
       ),
     );
 
-    await _widgetTester.pumpWidget(
-      _buildWidgetTree(superDocument),
-    );
+    await _widgetTester.pumpWidget(_buildWidgetTree(superDocument));
 
     return testContext;
   }
@@ -323,12 +316,7 @@ class TestDocumentConfigurator {
       return child;
     }
 
-    return CustomScrollView(
-      controller: _scrollController,
-      slivers: [
-        child,
-      ],
-    );
+    return CustomScrollView(controller: _scrollController, slivers: [child]);
   }
 
   Widget _buildWidgetTree(Widget superReader) {
@@ -337,9 +325,7 @@ class TestDocumentConfigurator {
     }
     return MaterialApp(
       theme: _appTheme,
-      home: Scaffold(
-        body: superReader,
-      ),
+      home: Scaffold(body: superReader),
       debugShowCheckedModeBanner: false,
     );
   }
@@ -364,7 +350,8 @@ class TestDocumentContext {
   final SuperReaderContext documentContext;
 }
 
-Matcher equalsMarkdown(String markdown) => DocumentEqualsMarkdownMatcher(markdown);
+Matcher equalsMarkdown(String markdown) =>
+    DocumentEqualsMarkdownMatcher(markdown);
 
 class DocumentEqualsMarkdownMatcher extends Matcher {
   const DocumentEqualsMarkdownMatcher(this._expectedMarkdown);
@@ -373,7 +360,9 @@ class DocumentEqualsMarkdownMatcher extends Matcher {
 
   @override
   Description describe(Description description) {
-    return description.add("given Document has equivalent content to the given markdown");
+    return description.add(
+      "given Document has equivalent content to the given markdown",
+    );
   }
 
   @override
@@ -425,11 +414,19 @@ class DocumentEqualsMarkdownMatcher extends Matcher {
       return null;
     }
 
-    return stringMatcher.describeMismatch(actualMarkdown, StringDescription(), matchState, false).toString();
+    return stringMatcher
+        .describeMismatch(
+          actualMarkdown,
+          StringDescription(),
+          matchState,
+          false,
+        )
+        .toString();
   }
 }
 
-Matcher documentEquivalentTo(Document expectedDocument) => EquivalentDocumentMatcher(expectedDocument);
+Matcher documentEquivalentTo(Document expectedDocument) =>
+    EquivalentDocumentMatcher(expectedDocument);
 
 class EquivalentDocumentMatcher extends Matcher {
   const EquivalentDocumentMatcher(this._expectedDocument);
@@ -438,7 +435,9 @@ class EquivalentDocumentMatcher extends Matcher {
 
   @override
   Description describe(Description description) {
-    return description.add("given Document has equivalent content to expected Document");
+    return description.add(
+      "given Document has equivalent content to expected Document",
+    );
   }
 
   @override
@@ -486,33 +485,56 @@ class EquivalentDocumentMatcher extends Matcher {
     bool nodeTypeOrContentMismatch = false;
 
     if (_expectedDocument.nodeCount != actualDocument.nodeCount) {
-      messages.add("expected ${_expectedDocument.nodeCount} document nodes but found ${actualDocument.nodeCount}");
+      messages.add(
+        "expected ${_expectedDocument.nodeCount} document nodes but found ${actualDocument.nodeCount}",
+      );
       nodeCountMismatch = true;
     } else {
       messages.add("document have the same number of nodes");
     }
 
-    final maxNodeCount = max(_expectedDocument.nodeCount, actualDocument.nodeCount);
-    final nodeComparisons = List.generate(maxNodeCount, (index) => ["", "", " "]);
+    final maxNodeCount = max(
+      _expectedDocument.nodeCount,
+      actualDocument.nodeCount,
+    );
+    final nodeComparisons = List.generate(
+      maxNodeCount,
+      (index) => ["", "", " "],
+    );
     for (int i = 0; i < maxNodeCount; i += 1) {
       if (i < _expectedDocument.nodeCount && i < actualDocument.nodeCount) {
-        nodeComparisons[i][0] = _expectedDocument.getNodeAt(i)!.runtimeType.toString();
-        nodeComparisons[i][1] = actualDocument.getNodeAt(i)!.runtimeType.toString();
+        nodeComparisons[i][0] = _expectedDocument
+            .getNodeAt(i)!
+            .runtimeType
+            .toString();
+        nodeComparisons[i][1] = actualDocument
+            .getNodeAt(i)!
+            .runtimeType
+            .toString();
 
-        if (_expectedDocument.getNodeAt(i)!.runtimeType != actualDocument.getNodeAt(i)!.runtimeType) {
+        if (_expectedDocument.getNodeAt(i)!.runtimeType !=
+            actualDocument.getNodeAt(i)!.runtimeType) {
           nodeComparisons[i][2] = "Wrong Type";
           nodeTypeOrContentMismatch = true;
-        } else if (!_expectedDocument.getNodeAt(i)!.hasEquivalentContent(actualDocument.getNodeAt(i)!)) {
+        } else if (!_expectedDocument
+            .getNodeAt(i)!
+            .hasEquivalentContent(actualDocument.getNodeAt(i)!)) {
           nodeComparisons[i][2] = "Different Content";
           nodeTypeOrContentMismatch = true;
         }
       } else if (i < _expectedDocument.nodeCount) {
-        nodeComparisons[i][0] = _expectedDocument.getNodeAt(i)!.runtimeType.toString();
+        nodeComparisons[i][0] = _expectedDocument
+            .getNodeAt(i)!
+            .runtimeType
+            .toString();
         nodeComparisons[i][1] = "NA";
         nodeComparisons[i][2] = "Missing Node";
       } else if (i < actualDocument.nodeCount) {
         nodeComparisons[i][0] = "NA";
-        nodeComparisons[i][1] = actualDocument.getNodeAt(i)!.runtimeType.toString();
+        nodeComparisons[i][1] = actualDocument
+            .getNodeAt(i)!
+            .runtimeType
+            .toString();
         nodeComparisons[i][2] = "Missing Node";
       }
     }
@@ -520,7 +542,10 @@ class EquivalentDocumentMatcher extends Matcher {
     if (nodeCountMismatch || nodeTypeOrContentMismatch) {
       String messagesList = messages.join(", ");
       messagesList += "\n";
-      messagesList += const TableRenderer().render(nodeComparisons, columns: ["Expected", "Actual", "Difference"]);
+      messagesList += const TableRenderer().render(
+        nodeComparisons,
+        columns: ["Expected", "Actual", "Difference"],
+      );
       return messagesList;
     }
 

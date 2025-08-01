@@ -74,16 +74,11 @@ class SuperEditorFocusDebugVisuals extends StatelessWidget {
         final color = focusNode.hasPrimaryFocus
             ? Colors.lightGreenAccent
             : focusNode.hasFocus
-                ? Colors.red
-                : Colors.grey;
+            ? Colors.red
+            : Colors.grey;
 
         return DecoratedBox(
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: color,
-              width: 2,
-            ),
-          ),
+          decoration: BoxDecoration(border: Border.all(color: color, width: 2)),
           position: DecorationPosition.foreground,
           child: child,
         );
@@ -116,14 +111,14 @@ class SuperEditorImeDebugVisuals extends StatelessWidget {
         final color = imeConnection.value == null
             ? Colors.grey
             : imeConnection.value!.attached
-                ? Colors.greenAccent
-                : Colors.red;
+            ? Colors.greenAccent
+            : Colors.red;
 
         final message = imeConnection.value == null
             ? "NO IME CONNECTION"
             : imeConnection.value!.attached
-                ? "ATTACHED TO IME"
-                : "DETACHED FROM IME";
+            ? "ATTACHED TO IME"
+            : "DETACHED FROM IME";
 
         return SliverHybridStack(
           children: [
@@ -133,8 +128,10 @@ class SuperEditorImeDebugVisuals extends StatelessWidget {
             Align(
               alignment: Alignment.topCenter,
               child: Container(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 8,
+                  horizontal: 16,
+                ),
                 decoration: BoxDecoration(
                   color: color,
                   borderRadius: const BorderRadius.only(

@@ -46,7 +46,8 @@ class DocumentImeSerializer {
 
   void _serialize() {
     editorImeLog.fine(
-        "Creating an IME model from document, selection, and composing region");
+      "Creating an IME model from document, selection, and composing region",
+    );
     final buffer = StringBuffer();
     int characterCount = 0;
 
@@ -84,8 +85,10 @@ class DocumentImeSerializer {
         buffer.write('~');
         characterCount += 1;
 
-        final imeRange =
-            TextRange(start: characterCount - 1, end: characterCount);
+        final imeRange = TextRange(
+          start: characterCount - 1,
+          end: characterCount,
+        );
         imeRangesToDocTextNodes[imeRange] = node.id;
         docTextNodesToImeRanges[node.id] = imeRange;
 
@@ -95,9 +98,12 @@ class DocumentImeSerializer {
       // Cache mappings between the IME text range and the document position
       // so that we can easily convert between the two, when requested.
       final imeRange = TextRange(
-          start: characterCount, end: characterCount + node.text.length);
+        start: characterCount,
+        end: characterCount + node.text.length,
+      );
       editorImeLog.finer(
-          "IME range $imeRange -> text node content '${node.text.toPlainText()}'");
+        "IME range $imeRange -> text node content '${node.text.toPlainText()}'",
+      );
       imeRangesToDocTextNodes[imeRange] = node.id;
       docTextNodesToImeRanges[node.id] = imeRange;
 
@@ -135,11 +141,13 @@ class DocumentImeSerializer {
   bool get didPrependPlaceholder => _prependedPlaceholder.isNotEmpty;
 
   DocumentSelection? imeToDocumentSelection(TextSelection imeSelection) {
-    editorImeLog
-        .fine("Creating doc selection from IME selection: $imeSelection");
+    editorImeLog.fine(
+      "Creating doc selection from IME selection: $imeSelection",
+    );
     if (!imeSelection.isValid) {
       editorImeLog.fine(
-          "The IME selection is empty. Returning a null document selection.");
+        "The IME selection is empty. Returning a null document selection.",
+      );
       return null;
     }
 
@@ -153,7 +161,8 @@ class DocumentImeSerializer {
         // The IME is only trying to select our invisible characters. Return null
         // for an empty document selection.
         editorImeLog.fine(
-            "The IME only selected invisible characters. Returning a null document selection.");
+          "The IME only selected invisible characters. Returning a null document selection.",
+        );
         return null;
       } else if (imeSelection.start < _prependedPlaceholder.length) {
         // The IME is trying to select some invisible characters and some real
@@ -161,23 +170,30 @@ class DocumentImeSerializer {
         // converting it to a document selection.
         editorImeLog.fine("Removing invisible characters from IME selection.");
         imeSelection = imeSelection.copyWith(
-          baseOffset:
-              max(imeSelection.baseOffset, _prependedPlaceholder.length),
-          extentOffset:
-              max(imeSelection.extentOffset, _prependedPlaceholder.length),
+          baseOffset: max(
+            imeSelection.baseOffset,
+            _prependedPlaceholder.length,
+          ),
+          extentOffset: max(
+            imeSelection.extentOffset,
+            _prependedPlaceholder.length,
+          ),
         );
         editorImeLog.fine("Adjusted IME selection is: $imeSelection");
       } else {
         editorImeLog.fine(
-            "The IME only selected visible characters. No adjustment necessary.");
+          "The IME only selected visible characters. No adjustment necessary.",
+        );
       }
     } else {
       editorImeLog.fine(
-          "The serialization doesn't have any invisible characters. No adjustment necessary.");
+        "The serialization doesn't have any invisible characters. No adjustment necessary.",
+      );
     }
 
     editorImeLog.fine(
-        "Calculating the base DocumentPosition for the DocumentSelection");
+      "Calculating the base DocumentPosition for the DocumentSelection",
+    );
     final base = _imeToDocumentPosition(
       imeSelection.base,
       isUpstream: imeSelection.base.affinity == TextAffinity.upstream,
@@ -185,7 +201,8 @@ class DocumentImeSerializer {
     editorImeLog.fine("Selection base: $base");
 
     editorImeLog.fine(
-        "Calculating the extent DocumentPosition for the DocumentSelection");
+      "Calculating the extent DocumentPosition for the DocumentSelection",
+    );
     final extent = _imeToDocumentPosition(
       imeSelection.extent,
       isUpstream: imeSelection.extent.affinity == TextAffinity.upstream,
@@ -198,8 +215,9 @@ class DocumentImeSerializer {
   DocumentRange? imeToDocumentRange(TextRange imeRange) {
     editorImeLog.fine("Creating doc range from IME range: $imeRange");
     if (!imeRange.isValid) {
-      editorImeLog
-          .fine("The IME range is empty. Returning null document range.");
+      editorImeLog.fine(
+        "The IME range is empty. Returning null document range.",
+      );
       // The range is empty. Return null.
       return null;
     }
@@ -214,7 +232,8 @@ class DocumentImeSerializer {
         // The IME is only trying to select our invisible characters. Return null
         // for an empty document range.
         editorImeLog.fine(
-            "The IME tried to create a range around invisible characters. Returning null document range.");
+          "The IME tried to create a range around invisible characters. Returning null document range.",
+        );
         return null;
       } else {
         // The IME is trying to select some invisible characters and some real
@@ -223,7 +242,8 @@ class DocumentImeSerializer {
         editorImeLog.fine("Removing arbitrary character from IME range.");
         editorImeLog.fine("Before adjustment, range: $imeRange");
         editorImeLog.fine(
-            "Prepended characters length: ${_prependedPlaceholder.length}");
+          "Prepended characters length: ${_prependedPlaceholder.length}",
+        );
         imeRange = TextRange(
           start: max(imeRange.start, _prependedPlaceholder.length),
           end: max(imeRange.end, _prependedPlaceholder.length),
@@ -232,7 +252,8 @@ class DocumentImeSerializer {
       }
     } else {
       editorImeLog.fine(
-          "The IME is only composing visible characters. No adjustment necessary.");
+        "The IME is only composing visible characters. No adjustment necessary.",
+      );
     }
 
     return DocumentRange(
@@ -283,8 +304,10 @@ class DocumentImeSerializer {
         : const TextPosition(offset: 0);
   }
 
-  DocumentPosition _imeToDocumentPosition(TextPosition imePosition,
-      {required bool isUpstream}) {
+  DocumentPosition _imeToDocumentPosition(
+    TextPosition imePosition, {
+    required bool isUpstream,
+  }) {
     for (final range in imeRangesToDocTextNodes.keys) {
       if (range.start <= imePosition.offset &&
           imePosition.offset <= range.end) {
@@ -293,8 +316,9 @@ class DocumentImeSerializer {
         if (node is TextNode) {
           return DocumentPosition(
             nodeId: imeRangesToDocTextNodes[range]!,
-            nodePosition:
-                TextNodePosition(offset: imePosition.offset - range.start),
+            nodePosition: TextNodePosition(
+              offset: imePosition.offset - range.start,
+            ),
           );
         } else {
           if (imePosition.offset <= range.start) {
@@ -314,8 +338,9 @@ class DocumentImeSerializer {
       }
     }
 
-    editorImeLog
-        .shout("---------------DocumentImeSerializer----------------------");
+    editorImeLog.shout(
+      "---------------DocumentImeSerializer----------------------",
+    );
     editorImeLog.shout("Couldn't map an IME position to a document position.");
     editorImeLog.shout("Desired IME position: '$imePosition'");
     editorImeLog.shout("");
@@ -327,20 +352,25 @@ class DocumentImeSerializer {
     editorImeLog.shout("");
     editorImeLog.shout("IME Ranges to text nodes:");
     for (final entry in imeRangesToDocTextNodes.entries) {
-      editorImeLog
-          .shout(" - IME range: ${entry.key} -> Text node: ${entry.value}");
       editorImeLog.shout(
-          "    ^ node content: '${(_doc.getNodeById(entry.value) as TextNode).text.toPlainText()}'");
+        " - IME range: ${entry.key} -> Text node: ${entry.value}",
+      );
+      editorImeLog.shout(
+        "    ^ node content: '${(_doc.getNodeById(entry.value) as TextNode).text.toPlainText()}'",
+      );
     }
-    editorImeLog
-        .shout("-----------------------------------------------------------");
+    editorImeLog.shout(
+      "-----------------------------------------------------------",
+    );
     throw Exception(
-        "Couldn't map an IME position to a document position. \nTextEditingValue: '$imeText'\nIME position: $imePosition");
+      "Couldn't map an IME position to a document position. \nTextEditingValue: '$imeText'\nIME position: $imePosition",
+    );
   }
 
   TextSelection documentToImeSelection(DocumentSelection docSelection) {
-    editorImeLog
-        .fine("Converting doc selection to ime selection: $docSelection");
+    editorImeLog.fine(
+      "Converting doc selection to ime selection: $docSelection",
+    );
     final selectionAffinity = _doc.getAffinityForSelection(docSelection);
     final startImePosition = _documentToImePosition(docSelection.base);
     final endImePosition = _documentToImePosition(docSelection.extent);
@@ -357,8 +387,9 @@ class DocumentImeSerializer {
   TextRange documentToImeRange(DocumentRange? documentRange) {
     editorImeLog.fine("Converting doc range to ime range: $documentRange");
     if (documentRange == null) {
-      editorImeLog
-          .fine("The document range is null. Returning an empty IME range.");
+      editorImeLog.fine(
+        "The document range is null. Returning an empty IME range.",
+      );
       return const TextRange(start: -1, end: -1);
     }
 
@@ -375,26 +406,30 @@ class DocumentImeSerializer {
   }
 
   TextPosition _documentToImePosition(DocumentPosition docPosition) {
-    editorImeLog
-        .fine("Converting DocumentPosition to IME TextPosition: $docPosition");
+    editorImeLog.fine(
+      "Converting DocumentPosition to IME TextPosition: $docPosition",
+    );
     final imeRange = docTextNodesToImeRanges[docPosition.nodeId];
     if (imeRange == null) {
       throw Exception(
-          "No such document position in the IME content: $docPosition");
+        "No such document position in the IME content: $docPosition",
+      );
     }
 
     final nodePosition = docPosition.nodePosition;
 
     if (nodePosition is UpstreamDownstreamNodePosition) {
       if (nodePosition.affinity == TextAffinity.upstream) {
-        editorImeLog
-            .fine("The doc position is an upstream position on a block.");
+        editorImeLog.fine(
+          "The doc position is an upstream position on a block.",
+        );
         // Return the text position before the special character,
         // e.g., "|~".
         return TextPosition(offset: imeRange.start);
       } else {
-        editorImeLog
-            .fine("The doc position is a downstream position on a block.");
+        editorImeLog.fine(
+          "The doc position is a downstream position on a block.",
+        );
         // Return the text position after the special character,
         // e.g., "~|".
         return TextPosition(offset: imeRange.start + 1);
@@ -403,17 +438,21 @@ class DocumentImeSerializer {
 
     if (nodePosition is TextNodePosition) {
       return TextPosition(
-          offset: imeRange.start +
-              (docPosition.nodePosition as TextNodePosition).offset);
+        offset:
+            imeRange.start +
+            (docPosition.nodePosition as TextNodePosition).offset,
+      );
     }
 
     throw Exception(
-        "Super Editor doesn't know how to convert a $nodePosition into an IME-compatible selection");
+      "Super Editor doesn't know how to convert a $nodePosition into an IME-compatible selection",
+    );
   }
 
   TextEditingValue toTextEditingValue() {
-    editorImeLog
-        .fine("Creating TextEditingValue from document. Selection: $selection");
+    editorImeLog.fine(
+      "Creating TextEditingValue from document. Selection: $selection",
+    );
     editorImeLog.fine("Text:\n'$imeText'");
     final imeSelection = documentToImeSelection(selection);
     editorImeLog.fine("Selection: $imeSelection");
@@ -428,8 +467,4 @@ class DocumentImeSerializer {
   }
 }
 
-enum PrependedCharacterPolicy {
-  automatic,
-  include,
-  exclude,
-}
+enum PrependedCharacterPolicy { automatic, include, exclude }

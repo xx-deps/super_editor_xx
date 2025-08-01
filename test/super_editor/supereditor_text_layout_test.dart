@@ -10,7 +10,9 @@ import 'supereditor_test_tools.dart';
 
 void main() {
   group('SuperEditor', () {
-    testWidgetsOnAllPlatforms('respects the OS text scaling preference', (tester) async {
+    testWidgetsOnAllPlatforms('respects the OS text scaling preference', (
+      tester,
+    ) async {
       // Pump an editor with a custom textScaleFactor.
       await tester
           .createDocument()
@@ -19,7 +21,9 @@ void main() {
             (superEditor) => MaterialApp(
               home: Scaffold(
                 body: MediaQuery(
-                  data: const MediaQueryData(textScaler: TextScaler.linear(1.5)),
+                  data: const MediaQueryData(
+                    textScaler: TextScaler.linear(1.5),
+                  ),
                   child: superEditor,
                 ),
               ),
@@ -31,25 +35,69 @@ void main() {
       expect(SuperTextInspector.findTextScaler().scale(1.0), 1.5);
     });
 
-    testWidgetsOnAllPlatforms('does not rebuild unmodified nodes', (tester) async {
+    testWidgetsOnAllPlatforms('does not rebuild unmodified nodes', (
+      tester,
+    ) async {
       final document = MutableDocument(
         nodes: [
-          ParagraphNode(id: "paragraph-1", text: AttributedText("Paragraph one")),
-          ParagraphNode(id: "paragraph-2", text: AttributedText("Paragraph two")),
-          ParagraphNode(id: "paragraph-3", text: AttributedText("Paragraph three")),
-          ListItemNode.unordered(id: "unordered-1", text: AttributedText("Unordered list item one")),
-          ListItemNode.unordered(id: "unordered-2", text: AttributedText("Unordered list item two")),
-          ListItemNode.unordered(id: "unordered-3", text: AttributedText("Unordered list item three")),
-          ListItemNode.ordered(id: "ordered-1", text: AttributedText("Ordered list item one")),
-          ListItemNode.ordered(id: "ordered-2", text: AttributedText("Ordered list item two")),
-          ListItemNode.ordered(id: "ordered-3", text: AttributedText("Ordered list item three")),
-          TaskNode(id: "task-1", text: AttributedText("Task one"), isComplete: false),
-          TaskNode(id: "task-2", text: AttributedText("Task two"), isComplete: false),
-          TaskNode(id: "task-3", text: AttributedText("Task three"), isComplete: false),
+          ParagraphNode(
+            id: "paragraph-1",
+            text: AttributedText("Paragraph one"),
+          ),
+          ParagraphNode(
+            id: "paragraph-2",
+            text: AttributedText("Paragraph two"),
+          ),
+          ParagraphNode(
+            id: "paragraph-3",
+            text: AttributedText("Paragraph three"),
+          ),
+          ListItemNode.unordered(
+            id: "unordered-1",
+            text: AttributedText("Unordered list item one"),
+          ),
+          ListItemNode.unordered(
+            id: "unordered-2",
+            text: AttributedText("Unordered list item two"),
+          ),
+          ListItemNode.unordered(
+            id: "unordered-3",
+            text: AttributedText("Unordered list item three"),
+          ),
+          ListItemNode.ordered(
+            id: "ordered-1",
+            text: AttributedText("Ordered list item one"),
+          ),
+          ListItemNode.ordered(
+            id: "ordered-2",
+            text: AttributedText("Ordered list item two"),
+          ),
+          ListItemNode.ordered(
+            id: "ordered-3",
+            text: AttributedText("Ordered list item three"),
+          ),
+          TaskNode(
+            id: "task-1",
+            text: AttributedText("Task one"),
+            isComplete: false,
+          ),
+          TaskNode(
+            id: "task-2",
+            text: AttributedText("Task two"),
+            isComplete: false,
+          ),
+          TaskNode(
+            id: "task-3",
+            text: AttributedText("Task three"),
+            isComplete: false,
+          ),
         ],
       );
       final composer = MutableDocumentComposer();
-      final editor = createDefaultDocumentEditor(document: document, composer: composer);
+      final editor = createDefaultDocumentEditor(
+        document: document,
+        composer: composer,
+      );
 
       // Keeps track of the build count for each node.
       Map<String, int> buildCountPerNode = {
@@ -75,9 +123,16 @@ void main() {
       );
 
       // Ensure each node was built a single time.
-      Map<String, int> newBuildCountPerNode = _findRebuildCountPerNode(document);
+      Map<String, int> newBuildCountPerNode = _findRebuildCountPerNode(
+        document,
+      );
       for (final pair in newBuildCountPerNode.entries) {
-        expect(pair.value, 1, reason: 'Node with id ${pair.key} was rebuilt more times than expected');
+        expect(
+          pair.value,
+          1,
+          reason:
+              'Node with id ${pair.key} was rebuilt more times than expected',
+        );
       }
 
       // Update the current build count to perform the subsequent expectations.
@@ -152,11 +207,17 @@ Map<String, int> _findRebuildCountPerNode(Document document) {
   for (final node in document) {
     final widget = SuperEditorInspector.findWidgetForComponent<Widget>(node.id);
 
-    final superTextState = (find
-            .descendant(of: find.byWidget(widget), matching: find.byType(SuperText))
-            .evaluate()
-            .first as StatefulElement)
-        .state as SuperTextState;
+    final superTextState =
+        (find
+                        .descendant(
+                          of: find.byWidget(widget),
+                          matching: find.byType(SuperText),
+                        )
+                        .evaluate()
+                        .first
+                    as StatefulElement)
+                .state
+            as SuperTextState;
 
     rebuildCountPerNode[node.id] = superTextState.textBuildCount;
   }
@@ -173,12 +234,18 @@ void _ensureOnlyExpectedNodesRebuilt({
   for (final pair in previousBuildCount.entries) {
     if (expectedRebuiltNodes.contains(pair.key)) {
       // Ensure that this node was rebuilt.
-      expect(currentBuildCount[pair.key], greaterThan(pair.value),
-          reason: 'Node with id ${pair.key} wasn\'t rebuilt when it should');
+      expect(
+        currentBuildCount[pair.key],
+        greaterThan(pair.value),
+        reason: 'Node with id ${pair.key} wasn\'t rebuilt when it should',
+      );
     } else {
       // Ensure that this node wasn't rebuilt.
-      expect(currentBuildCount[pair.key], equals(pair.value),
-          reason: 'Node with id ${pair.key} was rebuilt when it shouldn\'t');
+      expect(
+        currentBuildCount[pair.key],
+        equals(pair.value),
+        reason: 'Node with id ${pair.key} was rebuilt when it shouldn\'t',
+      );
     }
   }
 }

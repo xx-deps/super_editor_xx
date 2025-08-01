@@ -218,8 +218,10 @@ class ItemSelectionListState<T> extends State<ItemSelectionList<T>>
     }
 
     setState(() {
-      _activateItem(newActiveIndex,
-          animationDuration: const Duration(milliseconds: 100));
+      _activateItem(
+        newActiveIndex,
+        animationDuration: const Duration(milliseconds: 100),
+      );
     });
 
     return KeyEventResult.handled;
@@ -263,7 +265,7 @@ class ItemSelectionListState<T> extends State<ItemSelectionList<T>>
                           () => widget.onItemSelected(widget.items[i]),
                         ),
                       ),
-                    ]
+                    ],
                   ],
                 ),
               ),
@@ -277,16 +279,15 @@ class ItemSelectionListState<T> extends State<ItemSelectionList<T>>
   /// Builds a `Row` or `Column` which displays the items, depending
   /// whether the list is configured to be displayed horizontally or vertically.
   Widget _buildItemsLayout({required List<Widget> children}) {
-    return widget.axis == Axis.horizontal //
+    return widget.axis ==
+            Axis
+                .horizontal //
         ? Row(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: children,
           )
-        : Column(
-            mainAxisSize: MainAxisSize.min,
-            children: children,
-          );
+        : Column(mainAxisSize: MainAxisSize.min, children: children);
   }
 }
 
@@ -297,5 +298,10 @@ class ItemSelectionListState<T> extends State<ItemSelectionList<T>>
 /// The active item is the currently focused item in the list, which can be selected by pressing ENTER.
 ///
 /// The provided [onTap] must be called when the button is tapped.
-typedef SelectableListItemBuilder<T> = Widget Function(
-    BuildContext context, T item, bool isActive, VoidCallback onTap);
+typedef SelectableListItemBuilder<T> =
+    Widget Function(
+      BuildContext context,
+      T item,
+      bool isActive,
+      VoidCallback onTap,
+    );

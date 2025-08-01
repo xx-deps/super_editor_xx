@@ -5,14 +5,9 @@ class AxisOffset {
   static const zero = AxisOffset.symmetric(0);
 
   /// Equal leading/trailing edge spacing equal to `amount`.
-  const AxisOffset.symmetric(num amount)
-      : leading = amount,
-        trailing = amount;
+  const AxisOffset.symmetric(num amount) : leading = amount, trailing = amount;
 
-  const AxisOffset({
-    required this.leading,
-    required this.trailing,
-  });
+  const AxisOffset({required this.leading, required this.trailing});
 
   /// Distance from the leading edge of an axis-oriented area.
   final num leading;

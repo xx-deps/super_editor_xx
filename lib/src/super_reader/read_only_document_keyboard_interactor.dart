@@ -103,10 +103,11 @@ class ReadOnlyDocumentKeyboardInteractor extends StatelessWidget {
 ///
 /// It is possible that an action does nothing and then returns
 /// [ExecutionInstruction.haltExecution] to prevent further execution.
-typedef ReadOnlyDocumentKeyboardAction = ExecutionInstruction Function({
-  required SuperReaderContext documentContext,
-  required KeyEvent keyEvent,
-});
+typedef ReadOnlyDocumentKeyboardAction =
+    ExecutionInstruction Function({
+      required SuperReaderContext documentContext,
+      required KeyEvent keyEvent,
+    });
 
 /// Keyboard actions for the standard [SuperReader].
 final readOnlyDefaultKeyboardActions = <ReadOnlyDocumentKeyboardAction>[
@@ -137,10 +138,7 @@ final readOnlyDefaultKeyboardActions = <ReadOnlyDocumentKeyboardAction>[
 /// shift key (and triggers this shortcut), we want to remove the document selection
 /// if it's collapsed.
 final removeCollapsedSelectionWhenShiftIsReleased = createShortcut(
-  ({
-    required SuperReaderContext documentContext,
-    required KeyEvent keyEvent,
-  }) {
+  ({required SuperReaderContext documentContext, required KeyEvent keyEvent}) {
     final selection = documentContext.composer.selection;
     if (selection == null || !selection.isCollapsed) {
       return ExecutionInstruction.continueExecution;
@@ -148,9 +146,7 @@ final removeCollapsedSelectionWhenShiftIsReleased = createShortcut(
 
     // The selection is collapsed, and the shift key was released. We don't
     // want to retain the selection any longer. Remove it.
-    documentContext.editor.execute([
-      const ClearSelectionRequest(),
-    ]);
+    documentContext.editor.execute([const ClearSelectionRequest()]);
     return ExecutionInstruction.haltExecution;
   },
   keyPressedOrReleased: LogicalKeyboardKey.shift,
@@ -160,10 +156,7 @@ final removeCollapsedSelectionWhenShiftIsReleased = createShortcut(
 );
 
 final scrollUpWithArrowKey = createShortcut(
-  ({
-    required SuperReaderContext documentContext,
-    required KeyEvent keyEvent,
-  }) {
+  ({required SuperReaderContext documentContext, required KeyEvent keyEvent}) {
     documentContext.scroller.jumpBy(-20);
     return ExecutionInstruction.haltExecution;
   },
@@ -172,10 +165,7 @@ final scrollUpWithArrowKey = createShortcut(
 );
 
 final scrollDownWithArrowKey = createShortcut(
-  ({
-    required SuperReaderContext documentContext,
-    required KeyEvent keyEvent,
-  }) {
+  ({required SuperReaderContext documentContext, required KeyEvent keyEvent}) {
     documentContext.scroller.jumpBy(20);
     return ExecutionInstruction.haltExecution;
   },
@@ -183,69 +173,63 @@ final scrollDownWithArrowKey = createShortcut(
   isShiftPressed: false,
 );
 
-final expandSelectionWithLeftArrow = createShortcut(
-  ({
-    required SuperReaderContext documentContext,
-    required KeyEvent keyEvent,
-  }) {
-    if (defaultTargetPlatform == TargetPlatform.windows &&
-        HardwareKeyboard.instance.isAltPressed) {
-      return ExecutionInstruction.continueExecution;
-    }
+final expandSelectionWithLeftArrow = createShortcut(({
+  required SuperReaderContext documentContext,
+  required KeyEvent keyEvent,
+}) {
+  if (defaultTargetPlatform == TargetPlatform.windows &&
+      HardwareKeyboard.instance.isAltPressed) {
+    return ExecutionInstruction.continueExecution;
+  }
 
-    if (defaultTargetPlatform == TargetPlatform.linux &&
-        HardwareKeyboard.instance.isAltPressed &&
-        (keyEvent.logicalKey == LogicalKeyboardKey.arrowUp ||
-            keyEvent.logicalKey == LogicalKeyboardKey.arrowDown)) {
-      return ExecutionInstruction.continueExecution;
-    }
+  if (defaultTargetPlatform == TargetPlatform.linux &&
+      HardwareKeyboard.instance.isAltPressed &&
+      (keyEvent.logicalKey == LogicalKeyboardKey.arrowUp ||
+          keyEvent.logicalKey == LogicalKeyboardKey.arrowDown)) {
+    return ExecutionInstruction.continueExecution;
+  }
 
-    // Move the caret left/upstream.
-    final didMove = moveCaretUpstream(
-      editor: documentContext.editor,
-      documentLayout: documentContext.documentLayout,
-      movementModifier: _getHorizontalMovementModifier(keyEvent),
-      retainCollapsedSelection: HardwareKeyboard.instance.isShiftPressed,
-    );
+  // Move the caret left/upstream.
+  final didMove = moveCaretUpstream(
+    editor: documentContext.editor,
+    documentLayout: documentContext.documentLayout,
+    movementModifier: _getHorizontalMovementModifier(keyEvent),
+    retainCollapsedSelection: HardwareKeyboard.instance.isShiftPressed,
+  );
 
-    return didMove
-        ? ExecutionInstruction.haltExecution
-        : ExecutionInstruction.continueExecution;
-  },
-  keyPressedOrReleased: LogicalKeyboardKey.arrowLeft,
-);
+  return didMove
+      ? ExecutionInstruction.haltExecution
+      : ExecutionInstruction.continueExecution;
+}, keyPressedOrReleased: LogicalKeyboardKey.arrowLeft);
 
-final expandSelectionWithRightArrow = createShortcut(
-  ({
-    required SuperReaderContext documentContext,
-    required KeyEvent keyEvent,
-  }) {
-    if (defaultTargetPlatform == TargetPlatform.windows &&
-        HardwareKeyboard.instance.isAltPressed) {
-      return ExecutionInstruction.continueExecution;
-    }
+final expandSelectionWithRightArrow = createShortcut(({
+  required SuperReaderContext documentContext,
+  required KeyEvent keyEvent,
+}) {
+  if (defaultTargetPlatform == TargetPlatform.windows &&
+      HardwareKeyboard.instance.isAltPressed) {
+    return ExecutionInstruction.continueExecution;
+  }
 
-    if (defaultTargetPlatform == TargetPlatform.linux &&
-        HardwareKeyboard.instance.isAltPressed &&
-        (keyEvent.logicalKey == LogicalKeyboardKey.arrowUp ||
-            keyEvent.logicalKey == LogicalKeyboardKey.arrowDown)) {
-      return ExecutionInstruction.continueExecution;
-    }
+  if (defaultTargetPlatform == TargetPlatform.linux &&
+      HardwareKeyboard.instance.isAltPressed &&
+      (keyEvent.logicalKey == LogicalKeyboardKey.arrowUp ||
+          keyEvent.logicalKey == LogicalKeyboardKey.arrowDown)) {
+    return ExecutionInstruction.continueExecution;
+  }
 
-    // Move the caret right/downstream.
-    final didMove = moveCaretDownstream(
-      editor: documentContext.editor,
-      documentLayout: documentContext.documentLayout,
-      movementModifier: _getHorizontalMovementModifier(keyEvent),
-      retainCollapsedSelection: HardwareKeyboard.instance.isShiftPressed,
-    );
+  // Move the caret right/downstream.
+  final didMove = moveCaretDownstream(
+    editor: documentContext.editor,
+    documentLayout: documentContext.documentLayout,
+    movementModifier: _getHorizontalMovementModifier(keyEvent),
+    retainCollapsedSelection: HardwareKeyboard.instance.isShiftPressed,
+  );
 
-    return didMove
-        ? ExecutionInstruction.haltExecution
-        : ExecutionInstruction.continueExecution;
-  },
-  keyPressedOrReleased: LogicalKeyboardKey.arrowRight,
-);
+  return didMove
+      ? ExecutionInstruction.haltExecution
+      : ExecutionInstruction.continueExecution;
+}, keyPressedOrReleased: LogicalKeyboardKey.arrowRight);
 
 MovementModifier? _getHorizontalMovementModifier(KeyEvent keyEvent) {
   if ((defaultTargetPlatform == TargetPlatform.windows ||
@@ -263,67 +247,58 @@ MovementModifier? _getHorizontalMovementModifier(KeyEvent keyEvent) {
   return null;
 }
 
-final expandSelectionWithUpArrow = createShortcut(
-  ({
-    required SuperReaderContext documentContext,
-    required KeyEvent keyEvent,
-  }) {
-    if (defaultTargetPlatform == TargetPlatform.windows &&
-        HardwareKeyboard.instance.isAltPressed) {
-      return ExecutionInstruction.continueExecution;
-    }
+final expandSelectionWithUpArrow = createShortcut(({
+  required SuperReaderContext documentContext,
+  required KeyEvent keyEvent,
+}) {
+  if (defaultTargetPlatform == TargetPlatform.windows &&
+      HardwareKeyboard.instance.isAltPressed) {
+    return ExecutionInstruction.continueExecution;
+  }
 
-    if (defaultTargetPlatform == TargetPlatform.linux &&
-        HardwareKeyboard.instance.isAltPressed) {
-      return ExecutionInstruction.continueExecution;
-    }
+  if (defaultTargetPlatform == TargetPlatform.linux &&
+      HardwareKeyboard.instance.isAltPressed) {
+    return ExecutionInstruction.continueExecution;
+  }
 
-    final didMove = moveCaretUp(
-      editor: documentContext.editor,
-      documentLayout: documentContext.documentLayout,
-      retainCollapsedSelection: HardwareKeyboard.instance.isShiftPressed,
-    );
+  final didMove = moveCaretUp(
+    editor: documentContext.editor,
+    documentLayout: documentContext.documentLayout,
+    retainCollapsedSelection: HardwareKeyboard.instance.isShiftPressed,
+  );
 
-    return didMove
-        ? ExecutionInstruction.haltExecution
-        : ExecutionInstruction.continueExecution;
-  },
-  keyPressedOrReleased: LogicalKeyboardKey.arrowUp,
-);
+  return didMove
+      ? ExecutionInstruction.haltExecution
+      : ExecutionInstruction.continueExecution;
+}, keyPressedOrReleased: LogicalKeyboardKey.arrowUp);
 
-final expandSelectionWithDownArrow = createShortcut(
-  ({
-    required SuperReaderContext documentContext,
-    required KeyEvent keyEvent,
-  }) {
-    if (defaultTargetPlatform == TargetPlatform.windows &&
-        HardwareKeyboard.instance.isAltPressed) {
-      return ExecutionInstruction.continueExecution;
-    }
+final expandSelectionWithDownArrow = createShortcut(({
+  required SuperReaderContext documentContext,
+  required KeyEvent keyEvent,
+}) {
+  if (defaultTargetPlatform == TargetPlatform.windows &&
+      HardwareKeyboard.instance.isAltPressed) {
+    return ExecutionInstruction.continueExecution;
+  }
 
-    if (defaultTargetPlatform == TargetPlatform.linux &&
-        HardwareKeyboard.instance.isAltPressed) {
-      return ExecutionInstruction.continueExecution;
-    }
+  if (defaultTargetPlatform == TargetPlatform.linux &&
+      HardwareKeyboard.instance.isAltPressed) {
+    return ExecutionInstruction.continueExecution;
+  }
 
-    final didMove = moveCaretDown(
-      editor: documentContext.editor,
-      documentLayout: documentContext.documentLayout,
-      retainCollapsedSelection: HardwareKeyboard.instance.isShiftPressed,
-    );
+  final didMove = moveCaretDown(
+    editor: documentContext.editor,
+    documentLayout: documentContext.documentLayout,
+    retainCollapsedSelection: HardwareKeyboard.instance.isShiftPressed,
+  );
 
-    return didMove
-        ? ExecutionInstruction.haltExecution
-        : ExecutionInstruction.continueExecution;
-  },
-  keyPressedOrReleased: LogicalKeyboardKey.arrowDown,
-);
+  return didMove
+      ? ExecutionInstruction.haltExecution
+      : ExecutionInstruction.continueExecution;
+}, keyPressedOrReleased: LogicalKeyboardKey.arrowDown);
 
 final expandSelectionToLineStartWithHomeOnWindowsAndLinux = createShortcut(
-  ({
-    required SuperReaderContext documentContext,
-    required KeyEvent keyEvent,
-  }) {
+  ({required SuperReaderContext documentContext, required KeyEvent keyEvent}) {
     final didMove = moveCaretUpstream(
       editor: documentContext.editor,
       documentLayout: documentContext.documentLayout,
@@ -340,15 +315,12 @@ final expandSelectionToLineStartWithHomeOnWindowsAndLinux = createShortcut(
   platforms: {
     TargetPlatform.windows,
     TargetPlatform.linux,
-    TargetPlatform.fuchsia
+    TargetPlatform.fuchsia,
   },
 );
 
 final expandSelectionToLineEndWithEndOnWindowsAndLinux = createShortcut(
-  ({
-    required SuperReaderContext documentContext,
-    required KeyEvent keyEvent,
-  }) {
+  ({required SuperReaderContext documentContext, required KeyEvent keyEvent}) {
     final didMove = moveCaretDownstream(
       editor: documentContext.editor,
       documentLayout: documentContext.documentLayout,
@@ -365,15 +337,12 @@ final expandSelectionToLineEndWithEndOnWindowsAndLinux = createShortcut(
   platforms: {
     TargetPlatform.windows,
     TargetPlatform.linux,
-    TargetPlatform.fuchsia
+    TargetPlatform.fuchsia,
   },
 );
 
 final expandSelectionToLineStartWithCtrlAOnWindowsAndLinux = createShortcut(
-  ({
-    required SuperReaderContext documentContext,
-    required KeyEvent keyEvent,
-  }) {
+  ({required SuperReaderContext documentContext, required KeyEvent keyEvent}) {
     final didMove = moveCaretUpstream(
       editor: documentContext.editor,
       documentLayout: documentContext.documentLayout,
@@ -391,15 +360,12 @@ final expandSelectionToLineStartWithCtrlAOnWindowsAndLinux = createShortcut(
   platforms: {
     TargetPlatform.windows,
     TargetPlatform.linux,
-    TargetPlatform.fuchsia
+    TargetPlatform.fuchsia,
   },
 );
 
 final expandSelectionToLineEndWithCtrlEOnWindowsAndLinux = createShortcut(
-  ({
-    required SuperReaderContext documentContext,
-    required KeyEvent keyEvent,
-  }) {
+  ({required SuperReaderContext documentContext, required KeyEvent keyEvent}) {
     final didMove = moveCaretDownstream(
       editor: documentContext.editor,
       documentLayout: documentContext.documentLayout,
@@ -417,15 +383,12 @@ final expandSelectionToLineEndWithCtrlEOnWindowsAndLinux = createShortcut(
   platforms: {
     TargetPlatform.windows,
     TargetPlatform.linux,
-    TargetPlatform.fuchsia
+    TargetPlatform.fuchsia,
   },
 );
 
 final selectAllWhenCmdAIsPressedOnMac = createShortcut(
-  ({
-    required SuperReaderContext documentContext,
-    required KeyEvent keyEvent,
-  }) {
+  ({required SuperReaderContext documentContext, required KeyEvent keyEvent}) {
     final didSelectAll = selectAll(documentContext.editor);
     return didSelectAll
         ? ExecutionInstruction.haltExecution
@@ -437,10 +400,7 @@ final selectAllWhenCmdAIsPressedOnMac = createShortcut(
 );
 
 final selectAllWhenCtlAIsPressedOnWindowsAndLinux = createShortcut(
-  ({
-    required SuperReaderContext documentContext,
-    required KeyEvent keyEvent,
-  }) {
+  ({required SuperReaderContext documentContext, required KeyEvent keyEvent}) {
     final didSelectAll = selectAll(documentContext.editor);
     return didSelectAll
         ? ExecutionInstruction.haltExecution
@@ -457,10 +417,7 @@ final selectAllWhenCtlAIsPressedOnWindowsAndLinux = createShortcut(
 );
 
 final copyWhenCmdCIsPressedOnMac = createShortcut(
-  ({
-    required SuperReaderContext documentContext,
-    required KeyEvent keyEvent,
-  }) {
+  ({required SuperReaderContext documentContext, required KeyEvent keyEvent}) {
     if (documentContext.composer.selection == null) {
       return ExecutionInstruction.continueExecution;
     }
@@ -482,10 +439,7 @@ final copyWhenCmdCIsPressedOnMac = createShortcut(
 );
 
 final copyWhenCtlCIsPressedOnWindowsAndLinux = createShortcut(
-  ({
-    required SuperReaderContext documentContext,
-    required KeyEvent keyEvent,
-  }) {
+  ({required SuperReaderContext documentContext, required KeyEvent keyEvent}) {
     if (documentContext.composer.selection == null) {
       return ExecutionInstruction.continueExecution;
     }
@@ -536,12 +490,14 @@ ReadOnlyDocumentKeyboardAction createShortcut(
 }) {
   if (onKeyUp == false && onKeyDown == false) {
     throw Exception(
-        "Invalid shortcut definition. Both onKeyUp and onKeyDown are false. This shortcut will never be triggered.");
+      "Invalid shortcut definition. Both onKeyUp and onKeyDown are false. This shortcut will never be triggered.",
+    );
   }
 
-  return (
-      {required SuperReaderContext documentContext,
-      required KeyEvent keyEvent}) {
+  return ({
+    required SuperReaderContext documentContext,
+    required KeyEvent keyEvent,
+  }) {
     if (keyEvent is KeyUpEvent && !onKeyUp) {
       return ExecutionInstruction.continueExecution;
     }

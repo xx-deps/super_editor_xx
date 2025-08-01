@@ -8,7 +8,9 @@ void main() {
     group('multi line', () {
       const multilineText = 'First Line\nSecond Line\nThird Line\nFourth Line';
 
-      testWidgetsOnAllPlatforms('makes scrollview fill all the field width', (tester) async {
+      testWidgetsOnAllPlatforms('makes scrollview fill all the field width', (
+        tester,
+      ) async {
         await _pumpScaffold(
           tester,
           children: [
@@ -21,8 +23,12 @@ void main() {
         );
         await tester.pump();
 
-        final textfieldWidth = tester.getSize(find.byType(SuperTextField)).width;
-        final scrollViewWidth = tester.getSize(find.byType(SingleChildScrollView)).width;
+        final textfieldWidth = tester
+            .getSize(find.byType(SuperTextField))
+            .width;
+        final scrollViewWidth = tester
+            .getSize(find.byType(SingleChildScrollView))
+            .width;
 
         // Ensure the scrollview occupies all the available width rathen than
         // just width of the text.
@@ -52,10 +58,7 @@ Widget _buildSuperTextField({
       minLines: 1,
       lineHeight: 20,
       textStyleBuilder: (_) {
-        return const TextStyle(
-          color: Colors.black,
-          fontSize: 20,
-        );
+        return const TextStyle(color: Colors.black, fontSize: 20);
       },
     ),
   );
@@ -68,9 +71,7 @@ Future<void> _pumpScaffold(
   await tester.pumpWidget(
     MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: Column(children: children),
-      ),
+      home: Scaffold(body: Column(children: children)),
     ),
   );
 }

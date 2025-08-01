@@ -91,53 +91,57 @@ void main() {
       expect(_isCaretVisible(tester), true);
     });
 
-    testWidgetsOnAllPlatforms("is NOT displayed without a text selection", (tester) async {
-      await tester.pumpWidget(
-        _buildScaffold(
-          child: const SuperTextField(),
-        ),
-      );
+    testWidgetsOnAllPlatforms("is NOT displayed without a text selection", (
+      tester,
+    ) async {
+      await tester.pumpWidget(_buildScaffold(child: const SuperTextField()));
       await tester.pump();
 
       expect(_isCaretPresent(tester), isFalse);
     });
 
-    testWidgetsOnAllPlatforms("is displayed with focus and a collapsed text selection", (tester) async {
-      final controller = AttributedTextEditingController(
-        selection: const TextSelection.collapsed(offset: 0),
-      );
+    testWidgetsOnAllPlatforms(
+      "is displayed with focus and a collapsed text selection",
+      (tester) async {
+        final controller = AttributedTextEditingController(
+          selection: const TextSelection.collapsed(offset: 0),
+        );
 
-      await tester.pumpWidget(
-        _buildScaffold(
-          child: SuperTextField(
-            focusNode: FocusNode()..requestFocus(),
-            textController: controller,
+        await tester.pumpWidget(
+          _buildScaffold(
+            child: SuperTextField(
+              focusNode: FocusNode()..requestFocus(),
+              textController: controller,
+            ),
           ),
-        ),
-      );
-      await tester.pump();
+        );
+        await tester.pump();
 
-      expect(_isCaretPresent(tester), isTrue);
-    });
+        expect(_isCaretPresent(tester), isTrue);
+      },
+    );
 
-    testWidgetsOnMobile("is NOT displayed with focus and an expanded text selection", (tester) async {
-      final controller = AttributedTextEditingController(
-        text: AttributedText("Hello, world!"),
-        selection: const TextSelection(baseOffset: 0, extentOffset: 5),
-      );
+    testWidgetsOnMobile(
+      "is NOT displayed with focus and an expanded text selection",
+      (tester) async {
+        final controller = AttributedTextEditingController(
+          text: AttributedText("Hello, world!"),
+          selection: const TextSelection(baseOffset: 0, extentOffset: 5),
+        );
 
-      await tester.pumpWidget(
-        _buildScaffold(
-          child: SuperTextField(
-            focusNode: FocusNode()..requestFocus(),
-            textController: controller,
+        await tester.pumpWidget(
+          _buildScaffold(
+            child: SuperTextField(
+              focusNode: FocusNode()..requestFocus(),
+              textController: controller,
+            ),
           ),
-        ),
-      );
-      await tester.pump();
+        );
+        await tester.pump();
 
-      expect(_isCaretPresent(tester), isFalse);
-    });
+        expect(_isCaretPresent(tester), isFalse);
+      },
+    );
 
     testWidgetsOnAllPlatforms("uses the given caretStyle", (tester) async {
       final controller = AttributedTextEditingController(
@@ -161,14 +165,18 @@ void main() {
       );
       await tester.pump();
 
-      final caret = tester.widget<TextLayoutCaret>(find.byType(TextLayoutCaret));
+      final caret = tester.widget<TextLayoutCaret>(
+        find.byType(TextLayoutCaret),
+      );
 
       expect(caret.style.color, caretStyle.color);
       expect(caret.style.width, caretStyle.width);
       expect(caret.style.borderRadius, caretStyle.borderRadius);
     });
 
-    testWidgetsOnMobile("does not blink while dragging the caret", (tester) async {
+    testWidgetsOnMobile("does not blink while dragging the caret", (
+      tester,
+    ) async {
       addTearDown(() => BlinkController.indeterminateAnimationsEnabled = false);
 
       final controller = AttributedTextEditingController(
@@ -178,11 +186,7 @@ void main() {
       );
 
       await tester.pumpWidget(
-        _buildScaffold(
-          child: SuperTextField(
-            textController: controller,
-          ),
-        ),
+        _buildScaffold(child: SuperTextField(textController: controller)),
       );
 
       await tester.placeCaretInSuperTextField(0);
@@ -193,7 +197,8 @@ void main() {
       // Drag caret by a small distance so that we trigger a user drag event.
       // This drag event is continued down below so that we can check for caret blinking
       // during a user drag.
-      final TestGesture gesture = await tester.dragCaretByDistanceInSuperTextField(const Offset(100, 100));
+      final TestGesture gesture = await tester
+          .dragCaretByDistanceInSuperTextField(const Offset(100, 100));
       addTearDown(() => gesture.removePointer());
 
       // Check for the caret visibility across 3-4 frames and ensure it doesn't blink.
@@ -220,7 +225,9 @@ void main() {
       expect(_isCaretVisible(tester), true);
     });
 
-    testWidgetsOnMobile("does not blink while dragging expanded handles", (tester) async {
+    testWidgetsOnMobile("does not blink while dragging expanded handles", (
+      tester,
+    ) async {
       addTearDown(() => BlinkController.indeterminateAnimationsEnabled = false);
 
       final controller = AttributedTextEditingController(
@@ -230,11 +237,7 @@ void main() {
       );
 
       await tester.pumpWidget(
-        _buildScaffold(
-          child: SuperTextField(
-            textController: controller,
-          ),
-        ),
+        _buildScaffold(child: SuperTextField(textController: controller)),
       );
 
       await tester.doubleTapAtSuperTextField(0);
@@ -245,8 +248,10 @@ void main() {
       // Drag the upstream selection handle by a small distance so that we trigger a
       // user drag event. This drag event is continued down below so that we can check
       // for caret blinking during a user drag.
-      final TestGesture upstreamHandleGesture =
-          await tester.dragUpstreamMobileHandleByDistanceInSuperTextField(const Offset(100, 100));
+      final TestGesture upstreamHandleGesture = await tester
+          .dragUpstreamMobileHandleByDistanceInSuperTextField(
+            const Offset(100, 100),
+          );
       addTearDown(() => upstreamHandleGesture.removePointer());
 
       // Check for the caret visibility across 3-4 frames and ensure it doesn't blink.
@@ -280,8 +285,10 @@ void main() {
       // Drag the downstream selection handle by a small distance so that we trigger a
       // user drag event. This drag event is continued down below so that we can check
       // for caret blinking during a user drag.
-      final TestGesture downstreamHandleGesture =
-          await tester.dragDownstreamMobileHandleByDistanceInSuperTextField(const Offset(100, 100));
+      final TestGesture downstreamHandleGesture = await tester
+          .dragDownstreamMobileHandleByDistanceInSuperTextField(
+            const Offset(100, 100),
+          );
       addTearDown(() => downstreamHandleGesture.removePointer());
 
       // Check for the caret visibility across 3-4 frames and ensure it doesn't blink.
@@ -308,7 +315,9 @@ void main() {
       expect(_isCaretVisible(tester), true);
     });
 
-    testWidgetsOnAndroid("does not blink while dragging collapsed handle", (tester) async {
+    testWidgetsOnAndroid("does not blink while dragging collapsed handle", (
+      tester,
+    ) async {
       addTearDown(() => BlinkController.indeterminateAnimationsEnabled = false);
 
       final controller = AttributedTextEditingController(
@@ -318,11 +327,7 @@ void main() {
       );
 
       await tester.pumpWidget(
-        _buildScaffold(
-          child: SuperTextField(
-            textController: controller,
-          ),
-        ),
+        _buildScaffold(child: SuperTextField(textController: controller)),
       );
 
       await tester.placeCaretInSuperTextField(0);
@@ -333,8 +338,10 @@ void main() {
       // Drag the collapsed handle by a small distance so that we trigger a
       // user drag event. This drag event is continued down below so that we
       // can check for caret blinking during a user drag.
-      final TestGesture gesture =
-          await tester.dragAndroidCollapsedHandleByDistanceInSuperTextField(const Offset(100, 100));
+      final TestGesture gesture = await tester
+          .dragAndroidCollapsedHandleByDistanceInSuperTextField(
+            const Offset(100, 100),
+          );
       addTearDown(() => gesture.removePointer());
 
       // Check for the caret visibility across 3-4 frames and ensure it doesn't blink.
@@ -363,16 +370,9 @@ void main() {
   });
 }
 
-Widget _buildScaffold({
-  required Widget child,
-}) {
+Widget _buildScaffold({required Widget child}) {
   return MaterialApp(
-    home: Scaffold(
-      body: SizedBox(
-        width: 300,
-        child: child,
-      ),
-    ),
+    home: Scaffold(body: SizedBox(width: 300, child: child)),
   );
 }
 
@@ -381,12 +381,16 @@ bool _isCaretPresent(WidgetTester tester) {
   if (caretMatches.isEmpty) {
     return false;
   }
-  final caretState = (caretMatches.single as StatefulElement).state as TextLayoutCaretState;
+  final caretState =
+      (caretMatches.single as StatefulElement).state as TextLayoutCaretState;
   return caretState.isCaretPresent;
 }
 
 bool _isCaretVisible(WidgetTester tester) {
-  final customPaint = find.byWidgetPredicate((widget) => widget is CustomPaint && widget.painter is CaretPainter);
-  final caretPainter = tester.widget<CustomPaint>(customPaint.last).painter as CaretPainter;
+  final customPaint = find.byWidgetPredicate(
+    (widget) => widget is CustomPaint && widget.painter is CaretPainter,
+  );
+  final caretPainter =
+      tester.widget<CustomPaint>(customPaint.last).painter as CaretPainter;
   return caretPainter.blinkController!.opacity == 1.0;
 }

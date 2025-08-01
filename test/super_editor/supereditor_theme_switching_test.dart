@@ -11,7 +11,10 @@ void main() {
     testWidgetsOnArbitraryDesktop('switches caret color', (tester) async {
       final brightnessNotifier = ValueNotifier<Brightness>(Brightness.light);
 
-      await _pumpThemeSwitchingTestApp(tester, brightnessNotifier: brightnessNotifier);
+      await _pumpThemeSwitchingTestApp(
+        tester,
+        brightnessNotifier: brightnessNotifier,
+      );
 
       // Place the caret at the beginning of the paragraph.
       await tester.placeCaretInParagraph('1', 0);
@@ -27,10 +30,15 @@ void main() {
       expect(_findDesktopCaretColor(tester), Colors.red.shade500);
     });
 
-    testWidgetsOnArbitraryDesktop('switches caret color after typing', (tester) async {
+    testWidgetsOnArbitraryDesktop('switches caret color after typing', (
+      tester,
+    ) async {
       final brightnessNotifier = ValueNotifier<Brightness>(Brightness.light);
 
-      await _pumpThemeSwitchingTestApp(tester, brightnessNotifier: brightnessNotifier);
+      await _pumpThemeSwitchingTestApp(
+        tester,
+        brightnessNotifier: brightnessNotifier,
+      );
 
       // Place the caret at the beginning of the paragraph.
       await tester.placeCaretInParagraph('1', 0);
@@ -72,9 +80,7 @@ Future<void> _pumpThemeSwitchingTestApp(
           valueListenable: brightnessNotifier,
           builder: (context, brightness, child) {
             return Theme(
-              data: ThemeData(
-                brightness: brightness,
-              ),
+              data: ThemeData(brightness: brightness),
               child: SuperEditor(
                 editor: editor,
                 documentOverlayBuilders: [
@@ -84,9 +90,11 @@ Future<void> _pumpThemeSwitchingTestApp(
                   ),
                   DefaultCaretOverlayBuilder(
                     caretStyle: CaretStyle(
-                      color: brightness == Brightness.light ? Colors.green : Colors.red,
+                      color: brightness == Brightness.light
+                          ? Colors.green
+                          : Colors.red,
                     ),
-                  )
+                  ),
                 ],
               ),
             );

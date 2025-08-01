@@ -43,652 +43,790 @@ void main() {
         text = SuperEditorInspector.findTextInComponent("1");
 
         expect(text.toPlainText(), "https://www.google.com ");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
-              start: 0,
-              end: text.length - 2,
+        expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
+          AttributionSpan(
+            attribution: LinkAttribution.fromUri(
+              Uri.parse("https://www.google.com"),
             ),
-          },
-        );
-      });
-
-      testWidgetsOnAllPlatforms('when pressing ENTER at the end of a paragraph', (tester) async {
-        final textContext = await tester //
-            .createDocument()
-            .withSingleEmptyParagraph()
-            .withInputSource(TextInputSource.ime)
-            .pump();
-
-        // Place the caret at the beginning of the empty document.
-        await tester.placeCaretInParagraph("1", 0);
-
-        // Type a URL. It shouldn't linkify until the user presses ENTER.
-        await tester.typeImeText("https://www.google.com");
-
-        // Ensure it's not linkified yet.
-        var text = SuperEditorInspector.findTextInComponent("1");
-
-        expect(text.toPlainText(), "https://www.google.com");
-        expect(
-          text.getAttributionSpansInRange(
-            attributionFilter: (attribution) => true,
-            range: SpanRange(0, text.length - 1),
+            start: 0,
+            end: text.length - 2,
           ),
-          isEmpty,
-        );
-
-        // Press enter to linkify the URL and insert a new paragraph.
-        await tester.pressEnter();
-
-        // Ensure it's linkified.
-        text = SuperEditorInspector.findTextInComponent("1");
-
-        expect(text.toPlainText(), "https://www.google.com");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
-              start: 0,
-              end: text.length - 1,
-            ),
-          },
-        );
-
-        // Ensure we added a new empty paragraph.
-        expect(textContext.document.nodeCount, 2);
-        expect(textContext.document.getNodeAt(1)!, isA<ParagraphNode>());
-        expect((textContext.document.getNodeAt(1)! as ParagraphNode).text.toPlainText(), "");
+        });
       });
 
-      testWidgetsOnAllPlatforms('when pressing ENTER at the middle of a paragraph', (tester) async {
-        final textContext = await tester //
-            .createDocument()
-            .fromMarkdown('Before link after link')
-            .withInputSource(TextInputSource.ime)
-            .pump();
+      testWidgetsOnAllPlatforms(
+        'when pressing ENTER at the end of a paragraph',
+        (tester) async {
+          final textContext =
+              await tester //
+                  .createDocument()
+                  .withSingleEmptyParagraph()
+                  .withInputSource(TextInputSource.ime)
+                  .pump();
 
-        final nodeId = textContext.document.first.id;
+          // Place the caret at the beginning of the empty document.
+          await tester.placeCaretInParagraph("1", 0);
 
-        // Place the caret at "Before link |after link".
-        await tester.placeCaretInParagraph(nodeId, 12);
+          // Type a URL. It shouldn't linkify until the user presses ENTER.
+          await tester.typeImeText("https://www.google.com");
 
-        // Type a URL. It shouldn't linkify until the user presses ENTER.
-        await tester.typeImeText("https://www.google.com");
+          // Ensure it's not linkified yet.
+          var text = SuperEditorInspector.findTextInComponent("1");
 
-        // Ensure it's not linkified yet.
-        var text = SuperEditorInspector.findTextInComponent(nodeId);
-
-        expect(text.toPlainText(), "Before link https://www.google.comafter link");
-        expect(
-          text.getAttributionSpansInRange(
-            attributionFilter: (attribution) => true,
-            range: const SpanRange(12, 34),
-          ),
-          isEmpty,
-        );
-
-        // Press enter to linkify the URL and split the paragraph.
-        await tester.pressEnter();
-
-        // Ensure it's linkified.
-        text = SuperEditorInspector.findTextInComponent(nodeId);
-
-        expect(text.toPlainText(), "Before link https://www.google.com");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
-              start: 12,
-              end: text.length - 1,
+          expect(text.toPlainText(), "https://www.google.com");
+          expect(
+            text.getAttributionSpansInRange(
+              attributionFilter: (attribution) => true,
+              range: SpanRange(0, text.length - 1),
             ),
-          },
-        );
+            isEmpty,
+          );
 
-        // Ensure we split the paragraph.
-        expect(textContext.document.nodeCount, 2);
-        expect(textContext.document.getNodeAt(1)!, isA<ParagraphNode>());
-        expect((textContext.document.getNodeAt(1)! as ParagraphNode).text.toPlainText(), "after link");
-      });
+          // Press enter to linkify the URL and insert a new paragraph.
+          await tester.pressEnter();
 
-      testWidgetsOnAndroid('when pressing the newline button on the software keyboard at the end of a paragraph',
-          (tester) async {
-        final textContext = await tester //
-            .createDocument()
-            .withSingleEmptyParagraph()
-            .withInputSource(TextInputSource.ime)
-            .pump();
+          // Ensure it's linkified.
+          text = SuperEditorInspector.findTextInComponent("1");
 
-        // Place the caret at the beginning of the empty document.
-        await tester.placeCaretInParagraph("1", 0);
+          expect(text.toPlainText(), "https://www.google.com");
+          expect(
+            text.getAttributionSpansByFilter((a) => a is LinkAttribution),
+            {
+              AttributionSpan(
+                attribution: LinkAttribution.fromUri(
+                  Uri.parse("https://www.google.com"),
+                ),
+                start: 0,
+                end: text.length - 1,
+              ),
+            },
+          );
 
-        // Type a URL. It shouldn't linkify until the user presses ENTER.
-        await tester.typeImeText("https://www.google.com");
+          // Ensure we added a new empty paragraph.
+          expect(textContext.document.nodeCount, 2);
+          expect(textContext.document.getNodeAt(1)!, isA<ParagraphNode>());
+          expect(
+            (textContext.document.getNodeAt(1)! as ParagraphNode).text
+                .toPlainText(),
+            "",
+          );
+        },
+      );
 
-        // Ensure it's not linkified yet.
-        var text = SuperEditorInspector.findTextInComponent("1");
+      testWidgetsOnAllPlatforms(
+        'when pressing ENTER at the middle of a paragraph',
+        (tester) async {
+          final textContext =
+              await tester //
+                  .createDocument()
+                  .fromMarkdown('Before link after link')
+                  .withInputSource(TextInputSource.ime)
+                  .pump();
 
-        expect(text.toPlainText(), "https://www.google.com");
-        expect(
-          text.getAttributionSpansInRange(
-            attributionFilter: (attribution) => true,
-            range: SpanRange(0, text.length - 1),
-          ),
-          isEmpty,
-        );
+          final nodeId = textContext.document.first.id;
 
-        // Press enter to linkify the URL and insert a new paragraph.
-        // On Android, pressing ENTER generates a "\n" insertion.
-        await tester.typeImeText('\n');
+          // Place the caret at "Before link |after link".
+          await tester.placeCaretInParagraph(nodeId, 12);
 
-        // Ensure it's linkified.
-        text = SuperEditorInspector.findTextInComponent("1");
+          // Type a URL. It shouldn't linkify until the user presses ENTER.
+          await tester.typeImeText("https://www.google.com");
 
-        expect(text.toPlainText(), "https://www.google.com");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
-              start: 0,
-              end: text.length - 1,
+          // Ensure it's not linkified yet.
+          var text = SuperEditorInspector.findTextInComponent(nodeId);
+
+          expect(
+            text.toPlainText(),
+            "Before link https://www.google.comafter link",
+          );
+          expect(
+            text.getAttributionSpansInRange(
+              attributionFilter: (attribution) => true,
+              range: const SpanRange(12, 34),
             ),
-          },
-        );
+            isEmpty,
+          );
 
-        // Ensure we added a new empty paragraph.
-        expect(textContext.document.nodeCount, 2);
-        expect(textContext.document.getNodeAt(1)!, isA<ParagraphNode>());
-        expect((textContext.document.getNodeAt(1)! as ParagraphNode).text.toPlainText(), "");
-      });
+          // Press enter to linkify the URL and split the paragraph.
+          await tester.pressEnter();
 
-      testWidgetsOnAndroid('when pressing the newline button on the software keyboard at the middle of a paragraph',
-          (tester) async {
-        final textContext = await tester //
-            .createDocument()
-            .fromMarkdown('Before link after link')
-            .withInputSource(TextInputSource.ime)
-            .pump();
+          // Ensure it's linkified.
+          text = SuperEditorInspector.findTextInComponent(nodeId);
 
-        final nodeId = textContext.document.first.id;
+          expect(text.toPlainText(), "Before link https://www.google.com");
+          expect(
+            text.getAttributionSpansByFilter((a) => a is LinkAttribution),
+            {
+              AttributionSpan(
+                attribution: LinkAttribution.fromUri(
+                  Uri.parse("https://www.google.com"),
+                ),
+                start: 12,
+                end: text.length - 1,
+              ),
+            },
+          );
 
-        // Place the caret at "Before link |after link".
-        await tester.placeCaretInParagraph(nodeId, 12);
+          // Ensure we split the paragraph.
+          expect(textContext.document.nodeCount, 2);
+          expect(textContext.document.getNodeAt(1)!, isA<ParagraphNode>());
+          expect(
+            (textContext.document.getNodeAt(1)! as ParagraphNode).text
+                .toPlainText(),
+            "after link",
+          );
+        },
+      );
 
-        // Type a URL. It shouldn't linkify until the user presses ENTER.
-        await tester.typeImeText("https://www.google.com");
+      testWidgetsOnAndroid(
+        'when pressing the newline button on the software keyboard at the end of a paragraph',
+        (tester) async {
+          final textContext =
+              await tester //
+                  .createDocument()
+                  .withSingleEmptyParagraph()
+                  .withInputSource(TextInputSource.ime)
+                  .pump();
 
-        // Ensure it's not linkified yet.
-        var text = SuperEditorInspector.findTextInComponent(nodeId);
+          // Place the caret at the beginning of the empty document.
+          await tester.placeCaretInParagraph("1", 0);
 
-        expect(text.toPlainText(), "Before link https://www.google.comafter link");
-        expect(
-          text.getAttributionSpansInRange(
-            attributionFilter: (attribution) => true,
-            range: const SpanRange(12, 34),
-          ),
-          isEmpty,
-        );
+          // Type a URL. It shouldn't linkify until the user presses ENTER.
+          await tester.typeImeText("https://www.google.com");
 
-        // Press enter to linkify the URL and split the paragraph.
-        // On Android, pressing ENTER generates a "\n" insertion.
-        await tester.typeImeText('\n');
+          // Ensure it's not linkified yet.
+          var text = SuperEditorInspector.findTextInComponent("1");
 
-        // Ensure it's linkified.
-        text = SuperEditorInspector.findTextInComponent(nodeId);
-
-        expect(text.toPlainText(), "Before link https://www.google.com");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
-              start: 12,
-              end: text.length - 1,
+          expect(text.toPlainText(), "https://www.google.com");
+          expect(
+            text.getAttributionSpansInRange(
+              attributionFilter: (attribution) => true,
+              range: SpanRange(0, text.length - 1),
             ),
-          },
-        );
+            isEmpty,
+          );
 
-        // Ensure we split the paragraph.
-        expect(textContext.document.nodeCount, 2);
-        expect(textContext.document.getNodeAt(1)!, isA<ParagraphNode>());
-        expect((textContext.document.getNodeAt(1)! as ParagraphNode).text.toPlainText(), "after link");
-      });
+          // Press enter to linkify the URL and insert a new paragraph.
+          // On Android, pressing ENTER generates a "\n" insertion.
+          await tester.typeImeText('\n');
 
-      testWidgetsOnIos('when pressing the newline button on the software keyboard at the end of a paragraph',
-          (tester) async {
-        final textContext = await tester //
-            .createDocument()
-            .withSingleEmptyParagraph()
-            .withInputSource(TextInputSource.ime)
-            .pump();
+          // Ensure it's linkified.
+          text = SuperEditorInspector.findTextInComponent("1");
 
-        // Place the caret at the beginning of the empty document.
-        await tester.placeCaretInParagraph("1", 0);
+          expect(text.toPlainText(), "https://www.google.com");
+          expect(
+            text.getAttributionSpansByFilter((a) => a is LinkAttribution),
+            {
+              AttributionSpan(
+                attribution: LinkAttribution.fromUri(
+                  Uri.parse("https://www.google.com"),
+                ),
+                start: 0,
+                end: text.length - 1,
+              ),
+            },
+          );
 
-        // Type a URL. It shouldn't linkify until the user presses ENTER.
-        await tester.typeImeText("https://www.google.com");
+          // Ensure we added a new empty paragraph.
+          expect(textContext.document.nodeCount, 2);
+          expect(textContext.document.getNodeAt(1)!, isA<ParagraphNode>());
+          expect(
+            (textContext.document.getNodeAt(1)! as ParagraphNode).text
+                .toPlainText(),
+            "",
+          );
+        },
+      );
 
-        // Ensure it's not linkified yet.
-        var text = SuperEditorInspector.findTextInComponent("1");
+      testWidgetsOnAndroid(
+        'when pressing the newline button on the software keyboard at the middle of a paragraph',
+        (tester) async {
+          final textContext =
+              await tester //
+                  .createDocument()
+                  .fromMarkdown('Before link after link')
+                  .withInputSource(TextInputSource.ime)
+                  .pump();
 
-        expect(text.toPlainText(), "https://www.google.com");
-        expect(
-          text.getAttributionSpansInRange(
-            attributionFilter: (attribution) => true,
-            range: SpanRange(0, text.length - 1),
-          ),
-          isEmpty,
-        );
+          final nodeId = textContext.document.first.id;
 
-        // Press enter to linkify the URL and insert a new paragraph.
-        // On iOS, pressing ENTER generates a newline action.
-        await tester.testTextInput.receiveAction(TextInputAction.newline);
-        await tester.pump();
+          // Place the caret at "Before link |after link".
+          await tester.placeCaretInParagraph(nodeId, 12);
 
-        // Ensure it's linkified.
-        text = SuperEditorInspector.findTextInComponent("1");
+          // Type a URL. It shouldn't linkify until the user presses ENTER.
+          await tester.typeImeText("https://www.google.com");
 
-        expect(text.toPlainText(), "https://www.google.com");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
-              start: 0,
-              end: text.length - 1,
+          // Ensure it's not linkified yet.
+          var text = SuperEditorInspector.findTextInComponent(nodeId);
+
+          expect(
+            text.toPlainText(),
+            "Before link https://www.google.comafter link",
+          );
+          expect(
+            text.getAttributionSpansInRange(
+              attributionFilter: (attribution) => true,
+              range: const SpanRange(12, 34),
             ),
-          },
-        );
+            isEmpty,
+          );
 
-        // Ensure we added a new empty line.
-        expect(textContext.document.nodeCount, 2);
-        expect(textContext.document.getNodeAt(1)!, isA<ParagraphNode>());
-        expect((textContext.document.getNodeAt(1)! as ParagraphNode).text.toPlainText(), "");
-      });
+          // Press enter to linkify the URL and split the paragraph.
+          // On Android, pressing ENTER generates a "\n" insertion.
+          await tester.typeImeText('\n');
 
-      testWidgetsOnIos('when pressing the newline button on the software keyboard at the middle of a paragraph',
-          (tester) async {
-        final textContext = await tester //
-            .createDocument()
-            .fromMarkdown('Before link after link')
-            .withInputSource(TextInputSource.ime)
-            .pump();
+          // Ensure it's linkified.
+          text = SuperEditorInspector.findTextInComponent(nodeId);
 
-        final nodeId = textContext.document.first.id;
+          expect(text.toPlainText(), "Before link https://www.google.com");
+          expect(
+            text.getAttributionSpansByFilter((a) => a is LinkAttribution),
+            {
+              AttributionSpan(
+                attribution: LinkAttribution.fromUri(
+                  Uri.parse("https://www.google.com"),
+                ),
+                start: 12,
+                end: text.length - 1,
+              ),
+            },
+          );
 
-        // Place the caret at "Before link |after link".
-        await tester.placeCaretInParagraph(nodeId, 12);
+          // Ensure we split the paragraph.
+          expect(textContext.document.nodeCount, 2);
+          expect(textContext.document.getNodeAt(1)!, isA<ParagraphNode>());
+          expect(
+            (textContext.document.getNodeAt(1)! as ParagraphNode).text
+                .toPlainText(),
+            "after link",
+          );
+        },
+      );
 
-        // Type a URL. It shouldn't linkify until the user presses ENTER.
-        await tester.typeImeText("https://www.google.com");
+      testWidgetsOnIos(
+        'when pressing the newline button on the software keyboard at the end of a paragraph',
+        (tester) async {
+          final textContext =
+              await tester //
+                  .createDocument()
+                  .withSingleEmptyParagraph()
+                  .withInputSource(TextInputSource.ime)
+                  .pump();
 
-        // Ensure it's not linkified yet.
-        var text = SuperEditorInspector.findTextInComponent(nodeId);
+          // Place the caret at the beginning of the empty document.
+          await tester.placeCaretInParagraph("1", 0);
 
-        expect(text.toPlainText(), "Before link https://www.google.comafter link");
-        expect(
-          text.getAttributionSpansInRange(
-            attributionFilter: (attribution) => true,
-            range: const SpanRange(12, 34),
-          ),
-          isEmpty,
-        );
+          // Type a URL. It shouldn't linkify until the user presses ENTER.
+          await tester.typeImeText("https://www.google.com");
 
-        // Press enter to linkify the URL and split the paragraph.
-        // On iOS, pressing ENTER generates a newline action.
-        await tester.testTextInput.receiveAction(TextInputAction.newline);
-        await tester.pump();
+          // Ensure it's not linkified yet.
+          var text = SuperEditorInspector.findTextInComponent("1");
 
-        // Ensure it's linkified.
-        text = SuperEditorInspector.findTextInComponent(nodeId);
-
-        expect(text.toPlainText(), "Before link https://www.google.com");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
-              start: 12,
-              end: text.length - 1,
+          expect(text.toPlainText(), "https://www.google.com");
+          expect(
+            text.getAttributionSpansInRange(
+              attributionFilter: (attribution) => true,
+              range: SpanRange(0, text.length - 1),
             ),
-          },
-        );
+            isEmpty,
+          );
 
-        // Ensure we split the paragraph.
-        expect(textContext.document.nodeCount, 2);
-        expect(textContext.document.getNodeAt(1)!, isA<ParagraphNode>());
-        expect((textContext.document.getNodeAt(1)! as ParagraphNode).text.toPlainText(), "after link");
-      });
+          // Press enter to linkify the URL and insert a new paragraph.
+          // On iOS, pressing ENTER generates a newline action.
+          await tester.testTextInput.receiveAction(TextInputAction.newline);
+          await tester.pump();
 
-      testWidgetsOnAllPlatforms('when pressing ENTER at the end of a list item', (tester) async {
-        final textContext = await tester //
-            .createDocument()
-            .fromMarkdown('* Item')
-            .withInputSource(TextInputSource.ime)
-            .pump();
+          // Ensure it's linkified.
+          text = SuperEditorInspector.findTextInComponent("1");
 
-        final nodeId = textContext.document.first.id;
+          expect(text.toPlainText(), "https://www.google.com");
+          expect(
+            text.getAttributionSpansByFilter((a) => a is LinkAttribution),
+            {
+              AttributionSpan(
+                attribution: LinkAttribution.fromUri(
+                  Uri.parse("https://www.google.com"),
+                ),
+                start: 0,
+                end: text.length - 1,
+              ),
+            },
+          );
 
-        // Place the caret at the end of the list item.
-        await tester.placeCaretInParagraph(nodeId, 4);
+          // Ensure we added a new empty line.
+          expect(textContext.document.nodeCount, 2);
+          expect(textContext.document.getNodeAt(1)!, isA<ParagraphNode>());
+          expect(
+            (textContext.document.getNodeAt(1)! as ParagraphNode).text
+                .toPlainText(),
+            "",
+          );
+        },
+      );
 
-        // Type a URL. It shouldn't linkify until the user presses ENTER.
-        await tester.typeImeText(" https://www.google.com");
+      testWidgetsOnIos(
+        'when pressing the newline button on the software keyboard at the middle of a paragraph',
+        (tester) async {
+          final textContext =
+              await tester //
+                  .createDocument()
+                  .fromMarkdown('Before link after link')
+                  .withInputSource(TextInputSource.ime)
+                  .pump();
 
-        // Ensure it's not linkified yet.
-        var text = SuperEditorInspector.findTextInComponent(nodeId);
+          final nodeId = textContext.document.first.id;
 
-        expect(text.toPlainText(), "Item https://www.google.com");
-        expect(
-          text.getAttributionSpansInRange(
-            attributionFilter: (attribution) => true,
-            range: SpanRange(5, text.length - 1),
-          ),
-          isEmpty,
-        );
+          // Place the caret at "Before link |after link".
+          await tester.placeCaretInParagraph(nodeId, 12);
 
-        // Press enter to linkify the URL and insert a new list item.
-        await tester.pressEnter();
+          // Type a URL. It shouldn't linkify until the user presses ENTER.
+          await tester.typeImeText("https://www.google.com");
 
-        // Ensure it's linkified.
-        text = SuperEditorInspector.findTextInComponent(nodeId);
+          // Ensure it's not linkified yet.
+          var text = SuperEditorInspector.findTextInComponent(nodeId);
 
-        expect(text.toPlainText(), "Item https://www.google.com");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
-              start: 5,
-              end: text.length - 1,
+          expect(
+            text.toPlainText(),
+            "Before link https://www.google.comafter link",
+          );
+          expect(
+            text.getAttributionSpansInRange(
+              attributionFilter: (attribution) => true,
+              range: const SpanRange(12, 34),
             ),
-          },
-        );
+            isEmpty,
+          );
 
-        // Ensure we added a new empty list item.
-        expect(textContext.document.nodeCount, 2);
-        expect(textContext.document.getNodeAt(1)!, isA<ListItemNode>());
-        expect((textContext.document.getNodeAt(1)! as ListItemNode).text.toPlainText(), "");
-      });
+          // Press enter to linkify the URL and split the paragraph.
+          // On iOS, pressing ENTER generates a newline action.
+          await tester.testTextInput.receiveAction(TextInputAction.newline);
+          await tester.pump();
 
-      testWidgetsOnAllPlatforms('when pressing ENTER at the middle of a list item', (tester) async {
-        final textContext = await tester //
-            .createDocument()
-            .fromMarkdown('* Before link after link')
-            .withInputSource(TextInputSource.ime)
-            .pump();
+          // Ensure it's linkified.
+          text = SuperEditorInspector.findTextInComponent(nodeId);
 
-        final nodeId = textContext.document.first.id;
+          expect(text.toPlainText(), "Before link https://www.google.com");
+          expect(
+            text.getAttributionSpansByFilter((a) => a is LinkAttribution),
+            {
+              AttributionSpan(
+                attribution: LinkAttribution.fromUri(
+                  Uri.parse("https://www.google.com"),
+                ),
+                start: 12,
+                end: text.length - 1,
+              ),
+            },
+          );
 
-        // Place the caret at "Before link |after link".
-        await tester.placeCaretInParagraph(nodeId, 12);
+          // Ensure we split the paragraph.
+          expect(textContext.document.nodeCount, 2);
+          expect(textContext.document.getNodeAt(1)!, isA<ParagraphNode>());
+          expect(
+            (textContext.document.getNodeAt(1)! as ParagraphNode).text
+                .toPlainText(),
+            "after link",
+          );
+        },
+      );
 
-        // Type a URL. It shouldn't linkify until the user presses ENTER.
-        await tester.typeImeText("https://www.google.com");
+      testWidgetsOnAllPlatforms(
+        'when pressing ENTER at the end of a list item',
+        (tester) async {
+          final textContext =
+              await tester //
+                  .createDocument()
+                  .fromMarkdown('* Item')
+                  .withInputSource(TextInputSource.ime)
+                  .pump();
 
-        // Ensure it's not linkified yet.
-        var text = SuperEditorInspector.findTextInComponent(nodeId);
+          final nodeId = textContext.document.first.id;
 
-        expect(text.toPlainText(), "Before link https://www.google.comafter link");
-        expect(
-          text.getAttributionSpansInRange(
-            attributionFilter: (attribution) => true,
-            range: const SpanRange(12, 34),
-          ),
-          isEmpty,
-        );
+          // Place the caret at the end of the list item.
+          await tester.placeCaretInParagraph(nodeId, 4);
 
-        // Press enter to linkify the URL and insert a new list item.
-        await tester.pressEnter();
+          // Type a URL. It shouldn't linkify until the user presses ENTER.
+          await tester.typeImeText(" https://www.google.com");
 
-        // Ensure it's linkified.
-        text = SuperEditorInspector.findTextInComponent(nodeId);
+          // Ensure it's not linkified yet.
+          var text = SuperEditorInspector.findTextInComponent(nodeId);
 
-        expect(text.toPlainText(), "Before link https://www.google.com");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
-              start: 12,
-              end: text.length - 1,
+          expect(text.toPlainText(), "Item https://www.google.com");
+          expect(
+            text.getAttributionSpansInRange(
+              attributionFilter: (attribution) => true,
+              range: SpanRange(5, text.length - 1),
             ),
-          },
-        );
+            isEmpty,
+          );
 
-        // Ensure we split the list item.
-        expect(textContext.document.nodeCount, 2);
-        expect(textContext.document.getNodeAt(1)!, isA<ListItemNode>());
-        expect((textContext.document.getNodeAt(1)! as ListItemNode).text.toPlainText(), "after link");
-      });
+          // Press enter to linkify the URL and insert a new list item.
+          await tester.pressEnter();
 
-      testWidgetsOnAndroid('when pressing the newline button on the software keyboard at the end of a list item',
-          (tester) async {
-        final textContext = await tester //
-            .createDocument()
-            .fromMarkdown('* Item')
-            .withInputSource(TextInputSource.ime)
-            .pump();
+          // Ensure it's linkified.
+          text = SuperEditorInspector.findTextInComponent(nodeId);
 
-        final nodeId = textContext.document.first.id;
+          expect(text.toPlainText(), "Item https://www.google.com");
+          expect(
+            text.getAttributionSpansByFilter((a) => a is LinkAttribution),
+            {
+              AttributionSpan(
+                attribution: LinkAttribution.fromUri(
+                  Uri.parse("https://www.google.com"),
+                ),
+                start: 5,
+                end: text.length - 1,
+              ),
+            },
+          );
 
-        // Place the caret at the end of the list item.
-        await tester.placeCaretInParagraph(nodeId, 4);
+          // Ensure we added a new empty list item.
+          expect(textContext.document.nodeCount, 2);
+          expect(textContext.document.getNodeAt(1)!, isA<ListItemNode>());
+          expect(
+            (textContext.document.getNodeAt(1)! as ListItemNode).text
+                .toPlainText(),
+            "",
+          );
+        },
+      );
 
-        // Type a URL. It shouldn't linkify until the user presses ENTER.
-        await tester.typeImeText(" https://www.google.com");
+      testWidgetsOnAllPlatforms(
+        'when pressing ENTER at the middle of a list item',
+        (tester) async {
+          final textContext =
+              await tester //
+                  .createDocument()
+                  .fromMarkdown('* Before link after link')
+                  .withInputSource(TextInputSource.ime)
+                  .pump();
 
-        // Ensure it's not linkified yet.
-        var text = SuperEditorInspector.findTextInComponent(nodeId);
+          final nodeId = textContext.document.first.id;
 
-        expect(text.toPlainText(), "Item https://www.google.com");
-        expect(
-          text.getAttributionSpansInRange(
-            attributionFilter: (attribution) => true,
-            range: SpanRange(5, text.length - 1),
-          ),
-          isEmpty,
-        );
+          // Place the caret at "Before link |after link".
+          await tester.placeCaretInParagraph(nodeId, 12);
 
-        // Press enter to linkify the URL and insert a new list item.
-        // On Android, pressing ENTER generates a "\n" insertion.
-        await tester.typeImeText('\n');
+          // Type a URL. It shouldn't linkify until the user presses ENTER.
+          await tester.typeImeText("https://www.google.com");
 
-        // Ensure it's linkified.
-        text = SuperEditorInspector.findTextInComponent(nodeId);
+          // Ensure it's not linkified yet.
+          var text = SuperEditorInspector.findTextInComponent(nodeId);
 
-        expect(text.toPlainText(), "Item https://www.google.com");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
-              start: 5,
-              end: text.length - 1,
+          expect(
+            text.toPlainText(),
+            "Before link https://www.google.comafter link",
+          );
+          expect(
+            text.getAttributionSpansInRange(
+              attributionFilter: (attribution) => true,
+              range: const SpanRange(12, 34),
             ),
-          },
-        );
+            isEmpty,
+          );
 
-        // Ensure we added a new empty list item.
-        expect(textContext.document.nodeCount, 2);
-        expect(textContext.document.getNodeAt(1)!, isA<ListItemNode>());
-        expect((textContext.document.getNodeAt(1)! as ListItemNode).text.toPlainText(), "");
-      });
+          // Press enter to linkify the URL and insert a new list item.
+          await tester.pressEnter();
 
-      testWidgetsOnAndroid('when pressing the newline button on the software keyboard at the middle of a list item',
-          (tester) async {
-        final textContext = await tester //
-            .createDocument()
-            .fromMarkdown('* Before link after link')
-            .withInputSource(TextInputSource.ime)
-            .pump();
+          // Ensure it's linkified.
+          text = SuperEditorInspector.findTextInComponent(nodeId);
 
-        final nodeId = textContext.document.first.id;
+          expect(text.toPlainText(), "Before link https://www.google.com");
+          expect(
+            text.getAttributionSpansByFilter((a) => a is LinkAttribution),
+            {
+              AttributionSpan(
+                attribution: LinkAttribution.fromUri(
+                  Uri.parse("https://www.google.com"),
+                ),
+                start: 12,
+                end: text.length - 1,
+              ),
+            },
+          );
 
-        // Place the caret at "Before link |after link".
-        await tester.placeCaretInParagraph(nodeId, 12);
+          // Ensure we split the list item.
+          expect(textContext.document.nodeCount, 2);
+          expect(textContext.document.getNodeAt(1)!, isA<ListItemNode>());
+          expect(
+            (textContext.document.getNodeAt(1)! as ListItemNode).text
+                .toPlainText(),
+            "after link",
+          );
+        },
+      );
 
-        // Type a URL. It shouldn't linkify until the user presses ENTER.
-        await tester.typeImeText("https://www.google.com");
+      testWidgetsOnAndroid(
+        'when pressing the newline button on the software keyboard at the end of a list item',
+        (tester) async {
+          final textContext =
+              await tester //
+                  .createDocument()
+                  .fromMarkdown('* Item')
+                  .withInputSource(TextInputSource.ime)
+                  .pump();
 
-        // Ensure it's not linkified yet.
-        var text = SuperEditorInspector.findTextInComponent(nodeId);
+          final nodeId = textContext.document.first.id;
 
-        expect(text.toPlainText(), "Before link https://www.google.comafter link");
-        expect(
-          text.getAttributionSpansInRange(
-            attributionFilter: (attribution) => true,
-            range: const SpanRange(12, 34),
-          ),
-          isEmpty,
-        );
+          // Place the caret at the end of the list item.
+          await tester.placeCaretInParagraph(nodeId, 4);
 
-        // Press enter to linkify the URL and split the list item.
-        // On Android, pressing ENTER generates a "\n" insertion.
-        await tester.typeImeText('\n');
+          // Type a URL. It shouldn't linkify until the user presses ENTER.
+          await tester.typeImeText(" https://www.google.com");
 
-        // Ensure it's linkified.
-        text = SuperEditorInspector.findTextInComponent(nodeId);
+          // Ensure it's not linkified yet.
+          var text = SuperEditorInspector.findTextInComponent(nodeId);
 
-        expect(text.toPlainText(), "Before link https://www.google.com");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
-              start: 12,
-              end: text.length - 1,
+          expect(text.toPlainText(), "Item https://www.google.com");
+          expect(
+            text.getAttributionSpansInRange(
+              attributionFilter: (attribution) => true,
+              range: SpanRange(5, text.length - 1),
             ),
-          },
-        );
+            isEmpty,
+          );
 
-        // Ensure we split the list item.
-        expect(textContext.document.nodeCount, 2);
-        expect(textContext.document.getNodeAt(1)!, isA<ListItemNode>());
-        expect((textContext.document.getNodeAt(1)! as ListItemNode).text.toPlainText(), "after link");
-      });
+          // Press enter to linkify the URL and insert a new list item.
+          // On Android, pressing ENTER generates a "\n" insertion.
+          await tester.typeImeText('\n');
 
-      testWidgetsOnIos('when pressing the newline button on the software keyboard at the end of a list item',
-          (tester) async {
-        final textContext = await tester //
-            .createDocument()
-            .fromMarkdown('* Item')
-            .withInputSource(TextInputSource.ime)
-            .pump();
+          // Ensure it's linkified.
+          text = SuperEditorInspector.findTextInComponent(nodeId);
 
-        final nodeId = textContext.document.first.id;
+          expect(text.toPlainText(), "Item https://www.google.com");
+          expect(
+            text.getAttributionSpansByFilter((a) => a is LinkAttribution),
+            {
+              AttributionSpan(
+                attribution: LinkAttribution.fromUri(
+                  Uri.parse("https://www.google.com"),
+                ),
+                start: 5,
+                end: text.length - 1,
+              ),
+            },
+          );
 
-        // Place the caret at the end of the list item.
-        await tester.placeCaretInParagraph(nodeId, 4);
+          // Ensure we added a new empty list item.
+          expect(textContext.document.nodeCount, 2);
+          expect(textContext.document.getNodeAt(1)!, isA<ListItemNode>());
+          expect(
+            (textContext.document.getNodeAt(1)! as ListItemNode).text
+                .toPlainText(),
+            "",
+          );
+        },
+      );
 
-        // Type a URL. It shouldn't linkify until the user presses ENTER.
-        await tester.typeImeText(" https://www.google.com");
+      testWidgetsOnAndroid(
+        'when pressing the newline button on the software keyboard at the middle of a list item',
+        (tester) async {
+          final textContext =
+              await tester //
+                  .createDocument()
+                  .fromMarkdown('* Before link after link')
+                  .withInputSource(TextInputSource.ime)
+                  .pump();
 
-        // Ensure it's not linkified yet.
-        var text = SuperEditorInspector.findTextInComponent(nodeId);
+          final nodeId = textContext.document.first.id;
 
-        expect(text.toPlainText(), "Item https://www.google.com");
-        expect(
-          text.getAttributionSpansInRange(
-            attributionFilter: (attribution) => true,
-            range: SpanRange(5, text.length - 1),
-          ),
-          isEmpty,
-        );
+          // Place the caret at "Before link |after link".
+          await tester.placeCaretInParagraph(nodeId, 12);
 
-        // Press enter to linkify the URL and insert a new list item.
-        // On iOS, pressing ENTER generates a newline action.
-        await tester.testTextInput.receiveAction(TextInputAction.newline);
-        await tester.pump();
+          // Type a URL. It shouldn't linkify until the user presses ENTER.
+          await tester.typeImeText("https://www.google.com");
 
-        // Ensure it's linkified.
-        text = SuperEditorInspector.findTextInComponent(nodeId);
+          // Ensure it's not linkified yet.
+          var text = SuperEditorInspector.findTextInComponent(nodeId);
 
-        expect(text.toPlainText(), "Item https://www.google.com");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
-              start: 5,
-              end: text.length - 1,
+          expect(
+            text.toPlainText(),
+            "Before link https://www.google.comafter link",
+          );
+          expect(
+            text.getAttributionSpansInRange(
+              attributionFilter: (attribution) => true,
+              range: const SpanRange(12, 34),
             ),
-          },
-        );
+            isEmpty,
+          );
 
-        // Ensure we added a new empty list item.
-        expect(textContext.document.nodeCount, 2);
-        expect(textContext.document.getNodeAt(1)!, isA<ListItemNode>());
-        expect((textContext.document.getNodeAt(1)! as ListItemNode).text.toPlainText(), "");
-      });
+          // Press enter to linkify the URL and split the list item.
+          // On Android, pressing ENTER generates a "\n" insertion.
+          await tester.typeImeText('\n');
 
-      testWidgetsOnIos('when pressing the newline button on the software keyboard at the middle of a list item',
-          (tester) async {
-        final textContext = await tester //
-            .createDocument()
-            .fromMarkdown('* Before link after link')
-            .withInputSource(TextInputSource.ime)
-            .pump();
+          // Ensure it's linkified.
+          text = SuperEditorInspector.findTextInComponent(nodeId);
 
-        final nodeId = textContext.document.first.id;
+          expect(text.toPlainText(), "Before link https://www.google.com");
+          expect(
+            text.getAttributionSpansByFilter((a) => a is LinkAttribution),
+            {
+              AttributionSpan(
+                attribution: LinkAttribution.fromUri(
+                  Uri.parse("https://www.google.com"),
+                ),
+                start: 12,
+                end: text.length - 1,
+              ),
+            },
+          );
 
-        // Place the caret at "Before link |after link".
-        await tester.placeCaretInParagraph(nodeId, 12);
+          // Ensure we split the list item.
+          expect(textContext.document.nodeCount, 2);
+          expect(textContext.document.getNodeAt(1)!, isA<ListItemNode>());
+          expect(
+            (textContext.document.getNodeAt(1)! as ListItemNode).text
+                .toPlainText(),
+            "after link",
+          );
+        },
+      );
 
-        // Type a URL. It shouldn't linkify until the user presses ENTER.
-        await tester.typeImeText("https://www.google.com");
+      testWidgetsOnIos(
+        'when pressing the newline button on the software keyboard at the end of a list item',
+        (tester) async {
+          final textContext =
+              await tester //
+                  .createDocument()
+                  .fromMarkdown('* Item')
+                  .withInputSource(TextInputSource.ime)
+                  .pump();
 
-        // Ensure it's not linkified yet.
-        var text = SuperEditorInspector.findTextInComponent(nodeId);
+          final nodeId = textContext.document.first.id;
 
-        expect(text.toPlainText(), "Before link https://www.google.comafter link");
-        expect(
-          text.getAttributionSpansInRange(
-            attributionFilter: (attribution) => true,
-            range: const SpanRange(12, 34),
-          ),
-          isEmpty,
-        );
+          // Place the caret at the end of the list item.
+          await tester.placeCaretInParagraph(nodeId, 4);
 
-        // Press enter to linkify the URL and insert a new list item.
-        // On iOS, pressing ENTER generates a newline action.
-        await tester.testTextInput.receiveAction(TextInputAction.newline);
-        await tester.pump();
+          // Type a URL. It shouldn't linkify until the user presses ENTER.
+          await tester.typeImeText(" https://www.google.com");
 
-        // Ensure it's linkified.
-        text = SuperEditorInspector.findTextInComponent(nodeId);
+          // Ensure it's not linkified yet.
+          var text = SuperEditorInspector.findTextInComponent(nodeId);
 
-        expect(text.toPlainText(), "Before link https://www.google.com");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
-              start: 12,
-              end: text.length - 1,
+          expect(text.toPlainText(), "Item https://www.google.com");
+          expect(
+            text.getAttributionSpansInRange(
+              attributionFilter: (attribution) => true,
+              range: SpanRange(5, text.length - 1),
             ),
-          },
-        );
+            isEmpty,
+          );
 
-        // Ensure we split the list item.
-        expect(textContext.document.nodeCount, 2);
-        expect(textContext.document.getNodeAt(1)!, isA<ListItemNode>());
-        expect((textContext.document.getNodeAt(1)! as ListItemNode).text.toPlainText(), "after link");
-      });
+          // Press enter to linkify the URL and insert a new list item.
+          // On iOS, pressing ENTER generates a newline action.
+          await tester.testTextInput.receiveAction(TextInputAction.newline);
+          await tester.pump();
 
-      testWidgetsOnAllPlatforms('when pressing ENTER at the end of a task', (tester) async {
+          // Ensure it's linkified.
+          text = SuperEditorInspector.findTextInComponent(nodeId);
+
+          expect(text.toPlainText(), "Item https://www.google.com");
+          expect(
+            text.getAttributionSpansByFilter((a) => a is LinkAttribution),
+            {
+              AttributionSpan(
+                attribution: LinkAttribution.fromUri(
+                  Uri.parse("https://www.google.com"),
+                ),
+                start: 5,
+                end: text.length - 1,
+              ),
+            },
+          );
+
+          // Ensure we added a new empty list item.
+          expect(textContext.document.nodeCount, 2);
+          expect(textContext.document.getNodeAt(1)!, isA<ListItemNode>());
+          expect(
+            (textContext.document.getNodeAt(1)! as ListItemNode).text
+                .toPlainText(),
+            "",
+          );
+        },
+      );
+
+      testWidgetsOnIos(
+        'when pressing the newline button on the software keyboard at the middle of a list item',
+        (tester) async {
+          final textContext =
+              await tester //
+                  .createDocument()
+                  .fromMarkdown('* Before link after link')
+                  .withInputSource(TextInputSource.ime)
+                  .pump();
+
+          final nodeId = textContext.document.first.id;
+
+          // Place the caret at "Before link |after link".
+          await tester.placeCaretInParagraph(nodeId, 12);
+
+          // Type a URL. It shouldn't linkify until the user presses ENTER.
+          await tester.typeImeText("https://www.google.com");
+
+          // Ensure it's not linkified yet.
+          var text = SuperEditorInspector.findTextInComponent(nodeId);
+
+          expect(
+            text.toPlainText(),
+            "Before link https://www.google.comafter link",
+          );
+          expect(
+            text.getAttributionSpansInRange(
+              attributionFilter: (attribution) => true,
+              range: const SpanRange(12, 34),
+            ),
+            isEmpty,
+          );
+
+          // Press enter to linkify the URL and insert a new list item.
+          // On iOS, pressing ENTER generates a newline action.
+          await tester.testTextInput.receiveAction(TextInputAction.newline);
+          await tester.pump();
+
+          // Ensure it's linkified.
+          text = SuperEditorInspector.findTextInComponent(nodeId);
+
+          expect(text.toPlainText(), "Before link https://www.google.com");
+          expect(
+            text.getAttributionSpansByFilter((a) => a is LinkAttribution),
+            {
+              AttributionSpan(
+                attribution: LinkAttribution.fromUri(
+                  Uri.parse("https://www.google.com"),
+                ),
+                start: 12,
+                end: text.length - 1,
+              ),
+            },
+          );
+
+          // Ensure we split the list item.
+          expect(textContext.document.nodeCount, 2);
+          expect(textContext.document.getNodeAt(1)!, isA<ListItemNode>());
+          expect(
+            (textContext.document.getNodeAt(1)! as ListItemNode).text
+                .toPlainText(),
+            "after link",
+          );
+        },
+      );
+
+      testWidgetsOnAllPlatforms('when pressing ENTER at the end of a task', (
+        tester,
+      ) async {
         final document = MutableDocument(
           nodes: [
-            TaskNode(id: "1", text: AttributedText("This is a task "), isComplete: false),
+            TaskNode(
+              id: "1",
+              text: AttributedText("This is a task "),
+              isComplete: false,
+            ),
           ],
         );
         final composer = MutableDocumentComposer();
-        final editor = createDefaultDocumentEditor(document: document, composer: composer);
+        final editor = createDefaultDocumentEditor(
+          document: document,
+          composer: composer,
+        );
         await tester.pumpWidget(
           MaterialApp(
             home: Scaffold(
@@ -728,16 +866,15 @@ void main() {
         text = document.first.asTask.text;
 
         expect(text.toPlainText(), "This is a task https://www.google.com");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
-              start: 15,
-              end: text.length - 1,
+        expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
+          AttributionSpan(
+            attribution: LinkAttribution.fromUri(
+              Uri.parse("https://www.google.com"),
             ),
-          },
-        );
+            start: 15,
+            end: text.length - 1,
+          ),
+        });
 
         // Ensure we added a new empty task.
         expect(document.nodeCount, 2);
@@ -745,14 +882,23 @@ void main() {
         expect((document.getNodeAt(1)! as TaskNode).text.toPlainText(), "");
       });
 
-      testWidgetsOnAllPlatforms('when pressing ENTER at the middle of a task', (tester) async {
+      testWidgetsOnAllPlatforms('when pressing ENTER at the middle of a task', (
+        tester,
+      ) async {
         final document = MutableDocument(
           nodes: [
-            TaskNode(id: "1", text: AttributedText("Before link after link"), isComplete: false),
+            TaskNode(
+              id: "1",
+              text: AttributedText("Before link after link"),
+              isComplete: false,
+            ),
           ],
         );
         final composer = MutableDocumentComposer();
-        final editor = createDefaultDocumentEditor(document: document, composer: composer);
+        final editor = createDefaultDocumentEditor(
+          document: document,
+          composer: composer,
+        );
         await tester.pumpWidget(
           MaterialApp(
             home: Scaffold(
@@ -776,7 +922,10 @@ void main() {
         // Ensure it's not linkified yet.
         var text = document.first.asTask.text;
 
-        expect(text.toPlainText(), "Before link https://www.google.comafter link");
+        expect(
+          text.toPlainText(),
+          "Before link https://www.google.comafter link",
+        );
         expect(
           text.getAttributionSpansInRange(
             attributionFilter: (attribution) => true,
@@ -792,292 +941,352 @@ void main() {
         text = document.first.asTask.text;
 
         expect(text.toPlainText(), "Before link https://www.google.com");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
-              start: 12,
-              end: text.length - 1,
+        expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
+          AttributionSpan(
+            attribution: LinkAttribution.fromUri(
+              Uri.parse("https://www.google.com"),
             ),
-          },
-        );
+            start: 12,
+            end: text.length - 1,
+          ),
+        });
 
         // Ensure we split the task
         expect(document.nodeCount, 2);
         expect(document.getNodeAt(1)!, isA<TaskNode>());
-        expect((document.getNodeAt(1)! as TaskNode).text.toPlainText(), "after link");
+        expect(
+          (document.getNodeAt(1)! as TaskNode).text.toPlainText(),
+          "after link",
+        );
       });
 
-      testWidgetsOnAndroid('when pressing the newline button on the software keyboard at the end of a task',
-          (tester) async {
-        final document = MutableDocument(
-          nodes: [
-            TaskNode(id: "1", text: AttributedText("This is a task "), isComplete: false),
-          ],
-        );
-        final composer = MutableDocumentComposer();
-        final editor = createDefaultDocumentEditor(document: document, composer: composer);
-        await tester.pumpWidget(
-          MaterialApp(
-            home: Scaffold(
-              body: SuperEditor(
-                editor: editor,
-                componentBuilders: [
-                  TaskComponentBuilder(editor),
-                  ...defaultComponentBuilders,
-                ],
+      testWidgetsOnAndroid(
+        'when pressing the newline button on the software keyboard at the end of a task',
+        (tester) async {
+          final document = MutableDocument(
+            nodes: [
+              TaskNode(
+                id: "1",
+                text: AttributedText("This is a task "),
+                isComplete: false,
+              ),
+            ],
+          );
+          final composer = MutableDocumentComposer();
+          final editor = createDefaultDocumentEditor(
+            document: document,
+            composer: composer,
+          );
+          await tester.pumpWidget(
+            MaterialApp(
+              home: Scaffold(
+                body: SuperEditor(
+                  editor: editor,
+                  componentBuilders: [
+                    TaskComponentBuilder(editor),
+                    ...defaultComponentBuilders,
+                  ],
+                ),
               ),
             ),
-          ),
-        );
+          );
 
-        // Place the caret at the end of the task.
-        await tester.placeCaretInParagraph("1", 15);
+          // Place the caret at the end of the task.
+          await tester.placeCaretInParagraph("1", 15);
 
-        // Type a URL. It shouldn't linkify until the user presses ENTER.
-        await tester.typeImeText("https://www.google.com");
+          // Type a URL. It shouldn't linkify until the user presses ENTER.
+          await tester.typeImeText("https://www.google.com");
 
-        // Ensure it's not linkified yet.
-        var text = document.first.asTask.text;
+          // Ensure it's not linkified yet.
+          var text = document.first.asTask.text;
 
-        expect(text.toPlainText(), "This is a task https://www.google.com");
-        expect(
-          text.getAttributionSpansInRange(
-            attributionFilter: (attribution) => true,
-            range: SpanRange(15, text.length - 1),
-          ),
-          isEmpty,
-        );
-
-        // Press enter to linkify the URL and insert a new task.
-        // On Android, pressing ENTER generates a "\n" insertion.
-        await tester.typeImeText('\n');
-
-        // Ensure it's linkified.
-        text = document.first.asTask.text;
-
-        expect(text.toPlainText(), "This is a task https://www.google.com");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
-              start: 15,
-              end: text.length - 1,
+          expect(text.toPlainText(), "This is a task https://www.google.com");
+          expect(
+            text.getAttributionSpansInRange(
+              attributionFilter: (attribution) => true,
+              range: SpanRange(15, text.length - 1),
             ),
-          },
-        );
+            isEmpty,
+          );
 
-        // Ensure we added a new empty task.
-        expect(document.nodeCount, 2);
-        expect(document.getNodeAt(1)!, isA<TaskNode>());
-        expect((document.getNodeAt(1)! as TaskNode).text.toPlainText(), "");
-      });
+          // Press enter to linkify the URL and insert a new task.
+          // On Android, pressing ENTER generates a "\n" insertion.
+          await tester.typeImeText('\n');
 
-      testWidgetsOnAndroid('when pressing the newline button on the software keyboard at the middle of a task',
-          (tester) async {
-        final document = MutableDocument(
-          nodes: [
-            TaskNode(id: "1", text: AttributedText("Before link after link"), isComplete: false),
-          ],
-        );
-        final composer = MutableDocumentComposer();
-        final editor = createDefaultDocumentEditor(document: document, composer: composer);
-        await tester.pumpWidget(
-          MaterialApp(
-            home: Scaffold(
-              body: SuperEditor(
-                editor: editor,
-                componentBuilders: [
-                  TaskComponentBuilder(editor),
-                  ...defaultComponentBuilders,
-                ],
+          // Ensure it's linkified.
+          text = document.first.asTask.text;
+
+          expect(text.toPlainText(), "This is a task https://www.google.com");
+          expect(
+            text.getAttributionSpansByFilter((a) => a is LinkAttribution),
+            {
+              AttributionSpan(
+                attribution: LinkAttribution.fromUri(
+                  Uri.parse("https://www.google.com"),
+                ),
+                start: 15,
+                end: text.length - 1,
+              ),
+            },
+          );
+
+          // Ensure we added a new empty task.
+          expect(document.nodeCount, 2);
+          expect(document.getNodeAt(1)!, isA<TaskNode>());
+          expect((document.getNodeAt(1)! as TaskNode).text.toPlainText(), "");
+        },
+      );
+
+      testWidgetsOnAndroid(
+        'when pressing the newline button on the software keyboard at the middle of a task',
+        (tester) async {
+          final document = MutableDocument(
+            nodes: [
+              TaskNode(
+                id: "1",
+                text: AttributedText("Before link after link"),
+                isComplete: false,
+              ),
+            ],
+          );
+          final composer = MutableDocumentComposer();
+          final editor = createDefaultDocumentEditor(
+            document: document,
+            composer: composer,
+          );
+          await tester.pumpWidget(
+            MaterialApp(
+              home: Scaffold(
+                body: SuperEditor(
+                  editor: editor,
+                  componentBuilders: [
+                    TaskComponentBuilder(editor),
+                    ...defaultComponentBuilders,
+                  ],
+                ),
               ),
             ),
-          ),
-        );
+          );
 
-        // Place the caret at "Before link |after link".
-        await tester.placeCaretInParagraph("1", 12);
+          // Place the caret at "Before link |after link".
+          await tester.placeCaretInParagraph("1", 12);
 
-        // Type a URL. It shouldn't linkify until the user presses ENTER.
-        await tester.typeImeText("https://www.google.com");
+          // Type a URL. It shouldn't linkify until the user presses ENTER.
+          await tester.typeImeText("https://www.google.com");
 
-        // Ensure it's not linkified yet.
-        var text = document.first.asTask.text;
+          // Ensure it's not linkified yet.
+          var text = document.first.asTask.text;
 
-        expect(text.toPlainText(), "Before link https://www.google.comafter link");
-        expect(
-          text.getAttributionSpansInRange(
-            attributionFilter: (attribution) => true,
-            range: const SpanRange(12, 34),
-          ),
-          isEmpty,
-        );
-
-        // Press enter to linkify the URL and insert a new task.
-        // On Android, pressing ENTER generates a "\n" insertion.
-        await tester.typeImeText('\n');
-
-        // Ensure it's linkified.
-        text = document.first.asTask.text;
-
-        expect(text.toPlainText(), "Before link https://www.google.com");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
-              start: 12,
-              end: text.length - 1,
+          expect(
+            text.toPlainText(),
+            "Before link https://www.google.comafter link",
+          );
+          expect(
+            text.getAttributionSpansInRange(
+              attributionFilter: (attribution) => true,
+              range: const SpanRange(12, 34),
             ),
-          },
-        );
+            isEmpty,
+          );
 
-        // Ensure we split the task.
-        expect(document.nodeCount, 2);
-        expect(document.getNodeAt(1)!, isA<TaskNode>());
-        expect((document.getNodeAt(1)! as TaskNode).text.toPlainText(), "after link");
-      });
+          // Press enter to linkify the URL and insert a new task.
+          // On Android, pressing ENTER generates a "\n" insertion.
+          await tester.typeImeText('\n');
 
-      testWidgetsOnIos('when pressing the newline button on the software keyboard at the end of a task',
-          (tester) async {
-        final document = MutableDocument(
-          nodes: [
-            TaskNode(id: "1", text: AttributedText("This is a task "), isComplete: false),
-          ],
-        );
-        final composer = MutableDocumentComposer();
-        final editor = createDefaultDocumentEditor(document: document, composer: composer);
-        await tester.pumpWidget(
-          MaterialApp(
-            home: Scaffold(
-              body: SuperEditor(
-                editor: editor,
-                componentBuilders: [
-                  TaskComponentBuilder(editor),
-                  ...defaultComponentBuilders,
-                ],
+          // Ensure it's linkified.
+          text = document.first.asTask.text;
+
+          expect(text.toPlainText(), "Before link https://www.google.com");
+          expect(
+            text.getAttributionSpansByFilter((a) => a is LinkAttribution),
+            {
+              AttributionSpan(
+                attribution: LinkAttribution.fromUri(
+                  Uri.parse("https://www.google.com"),
+                ),
+                start: 12,
+                end: text.length - 1,
+              ),
+            },
+          );
+
+          // Ensure we split the task.
+          expect(document.nodeCount, 2);
+          expect(document.getNodeAt(1)!, isA<TaskNode>());
+          expect(
+            (document.getNodeAt(1)! as TaskNode).text.toPlainText(),
+            "after link",
+          );
+        },
+      );
+
+      testWidgetsOnIos(
+        'when pressing the newline button on the software keyboard at the end of a task',
+        (tester) async {
+          final document = MutableDocument(
+            nodes: [
+              TaskNode(
+                id: "1",
+                text: AttributedText("This is a task "),
+                isComplete: false,
+              ),
+            ],
+          );
+          final composer = MutableDocumentComposer();
+          final editor = createDefaultDocumentEditor(
+            document: document,
+            composer: composer,
+          );
+          await tester.pumpWidget(
+            MaterialApp(
+              home: Scaffold(
+                body: SuperEditor(
+                  editor: editor,
+                  componentBuilders: [
+                    TaskComponentBuilder(editor),
+                    ...defaultComponentBuilders,
+                  ],
+                ),
               ),
             ),
-          ),
-        );
+          );
 
-        // Place the caret at the end of the task.
-        await tester.placeCaretInParagraph("1", 15);
+          // Place the caret at the end of the task.
+          await tester.placeCaretInParagraph("1", 15);
 
-        // Type a URL. It shouldn't linkify until the user presses ENTER.
-        await tester.typeImeText("https://www.google.com");
+          // Type a URL. It shouldn't linkify until the user presses ENTER.
+          await tester.typeImeText("https://www.google.com");
 
-        // Ensure it's not linkified yet.
-        var text = document.first.asTask.text;
+          // Ensure it's not linkified yet.
+          var text = document.first.asTask.text;
 
-        expect(text.toPlainText(), "This is a task https://www.google.com");
-        expect(
-          text.getAttributionSpansInRange(
-            attributionFilter: (attribution) => true,
-            range: SpanRange(15, text.length - 1),
-          ),
-          isEmpty,
-        );
-
-        // Press enter to linkify the URL and insert a new task.
-        // On iOS, pressing ENTER generates a newline action.
-        await tester.testTextInput.receiveAction(TextInputAction.newline);
-        await tester.pump();
-
-        // Ensure it's linkified.
-        text = document.first.asTask.text;
-
-        expect(text.toPlainText(), "This is a task https://www.google.com");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
-              start: 15,
-              end: text.length - 1,
+          expect(text.toPlainText(), "This is a task https://www.google.com");
+          expect(
+            text.getAttributionSpansInRange(
+              attributionFilter: (attribution) => true,
+              range: SpanRange(15, text.length - 1),
             ),
-          },
-        );
+            isEmpty,
+          );
 
-        // Ensure we added a new empty task.
-        expect(document.nodeCount, 2);
-        expect(document.getNodeAt(1)!, isA<TaskNode>());
-        expect((document.getNodeAt(1)! as TaskNode).text.toPlainText(), "");
-      });
+          // Press enter to linkify the URL and insert a new task.
+          // On iOS, pressing ENTER generates a newline action.
+          await tester.testTextInput.receiveAction(TextInputAction.newline);
+          await tester.pump();
 
-      testWidgetsOnIos('when pressing the newline button on the software keyboard at the middle of a task',
-          (tester) async {
-        final document = MutableDocument(
-          nodes: [
-            TaskNode(id: "1", text: AttributedText("Before link after link"), isComplete: false),
-          ],
-        );
-        final composer = MutableDocumentComposer();
-        final editor = createDefaultDocumentEditor(document: document, composer: composer);
-        await tester.pumpWidget(
-          MaterialApp(
-            home: Scaffold(
-              body: SuperEditor(
-                editor: editor,
-                componentBuilders: [
-                  TaskComponentBuilder(editor),
-                  ...defaultComponentBuilders,
-                ],
+          // Ensure it's linkified.
+          text = document.first.asTask.text;
+
+          expect(text.toPlainText(), "This is a task https://www.google.com");
+          expect(
+            text.getAttributionSpansByFilter((a) => a is LinkAttribution),
+            {
+              AttributionSpan(
+                attribution: LinkAttribution.fromUri(
+                  Uri.parse("https://www.google.com"),
+                ),
+                start: 15,
+                end: text.length - 1,
+              ),
+            },
+          );
+
+          // Ensure we added a new empty task.
+          expect(document.nodeCount, 2);
+          expect(document.getNodeAt(1)!, isA<TaskNode>());
+          expect((document.getNodeAt(1)! as TaskNode).text.toPlainText(), "");
+        },
+      );
+
+      testWidgetsOnIos(
+        'when pressing the newline button on the software keyboard at the middle of a task',
+        (tester) async {
+          final document = MutableDocument(
+            nodes: [
+              TaskNode(
+                id: "1",
+                text: AttributedText("Before link after link"),
+                isComplete: false,
+              ),
+            ],
+          );
+          final composer = MutableDocumentComposer();
+          final editor = createDefaultDocumentEditor(
+            document: document,
+            composer: composer,
+          );
+          await tester.pumpWidget(
+            MaterialApp(
+              home: Scaffold(
+                body: SuperEditor(
+                  editor: editor,
+                  componentBuilders: [
+                    TaskComponentBuilder(editor),
+                    ...defaultComponentBuilders,
+                  ],
+                ),
               ),
             ),
-          ),
-        );
+          );
 
-        // Place the caret at "Before link |after link".
-        await tester.placeCaretInParagraph("1", 12);
+          // Place the caret at "Before link |after link".
+          await tester.placeCaretInParagraph("1", 12);
 
-        // Type a URL. It shouldn't linkify until the user presses ENTER.
-        await tester.typeImeText("https://www.google.com");
+          // Type a URL. It shouldn't linkify until the user presses ENTER.
+          await tester.typeImeText("https://www.google.com");
 
-        // Ensure it's not linkified yet.
-        var text = document.first.asTask.text;
+          // Ensure it's not linkified yet.
+          var text = document.first.asTask.text;
 
-        expect(text.toPlainText(), "Before link https://www.google.comafter link");
-        expect(
-          text.getAttributionSpansInRange(
-            attributionFilter: (attribution) => true,
-            range: const SpanRange(12, 34),
-          ),
-          isEmpty,
-        );
-
-        // Press enter to linkify the URL and split the task.
-        // On iOS, pressing ENTER generates a newline action.
-        await tester.testTextInput.receiveAction(TextInputAction.newline);
-        await tester.pump();
-
-        // Ensure it's linkified.
-        text = document.first.asTask.text;
-
-        expect(text.toPlainText(), "Before link https://www.google.com");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
-              start: 12,
-              end: text.length - 1,
+          expect(
+            text.toPlainText(),
+            "Before link https://www.google.comafter link",
+          );
+          expect(
+            text.getAttributionSpansInRange(
+              attributionFilter: (attribution) => true,
+              range: const SpanRange(12, 34),
             ),
-          },
-        );
+            isEmpty,
+          );
 
-        // Ensure we split the task.
-        expect(document.nodeCount, 2);
-        expect(document.getNodeAt(1)!, isA<TaskNode>());
-        expect((document.getNodeAt(1)! as TaskNode).text.toPlainText(), "after link");
-      });
+          // Press enter to linkify the URL and split the task.
+          // On iOS, pressing ENTER generates a newline action.
+          await tester.testTextInput.receiveAction(TextInputAction.newline);
+          await tester.pump();
+
+          // Ensure it's linkified.
+          text = document.first.asTask.text;
+
+          expect(text.toPlainText(), "Before link https://www.google.com");
+          expect(
+            text.getAttributionSpansByFilter((a) => a is LinkAttribution),
+            {
+              AttributionSpan(
+                attribution: LinkAttribution.fromUri(
+                  Uri.parse("https://www.google.com"),
+                ),
+                start: 12,
+                end: text.length - 1,
+              ),
+            },
+          );
+
+          // Ensure we split the task.
+          expect(document.nodeCount, 2);
+          expect(document.getNodeAt(1)!, isA<TaskNode>());
+          expect(
+            (document.getNodeAt(1)! as TaskNode).text.toPlainText(),
+            "after link",
+          );
+        },
+      );
     });
 
     group('URL protocol >', () {
-      testWidgetsOnAllPlatforms('inserts https scheme if it is missing', (tester) async {
+      testWidgetsOnAllPlatforms('inserts https scheme if it is missing', (
+        tester,
+      ) async {
         await tester //
             .createDocument()
             .withSingleEmptyParagraph()
@@ -1097,16 +1306,15 @@ void main() {
         var text = SuperEditorInspector.findTextInComponent("1");
 
         expect(text.toPlainText(), "www.google.com ");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
-              start: 0,
-              end: 13,
+        expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
+          AttributionSpan(
+            attribution: LinkAttribution.fromUri(
+              Uri.parse("https://www.google.com"),
             ),
-          },
-        );
+            start: 0,
+            end: 13,
+          ),
+        });
       });
 
       testWidgetsOnAllPlatforms('recognizes an app URL', (tester) async {
@@ -1129,167 +1337,190 @@ void main() {
         var text = SuperEditorInspector.findTextInComponent("1");
 
         expect(text.toPlainText(), "obsidian://open?vault=MyVault ");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("obsidian://open?vault=MyVault")),
-              start: 0,
-              end: 28,
+        expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
+          AttributionSpan(
+            attribution: LinkAttribution.fromUri(
+              Uri.parse("obsidian://open?vault=MyVault"),
             ),
-          },
-        );
-      });
-
-      testWidgetsOnAllPlatforms('recognizes a URL without https and www and converts it to a link', (tester) async {
-        await tester //
-            .createDocument()
-            .withSingleEmptyParagraph()
-            .withInputSource(TextInputSource.ime)
-            .pump();
-
-        // Place the caret at the beginning of the empty document.
-        await tester.placeCaretInParagraph("1", 0);
-
-        // Type a URL without the www. It shouldn't linkify until we add a space.
-        await tester.typeImeText("google.com");
-
-        // Ensure it's not linkified yet.
-        var text = SuperEditorInspector.findTextInComponent("1");
-
-        expect(text.toPlainText(), "google.com");
-        expect(
-          text.getAttributionSpansInRange(
-            attributionFilter: (attribution) => true,
-            range: SpanRange(0, text.length - 1),
+            start: 0,
+            end: 28,
           ),
-          isEmpty,
-        );
-
-        // Type a space, to cause a linkify reaction.
-        await tester.typeImeText(" ");
-
-        // Ensure it's linkified.
-        text = SuperEditorInspector.findTextInComponent("1");
-
-        expect(text.toPlainText(), "google.com ");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("https://google.com")),
-              start: 0,
-              end: 9,
-            ),
-          },
-        );
+        });
       });
 
-      testWidgetsOnDesktop('recognizes a pasted URL with www and converts it to a link', (tester) async {
-        await tester //
-            .createDocument()
-            .withSingleEmptyParagraph()
-            .withInputSource(TextInputSource.ime)
-            .pump();
+      testWidgetsOnAllPlatforms(
+        'recognizes a URL without https and www and converts it to a link',
+        (tester) async {
+          await tester //
+              .createDocument()
+              .withSingleEmptyParagraph()
+              .withInputSource(TextInputSource.ime)
+              .pump();
 
-        // Place the caret at the beginning of the empty document.
-        await tester.placeCaretInParagraph("1", 0);
+          // Place the caret at the beginning of the empty document.
+          await tester.placeCaretInParagraph("1", 0);
 
-        // Paste text with a URL.
-        tester.simulateClipboard();
-        await tester.setSimulatedClipboardContent("Hello https://www.google.com world");
-        // TODO: create and use something like tester.pressPasteAdaptive()
-        if (debugDefaultTargetPlatformOverride == TargetPlatform.macOS) {
-          await tester.pressCmdV();
-        } else {
-          await tester.pressCtlV();
-        }
+          // Type a URL without the www. It shouldn't linkify until we add a space.
+          await tester.typeImeText("google.com");
 
-        // Ensure the URL is linkified.
-        final text = SuperEditorInspector.findTextInComponent("1");
-        expect(text.toPlainText(), "Hello https://www.google.com world");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
-              start: 6,
-              end: 27,
+          // Ensure it's not linkified yet.
+          var text = SuperEditorInspector.findTextInComponent("1");
+
+          expect(text.toPlainText(), "google.com");
+          expect(
+            text.getAttributionSpansInRange(
+              attributionFilter: (attribution) => true,
+              range: SpanRange(0, text.length - 1),
             ),
-          },
-        );
-      });
+            isEmpty,
+          );
 
-      testWidgetsOnDesktop('recognizes a pasted URL and inserts https scheme if it is missing', (tester) async {
-        await tester //
-            .createDocument()
-            .withSingleEmptyParagraph()
-            .withInputSource(TextInputSource.ime)
-            .pump();
+          // Type a space, to cause a linkify reaction.
+          await tester.typeImeText(" ");
 
-        // Place the caret at the beginning of the empty document.
-        await tester.placeCaretInParagraph("1", 0);
+          // Ensure it's linkified.
+          text = SuperEditorInspector.findTextInComponent("1");
 
-        // Paste text with a URL.
-        tester.simulateClipboard();
-        await tester.setSimulatedClipboardContent("Hello www.google.com world");
-        // TODO: create and use something like tester.pressPasteAdaptive()
-        if (debugDefaultTargetPlatformOverride == TargetPlatform.macOS) {
-          await tester.pressCmdV();
-        } else {
-          await tester.pressCtlV();
-        }
+          expect(text.toPlainText(), "google.com ");
+          expect(
+            text.getAttributionSpansByFilter((a) => a is LinkAttribution),
+            {
+              AttributionSpan(
+                attribution: LinkAttribution.fromUri(
+                  Uri.parse("https://google.com"),
+                ),
+                start: 0,
+                end: 9,
+              ),
+            },
+          );
+        },
+      );
 
-        // Ensure it's linkified with a URL schema.
-        var text = SuperEditorInspector.findTextInComponent("1");
+      testWidgetsOnDesktop(
+        'recognizes a pasted URL with www and converts it to a link',
+        (tester) async {
+          await tester //
+              .createDocument()
+              .withSingleEmptyParagraph()
+              .withInputSource(TextInputSource.ime)
+              .pump();
 
-        expect(text.toPlainText(), "Hello www.google.com world");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
-              start: 6,
-              end: 19,
-            ),
-          },
-        );
-      });
+          // Place the caret at the beginning of the empty document.
+          await tester.placeCaretInParagraph("1", 0);
 
-      testWidgetsOnDesktop('recognizes a pasted URL without https or www and converts it to a link', (tester) async {
-        await tester //
-            .createDocument()
-            .withSingleEmptyParagraph()
-            .withInputSource(TextInputSource.ime)
-            .pump();
+          // Paste text with a URL.
+          tester.simulateClipboard();
+          await tester.setSimulatedClipboardContent(
+            "Hello https://www.google.com world",
+          );
+          // TODO: create and use something like tester.pressPasteAdaptive()
+          if (debugDefaultTargetPlatformOverride == TargetPlatform.macOS) {
+            await tester.pressCmdV();
+          } else {
+            await tester.pressCtlV();
+          }
 
-        // Place the caret at the beginning of the empty document.
-        await tester.placeCaretInParagraph("1", 0);
+          // Ensure the URL is linkified.
+          final text = SuperEditorInspector.findTextInComponent("1");
+          expect(text.toPlainText(), "Hello https://www.google.com world");
+          expect(
+            text.getAttributionSpansByFilter((a) => a is LinkAttribution),
+            {
+              AttributionSpan(
+                attribution: LinkAttribution.fromUri(
+                  Uri.parse("https://www.google.com"),
+                ),
+                start: 6,
+                end: 27,
+              ),
+            },
+          );
+        },
+      );
 
-        // Paste text with a URL.
-        tester.simulateClipboard();
-        await tester.setSimulatedClipboardContent("Hello google.com world");
-        // TODO: create and use something like tester.pressPasteAdaptive()
-        if (debugDefaultTargetPlatformOverride == TargetPlatform.macOS) {
-          await tester.pressCmdV();
-        } else {
-          await tester.pressCtlV();
-        }
+      testWidgetsOnDesktop(
+        'recognizes a pasted URL and inserts https scheme if it is missing',
+        (tester) async {
+          await tester //
+              .createDocument()
+              .withSingleEmptyParagraph()
+              .withInputSource(TextInputSource.ime)
+              .pump();
 
-        // Ensure the URL is linkified.
-        final text = SuperEditorInspector.findTextInComponent("1");
-        expect(text.toPlainText(), "Hello google.com world");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("https://google.com")),
-              start: 6,
-              end: 15,
-            ),
-          },
-        );
-      });
+          // Place the caret at the beginning of the empty document.
+          await tester.placeCaretInParagraph("1", 0);
+
+          // Paste text with a URL.
+          tester.simulateClipboard();
+          await tester.setSimulatedClipboardContent(
+            "Hello www.google.com world",
+          );
+          // TODO: create and use something like tester.pressPasteAdaptive()
+          if (debugDefaultTargetPlatformOverride == TargetPlatform.macOS) {
+            await tester.pressCmdV();
+          } else {
+            await tester.pressCtlV();
+          }
+
+          // Ensure it's linkified with a URL schema.
+          var text = SuperEditorInspector.findTextInComponent("1");
+
+          expect(text.toPlainText(), "Hello www.google.com world");
+          expect(
+            text.getAttributionSpansByFilter((a) => a is LinkAttribution),
+            {
+              AttributionSpan(
+                attribution: LinkAttribution.fromUri(
+                  Uri.parse("https://www.google.com"),
+                ),
+                start: 6,
+                end: 19,
+              ),
+            },
+          );
+        },
+      );
+
+      testWidgetsOnDesktop(
+        'recognizes a pasted URL without https or www and converts it to a link',
+        (tester) async {
+          await tester //
+              .createDocument()
+              .withSingleEmptyParagraph()
+              .withInputSource(TextInputSource.ime)
+              .pump();
+
+          // Place the caret at the beginning of the empty document.
+          await tester.placeCaretInParagraph("1", 0);
+
+          // Paste text with a URL.
+          tester.simulateClipboard();
+          await tester.setSimulatedClipboardContent("Hello google.com world");
+          // TODO: create and use something like tester.pressPasteAdaptive()
+          if (debugDefaultTargetPlatformOverride == TargetPlatform.macOS) {
+            await tester.pressCmdV();
+          } else {
+            await tester.pressCtlV();
+          }
+
+          // Ensure the URL is linkified.
+          final text = SuperEditorInspector.findTextInComponent("1");
+          expect(text.toPlainText(), "Hello google.com world");
+          expect(
+            text.getAttributionSpansByFilter((a) => a is LinkAttribution),
+            {
+              AttributionSpan(
+                attribution: LinkAttribution.fromUri(
+                  Uri.parse("https://google.com"),
+                ),
+                start: 6,
+                end: 15,
+              ),
+            },
+          );
+        },
+      );
 
       testWidgetsOnDesktop('recognizes multiple pasted URLs', (tester) async {
         await tester //
@@ -1320,36 +1551,43 @@ void main() {
           "Some URLS: google.com https://google.com somebody@gmail.com mailto:somebody@gmail.com obsidian://open?vault=my-vault",
         );
 
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("https://google.com")),
-              start: 11,
-              end: 20,
+        expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
+          AttributionSpan(
+            attribution: LinkAttribution.fromUri(
+              Uri.parse("https://google.com"),
             ),
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("https://google.com")),
-              start: 22,
-              end: 39,
+            start: 11,
+            end: 20,
+          ),
+          AttributionSpan(
+            attribution: LinkAttribution.fromUri(
+              Uri.parse("https://google.com"),
             ),
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("mailto:somebody@gmail.com")),
-              start: 41,
-              end: 58,
+            start: 22,
+            end: 39,
+          ),
+          AttributionSpan(
+            attribution: LinkAttribution.fromUri(
+              Uri.parse("mailto:somebody@gmail.com"),
             ),
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("mailto:somebody@gmail.com")),
-              start: 60,
-              end: 84,
+            start: 41,
+            end: 58,
+          ),
+          AttributionSpan(
+            attribution: LinkAttribution.fromUri(
+              Uri.parse("mailto:somebody@gmail.com"),
             ),
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("obsidian://open?vault=my-vault")),
-              start: 86,
-              end: 115,
+            start: 60,
+            end: 84,
+          ),
+          AttributionSpan(
+            attribution: LinkAttribution.fromUri(
+              Uri.parse("obsidian://open?vault=my-vault"),
             ),
-          },
-        );
+            start: 86,
+            end: 115,
+          ),
+        });
       });
     });
 
@@ -1374,55 +1612,63 @@ void main() {
         var text = SuperEditorInspector.findTextInComponent("1");
 
         expect(text.toPlainText(), "me@gmail.com ");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromEmail("me@gmail.com"),
-              start: 0,
-              end: 11,
-            ),
-          },
-        );
+        expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
+          AttributionSpan(
+            attribution: LinkAttribution.fromEmail("me@gmail.com"),
+            start: 0,
+            end: 11,
+          ),
+        });
       });
     });
 
-    testWidgetsOnAllPlatforms('recognizes a second URL when typing and converts it to a link', (tester) async {
-      await tester //
-          .createDocument()
-          .withSingleEmptyParagraph()
-          .withInputSource(TextInputSource.ime)
-          .pump();
+    testWidgetsOnAllPlatforms(
+      'recognizes a second URL when typing and converts it to a link',
+      (tester) async {
+        await tester //
+            .createDocument()
+            .withSingleEmptyParagraph()
+            .withInputSource(TextInputSource.ime)
+            .pump();
 
-      // Place the caret at the beginning of the empty document.
-      await tester.placeCaretInParagraph("1", 0);
+        // Place the caret at the beginning of the empty document.
+        await tester.placeCaretInParagraph("1", 0);
 
-      // Type text with two URLs.
-      await tester.typeImeText("https://www.google.com and https://flutter.dev ");
+        // Type text with two URLs.
+        await tester.typeImeText(
+          "https://www.google.com and https://flutter.dev ",
+        );
 
-      // Ensure both URLs are linkified with the correct URLs.
-      final text = SuperEditorInspector.findTextInComponent("1");
+        // Ensure both URLs are linkified with the correct URLs.
+        final text = SuperEditorInspector.findTextInComponent("1");
 
-      expect(text.toPlainText(), "https://www.google.com and https://flutter.dev ");
-      expect(
-        text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-        {
+        expect(
+          text.toPlainText(),
+          "https://www.google.com and https://flutter.dev ",
+        );
+        expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
           AttributionSpan(
-            attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
+            attribution: LinkAttribution.fromUri(
+              Uri.parse("https://www.google.com"),
+            ),
             start: 0,
             end: 21,
           ),
           AttributionSpan(
-            attribution: LinkAttribution.fromUri(Uri.parse("https://flutter.dev")),
+            attribution: LinkAttribution.fromUri(
+              Uri.parse("https://flutter.dev"),
+            ),
             start: 27,
             end: 45,
           ),
-        },
-      );
-    });
+        });
+      },
+    );
 
     group('does not expand the link when inserting before the link', () {
-      testWidgetsOnAllPlatforms('when configured to preserve links on change', (tester) async {
+      testWidgetsOnAllPlatforms('when configured to preserve links on change', (
+        tester,
+      ) async {
         // Configure and render a document.
         await tester //
             .createDocument()
@@ -1444,12 +1690,16 @@ void main() {
         );
       });
 
-      testWidgetsOnAllPlatforms('when configured to update links on change', (tester) async {
+      testWidgetsOnAllPlatforms('when configured to update links on change', (
+        tester,
+      ) async {
         // Configure and render a document.
         await tester //
             .createDocument()
             .fromMarkdown("[www.google.com](www.google.com)")
-            .withAddedReactions([const LinkifyReaction(updatePolicy: LinkUpdatePolicy.update)]) //
+            .withAddedReactions([
+              const LinkifyReaction(updatePolicy: LinkUpdatePolicy.update),
+            ]) //
             .pump();
 
         final doc = SuperEditorInspector.findDocument()!;
@@ -1467,12 +1717,16 @@ void main() {
         );
       });
 
-      testWidgetsOnAllPlatforms('when configured to remove links on change', (tester) async {
+      testWidgetsOnAllPlatforms('when configured to remove links on change', (
+        tester,
+      ) async {
         // Configure and render a document.
         await tester //
             .createDocument()
             .fromMarkdown("[www.google.com](www.google.com)")
-            .withAddedReactions([const LinkifyReaction(updatePolicy: LinkUpdatePolicy.remove)]) //
+            .withAddedReactions([
+              const LinkifyReaction(updatePolicy: LinkUpdatePolicy.remove),
+            ]) //
             .pump();
 
         final doc = SuperEditorInspector.findDocument()!;
@@ -1492,7 +1746,9 @@ void main() {
     });
 
     group('does not expand the link when inserting after the link', () {
-      testWidgets('when configured to preserve links on change', (tester) async {
+      testWidgets('when configured to preserve links on change', (
+        tester,
+      ) async {
         // Configure and render a document.
         await tester //
             .createDocument()
@@ -1519,7 +1775,9 @@ void main() {
         await tester //
             .createDocument()
             .fromMarkdown("[www.google.com](www.google.com)")
-            .withAddedReactions([const LinkifyReaction(updatePolicy: LinkUpdatePolicy.update)]) //
+            .withAddedReactions([
+              const LinkifyReaction(updatePolicy: LinkUpdatePolicy.update),
+            ]) //
             .pump();
 
         final doc = SuperEditorInspector.findDocument()!;
@@ -1542,7 +1800,9 @@ void main() {
         await tester //
             .createDocument()
             .fromMarkdown("[www.google.com](www.google.com)")
-            .withAddedReactions([const LinkifyReaction(updatePolicy: LinkUpdatePolicy.remove)]) //
+            .withAddedReactions([
+              const LinkifyReaction(updatePolicy: LinkUpdatePolicy.remove),
+            ]) //
             .pump();
 
         final doc = SuperEditorInspector.findDocument()!;
@@ -1562,7 +1822,9 @@ void main() {
     });
 
     group('can insert characters in the middle of a link', () {
-      testWidgetsOnAllPlatforms('without updating the attribution', (tester) async {
+      testWidgetsOnAllPlatforms('without updating the attribution', (
+        tester,
+      ) async {
         await tester //
             .createDocument()
             .fromMarkdown("[www.google.com](www.google.com)")
@@ -1582,16 +1844,13 @@ void main() {
         var text = SuperEditorInspector.findTextInComponent(nodeId);
 
         expect(text.toPlainText(), "www.googoooole.com");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("www.google.com")),
-              start: 0,
-              end: text.length - 1,
-            ),
-          },
-        );
+        expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
+          AttributionSpan(
+            attribution: LinkAttribution.fromUri(Uri.parse("www.google.com")),
+            start: 0,
+            end: text.length - 1,
+          ),
+        });
       });
 
       testWidgetsOnAllPlatforms('updating the attribution', (tester) async {
@@ -1600,7 +1859,9 @@ void main() {
             .createDocument()
             .fromMarkdown("[www.google.com](${scheme}www.google.com)")
             .withInputSource(TextInputSource.ime)
-            .withAddedReactions([const LinkifyReaction(updatePolicy: LinkUpdatePolicy.update)]) //
+            .withAddedReactions([
+              const LinkifyReaction(updatePolicy: LinkUpdatePolicy.update),
+            ]) //
             .pump();
 
         final doc = SuperEditorInspector.findDocument()!;
@@ -1614,16 +1875,13 @@ void main() {
         // Ensure the characters were inserted and the link was updated.
         final text = SuperEditorInspector.findTextInComponent(doc.first.id);
         expect(text.toPlainText(), "www.googoooole.com");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution("${scheme}www.googoooole.com"),
-              start: 0,
-              end: text.length - 1,
-            ),
-          },
-        );
+        expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
+          AttributionSpan(
+            attribution: LinkAttribution("${scheme}www.googoooole.com"),
+            start: 0,
+            end: text.length - 1,
+          ),
+        });
       }, variant: _urlSchemeVariant);
 
       testWidgetsOnAllPlatforms('removing the attribution', (tester) async {
@@ -1631,7 +1889,9 @@ void main() {
             .createDocument()
             .fromMarkdown("[www.google.com](www.google.com)")
             .withInputSource(TextInputSource.ime)
-            .withAddedReactions([const LinkifyReaction(updatePolicy: LinkUpdatePolicy.remove)]) //
+            .withAddedReactions([
+              const LinkifyReaction(updatePolicy: LinkUpdatePolicy.remove),
+            ]) //
             .pump();
 
         final doc = SuperEditorInspector.findDocument()!;
@@ -1650,7 +1910,9 @@ void main() {
     });
 
     group('can delete characters at the beginning of a link', () {
-      testWidgetsOnAllPlatforms('without updating the attribution', (tester) async {
+      testWidgetsOnAllPlatforms('without updating the attribution', (
+        tester,
+      ) async {
         final scheme = _urlSchemeVariant.currentValue;
         await tester //
             .createDocument()
@@ -1674,16 +1936,15 @@ void main() {
         var text = SuperEditorInspector.findTextInComponent(nodeId);
 
         expect(text.toPlainText(), "google.com");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("${scheme}www.google.com")),
-              start: 0,
-              end: text.length - 1,
+        expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
+          AttributionSpan(
+            attribution: LinkAttribution.fromUri(
+              Uri.parse("${scheme}www.google.com"),
             ),
-          },
-        );
+            start: 0,
+            end: text.length - 1,
+          ),
+        });
       }, variant: _urlSchemeVariant);
 
       testWidgetsOnAllPlatforms('updating the attribution', (tester) async {
@@ -1692,7 +1953,9 @@ void main() {
             .createDocument()
             .fromMarkdown("[www.google.com](${scheme}www.google.com)")
             .withInputSource(TextInputSource.ime)
-            .withAddedReactions([const LinkifyReaction(updatePolicy: LinkUpdatePolicy.update)]) //
+            .withAddedReactions([
+              const LinkifyReaction(updatePolicy: LinkUpdatePolicy.update),
+            ]) //
             .pump();
 
         final doc = SuperEditorInspector.findDocument()!;
@@ -1712,16 +1975,13 @@ void main() {
         // scheme.
         final text = SuperEditorInspector.findTextInComponent(doc.first.id);
         expect(text.toPlainText(), "google.com");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution("${scheme}google.com"),
-              start: 0,
-              end: text.length - 1,
-            ),
-          },
-        );
+        expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
+          AttributionSpan(
+            attribution: LinkAttribution("${scheme}google.com"),
+            start: 0,
+            end: text.length - 1,
+          ),
+        });
 
         // Delete 9 more characters, leaving only the last "m".
         await tester.pressDelete();
@@ -1735,10 +1995,14 @@ void main() {
         await tester.pressDelete();
 
         // Ensure the attribution was updated.
-        final textAfter = SuperEditorInspector.findTextInComponent(doc.first.id);
+        final textAfter = SuperEditorInspector.findTextInComponent(
+          doc.first.id,
+        );
         expect(textAfter.toPlainText(), "m");
         expect(
-          (textAfter.getAllAttributionsAt(0).first as LinkAttribution).plainTextUri.toString(),
+          (textAfter.getAllAttributionsAt(0).first as LinkAttribution)
+              .plainTextUri
+              .toString(),
           "${scheme}m",
         );
 
@@ -1746,7 +2010,10 @@ void main() {
         await tester.pressDelete();
 
         // Ensure the text was deleted.
-        expect(SuperEditorInspector.findTextInComponent(doc.first.id).toPlainText(), isEmpty);
+        expect(
+          SuperEditorInspector.findTextInComponent(doc.first.id).toPlainText(),
+          isEmpty,
+        );
       }, variant: _urlSchemeVariant);
 
       testWidgetsOnAllPlatforms('removing the attribution', (tester) async {
@@ -1754,7 +2021,9 @@ void main() {
             .createDocument()
             .fromMarkdown("[www.google.com](www.google.com)")
             .withInputSource(TextInputSource.ime)
-            .withAddedReactions([const LinkifyReaction(updatePolicy: LinkUpdatePolicy.remove)]) //
+            .withAddedReactions([
+              const LinkifyReaction(updatePolicy: LinkUpdatePolicy.remove),
+            ]) //
             .pump();
 
         final doc = SuperEditorInspector.findDocument()!;
@@ -1776,7 +2045,9 @@ void main() {
     });
 
     group('can delete characters in the middle of a link', () {
-      testWidgetsOnAllPlatforms('without updating the attribution', (tester) async {
+      testWidgetsOnAllPlatforms('without updating the attribution', (
+        tester,
+      ) async {
         final scheme = _urlSchemeVariant.currentValue;
         await tester //
             .createDocument()
@@ -1799,16 +2070,15 @@ void main() {
         // Ensure the characters were deleted and the whole link is still attributed.
         final text = SuperEditorInspector.findTextInComponent(doc.first.id);
         expect(text.toPlainText(), "www.g.com");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("${scheme}www.google.com")),
-              start: 0,
-              end: text.length - 1,
+        expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
+          AttributionSpan(
+            attribution: LinkAttribution.fromUri(
+              Uri.parse("${scheme}www.google.com"),
             ),
-          },
-        );
+            start: 0,
+            end: text.length - 1,
+          ),
+        });
       }, variant: _urlSchemeVariant);
 
       testWidgetsOnAllPlatforms('updating the attribution', (tester) async {
@@ -1817,7 +2087,9 @@ void main() {
             .createDocument()
             .fromMarkdown("[www.google.com](${scheme}www.google.com)")
             .withInputSource(TextInputSource.ime)
-            .withAddedReactions([const LinkifyReaction(updatePolicy: LinkUpdatePolicy.update)]) //
+            .withAddedReactions([
+              const LinkifyReaction(updatePolicy: LinkUpdatePolicy.update),
+            ]) //
             .pump();
 
         final doc = SuperEditorInspector.findDocument()!;
@@ -1839,16 +2111,15 @@ void main() {
         // Ensure the text and the link were updated.
         var text = SuperEditorInspector.findTextInComponent(doc.first.id);
         expect(text.toPlainText(), "www.duckduckgo.com");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("${scheme}www.duckduckgo.com")),
-              start: 0,
-              end: text.length - 1,
+        expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
+          AttributionSpan(
+            attribution: LinkAttribution.fromUri(
+              Uri.parse("${scheme}www.duckduckgo.com"),
             ),
-          },
-        );
+            start: 0,
+            end: text.length - 1,
+          ),
+        });
       }, variant: _urlSchemeVariant);
 
       testWidgetsOnAllPlatforms('removing the attribution', (tester) async {
@@ -1856,7 +2127,9 @@ void main() {
             .createDocument()
             .fromMarkdown("[www.google.com](www.google.com)")
             .withInputSource(TextInputSource.ime)
-            .withAddedReactions([const LinkifyReaction(updatePolicy: LinkUpdatePolicy.remove)]) //
+            .withAddedReactions([
+              const LinkifyReaction(updatePolicy: LinkUpdatePolicy.remove),
+            ]) //
             .pump();
 
         final doc = SuperEditorInspector.findDocument()!;
@@ -1875,7 +2148,9 @@ void main() {
     });
 
     group('can delete characters at the end of a link', () {
-      testWidgetsOnAllPlatforms('without updating the attribution', (tester) async {
+      testWidgetsOnAllPlatforms('without updating the attribution', (
+        tester,
+      ) async {
         final scheme = _urlSchemeVariant.currentValue;
         await tester //
             .createDocument()
@@ -1899,16 +2174,15 @@ void main() {
         var text = SuperEditorInspector.findTextInComponent(nodeId);
 
         expect(text.toPlainText(), "www.google");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("${scheme}www.google.com")),
-              start: 0,
-              end: text.length - 1,
+        expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
+          AttributionSpan(
+            attribution: LinkAttribution.fromUri(
+              Uri.parse("${scheme}www.google.com"),
             ),
-          },
-        );
+            start: 0,
+            end: text.length - 1,
+          ),
+        });
       }, variant: _urlSchemeVariant);
 
       testWidgetsOnAllPlatforms('updating the attribution', (tester) async {
@@ -1917,7 +2191,9 @@ void main() {
             .createDocument()
             .fromMarkdown("[www.google.com](${scheme}www.google.com)")
             .withInputSource(TextInputSource.ime)
-            .withAddedReactions([const LinkifyReaction(updatePolicy: LinkUpdatePolicy.update)]) //
+            .withAddedReactions([
+              const LinkifyReaction(updatePolicy: LinkUpdatePolicy.update),
+            ]) //
             .pump();
 
         final doc = SuperEditorInspector.findDocument()!;
@@ -1932,16 +2208,15 @@ void main() {
         // Ensure the characters were deleted and the link was updated.
         final text = SuperEditorInspector.findTextInComponent(doc.first.id);
         expect(text.toPlainText(), "www.google.c");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("${scheme}www.google.c")),
-              start: 0,
-              end: text.length - 1,
+        expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
+          AttributionSpan(
+            attribution: LinkAttribution.fromUri(
+              Uri.parse("${scheme}www.google.c"),
             ),
-          },
-        );
+            start: 0,
+            end: text.length - 1,
+          ),
+        });
       }, variant: _urlSchemeVariant);
 
       testWidgetsOnAllPlatforms('removing the attribution', (tester) async {
@@ -1949,7 +2224,9 @@ void main() {
             .createDocument()
             .fromMarkdown("[www.google.com](www.google.com)")
             .withInputSource(TextInputSource.ime)
-            .withAddedReactions([const LinkifyReaction(updatePolicy: LinkUpdatePolicy.remove)]) //
+            .withAddedReactions([
+              const LinkifyReaction(updatePolicy: LinkUpdatePolicy.remove),
+            ]) //
             .pump();
 
         final doc = SuperEditorInspector.findDocument()!;
@@ -1968,7 +2245,9 @@ void main() {
     });
 
     group('can replace characters in the middle of a link', () {
-      testWidgetsOnAllPlatforms('without updating the attribution', (tester) async {
+      testWidgetsOnAllPlatforms('without updating the attribution', (
+        tester,
+      ) async {
         final scheme = _urlSchemeVariant.currentValue;
         await tester //
             .createDocument()
@@ -1987,16 +2266,15 @@ void main() {
         // Ensure the text and the link were updated.
         final text = SuperEditorInspector.findTextInComponent(doc.first.id);
         expect(text.toPlainText(), "www.duckduckgo.com");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("${scheme}www.google.com")),
-              start: 0,
-              end: text.length - 1,
+        expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
+          AttributionSpan(
+            attribution: LinkAttribution.fromUri(
+              Uri.parse("${scheme}www.google.com"),
             ),
-          },
-        );
+            start: 0,
+            end: text.length - 1,
+          ),
+        });
       }, variant: _urlSchemeVariant);
 
       testWidgetsOnAllPlatforms('updating the attribution', (tester) async {
@@ -2005,7 +2283,9 @@ void main() {
             .createDocument()
             .fromMarkdown("[www.google.com](${scheme}www.google.com)")
             .withInputSource(TextInputSource.ime)
-            .withAddedReactions([const LinkifyReaction(updatePolicy: LinkUpdatePolicy.update)]) //
+            .withAddedReactions([
+              const LinkifyReaction(updatePolicy: LinkUpdatePolicy.update),
+            ]) //
             .pump();
 
         final doc = SuperEditorInspector.findDocument()!;
@@ -2019,16 +2299,15 @@ void main() {
         // Ensure the text and the link were updated.
         final text = SuperEditorInspector.findTextInComponent(doc.first.id);
         expect(text.toPlainText(), "www.duckduckgo.com");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("${scheme}www.duckduckgo.com")),
-              start: 0,
-              end: text.length - 1,
+        expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
+          AttributionSpan(
+            attribution: LinkAttribution.fromUri(
+              Uri.parse("${scheme}www.duckduckgo.com"),
             ),
-          },
-        );
+            start: 0,
+            end: text.length - 1,
+          ),
+        });
       }, variant: _urlSchemeVariant);
 
       testWidgetsOnAllPlatforms('removing the attribution', (tester) async {
@@ -2036,7 +2315,9 @@ void main() {
             .createDocument()
             .fromMarkdown("[www.google.com](www.google.com)")
             .withInputSource(TextInputSource.ime)
-            .withAddedReactions([const LinkifyReaction(updatePolicy: LinkUpdatePolicy.remove)]) //
+            .withAddedReactions([
+              const LinkifyReaction(updatePolicy: LinkUpdatePolicy.remove),
+            ]) //
             .pump();
 
         final doc = SuperEditorInspector.findDocument()!;
@@ -2054,52 +2335,57 @@ void main() {
       });
     });
 
-    testWidgetsOnAllPlatforms('user can delete characters at the end of a link and then keep typing', (tester) async {
-      final scheme = _urlSchemeVariant.currentValue;
-      await tester //
-          .createDocument()
-          .fromMarkdown("[www.google.com](${scheme}www.google.com)")
-          .withInputSource(TextInputSource.ime)
-          .pump();
+    testWidgetsOnAllPlatforms(
+      'user can delete characters at the end of a link and then keep typing',
+      (tester) async {
+        final scheme = _urlSchemeVariant.currentValue;
+        await tester //
+            .createDocument()
+            .fromMarkdown("[www.google.com](${scheme}www.google.com)")
+            .withInputSource(TextInputSource.ime)
+            .pump();
 
-      final doc = SuperEditorInspector.findDocument()!;
+        final doc = SuperEditorInspector.findDocument()!;
 
-      // Place the caret at "www.google.com|".
-      await tester.placeCaretInParagraph(doc.first.id, 14);
+        // Place the caret at "www.google.com|".
+        await tester.placeCaretInParagraph(doc.first.id, 14);
 
-      // Delete a character at the end of the link.
-      await tester.pressBackspace();
+        // Delete a character at the end of the link.
+        await tester.pressBackspace();
 
-      // Start typing new content, which shouldn't become part of the link.
-      await tester.typeImeText(" hello");
+        // Start typing new content, which shouldn't become part of the link.
+        await tester.typeImeText(" hello");
 
-      // Ensure the text were inserted, and only the URL is linkified.
-      final nodeId = doc.first.id;
-      var text = SuperEditorInspector.findTextInComponent(nodeId);
+        // Ensure the text were inserted, and only the URL is linkified.
+        final nodeId = doc.first.id;
+        var text = SuperEditorInspector.findTextInComponent(nodeId);
 
-      expect(text.toPlainText(), "www.google.co hello");
-      expect(
-        text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-        {
+        expect(text.toPlainText(), "www.google.co hello");
+        expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
           AttributionSpan(
-            attribution: LinkAttribution.fromUri(Uri.parse("${scheme}www.google.com")),
+            attribution: LinkAttribution.fromUri(
+              Uri.parse("${scheme}www.google.com"),
+            ),
             start: 0,
             end: 12,
           ),
-        },
-      );
-      expect(
-        text.hasAttributionsThroughout(
-          attributions: {
-            LinkAttribution.fromUri(Uri.parse("${scheme}www.google.com")),
-          },
-          range: SpanRange(13, text.length - 1),
-        ),
-        isFalse,
-      );
-    }, variant: _urlSchemeVariant);
+        });
+        expect(
+          text.hasAttributionsThroughout(
+            attributions: {
+              LinkAttribution.fromUri(Uri.parse("${scheme}www.google.com")),
+            },
+            range: SpanRange(13, text.length - 1),
+          ),
+          isFalse,
+        );
+      },
+      variant: _urlSchemeVariant,
+    );
 
-    testWidgetsOnAllPlatforms('does not extend link to new paragraph', (tester) async {
+    testWidgetsOnAllPlatforms('does not extend link to new paragraph', (
+      tester,
+    ) async {
       await tester //
           .createDocument()
           .fromMarkdown("[www.google.com](www.google.com)")
@@ -2119,14 +2405,17 @@ void main() {
       // ensure that no link markers were added to the empty paragraph.
       expect(doc.nodeCount, 2);
       final newParagraphId = doc.getNodeAt(1)!.id;
-      AttributedText newParagraphText = SuperEditorInspector.findTextInComponent(newParagraphId);
+      AttributedText newParagraphText =
+          SuperEditorInspector.findTextInComponent(newParagraphId);
       expect(newParagraphText.spans.markers, isEmpty);
 
       // Type some text.
       await tester.typeImeText("New paragraph");
 
       // Ensure the text we typed didn't re-introduce a link attribution.
-      newParagraphText = SuperEditorInspector.findTextInComponent(newParagraphId);
+      newParagraphText = SuperEditorInspector.findTextInComponent(
+        newParagraphId,
+      );
       expect(newParagraphText.toPlainText(), "New paragraph");
       expect(
         newParagraphText.getAttributionSpansInRange(
@@ -2137,7 +2426,9 @@ void main() {
       );
     });
 
-    testWidgetsOnAllPlatforms('does not extend link to new list item', (tester) async {
+    testWidgetsOnAllPlatforms('does not extend link to new list item', (
+      tester,
+    ) async {
       await tester //
           .createDocument()
           .fromMarkdown(" * [www.google.com](www.google.com)")
@@ -2161,7 +2452,9 @@ void main() {
       expect(doc.nodeCount, 2);
       expect(doc.getNodeAt(1)!, isA<ListItemNode>());
       final newListItemId = doc.getNodeAt(1)!.id;
-      AttributedText newListItemText = SuperEditorInspector.findTextInComponent(newListItemId);
+      AttributedText newListItemText = SuperEditorInspector.findTextInComponent(
+        newListItemId,
+      );
       expect(newListItemText.spans.markers, isEmpty);
 
       // Type some text.
@@ -2179,55 +2472,63 @@ void main() {
       );
     });
 
-    testWidgetsOnAllPlatforms('plays nice with Markdown link when Markdown parsing is disabled', (tester) async {
-      // Based on bug #2074 - https://github.com/superlistapp/super_editor/issues/2074
-      await tester //
-          .createDocument()
-          .withSingleEmptyParagraph()
-          .withInputSource(TextInputSource.ime)
-          .pump();
+    testWidgetsOnAllPlatforms(
+      'plays nice with Markdown link when Markdown parsing is disabled',
+      (tester) async {
+        // Based on bug #2074 - https://github.com/superlistapp/super_editor/issues/2074
+        await tester //
+            .createDocument()
+            .withSingleEmptyParagraph()
+            .withInputSource(TextInputSource.ime)
+            .pump();
 
-      await tester.placeCaretInParagraph("1", 0);
+        await tester.placeCaretInParagraph("1", 0);
 
-      await tester.typeImeText("[google](www.google.com) ");
+        await tester.typeImeText("[google](www.google.com) ");
 
-      // Ensure that the Markdown was ignored and nothing was linkified.
-      final text = SuperEditorInspector.findTextInComponent("1");
-      expect(text.toPlainText(), "[google](www.google.com) ");
-      expect(text.getAttributionSpansByFilter((a) => true), isEmpty);
-    });
+        // Ensure that the Markdown was ignored and nothing was linkified.
+        final text = SuperEditorInspector.findTextInComponent("1");
+        expect(text.toPlainText(), "[google](www.google.com) ");
+        expect(text.getAttributionSpansByFilter((a) => true), isEmpty);
+      },
+    );
 
-    testWidgetsOnMac('plays nice with Markdown link when pasting a Markdown link', (tester) async {
-      // Based on bug #2074 - https://github.com/superlistapp/super_editor/issues/2074
-      await tester //
-          .createDocument()
-          .withSingleEmptyParagraph()
-          .withInputSource(TextInputSource.ime)
-          .pump();
+    testWidgetsOnMac(
+      'plays nice with Markdown link when pasting a Markdown link',
+      (tester) async {
+        // Based on bug #2074 - https://github.com/superlistapp/super_editor/issues/2074
+        await tester //
+            .createDocument()
+            .withSingleEmptyParagraph()
+            .withInputSource(TextInputSource.ime)
+            .pump();
 
-      await tester.placeCaretInParagraph("1", 0);
+        await tester.placeCaretInParagraph("1", 0);
 
-      // Simulate copying a Markdown link to the clipboard.
-      tester.simulateClipboard();
-      await tester.setSimulatedClipboardContent("Hello [google](www.google.com) ");
+        // Simulate copying a Markdown link to the clipboard.
+        tester.simulateClipboard();
+        await tester.setSimulatedClipboardContent(
+          "Hello [google](www.google.com) ",
+        );
 
-      // Simulate pasting the Markdown link into the document.
-      await tester.pressCmdV();
+        // Simulate pasting the Markdown link into the document.
+        await tester.pressCmdV();
 
-      // Ensure that the Markdown was ignored and nothing was linkified.
-      final text = SuperEditorInspector.findTextInComponent("1");
-      expect(text.toPlainText(), "Hello [google](www.google.com) ");
-      expect(text.getAttributionSpansByFilter((a) => true), isEmpty);
-      expect(
-        SuperEditorInspector.findDocumentSelection(),
-        const DocumentSelection.collapsed(
-          position: DocumentPosition(
-            nodeId: "1",
-            nodePosition: TextNodePosition(offset: 31),
+        // Ensure that the Markdown was ignored and nothing was linkified.
+        final text = SuperEditorInspector.findTextInComponent("1");
+        expect(text.toPlainText(), "Hello [google](www.google.com) ");
+        expect(text.getAttributionSpansByFilter((a) => true), isEmpty);
+        expect(
+          SuperEditorInspector.findDocumentSelection(),
+          const DocumentSelection.collapsed(
+            position: DocumentPosition(
+              nodeId: "1",
+              nodePosition: TextNodePosition(offset: 31),
+            ),
           ),
-        ),
-      );
-    });
+        );
+      },
+    );
 
     // TODO: once it's easier to configure task components (#1295), add a test that checks link attributions when inserting a new task
   });

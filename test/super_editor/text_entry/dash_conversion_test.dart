@@ -21,11 +21,12 @@ void main() {
         tester, {
         required TextInputSource inputSource,
       }) async {
-        final context = await tester //
-            .createDocument()
-            .withSingleEmptyParagraph()
-            .withInputSource(inputSource)
-            .pump();
+        final context =
+            await tester //
+                .createDocument()
+                .withSingleEmptyParagraph()
+                .withInputSource(inputSource)
+                .pump();
 
         // Place the caret at the beginning of the document.
         await tester.placeCaretInParagraph('1', 0);
@@ -34,31 +35,41 @@ void main() {
         await tester.typeTextAdaptive('-');
 
         // Ensure no conversion happened.
-        expect(SuperEditorInspector.findTextInComponent('1').toPlainText(), '-');
+        expect(
+          SuperEditorInspector.findTextInComponent('1').toPlainText(),
+          '-',
+        );
 
         // Type the second dash.
         await tester.typeTextAdaptive('-');
 
         // Ensure the two dashes were converted to an em-dash.
         expect(context.document.nodeCount, 1);
-        expect(SuperEditorInspector.findTextInComponent('1').toPlainText(), SpecialCharacters.emDash);
+        expect(
+          SuperEditorInspector.findTextInComponent('1').toPlainText(),
+          SpecialCharacters.emDash,
+        );
 
         // Type some arbitrary text.
         await tester.typeTextAdaptive(' is an em-dash');
 
         // Ensure the text was inserted.
-        expect(SuperEditorInspector.findTextInComponent('1').toPlainText(), '— is an em-dash');
+        expect(
+          SuperEditorInspector.findTextInComponent('1').toPlainText(),
+          '— is an em-dash',
+        );
       });
 
       testAllInputsOnAllPlatforms('at the beginning of a non-empty paragraph', (
         tester, {
         required TextInputSource inputSource,
       }) async {
-        final context = await tester //
-            .createDocument()
-            .fromMarkdown('was inserted')
-            .withInputSource(inputSource)
-            .pump();
+        final context =
+            await tester //
+                .createDocument()
+                .fromMarkdown('was inserted')
+                .withInputSource(inputSource)
+                .pump();
 
         final nodeId = context.document.first.id;
 
@@ -69,31 +80,41 @@ void main() {
         await tester.typeTextAdaptive('-');
 
         // Ensure no conversion happened.
-        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(), '-was inserted');
+        expect(
+          SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+          '-was inserted',
+        );
 
         // Type the second dash.
         await tester.typeTextAdaptive('-');
 
         // Ensure the two dashes were converted to an em-dash.
         expect(context.document.nodeCount, 1);
-        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(), '—was inserted');
+        expect(
+          SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+          '—was inserted',
+        );
 
         // Type some arbitrary text.
         await tester.typeTextAdaptive('(em-dash) ');
 
         // Ensure the text was inserted.
-        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(), '—(em-dash) was inserted');
+        expect(
+          SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+          '—(em-dash) was inserted',
+        );
       });
 
       testAllInputsOnAllPlatforms('at the middle of a paragraph', (
         tester, {
         required TextInputSource inputSource,
       }) async {
-        final context = await tester //
-            .createDocument()
-            .fromMarkdown('Inserting with a reaction')
-            .withInputSource(inputSource)
-            .pump();
+        final context =
+            await tester //
+                .createDocument()
+                .fromMarkdown('Inserting with a reaction')
+                .withInputSource(inputSource)
+                .pump();
 
         final nodeId = context.document.first.id;
 
@@ -104,14 +125,20 @@ void main() {
         await tester.typeTextAdaptive('-');
 
         // Ensure no conversion happened.
-        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(), 'Inserting -with a reaction');
+        expect(
+          SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+          'Inserting -with a reaction',
+        );
 
         // Type the second dash.
         await tester.typeTextAdaptive('-');
 
         // Ensure the two dashes were converted to an em-dash.
         expect(context.document.nodeCount, 1);
-        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(), 'Inserting —with a reaction');
+        expect(
+          SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+          'Inserting —with a reaction',
+        );
 
         // Type some arbitrary text.
         await tester.typeTextAdaptive(' typing two dashes ');
@@ -119,25 +146,30 @@ void main() {
         // Type three dashes. The first two should be converted to an em-dash
         // and the second should be inserted as is.
         await tester.typeTextAdaptive('---');
-        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
-            'Inserting — typing two dashes —-with a reaction');
+        expect(
+          SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+          'Inserting — typing two dashes —-with a reaction',
+        );
 
         // Type another dash. The previously inserted dash and the current one
         // should be converted to an em-dash.
         await tester.typeTextAdaptive('-');
-        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
-            'Inserting — typing two dashes ——with a reaction');
+        expect(
+          SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+          'Inserting — typing two dashes ——with a reaction',
+        );
       });
 
       testAllInputsOnAllPlatforms('at the end of a paragraph', (
         tester, {
         required TextInputSource inputSource,
       }) async {
-        final context = await tester //
-            .createDocument()
-            .fromMarkdown('Inserting')
-            .withInputSource(inputSource)
-            .pump();
+        final context =
+            await tester //
+                .createDocument()
+                .fromMarkdown('Inserting')
+                .withInputSource(inputSource)
+                .pump();
 
         final nodeId = context.document.first.id;
 
@@ -151,31 +183,41 @@ void main() {
         await tester.typeTextAdaptive('-');
 
         // Ensure no conversion happened.
-        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(), 'Inserting -');
+        expect(
+          SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+          'Inserting -',
+        );
 
         // Type the second dash.
         await tester.typeTextAdaptive('-');
 
         // Ensure the two dashes were converted to an em-dash.
         expect(context.document.nodeCount, 1);
-        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(), 'Inserting —');
+        expect(
+          SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+          'Inserting —',
+        );
 
         // Type some arbitrary text.
         await tester.typeTextAdaptive(' by typing two dashes');
 
         // Ensure the text was inserted.
-        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(), 'Inserting — by typing two dashes');
+        expect(
+          SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+          'Inserting — by typing two dashes',
+        );
       });
 
       testAllInputsOnAllPlatforms('at the beginning of an empty list item', (
         tester, {
         required TextInputSource inputSource,
       }) async {
-        final context = await tester //
-            .createDocument()
-            .fromMarkdown('* ')
-            .withInputSource(inputSource)
-            .pump();
+        final context =
+            await tester //
+                .createDocument()
+                .fromMarkdown('* ')
+                .withInputSource(inputSource)
+                .pump();
 
         final nodeId = context.document.first.id;
 
@@ -186,31 +228,41 @@ void main() {
         await tester.typeTextAdaptive('-');
 
         // Ensure no conversion happened.
-        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(), '-');
+        expect(
+          SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+          '-',
+        );
 
         // Type the second dash.
         await tester.typeTextAdaptive('-');
 
         // Ensure the two dashes were converted to an em-dash.
         expect(context.document.nodeCount, 1);
-        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(), '—');
+        expect(
+          SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+          '—',
+        );
 
         // Type some arbitrary text.
         await tester.typeTextAdaptive(' is an em-dash');
 
         // Ensure the text was inserted.
-        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(), '— is an em-dash');
+        expect(
+          SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+          '— is an em-dash',
+        );
       });
 
       testAllInputsOnAllPlatforms('at the beginning of a non-empty list item', (
         tester, {
         required TextInputSource inputSource,
       }) async {
-        final context = await tester //
-            .createDocument()
-            .fromMarkdown('* was inserted')
-            .withInputSource(inputSource)
-            .pump();
+        final context =
+            await tester //
+                .createDocument()
+                .fromMarkdown('* was inserted')
+                .withInputSource(inputSource)
+                .pump();
 
         final nodeId = context.document.first.id;
 
@@ -221,38 +273,51 @@ void main() {
         await tester.typeTextAdaptive('-');
 
         // Ensure no conversion happened.
-        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(), '-was inserted');
+        expect(
+          SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+          '-was inserted',
+        );
 
         // Type the second dash.
         await tester.typeTextAdaptive('-');
 
         // Ensure the two dashes were converted to an em-dash.
         expect(context.document.nodeCount, 1);
-        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(), '—was inserted');
+        expect(
+          SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+          '—was inserted',
+        );
 
         // Type a third dash.
         await tester.typeTextAdaptive('-');
 
         // Ensure a dash was inserted and no other nodes were added.
-        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(), '—-was inserted');
+        expect(
+          SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+          '—-was inserted',
+        );
         expect(context.document.nodeCount, 1);
 
         // Type some arbitrary text.
         await tester.typeTextAdaptive('(em-dash) ');
 
         // Ensure the text was inserted.
-        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(), '—-(em-dash) was inserted');
+        expect(
+          SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+          '—-(em-dash) was inserted',
+        );
       });
 
       testAllInputsOnAllPlatforms('at the middle of a list item', (
         tester, {
         required TextInputSource inputSource,
       }) async {
-        final context = await tester //
-            .createDocument()
-            .fromMarkdown('* Inserting with a reaction')
-            .withInputSource(inputSource)
-            .pump();
+        final context =
+            await tester //
+                .createDocument()
+                .fromMarkdown('* Inserting with a reaction')
+                .withInputSource(inputSource)
+                .pump();
 
         final nodeId = context.document.first.id;
 
@@ -263,14 +328,20 @@ void main() {
         await tester.typeTextAdaptive('-');
 
         // Ensure no conversion happened.
-        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(), 'Inserting -with a reaction');
+        expect(
+          SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+          'Inserting -with a reaction',
+        );
 
         // Type the second dash.
         await tester.typeTextAdaptive('-');
 
         // Ensure the two dashes were converted to an em-dash.
         expect(context.document.nodeCount, 1);
-        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(), 'Inserting —with a reaction');
+        expect(
+          SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+          'Inserting —with a reaction',
+        );
 
         // Type some arbitrary text.
         await tester.typeTextAdaptive(' typing two dashes ');
@@ -278,25 +349,30 @@ void main() {
         // Type three dashes. The first two should be converted to an em-dash
         // and the second should be inserted as is.
         await tester.typeTextAdaptive('---');
-        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
-            'Inserting — typing two dashes —-with a reaction');
+        expect(
+          SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+          'Inserting — typing two dashes —-with a reaction',
+        );
 
         // Type another dash. The previously inserted dash and the current one
         // should be converted to an em-dash.
         await tester.typeTextAdaptive('-');
-        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
-            'Inserting — typing two dashes ——with a reaction');
+        expect(
+          SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+          'Inserting — typing two dashes ——with a reaction',
+        );
       });
 
       testAllInputsOnAllPlatforms('at the end of a list item', (
         tester, {
         required TextInputSource inputSource,
       }) async {
-        final context = await tester //
-            .createDocument()
-            .fromMarkdown('* Inserting')
-            .withInputSource(inputSource)
-            .pump();
+        final context =
+            await tester //
+                .createDocument()
+                .fromMarkdown('* Inserting')
+                .withInputSource(inputSource)
+                .pump();
 
         final nodeId = context.document.first.id;
 
@@ -310,20 +386,29 @@ void main() {
         await tester.typeTextAdaptive('-');
 
         // Ensure no conversion happened.
-        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(), 'Inserting -');
+        expect(
+          SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+          'Inserting -',
+        );
 
         // Type the second dash.
         await tester.typeTextAdaptive('-');
 
         // Ensure the two dashes were converted to an em-dash.
         expect(context.document.nodeCount, 1);
-        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(), 'Inserting —');
+        expect(
+          SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+          'Inserting —',
+        );
 
         // Type some arbitrary text.
         await tester.typeTextAdaptive(' by typing two dashes');
 
         // Ensure the text was inserted.
-        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(), 'Inserting — by typing two dashes');
+        expect(
+          SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+          'Inserting — by typing two dashes',
+        );
       });
 
       testAllInputsOnAllPlatforms('at the beginning of an empty task', (
@@ -336,7 +421,10 @@ void main() {
           ],
         );
         final composer = MutableDocumentComposer();
-        final editor = createDefaultDocumentEditor(document: document, composer: composer);
+        final editor = createDefaultDocumentEditor(
+          document: document,
+          composer: composer,
+        );
 
         await tester.pumpWidget(
           MaterialApp(
@@ -374,7 +462,10 @@ void main() {
         await tester.typeTextAdaptive(' is an em-dash');
 
         // Ensure the text was inserted.
-        expect((document.first as TaskNode).text.toPlainText(), '— is an em-dash');
+        expect(
+          (document.first as TaskNode).text.toPlainText(),
+          '— is an em-dash',
+        );
       });
 
       testAllInputsOnAllPlatforms('at the beginning of a non-empty task', (
@@ -383,11 +474,18 @@ void main() {
       }) async {
         final document = MutableDocument(
           nodes: [
-            TaskNode(id: "1", text: AttributedText("was inserted"), isComplete: false),
+            TaskNode(
+              id: "1",
+              text: AttributedText("was inserted"),
+              isComplete: false,
+            ),
           ],
         );
         final composer = MutableDocumentComposer();
-        final editor = createDefaultDocumentEditor(document: document, composer: composer);
+        final editor = createDefaultDocumentEditor(
+          document: document,
+          composer: composer,
+        );
 
         await tester.pumpWidget(
           MaterialApp(
@@ -410,27 +508,39 @@ void main() {
         await tester.typeTextAdaptive('-');
 
         // Ensure no conversion happened.
-        expect((document.first as TaskNode).text.toPlainText(), '-was inserted');
+        expect(
+          (document.first as TaskNode).text.toPlainText(),
+          '-was inserted',
+        );
 
         // Type the second dash.
         await tester.typeTextAdaptive('-');
 
         // Ensure the two dashes were converted to an em-dash.
         expect(document.nodeCount, 1);
-        expect((document.first as TaskNode).text.toPlainText(), '—was inserted');
+        expect(
+          (document.first as TaskNode).text.toPlainText(),
+          '—was inserted',
+        );
 
         // Type a third dash.
         await tester.typeTextAdaptive('-');
 
         // Ensure a dash was inserted and no other nodes were added.
-        expect((document.first as TaskNode).text.toPlainText(), '—-was inserted');
+        expect(
+          (document.first as TaskNode).text.toPlainText(),
+          '—-was inserted',
+        );
         expect(document.nodeCount, 1);
 
         // Type some arbitrary text.
         await tester.typeTextAdaptive('(em-dash) ');
 
         // Ensure the text was inserted.
-        expect((document.first as TaskNode).text.toPlainText(), '—-(em-dash) was inserted');
+        expect(
+          (document.first as TaskNode).text.toPlainText(),
+          '—-(em-dash) was inserted',
+        );
       });
 
       testAllInputsOnAllPlatforms('at the middle of a task', (
@@ -439,11 +549,18 @@ void main() {
       }) async {
         final document = MutableDocument(
           nodes: [
-            TaskNode(id: "1", text: AttributedText("Inserting with a reaction"), isComplete: false),
+            TaskNode(
+              id: "1",
+              text: AttributedText("Inserting with a reaction"),
+              isComplete: false,
+            ),
           ],
         );
         final composer = MutableDocumentComposer();
-        final editor = createDefaultDocumentEditor(document: document, composer: composer);
+        final editor = createDefaultDocumentEditor(
+          document: document,
+          composer: composer,
+        );
 
         await tester.pumpWidget(
           MaterialApp(
@@ -466,14 +583,20 @@ void main() {
         await tester.typeTextAdaptive('-');
 
         // Ensure no conversion happened.
-        expect((document.first as TaskNode).text.toPlainText(), 'Inserting -with a reaction');
+        expect(
+          (document.first as TaskNode).text.toPlainText(),
+          'Inserting -with a reaction',
+        );
 
         // Type the second dash.
         await tester.typeTextAdaptive('-');
 
         // Ensure the two dashes were converted to an em-dash.
         expect(document.nodeCount, 1);
-        expect((document.first as TaskNode).text.toPlainText(), 'Inserting —with a reaction');
+        expect(
+          (document.first as TaskNode).text.toPlainText(),
+          'Inserting —with a reaction',
+        );
 
         // Type some arbitrary text.
         await tester.typeTextAdaptive(' typing two dashes ');
@@ -481,12 +604,18 @@ void main() {
         // Type three dashes. The first two should be converted to an em-dash
         // and the second should be inserted as is.
         await tester.typeTextAdaptive('---');
-        expect((document.first as TaskNode).text.toPlainText(), 'Inserting — typing two dashes —-with a reaction');
+        expect(
+          (document.first as TaskNode).text.toPlainText(),
+          'Inserting — typing two dashes —-with a reaction',
+        );
 
         // Type another dash. The previously inserted dash and the current one
         // should be converted to an em-dash.
         await tester.typeTextAdaptive('-');
-        expect((document.first as TaskNode).text.toPlainText(), 'Inserting — typing two dashes ——with a reaction');
+        expect(
+          (document.first as TaskNode).text.toPlainText(),
+          'Inserting — typing two dashes ——with a reaction',
+        );
       });
 
       testAllInputsOnAllPlatforms('at the end of a task', (
@@ -495,11 +624,18 @@ void main() {
       }) async {
         final document = MutableDocument(
           nodes: [
-            TaskNode(id: "1", text: AttributedText("Inserting"), isComplete: false),
+            TaskNode(
+              id: "1",
+              text: AttributedText("Inserting"),
+              isComplete: false,
+            ),
           ],
         );
         final composer = MutableDocumentComposer();
-        final editor = createDefaultDocumentEditor(document: document, composer: composer);
+        final editor = createDefaultDocumentEditor(
+          document: document,
+          composer: composer,
+        );
 
         await tester.pumpWidget(
           MaterialApp(
@@ -538,7 +674,10 @@ void main() {
         await tester.typeTextAdaptive(' by typing two dashes');
 
         // Ensure the text was inserted.
-        expect((document.first as TaskNode).text.toPlainText(), 'Inserting — by typing two dashes');
+        expect(
+          (document.first as TaskNode).text.toPlainText(),
+          'Inserting — by typing two dashes',
+        );
       });
     });
   });

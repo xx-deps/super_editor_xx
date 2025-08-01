@@ -106,8 +106,8 @@ class AndroidCursorPainter extends CustomPainter {
     required this.caretColor,
     required this.isTextEmpty,
     required this.emptyTextCaretHeight,
-  })  : caretPaint = Paint()..color = caretColor,
-        super(repaint: blinkController);
+  }) : caretPaint = Paint()..color = caretColor,
+       super(repaint: blinkController);
 
   final BlinkController blinkController;
   final TextLayout textLayout;
@@ -136,9 +136,7 @@ class AndroidCursorPainter extends CustomPainter {
     _drawCaret(canvas: canvas);
   }
 
-  void _drawCaret({
-    required Canvas canvas,
-  }) {
+  void _drawCaret({required Canvas canvas}) {
     caretPaint.color = caretColor.withValues(alpha: blinkController.opacity);
 
     double caretHeight =

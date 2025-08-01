@@ -30,9 +30,9 @@ class AndroidTextFieldDragHandleSelectionStrategy {
     required Document document,
     required DocumentLayout documentLayout,
     required void Function(DocumentSelection) select,
-  })  : _document = document,
-        _docLayout = documentLayout,
-        _select = select;
+  }) : _document = document,
+       _docLayout = documentLayout,
+       _select = select;
 
   final Document _document;
   final DocumentLayout _docLayout;
@@ -67,22 +67,28 @@ class AndroidTextFieldDragHandleSelectionStrategy {
   _SelectionModifier? _selectionModifier;
 
   /// Clients should call this method when a drag handle gesture is initially recognized.
-  void onHandlePanStart(DragStartDetails details,
-      DocumentSelection initialSelection, HandleType handleType) {
+  void onHandlePanStart(
+    DragStartDetails details,
+    DocumentSelection initialSelection,
+    HandleType handleType,
+  ) {
     _lastSelection = initialSelection;
 
     if (handleType == HandleType.collapsed && !_lastSelection!.isCollapsed) {
       throw Exception(
-          "Tried to drag a collapsed Android handle but the selection is expanded.");
+        "Tried to drag a collapsed Android handle but the selection is expanded.",
+      );
     }
     if (handleType != HandleType.collapsed && _lastSelection!.isCollapsed) {
       throw Exception(
-          "Tried to drag an expanded Android handle but the selection is collapsed.");
+        "Tried to drag an expanded Android handle but the selection is collapsed.",
+      );
     }
     _dragHandleType = handleType;
 
-    final isSelectionDownstream =
-        initialSelection.hasDownstreamAffinity(_document);
+    final isSelectionDownstream = initialSelection.hasDownstreamAffinity(
+      _document,
+    );
     late final DocumentPosition selectionBoundPosition;
     if (isSelectionDownstream) {
       selectionBoundPosition = handleType == HandleType.upstream
@@ -142,26 +148,30 @@ class AndroidTextFieldDragHandleSelectionStrategy {
     final didFocalPointStayInSameNode =
         _lastFocalPosition!.nodeId == nearestPosition.nodeId;
 
-    final didFocalPointMoveToDownstreamNode = _document.getAffinityBetween(
+    final didFocalPointMoveToDownstreamNode =
+        _document.getAffinityBetween(
               base: _lastFocalPosition!,
               extent: nearestPosition,
             ) ==
             TextAffinity.downstream &&
         !didFocalPointStayInSameNode;
 
-    final didFocalPointMoveToUpstreamNode = _document.getAffinityBetween(
+    final didFocalPointMoveToUpstreamNode =
+        _document.getAffinityBetween(
               base: _lastFocalPosition!,
               extent: nearestPosition,
             ) ==
             TextAffinity.upstream &&
         !didFocalPointStayInSameNode;
 
-    final didFocalPointMoveDownstream = didFocalPointMoveToDownstreamNode ||
+    final didFocalPointMoveDownstream =
+        didFocalPointMoveToDownstreamNode ||
         (didFocalPointStayInSameNode &&
             nearestPositionTextOffset > previousNearestPositionTextOffset) ||
         (didFocalPointStayInSameNode && details.delta.dx > 0);
 
-    final didFocalPointMoveUpstream = didFocalPointMoveToUpstreamNode ||
+    final didFocalPointMoveUpstream =
+        didFocalPointMoveToUpstreamNode ||
         (didFocalPointStayInSameNode &&
             nearestPositionTextOffset < previousNearestPositionTextOffset) ||
         (didFocalPointStayInSameNode && details.delta.dx < 0);
@@ -198,10 +208,10 @@ class AndroidTextFieldDragHandleSelectionStrategy {
       // Invert the drag handle type if the selection has upstream affinity.
       final newEffectiveHandleType =
           _lastSelection!.hasDownstreamAffinity(_document) //
-              ? _dragHandleType!
-              : (_dragHandleType == HandleType.upstream
-                  ? HandleType.downstream
-                  : HandleType.upstream);
+          ? _dragHandleType!
+          : (_dragHandleType == HandleType.upstream
+                ? HandleType.downstream
+                : HandleType.upstream);
 
       if (newDragDirection != _currentDragDirection ||
           newEffectiveHandleType != _effectiveDragHandleType) {
@@ -222,10 +232,16 @@ class AndroidTextFieldDragHandleSelectionStrategy {
 
     final rangeToExpandSelection = _selectionModifier == _SelectionModifier.word
         ? _dragHandleType == _effectiveDragHandleType
-            ? getWordSelection(
-                docPosition: nearestPosition, docLayout: _docLayout)
-            : _flipSelection(getWordSelection(
-                docPosition: nearestPosition, docLayout: _docLayout)!)
+              ? getWordSelection(
+                  docPosition: nearestPosition,
+                  docLayout: _docLayout,
+                )
+              : _flipSelection(
+                  getWordSelection(
+                    docPosition: nearestPosition,
+                    docLayout: _docLayout,
+                  )!,
+                )
         : DocumentSelection.collapsed(position: nearestPosition);
 
     if (rangeToExpandSelection != null) {
@@ -243,14 +259,8 @@ class AndroidTextFieldDragHandleSelectionStrategy {
 
   /// Invert the selection so that the base and extent are swapped.
   DocumentSelection _flipSelection(DocumentSelection selection) {
-    return selection.copyWith(
-      base: selection.extent,
-      extent: selection.base,
-    );
+    return selection.copyWith(base: selection.extent, extent: selection.base);
   }
 }
 
-enum _SelectionModifier {
-  character,
-  word,
-}
+enum _SelectionModifier { character, word }

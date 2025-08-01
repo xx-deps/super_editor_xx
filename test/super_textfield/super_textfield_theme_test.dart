@@ -13,7 +13,9 @@ import 'super_textfield_robot.dart';
 
 void main() {
   group('SuperTextField', () {
-    testWidgetsOnIos('applies app theme to the popover toolbar', (tester) async {
+    testWidgetsOnIos('applies app theme to the popover toolbar', (
+      tester,
+    ) async {
       final controller = ImeAttributedTextEditingController(
         controller: AttributedTextEditingController(
           text: AttributedText('A single line textfield'),
@@ -55,7 +57,9 @@ void main() {
       expect(popoverBrightness, Brightness.light);
     });
 
-    testWidgetsOnAndroid('applies app theme to the popover toolbar', (tester) async {
+    testWidgetsOnAndroid('applies app theme to the popover toolbar', (
+      tester,
+    ) async {
       final controller = ImeAttributedTextEditingController(
         controller: AttributedTextEditingController(
           text: AttributedText('A single line textfield'),
@@ -84,7 +88,10 @@ void main() {
       );
 
       // Double tap to show the toolbar.
-      await tester.doubleTapAtSuperTextField(0, find.byType(SuperAndroidTextField));
+      await tester.doubleTapAtSuperTextField(
+        0,
+        find.byType(SuperAndroidTextField),
+      );
 
       // Ensure the toolbar has a dark theme.
       expect(popoverBrightness, Brightness.dark);
@@ -117,10 +124,7 @@ Future<void> _pumpTestAppScaffold(
             // so it isn't applied to the app's Overlay.
             return Theme(
               data: theme.value,
-              child: SizedBox(
-                width: 300,
-                child: child,
-              ),
+              child: SizedBox(width: 300, child: child),
             );
           },
         ),

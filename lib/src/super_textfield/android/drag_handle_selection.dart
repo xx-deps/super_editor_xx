@@ -26,9 +26,9 @@ class AndroidDocumentDragHandleSelectionStrategy {
     required GlobalKey textContentKey,
     required ProseTextLayout textLayout,
     required void Function(TextSelection) select,
-  })  : _textContentKey = textContentKey,
-        _textLayout = textLayout,
-        _select = select;
+  }) : _textContentKey = textContentKey,
+       _textLayout = textLayout,
+       _select = select;
 
   final GlobalKey _textContentKey;
   final ProseTextLayout _textLayout;
@@ -58,26 +58,33 @@ class AndroidDocumentDragHandleSelectionStrategy {
   _SelectionModifier? _selectionModifier;
 
   /// Clients should call this method when a drag handle gesture is initially recognized.
-  void onHandlePanStart(DragStartDetails details,
-      TextSelection initialSelection, HandleType handleType) {
+  void onHandlePanStart(
+    DragStartDetails details,
+    TextSelection initialSelection,
+    HandleType handleType,
+  ) {
     if (handleType == HandleType.collapsed && !initialSelection.isCollapsed) {
       throw Exception(
-          "Tried to drag a collapsed Android handle but the selection is expanded.");
+        "Tried to drag a collapsed Android handle but the selection is expanded.",
+      );
     }
     if (handleType != HandleType.collapsed && initialSelection.isCollapsed) {
       throw Exception(
-          "Tried to drag an expanded Android handle but the selection is collapsed.");
+        "Tried to drag an expanded Android handle but the selection is collapsed.",
+      );
     }
 
-    final globalOffsetInMiddleOfLine =
-        _getGlobalOffsetOfMiddleOfLine(initialSelection.base);
+    final globalOffsetInMiddleOfLine = _getGlobalOffsetOfMiddleOfLine(
+      initialSelection.base,
+    );
     final touchHandleOffsetFromLineOfText =
         globalOffsetInMiddleOfLine - details.globalPosition;
 
     final textBox =
         (_textContentKey.currentContext!.findRenderObject() as RenderBox);
     final textOffset = textBox.globalToLocal(
-        details.globalPosition + touchHandleOffsetFromLineOfText);
+      details.globalPosition + touchHandleOffsetFromLineOfText,
+    );
 
     _dragHandleType = handleType;
 
@@ -87,8 +94,9 @@ class AndroidDocumentDragHandleSelectionStrategy {
 
   /// Clients should call this method when a drag handle gesture is updated.
   void onHandlePanUpdate(Offset handleFocalPoint) {
-    final nearestPosition =
-        _textLayout.getPositionNearestToOffset(handleFocalPoint);
+    final nearestPosition = _textLayout.getPositionNearestToOffset(
+      handleFocalPoint,
+    );
     if (nearestPosition.offset < 0) {
       return;
     }
@@ -128,11 +136,13 @@ class AndroidDocumentDragHandleSelectionStrategy {
       // Check if the user started dragging the handle in the opposite direction.
       late TextAffinity newDragDirection;
       if (_currentDragDirection == TextAffinity.upstream) {
-        newDragDirection = didFocalPointMoveDownstream //
+        newDragDirection =
+            didFocalPointMoveDownstream //
             ? TextAffinity.downstream
             : TextAffinity.upstream;
       } else {
-        newDragDirection = didFocalPointMoveUpstream //
+        newDragDirection =
+            didFocalPointMoveUpstream //
             ? TextAffinity.upstream
             : TextAffinity.downstream;
       }
@@ -140,10 +150,10 @@ class AndroidDocumentDragHandleSelectionStrategy {
       // Invert the drag handle type if the selection has upstream affinity.
       final newEffectiveHandleType =
           _lastSelection!.baseOffset < _lastSelection!.extentOffset
-              ? _dragHandleType!
-              : (_dragHandleType == HandleType.upstream
-                  ? HandleType.downstream
-                  : HandleType.upstream);
+          ? _dragHandleType!
+          : (_dragHandleType == HandleType.upstream
+                ? HandleType.downstream
+                : HandleType.upstream);
 
       if (newDragDirection != _currentDragDirection ||
           newEffectiveHandleType != _effectiveDragHandleType) {
@@ -164,13 +174,16 @@ class AndroidDocumentDragHandleSelectionStrategy {
 
     final rangeToExpandSelection = _selectionModifier == _SelectionModifier.word
         ? _dragHandleType == _effectiveDragHandleType
-            ? _textLayout.getWordSelectionAt(nearestPosition)
-            : _flipSelection(_textLayout.getWordSelectionAt(nearestPosition))
+              ? _textLayout.getWordSelectionAt(nearestPosition)
+              : _flipSelection(_textLayout.getWordSelectionAt(nearestPosition))
         : TextSelection.collapsed(offset: nearestPosition.offset);
 
     if (rangeToExpandSelection.isValid) {
       _lastSelection = _lastSelection!.copyWith(
-        baseOffset: _dragHandleType == HandleType.upstream //
+        baseOffset:
+            _dragHandleType ==
+                HandleType
+                    .upstream //
             ? rangeToExpandSelection.baseOffset
             : _lastSelection!.baseOffset,
         extentOffset: _dragHandleType == HandleType.downstream
@@ -199,7 +212,7 @@ class AndroidDocumentDragHandleSelectionStrategy {
     final extentOffsetInText = textLayout.getOffsetAtPosition(position);
     final extentLineHeight =
         textLayout.getCharacterBox(position)?.toRect().height ??
-            textLayout.estimatedLineHeight;
+        textLayout.estimatedLineHeight;
     final extentGlobalOffset =
         (_textContentKey.currentContext!.findRenderObject() as RenderBox)
             .localToGlobal(extentOffsetInText);
@@ -216,7 +229,4 @@ class AndroidDocumentDragHandleSelectionStrategy {
   }
 }
 
-enum _SelectionModifier {
-  character,
-  word,
-}
+enum _SelectionModifier { character, word }

@@ -54,14 +54,14 @@ class _PageListViewportDemoState extends State<PageListViewportDemo>
 
                 return LayoutBuilder(
                   builder: (context, constraints) {
-                    final size =
-                        Size(constraints.maxWidth, constraints.maxHeight);
+                    final size = Size(
+                      constraints.maxWidth,
+                      constraints.maxHeight,
+                    );
 
                     return Stack(
                       children: [
-                        Positioned.fill(
-                          child: image,
-                        ),
+                        Positioned.fill(child: image),
                         Positioned(
                           left: size.width * 0.181,
                           top: size.height * 0.322,
@@ -98,26 +98,34 @@ class _PageListViewportDemoState extends State<PageListViewportDemo>
                 TextButton(
                   // ignore: avoid_print
                   onPressed: () => print("one"),
-                  child:
-                      const Text("One", style: TextStyle(color: Colors.white)),
+                  child: const Text(
+                    "One",
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
                 TextButton(
                   // ignore: avoid_print
                   onPressed: () => print("two"),
-                  child:
-                      const Text("Two", style: TextStyle(color: Colors.white)),
+                  child: const Text(
+                    "Two",
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
                 TextButton(
                   // ignore: avoid_print
                   onPressed: () => print("three"),
-                  child: const Text("Three",
-                      style: TextStyle(color: Colors.white)),
+                  child: const Text(
+                    "Three",
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
                 TextButton(
                   // ignore: avoid_print
                   onPressed: () => print("four"),
-                  child:
-                      const Text("Four", style: TextStyle(color: Colors.white)),
+                  child: const Text(
+                    "Four",
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
               ],
             ),

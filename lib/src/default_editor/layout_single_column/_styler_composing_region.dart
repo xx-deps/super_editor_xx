@@ -16,9 +16,9 @@ class SingleColumnLayoutComposingRegionStyler
     required Document document,
     required ValueListenable<DocumentRange?> composingRegion,
     required bool showComposingUnderline,
-  })  : _document = document,
-        _composingRegion = composingRegion,
-        _showComposingRegionUnderline = showComposingUnderline {
+  }) : _document = document,
+       _composingRegion = composingRegion,
+       _showComposingRegionUnderline = showComposingUnderline {
     // Our styles need to be re-applied whenever the composing region changes.
     _composingRegion.addListener(markDirty);
   }
@@ -35,9 +35,12 @@ class SingleColumnLayoutComposingRegionStyler
 
   @override
   SingleColumnLayoutViewModel style(
-      Document document, SingleColumnLayoutViewModel viewModel) {
+    Document document,
+    SingleColumnLayoutViewModel viewModel,
+  ) {
     editorStyleLog.finest(
-        "(Re)calculating composing region view model for document layout");
+      "(Re)calculating composing region view model for document layout",
+    );
     final documentComposingRegion = _composingRegion.value;
     if (documentComposingRegion == null) {
       // There's nothing for us to style if there's no composing region. Return the
@@ -54,7 +57,9 @@ class SingleColumnLayoutComposingRegionStyler
       componentViewModels: [
         for (final previousViewModel in viewModel.componentViewModels) //
           _applyComposingRegion(
-              previousViewModel.copy(), documentComposingRegion),
+            previousViewModel.copy(),
+            documentComposingRegion,
+          ),
       ],
     );
   }
@@ -100,8 +105,10 @@ class SingleColumnLayoutComposingRegionStyler
           documentComposingRegion.start.nodePosition as TextNodePosition;
       final endPosition =
           documentComposingRegion.end.nodePosition as TextNodePosition;
-      textComposingRegion =
-          TextRange(start: startPosition.offset, end: endPosition.offset);
+      textComposingRegion = TextRange(
+        start: startPosition.offset,
+        end: endPosition.offset,
+      );
     }
 
     viewModel
@@ -140,7 +147,9 @@ class SingleColumnLayoutComposingRegionStyler
       late NodeSelection? nodeSelection;
       try {
         nodeSelection = node.computeSelection(
-            base: baseNodePosition, extent: extentNodePosition);
+          base: baseNodePosition,
+          extent: extentNodePosition,
+        );
       } catch (exception) {
         // This situation can happen in the moment between a document change and
         // a corresponding selection change. For example: deleting an image and
@@ -165,8 +174,9 @@ class SingleColumnLayoutComposingRegionStyler
         editorStyleLog.finer('   - ${node.id}');
       }
 
-      if (selectedNodes
-              .firstWhereOrNull((selectedNode) => selectedNode.id == node.id) ==
+      if (selectedNodes.firstWhereOrNull(
+            (selectedNode) => selectedNode.id == node.id,
+          ) ==
           null) {
         // The document selection does not contain the node we're interested in. Return.
         editorStyleLog.finer(' - this node is not in the selection');
@@ -202,8 +212,9 @@ class SingleColumnLayoutComposingRegionStyler
           ),
         );
       } else {
-        editorStyleLog
-            .finer(' - this node is fully selected within the selection');
+        editorStyleLog.finer(
+          ' - this node is fully selected within the selection',
+        );
         // Multiple nodes are selected and this node is neither the top
         // or the bottom node, therefore this entire node is selected.
         return _DocumentNodeSelection(
@@ -229,10 +240,7 @@ class SingleColumnLayoutComposingRegionStyler
 /// [TextNodeSelection] that describes which characters of text are
 /// selected within the text node.
 class _DocumentNodeSelection<SelectionType extends NodeSelection> {
-  _DocumentNodeSelection({
-    required this.nodeId,
-    required this.nodeSelection,
-  });
+  _DocumentNodeSelection({required this.nodeId, required this.nodeSelection});
 
   /// The ID of the node that's selected.
   final String nodeId;

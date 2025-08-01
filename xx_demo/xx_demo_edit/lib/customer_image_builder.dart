@@ -53,7 +53,6 @@ class CustomerImageComponentBuilder implements ComponentBuilder {
   }
 }
 
-
 class CustomerImageComponent extends StatelessWidget {
   const CustomerImageComponent({
     Key? key,
@@ -90,44 +89,46 @@ class CustomerImageComponent extends StatelessWidget {
         child: Row(
           children: [
             SelectableBox(
-            selection: selection,
-            selectionColor: selectionColor,
-            child: BoxComponent(
-              key: componentKey,
-              opacity: opacity,
-              child: imageBuilder != null
-                  ? imageBuilder!(context, imageUrl)
-                  : Image.network(
-                      imageUrl,
-                      fit: BoxFit.contain,
-                      frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
-                        if (frame != null) {
-                          // The image is already loaded. Use the image as is.
-                          return child;
-                        }
+              selection: selection,
+              selectionColor: selectionColor,
+              child: BoxComponent(
+                key: componentKey,
+                opacity: opacity,
+                child: imageBuilder != null
+                    ? imageBuilder!(context, imageUrl)
+                    : Image.network(
+                        imageUrl,
+                        fit: BoxFit.contain,
+                        frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+                          if (frame != null) {
+                            // The image is already loaded. Use the image as is.
+                            return child;
+                          }
 
-                        if (expectedSize != null && expectedSize!.width != null && expectedSize!.height != null) {
-                          // Both width and height were provide.
-                          // Preserve the aspect ratio of the original image.
-                          return AspectRatio(
-                            aspectRatio: expectedSize!.aspectRatio,
-                            child: SizedBox(
-                              width: expectedSize!.width!.toDouble(),
-                              height: expectedSize!.height!.toDouble(),
-                            ),
+                          if (expectedSize != null &&
+                              expectedSize!.width != null &&
+                              expectedSize!.height != null) {
+                            // Both width and height were provide.
+                            // Preserve the aspect ratio of the original image.
+                            return AspectRatio(
+                              aspectRatio: expectedSize!.aspectRatio,
+                              child: SizedBox(
+                                width: expectedSize!.width!.toDouble(),
+                                height: expectedSize!.height!.toDouble(),
+                              ),
+                            );
+                          }
+
+                          // The image is still loading and only one dimension was provided.
+                          // Use the given dimension.
+                          return SizedBox(
+                            width: expectedSize?.width?.toDouble(),
+                            height: expectedSize?.height?.toDouble(),
                           );
-                        }
-
-                        // The image is still loading and only one dimension was provided.
-                        // Use the given dimension.
-                        return SizedBox(
-                          width: expectedSize?.width?.toDouble(),
-                          height: expectedSize?.height?.toDouble(),
-                        );
-                      },
-                    ),
+                        },
+                      ),
+              ),
             ),
-          )
           ],
         ),
       ),

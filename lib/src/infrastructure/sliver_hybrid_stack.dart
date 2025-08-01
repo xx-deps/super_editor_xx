@@ -25,7 +25,9 @@ class SliverHybridStack extends MultiChildRenderObjectWidget {
 
   @override
   void updateRenderObject(
-      BuildContext context, covariant RenderSliver renderObject) {
+    BuildContext context,
+    covariant RenderSliver renderObject,
+  ) {
     (renderObject as _RenderSliverHybridStack).fillViewport = fillViewport;
   }
 }
@@ -35,8 +37,10 @@ class _ChildParentData extends SliverLogicalParentData
 
 class _RenderSliverHybridStack extends RenderSliver
     with
-        ContainerRenderObjectMixin<RenderObject,
-            ContainerParentDataMixin<RenderObject>>,
+        ContainerRenderObjectMixin<
+          RenderObject,
+          ContainerParentDataMixin<RenderObject>
+        >,
         RenderSliverHelpers {
   _RenderSliverHybridStack({required this.fillViewport});
 
@@ -48,8 +52,10 @@ class _RenderSliverHybridStack extends RenderSliver
     var child = firstChild;
     while (child != null) {
       if (child is RenderSliver) {
-        assert(sliver == null,
-            "There can only be one sliver in a SliverHybridStack");
+        assert(
+          sliver == null,
+          "There can only be one sliver in a SliverHybridStack",
+        );
         sliver = child;
         break;
       }
@@ -112,22 +118,30 @@ class _RenderSliverHybridStack extends RenderSliver
   }
 
   @override
-  bool hitTest(SliverHitTestResult result,
-      {required double mainAxisPosition, required double crossAxisPosition}) {
+  bool hitTest(
+    SliverHitTestResult result, {
+    required double mainAxisPosition,
+    required double crossAxisPosition,
+  }) {
     if (mainAxisPosition >= 0.0 &&
         crossAxisPosition >= 0.0 &&
         crossAxisPosition < constraints.crossAxisExtent) {
-      if (hitTestChildren(result,
-              mainAxisPosition: mainAxisPosition,
-              crossAxisPosition: crossAxisPosition) ||
+      if (hitTestChildren(
+            result,
+            mainAxisPosition: mainAxisPosition,
+            crossAxisPosition: crossAxisPosition,
+          ) ||
           hitTestSelf(
-              mainAxisPosition: mainAxisPosition,
-              crossAxisPosition: crossAxisPosition)) {
-        result.add(SliverHitTestEntry(
-          this,
-          mainAxisPosition: mainAxisPosition,
-          crossAxisPosition: crossAxisPosition,
-        ));
+            mainAxisPosition: mainAxisPosition,
+            crossAxisPosition: crossAxisPosition,
+          )) {
+        result.add(
+          SliverHitTestEntry(
+            this,
+            mainAxisPosition: mainAxisPosition,
+            crossAxisPosition: crossAxisPosition,
+          ),
+        );
         return true;
       }
     }

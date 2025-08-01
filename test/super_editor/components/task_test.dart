@@ -16,7 +16,11 @@ void main() {
     testWidgetsOnAllPlatforms("toggles on tap", (tester) async {
       final document = MutableDocument(
         nodes: [
-          TaskNode(id: "1", text: AttributedText("This is a task"), isComplete: false),
+          TaskNode(
+            id: "1",
+            text: AttributedText("This is a task"),
+            isComplete: false,
+          ),
         ],
       );
       await _pumpScaffold(tester, document: document);
@@ -40,7 +44,9 @@ void main() {
       expect(TaskInspector.isChecked("1"), false);
     });
 
-    testWidgetsOnAllPlatforms("can be created from empty paragraph", (tester) async {
+    testWidgetsOnAllPlatforms("can be created from empty paragraph", (
+      tester,
+    ) async {
       final document = MutableDocument(
         nodes: [
           ParagraphNode(id: "1", text: AttributedText("This will be a task")),
@@ -54,14 +60,23 @@ void main() {
       // Ensure the node is now a task.
       expect(document.nodeCount, 1);
       expect(document.first, isA<TaskNode>());
-      expect((document.first as TaskNode).text.toPlainText(), "This will be a task");
+      expect(
+        (document.first as TaskNode).text.toPlainText(),
+        "This will be a task",
+      );
     });
 
     group("inserts", () {
-      testWidgetsOnAllPlatforms("new task on ENTER at end of existing task", (tester) async {
+      testWidgetsOnAllPlatforms("new task on ENTER at end of existing task", (
+        tester,
+      ) async {
         final document = MutableDocument(
           nodes: [
-            TaskNode(id: "1", text: AttributedText("This is a task"), isComplete: false),
+            TaskNode(
+              id: "1",
+              text: AttributedText("This is a task"),
+              isComplete: false,
+            ),
           ],
         );
         final task = document.getNodeAt(0) as TaskNode;
@@ -76,7 +91,10 @@ void main() {
         // Ensure that a new, empty task was created.
         expect(document.nodeCount, 2);
         expect(document.first, isA<TaskNode>());
-        expect((document.first as TaskNode).text.toPlainText(), "This is a task");
+        expect(
+          (document.first as TaskNode).text.toPlainText(),
+          "This is a task",
+        );
         expect(document.last, isA<TaskNode>());
         expect((document.last as TaskNode).text.toPlainText(), "");
         expect(
@@ -90,10 +108,16 @@ void main() {
         );
       });
 
-      testWidgetsOnWebDesktop("new task on ENTER at end of existing task", (tester) async {
+      testWidgetsOnWebDesktop("new task on ENTER at end of existing task", (
+        tester,
+      ) async {
         final document = MutableDocument(
           nodes: [
-            TaskNode(id: "1", text: AttributedText("This is a task"), isComplete: false),
+            TaskNode(
+              id: "1",
+              text: AttributedText("This is a task"),
+              isComplete: false,
+            ),
           ],
         );
         final task = document.getNodeAt(0) as TaskNode;
@@ -111,7 +135,10 @@ void main() {
         // Ensure that a new, empty task was created.
         expect(document.nodeCount, 2);
         expect(document.first, isA<TaskNode>());
-        expect((document.first as TaskNode).text.toPlainText(), "This is a task");
+        expect(
+          (document.first as TaskNode).text.toPlainText(),
+          "This is a task",
+        );
         expect(document.last, isA<TaskNode>());
         expect((document.last as TaskNode).text.toPlainText(), "");
         expect(
@@ -125,355 +152,445 @@ void main() {
         );
       });
 
-      testWidgetsOnAndroid("new task upon new line insertion at end of existing task", (tester) async {
-        final document = MutableDocument(
-          nodes: [
-            TaskNode(id: "1", text: AttributedText("This is a task"), isComplete: false),
-          ],
-        );
-        final task = document.getNodeAt(0) as TaskNode;
-        await _pumpScaffold(tester, document: document);
+      testWidgetsOnAndroid(
+        "new task upon new line insertion at end of existing task",
+        (tester) async {
+          final document = MutableDocument(
+            nodes: [
+              TaskNode(
+                id: "1",
+                text: AttributedText("This is a task"),
+                isComplete: false,
+              ),
+            ],
+          );
+          final task = document.getNodeAt(0) as TaskNode;
+          await _pumpScaffold(tester, document: document);
 
-        // Place the caret at the end of the task.
-        await tester.placeCaretInParagraph("1", task.text.length);
+          // Place the caret at the end of the task.
+          await tester.placeCaretInParagraph("1", task.text.length);
 
-        // On Android, pressing ENTER generates a "\n" insertion.
-        await tester.typeImeText("\n");
+          // On Android, pressing ENTER generates a "\n" insertion.
+          await tester.typeImeText("\n");
 
-        // Ensure that a new, empty task was created.
-        expect(document.nodeCount, 2);
-        expect(document.first, isA<TaskNode>());
-        expect((document.first as TaskNode).text.toPlainText(), "This is a task");
-        expect(document.last, isA<TaskNode>());
-        expect((document.last as TaskNode).text.toPlainText(), "");
-        expect(
-          SuperEditorInspector.findDocumentSelection(),
-          DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: document.last.id,
-              nodePosition: const TextNodePosition(offset: 0),
+          // Ensure that a new, empty task was created.
+          expect(document.nodeCount, 2);
+          expect(document.first, isA<TaskNode>());
+          expect(
+            (document.first as TaskNode).text.toPlainText(),
+            "This is a task",
+          );
+          expect(document.last, isA<TaskNode>());
+          expect((document.last as TaskNode).text.toPlainText(), "");
+          expect(
+            SuperEditorInspector.findDocumentSelection(),
+            DocumentSelection.collapsed(
+              position: DocumentPosition(
+                nodeId: document.last.id,
+                nodePosition: const TextNodePosition(offset: 0),
+              ),
             ),
-          ),
-        );
-      });
+          );
+        },
+      );
 
-      testWidgetsOnWebAndroid("new task upon new line insertion at end of existing task", (tester) async {
-        final document = MutableDocument(
-          nodes: [
-            TaskNode(id: "1", text: AttributedText("This is a task"), isComplete: false),
-          ],
-        );
-        final task = document.getNodeAt(0) as TaskNode;
-        await _pumpScaffold(tester, document: document);
+      testWidgetsOnWebAndroid(
+        "new task upon new line insertion at end of existing task",
+        (tester) async {
+          final document = MutableDocument(
+            nodes: [
+              TaskNode(
+                id: "1",
+                text: AttributedText("This is a task"),
+                isComplete: false,
+              ),
+            ],
+          );
+          final task = document.getNodeAt(0) as TaskNode;
+          await _pumpScaffold(tester, document: document);
 
-        // Place the caret at the end of the task.
-        await tester.placeCaretInParagraph("1", task.text.length);
+          // Place the caret at the end of the task.
+          await tester.placeCaretInParagraph("1", task.text.length);
 
-        // On Android Web, pressing ENTER generates both a "\n" insertion and a newline input action.
-        await tester.pressEnterWithIme(getter: imeClientGetter);
+          // On Android Web, pressing ENTER generates both a "\n" insertion and a newline input action.
+          await tester.pressEnterWithIme(getter: imeClientGetter);
 
-        // Ensure that a new, empty task was created.
-        expect(document.nodeCount, 2);
-        expect(document.first, isA<TaskNode>());
-        expect((document.first as TaskNode).text.toPlainText(), "This is a task");
-        expect(document.last, isA<TaskNode>());
-        expect((document.last as TaskNode).text.toPlainText(), "");
-        expect(
-          SuperEditorInspector.findDocumentSelection(),
-          DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: document.last.id,
-              nodePosition: const TextNodePosition(offset: 0),
+          // Ensure that a new, empty task was created.
+          expect(document.nodeCount, 2);
+          expect(document.first, isA<TaskNode>());
+          expect(
+            (document.first as TaskNode).text.toPlainText(),
+            "This is a task",
+          );
+          expect(document.last, isA<TaskNode>());
+          expect((document.last as TaskNode).text.toPlainText(), "");
+          expect(
+            SuperEditorInspector.findDocumentSelection(),
+            DocumentSelection.collapsed(
+              position: DocumentPosition(
+                nodeId: document.last.id,
+                nodePosition: const TextNodePosition(offset: 0),
+              ),
             ),
-          ),
-        );
-      });
+          );
+        },
+      );
 
-      testWidgetsOnMobile("new task upon new line input action at end of existing task", (tester) async {
-        final document = MutableDocument(
-          nodes: [
-            TaskNode(id: "1", text: AttributedText("This is a task"), isComplete: false),
-          ],
-        );
-        final task = document.getNodeAt(0) as TaskNode;
-        await _pumpScaffold(tester, document: document);
+      testWidgetsOnMobile(
+        "new task upon new line input action at end of existing task",
+        (tester) async {
+          final document = MutableDocument(
+            nodes: [
+              TaskNode(
+                id: "1",
+                text: AttributedText("This is a task"),
+                isComplete: false,
+              ),
+            ],
+          );
+          final task = document.getNodeAt(0) as TaskNode;
+          await _pumpScaffold(tester, document: document);
 
-        // Place the caret at the end of the task.
-        await tester.placeCaretInParagraph("1", task.text.length);
+          // Place the caret at the end of the task.
+          await tester.placeCaretInParagraph("1", task.text.length);
 
-        // On iOS, pressing ENTER generates a newline action.
-        await tester.testTextInput.receiveAction(TextInputAction.newline);
+          // On iOS, pressing ENTER generates a newline action.
+          await tester.testTextInput.receiveAction(TextInputAction.newline);
 
-        // Ensure that a new, empty task was created.
-        expect(document.nodeCount, 2);
-        expect(document.first, isA<TaskNode>());
-        expect((document.first as TaskNode).text.toPlainText(), "This is a task");
-        expect(document.last, isA<TaskNode>());
-        expect((document.last as TaskNode).text.toPlainText(), "");
-        expect(
-          SuperEditorInspector.findDocumentSelection(),
-          DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: document.last.id,
-              nodePosition: const TextNodePosition(offset: 0),
+          // Ensure that a new, empty task was created.
+          expect(document.nodeCount, 2);
+          expect(document.first, isA<TaskNode>());
+          expect(
+            (document.first as TaskNode).text.toPlainText(),
+            "This is a task",
+          );
+          expect(document.last, isA<TaskNode>());
+          expect((document.last as TaskNode).text.toPlainText(), "");
+          expect(
+            SuperEditorInspector.findDocumentSelection(),
+            DocumentSelection.collapsed(
+              position: DocumentPosition(
+                nodeId: document.last.id,
+                nodePosition: const TextNodePosition(offset: 0),
+              ),
             ),
-          ),
-        );
-      });
+          );
+        },
+      );
     });
 
     group("splits", () {
-      testWidgetsOnAllPlatforms("task into two on ENTER in middle of existing task", (tester) async {
-        final document = MutableDocument(
-          nodes: [
-            TaskNode(id: "1", text: AttributedText("This is a task"), isComplete: false),
-          ],
-        );
-        await _pumpScaffold(tester, document: document);
+      testWidgetsOnAllPlatforms(
+        "task into two on ENTER in middle of existing task",
+        (tester) async {
+          final document = MutableDocument(
+            nodes: [
+              TaskNode(
+                id: "1",
+                text: AttributedText("This is a task"),
+                isComplete: false,
+              ),
+            ],
+          );
+          await _pumpScaffold(tester, document: document);
 
-        // Place the caret at "This is |a task"
-        await tester.placeCaretInParagraph("1", 8);
+          // Place the caret at "This is |a task"
+          await tester.placeCaretInParagraph("1", 8);
 
-        // Press enter to split the existing task into two.
-        await tester.pressEnter();
+          // Press enter to split the existing task into two.
+          await tester.pressEnter();
 
-        // Ensure that a new task was created with part of the previous task.
-        expect(document.nodeCount, 2);
-        expect(document.first, isA<TaskNode>());
-        expect((document.first as TaskNode).text.toPlainText(), "This is ");
-        expect(document.last, isA<TaskNode>());
-        expect((document.last as TaskNode).text.toPlainText(), "a task");
-        expect(
-          SuperEditorInspector.findDocumentSelection(),
-          DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: document.last.id,
-              nodePosition: const TextNodePosition(offset: 0),
+          // Ensure that a new task was created with part of the previous task.
+          expect(document.nodeCount, 2);
+          expect(document.first, isA<TaskNode>());
+          expect((document.first as TaskNode).text.toPlainText(), "This is ");
+          expect(document.last, isA<TaskNode>());
+          expect((document.last as TaskNode).text.toPlainText(), "a task");
+          expect(
+            SuperEditorInspector.findDocumentSelection(),
+            DocumentSelection.collapsed(
+              position: DocumentPosition(
+                nodeId: document.last.id,
+                nodePosition: const TextNodePosition(offset: 0),
+              ),
             ),
-          ),
-        );
-      });
+          );
+        },
+      );
 
-      testWidgetsOnAndroid("task into two upon new line insertion in middle of existing task", (tester) async {
-        final document = MutableDocument(
-          nodes: [
-            TaskNode(id: "1", text: AttributedText("This is a task"), isComplete: false),
-          ],
-        );
-        await _pumpScaffold(tester, document: document);
+      testWidgetsOnAndroid(
+        "task into two upon new line insertion in middle of existing task",
+        (tester) async {
+          final document = MutableDocument(
+            nodes: [
+              TaskNode(
+                id: "1",
+                text: AttributedText("This is a task"),
+                isComplete: false,
+              ),
+            ],
+          );
+          await _pumpScaffold(tester, document: document);
 
-        // Place the caret at "This is |a task"
-        await tester.placeCaretInParagraph("1", 8);
+          // Place the caret at "This is |a task"
+          await tester.placeCaretInParagraph("1", 8);
 
-        // On Android, pressing ENTER generates a "\n" insertion.
-        await tester.typeImeText("\n");
+          // On Android, pressing ENTER generates a "\n" insertion.
+          await tester.typeImeText("\n");
 
-        // Ensure that a new task was created with part of the previous task.
-        expect(document.nodeCount, 2);
-        expect(document.first, isA<TaskNode>());
-        expect((document.first as TaskNode).text.toPlainText(), "This is ");
-        expect(document.last, isA<TaskNode>());
-        expect((document.last as TaskNode).text.toPlainText(), "a task");
-        expect(
-          SuperEditorInspector.findDocumentSelection(),
-          DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: document.last.id,
-              nodePosition: const TextNodePosition(offset: 0),
+          // Ensure that a new task was created with part of the previous task.
+          expect(document.nodeCount, 2);
+          expect(document.first, isA<TaskNode>());
+          expect((document.first as TaskNode).text.toPlainText(), "This is ");
+          expect(document.last, isA<TaskNode>());
+          expect((document.last as TaskNode).text.toPlainText(), "a task");
+          expect(
+            SuperEditorInspector.findDocumentSelection(),
+            DocumentSelection.collapsed(
+              position: DocumentPosition(
+                nodeId: document.last.id,
+                nodePosition: const TextNodePosition(offset: 0),
+              ),
             ),
-          ),
-        );
-      });
+          );
+        },
+      );
 
-      testWidgetsOnWebAndroid("task into two upon new line insertion in middle of existing task", (tester) async {
-        final document = MutableDocument(
-          nodes: [
-            TaskNode(id: "1", text: AttributedText("This is a task"), isComplete: false),
-          ],
-        );
-        await _pumpScaffold(tester, document: document);
+      testWidgetsOnWebAndroid(
+        "task into two upon new line insertion in middle of existing task",
+        (tester) async {
+          final document = MutableDocument(
+            nodes: [
+              TaskNode(
+                id: "1",
+                text: AttributedText("This is a task"),
+                isComplete: false,
+              ),
+            ],
+          );
+          await _pumpScaffold(tester, document: document);
 
-        // Place the caret at "This is |a task"
-        await tester.placeCaretInParagraph("1", 8);
+          // Place the caret at "This is |a task"
+          await tester.placeCaretInParagraph("1", 8);
 
-        // On Android Web, pressing ENTER generates both a "\n" insertion and a newline input action.
-        await tester.pressEnterWithIme(getter: imeClientGetter);
+          // On Android Web, pressing ENTER generates both a "\n" insertion and a newline input action.
+          await tester.pressEnterWithIme(getter: imeClientGetter);
 
-        // Ensure that a new task was created with part of the previous task.
-        expect(document.nodeCount, 2);
-        expect(document.first, isA<TaskNode>());
-        expect((document.first as TaskNode).text.toPlainText(), "This is ");
-        expect(document.last, isA<TaskNode>());
-        expect((document.last as TaskNode).text.toPlainText(), "a task");
-        expect(
-          SuperEditorInspector.findDocumentSelection(),
-          DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: document.last.id,
-              nodePosition: const TextNodePosition(offset: 0),
+          // Ensure that a new task was created with part of the previous task.
+          expect(document.nodeCount, 2);
+          expect(document.first, isA<TaskNode>());
+          expect((document.first as TaskNode).text.toPlainText(), "This is ");
+          expect(document.last, isA<TaskNode>());
+          expect((document.last as TaskNode).text.toPlainText(), "a task");
+          expect(
+            SuperEditorInspector.findDocumentSelection(),
+            DocumentSelection.collapsed(
+              position: DocumentPosition(
+                nodeId: document.last.id,
+                nodePosition: const TextNodePosition(offset: 0),
+              ),
             ),
-          ),
-        );
-      });
+          );
+        },
+      );
 
-      testWidgetsOnMobile("task into two upon new line input action in middle of existing task", (tester) async {
-        final document = MutableDocument(
-          nodes: [
-            TaskNode(id: "1", text: AttributedText("This is a task"), isComplete: false),
-          ],
-        );
-        await _pumpScaffold(tester, document: document);
+      testWidgetsOnMobile(
+        "task into two upon new line input action in middle of existing task",
+        (tester) async {
+          final document = MutableDocument(
+            nodes: [
+              TaskNode(
+                id: "1",
+                text: AttributedText("This is a task"),
+                isComplete: false,
+              ),
+            ],
+          );
+          await _pumpScaffold(tester, document: document);
 
-        // Place the caret at "This is |a task"
-        await tester.placeCaretInParagraph("1", 8);
+          // Place the caret at "This is |a task"
+          await tester.placeCaretInParagraph("1", 8);
 
-        // On iOS, pressing ENTER generates a newline action.
-        await tester.testTextInput.receiveAction(TextInputAction.newline);
+          // On iOS, pressing ENTER generates a newline action.
+          await tester.testTextInput.receiveAction(TextInputAction.newline);
 
-        // Ensure that a new task was created with part of the previous task.
-        expect(document.nodeCount, 2);
-        expect(document.first, isA<TaskNode>());
-        expect((document.first as TaskNode).text.toPlainText(), "This is ");
-        expect(document.last, isA<TaskNode>());
-        expect((document.last as TaskNode).text.toPlainText(), "a task");
-        expect(
-          SuperEditorInspector.findDocumentSelection(),
-          DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: document.last.id,
-              nodePosition: const TextNodePosition(offset: 0),
+          // Ensure that a new task was created with part of the previous task.
+          expect(document.nodeCount, 2);
+          expect(document.first, isA<TaskNode>());
+          expect((document.first as TaskNode).text.toPlainText(), "This is ");
+          expect(document.last, isA<TaskNode>());
+          expect((document.last as TaskNode).text.toPlainText(), "a task");
+          expect(
+            SuperEditorInspector.findDocumentSelection(),
+            DocumentSelection.collapsed(
+              position: DocumentPosition(
+                nodeId: document.last.id,
+                nodePosition: const TextNodePosition(offset: 0),
+              ),
             ),
-          ),
-        );
-      });
+          );
+        },
+      );
     });
 
     group("converts", () {
-      testWidgetsOnAllPlatforms("task to paragraph when the user presses BACKSPACE at the beginning", (tester) async {
-        final document = MutableDocument(
-          nodes: [
-            TaskNode(id: "1", text: AttributedText("This is a task"), isComplete: false),
-          ],
-        );
-        await _pumpScaffold(tester, document: document);
+      testWidgetsOnAllPlatforms(
+        "task to paragraph when the user presses BACKSPACE at the beginning",
+        (tester) async {
+          final document = MutableDocument(
+            nodes: [
+              TaskNode(
+                id: "1",
+                text: AttributedText("This is a task"),
+                isComplete: false,
+              ),
+            ],
+          );
+          await _pumpScaffold(tester, document: document);
 
-        // Place the caret at the beginning of the task.
-        await tester.placeCaretInParagraph("1", 0);
+          // Place the caret at the beginning of the task.
+          await tester.placeCaretInParagraph("1", 0);
 
-        // Press backspace to merge the task with the previous paragraph.
-        await tester.pressBackspace();
+          // Press backspace to merge the task with the previous paragraph.
+          await tester.pressBackspace();
 
-        // Ensure the task converted to a paragraph.
-        expect(document.nodeCount, 1);
-        expect(document.first, isA<ParagraphNode>());
-        expect((document.first as ParagraphNode).text.toPlainText(), "This is a task");
-      });
+          // Ensure the task converted to a paragraph.
+          expect(document.nodeCount, 1);
+          expect(document.first, isA<ParagraphNode>());
+          expect(
+            (document.first as ParagraphNode).text.toPlainText(),
+            "This is a task",
+          );
+        },
+      );
 
       testWidgetsOnAllPlatforms(
-          "task to paragraph when the user presses BACKSPACE with software keyboard at the beginning", (tester) async {
-        final document = MutableDocument(
-          nodes: [
-            TaskNode(id: "1", text: AttributedText("This is a task"), isComplete: false),
-          ],
-        );
-        await _pumpScaffold(tester, document: document);
+        "task to paragraph when the user presses BACKSPACE with software keyboard at the beginning",
+        (tester) async {
+          final document = MutableDocument(
+            nodes: [
+              TaskNode(
+                id: "1",
+                text: AttributedText("This is a task"),
+                isComplete: false,
+              ),
+            ],
+          );
+          await _pumpScaffold(tester, document: document);
 
-        // Place the caret at the beginning of the task.
-        await tester.placeCaretInParagraph("1", 0);
+          // Place the caret at the beginning of the task.
+          await tester.placeCaretInParagraph("1", 0);
 
-        // Press backspace to convert the task into a paragraph.
-        // Simulate the user pressing BACKSPACE on a software keyboard.
-        await tester.ime.sendDeltas([
-          const TextEditingDeltaNonTextUpdate(
-            oldText: ". This is a task",
-            selection: TextSelection.collapsed(offset: 2),
-            composing: TextRange.empty,
-          ),
-          const TextEditingDeltaDeletion(
+          // Press backspace to convert the task into a paragraph.
+          // Simulate the user pressing BACKSPACE on a software keyboard.
+          await tester.ime.sendDeltas([
+            const TextEditingDeltaNonTextUpdate(
+              oldText: ". This is a task",
+              selection: TextSelection.collapsed(offset: 2),
+              composing: TextRange.empty,
+            ),
+            const TextEditingDeltaDeletion(
               oldText: ". This is a task",
               deletedRange: TextRange(start: 1, end: 2),
               selection: TextSelection.collapsed(offset: 1),
-              composing: TextRange.empty),
-        ], getter: imeClientGetter);
+              composing: TextRange.empty,
+            ),
+          ], getter: imeClientGetter);
 
-        // Ensure the task converted to a paragraph.
-        expect(document.nodeCount, 1);
-        expect(document.first, isA<ParagraphNode>());
-        expect((document.first as ParagraphNode).text.toPlainText(), "This is a task");
-      });
+          // Ensure the task converted to a paragraph.
+          expect(document.nodeCount, 1);
+          expect(document.first, isA<ParagraphNode>());
+          expect(
+            (document.first as ParagraphNode).text.toPlainText(),
+            "This is a task",
+          );
+        },
+      );
 
-      testWidgetsOnAllPlatforms("task to paragraph when the user presses ENTER on an empty task", (tester) async {
-        await _pumpScaffold(tester);
+      testWidgetsOnAllPlatforms(
+        "task to paragraph when the user presses ENTER on an empty task",
+        (tester) async {
+          await _pumpScaffold(tester);
 
-        // Place the caret at the beginning of the task.
-        await tester.placeCaretInParagraph("1", 0);
+          // Place the caret at the beginning of the task.
+          await tester.placeCaretInParagraph("1", 0);
 
-        // Press enter to convert the task into a paragraph.
-        await tester.pressEnter();
+          // Press enter to convert the task into a paragraph.
+          await tester.pressEnter();
 
-        final document = SuperEditorInspector.findDocument()!;
+          final document = SuperEditorInspector.findDocument()!;
 
-        // Ensure the task was converted to a paragraph.
-        expect(document.nodeCount, 1);
-        expect(document.first, isA<ParagraphNode>());
-        expect((document.first as ParagraphNode).text.toPlainText(), "");
-      });
+          // Ensure the task was converted to a paragraph.
+          expect(document.nodeCount, 1);
+          expect(document.first, isA<ParagraphNode>());
+          expect((document.first as ParagraphNode).text.toPlainText(), "");
+        },
+      );
 
-      testWidgetsOnAndroid("task to paragraph upon new line insertion on an empty task", (tester) async {
-        await _pumpScaffold(tester);
+      testWidgetsOnAndroid(
+        "task to paragraph upon new line insertion on an empty task",
+        (tester) async {
+          await _pumpScaffold(tester);
 
-        // Place the caret at the beginning of the task.
-        await tester.placeCaretInParagraph("1", 0);
+          // Place the caret at the beginning of the task.
+          await tester.placeCaretInParagraph("1", 0);
 
-        // Press enter to convert the task into a paragraph.
-        // On Android, pressing ENTER generates a "\n" insertion.
-        await tester.typeImeText("\n");
+          // Press enter to convert the task into a paragraph.
+          // On Android, pressing ENTER generates a "\n" insertion.
+          await tester.typeImeText("\n");
 
-        final document = SuperEditorInspector.findDocument()!;
+          final document = SuperEditorInspector.findDocument()!;
 
-        // Ensure the task was converted to a paragraph.
-        expect(document.nodeCount, 1);
-        expect(document.first, isA<ParagraphNode>());
-        expect((document.first as ParagraphNode).text.toPlainText(), "");
-      });
+          // Ensure the task was converted to a paragraph.
+          expect(document.nodeCount, 1);
+          expect(document.first, isA<ParagraphNode>());
+          expect((document.first as ParagraphNode).text.toPlainText(), "");
+        },
+      );
 
-      testWidgetsOnIos("task to paragraph new line input action on an empty task", (tester) async {
-        await _pumpScaffold(tester);
+      testWidgetsOnIos(
+        "task to paragraph new line input action on an empty task",
+        (tester) async {
+          await _pumpScaffold(tester);
 
-        // Place the caret at the beginning of the task.
-        await tester.placeCaretInParagraph("1", 0);
+          // Place the caret at the beginning of the task.
+          await tester.placeCaretInParagraph("1", 0);
 
-        // Press enter to convert the task into a paragraph.
-        // On iOS, pressing ENTER generates a newline action.
-        await tester.testTextInput.receiveAction(TextInputAction.newline);
+          // Press enter to convert the task into a paragraph.
+          // On iOS, pressing ENTER generates a newline action.
+          await tester.testTextInput.receiveAction(TextInputAction.newline);
 
-        final document = SuperEditorInspector.findDocument()!;
+          final document = SuperEditorInspector.findDocument()!;
 
-        // Ensure the task was converted to a paragraph.
-        expect(document.nodeCount, 1);
-        expect(document.first, isA<ParagraphNode>());
-        expect((document.first as ParagraphNode).text.toPlainText(), "");
-      });
+          // Ensure the task was converted to a paragraph.
+          expect(document.nodeCount, 1);
+          expect(document.first, isA<ParagraphNode>());
+          expect((document.first as ParagraphNode).text.toPlainText(), "");
+        },
+      );
 
-      testWidgetsOnWebDesktop("task to paragraph when the user presses ENTER on an empty task", (tester) async {
-        await _pumpScaffold(tester);
+      testWidgetsOnWebDesktop(
+        "task to paragraph when the user presses ENTER on an empty task",
+        (tester) async {
+          await _pumpScaffold(tester);
 
-        // Place the caret at the beginning of the task.
-        await tester.placeCaretInParagraph("1", 0);
+          // Place the caret at the beginning of the task.
+          await tester.placeCaretInParagraph("1", 0);
 
-        // Press enter to convert the task into a paragraph.
-        // On Web, this generates both a newline input action and a key event.
-        await tester.pressEnter();
-        await tester.testTextInput.receiveAction(TextInputAction.newline);
-        await tester.pump();
+          // Press enter to convert the task into a paragraph.
+          // On Web, this generates both a newline input action and a key event.
+          await tester.pressEnter();
+          await tester.testTextInput.receiveAction(TextInputAction.newline);
+          await tester.pump();
 
-        final document = SuperEditorInspector.findDocument()!;
+          final document = SuperEditorInspector.findDocument()!;
 
-        // Ensure the task was converted to a paragraph.
-        expect(document.nodeCount, 1);
-        expect(document.first, isA<ParagraphNode>());
-        expect((document.first as ParagraphNode).text.toPlainText(), "");
-      });
+          // Ensure the task was converted to a paragraph.
+          expect(document.nodeCount, 1);
+          expect(document.first, isA<ParagraphNode>());
+          expect((document.first as ParagraphNode).text.toPlainText(), "");
+        },
+      );
 
       testWidgets("paragraph to task for incomplete task", (tester) async {
         final document = MutableDocument(
@@ -484,9 +601,7 @@ void main() {
         final editor = await _pumpScaffold(tester, document: document);
 
         // Convert the paragraph to a task.
-        editor.execute([
-          const ConvertParagraphToTaskRequest(nodeId: "1"),
-        ]);
+        editor.execute([const ConvertParagraphToTaskRequest(nodeId: "1")]);
 
         // Ensure the paragraph is a task, and it's not checked.
         expect(document.first, isA<TaskNode>());
@@ -516,7 +631,11 @@ void main() {
       testWidgetsOnDesktop("does nothing without parent task", (tester) async {
         final document = MutableDocument(
           nodes: [
-            TaskNode(id: "1", text: AttributedText("can't indent"), isComplete: false),
+            TaskNode(
+              id: "1",
+              text: AttributedText("can't indent"),
+              isComplete: false,
+            ),
           ],
         );
         await _pumpScaffold(tester, document: document);
@@ -534,11 +653,21 @@ void main() {
         expect(SuperEditorInspector.findTaskIndent("1"), 0);
       });
 
-      testWidgetsOnDesktop("applies indent when parent is a task", (tester) async {
+      testWidgetsOnDesktop("applies indent when parent is a task", (
+        tester,
+      ) async {
         final document = MutableDocument(
           nodes: [
-            TaskNode(id: "1", text: AttributedText("parent"), isComplete: false),
-            TaskNode(id: "2", text: AttributedText("can indent"), isComplete: false),
+            TaskNode(
+              id: "1",
+              text: AttributedText("parent"),
+              isComplete: false,
+            ),
+            TaskNode(
+              id: "2",
+              text: AttributedText("can indent"),
+              isComplete: false,
+            ),
           ],
         );
         await _pumpScaffold(tester, document: document);
@@ -556,11 +685,18 @@ void main() {
         expect(SuperEditorInspector.findTaskIndent("2"), 1);
       });
 
-      testWidgetsOnDesktop("Backspace at start of text un-indents task", (tester) async {
+      testWidgetsOnDesktop("Backspace at start of text un-indents task", (
+        tester,
+      ) async {
         final document = MutableDocument(
           nodes: [
             TaskNode(id: "1", text: AttributedText("one"), isComplete: false),
-            TaskNode(id: "2", text: AttributedText("two"), isComplete: false, indent: 1),
+            TaskNode(
+              id: "2",
+              text: AttributedText("two"),
+              isComplete: false,
+              indent: 1,
+            ),
           ],
         );
         await _pumpScaffold(tester, document: document);
@@ -576,7 +712,10 @@ void main() {
 
         // Ensure that the Backspace deleted a character, instead of un-indenting.
         expect(SuperEditorInspector.findTaskIndent("2"), 1);
-        expect(SuperEditorInspector.findTextInComponent("2").toPlainText(), "tw");
+        expect(
+          SuperEditorInspector.findTextInComponent("2").toPlainText(),
+          "tw",
+        );
 
         // Place caret at start of task.
         await tester.placeCaretInParagraph("2", 0);
@@ -588,7 +727,9 @@ void main() {
         expect(SuperEditorInspector.findTaskIndent("2"), 0);
       });
 
-      testWidgetsOnDesktop("does not apply to following tasks at same level", (tester) async {
+      testWidgetsOnDesktop("does not apply to following tasks at same level", (
+        tester,
+      ) async {
         final document = MutableDocument(
           nodes: [
             TaskNode(id: "1", text: AttributedText("one"), isComplete: false),
@@ -614,12 +755,24 @@ void main() {
         expect(SuperEditorInspector.findTaskIndent("3"), 0);
       });
 
-      testWidgetsOnDesktop("can indent multiple levels based on parent", (tester) async {
+      testWidgetsOnDesktop("can indent multiple levels based on parent", (
+        tester,
+      ) async {
         final document = MutableDocument(
           nodes: [
             TaskNode(id: "1", text: AttributedText("one"), isComplete: false),
-            TaskNode(id: "2", text: AttributedText("two"), isComplete: false, indent: 1),
-            TaskNode(id: "3", text: AttributedText("three"), isComplete: false, indent: 2),
+            TaskNode(
+              id: "2",
+              text: AttributedText("two"),
+              isComplete: false,
+              indent: 1,
+            ),
+            TaskNode(
+              id: "3",
+              text: AttributedText("three"),
+              isComplete: false,
+              indent: 2,
+            ),
             TaskNode(id: "4", text: AttributedText("four"), isComplete: false),
           ],
         );
@@ -637,37 +790,72 @@ void main() {
         expect(SuperEditorInspector.findTaskIndent("4"), 3);
       });
 
-      testWidgetsOnDesktop("does not indent more than one space past the parent", (tester) async {
+      testWidgetsOnDesktop(
+        "does not indent more than one space past the parent",
+        (tester) async {
+          final document = MutableDocument(
+            nodes: [
+              TaskNode(id: "1", text: AttributedText("one"), isComplete: false),
+              TaskNode(
+                id: "2",
+                text: AttributedText("two"),
+                isComplete: false,
+                indent: 1,
+              ),
+              TaskNode(
+                id: "3",
+                text: AttributedText("three"),
+                isComplete: false,
+                indent: 2,
+              ),
+            ],
+          );
+          await _pumpScaffold(tester, document: document);
+
+          // Place the caret in the child task.
+          await tester.placeCaretInParagraph("2", 0);
+
+          // Ensure the task is initially indented at level 1.
+          expect(SuperEditorInspector.findTaskIndent("2"), 1);
+
+          // Press Tab to attempt to further indent.
+          await tester.pressTab();
+
+          // Ensure the indent didn't change because it was already at max indent.
+          expect(SuperEditorInspector.findTaskIndent("2"), 1);
+        },
+      );
+
+      testWidgetsOnDesktop("unindenting parent pulls children back", (
+        tester,
+      ) async {
         final document = MutableDocument(
           nodes: [
             TaskNode(id: "1", text: AttributedText("one"), isComplete: false),
-            TaskNode(id: "2", text: AttributedText("two"), isComplete: false, indent: 1),
-            TaskNode(id: "3", text: AttributedText("three"), isComplete: false, indent: 2),
-          ],
-        );
-        await _pumpScaffold(tester, document: document);
-
-        // Place the caret in the child task.
-        await tester.placeCaretInParagraph("2", 0);
-
-        // Ensure the task is initially indented at level 1.
-        expect(SuperEditorInspector.findTaskIndent("2"), 1);
-
-        // Press Tab to attempt to further indent.
-        await tester.pressTab();
-
-        // Ensure the indent didn't change because it was already at max indent.
-        expect(SuperEditorInspector.findTaskIndent("2"), 1);
-      });
-
-      testWidgetsOnDesktop("unindenting parent pulls children back", (tester) async {
-        final document = MutableDocument(
-          nodes: [
-            TaskNode(id: "1", text: AttributedText("one"), isComplete: false),
-            TaskNode(id: "2", text: AttributedText("two"), isComplete: false, indent: 1),
-            TaskNode(id: "3", text: AttributedText("three"), isComplete: false, indent: 2),
-            TaskNode(id: "4", text: AttributedText("four"), isComplete: false, indent: 2),
-            TaskNode(id: "5", text: AttributedText("five"), isComplete: false, indent: 3),
+            TaskNode(
+              id: "2",
+              text: AttributedText("two"),
+              isComplete: false,
+              indent: 1,
+            ),
+            TaskNode(
+              id: "3",
+              text: AttributedText("three"),
+              isComplete: false,
+              indent: 2,
+            ),
+            TaskNode(
+              id: "4",
+              text: AttributedText("four"),
+              isComplete: false,
+              indent: 2,
+            ),
+            TaskNode(
+              id: "5",
+              text: AttributedText("five"),
+              isComplete: false,
+              indent: 3,
+            ),
           ],
         );
         await _pumpScaffold(tester, document: document);
@@ -694,23 +882,48 @@ void main() {
         expect(SuperEditorInspector.findTaskIndent("5"), 2);
       });
 
-      testWidgetsOnDesktop("deleting parent task pulls children back", (tester) async {
+      testWidgetsOnDesktop("deleting parent task pulls children back", (
+        tester,
+      ) async {
         final document = MutableDocument(
           nodes: [
             TaskNode(id: "1", text: AttributedText("one"), isComplete: false),
-            TaskNode(id: "2", text: AttributedText("two"), isComplete: false, indent: 1),
-            TaskNode(id: "3", text: AttributedText("three"), isComplete: false, indent: 2),
-            TaskNode(id: "4", text: AttributedText("four"), isComplete: false, indent: 1),
-            TaskNode(id: "5", text: AttributedText("five"), isComplete: false, indent: 2),
-            TaskNode(id: "6", text: AttributedText("six"), isComplete: false, indent: 0),
+            TaskNode(
+              id: "2",
+              text: AttributedText("two"),
+              isComplete: false,
+              indent: 1,
+            ),
+            TaskNode(
+              id: "3",
+              text: AttributedText("three"),
+              isComplete: false,
+              indent: 2,
+            ),
+            TaskNode(
+              id: "4",
+              text: AttributedText("four"),
+              isComplete: false,
+              indent: 1,
+            ),
+            TaskNode(
+              id: "5",
+              text: AttributedText("five"),
+              isComplete: false,
+              indent: 2,
+            ),
+            TaskNode(
+              id: "6",
+              text: AttributedText("six"),
+              isComplete: false,
+              indent: 0,
+            ),
           ],
         );
         final editor = await _pumpScaffold(tester, document: document);
 
         // Delete the 2nd task.
-        editor.execute([
-          DeleteNodeRequest(nodeId: "2"),
-        ]);
+        editor.execute([DeleteNodeRequest(nodeId: "2")]);
         await tester.pump();
 
         // Ensure that the third task automatically decreased its indent.
@@ -725,23 +938,23 @@ void main() {
   });
 }
 
-Future<Editor> _pumpScaffold(WidgetTester tester, {MutableDocument? document}) async {
+Future<Editor> _pumpScaffold(
+  WidgetTester tester, {
+  MutableDocument? document,
+}) async {
   document ??= MutableDocument(
-    nodes: [
-      TaskNode(id: "1", text: AttributedText(), isComplete: false),
-    ],
+    nodes: [TaskNode(id: "1", text: AttributedText(), isComplete: false)],
   );
 
   final composer = MutableDocumentComposer();
-  final editor = createDefaultDocumentEditor(document: document, composer: composer);
+  final editor = createDefaultDocumentEditor(
+    document: document,
+    composer: composer,
+  );
 
   await tester.pumpWidget(
     MaterialApp(
-      home: Scaffold(
-        body: SuperEditor(
-          editor: editor,
-        ),
-      ),
+      home: Scaffold(body: SuperEditor(editor: editor)),
     ),
   );
 

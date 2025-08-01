@@ -110,10 +110,12 @@ class SuperEditor extends StatefulWidget {
     this.tapRegionGroupId,
     required this.editor,
     @Deprecated(
-        "The document is now retrieved from the Editor. You should remove this property from your SuperEditor widget.")
+      "The document is now retrieved from the Editor. You should remove this property from your SuperEditor widget.",
+    )
     this.document,
     @Deprecated(
-        "The composer is now retrieved from the Editor. You should remove this property from your SuperEditor widget.")
+      "The composer is now retrieved from the Editor. You should remove this property from your SuperEditor widget.",
+    )
     this.composer,
     this.scrollController,
     this.documentLayoutKey,
@@ -132,7 +134,7 @@ class SuperEditor extends StatefulWidget {
     this.selectorHandlers,
     this.gestureMode,
     this.contentTapDelegateFactories = const [
-      superEditorLaunchLinkTapHandlerFactory
+      superEditorLaunchLinkTapHandlerFactory,
     ],
     this.selectionLayerLinks,
     this.documentUnderlayBuilders = const [],
@@ -146,16 +148,19 @@ class SuperEditor extends StatefulWidget {
     this.plugins = const {},
     this.debugPaint = const DebugPaintConfig(),
     this.shrinkWrap = false,
-  })  : stylesheet = stylesheet ?? defaultStylesheet,
-        selectionStyles = selectionStyle ?? defaultSelectionStyle,
-        componentBuilders = [
-          for (final plugin in plugins) ...plugin.componentBuilders,
-          if (componentBuilders != null)
-            ...componentBuilders
-          else ...[...defaultComponentBuilders, TaskComponentBuilder(editor)],
-          const UnknownComponentBuilder(),
-        ],
-        super(key: key);
+  }) : stylesheet = stylesheet ?? defaultStylesheet,
+       selectionStyles = selectionStyle ?? defaultSelectionStyle,
+       componentBuilders = [
+         for (final plugin in plugins) ...plugin.componentBuilders,
+         if (componentBuilders != null)
+           ...componentBuilders
+         else ...[
+           ...defaultComponentBuilders,
+           TaskComponentBuilder(editor),
+         ],
+         const UnknownComponentBuilder(),
+       ],
+       super(key: key);
 
   /// [FocusNode] for the entire `SuperEditor`.
   final FocusNode? focusNode;
@@ -198,13 +203,15 @@ class SuperEditor extends StatefulWidget {
 
   /// The [Document] that's edited by the [editor].
   @Deprecated(
-      "The Document is now retrieved from the Editor. You should remove this property from your SuperEditor widget.")
+    "The Document is now retrieved from the Editor. You should remove this property from your SuperEditor widget.",
+  )
   final Document? document;
 
   /// Owns the editor's current selection, the current attributions for
   /// text input, and other transitive editor configurations.
   @Deprecated(
-      "The DocumentComposer is now retrieved from the Editor. You should remove this property from your SuperEditor widget.")
+    "The DocumentComposer is now retrieved from the Editor. You should remove this property from your SuperEditor widget.",
+  )
   final DocumentComposer? composer;
 
   /// [GlobalKey] that's bound to the [DocumentLayout] within
@@ -331,27 +338,32 @@ class SuperEditor extends StatefulWidget {
 
   /// Shows, hides, and positions a floating toolbar and magnifier.
   @Deprecated(
-      "To configure overlay controls, surround SuperEditor with a SuperEditorIosControlsScope and/or SuperEditorAndroidControlsScope")
+    "To configure overlay controls, surround SuperEditor with a SuperEditorIosControlsScope and/or SuperEditorAndroidControlsScope",
+  )
   final MagnifierAndToolbarController? overlayController;
 
   /// Color of the text selection drag handles on Android.
   @Deprecated(
-      "To configure handle color, surround SuperEditor with a SuperEditorAndroidControlsScope, instead")
+    "To configure handle color, surround SuperEditor with a SuperEditorAndroidControlsScope, instead",
+  )
   final Color? androidHandleColor;
 
   /// Builder that creates a floating toolbar when running on Android.
   @Deprecated(
-      "To configure a toolbar builder, surround SuperEditor with a SuperEditorAndroidControlsScope, instead")
+    "To configure a toolbar builder, surround SuperEditor with a SuperEditorAndroidControlsScope, instead",
+  )
   final WidgetBuilder? androidToolbarBuilder;
 
   /// Color of the text selection drag handles on iOS.
   @Deprecated(
-      "To configure handle color, surround SuperEditor with a SuperEditorIosControlsScope, instead")
+    "To configure handle color, surround SuperEditor with a SuperEditorIosControlsScope, instead",
+  )
   final Color? iOSHandleColor;
 
   /// Builder that creates a floating toolbar when running on iOS.
   @Deprecated(
-      "To configure a toolbar builder, surround SuperEditor with a SuperEditorIosControlsScope, instead")
+    "To configure a toolbar builder, surround SuperEditor with a SuperEditorIosControlsScope, instead",
+  )
   final WidgetBuilder? iOSToolbarBuilder;
 
   /// Creates a clipper that applies to overlay controls, like drag
@@ -362,9 +374,10 @@ class SuperEditor extends StatefulWidget {
   /// will be allowed to appear anywhere in the overlay in which they sit
   /// (probably the entire screen).
   @Deprecated(
-      "To configure an overlay clipper, surround SuperEditor with a SuperEditorIosControlsScope and/or a SuperEditorAndroidControlsScope")
+    "To configure an overlay clipper, surround SuperEditor with a SuperEditorIosControlsScope and/or a SuperEditorAndroidControlsScope",
+  )
   final CustomClipper<Rect> Function(BuildContext overlayContext)?
-      createOverlayControlsClipper;
+  createOverlayControlsClipper;
 
   /// Plugins that add sets of behaviors to the editing experience.
   final Set<SuperEditorPlugin> plugins;
@@ -390,7 +403,7 @@ class SuperEditorState extends State<SuperEditor> {
   SingleColumnLayoutPresenter? _docLayoutPresenter;
   late SingleColumnStylesheetStyler _docStylesheetStyler;
   late SingleColumnLayoutCustomComponentStyler
-      _docLayoutPerComponentBlockStyler;
+  _docLayoutPerComponentBlockStyler;
   final _customUnderlineStyler = CustomUnderlineStyler();
   late SingleColumnLayoutSelectionStyler _docLayoutSelectionStyler;
 
@@ -446,11 +459,13 @@ class SuperEditorState extends State<SuperEditor> {
 
     if (widget.editor.maybeDocument == null) {
       throw Exception(
-          "No Document is available to SuperEditor. The Editor given to SuperEditor must contain a MutableDocument in the set of Editables.");
+        "No Document is available to SuperEditor. The Editor given to SuperEditor must contain a MutableDocument in the set of Editables.",
+      );
     }
     if (widget.editor.maybeComposer == null) {
       throw Exception(
-          "No DocumentComposer is available to SuperEditor. The Editor given to SuperEditor must contain a MutableDocumentComposer in the set of Editables.");
+        "No DocumentComposer is available to SuperEditor. The Editor given to SuperEditor must contain a MutableDocumentComposer in the set of Editables.",
+      );
     }
 
     _focusNode = (widget.focusNode ?? FocusNode())..addListener(_onFocusChange);
@@ -472,14 +487,16 @@ class SuperEditorState extends State<SuperEditor> {
     widget.editor.context.put(
       Editor.layoutKey,
       DocumentLayoutEditable(
-          () => _docLayoutKey.currentState as DocumentLayout),
+        () => _docLayoutKey.currentState as DocumentLayout,
+      ),
     );
 
     _createEditContext();
     _createLayoutPresenter();
 
-    _streamSubscription =
-        widget.editor.customEventStream.listen(_handleCustomEvent);
+    _streamSubscription = widget.editor.customEventStream.listen(
+      _handleCustomEvent,
+    );
   }
 
   @override
@@ -502,7 +519,8 @@ class SuperEditorState extends State<SuperEditor> {
     if (widget.editor.maybeComposer != oldWidget.editor.composer) {
       if (widget.editor.maybeComposer == null) {
         throw Exception(
-            "No DocumentComposer is available to SuperEditor. The Editor given to SuperEditor must contain a MutableDocumentComposer in the set of Editables.");
+          "No DocumentComposer is available to SuperEditor. The Editor given to SuperEditor must contain a MutableDocumentComposer in the set of Editables.",
+        );
       }
 
       _composer = widget.editor.composer;
@@ -517,14 +535,16 @@ class SuperEditorState extends State<SuperEditor> {
       widget.editor.context.put(
         Editor.layoutKey,
         DocumentLayoutEditable(
-            () => _docLayoutKey.currentState as DocumentLayout),
+          () => _docLayoutKey.currentState as DocumentLayout,
+        ),
       );
 
       _createEditContext();
       _createLayoutPresenter();
       _streamSubscription.cancel();
-      _streamSubscription =
-          widget.editor.customEventStream.listen(_handleCustomEvent);
+      _streamSubscription = widget.editor.customEventStream.listen(
+        _handleCustomEvent,
+      );
     } else {
       if (widget.selectionStyles != oldWidget.selectionStyles) {
         _docLayoutSelectionStyler.selectionStyles = widget.selectionStyles;
@@ -632,8 +652,9 @@ class SuperEditorState extends State<SuperEditor> {
 
     final document = editContext.document;
 
-    _docStylesheetStyler =
-        SingleColumnStylesheetStyler(stylesheet: widget.stylesheet);
+    _docStylesheetStyler = SingleColumnStylesheetStyler(
+      stylesheet: widget.stylesheet,
+    );
 
     _docLayoutPerComponentBlockStyler =
         SingleColumnLayoutCustomComponentStyler();
@@ -647,8 +668,8 @@ class SuperEditorState extends State<SuperEditor> {
 
     final showComposingUnderline =
         defaultTargetPlatform == TargetPlatform.macOS ||
-            defaultTargetPlatform == TargetPlatform.iOS ||
-            defaultTargetPlatform == TargetPlatform.android;
+        defaultTargetPlatform == TargetPlatform.iOS ||
+        defaultTargetPlatform == TargetPlatform.android;
 
     _docLayoutPresenter = SingleColumnLayoutPresenter(
       document: document,
@@ -729,74 +750,77 @@ class SuperEditorState extends State<SuperEditor> {
     return _buildGestureControlsScope(
       // We add a Builder immediately beneath the gesture controls scope so that
       // all descendant widgets built within SuperEditor can access that scope.
-      child: Builder(builder: (controlsScopeContext) {
-        return SuperEditorFocusDebugVisuals(
-          focusNode: _focusNode,
-          child: EditorSelectionAndFocusPolicy(
+      child: Builder(
+        builder: (controlsScopeContext) {
+          return SuperEditorFocusDebugVisuals(
             focusNode: _focusNode,
-            editor: widget.editor,
-            document: widget.editor.document,
-            selection: _composer.selectionNotifier,
-            isDocumentLayoutAvailable: () =>
-                (_docLayoutKey.currentContext?.findRenderObject()
-                        as RenderSliver?)
-                    ?.hasSize ==
-                true,
-            getDocumentLayout: () => editContext.documentLayout,
-            placeCaretAtEndOfDocumentOnGainFocus:
-                widget.selectionPolicies.placeCaretAtEndOfDocumentOnGainFocus,
-            restorePreviousSelectionOnGainFocus:
-                widget.selectionPolicies.restorePreviousSelectionOnGainFocus,
-            clearSelectionWhenEditorLosesFocus:
-                widget.selectionPolicies.clearSelectionWhenEditorLosesFocus,
-            child: DocumentScaffold(
-              documentLayoutLink: _documentLayoutLink,
-              documentLayoutKey: _docLayoutKey,
-              viewportDecorationBuilder:
-                  _buildPlatformSpecificViewportDecorations,
-              textInputBuilder: _buildTextInputSystem,
-              gestureBuilder: _buildGestureInteractor,
-              scrollController: _scrollController,
-              autoScrollController: _autoScrollController,
-              scroller: _scroller,
-              presenter: presenter,
-              componentBuilders: widget.componentBuilders,
-              shrinkWrap: widget.shrinkWrap,
-              underlays: [
-                // Add all underlays from plugins.
-                for (final plugin in widget.plugins) //
+            child: EditorSelectionAndFocusPolicy(
+              focusNode: _focusNode,
+              editor: widget.editor,
+              document: widget.editor.document,
+              selection: _composer.selectionNotifier,
+              isDocumentLayoutAvailable: () =>
+                  (_docLayoutKey.currentContext?.findRenderObject()
+                          as RenderSliver?)
+                      ?.hasSize ==
+                  true,
+              getDocumentLayout: () => editContext.documentLayout,
+              placeCaretAtEndOfDocumentOnGainFocus:
+                  widget.selectionPolicies.placeCaretAtEndOfDocumentOnGainFocus,
+              restorePreviousSelectionOnGainFocus:
+                  widget.selectionPolicies.restorePreviousSelectionOnGainFocus,
+              clearSelectionWhenEditorLosesFocus:
+                  widget.selectionPolicies.clearSelectionWhenEditorLosesFocus,
+              child: DocumentScaffold(
+                documentLayoutLink: _documentLayoutLink,
+                documentLayoutKey: _docLayoutKey,
+                viewportDecorationBuilder:
+                    _buildPlatformSpecificViewportDecorations,
+                textInputBuilder: _buildTextInputSystem,
+                gestureBuilder: _buildGestureInteractor,
+                scrollController: _scrollController,
+                autoScrollController: _autoScrollController,
+                scroller: _scroller,
+                presenter: presenter,
+                componentBuilders: widget.componentBuilders,
+                shrinkWrap: widget.shrinkWrap,
+                underlays: [
+                  // Add all underlays from plugins.
+                  for (final plugin in widget.plugins) //
+                    for (final underlayBuilder
+                        in plugin.documentUnderlayBuilders) //
+                      (context) => underlayBuilder.build(context, editContext),
+                  // Add all underlays that the app wants.
                   for (final underlayBuilder
-                      in plugin.documentUnderlayBuilders) //
+                      in widget.documentUnderlayBuilders) //
                     (context) => underlayBuilder.build(context, editContext),
-                // Add all underlays that the app wants.
-                for (final underlayBuilder
-                    in widget.documentUnderlayBuilders) //
-                  (context) => underlayBuilder.build(context, editContext),
-              ],
-              overlays: [
-                // Layer that positions and sizes leader widgets at the bounds
-                // of the users selection so that carets, handles, toolbars, and
-                // other things can follow the selection.
-                (context) {
-                  return _SelectionLeadersDocumentLayerBuilder(
-                    links: _selectionLinks,
-                    showDebugLeaderBounds: false,
-                  ).build(context, editContext);
-                },
-                // Add all overlays from plugins.
-                for (final plugin in widget.plugins) //
+                ],
+                overlays: [
+                  // Layer that positions and sizes leader widgets at the bounds
+                  // of the users selection so that carets, handles, toolbars, and
+                  // other things can follow the selection.
+                  (context) {
+                    return _SelectionLeadersDocumentLayerBuilder(
+                      links: _selectionLinks,
+                      showDebugLeaderBounds: false,
+                    ).build(context, editContext);
+                  },
+                  // Add all overlays from plugins.
+                  for (final plugin in widget.plugins) //
+                    for (final overlayBuilder
+                        in plugin.documentOverlayBuilders) //
+                      (context) => overlayBuilder.build(context, editContext),
+                  // Add all overlays that the app wants.
                   for (final overlayBuilder
-                      in plugin.documentOverlayBuilders) //
+                      in widget.documentOverlayBuilders) //
                     (context) => overlayBuilder.build(context, editContext),
-                // Add all overlays that the app wants.
-                for (final overlayBuilder in widget.documentOverlayBuilders) //
-                  (context) => overlayBuilder.build(context, editContext),
-              ],
-              debugPaint: widget.debugPaint,
+                ],
+                debugPaint: widget.debugPaint,
+              ),
             ),
-          ),
-        );
-      }),
+          );
+        },
+      ),
     );
   }
 
@@ -809,9 +833,7 @@ class SuperEditorState extends State<SuperEditor> {
   /// of [SuperEditor], and widgets outside of [SuperEditor].
   ///
   /// The specific scope that's added to the widget tree is selected by the given [gestureMode].
-  Widget _buildGestureControlsScope({
-    required Widget child,
-  }) {
+  Widget _buildGestureControlsScope({required Widget child}) {
     switch (gestureMode) {
       case DocumentGestureMode.mouse:
         return child;
@@ -832,10 +854,7 @@ class SuperEditorState extends State<SuperEditor> {
 
   /// Builds the widget tree that applies user input, e.g., key
   /// presses from a keyboard, or text deltas from the IME.
-  Widget _buildTextInputSystem(
-    BuildContext context, {
-    required Widget child,
-  }) {
+  Widget _buildTextInputSystem(BuildContext context, {required Widget child}) {
     switch (inputSource) {
       case TextInputSource.keyboard:
         return SuperEditorHardwareKeyHandler(
@@ -860,7 +879,8 @@ class SuperEditorState extends State<SuperEditor> {
               widget.selectionPolicies.clearSelectionWhenImeConnectionCloses,
           softwareKeyboardController: _softwareKeyboardController,
           imePolicies: widget.imePolicies,
-          imeConfiguration: widget.imeConfiguration ??
+          imeConfiguration:
+              widget.imeConfiguration ??
               SuperEditorImeConfiguration(
                 keyboardBrightness: Theme.of(context).brightness,
               ),
@@ -891,12 +911,12 @@ class SuperEditorState extends State<SuperEditor> {
           defaultToolbarBuilder:
               (overlayContext, mobileToolbarKey, focalPoint) =>
                   defaultIosEditorToolbarBuilder(
-            overlayContext,
-            mobileToolbarKey,
-            focalPoint,
-            editContext.commonOps,
-            SuperEditorIosControlsScope.rootOf(context),
-          ),
+                    overlayContext,
+                    mobileToolbarKey,
+                    focalPoint,
+                    editContext.commonOps,
+                    SuperEditorIosControlsScope.rootOf(context),
+                  ),
           child: SuperEditorIosMagnifierOverlayManager(
             child: EditorFloatingCursor(
               editor: widget.editor,
@@ -916,20 +936,23 @@ class SuperEditorState extends State<SuperEditor> {
           getDocumentLayout: () => _docLayoutKey.currentState as DocumentLayout,
           selection: _composer.selectionNotifier,
           setSelection: (newSelection) => editContext.editor.execute([
-            ChangeSelectionRequest(newSelection, SelectionChangeType.pushCaret,
-                SelectionReason.userInteraction),
+            ChangeSelectionRequest(
+              newSelection,
+              SelectionChangeType.pushCaret,
+              SelectionReason.userInteraction,
+            ),
           ]),
           scrollChangeSignal: _scrollChangeSignal,
           dragHandleAutoScroller: _dragHandleAutoScroller,
           defaultToolbarBuilder:
               (overlayContext, mobileToolbarKey, focalPoint) =>
                   defaultAndroidEditorToolbarBuilder(
-            overlayContext,
-            mobileToolbarKey,
-            editContext.commonOps,
-            SuperEditorAndroidControlsScope.rootOf(context),
-            editContext.composer.selectionNotifier,
-          ),
+                    overlayContext,
+                    mobileToolbarKey,
+                    editContext.commonOps,
+                    SuperEditorAndroidControlsScope.rootOf(context),
+                    editContext.composer.selectionNotifier,
+                  ),
           child: child,
         );
       case DocumentGestureMode.mouse:
@@ -937,8 +960,10 @@ class SuperEditorState extends State<SuperEditor> {
     }
   }
 
-  Widget _buildGestureInteractor(BuildContext context,
-      {required Widget child}) {
+  Widget _buildGestureInteractor(
+    BuildContext context, {
+    required Widget child,
+  }) {
     // Ensure that gesture object fill entire viewport when not being
     // in user specified scrollable.
     final fillViewport =
@@ -1028,9 +1053,7 @@ Widget iOSSystemPopoverEditorToolbarWithFallbackBuilder(
   }
 
   if (IOSSystemContextMenu.isSupported(context)) {
-    return IOSSystemContextMenu(
-      leaderLink: focalPoint,
-    );
+    return IOSSystemContextMenu(leaderLink: focalPoint);
   }
 
   return defaultIosEditorToolbarBuilder(
@@ -1143,10 +1166,16 @@ class DefaultAndroidEditorToolbar extends StatelessWidget {
       builder: (context, selection, child) {
         return AndroidTextEditingFloatingToolbar(
           floatingToolbarKey: floatingToolbarKey,
-          onCopyPressed: selection == null || !selection.isCollapsed //
+          onCopyPressed:
+              selection == null ||
+                  !selection
+                      .isCollapsed //
               ? _copy
               : null,
-          onCutPressed: selection == null || !selection.isCollapsed //
+          onCutPressed:
+              selection == null ||
+                  !selection
+                      .isCollapsed //
               ? _cut
               : null,
           onPastePressed: _paste,
@@ -1195,7 +1224,9 @@ class _SelectionLeadersDocumentLayerBuilder implements SuperEditorLayerBuilder {
 
   @override
   ContentLayerWidget build(
-      BuildContext context, SuperEditorContext editContext) {
+    BuildContext context,
+    SuperEditorContext editContext,
+  ) {
     return SelectionLeadersDocumentLayer(
       document: editContext.document,
       selection: editContext.composer.selectionNotifier,
@@ -1356,7 +1387,9 @@ class SuperEditorSelectionPolicies {
 /// the document layout within a [SuperEditor].
 abstract class SuperEditorLayerBuilder {
   ContentLayerWidget build(
-      BuildContext context, SuperEditorContext editContext);
+    BuildContext context,
+    SuperEditorContext editContext,
+  );
 }
 
 /// A [SuperEditorLayerBuilder] that's implemented with a given function, so
@@ -1365,22 +1398,23 @@ class FunctionalSuperEditorLayerBuilder implements SuperEditorLayerBuilder {
   const FunctionalSuperEditorLayerBuilder(this._delegate);
 
   final ContentLayerWidget Function(
-      BuildContext context, SuperEditorContext editContext) _delegate;
+    BuildContext context,
+    SuperEditorContext editContext,
+  )
+  _delegate;
 
   @override
   ContentLayerWidget build(
-          BuildContext context, SuperEditorContext editContext) =>
-      _delegate(context, editContext);
+    BuildContext context,
+    SuperEditorContext editContext,
+  ) => _delegate(context, editContext);
 }
 
 /// A [SuperEditorLayerBuilder] that paints a caret at the primary selection extent
 /// in a [SuperEditor].
 class DefaultCaretOverlayBuilder implements SuperEditorLayerBuilder {
   const DefaultCaretOverlayBuilder({
-    this.caretStyle = const CaretStyle(
-      width: 2,
-      color: Colors.black,
-    ),
+    this.caretStyle = const CaretStyle(width: 2, color: Colors.black),
     this.platformOverride,
     this.displayOnAllPlatforms = false,
     this.displayCaretWithExpandedSelection = true,
@@ -1410,7 +1444,9 @@ class DefaultCaretOverlayBuilder implements SuperEditorLayerBuilder {
 
   @override
   ContentLayerWidget build(
-      BuildContext context, SuperEditorContext editContext) {
+    BuildContext context,
+    SuperEditorContext editContext,
+  ) {
     return CaretDocumentOverlay(
       composer: editContext.composer,
       documentLayoutResolver: () => editContext.documentLayout,
@@ -1637,133 +1673,100 @@ const defaultEditorSelectorHandlers = <String, SuperEditorSelectorHandler>{
 /// Stylesheet applied to all [SuperEditor]s by default.
 final defaultStylesheet = Stylesheet(
   rules: [
-    StyleRule(
-      BlockSelector.all,
-      (doc, docNode) {
-        return {
-          Styles.maxWidth: 640.0,
-          Styles.padding: const CascadingPadding.symmetric(horizontal: 24),
-          Styles.textStyle: const TextStyle(
-            color: Colors.black,
-            fontSize: 18,
-            height: 1.4,
-          ),
-        };
-      },
-    ),
-    StyleRule(
-      const BlockSelector("header1"),
-      (doc, docNode) {
-        return {
-          Styles.padding: const CascadingPadding.only(top: 40),
-          Styles.textStyle: const TextStyle(
-            color: Color(0xFF333333),
-            fontSize: 38,
-            fontWeight: FontWeight.bold,
-          ),
-        };
-      },
-    ),
-    StyleRule(
-      const BlockSelector("header2"),
-      (doc, docNode) {
-        return {
-          Styles.padding: const CascadingPadding.only(top: 32),
-          Styles.textStyle: const TextStyle(
-            color: Color(0xFF333333),
-            fontSize: 26,
-            fontWeight: FontWeight.bold,
-          ),
-        };
-      },
-    ),
-    StyleRule(
-      const BlockSelector("header3"),
-      (doc, docNode) {
-        return {
-          Styles.padding: const CascadingPadding.only(top: 28),
-          Styles.textStyle: const TextStyle(
-            color: Color(0xFF333333),
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-          ),
-        };
-      },
-    ),
-    StyleRule(
-      const BlockSelector("paragraph"),
-      (doc, docNode) {
-        return {
-          Styles.padding: const CascadingPadding.only(top: 24),
-        };
-      },
-    ),
-    StyleRule(
-      const BlockSelector("paragraph").after("header1"),
-      (doc, docNode) {
-        return {
-          Styles.padding: const CascadingPadding.only(top: 0),
-        };
-      },
-    ),
-    StyleRule(
-      const BlockSelector("paragraph").after("header2"),
-      (doc, docNode) {
-        return {
-          Styles.padding: const CascadingPadding.only(top: 0),
-        };
-      },
-    ),
-    StyleRule(
-      const BlockSelector("paragraph").after("header3"),
-      (doc, docNode) {
-        return {
-          Styles.padding: const CascadingPadding.only(top: 0),
-        };
-      },
-    ),
-    StyleRule(
-      const BlockSelector("listItem"),
-      (doc, docNode) {
-        return {
-          Styles.padding: const CascadingPadding.only(top: 24),
-        };
-      },
-    ),
-    StyleRule(
-      const BlockSelector("blockquote"),
-      (doc, docNode) {
-        return {
-          Styles.textStyle: const TextStyle(
-            color: Colors.grey,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            height: 1.4,
-          ),
-        };
-      },
-    ),
-    StyleRule(
-      BlockSelector.all.last(),
-      (doc, docNode) {
-        return {
-          Styles.padding: const CascadingPadding.only(bottom: 96),
-        };
-      },
-    ),
+    StyleRule(BlockSelector.all, (doc, docNode) {
+      return {
+        Styles.maxWidth: 640.0,
+        Styles.padding: const CascadingPadding.symmetric(horizontal: 24),
+        Styles.textStyle: const TextStyle(
+          color: Colors.black,
+          fontSize: 18,
+          height: 1.4,
+        ),
+      };
+    }),
+    StyleRule(const BlockSelector("header1"), (doc, docNode) {
+      return {
+        Styles.padding: const CascadingPadding.only(top: 40),
+        Styles.textStyle: const TextStyle(
+          color: Color(0xFF333333),
+          fontSize: 38,
+          fontWeight: FontWeight.bold,
+        ),
+      };
+    }),
+    StyleRule(const BlockSelector("header2"), (doc, docNode) {
+      return {
+        Styles.padding: const CascadingPadding.only(top: 32),
+        Styles.textStyle: const TextStyle(
+          color: Color(0xFF333333),
+          fontSize: 26,
+          fontWeight: FontWeight.bold,
+        ),
+      };
+    }),
+    StyleRule(const BlockSelector("header3"), (doc, docNode) {
+      return {
+        Styles.padding: const CascadingPadding.only(top: 28),
+        Styles.textStyle: const TextStyle(
+          color: Color(0xFF333333),
+          fontSize: 22,
+          fontWeight: FontWeight.bold,
+        ),
+      };
+    }),
+    StyleRule(const BlockSelector("paragraph"), (doc, docNode) {
+      return {Styles.padding: const CascadingPadding.only(top: 24)};
+    }),
+    StyleRule(const BlockSelector("paragraph").after("header1"), (
+      doc,
+      docNode,
+    ) {
+      return {Styles.padding: const CascadingPadding.only(top: 0)};
+    }),
+    StyleRule(const BlockSelector("paragraph").after("header2"), (
+      doc,
+      docNode,
+    ) {
+      return {Styles.padding: const CascadingPadding.only(top: 0)};
+    }),
+    StyleRule(const BlockSelector("paragraph").after("header3"), (
+      doc,
+      docNode,
+    ) {
+      return {Styles.padding: const CascadingPadding.only(top: 0)};
+    }),
+    StyleRule(const BlockSelector("listItem"), (doc, docNode) {
+      return {Styles.padding: const CascadingPadding.only(top: 24)};
+    }),
+    StyleRule(const BlockSelector("blockquote"), (doc, docNode) {
+      return {
+        Styles.textStyle: const TextStyle(
+          color: Colors.grey,
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          height: 1.4,
+        ),
+      };
+    }),
+    StyleRule(BlockSelector.all.last(), (doc, docNode) {
+      return {Styles.padding: const CascadingPadding.only(bottom: 96)};
+    }),
   ],
   inlineTextStyler: defaultInlineTextStyler,
   inlineWidgetBuilders: defaultInlineWidgetBuilderChain,
 );
 
 TextStyle defaultInlineTextStyler(
-    Set<Attribution> attributions, TextStyle existingStyle) {
+  Set<Attribution> attributions,
+  TextStyle existingStyle,
+) {
   var newStyle = existingStyle.merge(defaultStyleBuilder(attributions));
 
   // We apply opacity here instead of defaultStyleBuilder because opacity requires
   // a color to be defined to apply itself.
-  final opacityAttribution =
-      attributions.whereType<OpacityAttribution>().firstOrNull;
+  final opacityAttribution = attributions
+      .whereType<OpacityAttribution>()
+      .firstOrNull;
   if (opacityAttribution != null) {
     newStyle = newStyle.copyWith(
       color: newStyle.color!.withValues(alpha: opacityAttribution.opacity),
@@ -1779,26 +1782,26 @@ TextStyle defaultStyleBuilder(Set<Attribution> attributions) {
 
   for (final attribution in attributions) {
     if (attribution == boldAttribution) {
-      newStyle = newStyle.copyWith(
-        fontWeight: FontWeight.bold,
-      );
+      newStyle = newStyle.copyWith(fontWeight: FontWeight.bold);
     } else if (attribution == italicsAttribution) {
-      newStyle = newStyle.copyWith(
-        fontStyle: FontStyle.italic,
-      );
+      newStyle = newStyle.copyWith(fontStyle: FontStyle.italic);
     } else if (attribution == underlineAttribution) {
       newStyle = newStyle.copyWith(
         decoration: newStyle.decoration == null
             ? TextDecoration.underline
-            : TextDecoration.combine(
-                [TextDecoration.underline, newStyle.decoration!]),
+            : TextDecoration.combine([
+                TextDecoration.underline,
+                newStyle.decoration!,
+              ]),
       );
     } else if (attribution == strikethroughAttribution) {
       newStyle = newStyle.copyWith(
         decoration: newStyle.decoration == null
             ? TextDecoration.lineThrough
-            : TextDecoration.combine(
-                [TextDecoration.lineThrough, newStyle.decoration!]),
+            : TextDecoration.combine([
+                TextDecoration.lineThrough,
+                newStyle.decoration!,
+              ]),
       );
     } else if (attribution == superscriptAttribution) {
       newStyle = newStyle.copyWith(
@@ -1809,21 +1812,13 @@ TextStyle defaultStyleBuilder(Set<Attribution> attributions) {
         fontFeatures: [const FontFeature.subscripts()],
       );
     } else if (attribution is ColorAttribution) {
-      newStyle = newStyle.copyWith(
-        color: attribution.color,
-      );
+      newStyle = newStyle.copyWith(color: attribution.color);
     } else if (attribution is BackgroundColorAttribution) {
-      newStyle = newStyle.copyWith(
-        backgroundColor: attribution.color,
-      );
+      newStyle = newStyle.copyWith(backgroundColor: attribution.color);
     } else if (attribution is FontSizeAttribution) {
-      newStyle = newStyle.copyWith(
-        fontSize: attribution.fontSize,
-      );
+      newStyle = newStyle.copyWith(fontSize: attribution.fontSize);
     } else if (attribution is FontFamilyAttribution) {
-      newStyle = newStyle.copyWith(
-        fontFamily: attribution.fontFamily,
-      );
+      newStyle = newStyle.copyWith(fontFamily: attribution.fontFamily);
     } else if (attribution is LinkAttribution) {
       newStyle = newStyle.copyWith(
         color: Colors.lightBlue,

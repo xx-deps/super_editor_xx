@@ -24,13 +24,12 @@ void main() {
         await tester.placeCaretInParagraph('1', 0);
 
         // Type the text "Example".
-        await tester.ime.typeText(
-          'مثال',
-          getter: imeClientGetter,
-        );
+        await tester.ime.typeText('مثال', getter: imeClientGetter);
 
         await screenMatchesGolden(
-            tester, 'super-editor-rtl-caret-at-leftmost-character-paragraph-${defaultTargetPlatform.name}');
+          tester,
+          'super-editor-rtl-caret-at-leftmost-character-paragraph-${defaultTargetPlatform.name}',
+        );
       },
       windowSize: goldenSizeSmall,
     );
@@ -54,13 +53,12 @@ void main() {
         await tester.placeCaretInParagraph('1', 0);
 
         // Type the text "Example".
-        await tester.ime.typeText(
-          'مثال',
-          getter: imeClientGetter,
-        );
+        await tester.ime.typeText('مثال', getter: imeClientGetter);
 
         await screenMatchesGolden(
-            tester, 'super-editor-rtl-caret-at-leftmost-character-unordered-list-item-${defaultTargetPlatform.name}');
+          tester,
+          'super-editor-rtl-caret-at-leftmost-character-unordered-list-item-${defaultTargetPlatform.name}',
+        );
       },
       windowSize: goldenSizeSmall,
     );
@@ -72,9 +70,7 @@ void main() {
             .createDocument()
             .withCustomContent(
               MutableDocument(
-                nodes: [
-                  ListItemNode.ordered(id: '1', text: AttributedText()),
-                ],
+                nodes: [ListItemNode.ordered(id: '1', text: AttributedText())],
               ),
             )
             .withInputSource(TextInputSource.ime)
@@ -84,13 +80,12 @@ void main() {
         await tester.placeCaretInParagraph('1', 0);
 
         // Type the text "Example".
-        await tester.ime.typeText(
-          'مثال',
-          getter: imeClientGetter,
-        );
+        await tester.ime.typeText('مثال', getter: imeClientGetter);
 
         await screenMatchesGolden(
-            tester, 'super-editor-rtl-caret-at-leftmost-character-ordered-list-item-${defaultTargetPlatform.name}');
+          tester,
+          'super-editor-rtl-caret-at-leftmost-character-ordered-list-item-${defaultTargetPlatform.name}',
+        );
       },
       windowSize: goldenSizeSmall,
     );
@@ -114,13 +109,12 @@ void main() {
         await tester.placeCaretInParagraph('1', 0);
 
         // Type the text "Example".
-        await tester.ime.typeText(
-          'مثال',
-          getter: imeClientGetter,
-        );
+        await tester.ime.typeText('مثال', getter: imeClientGetter);
 
         await screenMatchesGolden(
-            tester, 'super-editor-rtl-caret-at-leftmost-character-task-${defaultTargetPlatform.name}');
+          tester,
+          'super-editor-rtl-caret-at-leftmost-character-task-${defaultTargetPlatform.name}',
+        );
       },
       windowSize: goldenSizeSmall,
     );

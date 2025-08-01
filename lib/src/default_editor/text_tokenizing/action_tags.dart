@@ -39,14 +39,17 @@ import 'package:super_editor/src/infrastructure/keyboard.dart';
 /// of a user's desire to take an action. It's not a persistent reference, like
 /// a user tag, or a hash tag.
 class ActionTagsPlugin extends SuperEditorPlugin {
-  ActionTagsPlugin({
-    TagRule tagRule = defaultActionTagRule,
-  }) : _tagRule = tagRule {
+  ActionTagsPlugin({TagRule tagRule = defaultActionTagRule})
+    : _tagRule = tagRule {
     _requestHandlers = <EditRequestHandler>[
-      (editor, request) => request is SubmitComposingActionTagRequest //
+      (editor, request) =>
+          request
+              is SubmitComposingActionTagRequest //
           ? SubmitComposingActionTagCommand()
           : null,
-      (editor, request) => request is CancelComposingActionTagRequest //
+      (editor, request) =>
+          request
+              is CancelComposingActionTagRequest //
           ? CancelComposingActionTagCommand(request.tagRule)
           : null,
     ];
@@ -101,9 +104,7 @@ class ActionTagsPlugin extends SuperEditorPlugin {
       return ExecutionInstruction.continueExecution;
     }
 
-    editContext.editor.execute([
-      CancelComposingActionTagRequest(_tagRule),
-    ]);
+    editContext.editor.execute([CancelComposingActionTagRequest(_tagRule)]);
 
     return ExecutionInstruction.haltExecution;
   }
@@ -170,7 +171,8 @@ class SubmitComposingActionTagCommand extends EditCommand {
     executor.executeCommand(
       ChangeSelectionCommand(
         DocumentSelection.collapsed(
-            position: tagAroundPosition.indexedTag.start),
+          position: tagAroundPosition.indexedTag.start,
+        ),
         SelectionChangeType.deleteContent,
         SelectionReason.userInteraction,
       ),
@@ -220,7 +222,8 @@ class CancelComposingActionTagCommand extends EditCommand {
       // we can't find the desired composing action tag without a selection position
       // to guide us. Fizzle.
       editorActionTagsLog.warning(
-          "Tried to cancel a composing action tag, but there's no user selection.");
+        "Tried to cancel a composing action tag, but there's no user selection.",
+      );
       return;
     }
 
@@ -251,7 +254,8 @@ class CancelComposingActionTagCommand extends EditCommand {
     if (composingToken == null) {
       // There's no composing tag near either side of the user's selection. Fizzle.
       editorActionTagsLog.warning(
-          "Tried to cancel a composing action tag, but there's no composing action tag near the user's selection.");
+        "Tried to cancel a composing action tag, but there's no composing action tag near the user's selection.",
+      );
       return;
     }
 
@@ -281,8 +285,8 @@ class ActionTagComposingReaction extends EditReaction {
   ActionTagComposingReaction({
     required TagRule tagRule,
     required OnUpdateComposingActionTag onUpdateComposingActionTag,
-  })  : _tagRule = tagRule,
-        _onUpdateComposingActionTag = onUpdateComposingActionTag;
+  }) : _tagRule = tagRule,
+       _onUpdateComposingActionTag = onUpdateComposingActionTag;
 
   final TagRule _tagRule;
   final OnUpdateComposingActionTag _onUpdateComposingActionTag;
@@ -290,11 +294,15 @@ class ActionTagComposingReaction extends EditReaction {
   IndexedTag? _composingTag;
 
   @override
-  void react(EditContext editorContext, RequestDispatcher requestDispatcher,
-      List<EditEvent> changeList) {
+  void react(
+    EditContext editorContext,
+    RequestDispatcher requestDispatcher,
+    List<EditEvent> changeList,
+  ) {
     final document = editorContext.document;
-    final composer =
-        editorContext.find<MutableDocumentComposer>(Editor.composerKey);
+    final composer = editorContext.find<MutableDocumentComposer>(
+      Editor.composerKey,
+    );
 
     _composingTag = editorContext.composingActionTag.value;
 
@@ -342,8 +350,11 @@ class ActionTagComposingReaction extends EditReaction {
 
   /// Finds all cancelled action tags across all changed text nodes in [changeList] and corrects
   /// any invalid attribution bounds that may have been introduced by edits.
-  void _healCancelledTags(RequestDispatcher requestDispatcher,
-      MutableDocument document, List<EditEvent> changeList) {
+  void _healCancelledTags(
+    RequestDispatcher requestDispatcher,
+    MutableDocument document,
+    List<EditEvent> changeList,
+  ) {
     final healChangeRequests = <EditRequest>[];
 
     for (final event in changeList) {
@@ -373,7 +384,9 @@ class ActionTagComposingReaction extends EditReaction {
   }
 
   List<EditRequest> _healCancelledTagsInTextNode(
-      RequestDispatcher requestDispatcher, TextNode node) {
+    RequestDispatcher requestDispatcher,
+    TextNode node,
+  ) {
     final cancelledTagRanges = node.text.getAttributionSpansInRange(
       attributionFilter: (a) => a == actionTagCancelledAttribution,
       range: SpanRange(0, node.text.length - 1),
@@ -383,7 +396,9 @@ class ActionTagComposingReaction extends EditReaction {
 
     for (final range in cancelledTagRanges) {
       final cancelledText = node.text.substring(
-          range.start, range.end + 1); // +1 because substring is exclusive
+        range.start,
+        range.end + 1,
+      ); // +1 because substring is exclusive
       if (cancelledText == _tagRule.trigger) {
         // This is a legitimate cancellation attribution.
         continue;
@@ -414,7 +429,9 @@ class ActionTagComposingReaction extends EditReaction {
   }
 
   void _updateComposingTag(
-      RequestDispatcher requestDispatcher, IndexedTag newTag) {
+    RequestDispatcher requestDispatcher,
+    IndexedTag newTag,
+  ) {
     final oldComposingTag = _composingTag;
     _composingTag = newTag;
 
@@ -457,8 +474,9 @@ class ActionTagComposingReaction extends EditReaction {
         documentRange: DocumentSelection(
           base: composingTag.start,
           extent: composingTag.start.copyWith(
-            nodePosition:
-                TextNodePosition(offset: composingTag.startOffset + 1),
+            nodePosition: TextNodePosition(
+              offset: composingTag.startOffset + 1,
+            ),
           ),
         ),
         attributions: {actionTagCancelledAttribution},
@@ -529,9 +547,12 @@ TagAroundPosition? _findTagUpstream({
   }
 
   final tokenAttributions = text.getAttributionSpansInRange(
-      attributionFilter: (a) => true, range: tokenRange);
+    attributionFilter: (a) => true,
+    range: tokenRange,
+  );
   if (!isTokenCandidate(
-      tokenAttributions.map((span) => span.attribution).toSet())) {
+    tokenAttributions.map((span) => span.attribution).toSet(),
+  )) {
     return null;
   }
 
@@ -556,8 +577,8 @@ class ComposingActionTag with Editable {
   IndexedTag? value;
 }
 
-typedef OnUpdateComposingActionTag = void Function(
-    IndexedTag? composingActionTag);
+typedef OnUpdateComposingActionTag =
+    void Function(IndexedTag? composingActionTag);
 
 /// An attribution for an action tag that's currently being composed.
 const actionTagComposingAttribution = NamedAttribution("action-tag-composing");

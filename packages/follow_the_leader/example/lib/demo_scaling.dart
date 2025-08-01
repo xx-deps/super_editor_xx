@@ -27,9 +27,7 @@ class _ScalingDemoState extends State<ScalingDemo> {
             child: Row(
               children: [
                 // Spacer(),
-                Expanded(
-                  child: _ScaleLeaderAndFollower(scale: _scale),
-                ),
+                Expanded(child: _ScaleLeaderAndFollower(scale: _scale)),
                 Expanded(
                   child: Column(
                     children: [
@@ -77,10 +75,8 @@ class _ScalingDemoState extends State<ScalingDemo> {
 }
 
 class _ScaleLeaderAndFollower extends StatefulWidget {
-  const _ScaleLeaderAndFollower({
-    Key? key,
-    required this.scale,
-  }) : super(key: key);
+  const _ScaleLeaderAndFollower({Key? key, required this.scale})
+    : super(key: key);
 
   final double scale;
 
@@ -121,8 +117,11 @@ class _ScaleLeaderAndFollowerState extends State<_ScaleLeaderAndFollower> {
                     alignment: const Alignment(0.0, 0.0),
                     child: Leader(
                       link: _anchor,
-                      child:
-                          Container(width: 25, height: 25, color: Colors.red),
+                      child: Container(
+                        width: 25,
+                        height: 25,
+                        color: Colors.red,
+                      ),
                     ),
                   ),
                   Follower.withAligner(
@@ -140,14 +139,18 @@ class _ScaleLeaderAndFollowerState extends State<_ScaleLeaderAndFollower> {
                         TextButton(
                           // ignore: avoid_print
                           onPressed: () => print("one"),
-                          child: const Text("One",
-                              style: TextStyle(color: Colors.white)),
+                          child: const Text(
+                            "One",
+                            style: TextStyle(color: Colors.white),
+                          ),
                         ),
                         TextButton(
                           // ignore: avoid_print
                           onPressed: () => print("two"),
-                          child: const Text("Two",
-                              style: TextStyle(color: Colors.white)),
+                          child: const Text(
+                            "Two",
+                            style: TextStyle(color: Colors.white),
+                          ),
                         ),
                       ],
                     ),
@@ -173,10 +176,8 @@ class _ScaleLeaderAndFollowerState extends State<_ScaleLeaderAndFollower> {
 }
 
 class _ScaleLeaderButNotFollower extends StatefulWidget {
-  const _ScaleLeaderButNotFollower({
-    Key? key,
-    required this.scale,
-  }) : super(key: key);
+  const _ScaleLeaderButNotFollower({Key? key, required this.scale})
+    : super(key: key);
 
   final double scale;
 
@@ -259,10 +260,8 @@ class _ScaleLeaderButNotFollowerState
 }
 
 class _ScaleFollowerButNotLeader extends StatefulWidget {
-  const _ScaleFollowerButNotLeader({
-    Key? key,
-    required this.scale,
-  }) : super(key: key);
+  const _ScaleFollowerButNotLeader({Key? key, required this.scale})
+    : super(key: key);
 
   final double scale;
 
@@ -328,14 +327,18 @@ class _ScaleFollowerButNotLeaderState
                 TextButton(
                   // ignore: avoid_print
                   onPressed: () => print("one"),
-                  child:
-                      const Text("One", style: TextStyle(color: Colors.white)),
+                  child: const Text(
+                    "One",
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
                 TextButton(
                   // ignore: avoid_print
                   onPressed: () => print("two"),
-                  child:
-                      const Text("Two", style: TextStyle(color: Colors.white)),
+                  child: const Text(
+                    "Two",
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
               ],
             ),

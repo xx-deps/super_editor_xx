@@ -352,12 +352,7 @@ class LinkAttribution implements Attribution {
   /// This factory is equivalent to calling [LinkAttribution.fromUri]
   /// with a [Uri] whose `scheme` is "mailto" and whose `path` is [email].
   factory LinkAttribution.fromEmail(String email) {
-    return LinkAttribution.fromUri(
-      Uri(
-        scheme: "mailto",
-        path: email,
-      ),
-    );
+    return LinkAttribution.fromUri(Uri(scheme: "mailto", path: email));
   }
 
   /// Creates a [LinkAttribution] whose plain-text URI is [plainTextUri], and
@@ -373,7 +368,8 @@ class LinkAttribution implements Attribution {
   String get id => 'link';
 
   @Deprecated(
-      "Use plainTextUri instead. The term 'url' was a lie - it could always have been a URI.")
+    "Use plainTextUri instead. The term 'url' was a lie - it could always have been a URI.",
+  )
   String get url => plainTextUri;
 
   /// The URI associated with the attributed text, as a `String`.

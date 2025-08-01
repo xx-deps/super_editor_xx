@@ -98,8 +98,9 @@ class _IOSSystemContextMenuState extends State<IOSSystemContextMenu> {
   }
 
   void _positionSystemMenu() {
-    _systemContextMenuController
-        .show(widget.leaderLink.offset! & widget.leaderLink.leaderSize!);
+    _systemContextMenuController.show(
+      widget.leaderLink.offset! & widget.leaderLink.leaderSize!,
+    );
   }
 
   @override

@@ -14,10 +14,7 @@ class CaretDocumentOverlay extends DocumentLayoutLayerStatefulWidget {
     Key? key,
     required this.composer,
     required this.documentLayoutResolver,
-    this.caretStyle = const CaretStyle(
-      width: 2,
-      color: Colors.black,
-    ),
+    this.caretStyle = const CaretStyle(width: 2, color: Colors.black),
     this.platformOverride,
     this.displayOnAllPlatforms = false,
     this.displayCaretWithExpandedSelection = true,
@@ -156,15 +153,19 @@ class CaretDocumentOverlayState
   }
 
   @override
-  Rect? computeLayoutDataWithDocumentLayout(BuildContext contentLayersContext,
-      BuildContext documentContext, DocumentLayout documentLayout) {
+  Rect? computeLayoutDataWithDocumentLayout(
+    BuildContext contentLayersContext,
+    BuildContext documentContext,
+    DocumentLayout documentLayout,
+  ) {
     final documentSelection = widget.composer.selection;
     if (documentSelection == null) {
       return null;
     }
 
-    final selectedComponent = documentLayout
-        .getComponentByNodeId(widget.composer.selection!.extent.nodeId);
+    final selectedComponent = documentLayout.getComponentByNodeId(
+      widget.composer.selection!.extent.nodeId,
+    );
     if (selectedComponent == null) {
       // Assume that we're in a momentary transitive state where the document layout
       // just gained or lost a component. We expect this method ot run again in a moment
@@ -229,8 +230,9 @@ class CaretDocumentOverlayState
                       key: DocumentKeys.caret,
                       width: widget.caretStyle.width,
                       decoration: BoxDecoration(
-                        color: widget.caretStyle.color
-                            .withValues(alpha: _blinkController.opacity),
+                        color: widget.caretStyle.color.withValues(
+                          alpha: _blinkController.opacity,
+                        ),
                         borderRadius: widget.caretStyle.borderRadius,
                       ),
                     );
