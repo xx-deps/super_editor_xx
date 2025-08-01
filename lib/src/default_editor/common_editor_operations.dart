@@ -2896,62 +2896,7 @@ class PasteEditorCommand extends EditCommand {
     return nodes;
   }
 
-  /// Breaks the given [content] at each newline, then applies any inferred
-  /// attributions based on content analysis, e.g., surrounds URLs with
-  /// [LinkAttribution]s.
-  List<AttributedText> _inferAttributionsForLinesOfPastedText(String content) {
-    // Split the pasted content by newlines, because each new line of content
-    // needs to placed in its own ParagraphNode.
-    final lines = content.split('\n');
-    editorOpsLog.fine(
-      "Breaking pasted content into lines and adding attributions:",
-    );
-    editorOpsLog.fine("Lines of content:");
-    for (final line in lines) {
-      editorOpsLog.fine(' - "$line"');
-    }
-
-    final attributedLines = <AttributedText>[];
-    for (final line in lines) {
-      attributedLines.add(
-        AttributedText(line, _findUrlSpansInText(pastedText: line)),
-      );
-    }
-    return attributedLines;
-  }
-
-  /// Finds all URLs in the [pastedText] and returns an [AttributedSpans], which
-  /// contains [LinkAttribution]s that span each URL.
-  AttributedSpans _findUrlSpansInText({required String pastedText}) {
-    final AttributedSpans linkAttributionSpans = AttributedSpans();
-
-    final wordBoundaries = pastedText.calculateAllWordBoundaries();
-
-    for (final wordBoundary in wordBoundaries) {
-      final word = wordBoundary.textInside(pastedText);
-
-      // The word is a single URL. Linkify it.
-      final uri = tryToParseUrl(word);
-      if (uri == null) {
-        // This word isn't a URI.
-        continue;
-      }
-
-      final startOffset = wordBoundary.start;
-      // -1 because TextPosition's offset indexes the character after the
-      // selection, not the final character in the selection.
-      final endOffset = wordBoundary.end - 1;
-
-      // Add link attribution.
-      linkAttributionSpans.addAttribution(
-        newAttribution: LinkAttribution.fromUri(uri),
-        start: startOffset,
-        end: endOffset,
-      );
-    }
-
-    return linkAttributionSpans;
-  }
+ 
 
   Iterable<DocumentNode> _convertLinesToParagraphs(
     Iterable<AttributedText> attributedLines,

@@ -7,7 +7,6 @@ export 'package:super_editor_markdown/super_editor_markdown.dart';
 export 'package:super_keyboard/super_keyboard.dart';
 export 'package:attributed_text/attributed_text.dart';
 export 'package:follow_the_leader/follow_the_leader.dart';
-export 'package:linkify/linkify.dart';
 export 'package:overlord/overlord.dart';
 
 // Fundamental document abstractions
