@@ -94,7 +94,11 @@ class SingleColumnLayoutSelectionStyler extends SingleColumnLayoutStylePhase {
     SingleColumnLayoutComponentViewModel viewModel,
   ) {
     final documentSelection = _selection.value;
-    final node = _document.getNodeById(viewModel.nodeId)!;
+    final node = _document.getNodeById(viewModel.nodeId);
+
+    if (node == null) {
+      throw Exception('node is null');
+    }
 
     DocumentNodeSelection? nodeSelection;
     if (documentSelection != null) {
