@@ -30,11 +30,7 @@ class TextFieldScroller {
 
   /// Animates [scrollOffset] from its current offset to [to], over the given [duration]
   /// of time, following the given animation [curve].
-  void animateTo(
-    double to, {
-    required Duration duration,
-    Curve curve = Curves.easeInOut,
-  }) {
+  void animateTo(double to, {required Duration duration, Curve curve = Curves.easeInOut}) {
     _scrollController!.animateTo(to, duration: duration, curve: curve);
   }
 

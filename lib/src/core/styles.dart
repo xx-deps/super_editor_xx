@@ -52,36 +52,25 @@ class Stylesheet {
       documentPadding: documentPadding ?? this.documentPadding,
       inlineTextStyler: inlineTextStyler ?? this.inlineTextStyler,
       inlineWidgetBuilders: inlineWidgetBuilders ?? this.inlineWidgetBuilders,
-      selectedTextColorStrategy:
-          selectedTextColorStrategy ?? this.selectedTextColorStrategy,
-      rules: [
-        ...addRulesBefore,
-        ...(rules ?? this.rules),
-        ...addRulesAfter,
-      ],
+      selectedTextColorStrategy: selectedTextColorStrategy ?? this.selectedTextColorStrategy,
+      rules: [...addRulesBefore, ...(rules ?? this.rules), ...addRulesAfter],
     );
   }
 }
 
 /// Default [SelectedTextColorStrategy], which retains the original text color,
 /// regardless of selection color.
-Color defaultSelectedTextColorStrategy({
-  required Color originalTextColor,
-  required Color selectionHighlightColor,
-}) {
+Color defaultSelectedTextColorStrategy({required Color originalTextColor, required Color selectionHighlightColor}) {
   return originalTextColor;
 }
 
 /// Returns the [Color] that should be used for selected text, possibly based
 /// on the [originalTextColor].
-typedef SelectedTextColorStrategy = Color Function({
-  required Color originalTextColor,
-  required Color selectionHighlightColor,
-});
+typedef SelectedTextColorStrategy =
+    Color Function({required Color originalTextColor, required Color selectionHighlightColor});
 
 /// Adjusts the given [existingStyle] based on the given [attributions].
-typedef AttributionStyleAdjuster = TextStyle Function(
-    Set<Attribution> attributions, TextStyle existingStyle);
+typedef AttributionStyleAdjuster = TextStyle Function(Set<Attribution> attributions, TextStyle existingStyle);
 
 /// A single style rule within a [Stylesheet].
 ///
@@ -111,20 +100,17 @@ typedef Styler = Map<String, dynamic> Function(Document, DocumentNode);
 class BlockSelector {
   static const all = BlockSelector._();
 
-  const BlockSelector(this._blockType)
-      : _precedingBlockType = null,
-        _followingBlockType = null,
-        _indexMatcher = null;
+  const BlockSelector(this._blockType) : _precedingBlockType = null, _followingBlockType = null, _indexMatcher = null;
 
   const BlockSelector._({
     String? blockType,
     String? precedingBlockType,
     String? followingBlockType,
     _BlockMatcher? indexMatcher,
-  })  : _blockType = blockType,
-        _precedingBlockType = precedingBlockType,
-        _followingBlockType = followingBlockType,
-        _indexMatcher = indexMatcher;
+  }) : _blockType = blockType,
+       _precedingBlockType = precedingBlockType,
+       _followingBlockType = followingBlockType,
+       _indexMatcher = indexMatcher;
 
   /// The desired type of block, or `null` to match any block.
   final String? _blockType;
@@ -135,10 +121,10 @@ class BlockSelector {
   /// Returns a modified version of this selector that only selects blocks
   /// that appear immediately after the given [_blockType].
   BlockSelector after(String precedingBlockType) => BlockSelector._(
-        blockType: _blockType,
-        precedingBlockType: precedingBlockType,
-        followingBlockType: _followingBlockType,
-      );
+    blockType: _blockType,
+    precedingBlockType: precedingBlockType,
+    followingBlockType: _followingBlockType,
+  );
 
   /// Type of block that appears immediately after the desired block.
   final String? _followingBlockType;
@@ -146,40 +132,38 @@ class BlockSelector {
   /// Returns a modified version of this selector that only selects blocks
   /// that appear immediately before the given [_blockType].
   BlockSelector before(String followingBlockType) => BlockSelector._(
-        blockType: _blockType,
-        precedingBlockType: _precedingBlockType,
-        followingBlockType: followingBlockType,
-      );
+    blockType: _blockType,
+    precedingBlockType: _precedingBlockType,
+    followingBlockType: followingBlockType,
+  );
 
   final _BlockMatcher? _indexMatcher;
 
   BlockSelector first() => BlockSelector._(
-        blockType: _blockType,
-        precedingBlockType: _precedingBlockType,
-        followingBlockType: _followingBlockType,
-        indexMatcher: const _FirstBlockMatcher(),
-      );
+    blockType: _blockType,
+    precedingBlockType: _precedingBlockType,
+    followingBlockType: _followingBlockType,
+    indexMatcher: const _FirstBlockMatcher(),
+  );
 
   BlockSelector last() => BlockSelector._(
-        blockType: _blockType,
-        precedingBlockType: _precedingBlockType,
-        followingBlockType: _followingBlockType,
-        indexMatcher: const _LastBlockMatcher(),
-      );
+    blockType: _blockType,
+    precedingBlockType: _precedingBlockType,
+    followingBlockType: _followingBlockType,
+    indexMatcher: const _LastBlockMatcher(),
+  );
 
   BlockSelector atIndex(int index) => BlockSelector._(
-        blockType: _blockType,
-        precedingBlockType: _precedingBlockType,
-        followingBlockType: _followingBlockType,
-        indexMatcher: _IndexBlockMatcher(index),
-      );
+    blockType: _blockType,
+    precedingBlockType: _precedingBlockType,
+    followingBlockType: _followingBlockType,
+    indexMatcher: _IndexBlockMatcher(index),
+  );
 
   /// Returns `true` if this selector matches the block for the given [node], or
   /// `false`, otherwise.
   bool matches(Document document, DocumentNode node) {
-    if (_blockType != null &&
-        (node.getMetadataValue("blockType") as NamedAttribution?)?.name !=
-            _blockType) {
+    if (_blockType != null && (node.getMetadataValue("blockType") as NamedAttribution?)?.name != _blockType) {
       return false;
     }
 
@@ -190,9 +174,7 @@ class BlockSelector {
     if (_precedingBlockType != null) {
       final nodeBefore = document.getNodeBefore(node);
       if (nodeBefore == null ||
-          (nodeBefore.getMetadataValue("blockType") as NamedAttribution?)
-                  ?.name !=
-              _precedingBlockType) {
+          (nodeBefore.getMetadataValue("blockType") as NamedAttribution?)?.name != _precedingBlockType) {
         return false;
       }
     }
@@ -200,9 +182,7 @@ class BlockSelector {
     if (_followingBlockType != null) {
       final nodeAfter = document.getNodeAfter(node);
       if (nodeAfter == null ||
-          (nodeAfter.getMetadataValue("blockType") as NamedAttribution?)
-                  ?.name !=
-              _followingBlockType) {
+          (nodeAfter.getMetadataValue("blockType") as NamedAttribution?)?.name != _followingBlockType) {
         return false;
       }
     }
@@ -253,49 +233,33 @@ class _IndexBlockMatcher implements _BlockMatcher {
 /// an overall padding configuration.
 class CascadingPadding {
   /// Padding where all four sides have the given [padding].
-  const CascadingPadding.all(double padding)
-      : left = padding,
-        right = padding,
-        top = padding,
-        bottom = padding;
+  const CascadingPadding.all(double padding) : left = padding, right = padding, top = padding, bottom = padding;
 
   /// Padding where the left/right sides have [horizontal] padding, and
   /// top/bottom sides have [vertical] padding.
-  const CascadingPadding.symmetric({
-    double? horizontal,
-    double? vertical,
-  })  : left = horizontal,
-        right = horizontal,
-        top = vertical,
-        bottom = vertical;
+  const CascadingPadding.symmetric({double? horizontal, double? vertical})
+    : left = horizontal,
+      right = horizontal,
+      top = vertical,
+      bottom = vertical;
 
   /// Padding with the given [left], [right], [top], and [bottom] padding values.
-  const CascadingPadding.only({
-    this.left,
-    this.right,
-    this.top,
-    this.bottom,
-  });
+  const CascadingPadding.only({this.left, this.right, this.top, this.bottom});
 
   final double? left;
   final double? right;
   final double? top;
   final double? bottom;
 
-  CascadingPadding applyOnTopOf(CascadingPadding other) =>
-      CascadingPadding.only(
-        left: left ?? other.left,
-        right: right ?? other.right,
-        top: top ?? other.top,
-        bottom: bottom ?? other.bottom,
-      );
+  CascadingPadding applyOnTopOf(CascadingPadding other) => CascadingPadding.only(
+    left: left ?? other.left,
+    right: right ?? other.right,
+    top: top ?? other.top,
+    bottom: bottom ?? other.bottom,
+  );
 
-  EdgeInsets toEdgeInsets() => EdgeInsets.only(
-        left: left ?? 0.0,
-        right: right ?? 0.0,
-        top: top ?? 0.0,
-        bottom: bottom ?? 0.0,
-      );
+  EdgeInsets toEdgeInsets() =>
+      EdgeInsets.only(left: left ?? 0.0, right: right ?? 0.0, top: top ?? 0.0, bottom: bottom ?? 0.0);
 
   @override
   bool operator ==(Object other) =>
@@ -308,16 +272,12 @@ class CascadingPadding {
           bottom == other.bottom;
 
   @override
-  int get hashCode =>
-      left.hashCode ^ right.hashCode ^ top.hashCode ^ bottom.hashCode;
+  int get hashCode => left.hashCode ^ right.hashCode ^ top.hashCode ^ bottom.hashCode;
 }
 
 /// Styles applied to the user's selection, e.g., selected text.
 class SelectionStyles {
-  const SelectionStyles({
-    required this.selectionColor,
-    this.highlightEmptyTextBlocks = true,
-  });
+  const SelectionStyles({required this.selectionColor, this.highlightEmptyTextBlocks = true});
 
   /// The color of selection rectangles.
   final Color selectionColor;
@@ -335,8 +295,7 @@ class SelectionStyles {
           highlightEmptyTextBlocks == other.highlightEmptyTextBlocks;
 
   @override
-  int get hashCode =>
-      selectionColor.hashCode ^ highlightEmptyTextBlocks.hashCode;
+  int get hashCode => selectionColor.hashCode ^ highlightEmptyTextBlocks.hashCode;
 }
 
 /// The keys to the style metadata used by a [StyleRule].
@@ -370,8 +329,7 @@ class Styles {
 
   /// Applies an [UnderlineStyle] to the composing region, e.g., the word
   /// the user is currently editing on mobile.
-  static const String composingRegionUnderlineStyle =
-      'composingRegionUnderlineStyle';
+  static const String composingRegionUnderlineStyle = 'composingRegionUnderlineStyle';
 
   /// Whether to show an underline beneath the text that is currently in
   /// the composing region.
@@ -379,12 +337,10 @@ class Styles {
   /// It's common for Android to show an underline beneath the composing region.
   /// Showing an underline may not be expected on desktop. With this property app
   /// developers can make that choice for themselves.
-  static const String showComposingRegionUnderline =
-      'showComposingRegionUnderline';
+  static const String showComposingRegionUnderline = 'showComposingRegionUnderline';
 
   /// Applies an [UnderlineStyle] to all spelling errors in a text node.
-  static const String spellingErrorUnderlineStyle =
-      'spellingErrorUnderlineStyle';
+  static const String spellingErrorUnderlineStyle = 'spellingErrorUnderlineStyle';
 
   /// Applies an [UnderlineStyle] to all grammar errors in a text node.
   static const String grammarErrorUnderlineStyle = 'grammarErrorUnderlineStyle';

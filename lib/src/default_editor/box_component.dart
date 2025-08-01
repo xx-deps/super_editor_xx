@@ -17,29 +17,23 @@ final _log = Logger(scope: 'box_component.dart');
 /// Base implementation for a [DocumentNode] that only supports [UpstreamDownstreamNodeSelection]s.
 @immutable
 abstract class BlockNode extends DocumentNode {
-  BlockNode({
-    Map<String, dynamic>? metadata,
-  }) : super(metadata: metadata);
+  BlockNode({Map<String, dynamic>? metadata}) : super(metadata: metadata);
 
   @override
-  UpstreamDownstreamNodePosition get beginningPosition =>
-      const UpstreamDownstreamNodePosition.upstream();
+  UpstreamDownstreamNodePosition get beginningPosition => const UpstreamDownstreamNodePosition.upstream();
 
   @override
-  UpstreamDownstreamNodePosition get endPosition =>
-      const UpstreamDownstreamNodePosition.downstream();
+  UpstreamDownstreamNodePosition get endPosition => const UpstreamDownstreamNodePosition.downstream();
 
   @override
-  bool containsPosition(Object position) =>
-      position is UpstreamDownstreamNodePosition;
+  bool containsPosition(Object position) => position is UpstreamDownstreamNodePosition;
 
   @override
   UpstreamDownstreamNodePosition selectUpstreamPosition(
     covariant UpstreamDownstreamNodePosition position1,
     covariant UpstreamDownstreamNodePosition position2,
   ) {
-    if (position1.affinity == TextAffinity.upstream ||
-        position2.affinity == TextAffinity.upstream) {
+    if (position1.affinity == TextAffinity.upstream || position2.affinity == TextAffinity.upstream) {
       return const UpstreamDownstreamNodePosition.upstream();
     } else {
       return const UpstreamDownstreamNodePosition.downstream();
@@ -51,8 +45,7 @@ abstract class BlockNode extends DocumentNode {
     covariant UpstreamDownstreamNodePosition position1,
     covariant UpstreamDownstreamNodePosition position2,
   ) {
-    if (position1.affinity == TextAffinity.downstream ||
-        position2.affinity == TextAffinity.downstream) {
+    if (position1.affinity == TextAffinity.downstream || position2.affinity == TextAffinity.downstream) {
       return const UpstreamDownstreamNodePosition.downstream();
     } else {
       return const UpstreamDownstreamNodePosition.upstream();
@@ -72,12 +65,8 @@ abstract class BlockNode extends DocumentNode {
 /// entirely selected, or not selected, like an image or a
 /// horizontal rule.
 class BoxComponent extends StatefulWidget {
-  const BoxComponent({
-    Key? key,
-    this.isVisuallySelectable = true,
-    this.opacity = 1.0,
-    required this.child,
-  }) : super(key: key);
+  const BoxComponent({Key? key, this.isVisuallySelectable = true, this.opacity = 1.0, required this.child})
+    : super(key: key);
 
   final bool isVisuallySelectable;
   final double opacity;
@@ -103,8 +92,7 @@ class _BoxComponentState extends State<BoxComponent> with DocumentComponent {
   }
 
   @override
-  UpstreamDownstreamNodePosition? movePositionLeft(NodePosition currentPosition,
-      [MovementModifier? movementModifier]) {
+  UpstreamDownstreamNodePosition? movePositionLeft(NodePosition currentPosition, [MovementModifier? movementModifier]) {
     if (currentPosition == const UpstreamDownstreamNodePosition.upstream()) {
       // Can't move any further left.
       return null;
@@ -115,8 +103,9 @@ class _BoxComponentState extends State<BoxComponent> with DocumentComponent {
 
   @override
   UpstreamDownstreamNodePosition? movePositionRight(
-      NodePosition currentPosition,
-      [MovementModifier? movementModifier]) {
+    NodePosition currentPosition, [
+    MovementModifier? movementModifier,
+  ]) {
     if (currentPosition == const UpstreamDownstreamNodePosition.downstream()) {
       // Can't move any further right.
       return null;
@@ -132,15 +121,13 @@ class _BoxComponentState extends State<BoxComponent> with DocumentComponent {
   }
 
   @override
-  UpstreamDownstreamNodePosition? movePositionDown(
-      NodePosition currentPosition) {
+  UpstreamDownstreamNodePosition? movePositionDown(NodePosition currentPosition) {
     // BoxComponents don't support vertical movement.
     return null;
   }
 
   @override
-  UpstreamDownstreamNodeSelection getCollapsedSelectionAt(
-      covariant UpstreamDownstreamNodePosition nodePosition) {
+  UpstreamDownstreamNodeSelection getCollapsedSelectionAt(covariant UpstreamDownstreamNodePosition nodePosition) {
     return UpstreamDownstreamNodeSelection.collapsed(nodePosition);
   }
 
@@ -164,8 +151,7 @@ class _BoxComponentState extends State<BoxComponent> with DocumentComponent {
   }
 
   @override
-  Offset getOffsetForPosition(
-      covariant UpstreamDownstreamNodePosition nodePosition) {
+  Offset getOffsetForPosition(covariant UpstreamDownstreamNodePosition nodePosition) {
     final myBox = context.findRenderObject() as RenderBox;
 
     if (nodePosition.affinity == TextAffinity.upstream) {
@@ -182,8 +168,7 @@ class _BoxComponentState extends State<BoxComponent> with DocumentComponent {
   }
 
   @override
-  Rect getEdgeForPosition(
-      covariant UpstreamDownstreamNodePosition nodePosition) {
+  Rect getEdgeForPosition(covariant UpstreamDownstreamNodePosition nodePosition) {
     final boundingBox = getRectForPosition(nodePosition);
 
     final boxPosition = nodePosition;
@@ -199,8 +184,7 @@ class _BoxComponentState extends State<BoxComponent> with DocumentComponent {
   /// The behavior of this method is the same, regardless of whether the given
   /// [nodePosition] is `upstream` or `downstream`.
   @override
-  Rect getRectForPosition(
-      covariant UpstreamDownstreamNodePosition nodePosition) {
+  Rect getRectForPosition(covariant UpstreamDownstreamNodePosition nodePosition) {
     final myBox = context.findRenderObject() as RenderBox;
 
     return Rect.fromLTWH(0, 0, myBox.size.width, myBox.size.height);
@@ -211,8 +195,7 @@ class _BoxComponentState extends State<BoxComponent> with DocumentComponent {
     covariant UpstreamDownstreamNodePosition basePosition,
     covariant UpstreamDownstreamNodePosition extentPosition,
   ) {
-    final selection = UpstreamDownstreamNodeSelection(
-        base: basePosition, extent: extentPosition);
+    final selection = UpstreamDownstreamNodeSelection(base: basePosition, extent: extentPosition);
     if (selection.isCollapsed) {
       return getRectForPosition(selection.extent);
     }
@@ -238,13 +221,11 @@ class _BoxComponentState extends State<BoxComponent> with DocumentComponent {
     required covariant UpstreamDownstreamNodePosition basePosition,
     required covariant UpstreamDownstreamNodePosition extentPosition,
   }) {
-    return UpstreamDownstreamNodeSelection(
-        base: basePosition, extent: extentPosition);
+    return UpstreamDownstreamNodeSelection(base: basePosition, extent: extentPosition);
   }
 
   @override
-  UpstreamDownstreamNodeSelection getSelectionInRange(
-      Offset localBaseOffset, Offset localExtentOffset) {
+  UpstreamDownstreamNodeSelection getSelectionInRange(Offset localBaseOffset, Offset localExtentOffset) {
     return getSelectionBetween(
       basePosition: getPositionAtOffset(localBaseOffset),
       extentPosition: getPositionAtOffset(localExtentOffset),
@@ -261,20 +242,12 @@ class _BoxComponentState extends State<BoxComponent> with DocumentComponent {
 
   @override
   Widget build(BuildContext context) {
-    return Opacity(
-      opacity: widget.opacity,
-      child: widget.child,
-    );
+    return Opacity(opacity: widget.opacity, child: widget.child);
   }
 }
 
 class SelectableBox extends StatelessWidget {
-  const SelectableBox({
-    Key? key,
-    this.selection,
-    required this.selectionColor,
-    required this.child,
-  }) : super(key: key);
+  const SelectableBox({Key? key, this.selection, required this.selectionColor, required this.child}) : super(key: key);
 
   final UpstreamDownstreamNodeSelection? selection;
   final Color selectionColor;
@@ -288,11 +261,7 @@ class SelectableBox extends StatelessWidget {
       cursor: SystemMouseCursors.basic,
       child: IgnorePointer(
         child: DecoratedBox(
-          decoration: BoxDecoration(
-            color: isSelected
-                ? selectionColor.withValues(alpha: 0.5)
-                : Colors.transparent,
-          ),
+          decoration: BoxDecoration(color: isSelected ? selectionColor.withValues(alpha: 0.5) : Colors.transparent),
           position: DecorationPosition.foreground,
           child: child,
         ),
@@ -313,21 +282,15 @@ class DeleteUpstreamAtBeginningOfBlockNodeCommand extends EditCommand {
   void execute(EditContext context, CommandExecutor executor) {
     final document = context.document;
     final composer = context.find<MutableDocumentComposer>(Editor.composerKey);
-    final documentLayoutEditable =
-        context.find<DocumentLayoutEditable>(Editor.layoutKey);
+    final documentLayoutEditable = context.find<DocumentLayoutEditable>(Editor.layoutKey);
 
-    final deletionPosition =
-        DocumentPosition(nodeId: node.id, nodePosition: node.beginningPosition);
+    final deletionPosition = DocumentPosition(nodeId: node.id, nodePosition: node.beginningPosition);
 
-    final nodePosition =
-        deletionPosition.nodePosition as UpstreamDownstreamNodePosition;
+    final nodePosition = deletionPosition.nodePosition as UpstreamDownstreamNodePosition;
     if (nodePosition.affinity == TextAffinity.downstream) {
       // The caret is sitting on the downstream edge of block-level content. Delete the
       // whole block by replacing it with an empty paragraph.
-      executor.executeCommand(
-        ReplaceNodeWithEmptyParagraphWithCaretCommand(
-            nodeId: deletionPosition.nodeId),
-      );
+      executor.executeCommand(ReplaceNodeWithEmptyParagraphWithCaretCommand(nodeId: deletionPosition.nodeId));
       return;
     }
 
@@ -342,19 +305,14 @@ class DeleteUpstreamAtBeginningOfBlockNodeCommand extends EditCommand {
     }
 
     if (nodeBefore is TextNode && nodeBefore.text.isEmpty) {
-      executor.executeCommand(
-        DeleteNodeCommand(nodeId: nodeBefore.id),
-      );
+      executor.executeCommand(DeleteNodeCommand(nodeId: nodeBefore.id));
       return;
     }
 
-    final componentBefore = documentLayoutEditable.documentLayout
-        .getComponentByNodeId(nodeBefore.id)!;
+    final componentBefore = documentLayoutEditable.documentLayout.getComponentByNodeId(nodeBefore.id)!;
     if (!componentBefore.isVisualSelectionSupported()) {
       // The node/component above is not selectable. Delete it.
-      executor.executeCommand(
-        DeleteNodeCommand(nodeId: nodeBefore.id),
-      );
+      executor.executeCommand(DeleteNodeCommand(nodeId: nodeBefore.id));
       return;
     }
 
@@ -383,10 +341,7 @@ class DeleteUpstreamAtBeginningOfBlockNodeCommand extends EditCommand {
     executor.executeCommand(
       ChangeSelectionCommand(
         DocumentSelection.collapsed(
-          position: DocumentPosition(
-            nodeId: nodeBefore.id,
-            nodePosition: nodeBefore.endPosition,
-          ),
+          position: DocumentPosition(nodeId: nodeBefore.id, nodePosition: nodeBefore.endPosition),
         ),
         SelectionChangeType.collapseSelection,
         SelectionReason.userInteraction,

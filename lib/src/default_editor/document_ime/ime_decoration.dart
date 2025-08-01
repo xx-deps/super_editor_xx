@@ -20,36 +20,34 @@ abstract class TextInputConnectionDecorator implements TextInputConnection {
   void show() => client?.show();
 
   @override
-  void setEditingState(TextEditingValue value) =>
-      client?.setEditingState(value);
+  void setEditingState(TextEditingValue value) => client?.setEditingState(value);
 
   @override
-  void updateConfig(TextInputConfiguration configuration) =>
-      client?.updateConfig(configuration);
+  void updateConfig(TextInputConfiguration configuration) => client?.updateConfig(configuration);
 
   @override
   void setCaretRect(Rect rect) => client?.setCaretRect(rect);
 
   @override
-  void setSelectionRects(List<SelectionRect> selectionRects) =>
-      client?.setSelectionRects(selectionRects);
+  void setSelectionRects(List<SelectionRect> selectionRects) => client?.setSelectionRects(selectionRects);
 
   @override
   void setComposingRect(Rect rect) => client?.setComposingRect(rect);
 
   @override
-  void setStyle(
-          {required String? fontFamily,
-          required double? fontSize,
-          required FontWeight? fontWeight,
-          required TextDirection textDirection,
-          required TextAlign textAlign}) =>
-      client?.setStyle(
-          fontFamily: fontFamily,
-          fontSize: fontSize,
-          fontWeight: fontWeight,
-          textDirection: textDirection,
-          textAlign: textAlign);
+  void setStyle({
+    required String? fontFamily,
+    required double? fontSize,
+    required FontWeight? fontWeight,
+    required TextDirection textDirection,
+    required TextAlign textAlign,
+  }) => client?.setStyle(
+    fontFamily: fontFamily,
+    fontSize: fontSize,
+    fontWeight: fontWeight,
+    textDirection: textDirection,
+    textAlign: textAlign,
+  );
 
   @override
   void requestAutofill() => client?.requestAutofill();
@@ -80,8 +78,7 @@ class DeltaTextInputClientDecorator with DeltaTextInputClient, TextInputClient {
   AutofillScope? get currentAutofillScope => _client?.currentAutofillScope;
 
   @override
-  TextEditingValue? get currentTextEditingValue =>
-      _client?.currentTextEditingValue;
+  TextEditingValue? get currentTextEditingValue => _client?.currentTextEditingValue;
 
   @override
   void insertTextPlaceholder(Size size) {
@@ -146,19 +143,14 @@ class DeltaTextInputClientDecorator with DeltaTextInputClient, TextInputClient {
 /// for when its connection is closed. By wrapping a [TextInputClient] with
 /// this decorator, the code that owns the [TextInputConnection] can receive
 /// a notification when the connection closes.
-class ClosureAwareDeltaTextInputClientDecorator
-    extends DeltaTextInputClientDecorator {
-  ClosureAwareDeltaTextInputClientDecorator(
-    this._onConnectionClosed, [
-    DeltaTextInputClient? client,
-  ]) : super(client);
+class ClosureAwareDeltaTextInputClientDecorator extends DeltaTextInputClientDecorator {
+  ClosureAwareDeltaTextInputClientDecorator(this._onConnectionClosed, [DeltaTextInputClient? client]) : super(client);
 
   final VoidCallback _onConnectionClosed;
 
   @override
   void connectionClosed() {
-    editorImeLog.fine(
-        "[ClosureAwareDeltaTextInputClientDecorator] - IME connection was closed");
+    editorImeLog.fine("[ClosureAwareDeltaTextInputClientDecorator] - IME connection was closed");
     _onConnectionClosed();
     _client?.connectionClosed();
   }

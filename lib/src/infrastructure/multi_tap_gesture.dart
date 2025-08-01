@@ -91,8 +91,7 @@ class TapSequenceGestureRecognizer extends GestureRecognizer {
       if (!_secondTap!.isWithinGlobalTolerance(event, kDoubleTapSlop)) {
         // Ignore out-of-bounds second taps.
         return;
-      } else if (!_secondTap!.hasElapsedMinTime() ||
-          !_secondTap!.hasSameButton(event)) {
+      } else if (!_secondTap!.hasElapsedMinTime() || !_secondTap!.hasSameButton(event)) {
         // Restart when the third tap is too close to the second (touch screens
         // often detect touches intermittently), or when buttons mismatch.
         _reset();
@@ -103,15 +102,13 @@ class TapSequenceGestureRecognizer extends GestureRecognizer {
           localPosition: event.localPosition,
           kind: getKindForPointer(event.pointer),
         );
-        invokeCallback<void>(
-            'onTripleTapDown', () => onTripleTapDown!(details));
+        invokeCallback<void>('onTripleTapDown', () => onTripleTapDown!(details));
       }
     } else if (_firstTap != null) {
       if (!_firstTap!.isWithinGlobalTolerance(event, kDoubleTapSlop)) {
         // Ignore out-of-bounds second taps.
         return;
-      } else if (!_firstTap!.hasElapsedMinTime() ||
-          !_firstTap!.hasSameButton(event)) {
+      } else if (!_firstTap!.hasElapsedMinTime() || !_firstTap!.hasSameButton(event)) {
         // Restart when the second tap is too close to the first (touch screens
         // often detect touches intermittently), or when buttons mismatch.
         _reset();
@@ -123,8 +120,7 @@ class TapSequenceGestureRecognizer extends GestureRecognizer {
           kind: getKindForPointer(event.pointer),
         );
         if (reportPrecedingGestures) {
-          invokeCallback<void>('onDoubleTapDown',
-              () => onDoubleTapDown!(_secondTapDownDetails!));
+          invokeCallback<void>('onDoubleTapDown', () => onDoubleTapDown!(_secondTapDownDetails!));
         }
       }
     } else if (onTapDown != null) {
@@ -134,8 +130,7 @@ class TapSequenceGestureRecognizer extends GestureRecognizer {
         kind: getKindForPointer(event.pointer),
       );
       if (reportPrecedingGestures) {
-        invokeCallback<void>(
-            'onTapDown', () => onTapDown!(_firstTapDownDetails!));
+        invokeCallback<void>('onTapDown', () => onTapDown!(_firstTapDownDetails!));
       }
     }
 
@@ -186,9 +181,7 @@ class TapSequenceGestureRecognizer extends GestureRecognizer {
       tracker = _firstTap;
     }
     // If tracker is still null, check if this is the second tap tracker
-    if (tracker == null &&
-        _secondTap != null &&
-        _secondTap!.pointer == pointer) {
+    if (tracker == null && _secondTap != null && _secondTap!.pointer == pointer) {
       tracker = _secondTap;
     }
     // If tracker is still null, we rejected ourselves already
@@ -254,20 +247,17 @@ class TapSequenceGestureRecognizer extends GestureRecognizer {
     if (!reportPrecedingGestures) {
       if (_secondTap != null) {
         if (onDoubleTapDown != null) {
-          invokeCallback<void>('onDoubleTapDown',
-              () => onDoubleTapDown!(_secondTapDownDetails!));
+          invokeCallback<void>('onDoubleTapDown', () => onDoubleTapDown!(_secondTapDownDetails!));
         }
         if (onDoubleTapUp != null) {
-          invokeCallback<void>(
-              'onDoubleTapUp', () => onDoubleTapUp!(_secondTapUpDetails!));
+          invokeCallback<void>('onDoubleTapUp', () => onDoubleTapUp!(_secondTapUpDetails!));
         }
         if (onDoubleTap != null) {
           invokeCallback<void>('onDoubleTap', onDoubleTap!);
         }
       } else if (_firstTap != null) {
         if (onTapDown != null) {
-          invokeCallback<void>(
-              'onTapDown', () => onTapDown!(_firstTapDownDetails!));
+          invokeCallback<void>('onTapDown', () => onTapDown!(_firstTapDownDetails!));
         }
         if (onTapUp != null) {
           invokeCallback<void>('onTapUp', () => onTapUp!(_firstTapUpDetails!));
@@ -388,8 +378,7 @@ class TapSequenceGestureRecognizer extends GestureRecognizer {
         kind: getKindForPointer(event.pointer),
       );
       if (onDoubleTapUp != null && reportPrecedingGestures) {
-        invokeCallback<void>(
-            'onDoubleTapUp', () => onDoubleTapUp!(_secondTapUpDetails!));
+        invokeCallback<void>('onDoubleTapUp', () => onDoubleTapUp!(_secondTapUpDetails!));
       }
       if (onDoubleTap != null && reportPrecedingGestures) {
         invokeCallback<void>('onDoubleTap', onDoubleTap!);
@@ -441,14 +430,11 @@ typedef GestureDoubleTapCallback = void Function();
 /// TapTracker helps track individual tap sequences as part of a
 /// larger gesture.
 class _TapTracker {
-  _TapTracker({
-    required this.event,
-    required this.entry,
-    required Duration tapMinTime,
-  })  : pointer = event.pointer,
-        _initialGlobalPosition = event.position,
-        initialButtons = event.buttons,
-        _tapMinTimeCountdown = _CountdownZoned(duration: tapMinTime);
+  _TapTracker({required this.event, required this.entry, required Duration tapMinTime})
+    : pointer = event.pointer,
+      _initialGlobalPosition = event.position,
+      initialButtons = event.buttons,
+      _tapMinTimeCountdown = _CountdownZoned(duration: tapMinTime);
 
   final PointerDownEvent event;
   final int pointer;

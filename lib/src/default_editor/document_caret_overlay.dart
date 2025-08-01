@@ -14,10 +14,7 @@ class CaretDocumentOverlay extends DocumentLayoutLayerStatefulWidget {
     Key? key,
     required this.composer,
     required this.documentLayoutResolver,
-    this.caretStyle = const CaretStyle(
-      width: 2,
-      color: Colors.black,
-    ),
+    this.caretStyle = const CaretStyle(width: 2, color: Colors.black),
     this.platformOverride,
     this.displayOnAllPlatforms = false,
     this.displayCaretWithExpandedSelection = true,
@@ -53,13 +50,11 @@ class CaretDocumentOverlay extends DocumentLayoutLayerStatefulWidget {
   final BlinkTimingMode blinkTimingMode;
 
   @override
-  DocumentLayoutLayerState<CaretDocumentOverlay, Rect?> createState() =>
-      CaretDocumentOverlayState();
+  DocumentLayoutLayerState<CaretDocumentOverlay, Rect?> createState() => CaretDocumentOverlayState();
 }
 
 @visibleForTesting
-class CaretDocumentOverlayState
-    extends DocumentLayoutLayerState<CaretDocumentOverlay, Rect?>
+class CaretDocumentOverlayState extends DocumentLayoutLayerState<CaretDocumentOverlay, Rect?>
     with SingleTickerProviderStateMixin {
   late final BlinkController _blinkController;
 
@@ -101,8 +96,7 @@ class CaretDocumentOverlayState
   }
 
   @visibleForTesting
-  bool get isCaretVisible =>
-      _blinkController.opacity == 1.0 && !_shouldHideCaretForExpandedSelection;
+  bool get isCaretVisible => _blinkController.opacity == 1.0 && !_shouldHideCaretForExpandedSelection;
 
   /// Returns `true` if the selection is currently expanded, and we want to hide the caret when
   /// the selection is expanded.
@@ -110,8 +104,7 @@ class CaretDocumentOverlayState
   /// Returns `false` if the selection is collapsed or `null`, or if we want to show the caret
   /// when the selection is expanded.
   bool get _shouldHideCaretForExpandedSelection =>
-      !widget.displayCaretWithExpandedSelection &&
-      widget.composer.selection?.isCollapsed == false;
+      !widget.displayCaretWithExpandedSelection && widget.composer.selection?.isCollapsed == false;
 
   @visibleForTesting
   Duration get caretFlashPeriod => _blinkController.flashPeriod;
@@ -119,8 +112,7 @@ class CaretDocumentOverlayState
   void _onSelectionChange() {
     _updateCaretFlash();
 
-    if (SchedulerBinding.instance.schedulerPhase !=
-        SchedulerPhase.persistentCallbacks) {
+    if (SchedulerBinding.instance.schedulerPhase != SchedulerPhase.persistentCallbacks) {
       // The Flutter pipeline isn't running. Schedule a re-build and re-position the caret.
       setState(() {
         // The caret is positioned in the build() call.
@@ -156,15 +148,17 @@ class CaretDocumentOverlayState
   }
 
   @override
-  Rect? computeLayoutDataWithDocumentLayout(BuildContext contentLayersContext,
-      BuildContext documentContext, DocumentLayout documentLayout) {
+  Rect? computeLayoutDataWithDocumentLayout(
+    BuildContext contentLayersContext,
+    BuildContext documentContext,
+    DocumentLayout documentLayout,
+  ) {
     final documentSelection = widget.composer.selection;
     if (documentSelection == null) {
       return null;
     }
 
-    final selectedComponent = documentLayout
-        .getComponentByNodeId(widget.composer.selection!.extent.nodeId);
+    final selectedComponent = documentLayout.getComponentByNodeId(widget.composer.selection!.extent.nodeId);
     if (selectedComponent == null) {
       // Assume that we're in a momentary transitive state where the document layout
       // just gained or lost a component. We expect this method ot run again in a moment
@@ -177,9 +171,7 @@ class CaretDocumentOverlayState
         .translate(-widget.caretStyle.width / 2, 0.0);
 
     final overlayBox = context.findRenderObject() as RenderBox?;
-    if (overlayBox != null &&
-        overlayBox.hasSize &&
-        caretRect.left + widget.caretStyle.width >= overlayBox.size.width) {
+    if (overlayBox != null && overlayBox.hasSize && caretRect.left + widget.caretStyle.width >= overlayBox.size.width) {
       // Ajust the caret position to make it entirely visible because it's currently placed
       // partially or entirely outside of the layers' bounds. This can happen for downstream selections
       // of block components that take all the available width.
@@ -200,9 +192,7 @@ class CaretDocumentOverlayState
     // mobile carets and handles elsewhere. This can be overridden by settings
     // `displayOnAllPlatforms` to true.
     final platform = widget.platformOverride ?? defaultTargetPlatform;
-    if (!widget.displayOnAllPlatforms &&
-        (platform == TargetPlatform.android ||
-            platform == TargetPlatform.iOS)) {
+    if (!widget.displayOnAllPlatforms && (platform == TargetPlatform.android || platform == TargetPlatform.iOS)) {
       return const EmptyBox();
     }
 
@@ -229,8 +219,7 @@ class CaretDocumentOverlayState
                       key: DocumentKeys.caret,
                       width: widget.caretStyle.width,
                       decoration: BoxDecoration(
-                        color: widget.caretStyle.color
-                            .withValues(alpha: _blinkController.opacity),
+                        color: widget.caretStyle.color.withValues(alpha: _blinkController.opacity),
                         borderRadius: widget.caretStyle.borderRadius,
                       ),
                     );

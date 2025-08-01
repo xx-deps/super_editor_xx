@@ -2,11 +2,7 @@ import 'package:flutter/widgets.dart' hide ListenableBuilder;
 
 /// Builder that runs every time one of the given [listenables] changes.
 class MultiListenableBuilder extends StatefulWidget {
-  const MultiListenableBuilder({
-    Key? key,
-    required this.listenables,
-    required this.builder,
-  }) : super(key: key);
+  const MultiListenableBuilder({Key? key, required this.listenables, required this.builder}) : super(key: key);
 
   final Set<Listenable> listenables;
   final WidgetBuilder builder;
@@ -27,9 +23,7 @@ class _MultiListenableBuilderState extends State<MultiListenableBuilder> {
   void didUpdateWidget(MultiListenableBuilder oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.listenables != oldWidget.listenables) {
-      _syncListenables(
-          oldListenables: oldWidget.listenables,
-          newListenables: widget.listenables);
+      _syncListenables(oldListenables: oldWidget.listenables, newListenables: widget.listenables);
     }
   }
 
@@ -40,10 +34,7 @@ class _MultiListenableBuilderState extends State<MultiListenableBuilder> {
     super.dispose();
   }
 
-  void _syncListenables({
-    required Set<Listenable> oldListenables,
-    required Set<Listenable> newListenables,
-  }) {
+  void _syncListenables({required Set<Listenable> oldListenables, required Set<Listenable> newListenables}) {
     // Remove listenables that no longer exist.
     for (final listenable in oldListenables) {
       if (!newListenables.contains(listenable)) {

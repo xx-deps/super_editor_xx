@@ -51,11 +51,7 @@ abstract class ContentTapDelegate with ChangeNotifier {
 
 /// Information about a gesture that occured within a [DocumentLayout].
 class DocumentTapDetails {
-  DocumentTapDetails({
-    required this.documentLayout,
-    required this.layoutOffset,
-    required this.globalOffset,
-  });
+  DocumentTapDetails({required this.documentLayout, required this.layoutOffset, required this.globalOffset});
 
   /// The document layout.
   ///
@@ -72,7 +68,4 @@ class DocumentTapDetails {
   final Offset globalOffset;
 }
 
-enum TapHandlingInstruction {
-  halt,
-  continueHandling,
-}
+enum TapHandlingInstruction { halt, continueHandling }

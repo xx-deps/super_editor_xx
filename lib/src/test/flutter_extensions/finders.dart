@@ -15,15 +15,15 @@ extension Finders on CommonFinders {
   ///
   StateType? state<StateType extends State>([Finder? subtreeScope]) {
     final elementFinder = find.byElementPredicate(
-        (element) => element is StatefulElement && element.state is StateType);
+      (element) => element is StatefulElement && element.state is StateType,
+    );
     final Finder stateFinder = subtreeScope != null
         ? find.descendant(of: subtreeScope, matching: elementFinder)
         : elementFinder;
 
     final finderResult = stateFinder.evaluate();
     if (finderResult.length > 1) {
-      throw Exception(
-          "Expected to find no more than one $StateType, but found ${finderResult.length}");
+      throw Exception("Expected to find no more than one $StateType, but found ${finderResult.length}");
     }
     if (finderResult.isEmpty) {
       return null;
@@ -36,8 +36,7 @@ extension Finders on CommonFinders {
 
 class FindsNothing extends Finder {
   @override
-  String get description =>
-      "Finder that matches nothing so that a Finder may be returned in defunct situations";
+  String get description => "Finder that matches nothing so that a Finder may be returned in defunct situations";
 
   @override
   Iterable<Element> apply(Iterable<Element> candidates) {

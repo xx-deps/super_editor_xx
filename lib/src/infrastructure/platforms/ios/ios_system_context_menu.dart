@@ -33,11 +33,7 @@ class IOSSystemContextMenu extends StatefulWidget {
     return MediaQuery.maybeSupportsShowingSystemContextMenu(context) ?? false;
   }
 
-  const IOSSystemContextMenu({
-    super.key,
-    required this.leaderLink,
-    this.onSystemHide,
-  });
+  const IOSSystemContextMenu({super.key, required this.leaderLink, this.onSystemHide});
 
   /// A [LeaderLink] attached to the widget that determines the position
   /// of the system context menu.
@@ -62,9 +58,7 @@ class _IOSSystemContextMenuState extends State<IOSSystemContextMenu> {
   @override
   void initState() {
     super.initState();
-    _systemContextMenuController = SystemContextMenuController(
-      onSystemHide: widget.onSystemHide,
-    );
+    _systemContextMenuController = SystemContextMenuController(onSystemHide: widget.onSystemHide);
     widget.leaderLink.addListener(_onLeaderChanged);
     onNextFrame((_) => _positionSystemMenu());
   }
@@ -87,8 +81,7 @@ class _IOSSystemContextMenuState extends State<IOSSystemContextMenu> {
   }
 
   void _onLeaderChanged() {
-    if (widget.leaderLink.offset == null ||
-        widget.leaderLink.leaderSize == null) {
+    if (widget.leaderLink.offset == null || widget.leaderLink.leaderSize == null) {
       return;
     }
 
@@ -98,8 +91,7 @@ class _IOSSystemContextMenuState extends State<IOSSystemContextMenu> {
   }
 
   void _positionSystemMenu() {
-    _systemContextMenuController
-        .show(widget.leaderLink.offset! & widget.leaderLink.leaderSize!);
+    _systemContextMenuController.show(widget.leaderLink.offset! & widget.leaderLink.leaderSize!);
   }
 
   @override

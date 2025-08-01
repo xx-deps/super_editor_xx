@@ -10,11 +10,7 @@ class SliverHybridStack extends MultiChildRenderObjectWidget {
   /// child that a RenderSliver, and zero or more RenderBox children.
   /// The [fillViewport] flag controls whether the RenderBox children should
   /// be stretched if necessary to fill the entire viewport.
-  const SliverHybridStack({
-    super.key,
-    this.fillViewport = false,
-    super.children,
-  });
+  const SliverHybridStack({super.key, this.fillViewport = false, super.children});
 
   final bool fillViewport;
 
@@ -24,20 +20,15 @@ class SliverHybridStack extends MultiChildRenderObjectWidget {
   }
 
   @override
-  void updateRenderObject(
-      BuildContext context, covariant RenderSliver renderObject) {
+  void updateRenderObject(BuildContext context, covariant RenderSliver renderObject) {
     (renderObject as _RenderSliverHybridStack).fillViewport = fillViewport;
   }
 }
 
-class _ChildParentData extends SliverLogicalParentData
-    with ContainerParentDataMixin<RenderObject> {}
+class _ChildParentData extends SliverLogicalParentData with ContainerParentDataMixin<RenderObject> {}
 
 class _RenderSliverHybridStack extends RenderSliver
-    with
-        ContainerRenderObjectMixin<RenderObject,
-            ContainerParentDataMixin<RenderObject>>,
-        RenderSliverHelpers {
+    with ContainerRenderObjectMixin<RenderObject, ContainerParentDataMixin<RenderObject>>, RenderSliverHelpers {
   _RenderSliverHybridStack({required this.fillViewport});
 
   bool fillViewport;
@@ -48,8 +39,7 @@ class _RenderSliverHybridStack extends RenderSliver
     var child = firstChild;
     while (child != null) {
       if (child is RenderSliver) {
-        assert(sliver == null,
-            "There can only be one sliver in a SliverHybridStack");
+        assert(sliver == null, "There can only be one sliver in a SliverHybridStack");
         sliver = child;
         break;
       }
@@ -64,9 +54,7 @@ class _RenderSliverHybridStack extends RenderSliver
     sliver.layout(constraints, parentUsesSize: true);
     final SliverGeometry sliverLayoutGeometry = sliver.geometry!;
     if (sliverLayoutGeometry.scrollOffsetCorrection != null) {
-      geometry = SliverGeometry(
-        scrollOffsetCorrection: sliverLayoutGeometry.scrollOffsetCorrection,
-      );
+      geometry = SliverGeometry(scrollOffsetCorrection: sliverLayoutGeometry.scrollOffsetCorrection);
       return;
     }
 
@@ -74,8 +62,7 @@ class _RenderSliverHybridStack extends RenderSliver
       scrollExtent: sliverLayoutGeometry.scrollExtent,
       paintExtent: sliverLayoutGeometry.paintExtent,
       maxPaintExtent: sliverLayoutGeometry.maxPaintExtent,
-      maxScrollObstructionExtent:
-          sliverLayoutGeometry.maxScrollObstructionExtent,
+      maxScrollObstructionExtent: sliverLayoutGeometry.maxScrollObstructionExtent,
       cacheExtent: sliverLayoutGeometry.cacheExtent,
       hasVisualOverflow: sliverLayoutGeometry.hasVisualOverflow,
     );
@@ -93,14 +80,9 @@ class _RenderSliverHybridStack extends RenderSliver
       if (child is RenderBox) {
         final childParentData = child.parentData! as SliverLogicalParentData;
         childParentData.layoutOffset = -constraints.scrollOffset;
-        if (constraints.scrollOffset == 0.0 &&
-            constraints.viewportMainAxisExtent.isFinite &&
-            fillViewport) {
+        if (constraints.scrollOffset == 0.0 && constraints.viewportMainAxisExtent.isFinite && fillViewport) {
           child.layout(
-            BoxConstraints.tightFor(
-              width: constraints.crossAxisExtent,
-              height: constraints.viewportMainAxisExtent,
-            ),
+            BoxConstraints.tightFor(width: constraints.crossAxisExtent, height: constraints.viewportMainAxisExtent),
             parentUsesSize: true,
           );
         } else {
@@ -112,22 +94,11 @@ class _RenderSliverHybridStack extends RenderSliver
   }
 
   @override
-  bool hitTest(SliverHitTestResult result,
-      {required double mainAxisPosition, required double crossAxisPosition}) {
-    if (mainAxisPosition >= 0.0 &&
-        crossAxisPosition >= 0.0 &&
-        crossAxisPosition < constraints.crossAxisExtent) {
-      if (hitTestChildren(result,
-              mainAxisPosition: mainAxisPosition,
-              crossAxisPosition: crossAxisPosition) ||
-          hitTestSelf(
-              mainAxisPosition: mainAxisPosition,
-              crossAxisPosition: crossAxisPosition)) {
-        result.add(SliverHitTestEntry(
-          this,
-          mainAxisPosition: mainAxisPosition,
-          crossAxisPosition: crossAxisPosition,
-        ));
+  bool hitTest(SliverHitTestResult result, {required double mainAxisPosition, required double crossAxisPosition}) {
+    if (mainAxisPosition >= 0.0 && crossAxisPosition >= 0.0 && crossAxisPosition < constraints.crossAxisExtent) {
+      if (hitTestChildren(result, mainAxisPosition: mainAxisPosition, crossAxisPosition: crossAxisPosition) ||
+          hitTestSelf(mainAxisPosition: mainAxisPosition, crossAxisPosition: crossAxisPosition)) {
+        result.add(SliverHitTestEntry(this, mainAxisPosition: mainAxisPosition, crossAxisPosition: crossAxisPosition));
         return true;
       }
     }
@@ -143,11 +114,7 @@ class _RenderSliverHybridStack extends RenderSliver
     var child = lastChild;
     while (child != null) {
       if (child is RenderSliver) {
-        final isHit = child.hitTest(
-          result,
-          mainAxisPosition: mainAxisPosition,
-          crossAxisPosition: crossAxisPosition,
-        );
+        final isHit = child.hitTest(result, mainAxisPosition: mainAxisPosition, crossAxisPosition: crossAxisPosition);
         if (isHit) {
           return true;
         }
@@ -178,10 +145,7 @@ class _RenderSliverHybridStack extends RenderSliver
     var child = firstChild;
     while (child != null) {
       final childParentData = child.parentData! as SliverLogicalParentData;
-      context.paintChild(
-        child,
-        offset + Offset(0, childParentData.layoutOffset!),
-      );
+      context.paintChild(child, offset + Offset(0, childParentData.layoutOffset!));
       child = childAfter(child);
     }
   }
@@ -214,9 +178,7 @@ class ScrollingBoxConstraints extends BoxConstraints {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    return other is ScrollingBoxConstraints &&
-        super == other &&
-        scrollOffset == other.scrollOffset;
+    return other is ScrollingBoxConstraints && super == other && scrollOffset == other.scrollOffset;
   }
 
   @override

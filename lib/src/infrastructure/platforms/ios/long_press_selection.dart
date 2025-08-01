@@ -19,9 +19,9 @@ class IosLongPressSelectionStrategy {
     required Document document,
     required DocumentLayout documentLayout,
     required void Function(DocumentSelection) select,
-  })  : _document = document,
-        _docLayout = documentLayout,
-        _select = select;
+  }) : _document = document,
+       _docLayout = documentLayout,
+       _select = select;
 
   final Document _document;
   final DocumentLayout _docLayout;
@@ -35,12 +35,9 @@ class IosLongPressSelectionStrategy {
   ///
   /// Returns `true` if a long-press selection started, or `false` if the user's
   /// press didn't occur over selectable content.
-  bool onLongPressStart({
-    required Offset tapDownDocumentOffset,
-  }) {
+  bool onLongPressStart({required Offset tapDownDocumentOffset}) {
     longPressSelectionLog.fine("Long press start");
-    final docPosition =
-        _docLayout.getDocumentPositionNearestToOffset(tapDownDocumentOffset);
+    final docPosition = _docLayout.getDocumentPositionNearestToOffset(tapDownDocumentOffset);
     if (docPosition == null) {
       longPressSelectionLog.finer("No doc position where the user pressed");
       return false;
@@ -59,8 +56,7 @@ class IosLongPressSelectionStrategy {
         ),
       );
     } else {
-      _longPressInitialSelection =
-          getWordSelection(docPosition: docPosition, docLayout: _docLayout);
+      _longPressInitialSelection = getWordSelection(docPosition: docPosition, docLayout: _docLayout);
     }
 
     _select(_longPressInitialSelection!);
@@ -77,8 +73,7 @@ class IosLongPressSelectionStrategy {
 
   /// Clients should call this method whenever a long-press gesture pans, after
   /// initially calling [onLongPressStart].
-  void onLongPressDragUpdate(
-      Offset fingerDocumentOffset, DocumentPosition? fingerDocumentPosition) {
+  void onLongPressDragUpdate(Offset fingerDocumentOffset, DocumentPosition? fingerDocumentPosition) {
     longPressSelectionLog.finer("--------------------------------------------");
     longPressSelectionLog.fine("Long press drag update");
 
@@ -86,14 +81,12 @@ class IosLongPressSelectionStrategy {
       return;
     }
 
-    final isOverNonTextNode =
-        fingerDocumentPosition.nodePosition is! TextNodePosition;
+    final isOverNonTextNode = fingerDocumentPosition.nodePosition is! TextNodePosition;
     if (isOverNonTextNode) {
       // Don't change selection if the user long-presses over a non-text node and then
       // moves the finger over the same node. This prevents the selection from collapsing
       // when the user moves the finger towards the starting edge of the node.
-      if (fingerDocumentPosition.nodeId !=
-          _longPressInitialSelection!.base.nodeId) {
+      if (fingerDocumentPosition.nodeId != _longPressInitialSelection!.base.nodeId) {
         // The user is dragging over content that isn't text, therefore it doesn't have
         // a concept of "words". Select the whole node.
         _select(_longPressInitialSelection!.expandTo(fingerDocumentPosition));
@@ -110,14 +103,12 @@ class IosLongPressSelectionStrategy {
     //  - one two [three] four five
     //  - one [two three] four five
     //  - one two [three four] five
-    final wordUnderFinger = getWordSelection(
-        docPosition: fingerDocumentPosition, docLayout: _docLayout);
+    final wordUnderFinger = getWordSelection(docPosition: fingerDocumentPosition, docLayout: _docLayout);
     if (wordUnderFinger == null) {
       // This shouldn't happen. If we've gotten here, the user is selecting over
       // text content but we couldn't find a word selection. The best we can do
       // is fizzle.
-      longPressSelectionLog.warning(
-          "Long-press selecting. Couldn't find word at position: $fingerDocumentPosition");
+      longPressSelectionLog.warning("Long-press selecting. Couldn't find word at position: $fingerDocumentPosition");
       return;
     }
 
@@ -130,21 +121,16 @@ class IosLongPressSelectionStrategy {
     // Figure out whether the newly selected word comes before or after the initially
     // selected word.
     final newWordDirection = _document.getAffinityForSelection(
-      DocumentSelection(
-        base: wordUnderFinger.start,
-        extent: _longPressInitialSelection!.start,
-      ),
+      DocumentSelection(base: wordUnderFinger.start, extent: _longPressInitialSelection!.start),
     );
 
     late final DocumentSelection newSelection;
     if (newWordDirection == TextAffinity.downstream) {
       // The newly selected word comes before the initially selected word.
-      newSelection = DocumentSelection(
-          base: wordUnderFinger.start, extent: _longPressInitialSelection!.end);
+      newSelection = DocumentSelection(base: wordUnderFinger.start, extent: _longPressInitialSelection!.end);
     } else {
       // The newly selected word comes after the initially selected word.
-      newSelection = DocumentSelection(
-          base: _longPressInitialSelection!.start, extent: wordUnderFinger.end);
+      newSelection = DocumentSelection(base: _longPressInitialSelection!.start, extent: wordUnderFinger.end);
     }
 
     _select(newSelection);

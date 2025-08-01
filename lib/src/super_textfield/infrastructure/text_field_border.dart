@@ -40,11 +40,7 @@ class TextFieldBorder extends StatelessWidget {
         return ListenableBuilder(
           listenable: focusNode,
           builder: (context, child) {
-            return Container(
-              decoration: borderBuilder(_borderState),
-              clipBehavior: clipBehavior,
-              child: child,
-            );
+            return Container(decoration: borderBuilder(_borderState), clipBehavior: clipBehavior, child: child);
           },
           child: child,
         );
@@ -54,10 +50,10 @@ class TextFieldBorder extends StatelessWidget {
   }
 
   TextFieldBorderState get _borderState => TextFieldBorderState(
-        hasFocus: focusNode.hasFocus,
-        hasPrimaryFocus: focusNode.hasPrimaryFocus,
-        hasError: hasError?.value ?? false,
-      );
+    hasFocus: focusNode.hasFocus,
+    hasPrimaryFocus: focusNode.hasPrimaryFocus,
+    hasError: hasError?.value ?? false,
+  );
 }
 
 /// Properties that might impact the visual appearance of a text field border.
@@ -65,16 +61,11 @@ class TextFieldBorder extends StatelessWidget {
 /// [TextFieldBorder] provides a [TextFieldBorderState] to a [TextFieldBorderBuilder]
 /// to create the desired visual border for a text field.
 class TextFieldBorderState {
-  const TextFieldBorderState({
-    required this.hasFocus,
-    required this.hasPrimaryFocus,
-    required this.hasError,
-  });
+  const TextFieldBorderState({required this.hasFocus, required this.hasPrimaryFocus, required this.hasError});
 
   final bool hasFocus;
   final bool hasPrimaryFocus;
   final bool hasError;
 }
 
-typedef TextFieldBorderBuilder = BoxDecoration Function(
-    TextFieldBorderState borderState);
+typedef TextFieldBorderBuilder = BoxDecoration Function(TextFieldBorderState borderState);

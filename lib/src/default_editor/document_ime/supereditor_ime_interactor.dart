@@ -151,8 +151,7 @@ class SuperEditorImeInteractor extends StatefulWidget {
 }
 
 @visibleForTesting
-class SuperEditorImeInteractorState extends State<SuperEditorImeInteractor>
-    implements ImeInputOwner {
+class SuperEditorImeInteractorState extends State<SuperEditorImeInteractor> implements ImeInputOwner {
   late FocusNode _focusNode;
 
   SuperEditorIosControlsController? _controlsController;
@@ -190,8 +189,7 @@ class SuperEditorImeInteractorState extends State<SuperEditorImeInteractor>
       // this in a post-frame callback because the very first pump of the Super Editor
       // widget tree won't have Super Editor connected as an IME delegate, yet.
       if (widget.softwareKeyboardController != null) {
-        widget.isImeConnected?.value =
-            widget.softwareKeyboardController!.isConnectedToIme;
+        widget.isImeConnected?.value = widget.softwareKeyboardController!.isConnectedToIme;
       }
     });
   }
@@ -201,9 +199,9 @@ class SuperEditorImeInteractorState extends State<SuperEditorImeInteractor>
     super.didChangeDependencies();
     _controlsController = SuperEditorIosControlsScope.maybeRootOf(context);
     _documentImeClient.floatingCursorController =
-        widget.floatingCursorController ??
-            _controlsController?.floatingCursorController;
-    _textInputConfiguration = widget.imeConfiguration //
+        widget.floatingCursorController ?? _controlsController?.floatingCursorController;
+    _textInputConfiguration = widget
+        .imeConfiguration //
         .toTextInputConfiguration(viewId: View.of(context).viewId);
   }
 
@@ -214,14 +212,12 @@ class SuperEditorImeInteractorState extends State<SuperEditorImeInteractor>
     if (widget.editContext != oldWidget.editContext) {
       _setupImeConnection();
       _documentImeClient.floatingCursorController =
-          widget.floatingCursorController ??
-              _controlsController?.floatingCursorController;
+          widget.floatingCursorController ?? _controlsController?.floatingCursorController;
       _imeConnection.notifyListeners();
     }
 
     if (widget.imeConfiguration != oldWidget.imeConfiguration) {
-      _textInputConfiguration = widget.imeConfiguration
-          .toTextInputConfiguration(viewId: View.of(context).viewId);
+      _textInputConfiguration = widget.imeConfiguration.toTextInputConfiguration(viewId: View.of(context).viewId);
       if (isAttachedToIme) {
         _imeConnection.value!.updateConfig(_textInputConfiguration);
       }
@@ -404,18 +400,15 @@ class SuperEditorImeInteractorState extends State<SuperEditorImeInteractor>
 
     final docLayout = widget.editContext.documentLayout;
 
-    DocumentComponent? selectedComponent =
-        docLayout.getComponentByNodeId(selection.extent.nodeId);
+    DocumentComponent? selectedComponent = docLayout.getComponentByNodeId(selection.extent.nodeId);
     if (selectedComponent is ProxyDocumentComponent) {
       // The selected componente is a proxy.
       // If this component displays text, the text component is bounded to childDocumentComponentKey.
-      selectedComponent = selectedComponent
-          .childDocumentComponentKey.currentState as DocumentComponent?;
+      selectedComponent = selectedComponent.childDocumentComponentKey.currentState as DocumentComponent?;
     }
 
     if (selectedComponent == null) {
-      editorImeLog.warning(
-          'A selection exists but no component for node ${selection.extent.nodeId} was found');
+      editorImeLog.warning('A selection exists but no component for node ${selection.extent.nodeId} was found');
       return;
     }
 
@@ -476,18 +469,15 @@ class SuperEditorImeInteractorState extends State<SuperEditorImeInteractor>
 
     final documentLayout = widget.editContext.documentLayout;
 
-    DocumentComponent? selectedComponent =
-        documentLayout.getComponentByNodeId(selection.extent.nodeId);
+    DocumentComponent? selectedComponent = documentLayout.getComponentByNodeId(selection.extent.nodeId);
     if (selectedComponent is ProxyDocumentComponent) {
       // The selected componente is a proxy.
       // If this component displays text, the text component is bounded to childDocumentComponentKey.
-      selectedComponent = selectedComponent
-          .childDocumentComponentKey.currentState as DocumentComponent;
+      selectedComponent = selectedComponent.childDocumentComponentKey.currentState as DocumentComponent;
     }
 
     if (selectedComponent == null) {
-      editorImeLog.warning(
-          'A selection exists but no component for node ${selection.extent.nodeId} was found');
+      editorImeLog.warning('A selection exists but no component for node ${selection.extent.nodeId} was found');
       return null;
     }
 
@@ -510,9 +500,7 @@ class SuperEditorImeInteractorState extends State<SuperEditorImeInteractor>
     return SuperEditorImeDebugVisuals(
       imeConnection: _imeConnection,
       child: IntentBlocker(
-        intents: CurrentPlatform.isApple
-            ? appleBlockedIntents
-            : nonAppleBlockedIntents,
+        intents: CurrentPlatform.isApple ? appleBlockedIntents : nonAppleBlockedIntents,
         child: SuperEditorHardwareKeyHandler(
           focusNode: _focusNode,
           editContext: widget.editContext,
@@ -525,27 +513,19 @@ class SuperEditorImeInteractorState extends State<SuperEditorImeInteractor>
             imeConnection: _imeConnection,
             imeClientFactory: () => _imeClient,
             imeConfiguration: _textInputConfiguration,
-            openKeyboardOnSelectionChange:
-                widget.imePolicies.openKeyboardOnSelectionChange,
-            closeKeyboardOnSelectionLost:
-                widget.imePolicies.closeKeyboardOnSelectionLost,
-            clearSelectionWhenEditorLosesFocus:
-                widget.clearSelectionWhenEditorLosesFocus,
-            clearSelectionWhenImeConnectionCloses:
-                widget.clearSelectionWhenImeConnectionCloses,
+            openKeyboardOnSelectionChange: widget.imePolicies.openKeyboardOnSelectionChange,
+            closeKeyboardOnSelectionLost: widget.imePolicies.closeKeyboardOnSelectionLost,
+            clearSelectionWhenEditorLosesFocus: widget.clearSelectionWhenEditorLosesFocus,
+            clearSelectionWhenImeConnectionCloses: widget.clearSelectionWhenImeConnectionCloses,
             child: ImeFocusPolicy(
               focusNode: _focusNode,
               imeConnection: _imeConnection,
               imeClientFactory: () => _imeClient,
               imeConfiguration: _textInputConfiguration,
-              openImeOnPrimaryFocusGain:
-                  widget.imePolicies.openKeyboardOnGainPrimaryFocus,
-              closeImeOnPrimaryFocusLost:
-                  widget.imePolicies.closeKeyboardOnLosePrimaryFocus,
-              openImeOnNonPrimaryFocusGain:
-                  widget.imePolicies.openImeOnNonPrimaryFocusGain,
-              closeImeOnNonPrimaryFocusLost:
-                  widget.imePolicies.closeImeOnNonPrimaryFocusLost,
+              openImeOnPrimaryFocusGain: widget.imePolicies.openKeyboardOnGainPrimaryFocus,
+              closeImeOnPrimaryFocusLost: widget.imePolicies.closeKeyboardOnLosePrimaryFocus,
+              openImeOnNonPrimaryFocusGain: widget.imePolicies.openImeOnNonPrimaryFocusGain,
+              closeImeOnNonPrimaryFocusLost: widget.imePolicies.closeImeOnNonPrimaryFocusLost,
               child: SoftwareKeyboardOpener(
                 controller: widget.softwareKeyboardController,
                 imeConnection: _imeConnection,
@@ -585,8 +565,7 @@ void moveWordLeft(SuperEditorContext context) {
 }
 
 void moveWordRight(SuperEditorContext context) {
-  context.commonOps
-      .moveCaretDownstream(movementModifier: MovementModifier.word);
+  context.commonOps.moveCaretDownstream(movementModifier: MovementModifier.word);
 }
 
 void moveToLeftEndOfLine(SuperEditorContext context) {
@@ -594,18 +573,15 @@ void moveToLeftEndOfLine(SuperEditorContext context) {
 }
 
 void moveToRightEndOfLine(SuperEditorContext context) {
-  context.commonOps
-      .moveCaretDownstream(movementModifier: MovementModifier.line);
+  context.commonOps.moveCaretDownstream(movementModifier: MovementModifier.line);
 }
 
 void moveToBeginningOfParagraph(SuperEditorContext context) {
-  context.commonOps
-      .moveCaretUpstream(movementModifier: MovementModifier.paragraph);
+  context.commonOps.moveCaretUpstream(movementModifier: MovementModifier.paragraph);
 }
 
 void moveToEndOfParagraph(SuperEditorContext context) {
-  context.commonOps
-      .moveCaretDownstream(movementModifier: MovementModifier.paragraph);
+  context.commonOps.moveCaretDownstream(movementModifier: MovementModifier.paragraph);
 }
 
 void moveToBeginningOfDocument(SuperEditorContext context) {
@@ -633,38 +609,23 @@ void moveDownAndModifySelection(SuperEditorContext context) {
 }
 
 void moveWordLeftAndModifySelection(SuperEditorContext context) {
-  context.commonOps.moveCaretUpstream(
-    expand: true,
-    movementModifier: MovementModifier.word,
-  );
+  context.commonOps.moveCaretUpstream(expand: true, movementModifier: MovementModifier.word);
 }
 
 void moveWordRightAndModifySelection(SuperEditorContext context) {
-  context.commonOps.moveCaretDownstream(
-    expand: true,
-    movementModifier: MovementModifier.word,
-  );
+  context.commonOps.moveCaretDownstream(expand: true, movementModifier: MovementModifier.word);
 }
 
 void moveToLeftEndOfLineAndModifySelection(SuperEditorContext context) {
-  context.commonOps.moveCaretUpstream(
-    expand: true,
-    movementModifier: MovementModifier.line,
-  );
+  context.commonOps.moveCaretUpstream(expand: true, movementModifier: MovementModifier.line);
 }
 
 void moveParagraphBackwardAndModifySelection(SuperEditorContext context) {
-  context.commonOps.moveCaretUpstream(
-    expand: true,
-    movementModifier: MovementModifier.paragraph,
-  );
+  context.commonOps.moveCaretUpstream(expand: true, movementModifier: MovementModifier.paragraph);
 }
 
 void moveParagraphForwardAndModifySelection(SuperEditorContext context) {
-  context.commonOps.moveCaretDownstream(
-    expand: true,
-    movementModifier: MovementModifier.paragraph,
-  );
+  context.commonOps.moveCaretDownstream(expand: true, movementModifier: MovementModifier.paragraph);
 }
 
 void moveToBeginningOfDocumentAndModifySelection(SuperEditorContext context) {
@@ -676,10 +637,7 @@ void moveToEndOfDocumentAndModifySelection(SuperEditorContext context) {
 }
 
 void moveToRightEndOfLineAndModifySelection(SuperEditorContext context) {
-  context.commonOps.moveCaretDownstream(
-    expand: true,
-    movementModifier: MovementModifier.line,
-  );
+  context.commonOps.moveCaretDownstream(expand: true, movementModifier: MovementModifier.line);
 }
 
 void indentListItem(SuperEditorContext context) {
@@ -694,18 +652,13 @@ void insertNewLine(SuperEditorContext context) {
   if (CurrentPlatform.isWeb) {
     return;
   }
-  context.editor.execute([
-    InsertNewlineAtCaretRequest(),
-  ]);
+  context.editor.execute([InsertNewlineAtCaretRequest()]);
 }
 
 void deleteWordBackward(SuperEditorContext context) {
   bool didMove = false;
 
-  didMove = context.commonOps.moveCaretUpstream(
-    expand: true,
-    movementModifier: MovementModifier.word,
-  );
+  didMove = context.commonOps.moveCaretUpstream(expand: true, movementModifier: MovementModifier.word);
 
   if (didMove) {
     context.commonOps.deleteSelection(TextAffinity.upstream);
@@ -715,10 +668,7 @@ void deleteWordBackward(SuperEditorContext context) {
 void deleteWordForward(SuperEditorContext context) {
   bool didMove = false;
 
-  didMove = context.commonOps.moveCaretDownstream(
-    expand: true,
-    movementModifier: MovementModifier.word,
-  );
+  didMove = context.commonOps.moveCaretDownstream(expand: true, movementModifier: MovementModifier.word);
 
   if (didMove) {
     context.commonOps.deleteSelection(TextAffinity.downstream);
@@ -728,10 +678,7 @@ void deleteWordForward(SuperEditorContext context) {
 void deleteToBeginningOfLine(SuperEditorContext context) {
   bool didMove = false;
 
-  didMove = context.commonOps.moveCaretUpstream(
-    expand: true,
-    movementModifier: MovementModifier.line,
-  );
+  didMove = context.commonOps.moveCaretUpstream(expand: true, movementModifier: MovementModifier.line);
 
   if (didMove) {
     context.commonOps.deleteSelection(TextAffinity.upstream);
@@ -741,10 +688,7 @@ void deleteToBeginningOfLine(SuperEditorContext context) {
 void deleteToEndOfLine(SuperEditorContext context) {
   bool didMove = false;
 
-  didMove = context.commonOps.moveCaretDownstream(
-    expand: true,
-    movementModifier: MovementModifier.line,
-  );
+  didMove = context.commonOps.moveCaretDownstream(expand: true, movementModifier: MovementModifier.line);
 
   if (didMove) {
     context.commonOps.deleteSelection(TextAffinity.downstream);
@@ -783,8 +727,7 @@ void scrollToEndOfDocument(SuperEditorContext context) {
 
 void scrollPageUp(SuperEditorContext context) {
   context.scroller.animateTo(
-    max(context.scroller.scrollOffset - context.scroller.viewportDimension,
-        context.scroller.minScrollExtent),
+    max(context.scroller.scrollOffset - context.scroller.viewportDimension, context.scroller.minScrollExtent),
     duration: const Duration(milliseconds: 150),
     curve: Curves.decelerate,
   );
@@ -792,8 +735,7 @@ void scrollPageUp(SuperEditorContext context) {
 
 void scrollPageDown(SuperEditorContext context) {
   context.scroller.animateTo(
-    min(context.scroller.scrollOffset + context.scroller.viewportDimension,
-        context.scroller.maxScrollExtent),
+    min(context.scroller.scrollOffset + context.scroller.viewportDimension, context.scroller.maxScrollExtent),
     duration: const Duration(milliseconds: 150),
     curve: Curves.decelerate,
   );
@@ -859,15 +801,11 @@ class SuperEditorImePolicies {
       identical(this, other) ||
       other is SuperEditorImePolicies &&
           runtimeType == other.runtimeType &&
-          openKeyboardOnGainPrimaryFocus ==
-              other.openKeyboardOnGainPrimaryFocus &&
-          closeKeyboardOnLosePrimaryFocus ==
-              other.closeKeyboardOnLosePrimaryFocus &&
+          openKeyboardOnGainPrimaryFocus == other.openKeyboardOnGainPrimaryFocus &&
+          closeKeyboardOnLosePrimaryFocus == other.closeKeyboardOnLosePrimaryFocus &&
           openImeOnNonPrimaryFocusGain == other.openImeOnNonPrimaryFocusGain &&
-          closeImeOnNonPrimaryFocusLost ==
-              other.closeImeOnNonPrimaryFocusLost &&
-          openKeyboardOnSelectionChange ==
-              other.openKeyboardOnSelectionChange &&
+          closeImeOnNonPrimaryFocusLost == other.closeImeOnNonPrimaryFocusLost &&
+          openKeyboardOnSelectionChange == other.openKeyboardOnSelectionChange &&
           closeKeyboardOnSelectionLost == other.closeKeyboardOnSelectionLost;
 
   @override
@@ -907,9 +845,7 @@ class SuperEditorImeConfiguration {
   ///
   /// The [viewId] is required do determine the view that the text input belongs to. You can call
   /// `View.of(context).viewId` to get the current view's ID.
-  TextInputConfiguration toTextInputConfiguration({
-    required int viewId,
-  }) {
+  TextInputConfiguration toTextInputConfiguration({required int viewId}) {
     return TextInputConfiguration(
       viewId: viewId,
       enableDeltaModel: true,

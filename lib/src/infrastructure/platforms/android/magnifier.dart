@@ -6,11 +6,8 @@ import 'package:super_editor/src/super_textfield/infrastructure/outer_box_shadow
 
 /// An Android magnifying glass that follows a [LeaderLink].
 class AndroidFollowingMagnifier extends StatelessWidget {
-  const AndroidFollowingMagnifier({
-    Key? key,
-    required this.layerLink,
-    this.offsetFromFocalPoint = Offset.zero,
-  }) : super(key: key);
+  const AndroidFollowingMagnifier({Key? key, required this.layerLink, this.offsetFromFocalPoint = Offset.zero})
+    : super(key: key);
 
   final LeaderLink layerLink;
   final Offset offsetFromFocalPoint;
@@ -24,10 +21,7 @@ class AndroidFollowingMagnifier extends StatelessWidget {
       offset: offsetFromFocalPoint,
       leaderAnchor: Alignment.center,
       followerAnchor: Alignment.center,
-      boundary: ScreenFollowerBoundary(
-        screenSize: MediaQuery.sizeOf(context),
-        devicePixelRatio: devicePixelRatio,
-      ),
+      boundary: ScreenFollowerBoundary(screenSize: MediaQuery.sizeOf(context), devicePixelRatio: devicePixelRatio),
       child: AndroidMagnifyingGlass(
         magnificationScale: 1.5,
         offsetFromFocalPoint: Offset(
@@ -44,11 +38,7 @@ class AndroidMagnifyingGlass extends StatelessWidget {
   static const _height = 48.0;
   static const _cornerRadius = 8.0;
 
-  const AndroidMagnifyingGlass({
-    super.key,
-    this.magnificationScale = 1.5,
-    this.offsetFromFocalPoint = Offset.zero,
-  });
+  const AndroidMagnifyingGlass({super.key, this.magnificationScale = 1.5, this.offsetFromFocalPoint = Offset.zero});
 
   final double magnificationScale;
   final Offset offsetFromFocalPoint;
@@ -58,9 +48,7 @@ class AndroidMagnifyingGlass extends StatelessWidget {
     return Stack(
       children: [
         MagnifyingGlass(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(_cornerRadius),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(_cornerRadius)),
           offsetFromFocalPoint: offsetFromFocalPoint,
           size: const Size(_width, _height),
           magnificationScale: magnificationScale,
@@ -70,12 +58,7 @@ class AndroidMagnifyingGlass extends StatelessWidget {
           height: _height,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(_cornerRadius),
-            boxShadow: const [
-              OuterBoxShadow(
-                color: Color(0x44000000),
-                blurRadius: 8,
-              ),
-            ],
+            boxShadow: const [OuterBoxShadow(color: Color(0x44000000), blurRadius: 8)],
           ),
         ),
       ],

@@ -23,20 +23,17 @@ extension TaskRobot on WidgetTester {
 }
 
 TaskComponent _findTaskComponent(String nodeId, [Finder? superEditorFinder]) {
-  return SuperEditorInspector.findWidgetForComponent(nodeId, superEditorFinder)
-      as TaskComponent;
+  return SuperEditorInspector.findWidgetForComponent(nodeId, superEditorFinder) as TaskComponent;
 }
 
 Checkbox _findTaskCheckbox(String nodeId, [Finder? superEditorFinder]) {
   final taskWidget = _findTaskComponent(nodeId, superEditorFinder);
 
-  final checkboxes = find
-      .descendant(
-          of: find.byWidget(taskWidget), matching: find.byType(Checkbox))
-      .evaluate();
-  assert(checkboxes.isNotEmpty,
-      "Couldn't find the Checkbox widget within a task widget with node ID: $nodeId");
-  assert(checkboxes.length == 1,
-      "Found multiple Checkbox widgets within a task widget. We don't know which one to use. Node id: $nodeId");
+  final checkboxes = find.descendant(of: find.byWidget(taskWidget), matching: find.byType(Checkbox)).evaluate();
+  assert(checkboxes.isNotEmpty, "Couldn't find the Checkbox widget within a task widget with node ID: $nodeId");
+  assert(
+    checkboxes.length == 1,
+    "Found multiple Checkbox widgets within a task widget. We don't know which one to use. Node id: $nodeId",
+  );
   return checkboxes.first.widget as Checkbox;
 }

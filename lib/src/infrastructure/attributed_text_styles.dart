@@ -6,8 +6,7 @@ import 'package:super_editor/src/infrastructure/_logging.dart';
 /// with a span of text.
 ///
 /// The [attributions] set may be empty.
-typedef AttributionStyleBuilder = TextStyle Function(
-    Set<Attribution> attributions);
+typedef AttributionStyleBuilder = TextStyle Function(Set<Attribution> attributions);
 
 extension ToSpanRange on TextRange {
   SpanRange toSpanRange() => SpanRange(start, end);
@@ -50,12 +49,7 @@ extension ComputeTextSpan on AttributedText {
 
           if (i > startOfMostRecentTextRun) {
             // There is text before the placeholder. Add the current text run to the span.
-            inlineSpans.add(
-              TextSpan(
-                text: substring(startOfMostRecentTextRun, i),
-                style: textStyle,
-              ),
-            );
+            inlineSpans.add(TextSpan(text: substring(startOfMostRecentTextRun, i), style: textStyle));
           }
 
           Widget? inlineWidget;
@@ -67,12 +61,7 @@ extension ComputeTextSpan on AttributedText {
           }
 
           if (inlineWidget != null) {
-            inlineSpans.add(
-              _LayoutOptimizedWidgetSpan(
-                alignment: PlaceholderAlignment.middle,
-                child: inlineWidget,
-              ),
-            );
+            inlineSpans.add(_LayoutOptimizedWidgetSpan(alignment: PlaceholderAlignment.middle, child: inlineWidget));
           }
 
           // Start another inline span after the placeholder.
@@ -82,20 +71,11 @@ extension ComputeTextSpan on AttributedText {
 
       if (startOfMostRecentTextRun <= span.end) {
         // There is text after the last placeholder or there is no placeholder at all.
-        inlineSpans.add(
-          TextSpan(
-            text: substring(startOfMostRecentTextRun, span.end + 1),
-            style: textStyle,
-          ),
-        );
+        inlineSpans.add(TextSpan(text: substring(startOfMostRecentTextRun, span.end + 1), style: textStyle));
       }
     }
 
-    return TextSpan(
-      text: "",
-      children: inlineSpans,
-      style: styleBuilder({}),
-    );
+    return TextSpan(text: "", children: inlineSpans, style: styleBuilder({}));
   }
 
   /// Returns a Flutter [TextSpan] that is styled based on the
@@ -103,8 +83,7 @@ extension ComputeTextSpan on AttributedText {
   ///
   /// The given [styleBuilder] interprets the meaning of every
   /// attribution and constructs [TextStyle]s accordingly.
-  @Deprecated(
-      "Use computeInlineSpan() instead, which adds support for inline widgets.")
+  @Deprecated("Use computeInlineSpan() instead, which adds support for inline widgets.")
   TextSpan computeTextSpan(AttributionStyleBuilder styleBuilder) {
     attributionsLog.fine('text length: ${text.length}');
     attributionsLog.fine('attributions used to compute spans:');
@@ -118,19 +97,15 @@ extension ComputeTextSpan on AttributedText {
 
     final collapsedSpans = spans.collapseSpans(contentLength: text.length);
     final textSpans = collapsedSpans
-        .map((attributedSpan) => TextSpan(
-              text:
-                  text.substring(attributedSpan.start, attributedSpan.end + 1),
-              style: styleBuilder(attributedSpan.attributions),
-            ))
+        .map(
+          (attributedSpan) => TextSpan(
+            text: text.substring(attributedSpan.start, attributedSpan.end + 1),
+            style: styleBuilder(attributedSpan.attributions),
+          ),
+        )
         .toList();
 
-    return textSpans.length == 1
-        ? textSpans.first
-        : TextSpan(
-            children: textSpans,
-            style: styleBuilder({}),
-          );
+    return textSpans.length == 1 ? textSpans.first : TextSpan(children: textSpans, style: styleBuilder({}));
   }
 }
 
@@ -145,11 +120,7 @@ typedef InlineWidgetBuilderChain = List<InlineWidgetBuilder>;
 ///
 /// The given [textStyle] is the style applied to the text in the vicinity
 /// of the placeholder.
-typedef InlineWidgetBuilder = Widget? Function(
-  BuildContext context,
-  TextStyle textStyle,
-  Object placeholder,
-);
+typedef InlineWidgetBuilder = Widget? Function(BuildContext context, TextStyle textStyle, Object placeholder);
 
 /// A [WidgetSpan] that does not re-layout its child changed.
 ///
@@ -160,10 +131,8 @@ typedef InlineWidgetBuilder = Widget? Function(
 /// When the child widget do change its layout, i.e., by changing its size,
 /// the build pipeline will already mark the layout as dirty.
 class _LayoutOptimizedWidgetSpan extends WidgetSpan {
-  const _LayoutOptimizedWidgetSpan({
-    required Widget child,
-    required PlaceholderAlignment alignment,
-  }) : super(child: child, alignment: alignment);
+  const _LayoutOptimizedWidgetSpan({required Widget child, required PlaceholderAlignment alignment})
+    : super(child: child, alignment: alignment);
 
   @override
   RenderComparison compareTo(InlineSpan other) {

@@ -13,11 +13,9 @@ import 'package:super_editor/src/infrastructure/_logging.dart';
 import 'package:super_editor/src/infrastructure/document_gestures_interaction_overrides.dart';
 import 'package:super_editor/src/infrastructure/links.dart';
 
-typedef SuperEditorContentTapDelegateFactory = ContentTapDelegate Function(
-    SuperEditorContext editContext);
+typedef SuperEditorContentTapDelegateFactory = ContentTapDelegate Function(SuperEditorContext editContext);
 
-SuperEditorLaunchLinkTapHandler superEditorLaunchLinkTapHandlerFactory(
-        SuperEditorContext editContext) =>
+SuperEditorLaunchLinkTapHandler superEditorLaunchLinkTapHandlerFactory(SuperEditorContext editContext) =>
     SuperEditorLaunchLinkTapHandler(editContext.document, editContext.composer);
 
 /// A [ContentTapDelegate] that opens links when the user taps text with
@@ -52,8 +50,7 @@ class SuperEditorLaunchLinkTapHandler extends ContentTapDelegate {
 
   @override
   TapHandlingInstruction onTap(DocumentTapDetails details) {
-    final tapPosition = details.documentLayout
-        .getDocumentPositionNearestToOffset(details.layoutOffset);
+    final tapPosition = details.documentLayout.getDocumentPositionNearestToOffset(details.layoutOffset);
     if (tapPosition == null) {
       return TapHandlingInstruction.continueHandling;
     }
@@ -84,12 +81,12 @@ class SuperEditorLaunchLinkTapHandler extends ContentTapDelegate {
     final textNode = document.getNodeById(position.nodeId);
     if (textNode is! TextNode) {
       editorGesturesLog.shout(
-          "Received a report of a tap on a TextNodePosition, but the node with that ID is a: $textNode");
+        "Received a report of a tap on a TextNodePosition, but the node with that ID is a: $textNode",
+      );
       return null;
     }
 
-    final tappedAttributions =
-        textNode.text.getAllAttributionsAt(nodePosition.offset);
+    final tappedAttributions = textNode.text.getAllAttributionsAt(nodePosition.offset);
     for (final tappedAttribution in tappedAttributions) {
       if (tappedAttribution is LinkAttribution) {
         return tappedAttribution.launchableUri;
@@ -100,26 +97,21 @@ class SuperEditorLaunchLinkTapHandler extends ContentTapDelegate {
   }
 }
 
-SuperEditorAddEmptyParagraphTapHandler
-    superEditorAddEmptyParagraphTapHandlerFactory(
-            SuperEditorContext editContext) =>
-        SuperEditorAddEmptyParagraphTapHandler(editContext: editContext);
+SuperEditorAddEmptyParagraphTapHandler superEditorAddEmptyParagraphTapHandlerFactory(SuperEditorContext editContext) =>
+    SuperEditorAddEmptyParagraphTapHandler(editContext: editContext);
 
 /// A [ContentTapDelegate] that adds an empty paragraph at the end of the document
 /// when the user taps below the last node in the document.
 ///
 /// Does nothing if the last node is a [TextNode].
 class SuperEditorAddEmptyParagraphTapHandler extends ContentTapDelegate {
-  SuperEditorAddEmptyParagraphTapHandler({
-    required this.editContext,
-  });
+  SuperEditorAddEmptyParagraphTapHandler({required this.editContext});
 
   final SuperEditorContext editContext;
 
   @override
   TapHandlingInstruction onTap(DocumentTapDetails details) {
-    final tapPosition = details.documentLayout
-        .getDocumentPositionNearestToOffset(details.layoutOffset);
+    final tapPosition = details.documentLayout.getDocumentPositionNearestToOffset(details.layoutOffset);
     if (tapPosition == null) {
       return TapHandlingInstruction.continueHandling;
     }
@@ -132,10 +124,7 @@ class SuperEditorAddEmptyParagraphTapHandler extends ContentTapDelegate {
       return TapHandlingInstruction.continueHandling;
     }
 
-    if (!_isTapBelowLastNode(
-      nodeId: tapPosition.nodeId,
-      globalOffset: details.globalOffset,
-    )) {
+    if (!_isTapBelowLastNode(nodeId: tapPosition.nodeId, globalOffset: details.globalOffset)) {
       return TapHandlingInstruction.continueHandling;
     }
 
@@ -145,17 +134,11 @@ class SuperEditorAddEmptyParagraphTapHandler extends ContentTapDelegate {
     editor.execute([
       InsertNodeAfterNodeRequest(
         existingNodeId: node.id,
-        newNode: ParagraphNode(
-          id: newNodeId,
-          text: AttributedText(),
-        ),
+        newNode: ParagraphNode(id: newNodeId, text: AttributedText()),
       ),
       ChangeSelectionRequest(
         DocumentSelection.collapsed(
-          position: DocumentPosition(
-            nodeId: newNodeId,
-            nodePosition: const TextNodePosition(offset: 0),
-          ),
+          position: DocumentPosition(nodeId: newNodeId, nodePosition: const TextNodePosition(offset: 0)),
         ),
         SelectionChangeType.insertContent,
         SelectionReason.userInteraction,
@@ -166,20 +149,15 @@ class SuperEditorAddEmptyParagraphTapHandler extends ContentTapDelegate {
     return TapHandlingInstruction.halt;
   }
 
-  bool _isTapBelowLastNode({
-    required String nodeId,
-    required Offset globalOffset,
-  }) {
+  bool _isTapBelowLastNode({required String nodeId, required Offset globalOffset}) {
     final documentLayout = editContext.documentLayout;
     final document = editContext.document;
 
     final tappedComponent = documentLayout.getComponentByNodeId(nodeId)!;
-    final componentBox =
-        tappedComponent.context.findRenderObject() as RenderBox;
+    final componentBox = tappedComponent.context.findRenderObject() as RenderBox;
     final localPosition = componentBox.globalToLocal(globalOffset);
     final node = document.getNodeById(nodeId);
 
-    return (node == document.lastOrNull) &&
-        (localPosition.dy > componentBox.size.height);
+    return (node == document.lastOrNull) && (localPosition.dy > componentBox.size.height);
   }
 }

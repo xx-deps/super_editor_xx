@@ -24,8 +24,7 @@ extension RectangleMutation on Rect {
   /// It's the caller's responsibility to ensure that the movement of the left
   /// edge doesn't result in a broken `Rect`, i.e., a left edge that's further
   /// to the right than the right edge.
-  Rect inflateLeft(double amount) =>
-      Rect.fromLTWH(left - amount, top, width + amount, height);
+  Rect inflateLeft(double amount) => Rect.fromLTWH(left - amount, top, width + amount, height);
 
   /// Returns a copy of this `Rect` with the right edge moved [amount] to the
   /// right.
@@ -36,6 +35,5 @@ extension RectangleMutation on Rect {
   /// It's the caller's responsibility to ensure that the movement of the right
   /// edge doesn't result in a broken `Rect`, i.e., a right edge that's further
   /// to the left than the left edge.
-  Rect inflateRight(double amount) =>
-      Rect.fromLTWH(left, top, width + amount, height);
+  Rect inflateRight(double amount) => Rect.fromLTWH(left, top, width + amount, height);
 }

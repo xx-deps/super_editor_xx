@@ -34,8 +34,7 @@ class TagFinder {
     final charactersAfter = rawText.substring(splitIndex).characters;
     final iteratorDownstream = charactersAfter.iterator;
 
-    if (charactersBefore.isNotEmpty &&
-        tagRule.excludedCharacters.contains(charactersBefore.last)) {
+    if (charactersBefore.isNotEmpty && tagRule.excludedCharacters.contains(charactersBefore.last)) {
       // The character where we're supposed to begin our expansion is a
       // character that's not allowed in a tag. Therefore, no tag exists
       // around the search offset.
@@ -67,34 +66,26 @@ class TagFinder {
     }
 
     final tokenStartOffset = splitIndex - iteratorUpstream.stringAfterLength;
-    final tokenRange = SpanRange(
-        tokenStartOffset, splitIndex + iteratorDownstream.stringBeforeLength);
+    final tokenRange = SpanRange(tokenStartOffset, splitIndex + iteratorDownstream.stringBeforeLength);
 
     final tagText = text.substringInRange(tokenRange);
     if (!tagText.startsWith(tagRule.trigger)) {
       return null;
     }
 
-    final tokenAttributions = text.getAttributionSpansInRange(
-        attributionFilter: (a) => true, range: tokenRange);
-    if (!isTokenCandidate(
-        tokenAttributions.map((span) => span.attribution).toSet())) {
+    final tokenAttributions = text.getAttributionSpansInRange(attributionFilter: (a) => true, range: tokenRange);
+    if (!isTokenCandidate(tokenAttributions.map((span) => span.attribution).toSet())) {
       return null;
     }
 
     return TagAroundPosition(
-      indexedTag: IndexedTag(
-        Tag(tagRule.trigger, tagText.substring(1)),
-        nodeId,
-        tokenStartOffset,
-      ),
+      indexedTag: IndexedTag(Tag(tagRule.trigger, tagText.substring(1)), nodeId, tokenStartOffset),
       searchOffset: expansionPosition.offset,
     );
   }
 
   /// Finds and returns all tags in the given [textNode], which meet the given [rule].
-  static Set<IndexedTag> findAllTagsInTextNode(
-      TextNode textNode, TagRule rule) {
+  static Set<IndexedTag> findAllTagsInTextNode(TextNode textNode, TagRule rule) {
     final plainText = textNode.text.toPlainText();
     final tags = <IndexedTag>{};
 
@@ -106,11 +97,7 @@ class TagFinder {
         if (tagStartIndex != null) {
           // We found a trigger, but we're still accumulating a tag from an earlier
           // trigger. End the tag we were accumulating.
-          tags.add(IndexedTag(
-            Tag.fromRaw(tagBuffer.toString()),
-            textNode.id,
-            tagStartIndex,
-          ));
+          tags.add(IndexedTag(Tag.fromRaw(tagBuffer.toString()), textNode.id, tagStartIndex));
         }
 
         // Start accumulating a new tag, because we hit a trigger character.
@@ -118,15 +105,10 @@ class TagFinder {
         tagBuffer = StringBuffer();
       }
 
-      if (tagStartIndex != null &&
-          rule.excludedCharacters.contains(character)) {
+      if (tagStartIndex != null && rule.excludedCharacters.contains(character)) {
         // We're accumulating a tag and we hit a character that isn't allowed to
         // appear in a tag. End the tag we were accumulating.
-        tags.add(IndexedTag(
-          Tag.fromRaw(tagBuffer.toString()),
-          textNode.id,
-          tagStartIndex,
-        ));
+        tags.add(IndexedTag(Tag.fromRaw(tagBuffer.toString()), textNode.id, tagStartIndex));
 
         tagStartIndex = null;
       } else if (tagStartIndex != null) {
@@ -139,11 +121,7 @@ class TagFinder {
 
     if (tagStartIndex != null) {
       // We were assembling a tag and it went to the end of the text. End the tag.
-      tags.add(IndexedTag(
-        Tag.fromRaw(tagBuffer.toString()),
-        textNode.id,
-        tagStartIndex,
-      ));
+      tags.add(IndexedTag(Tag.fromRaw(tagBuffer.toString()), textNode.id, tagStartIndex));
     }
 
     return tags;
@@ -156,10 +134,7 @@ class TagFinder {
 ///
 /// This data structure is useful for inspecting active typing into a token.
 class TagAroundPosition {
-  const TagAroundPosition({
-    required this.indexedTag,
-    required this.searchOffset,
-  });
+  const TagAroundPosition({required this.indexedTag, required this.searchOffset});
 
   /// The [IndexedTag] that surrounds the caret.
   final IndexedTag indexedTag;
@@ -172,8 +147,7 @@ class TagAroundPosition {
   int get searchOffsetInToken => searchOffset - indexedTag.startOffset;
 
   @override
-  String toString() =>
-      "[TagAroundPosition] - indexedTag: '$indexedTag', search offset in tag: $searchOffsetInToken";
+  String toString() => "[TagAroundPosition] - indexedTag: '$indexedTag', search offset in tag: $searchOffsetInToken";
 
   @override
   bool operator ==(Object other) =>
@@ -192,11 +166,8 @@ class TagAroundPosition {
 /// A tag begins with a [trigger] character, and is then followed by one or more
 /// non-whitespace characters, except for [excludedCharacters].
 class TagRule {
-  const TagRule({
-    required this.trigger,
-    this.excludedCharacters = const {},
-  }) : assert(
-            trigger.length == 1, "Trigger must be exactly one character long");
+  const TagRule({required this.trigger, this.excludedCharacters = const {}})
+    : assert(trigger.length == 1, "Trigger must be exactly one character long");
 
   final String trigger;
   final Set<String> excludedCharacters;
@@ -281,14 +252,18 @@ class IndexedTag {
 
   /// The fully-specified [DocumentPosition] associated with the tag's [startOffset].
   DocumentPosition get start => DocumentPosition(
-      nodeId: nodeId, nodePosition: TextNodePosition(offset: startOffset));
+    nodeId: nodeId,
+    nodePosition: TextNodePosition(offset: startOffset),
+  );
 
   /// The text offset immediately after the final character in this tag, within the given [TextNode].
   int get endOffset => startOffset + tag.raw.length;
 
   /// The fully-specified [DocumentPosition] associated with the tag's [endOffset].
   DocumentPosition get end => DocumentPosition(
-      nodeId: nodeId, nodePosition: TextNodePosition(offset: endOffset));
+    nodeId: nodeId,
+    nodePosition: TextNodePosition(offset: endOffset),
+  );
 
   /// The [DocumentRange] from [start] to [end].
   DocumentRange get range => DocumentRange(start: start, end: end);
@@ -299,17 +274,13 @@ class IndexedTag {
   /// Collects and returns all attributions in this tag's [TextNode], between the
   /// [start] of the tag and the [end] of the tag.
   AttributedSpans computeTagSpans(Document document) =>
-      (document.getNodeById(nodeId) as TextNode)
-          .text
-          .copyText(startOffset, endOffset - 1)
-          .spans;
+      (document.getNodeById(nodeId) as TextNode).text.copyText(startOffset, endOffset - 1).spans;
 
   /// Assuming that this tag begins with the given [attribution], this method returns
   /// the [SpanRange] for the given [attribution], beginning at the [start] of this tag.
   ///
   /// This is useful to determine whether a tag attribution fully spans the tag.
-  SpanRange computeLeadingSpanForAttribution(
-      Document document, Attribution attribution) {
+  SpanRange computeLeadingSpanForAttribution(Document document, Attribution attribution) {
     final text = (document.getNodeById(nodeId) as TextNode).text;
     if (!text.hasAttributionAt(startOffset, attribution: attribution)) {
       return SpanRange.empty;
@@ -319,8 +290,7 @@ class IndexedTag {
   }
 
   @override
-  String toString() =>
-      "[IndexedToken] - '${tag.raw}', $startOffset -> $endOffset, node: $nodeId";
+  String toString() => "[IndexedToken] - '${tag.raw}', $startOffset -> $endOffset, node: $nodeId";
 
   @override
   bool operator ==(Object other) =>
@@ -333,11 +303,7 @@ class IndexedTag {
           endOffset == other.endOffset;
 
   @override
-  int get hashCode =>
-      tag.hashCode ^
-      nodeId.hashCode ^
-      startOffset.hashCode ^
-      endOffset.hashCode;
+  int get hashCode => tag.hashCode ^ nodeId.hashCode ^ startOffset.hashCode ^ endOffset.hashCode;
 }
 
 /// A text tag, e.g., "@dash", "#flutter".
@@ -361,10 +327,7 @@ class Tag {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is Tag &&
-          runtimeType == other.runtimeType &&
-          trigger == other.trigger &&
-          token == other.token;
+      other is Tag && runtimeType == other.runtimeType && trigger == other.trigger && token == other.token;
 
   @override
   int get hashCode => trigger.hashCode ^ token.hashCode;

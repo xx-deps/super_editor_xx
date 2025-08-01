@@ -27,8 +27,7 @@ class BlinkingCaret extends StatefulWidget {
   BlinkingCaretState createState() => BlinkingCaretState();
 }
 
-class BlinkingCaretState extends State<BlinkingCaret>
-    with SingleTickerProviderStateMixin {
+class BlinkingCaretState extends State<BlinkingCaret> with SingleTickerProviderStateMixin {
   // Controls the blinking caret animation.
   late BlinkController _caretBlinkController;
 
@@ -36,10 +35,7 @@ class BlinkingCaretState extends State<BlinkingCaret>
   void initState() {
     super.initState();
 
-    _caretBlinkController = widget.controller ??
-        BlinkController(
-          tickerProvider: this,
-        );
+    _caretBlinkController = widget.controller ?? BlinkController(tickerProvider: this);
 
     if (widget.caretOffset != null) {
       _caretBlinkController.jumpToOpaque();
@@ -55,10 +51,7 @@ class BlinkingCaretState extends State<BlinkingCaret>
         _caretBlinkController.dispose();
       }
 
-      _caretBlinkController = widget.controller ??
-          BlinkController(
-            tickerProvider: this,
-          );
+      _caretBlinkController = widget.controller ?? BlinkController(tickerProvider: this);
     }
 
     if (widget.caretOffset != oldWidget.caretOffset) {
@@ -106,8 +99,8 @@ class _CaretPainter extends CustomPainter {
     required this.caretColor,
     required this.isTextEmpty,
     required this.showCaret,
-  })  : caretPaint = Paint()..color = caretColor,
-        super(repaint: blinkController);
+  }) : caretPaint = Paint()..color = caretColor,
+       super(repaint: blinkController);
 
   final BlinkController blinkController;
   final double? caretHeight;

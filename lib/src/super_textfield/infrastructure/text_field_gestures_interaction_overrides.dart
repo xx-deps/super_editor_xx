@@ -6,49 +6,35 @@ import 'package:super_text_layout/super_text_layout.dart';
 /// Tap handler that can (optionally) respond to single, double, and triple taps, as well as dictate the cursor
 /// appearance on desktop.
 abstract class SuperTextFieldTapHandler {
-  MouseCursor? mouseCursorForContentHover(
-          SuperTextFieldGestureDetails details) =>
-      null;
+  MouseCursor? mouseCursorForContentHover(SuperTextFieldGestureDetails details) => null;
 
-  TapHandlingInstruction onTapDown(SuperTextFieldGestureDetails details) =>
+  TapHandlingInstruction onTapDown(SuperTextFieldGestureDetails details) => TapHandlingInstruction.continueHandling;
+
+  TapHandlingInstruction onTapUp(SuperTextFieldGestureDetails details) => TapHandlingInstruction.continueHandling;
+
+  TapHandlingInstruction onTapCancel() => TapHandlingInstruction.continueHandling;
+
+  TapHandlingInstruction onDoubleTapDown(SuperTextFieldGestureDetails details) =>
       TapHandlingInstruction.continueHandling;
 
-  TapHandlingInstruction onTapUp(SuperTextFieldGestureDetails details) =>
+  TapHandlingInstruction onDoubleTapUp(SuperTextFieldGestureDetails details) => TapHandlingInstruction.continueHandling;
+
+  TapHandlingInstruction onDoubleTapCancel() => TapHandlingInstruction.continueHandling;
+
+  TapHandlingInstruction onTripleTapDown(SuperTextFieldGestureDetails details) =>
       TapHandlingInstruction.continueHandling;
 
-  TapHandlingInstruction onTapCancel() =>
+  TapHandlingInstruction onTripleTapUp(SuperTextFieldGestureDetails details) => TapHandlingInstruction.continueHandling;
+
+  TapHandlingInstruction onTripleTapCancel() => TapHandlingInstruction.continueHandling;
+
+  TapHandlingInstruction onSecondaryTapDown(SuperTextFieldGestureDetails details) =>
       TapHandlingInstruction.continueHandling;
 
-  TapHandlingInstruction onDoubleTapDown(
-          SuperTextFieldGestureDetails details) =>
+  TapHandlingInstruction onSecondaryTapUp(SuperTextFieldGestureDetails details) =>
       TapHandlingInstruction.continueHandling;
 
-  TapHandlingInstruction onDoubleTapUp(SuperTextFieldGestureDetails details) =>
-      TapHandlingInstruction.continueHandling;
-
-  TapHandlingInstruction onDoubleTapCancel() =>
-      TapHandlingInstruction.continueHandling;
-
-  TapHandlingInstruction onTripleTapDown(
-          SuperTextFieldGestureDetails details) =>
-      TapHandlingInstruction.continueHandling;
-
-  TapHandlingInstruction onTripleTapUp(SuperTextFieldGestureDetails details) =>
-      TapHandlingInstruction.continueHandling;
-
-  TapHandlingInstruction onTripleTapCancel() =>
-      TapHandlingInstruction.continueHandling;
-
-  TapHandlingInstruction onSecondaryTapDown(
-          SuperTextFieldGestureDetails details) =>
-      TapHandlingInstruction.continueHandling;
-
-  TapHandlingInstruction onSecondaryTapUp(
-          SuperTextFieldGestureDetails details) =>
-      TapHandlingInstruction.continueHandling;
-
-  TapHandlingInstruction onSecondaryTapCancel() =>
-      TapHandlingInstruction.continueHandling;
+  TapHandlingInstruction onSecondaryTapCancel() => TapHandlingInstruction.continueHandling;
 }
 
 /// Information about a gesture that happened within a [SuperTextField].

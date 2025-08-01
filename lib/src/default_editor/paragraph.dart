@@ -26,28 +26,16 @@ import 'package:super_editor/src/default_editor/text_tools.dart';
 
 @immutable
 class ParagraphNode extends TextNode {
-  ParagraphNode({
-    required super.id,
-    required super.text,
-    this.indent = 0,
-    super.metadata,
-  }) {
+  ParagraphNode({required super.id, required super.text, this.indent = 0, super.metadata}) {
     if (getMetadataValue("blockType") == null) {
-      initAddToMetadata({
-        "blockType": paragraphAttribution,
-      });
+      initAddToMetadata({"blockType": paragraphAttribution});
     }
   }
 
   /// The indent level of this paragraph - `0` is no indent.
   final int indent;
 
-  ParagraphNode copyParagraphWith({
-    String? id,
-    AttributedText? text,
-    int? indent,
-    Map<String, dynamic>? metadata,
-  }) {
+  ParagraphNode copyParagraphWith({String? id, AttributedText? text, int? indent, Map<String, dynamic>? metadata}) {
     return ParagraphNode(
       id: id ?? this.id,
       text: text ?? this.text,
@@ -57,48 +45,29 @@ class ParagraphNode extends TextNode {
   }
 
   @override
-  ParagraphNode copyTextNodeWith({
-    String? id,
-    AttributedText? text,
-    Map<String, dynamic>? metadata,
-  }) {
-    return copyParagraphWith(
-      id: id,
-      text: text,
-      metadata: metadata,
-    );
+  ParagraphNode copyTextNodeWith({String? id, AttributedText? text, Map<String, dynamic>? metadata}) {
+    return copyParagraphWith(id: id, text: text, metadata: metadata);
   }
 
   @override
   ParagraphNode copyAndReplaceMetadata(Map<String, dynamic> newMetadata) {
-    return copyParagraphWith(
-      metadata: newMetadata,
-    );
+    return copyParagraphWith(metadata: newMetadata);
   }
 
   @override
   ParagraphNode copyWithAddedMetadata(Map<String, dynamic> newProperties) {
-    return copyParagraphWith(
-      metadata: {
-        ...metadata,
-        ...newProperties,
-      },
-    );
+    return copyParagraphWith(metadata: {...metadata, ...newProperties});
   }
 
   @override
   ParagraphNode copy() {
-    return ParagraphNode(
-        id: id, text: text.copyText(0), metadata: Map.from(metadata));
+    return ParagraphNode(id: id, text: text.copyText(0), metadata: Map.from(metadata));
   }
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      super == other &&
-          other is ParagraphNode &&
-          runtimeType == other.runtimeType &&
-          indent == other.indent;
+      super == other && other is ParagraphNode && runtimeType == other.runtimeType && indent == other.indent;
 
   @override
   int get hashCode => super.hashCode ^ indent.hashCode;
@@ -108,16 +77,14 @@ class ParagraphComponentBuilder implements ComponentBuilder {
   const ParagraphComponentBuilder();
 
   @override
-  SingleColumnLayoutComponentViewModel? createViewModel(
-      Document document, DocumentNode node) {
+  SingleColumnLayoutComponentViewModel? createViewModel(Document document, DocumentNode node) {
     if (node is! ParagraphNode) {
       return null;
     }
 
     final textDirection = getParagraphDirection(node.text.toPlainText());
 
-    TextAlign textAlign =
-        (textDirection == TextDirection.ltr) ? TextAlign.left : TextAlign.right;
+    TextAlign textAlign = (textDirection == TextDirection.ltr) ? TextAlign.left : TextAlign.right;
     final textAlignName = node.getMetadataValue('textAlign');
     switch (textAlignName) {
       case 'left':
@@ -149,33 +116,29 @@ class ParagraphComponentBuilder implements ComponentBuilder {
   }
 
   @override
-  Widget? createComponent(SingleColumnDocumentComponentContext componentContext,
-      SingleColumnLayoutComponentViewModel componentViewModel) {
+  Widget? createComponent(
+    SingleColumnDocumentComponentContext componentContext,
+    SingleColumnLayoutComponentViewModel componentViewModel,
+  ) {
     if (componentViewModel is! ParagraphComponentViewModel) {
       return null;
     }
 
-    editorLayoutLog.fine(
-        "Building paragraph component for node: ${componentViewModel.nodeId}");
+    editorLayoutLog.fine("Building paragraph component for node: ${componentViewModel.nodeId}");
 
     if (componentViewModel.selection != null) {
       editorLayoutLog.finer(' - painting a text selection:');
       editorLayoutLog.finer('   base: ${componentViewModel.selection!.base}');
-      editorLayoutLog
-          .finer('   extent: ${componentViewModel.selection!.extent}');
+      editorLayoutLog.finer('   extent: ${componentViewModel.selection!.extent}');
     } else {
       editorLayoutLog.finer(' - not painting any text selection');
     }
 
-    return ParagraphComponent(
-      key: componentContext.componentKey,
-      viewModel: componentViewModel,
-    );
+    return ParagraphComponent(key: componentContext.componentKey, viewModel: componentViewModel);
   }
 }
 
-class ParagraphComponentViewModel extends SingleColumnLayoutComponentViewModel
-    with TextComponentViewModel {
+class ParagraphComponentViewModel extends SingleColumnLayoutComponentViewModel with TextComponentViewModel {
   ParagraphComponentViewModel({
     required super.nodeId,
     super.createdAt,
@@ -197,11 +160,9 @@ class ParagraphComponentViewModel extends SingleColumnLayoutComponentViewModel
     Set<CustomUnderline> customUnderlines = const <CustomUnderline>{},
     TextRange? composingRegion,
     bool showComposingRegionUnderline = false,
-    UnderlineStyle spellingErrorUnderlineStyle =
-        const SquiggleUnderlineStyle(color: Colors.red),
+    UnderlineStyle spellingErrorUnderlineStyle = const SquiggleUnderlineStyle(color: Colors.red),
     List<TextRange> spellingErrors = const <TextRange>[],
-    UnderlineStyle grammarErrorUnderlineStyle =
-        const SquiggleUnderlineStyle(color: Colors.blue),
+    UnderlineStyle grammarErrorUnderlineStyle = const SquiggleUnderlineStyle(color: Colors.blue),
     List<TextRange> grammarErrors = const <TextRange>[],
   }) {
     this.customUnderlines = customUnderlines;
@@ -261,8 +222,7 @@ class ParagraphComponentViewModel extends SingleColumnLayoutComponentViewModel
   }
 
   @override
-  ParagraphComponentViewModel internalCopy(
-      ParagraphComponentViewModel viewModel) {
+  ParagraphComponentViewModel internalCopy(ParagraphComponentViewModel viewModel) {
     final copy = super.internalCopy(viewModel) as ParagraphComponentViewModel;
 
     copy
@@ -287,36 +247,24 @@ class ParagraphComponentViewModel extends SingleColumnLayoutComponentViewModel
 
   @override
   int get hashCode =>
-      super.hashCode ^
-      textViewModelHashCode ^
-      blockType.hashCode ^
-      indent.hashCode ^
-      textScaler.hashCode;
+      super.hashCode ^ textViewModelHashCode ^ blockType.hashCode ^ indent.hashCode ^ textScaler.hashCode;
 }
 
 /// A [ComponentBuilder] for rendering hint text in the first node of a document,
 /// when its an empty text node.
 class HintComponentBuilder extends ParagraphComponentBuilder {
-  const HintComponentBuilder(
-    this.hint,
-    this.hintStyleBuilder,
-  );
+  const HintComponentBuilder(this.hint, this.hintStyleBuilder);
 
   final String hint;
   final TextStyle Function(BuildContext) hintStyleBuilder;
 
   @override
-  SingleColumnLayoutComponentViewModel? createViewModel(
-    Document document,
-    DocumentNode node,
-  ) {
+  SingleColumnLayoutComponentViewModel? createViewModel(Document document, DocumentNode node) {
     if (node is! ParagraphNode) {
       return null;
     }
 
-    final nodeIndex = document.getNodeIndexById(
-      node.id,
-    );
+    final nodeIndex = document.getNodeIndexById(node.id);
 
     if (nodeIndex > 0) {
       // This isn't the first node, we don't ever want to show hint text.
@@ -349,8 +297,7 @@ class HintComponentBuilder extends ParagraphComponentBuilder {
       text: componentViewModel.text,
       textStyleBuilder: componentViewModel.textStyleBuilder,
       hintText: AttributedText(componentViewModel.hintText),
-      hintStyleBuilder: (attributions) =>
-          hintStyleBuilder(componentContext.context),
+      hintStyleBuilder: (attributions) => hintStyleBuilder(componentContext.context),
       textSelection: componentViewModel.selection,
       selectionColor: componentViewModel.selectionColor,
       underlines: componentViewModel.createUnderlines(),
@@ -362,8 +309,7 @@ class HintComponentBuilder extends ParagraphComponentBuilder {
   }
 }
 
-class HintComponentViewModel extends SingleColumnLayoutComponentViewModel
-    with TextComponentViewModel {
+class HintComponentViewModel extends SingleColumnLayoutComponentViewModel with TextComponentViewModel {
   factory HintComponentViewModel.fromParagraphViewModel(
     ParagraphComponentViewModel viewModel, {
     required String hintText,
@@ -472,12 +418,7 @@ class HintComponentViewModel extends SingleColumnLayoutComponentViewModel
           hintText == hintText;
 
   @override
-  int get hashCode =>
-      super.hashCode ^
-      textViewModelHashCode ^
-      blockType.hashCode ^
-      indent.hashCode ^
-      hintText.hashCode;
+  int get hashCode => super.hashCode ^ textViewModelHashCode ^ blockType.hashCode ^ indent.hashCode ^ hintText.hashCode;
 }
 
 /// The standard [TextBlockIndentCalculator] used by paragraphs in `SuperEditor`.
@@ -487,11 +428,7 @@ double defaultParagraphIndentCalculator(TextStyle textStyle, int indent) {
 
 /// A document component that displays a paragraph.
 class ParagraphComponent extends StatefulWidget {
-  const ParagraphComponent({
-    Key? key,
-    required this.viewModel,
-    this.showDebugPaint = false,
-  }) : super(key: key);
+  const ParagraphComponent({Key? key, required this.viewModel, this.showDebugPaint = false}) : super(key: key);
 
   final ParagraphComponentViewModel viewModel;
   final bool showDebugPaint;
@@ -508,8 +445,7 @@ class _ParagraphComponentState extends State<ParagraphComponent>
   GlobalKey<State<StatefulWidget>> get childDocumentComponentKey => _textKey;
 
   @override
-  TextComposable get childTextComposable =>
-      childDocumentComponentKey.currentState as TextComposable;
+  TextComposable get childTextComposable => childDocumentComponentKey.currentState as TextComposable;
 
   @override
   Widget build(BuildContext context) {
@@ -520,10 +456,7 @@ class _ParagraphComponentState extends State<ParagraphComponent>
         children: [
           // Indent spacing on left.
           SizedBox(
-            width: widget.viewModel.indentCalculator(
-              widget.viewModel.textStyleBuilder({}),
-              widget.viewModel.indent,
-            ),
+            width: widget.viewModel.indentCalculator(widget.viewModel.textStyleBuilder({}), widget.viewModel.indent),
           ),
           // The actual paragraph UI.
           Expanded(
@@ -535,11 +468,7 @@ class _ParagraphComponentState extends State<ParagraphComponent>
               textScaler: widget.viewModel.textScaler,
               textStyleBuilder: widget.viewModel.textStyleBuilder,
               inlineWidgetBuilders: widget.viewModel.inlineWidgetBuilders,
-              metadata: widget.viewModel.blockType != null
-                  ? {
-                      'blockType': widget.viewModel.blockType,
-                    }
-                  : {},
+              metadata: widget.viewModel.blockType != null ? {'blockType': widget.viewModel.blockType} : {},
               textSelection: widget.viewModel.selection,
               selectionColor: widget.viewModel.selectionColor,
               highlightWhenEmpty: widget.viewModel.highlightWhenEmpty,
@@ -554,10 +483,7 @@ class _ParagraphComponentState extends State<ParagraphComponent>
 }
 
 class ChangeParagraphAlignmentRequest implements EditRequest {
-  ChangeParagraphAlignmentRequest({
-    required this.nodeId,
-    required this.alignment,
-  });
+  ChangeParagraphAlignmentRequest({required this.nodeId, required this.alignment});
 
   final String nodeId;
   final TextAlign alignment;
@@ -575,10 +501,7 @@ class ChangeParagraphAlignmentRequest implements EditRequest {
 }
 
 class ChangeParagraphAlignmentCommand extends EditCommand {
-  const ChangeParagraphAlignmentCommand({
-    required this.nodeId,
-    required this.alignment,
-  });
+  const ChangeParagraphAlignmentCommand({required this.nodeId, required this.alignment});
 
   final String nodeId;
   final TextAlign alignment;
@@ -612,27 +535,15 @@ class ChangeParagraphAlignmentCommand extends EditCommand {
 
     document.replaceNodeById(
       existingNode.id,
-      existingNode.copyParagraphWith(
-        metadata: {
-          ...existingNode.metadata,
-          "textAlign": alignmentName,
-        },
-      ),
+      existingNode.copyParagraphWith(metadata: {...existingNode.metadata, "textAlign": alignmentName}),
     );
 
-    executor.logChanges([
-      DocumentEdit(
-        NodeChangeEvent(nodeId),
-      ),
-    ]);
+    executor.logChanges([DocumentEdit(NodeChangeEvent(nodeId))]);
   }
 }
 
 class ChangeParagraphBlockTypeRequest implements EditRequest {
-  ChangeParagraphBlockTypeRequest({
-    required this.nodeId,
-    required this.blockType,
-  });
+  ChangeParagraphBlockTypeRequest({required this.nodeId, required this.blockType});
 
   final String nodeId;
   final Attribution? blockType;
@@ -650,10 +561,7 @@ class ChangeParagraphBlockTypeRequest implements EditRequest {
 }
 
 class ChangeParagraphBlockTypeCommand extends EditCommand {
-  const ChangeParagraphBlockTypeCommand({
-    required this.nodeId,
-    required this.blockType,
-  });
+  const ChangeParagraphBlockTypeCommand({required this.nodeId, required this.blockType});
 
   final String nodeId;
   final Attribution? blockType;
@@ -668,29 +576,18 @@ class ChangeParagraphBlockTypeCommand extends EditCommand {
     final existingNode = document.getNodeById(nodeId)! as ParagraphNode;
     document.replaceNodeById(
       existingNode.id,
-      existingNode.copyParagraphWith(
-        metadata: {
-          ...existingNode.metadata,
-          "blockType": blockType,
-        },
-      ),
+      existingNode.copyParagraphWith(metadata: {...existingNode.metadata, "blockType": blockType}),
     );
 
-    executor.logChanges([
-      DocumentEdit(
-        NodeChangeEvent(nodeId),
-      ),
-    ]);
+    executor.logChanges([DocumentEdit(NodeChangeEvent(nodeId))]);
   }
 }
 
 /// [EditRequest] to combine the [ParagraphNode] with [firstNodeId] with the [ParagraphNode] after it, which
 /// should have the [secondNodeId].
 class CombineParagraphsRequest implements EditRequest {
-  CombineParagraphsRequest({
-    required this.firstNodeId,
-    required this.secondNodeId,
-  }) : assert(firstNodeId != secondNodeId);
+  CombineParagraphsRequest({required this.firstNodeId, required this.secondNodeId})
+    : assert(firstNodeId != secondNodeId);
 
   final String firstNodeId;
   final String secondNodeId;
@@ -704,10 +601,8 @@ class CombineParagraphsRequest implements EditRequest {
 ///
 /// If both nodes are not `ParagraphNode`s, the command fizzles.
 class CombineParagraphsCommand extends EditCommand {
-  CombineParagraphsCommand({
-    required this.firstNodeId,
-    required this.secondNodeId,
-  }) : assert(firstNodeId != secondNodeId);
+  CombineParagraphsCommand({required this.firstNodeId, required this.secondNodeId})
+    : assert(firstNodeId != secondNodeId);
 
   final String firstNodeId;
   final String secondNodeId;
@@ -722,8 +617,7 @@ class CombineParagraphsCommand extends EditCommand {
     final document = context.document;
     final secondNode = document.getNodeById(secondNodeId);
     if (secondNode is! TextNode) {
-      editorDocLog.finest(
-          'WARNING: Cannot merge node of type: $secondNode into node above.');
+      editorDocLog.finest('WARNING: Cannot merge node of type: $secondNode into node above.');
       return;
     }
 
@@ -750,13 +644,11 @@ class CombineParagraphsCommand extends EditCommand {
     }
 
     if (nodeAbove == null) {
-      editorDocLog.finest(
-          'The specified `firstNodeId` is not the node before `secondNodeId`.');
+      editorDocLog.finest('The specified `firstNodeId` is not the node before `secondNodeId`.');
       return;
     }
     if (nodeAbove is! TextNode) {
-      editorDocLog
-          .finest('Cannot merge ParagraphNode into node of type: $nodeAbove');
+      editorDocLog.finest('Cannot merge ParagraphNode into node of type: $nodeAbove');
       return;
     }
 
@@ -773,33 +665,23 @@ class CombineParagraphsCommand extends EditCommand {
       // bottom node, including the block attribution and styles.
       document.replaceNodeById(
         nodeAbove.id,
-        nodeAbove.copyTextNodeWith(
-          text: nodeAbove.text.copyAndAppend(secondNode.text),
-          metadata: secondNode.metadata,
-        ),
+        nodeAbove.copyTextNodeWith(text: nodeAbove.text.copyAndAppend(secondNode.text), metadata: secondNode.metadata),
       );
     } else {
       document.replaceNodeById(
         nodeAbove.id,
-        nodeAbove.copyTextNodeWith(
-          text: nodeAbove.text.copyAndAppend(secondNode.text),
-        ),
+        nodeAbove.copyTextNodeWith(text: nodeAbove.text.copyAndAppend(secondNode.text)),
       );
     }
 
     bool didRemove = document.deleteNode(secondNode.id);
     if (!didRemove) {
-      editorDocLog.finest(
-          'ERROR: Failed to delete the currently selected node from the document.');
+      editorDocLog.finest('ERROR: Failed to delete the currently selected node from the document.');
     }
 
     executor.logChanges([
-      DocumentEdit(
-        NodeRemovedEvent(secondNode.id, secondNode),
-      ),
-      DocumentEdit(
-        NodeChangeEvent(nodeAbove.id),
-      ),
+      DocumentEdit(NodeRemovedEvent(secondNode.id, secondNode)),
+      DocumentEdit(NodeChangeEvent(nodeAbove.id)),
     ]);
   }
 }
@@ -810,8 +692,7 @@ class SplitParagraphRequest implements EditRequest {
     required this.splitPosition,
     required this.newNodeId,
     required this.replicateExistingMetadata,
-    this.attributionsToExtendToNewParagraph =
-        defaultAttributionsToExtendToNewParagraph,
+    this.attributionsToExtendToNewParagraph = defaultAttributionsToExtendToNewParagraph,
   });
 
   final String nodeId;
@@ -850,8 +731,7 @@ class SplitParagraphCommand extends EditCommand {
     required this.splitPosition,
     required this.newNodeId,
     required this.replicateExistingMetadata,
-    this.attributionsToExtendToNewParagraph =
-        defaultAttributionsToExtendToNewParagraph,
+    this.attributionsToExtendToNewParagraph = defaultAttributionsToExtendToNewParagraph,
   });
 
   final String nodeId;
@@ -871,8 +751,7 @@ class SplitParagraphCommand extends EditCommand {
     final document = context.document;
     final node = document.getNodeById(nodeId);
     if (node is! ParagraphNode) {
-      editorDocLog
-          .finest('WARNING: Cannot split paragraph for node of type: $node.');
+      editorDocLog.finest('WARNING: Cannot split paragraph for node of type: $node.');
       return;
     }
 
@@ -899,20 +778,14 @@ class SplitParagraphCommand extends EditCommand {
         }
 
         // This attribution shouldn't extend from one paragraph to another. Remove it.
-        endText.removeAttribution(
-          attributionRange.attribution,
-          attributionRange.range,
-        );
+        endText.removeAttribution(attributionRange.attribution, attributionRange.range);
       }
     }
 
     // Change the current nodes content to just the text before the caret.
     editorDocLog.finest(' - changing the original paragraph text due to split');
     final updatedNode = node.copyParagraphWith(text: startText);
-    document.replaceNodeById(
-      node.id,
-      updatedNode,
-    );
+    document.replaceNodeById(node.id, updatedNode);
 
     // Create a new node that will follow the current node. Set its text
     // to the text that was removed from the current node. And create a
@@ -926,60 +799,37 @@ class SplitParagraphCommand extends EditCommand {
 
     // Insert the new node after the current node.
     editorDocLog.finest(' - inserting new node in document');
-    document.insertNodeAfter(
-      existingNodeId: updatedNode.id,
-      newNode: newNode,
-    );
+    document.insertNodeAfter(existingNodeId: updatedNode.id, newNode: newNode);
 
-    editorDocLog.finest(
-        ' - inserted new node: ${newNode.id} after old one: ${node.id}');
+    editorDocLog.finest(' - inserted new node: ${newNode.id} after old one: ${node.id}');
 
     // Move the caret to the new node.
     final composer = context.find<MutableDocumentComposer>(Editor.composerKey);
     final oldSelection = composer.selection;
     final oldComposingRegion = composer.composingRegion.value;
     final newSelection = DocumentSelection.collapsed(
-      position: DocumentPosition(
-        nodeId: newNodeId,
-        nodePosition: const TextNodePosition(offset: 0),
-      ),
+      position: DocumentPosition(nodeId: newNodeId, nodePosition: const TextNodePosition(offset: 0)),
     );
 
-    composer.setSelectionWithReason(
-        newSelection, SelectionReason.userInteraction);
+    composer.setSelectionWithReason(newSelection, SelectionReason.userInteraction);
     composer.setComposingRegion(null);
 
     final documentChanges = [
-      DocumentEdit(
-        NodeChangeEvent(node.id),
-      ),
-      DocumentEdit(
-        NodeInsertedEvent(newNodeId, document.getNodeIndexById(newNodeId)),
-      ),
+      DocumentEdit(NodeChangeEvent(node.id)),
+      DocumentEdit(NodeInsertedEvent(newNodeId, document.getNodeIndexById(newNodeId))),
       SelectionChangeEvent(
         oldSelection: oldSelection,
         newSelection: newSelection,
         changeType: SelectionChangeType.insertContent,
         reason: SelectionReason.userInteraction,
       ),
-      ComposingRegionChangeEvent(
-        oldComposingRegion: oldComposingRegion,
-        newComposingRegion: null,
-      ),
+      ComposingRegionChangeEvent(oldComposingRegion: oldComposingRegion, newComposingRegion: null),
     ];
 
     if (newNode.text.isEmpty) {
-      executor.logChanges([
-        SubmitParagraphIntention.start(),
-        ...documentChanges,
-        SubmitParagraphIntention.end(),
-      ]);
+      executor.logChanges([SubmitParagraphIntention.start(), ...documentChanges, SubmitParagraphIntention.end()]);
     } else {
-      executor.logChanges([
-        SplitParagraphIntention.start(),
-        ...documentChanges,
-        SplitParagraphIntention.end(),
-      ]);
+      executor.logChanges([SplitParagraphIntention.start(), ...documentChanges, SplitParagraphIntention.end()]);
     }
   }
 }
@@ -998,25 +848,18 @@ class DeleteUpstreamAtBeginningOfParagraphCommand extends EditCommand {
       return;
     }
 
-    final deletionPosition =
-        DocumentPosition(nodeId: node.id, nodePosition: node.beginningPosition);
+    final deletionPosition = DocumentPosition(nodeId: node.id, nodePosition: node.beginningPosition);
     if (deletionPosition.nodePosition is! TextNodePosition) {
       return;
     }
 
     final document = context.document;
     final composer = context.find<MutableDocumentComposer>(Editor.composerKey);
-    final documentLayoutEditable =
-        context.find<DocumentLayoutEditable>(Editor.layoutKey);
+    final documentLayoutEditable = context.find<DocumentLayoutEditable>(Editor.layoutKey);
 
     final paragraphNode = node as ParagraphNode;
     if (paragraphNode.metadata["blockType"] != paragraphAttribution) {
-      executor.executeCommand(
-        ChangeParagraphBlockTypeCommand(
-          nodeId: node.id,
-          blockType: paragraphAttribution,
-        ),
-      );
+      executor.executeCommand(ChangeParagraphBlockTypeCommand(nodeId: node.id, blockType: paragraphAttribution));
       return;
     }
 
@@ -1036,13 +879,10 @@ class DeleteUpstreamAtBeginningOfParagraphCommand extends EditCommand {
       return;
     }
 
-    final componentBefore = documentLayoutEditable.documentLayout
-        .getComponentByNodeId(nodeBefore.id)!;
+    final componentBefore = documentLayoutEditable.documentLayout.getComponentByNodeId(nodeBefore.id)!;
     if (!componentBefore.isVisualSelectionSupported()) {
       // The node/component above is not selectable. Delete it.
-      executor.executeCommand(
-        DeleteNodeCommand(nodeId: nodeBefore.id),
-      );
+      executor.executeCommand(DeleteNodeCommand(nodeId: nodeBefore.id));
       return;
     }
 
@@ -1052,9 +892,7 @@ class DeleteUpstreamAtBeginningOfParagraphCommand extends EditCommand {
       // The caret is at the beginning of an empty TextNode and the preceding
       // node is not a TextNode. Delete the current TextNode and move the
       // selection up to the preceding node if exist.
-      executor.executeCommand(
-        DeleteNodeCommand(nodeId: node.id),
-      );
+      executor.executeCommand(DeleteNodeCommand(nodeId: node.id));
     }
   }
 
@@ -1088,12 +926,7 @@ class DeleteUpstreamAtBeginningOfParagraphCommand extends EditCommand {
 
     // Send edit command.
     executor
-      ..executeCommand(
-        CombineParagraphsCommand(
-          firstNodeId: nodeAbove.id,
-          secondNodeId: node.id,
-        ),
-      )
+      ..executeCommand(CombineParagraphsCommand(firstNodeId: nodeAbove.id, secondNodeId: node.id))
       ..executeCommand(
         ChangeSelectionCommand(
           DocumentSelection.collapsed(
@@ -1132,10 +965,7 @@ class DeleteUpstreamAtBeginningOfParagraphCommand extends EditCommand {
     executor.executeCommand(
       ChangeSelectionCommand(
         DocumentSelection.collapsed(
-          position: DocumentPosition(
-            nodeId: nodeBefore.id,
-            nodePosition: nodeBefore.endPosition,
-          ),
+          position: DocumentPosition(nodeId: nodeBefore.id, nodePosition: nodeBefore.endPosition),
         ),
         SelectionChangeType.collapseSelection,
         SelectionReason.userInteraction,
@@ -1178,8 +1008,7 @@ ExecutionInstruction anyCharacterToInsertInParagraph({
 
   // Do nothing if CMD or CTRL are pressed because this signifies an attempted
   // shortcut.
-  if (HardwareKeyboard.instance.isControlPressed ||
-      HardwareKeyboard.instance.isMetaPressed) {
+  if (HardwareKeyboard.instance.isControlPressed || HardwareKeyboard.instance.isMetaPressed) {
     return ExecutionInstruction.continueExecution;
   }
 
@@ -1188,8 +1017,7 @@ ExecutionInstruction anyCharacterToInsertInParagraph({
     return ExecutionInstruction.continueExecution;
   }
 
-  if (LogicalKeyboardKey.isControlCharacter(keyEvent.character!) ||
-      keyEvent.isArrowKeyPressed) {
+  if (LogicalKeyboardKey.isControlCharacter(keyEvent.character!) || keyEvent.isArrowKeyPressed) {
     return ExecutionInstruction.continueExecution;
   }
 
@@ -1207,15 +1035,11 @@ ExecutionInstruction anyCharacterToInsertInParagraph({
 
   final didInsertCharacter = editContext.commonOps.insertCharacter(character);
 
-  return didInsertCharacter
-      ? ExecutionInstruction.haltExecution
-      : ExecutionInstruction.continueExecution;
+  return didInsertCharacter ? ExecutionInstruction.haltExecution : ExecutionInstruction.continueExecution;
 }
 
 class DeleteParagraphCommand extends EditCommand {
-  DeleteParagraphCommand({
-    required this.nodeId,
-  });
+  DeleteParagraphCommand({required this.nodeId});
 
   final String nodeId;
 
@@ -1235,15 +1059,10 @@ class DeleteParagraphCommand extends EditCommand {
 
     bool didRemove = document.deleteNode(node.id);
     if (!didRemove) {
-      editorDocLog
-          .shout('ERROR: Failed to delete node "$node" from the document.');
+      editorDocLog.shout('ERROR: Failed to delete node "$node" from the document.');
     }
 
-    executor.logChanges([
-      DocumentEdit(
-        NodeRemovedEvent(node.id, node),
-      )
-    ]);
+    executor.logChanges([DocumentEdit(NodeRemovedEvent(node.id, node))]);
   }
 }
 
@@ -1270,8 +1089,7 @@ ExecutionInstruction backspaceToClearParagraphBlockType({
     return ExecutionInstruction.continueExecution;
   }
 
-  final node = editContext.document
-      .getNodeById(editContext.composer.selection!.extent.nodeId);
+  final node = editContext.document.getNodeById(editContext.composer.selection!.extent.nodeId);
   if (node is! ParagraphNode) {
     return ExecutionInstruction.continueExecution;
   }
@@ -1282,23 +1100,17 @@ ExecutionInstruction backspaceToClearParagraphBlockType({
   }
 
   final didClearBlockType = editContext.commonOps.convertToParagraph();
-  return didClearBlockType
-      ? ExecutionInstruction.haltExecution
-      : ExecutionInstruction.continueExecution;
+  return didClearBlockType ? ExecutionInstruction.haltExecution : ExecutionInstruction.continueExecution;
 }
 
 /// Un-indents the current paragraph if the paragraph is empty and the user
 /// pressed Enter.
-ExecutionInstruction enterToUnIndentParagraph({
-  required SuperEditorContext editContext,
-  required KeyEvent keyEvent,
-}) {
+ExecutionInstruction enterToUnIndentParagraph({required SuperEditorContext editContext, required KeyEvent keyEvent}) {
   if (keyEvent is! KeyDownEvent && keyEvent is! KeyRepeatEvent) {
     return ExecutionInstruction.continueExecution;
   }
 
-  if (keyEvent.logicalKey != LogicalKeyboardKey.enter &&
-      keyEvent.logicalKey != LogicalKeyboardKey.numpadEnter) {
+  if (keyEvent.logicalKey != LogicalKeyboardKey.enter && keyEvent.logicalKey != LogicalKeyboardKey.numpadEnter) {
     return ExecutionInstruction.continueExecution;
   }
 
@@ -1325,23 +1137,17 @@ ExecutionInstruction enterToUnIndentParagraph({
   }
 
   // Un-indent the paragraph.
-  editContext.editor.execute([
-    UnIndentParagraphRequest(paragraph.id),
-  ]);
+  editContext.editor.execute([UnIndentParagraphRequest(paragraph.id)]);
 
   return ExecutionInstruction.haltExecution;
 }
 
-ExecutionInstruction enterToInsertBlockNewline({
-  required SuperEditorContext editContext,
-  required KeyEvent keyEvent,
-}) {
+ExecutionInstruction enterToInsertBlockNewline({required SuperEditorContext editContext, required KeyEvent keyEvent}) {
   if (keyEvent is! KeyDownEvent && keyEvent is! KeyRepeatEvent) {
     return ExecutionInstruction.continueExecution;
   }
 
-  if (keyEvent.logicalKey != LogicalKeyboardKey.enter &&
-      keyEvent.logicalKey != LogicalKeyboardKey.numpadEnter) {
+  if (keyEvent.logicalKey != LogicalKeyboardKey.enter && keyEvent.logicalKey != LogicalKeyboardKey.numpadEnter) {
     return ExecutionInstruction.continueExecution;
   }
 
@@ -1351,17 +1157,12 @@ ExecutionInstruction enterToInsertBlockNewline({
     return ExecutionInstruction.continueExecution;
   }
 
-  editContext.editor.execute([
-    InsertNewlineAtCaretRequest(Editor.createNodeId()),
-  ]);
+  editContext.editor.execute([InsertNewlineAtCaretRequest(Editor.createNodeId())]);
 
   return ExecutionInstruction.haltExecution;
 }
 
-ExecutionInstruction tabToIndentParagraph({
-  required SuperEditorContext editContext,
-  required KeyEvent keyEvent,
-}) {
+ExecutionInstruction tabToIndentParagraph({required SuperEditorContext editContext, required KeyEvent keyEvent}) {
   if (keyEvent is! KeyDownEvent && keyEvent is! KeyRepeatEvent) {
     return ExecutionInstruction.continueExecution;
   }
@@ -1386,34 +1187,25 @@ ExecutionInstruction tabToIndentParagraph({
     return ExecutionInstruction.continueExecution;
   }
 
-  final node = editContext.document
-      .getNodeById(editContext.composer.selection!.extent.nodeId);
+  final node = editContext.document.getNodeById(editContext.composer.selection!.extent.nodeId);
   if (node is! ParagraphNode) {
     return ExecutionInstruction.continueExecution;
   }
 
-  editContext.editor.execute([
-    IndentParagraphRequest(node.id),
-  ]);
+  editContext.editor.execute([IndentParagraphRequest(node.id)]);
 
   return ExecutionInstruction.haltExecution;
 }
 
 class SetParagraphIndentRequest implements EditRequest {
-  const SetParagraphIndentRequest(
-    this.nodeId, {
-    required this.level,
-  });
+  const SetParagraphIndentRequest(this.nodeId, {required this.level});
 
   final String nodeId;
   final int level;
 }
 
 class SetParagraphIndentCommand extends EditCommand {
-  const SetParagraphIndentCommand(
-    this.nodeId, {
-    required this.level,
-  });
+  const SetParagraphIndentCommand(this.nodeId, {required this.level});
 
   final String nodeId;
   final int level;
@@ -1429,19 +1221,10 @@ class SetParagraphIndentCommand extends EditCommand {
     }
 
     // Decrease the paragraph indentation of the desired paragraph.
-    document.replaceNodeById(
-      paragraph.id,
-      paragraph.copyParagraphWith(
-        indent: level,
-      ),
-    );
+    document.replaceNodeById(paragraph.id, paragraph.copyParagraphWith(indent: level));
 
     // Log all changes.
-    executor.logChanges([
-      DocumentEdit(
-        NodeChangeEvent(paragraph.id),
-      ),
-    ]);
+    executor.logChanges([DocumentEdit(NodeChangeEvent(paragraph.id))]);
   }
 }
 
@@ -1467,16 +1250,9 @@ class IndentParagraphCommand extends EditCommand {
     }
 
     // Increase the paragraph indentation.
-    document.replaceNodeById(
-      paragraph.id,
-      paragraph.copyParagraphWith(indent: paragraph.indent + 1),
-    );
+    document.replaceNodeById(paragraph.id, paragraph.copyParagraphWith(indent: paragraph.indent + 1));
 
-    executor.logChanges([
-      DocumentEdit(
-        NodeChangeEvent(paragraph.id),
-      ),
-    ]);
+    executor.logChanges([DocumentEdit(NodeChangeEvent(paragraph.id))]);
   }
 }
 
@@ -1506,8 +1282,7 @@ ExecutionInstruction shiftTabToUnIndentParagraph({
     return ExecutionInstruction.continueExecution;
   }
 
-  final node = editContext.document
-      .getNodeById(editContext.composer.selection!.extent.nodeId);
+  final node = editContext.document.getNodeById(editContext.composer.selection!.extent.nodeId);
   if (node is! ParagraphNode) {
     return ExecutionInstruction.continueExecution;
   }
@@ -1517,9 +1292,7 @@ ExecutionInstruction shiftTabToUnIndentParagraph({
     return ExecutionInstruction.continueExecution;
   }
 
-  editContext.editor.execute([
-    UnIndentParagraphRequest(node.id),
-  ]);
+  editContext.editor.execute([UnIndentParagraphRequest(node.id)]);
 
   return ExecutionInstruction.haltExecution;
 }
@@ -1551,17 +1324,10 @@ class UnIndentParagraphCommand extends EditCommand {
     }
 
     // Decrease the paragraph indentation of the desired paragraph.
-    document.replaceNodeById(
-      paragraph.id,
-      paragraph.copyParagraphWith(indent: paragraph.indent - 1),
-    );
+    document.replaceNodeById(paragraph.id, paragraph.copyParagraphWith(indent: paragraph.indent - 1));
 
     // Log all changes.
-    executor.logChanges([
-      DocumentEdit(
-        NodeChangeEvent(paragraph.id),
-      ),
-    ]);
+    executor.logChanges([DocumentEdit(NodeChangeEvent(paragraph.id))]);
   }
 }
 
@@ -1588,14 +1354,11 @@ ExecutionInstruction backspaceToUnIndentParagraph({
     return ExecutionInstruction.continueExecution;
   }
 
-  final node = editContext.document
-      .getNodeById(editContext.composer.selection!.extent.nodeId);
+  final node = editContext.document.getNodeById(editContext.composer.selection!.extent.nodeId);
   if (node is! ParagraphNode) {
     return ExecutionInstruction.continueExecution;
   }
-  if ((editContext.composer.selection!.extent.nodePosition as TextPosition)
-          .offset >
-      0) {
+  if ((editContext.composer.selection!.extent.nodePosition as TextPosition).offset > 0) {
     // Backspace should only un-indent if the caret is at the start of the text.
     return ExecutionInstruction.continueExecution;
   }
@@ -1605,9 +1368,7 @@ ExecutionInstruction backspaceToUnIndentParagraph({
     return ExecutionInstruction.continueExecution;
   }
 
-  editContext.editor.execute([
-    UnIndentParagraphRequest(node.id),
-  ]);
+  editContext.editor.execute([UnIndentParagraphRequest(node.id)]);
 
   return ExecutionInstruction.haltExecution;
 }
@@ -1626,8 +1387,7 @@ ExecutionInstruction moveParagraphSelectionUpWhenBackspaceIsPressed({
     return ExecutionInstruction.continueExecution;
   }
 
-  final node = editContext.document
-      .getNodeById(editContext.composer.selection!.extent.nodeId);
+  final node = editContext.document.getNodeById(editContext.composer.selection!.extent.nodeId);
   if (node is! ParagraphNode) {
     return ExecutionInstruction.continueExecution;
   }
@@ -1640,16 +1400,11 @@ ExecutionInstruction moveParagraphSelectionUpWhenBackspaceIsPressed({
   if (nodeAbove == null) {
     return ExecutionInstruction.continueExecution;
   }
-  final newDocumentPosition = DocumentPosition(
-    nodeId: nodeAbove.id,
-    nodePosition: nodeAbove.endPosition,
-  );
+  final newDocumentPosition = DocumentPosition(nodeId: nodeAbove.id, nodePosition: nodeAbove.endPosition);
 
   editContext.editor.execute([
     ChangeSelectionRequest(
-      DocumentSelection.collapsed(
-        position: newDocumentPosition,
-      ),
+      DocumentSelection.collapsed(position: newDocumentPosition),
       SelectionChangeType.deleteContent,
       SelectionReason.userInteraction,
     ),
@@ -1658,16 +1413,12 @@ ExecutionInstruction moveParagraphSelectionUpWhenBackspaceIsPressed({
   return ExecutionInstruction.haltExecution;
 }
 
-ExecutionInstruction doNothingWithEnterOnWeb({
-  required SuperEditorContext editContext,
-  required KeyEvent keyEvent,
-}) {
+ExecutionInstruction doNothingWithEnterOnWeb({required SuperEditorContext editContext, required KeyEvent keyEvent}) {
   if (keyEvent is! KeyDownEvent && keyEvent is! KeyRepeatEvent) {
     return ExecutionInstruction.continueExecution;
   }
 
-  if (keyEvent.logicalKey != LogicalKeyboardKey.enter &&
-      keyEvent.logicalKey != LogicalKeyboardKey.numpadEnter) {
+  if (keyEvent.logicalKey != LogicalKeyboardKey.enter && keyEvent.logicalKey != LogicalKeyboardKey.numpadEnter) {
     return ExecutionInstruction.continueExecution;
   }
 
@@ -1733,10 +1484,7 @@ ExecutionInstruction doNothingWithCtrlOrCmdAndZOnWeb({
   return ExecutionInstruction.continueExecution;
 }
 
-ExecutionInstruction doNothingWithDeleteOnWeb({
-  required SuperEditorContext editContext,
-  required KeyEvent keyEvent,
-}) {
+ExecutionInstruction doNothingWithDeleteOnWeb({required SuperEditorContext editContext, required KeyEvent keyEvent}) {
   if (keyEvent is! KeyDownEvent && keyEvent is! KeyRepeatEvent) {
     return ExecutionInstruction.continueExecution;
   }

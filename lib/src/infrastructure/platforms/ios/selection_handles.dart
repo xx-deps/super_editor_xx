@@ -78,25 +78,15 @@ class IOSSelectionHandle extends StatelessWidget {
           Container(
             width: ballDiameter,
             height: ballDiameter,
-            decoration: BoxDecoration(
-              color: color,
-              shape: BoxShape.circle,
-            ),
+            decoration: BoxDecoration(color: color, shape: BoxShape.circle),
           ),
-        Container(
-          width: caretWidth,
-          height: caretHeight,
-          color: color,
-        ),
+        Container(width: caretWidth, height: caretHeight, color: color),
         // Show the ball on the bottom for a downstream handle
         if (handleType == HandleType.downstream)
           Container(
             width: ballDiameter,
             height: ballDiameter,
-            decoration: BoxDecoration(
-              color: color,
-              shape: BoxShape.circle,
-            ),
+            decoration: BoxDecoration(color: color, shape: BoxShape.circle),
           ),
       ],
     );

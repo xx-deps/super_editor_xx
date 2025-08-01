@@ -49,16 +49,14 @@ class IOSFollowingMagnifier extends StatefulWidget {
   State<IOSFollowingMagnifier> createState() => _IOSFollowingMagnifierState();
 }
 
-class _IOSFollowingMagnifierState extends State<IOSFollowingMagnifier>
-    with SingleTickerProviderStateMixin {
+class _IOSFollowingMagnifierState extends State<IOSFollowingMagnifier> with SingleTickerProviderStateMixin {
   late final AnimationController _animationController;
 
   /// Wether or not the magnifier should be displayed.
   ///
   /// The magnifier can still be displayed event when [widget.show] is `false`
   /// because the magnifier should be visible during the exit animation.
-  bool get _shouldShowMagnifier =>
-      widget.show || _animationController.status != AnimationStatus.dismissed;
+  bool get _shouldShowMagnifier => widget.show || _animationController.status != AnimationStatus.dismissed;
 
   @override
   void initState() {
@@ -130,10 +128,8 @@ class _IOSFollowingMagnifierState extends State<IOSFollowingMagnifier>
                 widget.offsetFromFocalPoint.dy * percentage,
               ),
               animationValue: _animationController.value,
-              animationDirection: const [
-                AnimationStatus.forward,
-                AnimationStatus.completed
-              ].contains(_animationController.status)
+              animationDirection:
+                  const [AnimationStatus.forward, AnimationStatus.completed].contains(_animationController.status)
                   ? AnimationDirection.forward
                   : AnimationDirection.reverse,
               borderColor: widget.handleColor ?? Theme.of(context).primaryColor,
@@ -146,27 +142,21 @@ class _IOSFollowingMagnifierState extends State<IOSFollowingMagnifier>
   }
 }
 
-typedef MagnifierBuilder = Widget Function(
-    BuildContext, IosMagnifierViewModel magnifierInfo,
-    [Key? magnifierKey]);
+typedef MagnifierBuilder = Widget Function(BuildContext, IosMagnifierViewModel magnifierInfo, [Key? magnifierKey]);
 
 Widget _roundedRectangleMagnifierBuilder(
-        BuildContext context, IosMagnifierViewModel magnifierInfo,
-        [Key? magnifierKey]) =>
-    IOSRoundedRectangleMagnifyingGlass(
-      key: magnifierKey,
-      offsetFromFocalPoint: magnifierInfo.offsetFromFocalPoint,
-      animationValue: magnifierInfo.animationValue,
-      borderColor: magnifierInfo.borderColor,
-    );
+  BuildContext context,
+  IosMagnifierViewModel magnifierInfo, [
+  Key? magnifierKey,
+]) => IOSRoundedRectangleMagnifyingGlass(
+  key: magnifierKey,
+  offsetFromFocalPoint: magnifierInfo.offsetFromFocalPoint,
+  animationValue: magnifierInfo.animationValue,
+  borderColor: magnifierInfo.borderColor,
+);
 
-Widget _circleMagnifierBuilder(
-        BuildContext context, IosMagnifierViewModel magnifierInfo,
-        [Key? magnifierKey]) =>
-    IOSCircleMagnifyingGlass(
-      key: magnifierKey,
-      offsetFromFocalPoint: magnifierInfo.offsetFromFocalPoint,
-    );
+Widget _circleMagnifierBuilder(BuildContext context, IosMagnifierViewModel magnifierInfo, [Key? magnifierKey]) =>
+    IOSCircleMagnifyingGlass(key: magnifierKey, offsetFromFocalPoint: magnifierInfo.offsetFromFocalPoint);
 
 class IOSRoundedRectangleMagnifyingGlass extends StatelessWidget {
   static const _magnification = 1.5;
@@ -204,12 +194,9 @@ class IOSRoundedRectangleMagnifyingGlass extends StatelessWidget {
           children: [
             if (percent >= 0.3)
               MagnifyingGlass(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
-                ),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(borderRadius))),
                 size: size,
-                offsetFromFocalPoint:
-                    Offset(offsetFromFocalPoint.dx, offsetFromFocalPoint.dy),
+                offsetFromFocalPoint: Offset(offsetFromFocalPoint.dx, offsetFromFocalPoint.dy),
                 magnificationScale: _magnification,
               ),
             Opacity(
@@ -217,20 +204,11 @@ class IOSRoundedRectangleMagnifyingGlass extends StatelessWidget {
               child: Container(
                 decoration: ShapeDecoration(
                   shape: RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.all(Radius.circular(borderRadius)),
-                    side: BorderSide(
-                      color: borderColor,
-                      width: borderWidth,
-                    ),
+                    borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
+                    side: BorderSide(color: borderColor, width: borderWidth),
                   ),
                   color: borderColor.withValues(alpha: tintOpacity),
-                  shadows: const [
-                    OuterBoxShadow(
-                      color: Color(0x33000000),
-                      blurRadius: 4,
-                    ),
-                  ],
+                  shadows: const [OuterBoxShadow(color: Color(0x33000000), blurRadius: 4)],
                 ),
               ),
             ),
@@ -245,10 +223,7 @@ class IOSCircleMagnifyingGlass extends StatelessWidget {
   static const _diameter = 92.0;
   static const _magnification = 2.0;
 
-  const IOSCircleMagnifyingGlass({
-    super.key,
-    this.offsetFromFocalPoint = Offset.zero,
-  });
+  const IOSCircleMagnifyingGlass({super.key, this.offsetFromFocalPoint = Offset.zero});
 
   /// The distance, in density independent pixels, from the focal point to the magnifier.
   final Offset offsetFromFocalPoint;
@@ -270,23 +245,12 @@ class IOSCircleMagnifyingGlass extends StatelessWidget {
             shape: BoxShape.circle,
             border: Border.all(color: const Color(0xFFAAAAAA), width: 1),
             gradient: const LinearGradient(
-              colors: [
-                Color(0x22000000),
-                Color(0x00000000),
-              ],
-              stops: [
-                0.0,
-                0.5,
-              ],
+              colors: [Color(0x22000000), Color(0x00000000)],
+              stops: [0.0, 0.5],
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
             ),
-            boxShadow: const [
-              OuterBoxShadow(
-                color: Color(0x44000000),
-                blurRadius: 8,
-              ),
-            ],
+            boxShadow: const [OuterBoxShadow(color: Color(0x44000000), blurRadius: 8)],
           ),
         ),
       ],

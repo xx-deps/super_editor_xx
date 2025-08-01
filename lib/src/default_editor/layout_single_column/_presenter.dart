@@ -10,10 +10,7 @@ import 'package:super_editor/src/infrastructure/_logging.dart';
 /// construct an appropriate [DocumentComponent] widget.
 class SingleColumnDocumentComponentContext {
   /// Creates a component context.
-  const SingleColumnDocumentComponentContext({
-    required this.context,
-    required this.componentKey,
-  });
+  const SingleColumnDocumentComponentContext({required this.context, required this.componentKey});
 
   /// The [BuildContext] for the parent of the [DocumentComponent]
   /// that needs to be built.
@@ -50,9 +47,9 @@ class SingleColumnLayoutPresenter {
     required Document document,
     required List<ComponentBuilder> componentBuilders,
     required List<SingleColumnLayoutStylePhase> pipeline,
-  })  : _document = document,
-        _componentBuilders = componentBuilders,
-        _pipeline = pipeline {
+  }) : _document = document,
+       _componentBuilders = componentBuilders,
+       _pipeline = pipeline {
     _assemblePipeline();
     _viewModel = _createNewViewModel();
     _document.addListener(_onDocumentChange);
@@ -81,14 +78,12 @@ class SingleColumnLayoutPresenter {
     _listeners.add(listener);
   }
 
-  void removeChangeListener(
-      SingleColumnLayoutPresenterChangeListener listener) {
+  void removeChangeListener(SingleColumnLayoutPresenterChangeListener listener) {
     _listeners.remove(listener);
   }
 
   void _onDocumentChange(_) {
-    editorLayoutLog
-        .finest("The document changed. Marking the presenter dirty.");
+    editorLayoutLog.finest("The document changed. Marking the presenter dirty.");
     final wasDirty = isDirty;
 
     _earliestDirtyPhase = 0;
@@ -111,8 +106,7 @@ class SingleColumnLayoutPresenter {
       _pipeline[i].dirtyCallback = () {
         final phaseIndex = i;
         if (phaseIndex < 0) {
-          throw Exception(
-              "A phase marked itself as dirty, but that phase isn't in the pipeline. Index: $phaseIndex");
+          throw Exception("A phase marked itself as dirty, but that phase isn't in the pipeline. Index: $phaseIndex");
         }
 
         final wasDirty = isDirty;
@@ -139,25 +133,20 @@ class SingleColumnLayoutPresenter {
   }
 
   void updateViewModel() {
-    editorLayoutLog
-        .finest("Calculating an updated view model for document layout.");
+    editorLayoutLog.finest("Calculating an updated view model for document layout.");
     if (_earliestDirtyPhase == _pipeline.length) {
       editorLayoutLog.fine("The presenter is already up to date");
       return;
     }
 
-    editorLayoutLog.fine(
-        "Earliest dirty phase is: $_earliestDirtyPhase. Phase count: ${_pipeline.length}");
+    editorLayoutLog.fine("Earliest dirty phase is: $_earliestDirtyPhase. Phase count: ${_pipeline.length}");
 
     final oldViewModel = _viewModel;
     _viewModel = _createNewViewModel();
 
     editorLayoutLog.finest("Done calculating new document layout view model");
 
-    _notifyListenersOfChanges(
-      oldViewModel: oldViewModel,
-      newViewModel: _viewModel,
-    );
+    _notifyListenersOfChanges(oldViewModel: oldViewModel, newViewModel: _viewModel);
   }
 
   SingleColumnLayoutViewModel _createNewViewModel() {
@@ -178,15 +167,12 @@ class SingleColumnLayoutPresenter {
           }
         }
         if (viewModel == null) {
-          throw Exception(
-              "Couldn't find styler to create component for document node: ${node.runtimeType}");
+          throw Exception("Couldn't find styler to create component for document node: ${node.runtimeType}");
         }
         viewModels.add(viewModel);
       }
 
-      newViewModel = SingleColumnLayoutViewModel(
-        componentViewModels: viewModels,
-      );
+      newViewModel = SingleColumnLayoutViewModel(componentViewModels: viewModels);
     }
 
     // Style the document view model.
@@ -203,8 +189,7 @@ class SingleColumnLayoutPresenter {
   }
 
   SingleColumnLayoutViewModel? _getCleanCachedViewModel() {
-    return _earliestDirtyPhase > 0 &&
-            _earliestDirtyPhase < _phaseViewModels.length
+    return _earliestDirtyPhase > 0 && _earliestDirtyPhase < _phaseViewModels.length
         ? _phaseViewModels[_earliestDirtyPhase - 1]
         : null;
   }
@@ -213,16 +198,14 @@ class SingleColumnLayoutPresenter {
     required SingleColumnLayoutViewModel oldViewModel,
     required SingleColumnLayoutViewModel newViewModel,
   }) {
-    editorLayoutLog.finer(
-        "Computing layout view model changes to notify listeners of those changes.");
+    editorLayoutLog.finer("Computing layout view model changes to notify listeners of those changes.");
 
     final addedComponents = <String>[];
     final movedComponents = <String>[];
     final removedComponents = <String>[];
     final changedComponents = <String>[];
 
-    final nodeIdToComponentMap =
-        <String, SingleColumnLayoutComponentViewModel>{};
+    final nodeIdToComponentMap = <String, SingleColumnLayoutComponentViewModel>{};
     final nodeIdToPreviousOrderMap = <String, int>{};
     // Maps a component's node ID to a change code:
     //  -1 - the component was removed
@@ -258,7 +241,8 @@ class SingleColumnLayoutPresenter {
       if (nodeIdToPreviousOrderMap[nodeId] != i) {
         // This component moved somewhere else. Mark this view model as changed.
         editorLayoutLog.fine(
-            "Component for node $nodeId was at index ${nodeIdToPreviousOrderMap[nodeId]} but now it's at $i, marking the view model as changed");
+          "Component for node $nodeId was at index ${nodeIdToPreviousOrderMap[nodeId]} but now it's at $i, marking the view model as changed",
+        );
         changeMap[nodeId] = 2;
         continue;
       }
@@ -270,11 +254,11 @@ class SingleColumnLayoutPresenter {
         continue;
       }
 
-      if (nodeIdToComponentMap[nodeId].runtimeType ==
-          newComponent.runtimeType) {
+      if (nodeIdToComponentMap[nodeId].runtimeType == newComponent.runtimeType) {
         // The component still exists, but it changed.
         editorLayoutLog.fine(
-            "Component for node $nodeId is the same runtime type, but changed content. Marking as changed.");
+          "Component for node $nodeId is the same runtime type, but changed content. Marking as changed.",
+        );
         changeMap[nodeId] = 1;
         continue;
       }
@@ -282,8 +266,7 @@ class SingleColumnLayoutPresenter {
       // The component has changed type, e.g., from an Image to a
       // Paragraph. This can happen as a result of deletions. Treat
       // this as a component removal.
-      editorLayoutLog
-          .fine("Component for node $nodeId at index $i was removed");
+      editorLayoutLog.fine("Component for node $nodeId at index $i was removed");
       changeMap[nodeId] = -1;
     }
 
@@ -313,13 +296,9 @@ class SingleColumnLayoutPresenter {
       }
     }
 
-    if (addedComponents.isEmpty &&
-        movedComponents.isEmpty &&
-        changedComponents.isEmpty &&
-        removedComponents.isEmpty) {
+    if (addedComponents.isEmpty && movedComponents.isEmpty && changedComponents.isEmpty && removedComponents.isEmpty) {
       // No changes to report.
-      editorLayoutLog.fine(
-          "Nothing has changed in the view model. Not notifying any listeners.");
+      editorLayoutLog.fine("Nothing has changed in the view model. Not notifying any listeners.");
       return;
     }
 
@@ -343,8 +322,8 @@ class SingleColumnLayoutPresenterChangeListener {
   const SingleColumnLayoutPresenterChangeListener({
     VoidCallback? onPresenterMarkedDirty,
     ViewModelChangeCallback? onViewModelChange,
-  })  : _onPresenterMarkedDirty = onPresenterMarkedDirty,
-        _onViewModelChange = onViewModelChange;
+  }) : _onPresenterMarkedDirty = onPresenterMarkedDirty,
+       _onViewModelChange = onViewModelChange;
 
   final VoidCallback? _onPresenterMarkedDirty;
   final ViewModelChangeCallback? _onViewModelChange;
@@ -368,20 +347,20 @@ class SingleColumnLayoutPresenterChangeListener {
   }
 }
 
-typedef ViewModelChangeCallback = void Function({
-  required List<String> addedComponents,
-  required List<String> movedComponents,
-  required List<String> changedComponents,
-  required List<String> removedComponents,
-});
+typedef ViewModelChangeCallback =
+    void Function({
+      required List<String> addedComponents,
+      required List<String> movedComponents,
+      required List<String> changedComponents,
+      required List<String> removedComponents,
+    });
 
 /// Creates view models and components to display various [DocumentNode]s
 /// in a [Document].
 abstract class ComponentBuilder {
   /// Produces a [SingleColumnLayoutComponentViewModel] with default styles for the given
   /// [node], or returns `null` if this builder doesn't apply to the given node.
-  SingleColumnLayoutComponentViewModel? createViewModel(
-      Document document, DocumentNode node);
+  SingleColumnLayoutComponentViewModel? createViewModel(Document document, DocumentNode node);
 
   /// Creates a visual component that renders the given [viewModel],
   /// or returns `null` if this builder doesn't apply to the given [viewModel].
@@ -395,8 +374,10 @@ abstract class ComponentBuilder {
   ///
   /// See [ComponentContext] for expectations about how to use the context
   /// to build a component widget.
-  Widget? createComponent(SingleColumnDocumentComponentContext componentContext,
-      SingleColumnLayoutComponentViewModel componentViewModel);
+  Widget? createComponent(
+    SingleColumnDocumentComponentContext componentContext,
+    SingleColumnLayoutComponentViewModel componentViewModel,
+  );
 }
 
 /// A single phase of style rules, which are applied in a pipeline to
@@ -424,8 +405,7 @@ abstract class SingleColumnLayoutStylePhase {
   }
 
   /// Styles a [SingleColumnLayoutViewModel] by adjusting the given viewModel.
-  SingleColumnLayoutViewModel style(
-      Document document, SingleColumnLayoutViewModel viewModel);
+  SingleColumnLayoutViewModel style(Document document, SingleColumnLayoutViewModel viewModel);
 }
 
 /// [AttributionStyleBuilder] that returns a default `TextStyle`, for
@@ -446,8 +426,8 @@ class SingleColumnLayoutViewModel {
   SingleColumnLayoutViewModel({
     this.padding = EdgeInsets.zero,
     required List<SingleColumnLayoutComponentViewModel> componentViewModels,
-  })  : _componentViewModels = componentViewModels,
-        _viewModelsByNodeId = {} {
+  }) : _componentViewModels = componentViewModels,
+       _viewModelsByNodeId = {} {
     for (final componentViewModel in _componentViewModels) {
       _viewModelsByNodeId[componentViewModel.nodeId] = componentViewModel;
     }
@@ -456,13 +436,10 @@ class SingleColumnLayoutViewModel {
   final EdgeInsetsGeometry padding;
 
   final List<SingleColumnLayoutComponentViewModel> _componentViewModels;
-  List<SingleColumnLayoutComponentViewModel> get componentViewModels =>
-      _componentViewModels;
+  List<SingleColumnLayoutComponentViewModel> get componentViewModels => _componentViewModels;
 
   final Map<String, SingleColumnLayoutComponentViewModel> _viewModelsByNodeId;
-  SingleColumnLayoutComponentViewModel? getComponentViewModelByNodeId(
-          String nodeId) =>
-      _viewModelsByNodeId[nodeId];
+  SingleColumnLayoutComponentViewModel? getComponentViewModelByNodeId(String nodeId) => _viewModelsByNodeId[nodeId];
 }
 
 /// Base class for a component view model that appears within a
@@ -497,8 +474,7 @@ abstract class SingleColumnLayoutComponentViewModel {
 
   void applyStyles(Map<String, dynamic> styles) {
     maxWidth = styles[Styles.maxWidth] ?? double.infinity;
-    padding = (styles[Styles.padding] as CascadingPadding?)?.toEdgeInsets() ??
-        EdgeInsets.zero;
+    padding = (styles[Styles.padding] as CascadingPadding?)?.toEdgeInsets() ?? EdgeInsets.zero;
     opacity = styles[Styles.opacity] ?? 1.0;
   }
 
@@ -516,10 +492,5 @@ abstract class SingleColumnLayoutComponentViewModel {
           opacity == other.opacity;
 
   @override
-  int get hashCode =>
-      nodeId.hashCode ^
-      createdAt.hashCode ^
-      maxWidth.hashCode ^
-      padding.hashCode ^
-      opacity.hashCode;
+  int get hashCode => nodeId.hashCode ^ createdAt.hashCode ^ maxWidth.hashCode ^ padding.hashCode ^ opacity.hashCode;
 }

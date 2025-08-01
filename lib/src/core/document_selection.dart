@@ -26,18 +26,14 @@ class DocumentSelection extends DocumentRange {
   ///
   ///  * [isCollapsed], which determines whether a selection is collapsed or
   ///    not.
-  const DocumentSelection.collapsed({
-    required DocumentPosition position,
-  })  : base = position,
-        extent = position,
-        super(start: position, end: position);
+  const DocumentSelection.collapsed({required DocumentPosition position})
+    : base = position,
+      extent = position,
+      super(start: position, end: position);
 
   /// Creates a selection from the [base] position to the [extent] position
   /// within the document.
-  const DocumentSelection({
-    required this.base,
-    required this.extent,
-  }) : super(start: base, end: extent);
+  const DocumentSelection({required this.base, required this.extent}) : super(start: base, end: extent);
 
   /// The base position of the selection within the document.
   ///
@@ -66,9 +62,7 @@ class DocumentSelection extends DocumentRange {
   ///
   /// A [DocumentSelection] is "collapsed" when its [base] and [extent] are
   /// equivalent. Otherwise, the [DocumentSelection] is "expanded".
-  bool get isCollapsed =>
-      base.nodeId == extent.nodeId &&
-      base.nodePosition.isEquivalentTo(extent.nodePosition);
+  bool get isCollapsed => base.nodeId == extent.nodeId && base.nodePosition.isEquivalentTo(extent.nodePosition);
 
   /// Returns the affinity (direction) for this selection - downstream refers to a selection
   /// that starts at earlier content and ends at later content, upstream refers to a selection
@@ -76,28 +70,24 @@ class DocumentSelection extends DocumentRange {
   ///
   /// Calculating the selection affinity requires a [Document] because only the [Document] knows the
   /// relative position of various [DocumentPosition]s.
-  TextAffinity calculateAffinity(Document document) =>
-      document.getAffinityBetween(base: base, extent: extent);
+  TextAffinity calculateAffinity(Document document) => document.getAffinityBetween(base: base, extent: extent);
 
   /// Returns `true` if this selection has an affinity of [TextAffinity.downstream].
   ///
   /// See [calculateAffinity] for more info.
-  bool hasDownstreamAffinity(Document document) =>
-      calculateAffinity(document) == TextAffinity.downstream;
+  bool hasDownstreamAffinity(Document document) => calculateAffinity(document) == TextAffinity.downstream;
 
   /// Returns `true` if this selection has an affinity of [TextAffinity.upstream].
   ///
   /// See [calculateAffinity] for more info.
-  bool hasUpstreamAffinity(Document document) =>
-      calculateAffinity(document) == TextAffinity.upstream;
+  bool hasUpstreamAffinity(Document document) => calculateAffinity(document) == TextAffinity.upstream;
 
   @override
   String toString() {
     if (base.nodeId == extent.nodeId) {
       final basePosition = base.nodePosition;
       final extentPosition = extent.nodePosition;
-      if (basePosition is TextNodePosition &&
-          extentPosition is TextNodePosition) {
+      if (basePosition is TextNodePosition && extentPosition is TextNodePosition) {
         if (basePosition.offset == extentPosition.offset) {
           return "[Selection] - ${base.nodeId}: ${extentPosition.offset}";
         }
@@ -129,10 +119,7 @@ class DocumentSelection extends DocumentRange {
     if (isCollapsed) {
       return this;
     } else {
-      return DocumentSelection(
-        base: extent,
-        extent: extent,
-      );
+      return DocumentSelection(base: extent, extent: extent);
     }
   }
 
@@ -157,7 +144,9 @@ class DocumentSelection extends DocumentRange {
     }
 
     final selectionAffinity = document.getAffinityForSelection(this);
-    return selectionAffinity == TextAffinity.downstream //
+    return selectionAffinity ==
+            TextAffinity
+                .downstream //
         ? DocumentSelection.collapsed(position: base)
         : DocumentSelection.collapsed(position: extent);
   }
@@ -183,7 +172,9 @@ class DocumentSelection extends DocumentRange {
     }
 
     final selectionAffinity = document.getAffinityForSelection(this);
-    return selectionAffinity == TextAffinity.downstream //
+    return selectionAffinity ==
+            TextAffinity
+                .downstream //
         ? DocumentSelection.collapsed(position: extent)
         : DocumentSelection.collapsed(position: base);
   }
@@ -191,24 +182,15 @@ class DocumentSelection extends DocumentRange {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is DocumentSelection &&
-          runtimeType == other.runtimeType &&
-          base == other.base &&
-          extent == other.extent;
+      other is DocumentSelection && runtimeType == other.runtimeType && base == other.base && extent == other.extent;
 
   @override
   int get hashCode => base.hashCode ^ extent.hashCode;
 
   /// Creates a new [DocumentSelection] based on the current selection, with the
   /// provided parameters overridden.
-  DocumentSelection copyWith({
-    DocumentPosition? base,
-    DocumentPosition? extent,
-  }) {
-    return DocumentSelection(
-      base: base ?? this.base,
-      extent: extent ?? this.extent,
-    );
+  DocumentSelection copyWith({DocumentPosition? base, DocumentPosition? extent}) {
+    return DocumentSelection(base: base ?? this.base, extent: extent ?? this.extent);
   }
 
   /// Creates a copy of this selection but with the [extent] expanded to the
@@ -217,9 +199,7 @@ class DocumentSelection extends DocumentRange {
   /// This is like calling [copyWith] with the [newExtent] as the new value for
   /// the extent.
   DocumentSelection expandTo(DocumentPosition newExtent) {
-    return copyWith(
-      extent: newExtent,
-    );
+    return copyWith(extent: newExtent);
   }
 }
 
@@ -239,10 +219,7 @@ class DocumentSelection extends DocumentRange {
 /// source of truth for [DocumentNode] content order.
 class DocumentRange {
   /// Creates a document range between [start] and [end].
-  const DocumentRange({
-    required this.start,
-    required this.end,
-  });
+  const DocumentRange({required this.start, required this.end});
 
   /// The bounding position of one side of a [DocumentRange].
   ///
@@ -262,8 +239,7 @@ class DocumentRange {
   bool get isCollapsed => start == end;
 
   /// Returns `true` if [start] appears at, or before [end], or `false` otherwise.
-  bool isNormalized(Document document) =>
-      document.getAffinityForRange(this) == TextAffinity.downstream;
+  bool isNormalized(Document document) => document.getAffinityForRange(this) == TextAffinity.downstream;
 
   /// Returns a version of this [DocumentRange] that's normalized.
   ///
@@ -280,10 +256,7 @@ class DocumentRange {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is DocumentRange &&
-          runtimeType == other.runtimeType &&
-          start == other.start &&
-          end == other.end;
+      other is DocumentRange && runtimeType == other.runtimeType && start == other.start && end == other.end;
 
   @override
   int get hashCode => start.hashCode ^ end.hashCode;
@@ -293,8 +266,7 @@ class DocumentRange {
     if (start.nodeId == end.nodeId) {
       final startPosition = start.nodePosition;
       final endPosition = end.nodePosition;
-      if (startPosition is TextNodePosition &&
-          endPosition is TextNodePosition) {
+      if (startPosition is TextNodePosition && endPosition is TextNodePosition) {
         if (startPosition.offset == endPosition.offset) {
           return "[Range] - ${start.nodeId}: ${endPosition.offset}";
         }
@@ -321,24 +293,15 @@ extension InspectDocumentAffinity on Document {
   TextAffinity getAffinityBetweenNodes(DocumentNode base, DocumentNode extent) {
     return getAffinityForSelection(
       DocumentSelection(
-        base: DocumentPosition(
-          nodeId: base.id,
-          nodePosition: base.beginningPosition,
-        ),
-        extent: DocumentPosition(
-          nodeId: extent.id,
-          nodePosition: extent.beginningPosition,
-        ),
+        base: DocumentPosition(nodeId: base.id, nodePosition: base.beginningPosition),
+        extent: DocumentPosition(nodeId: extent.id, nodePosition: extent.beginningPosition),
       ),
     );
   }
 
   /// Returns the affinity direction implied by the given [base] and [extent].
   // TODO: Replace TextAffinity with a DocumentAffinity to avoid confusion.
-  TextAffinity getAffinityBetween({
-    required DocumentPosition base,
-    required DocumentPosition extent,
-  }) {
+  TextAffinity getAffinityBetween({required DocumentPosition base, required DocumentPosition extent}) {
     final baseNode = getNode(base);
     if (baseNode == null) {
       throw Exception('No such position in document: $base');
@@ -357,8 +320,7 @@ extension InspectDocumentAffinity on Document {
     } else {
       // The selection is within the same node. Ask the node which position
       // comes first.
-      affinity = extentNode.getAffinityBetween(
-          base: base.nodePosition, extent: extent.nodePosition);
+      affinity = extentNode.getAffinityBetween(base: base.nodePosition, extent: extent.nodePosition);
     }
 
     return affinity;
@@ -368,10 +330,8 @@ extension InspectDocumentAffinity on Document {
 extension InspectDocumentRange on Document {
   /// Returns a [DocumentRange] that ranges from [position1] to [position2],
   /// including [position1] and [position2].
-  DocumentRange getRangeBetween(
-      DocumentPosition position1, DocumentPosition position2) {
-    late TextAffinity affinity =
-        getAffinityBetween(base: position1, extent: position2);
+  DocumentRange getRangeBetween(DocumentPosition position1, DocumentPosition position2) {
+    late TextAffinity affinity = getAffinityBetween(base: position1, extent: position2);
     return DocumentRange(
       start: affinity == TextAffinity.downstream ? position1 : position2,
       end: affinity == TextAffinity.downstream ? position2 : position1,
@@ -383,22 +343,20 @@ extension InspectDocumentSelection on Document {
   /// Returns a list of all the `DocumentNodes` within the given [selection], ordered
   /// from upstream to downstream.
   List<DocumentNode> getNodesInContentOrder(DocumentSelection selection) {
-    final upstreamPosition =
-        selectUpstreamPosition(selection.base, selection.extent);
-    final downstreamPosition =
-        selectDownstreamPosition(selection.base, selection.extent);
+    final upstreamPosition = selectUpstreamPosition(selection.base, selection.extent);
+    final downstreamPosition = selectDownstreamPosition(selection.base, selection.extent);
 
     return getNodesInside(upstreamPosition, downstreamPosition);
   }
 
   /// Given [docPosition1] and [docPosition2], returns the `DocumentPosition` that
   /// appears first in the document.
-  DocumentPosition selectUpstreamPosition(
-      DocumentPosition docPosition1, DocumentPosition docPosition2) {
+  DocumentPosition selectUpstreamPosition(DocumentPosition docPosition1, DocumentPosition docPosition2) {
     if (docPosition1.nodeId != docPosition2.nodeId) {
-      final affinity =
-          getAffinityBetween(base: docPosition1, extent: docPosition2);
-      return affinity == TextAffinity.downstream //
+      final affinity = getAffinityBetween(base: docPosition1, extent: docPosition2);
+      return affinity ==
+              TextAffinity
+                  .downstream //
           ? docPosition1
           : docPosition2;
     }
@@ -409,8 +367,7 @@ extension InspectDocumentSelection on Document {
     if (theNode == null) {
       throw Exception('theNode is null');
     }
-    return theNode.selectUpstreamPosition(
-                docPosition1.nodePosition, docPosition2.nodePosition) ==
+    return theNode.selectUpstreamPosition(docPosition1.nodePosition, docPosition2.nodePosition) ==
             docPosition1.nodePosition
         ? docPosition1
         : docPosition2;
@@ -418,27 +375,21 @@ extension InspectDocumentSelection on Document {
 
   /// Given [docPosition1] and [docPosition2], returns the `DocumentPosition` that
   /// appears last in the document.
-  DocumentPosition selectDownstreamPosition(
-      DocumentPosition docPosition1, DocumentPosition docPosition2) {
+  DocumentPosition selectDownstreamPosition(DocumentPosition docPosition1, DocumentPosition docPosition2) {
     final upstreamPosition = selectUpstreamPosition(docPosition1, docPosition2);
     return upstreamPosition == docPosition1 ? docPosition2 : docPosition1;
   }
 
   /// Returns `true` if, and only if, the given [position] sits within the
   /// given [selection] in this `Document`.
-  bool doesSelectionContainPosition(
-      DocumentSelection selection, DocumentPosition position) {
+  bool doesSelectionContainPosition(DocumentSelection selection, DocumentPosition position) {
     if (selection.isCollapsed) {
       return false;
     }
 
     final selectionAffinity = getAffinityForSelection(selection);
-    final upstreamPosition = selectionAffinity == TextAffinity.downstream
-        ? selection.base
-        : selection.extent;
-    final downstreamPosition = selectionAffinity == TextAffinity.downstream
-        ? selection.extent
-        : selection.base;
+    final upstreamPosition = selectionAffinity == TextAffinity.downstream ? selection.base : selection.extent;
+    final downstreamPosition = selectionAffinity == TextAffinity.downstream ? selection.extent : selection.base;
 
     // The selection contains the position if the ordering is as follows:
     //
@@ -447,9 +398,7 @@ extension InspectDocumentSelection on Document {
     // Another way of stating this relationship is that there's a downstream
     // affinity from selection start to the position, and from the position to
     // the selection end.
-    return getAffinityBetween(base: upstreamPosition, extent: position) ==
-            TextAffinity.downstream &&
-        getAffinityBetween(base: position, extent: downstreamPosition) ==
-            TextAffinity.downstream;
+    return getAffinityBetween(base: upstreamPosition, extent: position) == TextAffinity.downstream &&
+        getAffinityBetween(base: position, extent: downstreamPosition) == TextAffinity.downstream;
   }
 }

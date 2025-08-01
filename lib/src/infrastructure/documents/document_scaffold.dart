@@ -38,17 +38,14 @@ class DocumentScaffold<ContextType> extends StatefulWidget {
 
   /// Builder that creates a gesture interaction widget, which is displayed
   /// beneath the document, at the same size as the viewport.
-  final Widget Function(BuildContext context, {required Widget child})
-      gestureBuilder;
+  final Widget Function(BuildContext context, {required Widget child}) gestureBuilder;
 
   /// Builds the text input widget, if applicable. The text input system is placed
   /// above the gesture system and beneath viewport decoration.
-  final Widget Function(BuildContext context, {required Widget child})?
-      textInputBuilder;
+  final Widget Function(BuildContext context, {required Widget child})? textInputBuilder;
 
   /// Builds platform specific viewport decoration (such as toolbar overlay manager or magnifier overlay manager).
-  final Widget Function(BuildContext context, {required Widget child})
-      viewportDecorationBuilder;
+  final Widget Function(BuildContext context, {required Widget child}) viewportDecorationBuilder;
 
   /// Controls scrolling when this [DocumentScaffold] adds its own `Scrollable`, but
   /// doesn't provide scrolling control when this [DocumentScaffold] uses an ancestor
@@ -94,26 +91,17 @@ class DocumentScaffold<ContextType> extends StatefulWidget {
 class _DocumentScaffoldState extends State<DocumentScaffold> {
   @override
   Widget build(BuildContext context) {
-    var child = _buildGestureSystem(
-      child: _buildDocumentLayout(),
-    );
+    var child = _buildGestureSystem(child: _buildDocumentLayout());
     if (widget.textInputBuilder != null) {
       child = widget.textInputBuilder!(context, child: child);
     }
-    return _buildDocumentScrollable(
-      child: widget.viewportDecorationBuilder(
-        context,
-        child: child,
-      ),
-    );
+    return _buildDocumentScrollable(child: widget.viewportDecorationBuilder(context, child: child));
   }
 
   /// Builds the widget tree that scrolls the document. This subtree might
   /// introduce its own Scrollable, or it might defer to an ancestor
   /// scrollable. This subtree also hooks up auto-scrolling capabilities.
-  Widget _buildDocumentScrollable({
-    required Widget child,
-  }) {
+  Widget _buildDocumentScrollable({required Widget child}) {
     return DocumentScrollable(
       autoScroller: widget.autoScrollController,
       scrollController: widget.scrollController,
@@ -128,9 +116,7 @@ class _DocumentScaffoldState extends State<DocumentScaffold> {
   /// Builds the widget tree that handles user gesture interaction
   /// with the document, e.g., mouse input on desktop, or touch input
   /// on mobile.
-  Widget _buildGestureSystem({
-    required Widget child,
-  }) {
+  Widget _buildGestureSystem({required Widget child}) {
     return widget.gestureBuilder(context, child: child);
   }
 

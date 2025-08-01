@@ -30,12 +30,11 @@ class AttributionBounds extends ContentLayerStatefulWidget {
   final AttributionBoundsBuilder builder;
 
   @override
-  ContentLayerState<ContentLayerStatefulWidget, List<AttributionBoundsLayout>>
-      createState() => _AttributionBoundsState();
+  ContentLayerState<ContentLayerStatefulWidget, List<AttributionBoundsLayout>> createState() =>
+      _AttributionBoundsState();
 }
 
-class _AttributionBoundsState extends ContentLayerState<AttributionBounds,
-    List<AttributionBoundsLayout>> {
+class _AttributionBoundsState extends ContentLayerState<AttributionBounds, List<AttributionBoundsLayout>> {
   @override
   void initState() {
     super.initState();
@@ -59,8 +58,7 @@ class _AttributionBoundsState extends ContentLayerState<AttributionBounds,
   }
 
   @override
-  List<AttributionBoundsLayout>? computeLayoutData(
-      Element? contentElement, RenderObject? contentLayout) {
+  List<AttributionBoundsLayout>? computeLayoutData(Element? contentElement, RenderObject? contentLayout) {
     final bounds = <AttributionBoundsLayout>[];
 
     for (final node in widget.document) {
@@ -76,18 +74,19 @@ class _AttributionBoundsState extends ContentLayerState<AttributionBounds,
       for (final span in spans) {
         final range = DocumentRange(
           start: DocumentPosition(
-              nodeId: node.id,
-              nodePosition: TextNodePosition(offset: span.start)),
+            nodeId: node.id,
+            nodePosition: TextNodePosition(offset: span.start),
+          ),
           end: DocumentPosition(
-              nodeId: node.id,
-              nodePosition: TextNodePosition(offset: span.end + 1)),
+            nodeId: node.id,
+            nodePosition: TextNodePosition(offset: span.end + 1),
+          ),
         );
 
         bounds.add(
           AttributionBoundsLayout(
             span.attribution,
-            widget.layout.getRectForSelection(range.start, range.end) ??
-                Rect.zero,
+            widget.layout.getRectForSelection(range.start, range.end) ?? Rect.zero,
           ),
         );
       }
@@ -97,17 +96,12 @@ class _AttributionBoundsState extends ContentLayerState<AttributionBounds,
   }
 
   @override
-  Widget doBuild(
-      BuildContext context, List<AttributionBoundsLayout>? layoutData) {
+  Widget doBuild(BuildContext context, List<AttributionBoundsLayout>? layoutData) {
     if (layoutData == null) {
       return const SizedBox();
     }
 
-    return IgnorePointer(
-      child: Stack(
-        children: _buildBounds(layoutData),
-      ),
-    );
+    return IgnorePointer(child: Stack(children: _buildBounds(layoutData)));
   }
 
   List<Widget> _buildBounds(List<AttributionBoundsLayout> bounds) {
@@ -115,12 +109,7 @@ class _AttributionBoundsState extends ContentLayerState<AttributionBounds,
     for (final bound in bounds) {
       final boundWidget = widget.builder(context, bound.attribution);
       if (boundWidget != null) {
-        boundWidgets.add(
-          Positioned.fromRect(
-            rect: bound.rect,
-            child: boundWidget,
-          ),
-        );
+        boundWidgets.add(Positioned.fromRect(rect: bound.rect, child: boundWidget));
       }
     }
 
@@ -141,5 +130,4 @@ typedef AttributionBoundsSelector = bool Function(Attribution attribution);
 
 /// Builder that (optionally) returns a widget that is positioned at the size
 /// and location of attributed text.
-typedef AttributionBoundsBuilder = Widget? Function(
-    BuildContext context, Attribution attribution);
+typedef AttributionBoundsBuilder = Widget? Function(BuildContext context, Attribution attribution);

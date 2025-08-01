@@ -56,12 +56,10 @@ class KeyboardPanelScaffold<PanelType> extends StatefulWidget {
   final ValueListenable<bool> isImeConnected;
 
   /// Builds the toolbar that's docked to the top of the software keyboard area.
-  final Widget Function(BuildContext context, PanelType? openPanel)
-      toolbarBuilder;
+  final Widget Function(BuildContext context, PanelType? openPanel) toolbarBuilder;
 
   /// Builds the keyboard panel that's displayed in place of the software keyboard.
-  final Widget Function(BuildContext context, PanelType? openPanel)
-      keyboardPanelBuilder;
+  final Widget Function(BuildContext context, PanelType? openPanel) keyboardPanelBuilder;
 
   /// The height of the keyboard panel in situations where no software keyboard is
   /// present, e.g., on a tablet when using a physical keyboard, or when using a floating
@@ -73,8 +71,7 @@ class KeyboardPanelScaffold<PanelType> extends StatefulWidget {
   /// This is the content that this widget "wraps". Sometimes this content might be
   /// a whole screen of content, or other times this content might be a single widget
   /// like a text field or an editor.
-  final Widget Function(BuildContext context, PanelType? openPanel)
-      contentBuilder;
+  final Widget Function(BuildContext context, PanelType? openPanel) contentBuilder;
 
   /// When determining the height of the keyboard, whether to bypass Flutter's `MediaQuery`
   /// and solely rely on `SuperKeyboard` reporting, or whether the scaffold should use a
@@ -87,12 +84,10 @@ class KeyboardPanelScaffold<PanelType> extends StatefulWidget {
   final bool bypassMediaQuery;
 
   @override
-  State<KeyboardPanelScaffold<PanelType>> createState() =>
-      _KeyboardPanelScaffoldState<PanelType>();
+  State<KeyboardPanelScaffold<PanelType>> createState() => _KeyboardPanelScaffoldState<PanelType>();
 }
 
-class _KeyboardPanelScaffoldState<PanelType>
-    extends State<KeyboardPanelScaffold<PanelType>>
+class _KeyboardPanelScaffoldState<PanelType> extends State<KeyboardPanelScaffold<PanelType>>
     with SingleTickerProviderStateMixin
     implements KeyboardPanelScaffoldDelegate<PanelType> {
   /// Whether we've run at least one didChangeDependencies, which is initially
@@ -126,12 +121,10 @@ class _KeyboardPanelScaffoldState<PanelType>
   final _currentBottomSpacing = ValueNotifier<double>(0.0);
 
   /// Shows/hides the [OverlayPortal] containing the keyboard panel and above-keyboard panel.
-  final OverlayPortalController _overlayPortalController =
-      OverlayPortalController();
+  final OverlayPortalController _overlayPortalController = OverlayPortalController();
 
   bool get _wantsToShowToolbar =>
-      widget.controller.toolbarVisibility ==
-          KeyboardToolbarVisibility.visible ||
+      widget.controller.toolbarVisibility == KeyboardToolbarVisibility.visible ||
       (widget.controller.toolbarVisibility == KeyboardToolbarVisibility.auto &&
           (widget.isImeConnected.value || wantsToShowKeyboardPanel));
 
@@ -146,8 +139,7 @@ class _KeyboardPanelScaffoldState<PanelType>
     super.initState();
     assert(() {
       final scaffold = Scaffold.maybeOf(context);
-      if (scaffold != null &&
-          scaffold.widget.resizeToAvoidBottomInset != false) {
+      if (scaffold != null && scaffold.widget.resizeToAvoidBottomInset != false) {
         throw FlutterError(
           'KeyboardPanelScaffold is placed inside a Scaffold with resizeToAvoidBottomInset set to true.\n'
           'This will produce incorrect results. Set resizeToAvoidBottomInset to false.',
@@ -156,18 +148,15 @@ class _KeyboardPanelScaffoldState<PanelType>
       return true;
     }());
 
-    _panelHeightController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 250),
-    )..addListener(_onPanelHeightChange);
+    _panelHeightController = AnimationController(vsync: this, duration: const Duration(milliseconds: 250))
+      ..addListener(_onPanelHeightChange);
     _updateMaxPanelHeight();
 
     widget.controller.attach(this);
 
     widget.isImeConnected.addListener(_onImeConnectionChange);
 
-    SuperKeyboard.instance.mobileGeometry
-        .addListener(_onKeyboardGeometryChange);
+    SuperKeyboard.instance.mobileGeometry.addListener(_onKeyboardGeometryChange);
 
     _overlayPortalController.show();
     onNextFrame((_) {
@@ -185,8 +174,7 @@ class _KeyboardPanelScaffoldState<PanelType>
     if (!_didInitializeViewInsets) {
       _didInitializeViewInsets = true;
       _bestGuessMaxKeyboardHeight = _getCurrentKeyboardHeight();
-      widget.controller.debugBestGuessKeyboardHeight.value =
-          _bestGuessMaxKeyboardHeight;
+      widget.controller.debugBestGuessKeyboardHeight.value = _bestGuessMaxKeyboardHeight;
       _updateMaxPanelHeight();
     }
 
@@ -224,8 +212,7 @@ class _KeyboardPanelScaffoldState<PanelType>
   void dispose() {
     _ancestorSafeArea?.geometry = const KeyboardSafeAreaGeometry();
 
-    SuperKeyboard.instance.mobileGeometry
-        .removeListener(_onKeyboardGeometryChange);
+    SuperKeyboard.instance.mobileGeometry.removeListener(_onKeyboardGeometryChange);
 
     widget.isImeConnected.removeListener(_onImeConnectionChange);
 
@@ -265,20 +252,18 @@ class _KeyboardPanelScaffoldState<PanelType>
   }
 
   void _updateMaxPanelHeight() {
-    _panelHeight = Tween(
-      begin: 0.0,
-      end: _bestGuessMaxKeyboardHeight > 100
-          ? _bestGuessMaxKeyboardHeight
-          : widget.fallbackPanelHeight,
-    ) //
-        .chain(CurveTween(curve: Curves.easeInOut))
-        .animate(_panelHeightController);
+    _panelHeight =
+        Tween(
+              begin: 0.0,
+              end: _bestGuessMaxKeyboardHeight > 100 ? _bestGuessMaxKeyboardHeight : widget.fallbackPanelHeight,
+            ) //
+            .chain(CurveTween(curve: Curves.easeInOut))
+            .animate(_panelHeightController);
   }
 
   void _onPanelHeightChange() {
     _updateSafeArea();
-    _currentBottomSpacing.value =
-        max(_panelHeight.value, _currentKeyboardHeight);
+    _currentBottomSpacing.value = max(_panelHeight.value, _currentKeyboardHeight);
   }
 
   @override
@@ -323,7 +308,8 @@ class _KeyboardPanelScaffoldState<PanelType>
       case KeyboardToolbarVisibility.hidden:
         hideToolbar();
       case KeyboardToolbarVisibility.auto:
-        _wantsToShowSoftwareKeyboard || _wantsToShowKeyboardPanel //
+        _wantsToShowSoftwareKeyboard ||
+                _wantsToShowKeyboardPanel //
             ? showToolbar()
             : hideToolbar();
     }
@@ -412,8 +398,7 @@ class _KeyboardPanelScaffoldState<PanelType>
       _wantsToShowSoftwareKeyboard = false;
       _activePanel = panel;
 
-      if (SuperKeyboard.instance.mobileGeometry.value.keyboardState ==
-          KeyboardState.open) {
+      if (SuperKeyboard.instance.mobileGeometry.value.keyboardState == KeyboardState.open) {
         // The keyboard is fully open. We'd like for the panel to immediately
         // appear behind the keyboard as it closes, so that we don't have a
         // bunch of jumping around for the widgets mounted to the top of the
@@ -465,9 +450,7 @@ class _KeyboardPanelScaffoldState<PanelType>
   }
 
   void _maybeAnimatePanelClosed() {
-    if (_wantsToShowKeyboardPanel ||
-        _wantsToShowSoftwareKeyboard ||
-        _currentKeyboardHeight != 0.0) {
+    if (_wantsToShowKeyboardPanel || _wantsToShowSoftwareKeyboard || _currentKeyboardHeight != 0.0) {
       return;
     }
 
@@ -490,8 +473,7 @@ class _KeyboardPanelScaffoldState<PanelType>
           // message despite the fact that the keyboard didn't make it all the
           // way up.
           _bestGuessMaxKeyboardHeight = newBottomInset;
-          widget.controller.debugBestGuessKeyboardHeight.value =
-              _bestGuessMaxKeyboardHeight;
+          widget.controller.debugBestGuessKeyboardHeight.value = _bestGuessMaxKeyboardHeight;
         }
 
         if (_wantsToShowSoftwareKeyboard) {
@@ -561,8 +543,7 @@ class _KeyboardPanelScaffoldState<PanelType>
     }
 
     _currentKeyboardHeight = newBottomInset;
-    _currentBottomSpacing.value =
-        max(_panelHeight.value, _currentKeyboardHeight);
+    _currentBottomSpacing.value = max(_panelHeight.value, _currentKeyboardHeight);
 
     setState(() {
       // Re-build with the various property changes we made above.
@@ -593,16 +574,15 @@ class _KeyboardPanelScaffoldState<PanelType>
       return;
     }
 
-    final bottomPadding = _wantsToShowKeyboardPanel //
+    final bottomPadding =
+        _wantsToShowKeyboardPanel //
         ? 0.0
         : _wantsToShowSoftwareKeyboard //
-            ? 0.0
-            : _getCurrentBottomPadding();
+        ? 0.0
+        : _getCurrentBottomPadding();
 
-    final toolbarSize =
-        (_toolbarKey.currentContext?.findRenderObject() as RenderBox?)?.size;
-    final bottomInsets =
-        _currentBottomSpacing.value + (toolbarSize?.height ?? 0);
+    final toolbarSize = (_toolbarKey.currentContext?.findRenderObject() as RenderBox?)?.size;
+    final bottomInsets = _currentBottomSpacing.value + (toolbarSize?.height ?? 0);
 
     _ancestorSafeArea!.geometry = _ancestorSafeArea!.geometry.copyWith(
       bottomInsets: bottomInsets,
@@ -612,8 +592,7 @@ class _KeyboardPanelScaffoldState<PanelType>
 
   double _getCurrentKeyboardHeight() {
     if (widget.bypassMediaQuery) {
-      return SuperKeyboard.instance.mobileGeometry.value.keyboardHeight ??
-          MediaQuery.viewInsetsOf(context).bottom;
+      return SuperKeyboard.instance.mobileGeometry.value.keyboardHeight ?? MediaQuery.viewInsetsOf(context).bottom;
     }
 
     // Note: One reason that it's still important to use MediaQuery bottom insets on iOS instead
@@ -627,8 +606,7 @@ class _KeyboardPanelScaffoldState<PanelType>
 
   double _getCurrentBottomPadding() {
     if (widget.bypassMediaQuery) {
-      return SuperKeyboard.instance.mobileGeometry.value.bottomPadding ??
-          MediaQuery.paddingOf(context).bottom;
+      return SuperKeyboard.instance.mobileGeometry.value.bottomPadding ?? MediaQuery.paddingOf(context).bottom;
     }
 
     return MediaQuery.paddingOf(context).bottom;
@@ -636,13 +614,13 @@ class _KeyboardPanelScaffoldState<PanelType>
 
   @override
   Widget build(BuildContext context) {
-    final shouldShowKeyboardPanel = wantsToShowKeyboardPanel ||
+    final shouldShowKeyboardPanel =
+        wantsToShowKeyboardPanel ||
         // The keyboard panel should be kept visible while the software keyboard is expanding
         // and the keyboard panel was previously visible. Otherwise, there will be an empty
         // region between the top of the software keyboard and the bottom of the above-keyboard panel.
         (wantsToShowSoftwareKeyboard &&
-            SuperKeyboard.instance.mobileGeometry.value.keyboardState !=
-                KeyboardState.open);
+            SuperKeyboard.instance.mobileGeometry.value.keyboardState != KeyboardState.open);
 
     assert(() {
       keyboardPanelLog.fine('''
@@ -685,28 +663,17 @@ Building keyboard scaffold
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   if (_wantsToShowToolbar)
-                    KeyedSubtree(
-                      key: _toolbarKey,
-                      child: widget.toolbarBuilder(
-                        context,
-                        _activePanel,
-                      ),
-                    ),
+                    KeyedSubtree(key: _toolbarKey, child: widget.toolbarBuilder(context, _activePanel)),
                   // Spacer that pushes the toolbar up above the current bottom spacing,
                   // whether that's the software keyboard, or a panel.
                   AnimatedBuilder(
                     animation: _currentBottomSpacing,
                     builder: (context, child) {
-                      return SizedBox(
-                        height: _currentBottomSpacing.value,
-                        child: child,
-                      );
+                      return SizedBox(height: _currentBottomSpacing.value, child: child);
                     },
                     // In the case that we want to display a panel, display it here,
                     // in the current bottom space below the toolbar.
-                    child: shouldShowKeyboardPanel
-                        ? widget.keyboardPanelBuilder(context, _activePanel)
-                        : null,
+                    child: shouldShowKeyboardPanel ? widget.keyboardPanelBuilder(context, _activePanel) : null,
                   ),
                 ],
               ),
@@ -714,19 +681,14 @@ Building keyboard scaffold
           },
         );
       },
-      child: widget.contentBuilder(
-        context,
-        _activePanel,
-      ),
+      child: widget.contentBuilder(context, _activePanel),
     );
   }
 }
 
 /// Shows and hides the keyboard panel and software keyboard.
 class KeyboardPanelController<PanelType> {
-  KeyboardPanelController(
-    this.softwareKeyboardController,
-  );
+  KeyboardPanelController(this.softwareKeyboardController);
 
   void dispose() {
     detach();
@@ -744,8 +706,7 @@ class KeyboardPanelController<PanelType> {
   /// Attaches this controller to a delegate that knows how to show a toolbar, open and
   /// close the software keyboard, and the keyboard panel.
   void attach(KeyboardPanelScaffoldDelegate<PanelType> delegate) {
-    editorImeLog
-        .finer("[KeyboardPanelController] - Attaching to delegate: $delegate");
+    editorImeLog.finer("[KeyboardPanelController] - Attaching to delegate: $delegate");
     _delegate = delegate;
     _delegate!.onAttached(softwareKeyboardController);
   }
@@ -755,17 +716,14 @@ class KeyboardPanelController<PanelType> {
   /// This controller can't open or close the software keyboard, or keyboard panel, while
   /// detached from a delegate that knows how to make that happen.
   void detach() {
-    editorImeLog.finer(
-        "[KeyboardPanelController] - Detaching from delegate: $_delegate");
+    editorImeLog.finer("[KeyboardPanelController] - Detaching from delegate: $_delegate");
     _delegate?.onDetached();
     _delegate = null;
   }
 
   /// Whether the toolbar should be displayed, anchored to the top of the keyboard area.
-  KeyboardToolbarVisibility get toolbarVisibility =>
-      _delegate?.toolbarVisibility ?? KeyboardToolbarVisibility.hidden;
-  set toolbarVisibility(KeyboardToolbarVisibility value) =>
-      _delegate?.toolbarVisibility = value;
+  KeyboardToolbarVisibility get toolbarVisibility => _delegate?.toolbarVisibility ?? KeyboardToolbarVisibility.hidden;
+  set toolbarVisibility(KeyboardToolbarVisibility value) => _delegate?.toolbarVisibility = value;
 
   /// Shows the toolbar, if it's hidden, or hides the toolbar, if it's visible.
   void toggleToolbar() => _delegate?.toggleToolbar();
@@ -804,8 +762,7 @@ class KeyboardPanelController<PanelType> {
 
   /// Shows the keyboard panel, if it's closed, and hides (doesn't close) the
   /// software keyboard, if it's open.
-  void showKeyboardPanel(PanelType panel) =>
-      _delegate?.showKeyboardPanel(panel);
+  void showKeyboardPanel(PanelType panel) => _delegate?.showKeyboardPanel(panel);
 
   /// Hides the keyboard panel, if it's open.
   void hideKeyboardPanel() {
@@ -824,8 +781,7 @@ class KeyboardPanelController<PanelType> {
   final debugBestGuessKeyboardHeight = ValueNotifier<double?>(null);
 }
 
-abstract interface class KeyboardPanelScaffoldDelegate<PanelType>
-    implements ChangeNotifier {
+abstract interface class KeyboardPanelScaffoldDelegate<PanelType> implements ChangeNotifier {
   /// Called on this delegate by the [KeyboardPanelController] when the controller
   /// attaches to the delegate.
   ///
@@ -963,10 +919,8 @@ class KeyboardScaffoldSafeAreaScope extends StatefulWidget {
   }
 
   static KeyboardScaffoldSafeAreaMutator? maybeOf(BuildContext context) {
-    context.dependOnInheritedWidgetOfExactType<
-        _InheritedKeyboardScaffoldSafeArea>();
-    return context
-        .findAncestorStateOfType<_KeyboardScaffoldSafeAreaScopeState>();
+    context.dependOnInheritedWidgetOfExactType<_InheritedKeyboardScaffoldSafeArea>();
+    return context.findAncestorStateOfType<_KeyboardScaffoldSafeAreaScopeState>();
   }
 
   const KeyboardScaffoldSafeAreaScope({
@@ -993,12 +947,10 @@ class KeyboardScaffoldSafeAreaScope extends StatefulWidget {
   final Widget child;
 
   @override
-  State<KeyboardScaffoldSafeAreaScope> createState() =>
-      _KeyboardScaffoldSafeAreaScopeState();
+  State<KeyboardScaffoldSafeAreaScope> createState() => _KeyboardScaffoldSafeAreaScopeState();
 }
 
-class _KeyboardScaffoldSafeAreaScopeState
-    extends State<KeyboardScaffoldSafeAreaScope>
+class _KeyboardScaffoldSafeAreaScopeState extends State<KeyboardScaffoldSafeAreaScope>
     implements KeyboardScaffoldSafeAreaMutator {
   KeyboardSafeAreaGeometry? _keyboardSafeAreaData;
 
@@ -1025,10 +977,8 @@ class _KeyboardScaffoldSafeAreaScopeState
     if (_keyboardSafeAreaData == null) {
       // This is the first call to didChangeDependencies. Initialize our safe area.
       _keyboardSafeAreaData = KeyboardSafeAreaGeometry(
-        bottomInsets: _ancestorSafeArea?.geometry.bottomInsets ??
-            MediaQuery.viewInsetsOf(context).bottom,
-        bottomPadding: _ancestorSafeArea?.geometry.bottomPadding ??
-            MediaQuery.paddingOf(context).bottom,
+        bottomInsets: _ancestorSafeArea?.geometry.bottomInsets ?? MediaQuery.viewInsetsOf(context).bottom,
+        bottomPadding: _ancestorSafeArea?.geometry.bottomPadding ?? MediaQuery.paddingOf(context).bottom,
       );
 
       // We track whether our safe area is from MediaQuery (instead of an another KeyboardSafeAreaGeometry).
@@ -1090,8 +1040,7 @@ class _KeyboardScaffoldSafeAreaScopeState
 
   double _getCurrentKeyboardHeight() {
     if (widget.bypassMediaQuery) {
-      return SuperKeyboard.instance.mobileGeometry.value.keyboardHeight ??
-          MediaQuery.viewInsetsOf(context).bottom;
+      return SuperKeyboard.instance.mobileGeometry.value.keyboardHeight ?? MediaQuery.viewInsetsOf(context).bottom;
     }
 
     return MediaQuery.viewInsetsOf(context).bottom;
@@ -1099,8 +1048,7 @@ class _KeyboardScaffoldSafeAreaScopeState
 
   double _getCurrentBottomPadding() {
     if (widget.bypassMediaQuery) {
-      return SuperKeyboard.instance.mobileGeometry.value.bottomPadding ??
-          MediaQuery.paddingOf(context).bottom;
+      return SuperKeyboard.instance.mobileGeometry.value.bottomPadding ?? MediaQuery.paddingOf(context).bottom;
     }
 
     return MediaQuery.paddingOf(context).bottom;
@@ -1111,10 +1059,10 @@ class _KeyboardScaffoldSafeAreaScopeState
 
   @override
   List<String> get debugLabelPath => [
-        if (_ancestorSafeArea != null) //
-          ..._ancestorSafeArea!.debugLabelPath,
-        debugLabel,
-      ];
+    if (_ancestorSafeArea != null) //
+      ..._ancestorSafeArea!.debugLabelPath,
+    debugLabel,
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -1123,10 +1071,7 @@ class _KeyboardScaffoldSafeAreaScopeState
       return widget.child;
     }
 
-    return _InheritedKeyboardScaffoldSafeArea(
-      keyboardSafeAreaData: _keyboardSafeAreaData!,
-      child: widget.child,
-    );
+    return _InheritedKeyboardScaffoldSafeArea(keyboardSafeAreaData: _keyboardSafeAreaData!, child: widget.child);
   }
 }
 
@@ -1148,16 +1093,11 @@ class _KeyboardScaffoldSafeAreaScopeState
 /// in the widget tree.
 class KeyboardScaffoldSafeArea extends StatefulWidget {
   static _KeyboardScaffoldSafeAreaState? _maybeOf(BuildContext context) {
-    context.dependOnInheritedWidgetOfExactType<
-        _InheritedKeyboardScaffoldSafeArea>();
+    context.dependOnInheritedWidgetOfExactType<_InheritedKeyboardScaffoldSafeArea>();
     return context.findAncestorStateOfType<_KeyboardScaffoldSafeAreaState>();
   }
 
-  const KeyboardScaffoldSafeArea({
-    super.key,
-    this.debugLabel = "UNNAMED",
-    required this.child,
-  });
+  const KeyboardScaffoldSafeArea({super.key, this.debugLabel = "UNNAMED", required this.child});
 
   /// A label associated with this widget that can be helpful when debugging
   /// unexpected safe areas throughout a scope.
@@ -1166,8 +1106,7 @@ class KeyboardScaffoldSafeArea extends StatefulWidget {
   final Widget child;
 
   @override
-  State<KeyboardScaffoldSafeArea> createState() =>
-      _KeyboardScaffoldSafeAreaState();
+  State<KeyboardScaffoldSafeArea> createState() => _KeyboardScaffoldSafeAreaState();
 }
 
 class _KeyboardScaffoldSafeAreaState extends State<KeyboardScaffoldSafeArea> {
@@ -1197,25 +1136,27 @@ class _KeyboardScaffoldSafeAreaState extends State<KeyboardScaffoldSafeArea> {
     return KeyboardScaffoldSafeAreaScope(
       key: _myBoxKey,
       debugLabel: "internal scope",
-      child: Builder(builder: (safeAreaContext) {
-        if (_ancestorSafeArea != null) {
-          // An ancestor safe area was already applied to our subtree.
-          return widget.child;
-        }
+      child: Builder(
+        builder: (safeAreaContext) {
+          if (_ancestorSafeArea != null) {
+            // An ancestor safe area was already applied to our subtree.
+            return widget.child;
+          }
 
-        final bottomInsets = _chooseBottomInsets(safeAreaContext);
-        return Padding(
-          padding: EdgeInsets.only(bottom: bottomInsets),
-          // ^ We inject `bottomInsets` to push content above the keyboard. However, we don't
-          //   inject the `bottomPadding` because that would take away styling opportunities
-          //   from the user. Consider a chat message editor at the bottom of the screen. That
-          //   chat editor should push its content up above the bottom notch, but the chat editor
-          //   itself should still extend its background to the bottom of the screen. If we
-          //   enforce bottom padding here, then the whole chat editor would get pushed up and
-          //   and leave an ugly visual gap between the editor and the bottom of the screen.
-          child: widget.child,
-        );
-      }),
+          final bottomInsets = _chooseBottomInsets(safeAreaContext);
+          return Padding(
+            padding: EdgeInsets.only(bottom: bottomInsets),
+            // ^ We inject `bottomInsets` to push content above the keyboard. However, we don't
+            //   inject the `bottomPadding` because that would take away styling opportunities
+            //   from the user. Consider a chat message editor at the bottom of the screen. That
+            //   chat editor should push its content up above the bottom notch, but the chat editor
+            //   itself should still extend its background to the bottom of the screen. If we
+            //   enforce bottom padding here, then the whole chat editor would get pushed up and
+            //   and leave an ugly visual gap between the editor and the bottom of the screen.
+            child: widget.child,
+          );
+        },
+      ),
     );
   }
 
@@ -1225,8 +1166,7 @@ class _KeyboardScaffoldSafeAreaState extends State<KeyboardScaffoldSafeArea> {
     final inheritedGeometry = _ancestorSafeAreaScope?.geometry;
 
     // Either use the ancestor geometry, or use our own.
-    final keyboardSafeArea = inheritedGeometry ??
-        KeyboardScaffoldSafeAreaScope.of(safeAreaContext).geometry;
+    final keyboardSafeArea = inheritedGeometry ?? KeyboardScaffoldSafeAreaScope.of(safeAreaContext).geometry;
 
     // Get the current keyboard safe area bottom insets, and then adjust that
     // value based on our global bottom y-value. When this widget appears at
@@ -1235,8 +1175,7 @@ class _KeyboardScaffoldSafeAreaState extends State<KeyboardScaffoldSafeArea> {
     // need to account for that extra space between us and the keyboard that's
     // coming up from the bottom of the screen.
     var bottomInsets = keyboardSafeArea.bottomInsets;
-    if (_myBoxKey.currentContext != null &&
-        _myBoxKey.currentContext!.findRenderObject() != null) {
+    if (_myBoxKey.currentContext != null && _myBoxKey.currentContext!.findRenderObject() != null) {
       final myBox = _myBoxKey.currentContext!.findRenderObject() as RenderBox;
 
       late final double myGlobalBottom;
@@ -1271,8 +1210,7 @@ class _KeyboardScaffoldSafeAreaState extends State<KeyboardScaffoldSafeArea> {
         return 0;
       }
 
-      final spaceBelowMe =
-          MediaQuery.sizeOf(safeAreaContext).height - myGlobalBottom;
+      final spaceBelowMe = MediaQuery.sizeOf(safeAreaContext).height - myGlobalBottom;
 
       // The bottom insets are measured from the bottom of the screen. But we might not
       // be sitting at the bottom of the screen. There might be some space beneath us.
@@ -1322,16 +1260,12 @@ abstract interface class KeyboardScaffoldSafeAreaMutator {
 }
 
 class _InheritedKeyboardScaffoldSafeArea extends InheritedWidget {
-  const _InheritedKeyboardScaffoldSafeArea({
-    required this.keyboardSafeAreaData,
-    required super.child,
-  });
+  const _InheritedKeyboardScaffoldSafeArea({required this.keyboardSafeAreaData, required super.child});
 
   final KeyboardSafeAreaGeometry keyboardSafeAreaData;
 
   @override
-  bool updateShouldNotify(
-      covariant _InheritedKeyboardScaffoldSafeArea oldWidget) {
+  bool updateShouldNotify(covariant _InheritedKeyboardScaffoldSafeArea oldWidget) {
     return oldWidget.keyboardSafeAreaData != keyboardSafeAreaData;
   }
 }
@@ -1339,10 +1273,7 @@ class _InheritedKeyboardScaffoldSafeArea extends InheritedWidget {
 /// Insets applied by a [KeyboardPanelScaffold] to an ancestor [KeyboardScaffoldSafeArea]
 /// to deal with the presence or absence of the software keyboard.
 class KeyboardSafeAreaGeometry {
-  const KeyboardSafeAreaGeometry({
-    this.bottomInsets = 0,
-    this.bottomPadding = 0,
-  });
+  const KeyboardSafeAreaGeometry({this.bottomInsets = 0, this.bottomPadding = 0});
 
   /// The space taken up by the keyboard or a keyboard panel.
   final double bottomInsets;
@@ -1391,13 +1322,9 @@ class KeyboardSafeAreaGeometry {
   final double bottomPadding;
 
   @override
-  String toString() =>
-      "[KeyboardSafeAreaGeometry] - bottom insets: $bottomInsets, bottom padding: $bottomPadding";
+  String toString() => "[KeyboardSafeAreaGeometry] - bottom insets: $bottomInsets, bottom padding: $bottomPadding";
 
-  KeyboardSafeAreaGeometry copyWith({
-    double? bottomInsets,
-    double? bottomPadding,
-  }) {
+  KeyboardSafeAreaGeometry copyWith({double? bottomInsets, double? bottomPadding}) {
     return KeyboardSafeAreaGeometry(
       bottomInsets: bottomInsets ?? this.bottomInsets,
       bottomPadding: bottomPadding ?? this.bottomPadding,

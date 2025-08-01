@@ -57,13 +57,8 @@ class SuperEditorDryLayout extends CustomScrollView {
   List<Widget> get slivers => [superEditor];
 
   @override
-  Widget buildViewport(BuildContext context, ViewportOffset offset,
-      AxisDirection axisDirection, List<Widget> slivers) {
-    return ViewportWithDryLayout(
-      axisDirection: axisDirection,
-      offset: offset,
-      slivers: slivers,
-    );
+  Widget buildViewport(BuildContext context, ViewportOffset offset, AxisDirection axisDirection, List<Widget> slivers) {
+    return ViewportWithDryLayout(axisDirection: axisDirection, offset: offset, slivers: slivers);
   }
 }
 
@@ -85,8 +80,7 @@ class ViewportWithDryLayout extends Viewport {
   RenderViewportWithDryLayout createRenderObject(BuildContext context) {
     return RenderViewportWithDryLayout(
       axisDirection: axisDirection,
-      crossAxisDirection: crossAxisDirection ??
-          Viewport.getDefaultCrossAxisDirection(context, axisDirection),
+      crossAxisDirection: crossAxisDirection ?? Viewport.getDefaultCrossAxisDirection(context, axisDirection),
       anchor: anchor,
       offset: offset,
       cacheExtent: cacheExtent,
@@ -96,12 +90,10 @@ class ViewportWithDryLayout extends Viewport {
   }
 
   @override
-  void updateRenderObject(
-      BuildContext context, RenderViewportWithDryLayout renderObject) {
+  void updateRenderObject(BuildContext context, RenderViewportWithDryLayout renderObject) {
     renderObject
       ..axisDirection = axisDirection
-      ..crossAxisDirection = crossAxisDirection ??
-          Viewport.getDefaultCrossAxisDirection(context, axisDirection)
+      ..crossAxisDirection = crossAxisDirection ?? Viewport.getDefaultCrossAxisDirection(context, axisDirection)
       ..anchor = anchor
       ..offset = offset
       ..cacheExtent = cacheExtent
@@ -166,8 +158,6 @@ class RenderViewportWithDryLayout extends RenderViewport {
         firstBox = child;
       }
     });
-    return firstSliver != null
-        ? _findFirstRenderBoxInSliverList(firstSliver!)
-        : firstBox!;
+    return firstSliver != null ? _findFirstRenderBoxInSliverList(firstSliver!) : firstBox!;
   }
 }

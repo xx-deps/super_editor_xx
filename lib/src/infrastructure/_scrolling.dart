@@ -8,12 +8,9 @@ import '_logging.dart';
 /// Animates the scroll offset of a given [scrollPosition] based on a
 /// given speed percent.
 class AutoScroller {
-  AutoScroller({
-    required TickerProvider vsync,
-    double maxScrollSpeed = 5,
-    ScrollPosition? scrollPosition,
-  })  : _maxScrollSpeed = maxScrollSpeed,
-        _scrollPosition = scrollPosition {
+  AutoScroller({required TickerProvider vsync, double maxScrollSpeed = 5, ScrollPosition? scrollPosition})
+    : _maxScrollSpeed = maxScrollSpeed,
+      _scrollPosition = scrollPosition {
     _ticker = vsync.createTicker(_onTick);
   }
 
@@ -24,8 +21,7 @@ class AutoScroller {
   final double _maxScrollSpeed;
 
   ScrollPosition? _scrollPosition;
-  set scrollPosition(ScrollPosition? scrollPosition) =>
-      _scrollPosition = scrollPosition;
+  set scrollPosition(ScrollPosition? scrollPosition) => _scrollPosition = scrollPosition;
 
   double _scrollSpeedPercent = 0.0;
 
@@ -49,14 +45,12 @@ class AutoScroller {
 
   void _scrollUp() {
     if (_scrollPosition == null) {
-      editorGesturesLog
-          .warning("Tried to scroll up but the scroll position is null");
+      editorGesturesLog.warning("Tried to scroll up but the scroll position is null");
       return;
     }
 
     if (_scrollPosition!.pixels <= 0) {
-      editorGesturesLog.finest(
-          "Tried to scroll up but the scroll position is already at the top");
+      editorGesturesLog.finest("Tried to scroll up but the scroll position is already at the top");
       return;
     }
 
@@ -90,14 +84,12 @@ class AutoScroller {
 
   void _scrollDown() {
     if (_scrollPosition == null) {
-      editorGesturesLog
-          .warning("Tried to scroll down but the scroll position is null");
+      editorGesturesLog.warning("Tried to scroll down but the scroll position is null");
       return;
     }
 
     if (_scrollPosition!.pixels >= _scrollPosition!.maxScrollExtent) {
-      editorGesturesLog.finest(
-          "Tried to scroll down but the scroll position is already beyond the max");
+      editorGesturesLog.finest("Tried to scroll down but the scroll position is already beyond the max");
       return;
     }
 

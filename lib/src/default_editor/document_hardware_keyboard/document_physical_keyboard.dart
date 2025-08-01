@@ -48,12 +48,10 @@ class SuperEditorHardwareKeyHandler extends StatefulWidget {
   final Widget child;
 
   @override
-  State<SuperEditorHardwareKeyHandler> createState() =>
-      _SuperEditorHardwareKeyHandlerState();
+  State<SuperEditorHardwareKeyHandler> createState() => _SuperEditorHardwareKeyHandlerState();
 }
 
-class _SuperEditorHardwareKeyHandlerState
-    extends State<SuperEditorHardwareKeyHandler> {
+class _SuperEditorHardwareKeyHandlerState extends State<SuperEditorHardwareKeyHandler> {
   late FocusNode _focusNode;
 
   @override
@@ -82,12 +80,8 @@ class _SuperEditorHardwareKeyHandlerState
     editorKeyLog.finest("Handling key press: $keyEvent");
     ExecutionInstruction instruction = ExecutionInstruction.continueExecution;
     int index = 0;
-    while (instruction == ExecutionInstruction.continueExecution &&
-        index < widget.keyboardActions.length) {
-      instruction = widget.keyboardActions[index](
-        editContext: widget.editContext,
-        keyEvent: keyEvent,
-      );
+    while (instruction == ExecutionInstruction.continueExecution && index < widget.keyboardActions.length) {
+      instruction = widget.keyboardActions[index](editContext: widget.editContext, keyEvent: keyEvent);
       index += 1;
     }
 
@@ -123,18 +117,13 @@ class _SuperEditorHardwareKeyHandlerState
 ///
 /// It is possible that an action does nothing and then returns
 /// `ExecutionInstruction.haltExecution` to prevent further execution.
-typedef DocumentKeyboardAction = ExecutionInstruction Function({
-  required SuperEditorContext editContext,
-  required KeyEvent keyEvent,
-});
+typedef DocumentKeyboardAction =
+    ExecutionInstruction Function({required SuperEditorContext editContext, required KeyEvent keyEvent});
 
 /// A [DocumentKeyboardAction] that reports [ExecutionInstruction.blocked]
 /// for any key combination that matches one of the given [keys].
 DocumentKeyboardAction ignoreKeyCombos(List<ShortcutActivator> keys) {
-  return ({
-    required SuperEditorContext editContext,
-    required KeyEvent keyEvent,
-  }) {
+  return ({required SuperEditorContext editContext, required KeyEvent keyEvent}) {
     for (final key in keys) {
       if (key.accepts(keyEvent, HardwareKeyboard.instance)) {
         return ExecutionInstruction.blocked;

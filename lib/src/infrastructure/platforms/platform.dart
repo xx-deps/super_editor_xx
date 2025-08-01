@@ -3,15 +3,16 @@ import 'package:flutter/foundation.dart';
 class CurrentPlatform {
   /// Whether or not we are running on an Apple device (MacOS or iOS).
   static bool get isApple =>
-      defaultTargetPlatform == TargetPlatform.macOS ||
-      defaultTargetPlatform == TargetPlatform.iOS;
+      defaultTargetPlatform == TargetPlatform.macOS || defaultTargetPlatform == TargetPlatform.iOS;
 
   /// Whether or not we are running on web.
   ///
   /// By default this is the same as [kIsWeb].
   ///
   /// [debugIsWebOverride] may be used to override the natural value of [isWeb].
-  static bool get isWeb => debugIsWebOverride == null //
+  static bool get isWeb =>
+      debugIsWebOverride ==
+          null //
       ? kIsWeb
       : debugIsWebOverride == WebPlatformOverride.web;
 }

@@ -53,8 +53,7 @@ extension SuperEditorRobot on WidgetTester {
   }) async {
     // Calculate the global tap position based on the TextLayout and desired
     // TextPosition.
-    final globalTapOffset = _findGlobalOffsetForTextPosition(
-        nodeId, offset, affinity, superEditorFinder);
+    final globalTapOffset = _findGlobalOffsetForTextPosition(nodeId, offset, affinity, superEditorFinder);
 
     // TODO: check that the tap offset is visible within the viewport. Add option to
     // auto-scroll, or throw exception when it's not tappable.
@@ -69,8 +68,7 @@ extension SuperEditorRobot on WidgetTester {
     Finder? superEditorFinder,
   }) async {
     // Calculate the global tap position based on the TextLayout and desired TextPosition.
-    final globalTapOffset = _findGlobalOffsetForTextPosition(
-        nodeId, offset, affinity, superEditorFinder);
+    final globalTapOffset = _findGlobalOffsetForTextPosition(nodeId, offset, affinity, superEditorFinder);
 
     final gesture = await startGesture(globalTapOffset);
     await gesture.up();
@@ -91,8 +89,7 @@ extension SuperEditorRobot on WidgetTester {
     TextAffinity affinity = TextAffinity.downstream,
     Finder? superEditorFinder,
   }) async {
-    final gesture = await tapDownInParagraph(nodeId, offset,
-        affinity: affinity, superEditorFinder: superEditorFinder);
+    final gesture = await tapDownInParagraph(nodeId, offset, affinity: affinity, superEditorFinder: superEditorFinder);
     await pump(kLongPressTimeout + kPressTimeout);
 
     await gesture.up();
@@ -108,8 +105,7 @@ extension SuperEditorRobot on WidgetTester {
     TextAffinity affinity = TextAffinity.downstream,
     Finder? superEditorFinder,
   }) async {
-    final gesture = await tapDownInParagraph(nodeId, offset,
-        affinity: affinity, superEditorFinder: superEditorFinder);
+    final gesture = await tapDownInParagraph(nodeId, offset, affinity: affinity, superEditorFinder: superEditorFinder);
     await pump(kLongPressTimeout + kPressTimeout);
     return gesture;
   }
@@ -146,8 +142,7 @@ extension SuperEditorRobot on WidgetTester {
   ]) async {
     // Calculate the global tap position based on the TextLayout and desired
     // TextPosition.
-    final globalTapOffset = _findGlobalOffsetForTextPosition(
-        nodeId, offset, affinity, superEditorFinder);
+    final globalTapOffset = _findGlobalOffsetForTextPosition(nodeId, offset, affinity, superEditorFinder);
 
     // TODO: check that the tap offset is visible within the viewport. Add option to
     // auto-scroll, or throw exception when it's not tappable.
@@ -167,13 +162,10 @@ extension SuperEditorRobot on WidgetTester {
   /// Taps at the center of the content at the given [position] within a [SuperEditor].
   ///
   /// {@macro supereditor_finder}
-  Future<void> tapAtDocumentPosition(DocumentPosition position,
-      [Finder? superEditorFinder]) async {
+  Future<void> tapAtDocumentPosition(DocumentPosition position, [Finder? superEditorFinder]) async {
     final documentLayout = _findDocumentLayout(superEditorFinder);
-    final positionRectInDoc = _getRectForDocumentPosition(
-        position, documentLayout, superEditorFinder);
-    final globalTapOffset = documentLayout
-        .getAncestorOffsetFromDocumentOffset(positionRectInDoc.center);
+    final positionRectInDoc = _getRectForDocumentPosition(position, documentLayout, superEditorFinder);
+    final globalTapOffset = documentLayout.getAncestorOffsetFromDocumentOffset(positionRectInDoc.center);
 
     await tapAt(globalTapOffset);
   }
@@ -181,12 +173,10 @@ extension SuperEditorRobot on WidgetTester {
   /// Double-taps at the center of the content at the given [position] within a [SuperEditor].
   ///
   /// {@macro supereditor_finder}
-  Future<void> doubleTapAtDocumentPosition(DocumentPosition position,
-      [Finder? superEditorFinder]) async {
+  Future<void> doubleTapAtDocumentPosition(DocumentPosition position, [Finder? superEditorFinder]) async {
     final documentLayout = _findDocumentLayout(superEditorFinder);
     final positionRectInDoc = documentLayout.getRectForPosition(position)!;
-    final globalTapOffset = documentLayout
-        .getAncestorOffsetFromDocumentOffset(positionRectInDoc.center);
+    final globalTapOffset = documentLayout.getAncestorOffsetFromDocumentOffset(positionRectInDoc.center);
 
     await tapAt(globalTapOffset);
     await pump(kTapMinTime);
@@ -196,12 +186,10 @@ extension SuperEditorRobot on WidgetTester {
   /// Triple-taps at the center of the content at the given [position] within a [SuperEditor].
   ///
   /// {@macro supereditor_finder}
-  Future<void> tripleTapAtDocumentPosition(DocumentPosition position,
-      [Finder? superEditorFinder]) async {
+  Future<void> tripleTapAtDocumentPosition(DocumentPosition position, [Finder? superEditorFinder]) async {
     final documentLayout = _findDocumentLayout(superEditorFinder);
     final positionRectInDoc = documentLayout.getRectForPosition(position)!;
-    final globalTapOffset = documentLayout
-        .getAncestorOffsetFromDocumentOffset(positionRectInDoc.center);
+    final globalTapOffset = documentLayout.getAncestorOffsetFromDocumentOffset(positionRectInDoc.center);
 
     await tapAt(globalTapOffset);
     await pump(kTapMinTime);
@@ -244,31 +232,27 @@ extension SuperEditorRobot on WidgetTester {
       if (delta.dx < 0) {
         // We're dragging up and left. To capture the content at `from`,
         // drag from bottom right.
-        dragStartOffset = documentLayout
-            .getAncestorOffsetFromDocumentOffset(dragStartRect.bottomRight);
+        dragStartOffset = documentLayout.getAncestorOffsetFromDocumentOffset(dragStartRect.bottomRight);
       } else {
         // We're dragging up and right. To capture the content at `from`,
         // drag from bottom left.
-        dragStartOffset = documentLayout
-            .getAncestorOffsetFromDocumentOffset(dragStartRect.bottomLeft);
+        dragStartOffset = documentLayout.getAncestorOffsetFromDocumentOffset(dragStartRect.bottomLeft);
       }
     } else {
       if (delta.dx < 0) {
         // We're dragging down and left. To capture the content at `from`,
         // drag from top right.
-        dragStartOffset = documentLayout
-            .getAncestorOffsetFromDocumentOffset(dragStartRect.topRight);
+        dragStartOffset = documentLayout.getAncestorOffsetFromDocumentOffset(dragStartRect.topRight);
       } else {
         // We're dragging down and right. To capture the content at `from`,
         // drag from top left.
-        dragStartOffset = documentLayout
-            .getAncestorOffsetFromDocumentOffset(dragStartRect.topLeft);
+        dragStartOffset = documentLayout.getAncestorOffsetFromDocumentOffset(dragStartRect.topLeft);
       }
     }
 
-    final deviceKind = pointerDeviceKind ??
-        (defaultTargetPlatform == TargetPlatform.iOS ||
-                defaultTargetPlatform == TargetPlatform.android
+    final deviceKind =
+        pointerDeviceKind ??
+        (defaultTargetPlatform == TargetPlatform.iOS || defaultTargetPlatform == TargetPlatform.android
             ? PointerDeviceKind.touch
             : PointerDeviceKind.mouse);
 
@@ -306,12 +290,9 @@ extension SuperEditorRobot on WidgetTester {
 
     // Find the global offset to start the drag gesture.
     Rect dragStartRect = documentLayout.getRectForPosition(from)!.deflate(1);
-    final globalDocTopLeft =
-        documentLayout.getGlobalOffsetFromDocumentOffset(Offset.zero);
-    dragStartRect =
-        dragStartRect.translate(globalDocTopLeft.dx, globalDocTopLeft.dy);
-    final dragStartOffset =
-        startAlignmentWithinPosition.withinRect(dragStartRect);
+    final globalDocTopLeft = documentLayout.getGlobalOffsetFromDocumentOffset(Offset.zero);
+    dragStartRect = dragStartRect.translate(globalDocTopLeft.dx, globalDocTopLeft.dy);
+    final dragStartOffset = startAlignmentWithinPosition.withinRect(dragStartRect);
 
     // Simulate the drag.
     final gesture = await startGesture(dragStartOffset, kind: deviceKind);
@@ -335,51 +316,39 @@ extension SuperEditorRobot on WidgetTester {
   }
 
   Future<TestGesture> pressDownOnCollapsedMobileHandle() async {
-    final handleElement =
-        find.byKey(DocumentKeys.androidCaretHandle).evaluate().firstOrNull;
-    assert(handleElement != null,
-        "Tried to press down on Android collapsed handle but no handle was found.");
+    final handleElement = find.byKey(DocumentKeys.androidCaretHandle).evaluate().firstOrNull;
+    assert(handleElement != null, "Tried to press down on Android collapsed handle but no handle was found.");
     final renderHandle = handleElement!.renderObject as RenderBox;
-    final handleCenter =
-        renderHandle.localToGlobal(renderHandle.size.center(Offset.zero));
+    final handleCenter = renderHandle.localToGlobal(renderHandle.size.center(Offset.zero));
 
     final gesture = await startGesture(handleCenter);
     return gesture;
   }
 
   Future<void> tapOnCollapsedMobileHandle() async {
-    final handleElement =
-        find.byKey(DocumentKeys.androidCaretHandle).evaluate().firstOrNull;
-    assert(handleElement != null,
-        "Tried to press down on Android collapsed handle but no handle was found.");
+    final handleElement = find.byKey(DocumentKeys.androidCaretHandle).evaluate().firstOrNull;
+    assert(handleElement != null, "Tried to press down on Android collapsed handle but no handle was found.");
     final renderHandle = handleElement!.renderObject as RenderBox;
-    final handleCenter =
-        renderHandle.localToGlobal(renderHandle.size.center(Offset.zero));
+    final handleCenter = renderHandle.localToGlobal(renderHandle.size.center(Offset.zero));
 
     await tapAt(handleCenter);
   }
 
   Future<TestGesture> pressDownOnUpstreamMobileHandle() async {
-    final handleElement =
-        find.byKey(DocumentKeys.upstreamHandle).evaluate().firstOrNull;
-    assert(handleElement != null,
-        "Tried to press down on upstream handle but no handle was found.");
+    final handleElement = find.byKey(DocumentKeys.upstreamHandle).evaluate().firstOrNull;
+    assert(handleElement != null, "Tried to press down on upstream handle but no handle was found.");
     final renderHandle = handleElement!.renderObject as RenderBox;
-    final handleCenter =
-        renderHandle.localToGlobal(renderHandle.size.center(Offset.zero));
+    final handleCenter = renderHandle.localToGlobal(renderHandle.size.center(Offset.zero));
 
     final gesture = await startGesture(handleCenter);
     return gesture;
   }
 
   Future<TestGesture> pressDownOnDownstreamMobileHandle() async {
-    final handleElement =
-        find.byKey(DocumentKeys.downstreamHandle).evaluate().firstOrNull;
-    assert(handleElement != null,
-        "Tried to press down on upstream handle but no handle was found.");
+    final handleElement = find.byKey(DocumentKeys.downstreamHandle).evaluate().firstOrNull;
+    assert(handleElement != null, "Tried to press down on upstream handle but no handle was found.");
     final renderHandle = handleElement!.renderObject as RenderBox;
-    final handleCenter =
-        renderHandle.localToGlobal(renderHandle.size.center(Offset.zero));
+    final handleCenter = renderHandle.localToGlobal(renderHandle.size.center(Offset.zero));
 
     final gesture = await startGesture(handleCenter);
     return gesture;
@@ -414,8 +383,7 @@ extension SuperEditorRobot on WidgetTester {
   ///
   /// The initial offset is at (0,0).
   Future<void> startFloatingCursorGesture() async {
-    await _updateFloatingCursor(
-        action: "FloatingCursorDragState.start", offset: Offset.zero);
+    await _updateFloatingCursor(action: "FloatingCursorDragState.start", offset: Offset.zero);
   }
 
   /// Simulates the user swiping the spacebar by [offset].
@@ -424,16 +392,14 @@ extension SuperEditorRobot on WidgetTester {
   ///
   /// A floating cursor gesture must be started before calling this method.
   Future<void> updateFloatingCursorGesture(Offset offset) async {
-    await _updateFloatingCursor(
-        action: "FloatingCursorDragState.update", offset: offset);
+    await _updateFloatingCursor(action: "FloatingCursorDragState.update", offset: offset);
   }
 
   /// Simulates the user releasing the spacebar and stopping the floating cursor gesture.
   ///
   /// A floating cursor gesture must be started before calling this method.
   Future<void> stopFloatingCursorGesture() async {
-    await _updateFloatingCursor(
-        action: "FloatingCursorDragState.end", offset: Offset.zero);
+    await _updateFloatingCursor(action: "FloatingCursorDragState.end", offset: Offset.zero);
   }
 
   Offset _findGlobalOffsetForTextPosition(
@@ -442,13 +408,10 @@ extension SuperEditorRobot on WidgetTester {
     TextAffinity affinity, [
     Finder? superEditorFinder,
   ]) {
-    final textComponentKey =
-        _findComponentKeyForTextNode(nodeId, superEditorFinder);
-    final textRenderBox =
-        textComponentKey.currentContext!.findRenderObject() as RenderBox;
+    final textComponentKey = _findComponentKeyForTextNode(nodeId, superEditorFinder);
+    final textRenderBox = textComponentKey.currentContext!.findRenderObject() as RenderBox;
 
-    final localTapOffset = _findLocalOffsetForTextPosition(
-        nodeId, offset, affinity, superEditorFinder);
+    final localTapOffset = _findLocalOffsetForTextPosition(nodeId, offset, affinity, superEditorFinder);
     return localTapOffset + textRenderBox.localToGlobal(Offset.zero);
   }
 
@@ -458,10 +421,8 @@ extension SuperEditorRobot on WidgetTester {
     TextAffinity affinity, [
     Finder? superEditorFinder,
   ]) {
-    final textComponentKey =
-        _findComponentKeyForTextNode(nodeId, superEditorFinder);
-    final textLayout =
-        (textComponentKey.currentState as TextComponentState).textLayout;
+    final textComponentKey = _findComponentKeyForTextNode(nodeId, superEditorFinder);
+    final textLayout = (textComponentKey.currentState as TextComponentState).textLayout;
 
     // Calculate the global tap position based on the TextLayout and desired
     // TextPosition.
@@ -473,16 +434,17 @@ extension SuperEditorRobot on WidgetTester {
     // hard-coded value, instead. We also adjust the horizontal offset by a pixel left
     // or right depending on the requested affinity. Without this the resulting selection
     // may contain an incorrect affinity if the gesture did not occur at a line break.
-    return textLayout.getOffsetForCaret(position) +
-        Offset(affinity == TextAffinity.upstream ? -1 : 1, 5);
+    return textLayout.getOffsetForCaret(position) + Offset(affinity == TextAffinity.upstream ? -1 : 1, 5);
   }
 
   /// Returns the bounding box around the given [position], within the associated component.
   ///
   /// If the component is a block component, the returned [Rect] will be half of its width.
   Rect _getRectForDocumentPosition(
-      DocumentPosition position, DocumentLayout documentLayout,
-      [Finder? superEditorFinder]) {
+    DocumentPosition position,
+    DocumentLayout documentLayout, [
+    Finder? superEditorFinder,
+  ]) {
     final component = documentLayout.getComponentByNodeId(position.nodeId);
     if (component == null) {
       throw Exception('No component found for node ID: ${position.nodeId}');
@@ -495,15 +457,9 @@ extension SuperEditorRobot on WidgetTester {
       final componentBox = component.context.findRenderObject() as RenderBox;
       final edge = component.getEdgeForPosition(position.nodePosition);
 
-      final positionRect = position.nodePosition ==
-              const UpstreamDownstreamNodePosition.upstream()
+      final positionRect = position.nodePosition == const UpstreamDownstreamNodePosition.upstream()
           // For upstream position, the edge is a zero width rect starting from the left.
-          ? Rect.fromLTWH(
-              edge.left,
-              edge.top,
-              componentBox.size.width / 2,
-              componentBox.size.height,
-            )
+          ? Rect.fromLTWH(edge.left, edge.top, componentBox.size.width / 2, componentBox.size.height)
           // For downstream position, the edge is a zero width rect starting at the right.
           // Subtract half of the width to make it start from the center.
           : Rect.fromLTWH(
@@ -514,10 +470,8 @@ extension SuperEditorRobot on WidgetTester {
             );
 
       // Translate the rect to global coordinates.
-      final documentLayoutElement =
-          _findDocumentLayoutElement(superEditorFinder);
-      final docOffset = componentBox.localToGlobal(Offset.zero,
-          ancestor: documentLayoutElement.findRenderObject());
+      final documentLayoutElement = _findDocumentLayoutElement(superEditorFinder);
+      final docOffset = componentBox.localToGlobal(Offset.zero, ancestor: documentLayoutElement.findRenderObject());
       return positionRect.translate(docOffset.dx, docOffset.dy);
     }
 
@@ -537,9 +491,7 @@ extension SuperEditorRobot on WidgetTester {
   StatefulElement _findDocumentLayoutElement([Finder? superEditorFinder]) {
     late final Finder layoutFinder;
     if (superEditorFinder != null) {
-      layoutFinder = find.descendant(
-          of: superEditorFinder,
-          matching: find.byType(SingleColumnDocumentLayout));
+      layoutFinder = find.descendant(of: superEditorFinder, matching: find.byType(SingleColumnDocumentLayout));
     } else {
       layoutFinder = find.byType(SingleColumnDocumentLayout);
     }
@@ -550,8 +502,7 @@ extension SuperEditorRobot on WidgetTester {
   /// given [nodeId].
   ///
   /// The given [nodeId] must refer to a [TextNode] or subclass.
-  GlobalKey _findComponentKeyForTextNode(String nodeId,
-      [Finder? superEditorFinder]) {
+  GlobalKey _findComponentKeyForTextNode(String nodeId, [Finder? superEditorFinder]) {
     final documentLayout = _findDocumentLayout(superEditorFinder);
 
     final componentState = documentLayout.getComponentByNodeId(nodeId) as State;
@@ -562,20 +513,15 @@ extension SuperEditorRobot on WidgetTester {
     }
   }
 
-  Future<void> _updateFloatingCursor(
-      {required String action, required Offset offset}) async {
-    await TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
-        .handlePlatformMessage(
+  Future<void> _updateFloatingCursor({required String action, required Offset offset}) async {
+    await TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.handlePlatformMessage(
       SystemChannels.textInput.name,
       SystemChannels.textInput.codec.encodeMethodCall(
-        MethodCall(
-          "TextInputClient.updateFloatingCursor",
-          [
-            -1,
-            action,
-            {"X": offset.dx, "Y": offset.dy}
-          ],
-        ),
+        MethodCall("TextInputClient.updateFloatingCursor", [
+          -1,
+          action,
+          {"X": offset.dx, "Y": offset.dy},
+        ]),
       ),
       null,
     );

@@ -11,8 +11,7 @@ class MacOsSelectors {
   static const String deleteForward = 'deleteForward:';
   static const String deleteWordForward = 'deleteWordForward:';
   static const String deleteToEndOfLine = 'deleteToEndOfLine:';
-  static const String deleteBackwardByDecomposingPreviousCharacter =
-      'deleteBackwardByDecomposingPreviousCharacter:';
+  static const String deleteBackwardByDecomposingPreviousCharacter = 'deleteBackwardByDecomposingPreviousCharacter:';
 
   static const String moveLeft = 'moveLeft:';
   static const String moveRight = 'moveRight:';
@@ -23,8 +22,7 @@ class MacOsSelectors {
 
   static const String moveWordLeft = 'moveWordLeft:';
   static const String moveWordRight = 'moveWordRight:';
-  static const String moveToBeginningOfParagraph =
-      'moveToBeginningOfParagraph:';
+  static const String moveToBeginningOfParagraph = 'moveToBeginningOfParagraph:';
   static const String moveToEndOfParagraph = 'moveToEndOfParagraph:';
 
   static const String moveToLeftEndOfLine = 'moveToLeftEndOfLine:';
@@ -32,43 +30,30 @@ class MacOsSelectors {
   static const String moveToBeginningOfDocument = 'moveToBeginningOfDocument:';
   static const String moveToEndOfDocument = 'moveToEndOfDocument:';
 
-  static const String moveLeftAndModifySelection =
-      'moveLeftAndModifySelection:';
-  static const String moveRightAndModifySelection =
-      'moveRightAndModifySelection:';
+  static const String moveLeftAndModifySelection = 'moveLeftAndModifySelection:';
+  static const String moveRightAndModifySelection = 'moveRightAndModifySelection:';
   static const String moveUpAndModifySelection = 'moveUpAndModifySelection:';
-  static const String moveDownAndModifySelection =
-      'moveDownAndModifySelection:';
+  static const String moveDownAndModifySelection = 'moveDownAndModifySelection:';
 
-  static const String moveWordLeftAndModifySelection =
-      'moveWordLeftAndModifySelection:';
-  static const String moveWordRightAndModifySelection =
-      'moveWordRightAndModifySelection:';
-  static const String moveParagraphBackwardAndModifySelection =
-      'moveParagraphBackwardAndModifySelection:';
-  static const String moveParagraphForwardAndModifySelection =
-      'moveParagraphForwardAndModifySelection:';
+  static const String moveWordLeftAndModifySelection = 'moveWordLeftAndModifySelection:';
+  static const String moveWordRightAndModifySelection = 'moveWordRightAndModifySelection:';
+  static const String moveParagraphBackwardAndModifySelection = 'moveParagraphBackwardAndModifySelection:';
+  static const String moveParagraphForwardAndModifySelection = 'moveParagraphForwardAndModifySelection:';
 
-  static const String moveToLeftEndOfLineAndModifySelection =
-      'moveToLeftEndOfLineAndModifySelection:';
-  static const String moveToRightEndOfLineAndModifySelection =
-      'moveToRightEndOfLineAndModifySelection:';
-  static const String moveToBeginningOfDocumentAndModifySelection =
-      'moveToBeginningOfDocumentAndModifySelection:';
-  static const String moveToEndOfDocumentAndModifySelection =
-      'moveToEndOfDocumentAndModifySelection:';
+  static const String moveToLeftEndOfLineAndModifySelection = 'moveToLeftEndOfLineAndModifySelection:';
+  static const String moveToRightEndOfLineAndModifySelection = 'moveToRightEndOfLineAndModifySelection:';
+  static const String moveToBeginningOfDocumentAndModifySelection = 'moveToBeginningOfDocumentAndModifySelection:';
+  static const String moveToEndOfDocumentAndModifySelection = 'moveToEndOfDocumentAndModifySelection:';
 
   static const String transpose = 'transpose:';
 
-  static const String scrollToBeginningOfDocument =
-      'scrollToBeginningOfDocument:';
+  static const String scrollToBeginningOfDocument = 'scrollToBeginningOfDocument:';
   static const String scrollToEndOfDocument = 'scrollToEndOfDocument:';
 
   static const String scrollPageUp = 'scrollPageUp:';
   static const String scrollPageDown = 'scrollPageDown:';
   static const String pageUpAndModifySelection = 'pageUpAndModifySelection:';
-  static const String pageDownAndModifySelection =
-      'pageDownAndModifySelection:';
+  static const String pageDownAndModifySelection = 'pageDownAndModifySelection:';
 
   static const String cancelOperation = 'cancelOperation:';
 

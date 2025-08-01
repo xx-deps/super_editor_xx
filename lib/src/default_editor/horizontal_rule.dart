@@ -11,10 +11,7 @@ import 'package:super_editor/src/default_editor/layout_single_column/layout_sing
 /// horizontal separation in a document.
 @immutable
 class HorizontalRuleNode extends BlockNode {
-  HorizontalRuleNode({
-    required this.id,
-    super.metadata,
-  }) {
+  HorizontalRuleNode({required this.id, super.metadata}) {
     initAddToMetadata({"blockType": const NamedAttribution("horizontalRule")});
   }
 
@@ -33,13 +30,7 @@ class HorizontalRuleNode extends BlockNode {
 
   @override
   DocumentNode copyWithAddedMetadata(Map<String, dynamic> newProperties) {
-    return HorizontalRuleNode(
-      id: id,
-      metadata: {
-        ...metadata,
-        ...newProperties,
-      },
-    );
+    return HorizontalRuleNode(id: id, metadata: {...metadata, ...newProperties});
   }
 
   @override
@@ -49,12 +40,7 @@ class HorizontalRuleNode extends BlockNode {
 
   @override
   DocumentNode copyWithNewId(String id) {
-    return HorizontalRuleNode(
-      id: id,
-      metadata: {
-        ...metadata,
-      },
-    );
+    return HorizontalRuleNode(id: id, metadata: {...metadata});
   }
 
   @override
@@ -64,10 +50,7 @@ class HorizontalRuleNode extends BlockNode {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is HorizontalRuleNode &&
-          runtimeType == other.runtimeType &&
-          id == other.id;
+      identical(this, other) || other is HorizontalRuleNode && runtimeType == other.runtimeType && id == other.id;
 
   @override
   int get hashCode => id.hashCode;
@@ -77,8 +60,7 @@ class HorizontalRuleComponentBuilder implements ComponentBuilder {
   const HorizontalRuleComponentBuilder();
 
   @override
-  SingleColumnLayoutComponentViewModel? createViewModel(
-      Document document, DocumentNode node) {
+  SingleColumnLayoutComponentViewModel? createViewModel(Document document, DocumentNode node) {
     if (node is! HorizontalRuleNode) {
       return null;
     }
@@ -92,16 +74,17 @@ class HorizontalRuleComponentBuilder implements ComponentBuilder {
   }
 
   @override
-  Widget? createComponent(SingleColumnDocumentComponentContext componentContext,
-      SingleColumnLayoutComponentViewModel componentViewModel) {
+  Widget? createComponent(
+    SingleColumnDocumentComponentContext componentContext,
+    SingleColumnLayoutComponentViewModel componentViewModel,
+  ) {
     if (componentViewModel is! HorizontalRuleComponentViewModel) {
       return null;
     }
 
     return HorizontalRuleComponent(
       componentKey: componentContext.componentKey,
-      selection: componentViewModel.selection?.nodeSelection
-          as UpstreamDownstreamNodeSelection?,
+      selection: componentViewModel.selection?.nodeSelection as UpstreamDownstreamNodeSelection?,
       selectionColor: componentViewModel.selectionColor,
       showCaret: componentViewModel.caret != null,
       caretColor: componentViewModel.caretColor,
@@ -110,9 +93,7 @@ class HorizontalRuleComponentBuilder implements ComponentBuilder {
   }
 }
 
-class HorizontalRuleComponentViewModel
-    extends SingleColumnLayoutComponentViewModel
-    with SelectionAwareViewModelMixin {
+class HorizontalRuleComponentViewModel extends SingleColumnLayoutComponentViewModel with SelectionAwareViewModelMixin {
   HorizontalRuleComponentViewModel({
     required super.nodeId,
     super.createdAt,
@@ -203,10 +184,7 @@ class HorizontalRuleComponent extends StatelessWidget {
         child: BoxComponent(
           key: componentKey,
           opacity: opacity,
-          child: Divider(
-            color: color,
-            thickness: thickness,
-          ),
+          child: Divider(color: color, thickness: thickness),
         ),
       ),
     );

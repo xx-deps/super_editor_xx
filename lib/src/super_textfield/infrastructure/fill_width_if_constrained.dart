@@ -18,22 +18,16 @@ import 'package:flutter/rendering.dart';
 /// a constrained width. It's also used to constrain and align single-line text within
 /// a horizontal scrollable.
 class FillWidthIfConstrained extends SingleChildRenderObjectWidget {
-  const FillWidthIfConstrained({
-    required Widget child,
-  }) : super(child: child);
+  const FillWidthIfConstrained({required Widget child}) : super(child: child);
 
   @override
   RenderObject createRenderObject(BuildContext context) {
-    return RenderFillWidthIfConstrained(
-      findAncestorScrollableWidth: _createViewportWidthLookup(context),
-    );
+    return RenderFillWidthIfConstrained(findAncestorScrollableWidth: _createViewportWidthLookup(context));
   }
 
   @override
-  void updateRenderObject(
-      BuildContext context, RenderFillWidthIfConstrained renderObject) {
-    renderObject.findAncestorScrollableWidth =
-        _createViewportWidthLookup(context);
+  void updateRenderObject(BuildContext context, RenderFillWidthIfConstrained renderObject) {
+    renderObject.findAncestorScrollableWidth = _createViewportWidthLookup(context);
   }
 
   double? Function() _createViewportWidthLookup(BuildContext context) {
@@ -54,16 +48,13 @@ class FillWidthIfConstrained extends SingleChildRenderObjectWidget {
     if (direction == AxisDirection.up || direction == AxisDirection.down) {
       return null;
     }
-    return (scrollable.context.findRenderObject() as RenderBox?)
-        ?.constraints
-        .maxWidth;
+    return (scrollable.context.findRenderObject() as RenderBox?)?.constraints.maxWidth;
   }
 }
 
 class RenderFillWidthIfConstrained extends RenderProxyBox {
-  RenderFillWidthIfConstrained({
-    required double? Function() findAncestorScrollableWidth,
-  }) : _findAncestorScrollableWidth = findAncestorScrollableWidth;
+  RenderFillWidthIfConstrained({required double? Function() findAncestorScrollableWidth})
+    : _findAncestorScrollableWidth = findAncestorScrollableWidth;
 
   /// Informs this [RenderFillWidthIfConstrained] about the width of an ancestor [Scrollable],
   /// which may be used to set the width of the [child] `RenderObject`.
@@ -89,8 +80,7 @@ class RenderFillWidthIfConstrained extends RenderProxyBox {
         minHeight: constraints.minHeight,
         maxHeight: constraints.maxHeight,
       );
-    } else if (ancestorViewportWidth != null &&
-        ancestorViewportWidth < double.infinity) {
+    } else if (ancestorViewportWidth != null && ancestorViewportWidth < double.infinity) {
       // The available width is unbounded and we're inside of a Scrollable.
       // Make the child at least as wide as the Scrollable viewport.
       childConstraints = BoxConstraints(

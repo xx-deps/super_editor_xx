@@ -23,7 +23,10 @@ class AndroidTextEditingFloatingToolbar extends StatelessWidget {
     final brightness = Theme.of(context).brightness;
     return Theme(
       data: ThemeData(
-        colorScheme: brightness == Brightness.light //
+        colorScheme:
+            brightness ==
+                Brightness
+                    .light //
             ? const ColorScheme.light(primary: Colors.black)
             : const ColorScheme.dark(primary: Colors.white),
       ),
@@ -31,53 +34,32 @@ class AndroidTextEditingFloatingToolbar extends StatelessWidget {
         key: floatingToolbarKey,
         borderRadius: BorderRadius.circular(1),
         elevation: 1,
-        color: brightness == Brightness.dark //
+        color:
+            brightness ==
+                Brightness
+                    .dark //
             ? androidToolbarDarkBackgroundColor
             : androidToolbarLightBackgroundColor,
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (onCutPressed != null)
-              _buildButton(
-                onPressed: onCutPressed!,
-                title: 'Cut',
-              ),
-            if (onCopyPressed != null)
-              _buildButton(
-                onPressed: onCopyPressed!,
-                title: 'Copy',
-              ),
-            if (onPastePressed != null)
-              _buildButton(
-                onPressed: onPastePressed!,
-                title: 'Paste',
-              ),
-            if (onSelectAllPressed != null)
-              _buildButton(
-                onPressed: onSelectAllPressed!,
-                title: 'Select All',
-              ),
+            if (onCutPressed != null) _buildButton(onPressed: onCutPressed!, title: 'Cut'),
+            if (onCopyPressed != null) _buildButton(onPressed: onCopyPressed!, title: 'Copy'),
+            if (onPastePressed != null) _buildButton(onPressed: onPastePressed!, title: 'Paste'),
+            if (onSelectAllPressed != null) _buildButton(onPressed: onSelectAllPressed!, title: 'Select All'),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildButton({
-    required String title,
-    required VoidCallback onPressed,
-  }) {
+  Widget _buildButton({required String title, required VoidCallback onPressed}) {
     return TextButton(
       onPressed: onPressed,
-      style: TextButton.styleFrom(
-        padding: const EdgeInsets.symmetric(vertical: 16),
-      ),
+      style: TextButton.styleFrom(padding: const EdgeInsets.symmetric(vertical: 16)),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: Text(
-          title,
-          style: const TextStyle(fontSize: 14),
-        ),
+        child: Text(title, style: const TextStyle(fontSize: 14)),
       ),
     );
   }

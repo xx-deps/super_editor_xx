@@ -34,8 +34,7 @@ class SoftwareKeyboardOpener extends StatefulWidget {
   State<SoftwareKeyboardOpener> createState() => _SoftwareKeyboardOpenerState();
 }
 
-class _SoftwareKeyboardOpenerState extends State<SoftwareKeyboardOpener>
-    implements SoftwareKeyboardControllerDelegate {
+class _SoftwareKeyboardOpenerState extends State<SoftwareKeyboardOpener> implements SoftwareKeyboardControllerDelegate {
   @override
   void initState() {
     super.initState();
@@ -68,12 +67,9 @@ class _SoftwareKeyboardOpenerState extends State<SoftwareKeyboardOpener>
   bool get isConnectedToIme => widget.imeConnection.value?.attached ?? false;
 
   @override
-  void open({
-    required int viewId,
-  }) {
+  void open({required int viewId}) {
     editorImeLog.finest("[SoftwareKeyboard] - showing keyboard");
-    widget.imeConnection.value ??= TextInput.attach(
-        widget.createImeClient(), widget.createImeConfiguration());
+    widget.imeConnection.value ??= TextInput.attach(widget.createImeClient(), widget.createImeConfiguration());
     widget.imeConnection.value!.show();
   }
 
@@ -109,8 +105,7 @@ class SoftwareKeyboardController {
   /// Attaches this controller to a delegate that knows how to open and
   /// close the software keyboard.
   void attach(SoftwareKeyboardControllerDelegate delegate) {
-    editorImeLog.finer(
-        "[SoftwareKeyboardController] - Attaching to delegate: $delegate");
+    editorImeLog.finer("[SoftwareKeyboardController] - Attaching to delegate: $delegate");
     _delegate = delegate;
   }
 
@@ -119,8 +114,7 @@ class SoftwareKeyboardController {
   /// This controller can't open or close the software keyboard while
   /// detached from a delegate that knows how to make that happen.
   void detach() {
-    editorImeLog.finer(
-        "[SoftwareKeyboardController] - Detaching from delegate: $_delegate");
+    editorImeLog.finer("[SoftwareKeyboardController] - Detaching from delegate: $_delegate");
     _delegate = null;
   }
 
@@ -134,9 +128,7 @@ class SoftwareKeyboardController {
   ///
   /// The [viewId] is required do determine the view that the text input belongs to. You can call
   /// `View.of(context).viewId` to get the current view's ID.
-  void open({
-    required int viewId,
-  }) {
+  void open({required int viewId}) {
     assert(hasDelegate);
     _delegate?.open(viewId: viewId);
   }
@@ -163,9 +155,7 @@ abstract class SoftwareKeyboardControllerDelegate {
   ///
   /// The [viewId] is required do determine the view that the text input belongs to. You can call
   /// `View.of(context).viewId` to get the current view's ID.
-  void open({
-    required int viewId,
-  });
+  void open({required int viewId});
 
   /// Hides the software keyboard without closing the IME connection.
   void hide();

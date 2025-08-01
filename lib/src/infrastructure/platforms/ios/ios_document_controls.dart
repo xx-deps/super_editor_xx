@@ -47,8 +47,7 @@ class IosFloatingToolbarOverlay extends StatefulWidget {
   /// If no clipper factory method is provided, then the overlay controls
   /// will be allowed to appear anywhere in the overlay in which they sit
   /// (probably the entire screen).
-  final CustomClipper<Rect> Function(BuildContext overlayContext)?
-      createOverlayControlsClipper;
+  final CustomClipper<Rect> Function(BuildContext overlayContext)? createOverlayControlsClipper;
 
   /// Builder that constructs the floating toolbar that's displayed above
   /// selected text.
@@ -62,8 +61,7 @@ class IosFloatingToolbarOverlay extends StatefulWidget {
   State createState() => _IosFloatingToolbarOverlayState();
 }
 
-class _IosFloatingToolbarOverlayState extends State<IosFloatingToolbarOverlay>
-    with SingleTickerProviderStateMixin {
+class _IosFloatingToolbarOverlayState extends State<IosFloatingToolbarOverlay> with SingleTickerProviderStateMixin {
   final _boundsKey = GlobalKey();
 
   @override
@@ -75,8 +73,7 @@ class _IosFloatingToolbarOverlayState extends State<IosFloatingToolbarOverlay>
           // Remove the keyboard from the space that we occupy so that
           // clipping calculations apply to the expected visual borders,
           // instead of applying underneath the keyboard.
-          padding:
-              EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom),
+          padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom),
           child: ClipRect(
             clipper: widget.createOverlayControlsClipper?.call(context),
             child: SizedBox(
@@ -116,19 +113,14 @@ class _IosFloatingToolbarOverlayState extends State<IosFloatingToolbarOverlay>
           boundaryKey: _boundsKey,
           devicePixelRatio: MediaQuery.devicePixelRatioOf(context),
         ),
-        child: widget.floatingToolbarBuilder(
-            context, DocumentKeys.mobileToolbar, widget.toolbarFocalPoint),
+        child: widget.floatingToolbarBuilder(context, DocumentKeys.mobileToolbar, widget.toolbarFocalPoint),
       ),
     );
   }
 
   Widget _buildDebugPaint() {
     return IgnorePointer(
-      child: Container(
-        width: double.infinity,
-        height: double.infinity,
-        color: Colors.yellow.withValues(alpha: 0.2),
-      ),
+      child: Container(width: double.infinity, height: double.infinity, color: Colors.yellow.withValues(alpha: 0.2)),
     );
   }
 }
@@ -163,10 +155,7 @@ class IosDocumentGestureEditingController extends GestureEditingController {
   /// Updates the caret's size and position.
   ///
   /// The [top] offset is in the document layout's coordinate space.
-  void updateCaret({
-    Offset? top,
-    double? height,
-  }) {
+  void updateCaret({Offset? top, double? height}) {
     bool changed = false;
     if (top != null) {
       _caretTop = top;
@@ -208,8 +197,7 @@ class IosDocumentGestureEditingController extends GestureEditingController {
   }
 
   /// Whether the expanded handles (base + extent) should be displayed.
-  bool get shouldDisplayExpandedHandles =>
-      _upstreamHandleOffset != null && _downstreamHandleOffset != null;
+  bool get shouldDisplayExpandedHandles => _upstreamHandleOffset != null && _downstreamHandleOffset != null;
 
   double? get upstreamCaretHeight => _upstreamCaretHeight;
   double? _upstreamCaretHeight;
@@ -342,13 +330,10 @@ class FloatingCursorController {
 }
 
 class FloatingCursorListener {
-  FloatingCursorListener({
-    VoidCallback? onStart,
-    void Function(Offset?)? onMove,
-    VoidCallback? onStop,
-  })  : _onStart = onStart,
-        _onMove = onMove,
-        _onStop = onStop;
+  FloatingCursorListener({VoidCallback? onStart, void Function(Offset?)? onMove, VoidCallback? onStop})
+    : _onStart = onStart,
+      _onMove = onMove,
+      _onStop = onStop;
 
   final VoidCallback? _onStart;
   final void Function(Offset?)? _onMove;
@@ -366,8 +351,7 @@ class FloatingCursorListener {
 ///
 /// By default, the toolbar focal point [LeaderLink] is obtained from an ancestor
 /// [SuperEditorIosControlsScope].
-class IosToolbarFocalPointDocumentLayer
-    extends DocumentLayoutLayerStatefulWidget {
+class IosToolbarFocalPointDocumentLayer extends DocumentLayoutLayerStatefulWidget {
   const IosToolbarFocalPointDocumentLayer({
     Key? key,
     required this.document,
@@ -393,12 +377,10 @@ class IosToolbarFocalPointDocumentLayer
   final bool showDebugLeaderBounds;
 
   @override
-  DocumentLayoutLayerState<ContentLayerStatefulWidget, Rect> createState() =>
-      _IosToolbarFocalPointDocumentLayerState();
+  DocumentLayoutLayerState<ContentLayerStatefulWidget, Rect> createState() => _IosToolbarFocalPointDocumentLayerState();
 }
 
-class _IosToolbarFocalPointDocumentLayerState
-    extends DocumentLayoutLayerState<IosToolbarFocalPointDocumentLayer, Rect>
+class _IosToolbarFocalPointDocumentLayerState extends DocumentLayoutLayerState<IosToolbarFocalPointDocumentLayer, Rect>
     with SingleTickerProviderStateMixin {
   DocumentSelection? _selectionUsedForMostRecentLayout;
 
@@ -443,15 +425,17 @@ class _IosToolbarFocalPointDocumentLayerState
   }
 
   @override
-  Rect? computeLayoutDataWithDocumentLayout(BuildContext contentLayersContext,
-      BuildContext documentContext, DocumentLayout documentLayout) {
+  Rect? computeLayoutDataWithDocumentLayout(
+    BuildContext contentLayersContext,
+    BuildContext documentContext,
+    DocumentLayout documentLayout,
+  ) {
     final documentSelection = widget.selection.value;
     if (documentSelection == null) {
       return null;
     }
 
-    final selectedComponent = documentLayout
-        .getComponentByNodeId(widget.selection.value!.extent.nodeId);
+    final selectedComponent = documentLayout.getComponentByNodeId(widget.selection.value!.extent.nodeId);
     if (selectedComponent == null) {
       // Assume that we're in a momentary transitive state where the document layout
       // just gained or lost a component. We expect this method to run again in a moment
@@ -459,10 +443,7 @@ class _IosToolbarFocalPointDocumentLayerState
       return null;
     }
 
-    return documentLayout.getRectForSelection(
-      documentSelection.base,
-      documentSelection.extent,
-    );
+    return documentLayout.getRectForSelection(documentSelection.base, documentSelection.extent);
   }
 
   @override
@@ -480,12 +461,7 @@ class _IosToolbarFocalPointDocumentLayerState
               link: widget.toolbarFocalPointLink,
               child: widget.showDebugLeaderBounds
                   ? DecoratedBox(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          width: 4,
-                          color: const Color(0xFFFF00FF),
-                        ),
-                      ),
+                      decoration: BoxDecoration(border: Border.all(width: 4, color: const Color(0xFFFF00FF))),
                     )
                   : null,
             ),
@@ -524,9 +500,7 @@ class IosHandlesDocumentLayer extends DocumentLayoutLayerStatefulWidget {
 
   final ValueListenable<DocumentSelection?> selection;
 
-  final void Function(
-          DocumentSelection?, SelectionChangeType, String selectionReason)
-      changeSelection;
+  final void Function(DocumentSelection?, SelectionChangeType, String selectionReason) changeSelection;
 
   /// {@macro are_selection_handles_allowed}
   final ValueListenable<bool>? areSelectionHandlesAllowed;
@@ -556,14 +530,13 @@ class IosHandlesDocumentLayer extends DocumentLayoutLayerStatefulWidget {
   final bool showDebugPaint;
 
   @override
-  DocumentLayoutLayerState<IosHandlesDocumentLayer, DocumentSelectionLayout>
-      createState() => IosControlsDocumentLayerState();
+  DocumentLayoutLayerState<IosHandlesDocumentLayer, DocumentSelectionLayout> createState() =>
+      IosControlsDocumentLayerState();
 }
 
 @visibleForTesting
-class IosControlsDocumentLayerState extends DocumentLayoutLayerState<
-    IosHandlesDocumentLayer,
-    DocumentSelectionLayout> with SingleTickerProviderStateMixin {
+class IosControlsDocumentLayerState extends DocumentLayoutLayerState<IosHandlesDocumentLayer, DocumentSelectionLayout>
+    with SingleTickerProviderStateMixin {
   // These global keys are assigned to each draggable handle to
   // prevent a strange dragging issue.
   //
@@ -590,8 +563,7 @@ class IosControlsDocumentLayerState extends DocumentLayoutLayerState<
 
     widget.selection.addListener(_onSelectionChange);
     widget.shouldCaretBlink.addListener(_onBlinkModeChange);
-    widget.floatingCursorController?.isActive
-        .addListener(_onFloatingCursorActivationChange);
+    widget.floatingCursorController?.isActive.addListener(_onFloatingCursorActivationChange);
     widget.handleBeingDragged?.addListener(_onDragChanged);
 
     _onBlinkModeChange();
@@ -612,10 +584,8 @@ class IosControlsDocumentLayerState extends DocumentLayoutLayerState<
     }
 
     if (widget.floatingCursorController != oldWidget.floatingCursorController) {
-      oldWidget.floatingCursorController?.isActive
-          .removeListener(_onFloatingCursorActivationChange);
-      widget.floatingCursorController?.isActive
-          .addListener(_onFloatingCursorActivationChange);
+      oldWidget.floatingCursorController?.isActive.removeListener(_onFloatingCursorActivationChange);
+      widget.floatingCursorController?.isActive.addListener(_onFloatingCursorActivationChange);
     }
 
     if (widget.handleBeingDragged != oldWidget.handleBeingDragged) {
@@ -628,8 +598,7 @@ class IosControlsDocumentLayerState extends DocumentLayoutLayerState<
   void dispose() {
     widget.selection.removeListener(_onSelectionChange);
     widget.shouldCaretBlink.removeListener(_onBlinkModeChange);
-    widget.floatingCursorController?.isActive
-        .removeListener(_onFloatingCursorActivationChange);
+    widget.floatingCursorController?.isActive.removeListener(_onFloatingCursorActivationChange);
     widget.handleBeingDragged?.removeListener(_onDragChanged);
 
     _caretBlinkController.dispose();
@@ -646,8 +615,7 @@ class IosControlsDocumentLayerState extends DocumentLayoutLayerState<
   bool get isCaretDisplayed => layoutData?.caret != null;
 
   @visibleForTesting
-  bool get isCaretVisible =>
-      _caretBlinkController.opacity == 1.0 && isCaretDisplayed;
+  bool get isCaretVisible => _caretBlinkController.opacity == 1.0 && isCaretDisplayed;
 
   @visibleForTesting
   Duration get caretFlashPeriod => _caretBlinkController.flashPeriod;
@@ -678,8 +646,7 @@ class IosControlsDocumentLayerState extends DocumentLayoutLayerState<
 
   void _startOrStopBlinking() {
     // TODO: allow a configurable policy as to whether to show the caret at all when the selection is expanded: https://github.com/superlistapp/super_editor/issues/234
-    final wantsToBlink =
-        widget.selection.value != null && widget.shouldCaretBlink.value;
+    final wantsToBlink = widget.selection.value != null && widget.shouldCaretBlink.value;
     if (wantsToBlink && _caretBlinkController.isBlinking) {
       return;
     }
@@ -716,15 +683,13 @@ class IosControlsDocumentLayerState extends DocumentLayoutLayerState<
   /// expanded selection based on the given [position], computes the box for that
   /// selection, and returns the edge of the selection box.
   Rect _computeRectForExpandedHandle(DocumentPosition position) {
-    final component =
-        widget.documentLayout.getComponentByNodeId(position.nodeId);
+    final component = widget.documentLayout.getComponentByNodeId(position.nodeId);
     if (component == null) {
       return Rect.zero;
     }
 
     // Check if we have a position to the right of the current position within the same node.
-    NodePosition? extentNodePosition =
-        component.movePositionRight(position.nodePosition);
+    NodePosition? extentNodePosition = component.movePositionRight(position.nodePosition);
     bool isExtentDownstream = extentNodePosition != null;
 
     if (extentNodePosition == null) {
@@ -743,10 +708,7 @@ class IosControlsDocumentLayerState extends DocumentLayoutLayerState<
 
     final rectForSelection = widget.documentLayout.getRectForSelection(
       position,
-      DocumentPosition(
-        nodeId: position.nodeId,
-        nodePosition: extentNodePosition,
-      ),
+      DocumentPosition(nodeId: position.nodeId, nodePosition: extentNodePosition),
     )!;
 
     return Rect.fromLTWH(
@@ -759,9 +721,10 @@ class IosControlsDocumentLayerState extends DocumentLayoutLayerState<
 
   @override
   DocumentSelectionLayout? computeLayoutDataWithDocumentLayout(
-      BuildContext contentLayersContext,
-      BuildContext documentContext,
-      DocumentLayout documentLayout) {
+    BuildContext contentLayersContext,
+    BuildContext documentContext,
+    DocumentLayout documentLayout,
+  ) {
     final selection = widget.selection.value;
     if (selection == null) {
       return null;
@@ -791,37 +754,23 @@ class IosControlsDocumentLayerState extends DocumentLayoutLayerState<
       // layer's RenderBox is outdated, because it wasn't laid out yet for the current frame.
       // Use the content's RenderBox, which was already laid out for the current frame.
       final contentBox = documentContext.findRenderObject() as RenderSliver?;
-      if (contentBox != null &&
-          contentBox.hasSize &&
-          caretRect.left + caretWidth >= contentBox.size.width) {
+      if (contentBox != null && contentBox.hasSize && caretRect.left + caretWidth >= contentBox.size.width) {
         // Ajust the caret position to make it entirely visible because it's currently placed
         // partially or entirely outside of the layers' bounds. This can happen for downstream selections
         // of block components that take all the available width.
-        caretRect = Rect.fromLTWH(
-          contentBox.size.width - caretWidth,
-          caretRect.top,
-          caretRect.width,
-          caretRect.height,
-        );
+        caretRect = Rect.fromLTWH(contentBox.size.width - caretWidth, caretRect.top, caretRect.width, caretRect.height);
       }
 
-      return DocumentSelectionLayout(
-        caret: caretRect,
-      );
+      return DocumentSelectionLayout(caret: caretRect);
     } else {
       return DocumentSelectionLayout(
         upstream: _computeRectForExpandedHandle(
-          widget.document
-              .selectUpstreamPosition(selection.base, selection.extent),
+          widget.document.selectUpstreamPosition(selection.base, selection.extent),
         ),
         downstream: _computeRectForExpandedHandle(
-          widget.document
-              .selectDownstreamPosition(selection.base, selection.extent),
+          widget.document.selectDownstreamPosition(selection.base, selection.extent),
         ),
-        expandedSelectionBounds: documentLayout.getRectForSelection(
-          selection.base,
-          selection.extent,
-        ),
+        expandedSelectionBounds: documentLayout.getRectForSelection(selection.base, selection.extent),
       );
     }
   }
@@ -830,7 +779,9 @@ class IosControlsDocumentLayerState extends DocumentLayoutLayerState<
   Widget doBuild(BuildContext context, DocumentSelectionLayout? layoutData) {
     return IgnorePointer(
       child: SizedBox.expand(
-        child: layoutData != null //
+        child:
+            layoutData !=
+                null //
             ? _buildHandles(layoutData)
             : const SizedBox(),
       ),
@@ -839,8 +790,7 @@ class IosControlsDocumentLayerState extends DocumentLayoutLayerState<
 
   Widget _buildHandles(DocumentSelectionLayout layoutData) {
     if (widget.selection.value == null) {
-      editorGesturesLog
-          .finer("Not building overlay handles because there's no selection.");
+      editorGesturesLog.finer("Not building overlay handles because there's no selection.");
       return const SizedBox.shrink();
     }
 
@@ -850,22 +800,14 @@ class IosControlsDocumentLayerState extends DocumentLayoutLayerState<
         if (layoutData.caret != null) //
           _buildCollapsedHandle(caret: layoutData.caret!),
         if (layoutData.upstream != null && layoutData.downstream != null) ...[
-          _buildUpstreamHandle(
-            upstream: layoutData.upstream!,
-            debugColor: Colors.green,
-          ),
-          _buildDownstreamHandle(
-            downstream: layoutData.downstream!,
-            debugColor: Colors.red,
-          ),
+          _buildUpstreamHandle(upstream: layoutData.upstream!, debugColor: Colors.green),
+          _buildDownstreamHandle(downstream: layoutData.downstream!, debugColor: Colors.red),
         ],
       ],
     );
   }
 
-  Widget _buildCollapsedHandle({
-    required Rect caret,
-  }) {
+  Widget _buildCollapsedHandle({required Rect caret}) {
     return Positioned(
       key: _collapsedHandleKey,
       left: caret.left,
@@ -875,13 +817,11 @@ class IosControlsDocumentLayerState extends DocumentLayoutLayerState<
           if (widget.floatingCursorController != null) ...{
             widget.floatingCursorController!.isActive,
             widget.floatingCursorController!.isNearText,
-          }
+          },
         },
         builder: (context) {
-          final isShowingFloatingCursor =
-              widget.floatingCursorController?.isActive.value == true;
-          final isNearText =
-              widget.floatingCursorController?.isNearText.value == true;
+          final isShowingFloatingCursor = widget.floatingCursorController?.isActive.value == true;
+          final isNearText = widget.floatingCursorController?.isNearText.value == true;
           if (isShowingFloatingCursor && isNearText) {
             // The floating cursor is active and it's near some text. We don't want to
             // paint a collapsed handle/caret.
@@ -900,19 +840,16 @@ class IosControlsDocumentLayerState extends DocumentLayoutLayerState<
     );
   }
 
-  Widget _buildUpstreamHandle({
-    required Rect upstream,
-    required Color debugColor,
-  }) {
-    final shouldShowBall =
-        widget.handleBeingDragged?.value != HandleType.upstream;
+  Widget _buildUpstreamHandle({required Rect upstream, required Color debugColor}) {
+    final shouldShowBall = widget.handleBeingDragged?.value != HandleType.upstream;
     final ballRadius = shouldShowBall ? widget.handleBallDiameter / 2 : 0.0;
     return Positioned(
       key: _upstreamHandleKey,
       left: upstream.left,
       // Move the handle up so the ball is above the selected area and add half
       // of the radius to make the ball overlap the selected area.
-      top: upstream.top -
+      top:
+          upstream.top -
           selectionHighlightBoxVerticalExpansion +
           (shouldShowBall ? (ballRadius / 2) - widget.handleBallDiameter : 0.0),
       child: FractionalTranslation(
@@ -921,9 +858,7 @@ class IosControlsDocumentLayerState extends DocumentLayoutLayerState<
           key: DocumentKeys.upstreamHandle,
           color: widget.handleColor,
           handleType: HandleType.upstream,
-          caretHeight: upstream.height +
-              (selectionHighlightBoxVerticalExpansion * 2) -
-              (ballRadius / 2),
+          caretHeight: upstream.height + (selectionHighlightBoxVerticalExpansion * 2) - (ballRadius / 2),
           caretWidth: widget.caretWidth,
           ballRadius: ballRadius,
         ),
@@ -931,14 +866,13 @@ class IosControlsDocumentLayerState extends DocumentLayoutLayerState<
     );
   }
 
-  Widget _buildDownstreamHandle({
-    required Rect downstream,
-    required Color debugColor,
-  }) {
+  Widget _buildDownstreamHandle({required Rect downstream, required Color debugColor}) {
     final ballRadius =
-        widget.handleBeingDragged?.value == HandleType.downstream //
-            ? 0.0
-            : widget.handleBallDiameter / 2;
+        widget.handleBeingDragged?.value ==
+            HandleType
+                .downstream //
+        ? 0.0
+        : widget.handleBallDiameter / 2;
 
     return Positioned(
       key: _downstreamHandleKey,
@@ -950,9 +884,7 @@ class IosControlsDocumentLayerState extends DocumentLayoutLayerState<
           key: DocumentKeys.downstreamHandle,
           color: widget.handleColor,
           handleType: HandleType.downstream,
-          caretHeight: downstream.height +
-              (selectionHighlightBoxVerticalExpansion * 2) -
-              (ballRadius / 2),
+          caretHeight: downstream.height + (selectionHighlightBoxVerticalExpansion * 2) - (ballRadius / 2),
           caretWidth: widget.caretWidth,
           ballRadius: ballRadius,
         ),

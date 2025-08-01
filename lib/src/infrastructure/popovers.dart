@@ -52,12 +52,7 @@ class SuperEditorPopover extends StatelessWidget {
   Widget build(BuildContext context) {
     return IntentBlocker(
       intents: appleBlockedIntents,
-      child: Focus(
-        focusNode: popoverFocusNode,
-        parentNode: editorFocusNode,
-        onKeyEvent: onKeyEvent,
-        child: child,
-      ),
+      child: Focus(focusNode: popoverFocusNode, parentNode: editorFocusNode, onKeyEvent: onKeyEvent, child: child),
     );
   }
 }

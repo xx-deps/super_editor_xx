@@ -49,9 +49,7 @@ class MagnifyingGlass extends StatelessWidget {
       shape: shape,
       child: BackdropFilter(
         filter: _createMagnificationFilter(),
-        child: SizedBox.fromSize(
-          size: size,
-        ),
+        child: SizedBox.fromSize(size: size),
       ),
     );
   }

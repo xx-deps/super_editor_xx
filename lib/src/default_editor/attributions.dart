@@ -94,10 +94,7 @@ class ColorAttribution implements Attribution {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is ColorAttribution &&
-          runtimeType == other.runtimeType &&
-          color == other.color;
+      identical(this, other) || other is ColorAttribution && runtimeType == other.runtimeType && color == other.color;
 
   @override
   int get hashCode => color.hashCode;
@@ -130,9 +127,7 @@ class BackgroundColorAttribution implements Attribution {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is BackgroundColorAttribution &&
-          runtimeType == other.runtimeType &&
-          color == other.color;
+      other is BackgroundColorAttribution && runtimeType == other.runtimeType && color == other.color;
 
   @override
   int get hashCode => color.hashCode;
@@ -200,9 +195,7 @@ class CustomUnderlineAttribution implements Attribution {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is CustomUnderlineAttribution &&
-          runtimeType == other.runtimeType &&
-          type == other.type;
+      other is CustomUnderlineAttribution && runtimeType == other.runtimeType && type == other.type;
 
   @override
   int get hashCode => type.hashCode;
@@ -231,9 +224,7 @@ class OpacityAttribution implements Attribution {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is OpacityAttribution &&
-          runtimeType == other.runtimeType &&
-          opacity == other.opacity;
+      other is OpacityAttribution && runtimeType == other.runtimeType && opacity == other.opacity;
 
   @override
   int get hashCode => opacity.hashCode;
@@ -266,9 +257,7 @@ class FontSizeAttribution implements Attribution {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is FontSizeAttribution &&
-          runtimeType == other.runtimeType &&
-          fontSize == other.fontSize;
+      other is FontSizeAttribution && runtimeType == other.runtimeType && fontSize == other.fontSize;
 
   @override
   int get hashCode => fontSize.hashCode;
@@ -301,9 +290,7 @@ class FontFamilyAttribution implements Attribution {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is FontFamilyAttribution &&
-          runtimeType == other.runtimeType &&
-          fontFamily == other.fontFamily;
+      other is FontFamilyAttribution && runtimeType == other.runtimeType && fontFamily == other.fontFamily;
 
   @override
   int get hashCode => fontFamily.hashCode;
@@ -352,12 +339,7 @@ class LinkAttribution implements Attribution {
   /// This factory is equivalent to calling [LinkAttribution.fromUri]
   /// with a [Uri] whose `scheme` is "mailto" and whose `path` is [email].
   factory LinkAttribution.fromEmail(String email) {
-    return LinkAttribution.fromUri(
-      Uri(
-        scheme: "mailto",
-        path: email,
-      ),
-    );
+    return LinkAttribution.fromUri(Uri(scheme: "mailto", path: email));
   }
 
   /// Creates a [LinkAttribution] whose plain-text URI is [plainTextUri], and
@@ -372,8 +354,7 @@ class LinkAttribution implements Attribution {
   @override
   String get id => 'link';
 
-  @Deprecated(
-      "Use plainTextUri instead. The term 'url' was a lie - it could always have been a URI.")
+  @Deprecated("Use plainTextUri instead. The term 'url' was a lie - it could always have been a URI.")
   String get url => plainTextUri;
 
   /// The URI associated with the attributed text, as a `String`.
@@ -424,9 +405,7 @@ class LinkAttribution implements Attribution {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is LinkAttribution &&
-          runtimeType == other.runtimeType &&
-          plainTextUri == other.plainTextUri;
+      other is LinkAttribution && runtimeType == other.runtimeType && plainTextUri == other.plainTextUri;
 
   @override
   int get hashCode => plainTextUri.hashCode;

@@ -10,15 +10,14 @@ import '_presenter.dart';
 
 /// [SingleColumnLayoutStylePhase] that draws an underline beneath the text in the IME's
 /// composing region.
-class SingleColumnLayoutComposingRegionStyler
-    extends SingleColumnLayoutStylePhase {
+class SingleColumnLayoutComposingRegionStyler extends SingleColumnLayoutStylePhase {
   SingleColumnLayoutComposingRegionStyler({
     required Document document,
     required ValueListenable<DocumentRange?> composingRegion,
     required bool showComposingUnderline,
-  })  : _document = document,
-        _composingRegion = composingRegion,
-        _showComposingRegionUnderline = showComposingUnderline {
+  }) : _document = document,
+       _composingRegion = composingRegion,
+       _showComposingRegionUnderline = showComposingUnderline {
     // Our styles need to be re-applied whenever the composing region changes.
     _composingRegion.addListener(markDirty);
   }
@@ -34,10 +33,8 @@ class SingleColumnLayoutComposingRegionStyler
   final bool _showComposingRegionUnderline;
 
   @override
-  SingleColumnLayoutViewModel style(
-      Document document, SingleColumnLayoutViewModel viewModel) {
-    editorStyleLog.finest(
-        "(Re)calculating composing region view model for document layout");
+  SingleColumnLayoutViewModel style(Document document, SingleColumnLayoutViewModel viewModel) {
+    editorStyleLog.finest("(Re)calculating composing region view model for document layout");
     final documentComposingRegion = _composingRegion.value;
     if (documentComposingRegion == null) {
       // There's nothing for us to style if there's no composing region. Return the
@@ -53,8 +50,7 @@ class SingleColumnLayoutComposingRegionStyler
       padding: viewModel.padding,
       componentViewModels: [
         for (final previousViewModel in viewModel.componentViewModels) //
-          _applyComposingRegion(
-              previousViewModel.copy(), documentComposingRegion),
+          _applyComposingRegion(previousViewModel.copy(), documentComposingRegion),
       ],
     );
   }
@@ -91,17 +87,13 @@ class SingleColumnLayoutComposingRegionStyler
     editorStyleLog.fine("Node selection (${node.id}): $nodeSelection");
 
     TextRange? textComposingRegion;
-    if (documentComposingRegion.start.nodeId ==
-            documentComposingRegion.end.nodeId &&
+    if (documentComposingRegion.start.nodeId == documentComposingRegion.end.nodeId &&
         documentComposingRegion.start.nodeId == node.id) {
       // There's a composing region and it's entirely within this text node.
       // TODO: handle the possibility of a composing region extending across multiple nodes.
-      final startPosition =
-          documentComposingRegion.start.nodePosition as TextNodePosition;
-      final endPosition =
-          documentComposingRegion.end.nodePosition as TextNodePosition;
-      textComposingRegion =
-          TextRange(start: startPosition.offset, end: endPosition.offset);
+      final startPosition = documentComposingRegion.start.nodePosition as TextNodePosition;
+      final endPosition = documentComposingRegion.end.nodePosition as TextNodePosition;
+      textComposingRegion = TextRange(start: startPosition.offset, end: endPosition.offset);
     }
 
     viewModel
@@ -139,8 +131,7 @@ class SingleColumnLayoutComposingRegionStyler
       final extentNodePosition = documentRange.end.nodePosition;
       late NodeSelection? nodeSelection;
       try {
-        nodeSelection = node.computeSelection(
-            base: baseNodePosition, extent: extentNodePosition);
+        nodeSelection = node.computeSelection(base: baseNodePosition, extent: extentNodePosition);
       } catch (exception) {
         // This situation can happen in the moment between a document change and
         // a corresponding selection change. For example: deleting an image and
@@ -154,10 +145,7 @@ class SingleColumnLayoutComposingRegionStyler
       }
       editorStyleLog.finer(' - node selection: $nodeSelection');
 
-      return _DocumentNodeSelection(
-        nodeId: node.id,
-        nodeSelection: nodeSelection,
-      );
+      return _DocumentNodeSelection(nodeId: node.id, nodeSelection: nodeSelection);
     } else {
       // Log all the selected nodes.
       editorStyleLog.finer(' - selection contains multiple nodes:');
@@ -165,9 +153,7 @@ class SingleColumnLayoutComposingRegionStyler
         editorStyleLog.finer('   - ${node.id}');
       }
 
-      if (selectedNodes
-              .firstWhereOrNull((selectedNode) => selectedNode.id == node.id) ==
-          null) {
+      if (selectedNodes.firstWhereOrNull((selectedNode) => selectedNode.id == node.id) == null) {
         // The document selection does not contain the node we're interested in. Return.
         editorStyleLog.finer(' - this node is not in the selection');
         return null;
@@ -196,22 +182,16 @@ class SingleColumnLayoutComposingRegionStyler
           nodeId: node.id,
           nodeSelection: node.computeSelection(
             base: isBase ? node.beginningPosition : node.beginningPosition,
-            extent: isBase
-                ? documentRange.start.nodePosition
-                : documentRange.end.nodePosition,
+            extent: isBase ? documentRange.start.nodePosition : documentRange.end.nodePosition,
           ),
         );
       } else {
-        editorStyleLog
-            .finer(' - this node is fully selected within the selection');
+        editorStyleLog.finer(' - this node is fully selected within the selection');
         // Multiple nodes are selected and this node is neither the top
         // or the bottom node, therefore this entire node is selected.
         return _DocumentNodeSelection(
           nodeId: node.id,
-          nodeSelection: node.computeSelection(
-            base: node.beginningPosition,
-            extent: node.endPosition,
-          ),
+          nodeSelection: node.computeSelection(base: node.beginningPosition, extent: node.endPosition),
         );
       }
     }
@@ -229,10 +209,7 @@ class SingleColumnLayoutComposingRegionStyler
 /// [TextNodeSelection] that describes which characters of text are
 /// selected within the text node.
 class _DocumentNodeSelection<SelectionType extends NodeSelection> {
-  _DocumentNodeSelection({
-    required this.nodeId,
-    required this.nodeSelection,
-  });
+  _DocumentNodeSelection({required this.nodeId, required this.nodeSelection});
 
   /// The ID of the node that's selected.
   final String nodeId;

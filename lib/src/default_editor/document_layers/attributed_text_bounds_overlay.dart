@@ -8,17 +8,13 @@ import 'package:super_editor/src/infrastructure/content_layers.dart';
 ///
 /// See [AttributionBounds] for the real implementation.
 class AttributedTextBoundsOverlay implements SuperEditorLayerBuilder {
-  const AttributedTextBoundsOverlay({
-    required this.selector,
-    required this.builder,
-  });
+  const AttributedTextBoundsOverlay({required this.selector, required this.builder});
 
   final AttributionBoundsSelector selector;
   final AttributionBoundsBuilder builder;
 
   @override
-  ContentLayerStatefulWidget build(
-      BuildContext context, SuperEditorContext editContext) {
+  ContentLayerStatefulWidget build(BuildContext context, SuperEditorContext editContext) {
     return AttributionBounds(
       document: editContext.document,
       layout: editContext.documentLayout,

@@ -17,10 +17,7 @@ final _log = Logger(scope: 'text_tools.dart');
 /// no text exists at the given `docPosition`.
 ///
 /// A word is defined by `TextComposable#getWordSelectionAt()`.
-DocumentSelection? getWordSelection({
-  required DocumentPosition docPosition,
-  required DocumentLayout docLayout,
-}) {
+DocumentSelection? getWordSelection({required DocumentPosition docPosition, required DocumentLayout docLayout}) {
   _log.log('getWordSelection', '_getWordSelection()');
   _log.log('getWordSelection', ' - doc position: $docPosition');
 
@@ -36,30 +33,19 @@ DocumentSelection? getWordSelection({
 
   // Create a new TextNodePosition to ensure that we're searching with downstream affinity, for consistent results.
   final searchPosition = TextNodePosition(offset: nodePosition.offset);
-  final TextSelection wordTextSelection =
-      (component as TextComposable).getWordSelectionAt(searchPosition);
-  final wordNodeSelection =
-      TextNodeSelection.fromTextSelection(wordTextSelection);
+  final TextSelection wordTextSelection = (component as TextComposable).getWordSelectionAt(searchPosition);
+  final wordNodeSelection = TextNodeSelection.fromTextSelection(wordTextSelection);
 
   _log.log('getWordSelection', ' - word selection: $wordNodeSelection');
   return DocumentSelection(
-    base: DocumentPosition(
-      nodeId: docPosition.nodeId,
-      nodePosition: wordNodeSelection.base,
-    ),
-    extent: DocumentPosition(
-      nodeId: docPosition.nodeId,
-      nodePosition: wordNodeSelection.extent,
-    ),
+    base: DocumentPosition(nodeId: docPosition.nodeId, nodePosition: wordNodeSelection.base),
+    extent: DocumentPosition(nodeId: docPosition.nodeId, nodePosition: wordNodeSelection.extent),
   );
 }
 
 /// Expands a selection in both directions starting at [textPosition] until
 /// the selection reaches a space, or the end of the available text.
-TextSelection expandPositionToWord({
-  required String text,
-  required TextPosition textPosition,
-}) {
+TextSelection expandPositionToWord({required String text, required TextPosition textPosition}) {
   if (text.isEmpty) {
     return const TextSelection.collapsed(offset: -1);
   }
@@ -75,10 +61,7 @@ TextSelection expandPositionToWord({
   while (end < text.length && text[end] != ' ') {
     end += 1;
   }
-  return TextSelection(
-    baseOffset: start,
-    extentOffset: end,
-  );
+  return TextSelection(baseOffset: start, extentOffset: end);
 }
 
 /// Returns the paragraph of text that contains the given `docPosition`, or `null`
@@ -86,10 +69,7 @@ TextSelection expandPositionToWord({
 ///
 /// A paragraph is defined as all text within the given document node, bounded by
 /// newlines or the beginning/end of the node's text.
-DocumentSelection? getParagraphSelection({
-  required DocumentPosition docPosition,
-  required DocumentLayout docLayout,
-}) {
+DocumentSelection? getParagraphSelection({required DocumentPosition docPosition, required DocumentLayout docLayout}) {
   _log.log('getParagraphSelection', '_getWordSelection()');
   _log.log('getParagraphSelection', ' - doc position: $docPosition');
 
@@ -103,27 +83,17 @@ DocumentSelection? getParagraphSelection({
     return null;
   }
 
-  final paragraphNodeSelection =
-      (component as TextComposable).getContiguousTextSelectionAt(nodePosition);
+  final paragraphNodeSelection = (component as TextComposable).getContiguousTextSelectionAt(nodePosition);
 
   return DocumentSelection(
-    base: DocumentPosition(
-      nodeId: docPosition.nodeId,
-      nodePosition: paragraphNodeSelection.base,
-    ),
-    extent: DocumentPosition(
-      nodeId: docPosition.nodeId,
-      nodePosition: paragraphNodeSelection.extent,
-    ),
+    base: DocumentPosition(nodeId: docPosition.nodeId, nodePosition: paragraphNodeSelection.base),
+    extent: DocumentPosition(nodeId: docPosition.nodeId, nodePosition: paragraphNodeSelection.extent),
   );
 }
 
 /// Expands a selection in both directions starting at [textPosition] until
 /// the selection reaches a newline, or the end of the available text.
-TextSelection expandPositionToParagraph({
-  required String text,
-  required TextPosition textPosition,
-}) {
+TextSelection expandPositionToParagraph({required String text, required TextPosition textPosition}) {
   if (text.isEmpty) {
     return const TextSelection.collapsed(offset: -1);
   }
@@ -136,10 +106,7 @@ TextSelection expandPositionToParagraph({
   while (end < text.length && text[end] != '\n') {
     end += 1;
   }
-  return TextSelection(
-    baseOffset: start,
-    extentOffset: end,
-  );
+  return TextSelection(baseOffset: start, extentOffset: end);
 }
 
 // copied from: flutter/lib/src/widgets/editable_text.dart
@@ -153,8 +120,7 @@ final RegExp _rtlRegExp = RegExp(r'[\u0591-\u07FF\uFB1D-\uFDFD\uFE70-\uFEFC]');
 TextDirection getParagraphDirection(String text) {
   text = text.trim();
 
-  if (text.isNotEmpty &&
-      _rtlRegExp.hasMatch(String.fromCharCode(text.runes.first))) {
+  if (text.isNotEmpty && _rtlRegExp.hasMatch(String.fromCharCode(text.runes.first))) {
     return TextDirection.rtl;
   } else {
     return TextDirection.ltr;

@@ -8,8 +8,7 @@ class UnknownComponentBuilder implements ComponentBuilder {
   const UnknownComponentBuilder();
 
   @override
-  SingleColumnLayoutComponentViewModel? createViewModel(
-      Document document, DocumentNode node) {
+  SingleColumnLayoutComponentViewModel? createViewModel(Document document, DocumentNode node) {
     return _UnknownViewModel(
       nodeId: node.id,
       createdAt: node.metadata[NodeMetadata.createdAt],
@@ -18,13 +17,12 @@ class UnknownComponentBuilder implements ComponentBuilder {
   }
 
   @override
-  Widget? createComponent(SingleColumnDocumentComponentContext componentContext,
-      SingleColumnLayoutComponentViewModel componentViewModel) {
-    editorLayoutLog.warning(
-        "Building component widget for unknown component: $componentViewModel");
-    return UnknownComponent(
-      key: componentContext.componentKey,
-    );
+  Widget? createComponent(
+    SingleColumnDocumentComponentContext componentContext,
+    SingleColumnLayoutComponentViewModel componentViewModel,
+  ) {
+    editorLayoutLog.warning("Building component widget for unknown component: $componentViewModel");
+    return UnknownComponent(key: componentContext.componentKey);
   }
 }
 
@@ -33,19 +31,11 @@ class UnknownComponentBuilder implements ComponentBuilder {
 /// This is used so the editor doesn't crash when it encounters a node that it
 /// doesn't know how to render.
 class _UnknownViewModel extends SingleColumnLayoutComponentViewModel {
-  _UnknownViewModel({
-    required super.nodeId,
-    super.createdAt,
-    required super.padding,
-  });
+  _UnknownViewModel({required super.nodeId, super.createdAt, required super.padding});
 
   @override
   SingleColumnLayoutComponentViewModel copy() {
-    return _UnknownViewModel(
-      nodeId: nodeId,
-      createdAt: createdAt,
-      padding: padding,
-    );
+    return _UnknownViewModel(nodeId: nodeId, createdAt: createdAt, padding: padding);
   }
 }
 
@@ -59,10 +49,6 @@ class UnknownComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SizedBox(
-      width: double.infinity,
-      height: 100,
-      child: Placeholder(),
-    );
+    return const SizedBox(width: double.infinity, height: 100, child: Placeholder());
   }
 }

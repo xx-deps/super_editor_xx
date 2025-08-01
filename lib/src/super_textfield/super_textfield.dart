@@ -219,8 +219,7 @@ class SuperTextField extends StatefulWidget {
   /// and when in multi-line mode, the action will be  [TextInputAction.newline].
   ///
   /// Only used on mobile.
-  @Deprecated(
-      'This will be removed in a future release. Use imeConfiguration instead')
+  @Deprecated('This will be removed in a future release. Use imeConfiguration instead')
   final TextInputAction? textInputAction;
 
   /// Preferences for how the platform IME should look and behave during editing.
@@ -234,8 +233,7 @@ class SuperTextField extends StatefulWidget {
   State<SuperTextField> createState() => SuperTextFieldState();
 }
 
-class SuperTextFieldState extends State<SuperTextField>
-    implements ImeInputOwner {
+class SuperTextFieldState extends State<SuperTextField> implements ImeInputOwner {
   final _platformFieldKey = GlobalKey();
   late FocusNode _focusNode;
   late ImeAttributedTextEditingController _controller;
@@ -248,10 +246,8 @@ class SuperTextFieldState extends State<SuperTextField>
 
     _controller = widget.textController != null
         ? widget.textController is ImeAttributedTextEditingController
-            ? (widget.textController as ImeAttributedTextEditingController)
-            : ImeAttributedTextEditingController(
-                controller: widget.textController,
-                disposeClientController: false)
+              ? (widget.textController as ImeAttributedTextEditingController)
+              : ImeAttributedTextEditingController(controller: widget.textController, disposeClientController: false)
         : ImeAttributedTextEditingController();
   }
 
@@ -269,10 +265,8 @@ class SuperTextFieldState extends State<SuperTextField>
     if (widget.textController != oldWidget.textController) {
       _controller = widget.textController != null
           ? widget.textController is ImeAttributedTextEditingController
-              ? (widget.textController as ImeAttributedTextEditingController)
-              : ImeAttributedTextEditingController(
-                  controller: widget.textController,
-                  disposeClientController: false)
+                ? (widget.textController as ImeAttributedTextEditingController)
+                : ImeAttributedTextEditingController(controller: widget.textController, disposeClientController: false)
           : ImeAttributedTextEditingController();
     }
   }
@@ -293,8 +287,7 @@ class SuperTextFieldState extends State<SuperTextField>
   AttributedTextEditingController get controller => _controller;
 
   @visibleForTesting
-  ProseTextLayout get textLayout =>
-      (_platformFieldKey.currentState as ProseTextBlock).textLayout;
+  ProseTextLayout get textLayout => (_platformFieldKey.currentState as ProseTextBlock).textLayout;
 
   @visibleForTesting
   @override
@@ -302,22 +295,18 @@ class SuperTextFieldState extends State<SuperTextField>
     switch (_configuration) {
       case SuperTextFieldPlatformConfiguration.desktop:
         // ignore: invalid_use_of_visible_for_testing_member
-        return (_platformFieldKey.currentState as SuperDesktopTextFieldState)
-            .imeClient;
+        return (_platformFieldKey.currentState as SuperDesktopTextFieldState).imeClient;
       case SuperTextFieldPlatformConfiguration.android:
-        return (_platformFieldKey.currentState as SuperAndroidTextFieldState)
-            .imeClient;
+        return (_platformFieldKey.currentState as SuperAndroidTextFieldState).imeClient;
       case SuperTextFieldPlatformConfiguration.iOS:
-        return (_platformFieldKey.currentState as SuperIOSTextFieldState)
-            .imeClient;
+        return (_platformFieldKey.currentState as SuperIOSTextFieldState).imeClient;
     }
   }
 
   bool get _isMultiline => (widget.minLines ?? 1) != 1 || widget.maxLines != 1;
 
   TextInputAction get _textInputAction =>
-      widget.textInputAction ??
-      (_isMultiline ? TextInputAction.newline : TextInputAction.done);
+      widget.textInputAction ?? (_isMultiline ? TextInputAction.newline : TextInputAction.done);
 
   SuperTextFieldPlatformConfiguration get _configuration {
     if (widget.configuration != null) {
@@ -365,16 +354,11 @@ class SuperTextFieldState extends State<SuperTextField>
   /// pressing [LogicalKeyboardKey.space] scrolls the scrollview.
   final Map<LogicalKeySet, Intent> _scrollShortcutOverrides = kIsWeb
       ? {
-          LogicalKeySet(LogicalKeyboardKey.space):
-              const DoNothingAndStopPropagationIntent(),
-          LogicalKeySet(LogicalKeyboardKey.arrowUp):
-              const DoNothingAndStopPropagationIntent(),
-          LogicalKeySet(LogicalKeyboardKey.arrowDown):
-              const DoNothingAndStopPropagationIntent(),
-          LogicalKeySet(LogicalKeyboardKey.arrowLeft):
-              const DoNothingAndStopPropagationIntent(),
-          LogicalKeySet(LogicalKeyboardKey.arrowRight):
-              const DoNothingAndStopPropagationIntent(),
+          LogicalKeySet(LogicalKeyboardKey.space): const DoNothingAndStopPropagationIntent(),
+          LogicalKeySet(LogicalKeyboardKey.arrowUp): const DoNothingAndStopPropagationIntent(),
+          LogicalKeySet(LogicalKeyboardKey.arrowDown): const DoNothingAndStopPropagationIntent(),
+          LogicalKeySet(LogicalKeyboardKey.arrowLeft): const DoNothingAndStopPropagationIntent(),
+          LogicalKeySet(LogicalKeyboardKey.arrowRight): const DoNothingAndStopPropagationIntent(),
         }
       : const <LogicalKeySet, Intent>{};
 
@@ -392,10 +376,9 @@ class SuperTextFieldState extends State<SuperTextField>
           inlineWidgetBuilders: widget.inlineWidgetBuilders,
           hintBehavior: widget.hintBehavior,
           hintBuilder: widget.hintBuilder,
-          selectionHighlightStyle: SelectionHighlightStyle(
-            color: widget.selectionColor ?? defaultSelectionColor,
-          ),
-          caretStyle: widget.caretStyle ??
+          selectionHighlightStyle: SelectionHighlightStyle(color: widget.selectionColor ?? defaultSelectionColor),
+          caretStyle:
+              widget.caretStyle ??
               CaretStyle(
                 color: widget.controlsColor ?? defaultDesktopCaretColor,
                 width: 1,
@@ -410,8 +393,7 @@ class SuperTextFieldState extends State<SuperTextField>
           inputSource: _inputSource,
           textInputAction: _textInputAction,
           imeConfiguration: widget.imeConfiguration,
-          showComposingUnderline: widget.showComposingUnderline ??
-              defaultTargetPlatform == TargetPlatform.macOS,
+          showComposingUnderline: widget.showComposingUnderline ?? defaultTargetPlatform == TargetPlatform.macOS,
           blinkTimingMode: widget.blinkTimingMode,
         );
       case SuperTextFieldPlatformConfiguration.android:
@@ -428,10 +410,7 @@ class SuperTextFieldState extends State<SuperTextField>
             inlineWidgetBuilders: widget.inlineWidgetBuilders,
             hintBehavior: widget.hintBehavior,
             hintBuilder: widget.hintBuilder,
-            caretStyle: widget.caretStyle ??
-                CaretStyle(
-                  color: widget.controlsColor ?? defaultAndroidControlsColor,
-                ),
+            caretStyle: widget.caretStyle ?? CaretStyle(color: widget.controlsColor ?? defaultAndroidControlsColor),
             selectionColor: widget.selectionColor ?? defaultSelectionColor,
             handlesColor: widget.controlsColor ?? defaultAndroidControlsColor,
             minLines: widget.minLines,
@@ -459,10 +438,7 @@ class SuperTextFieldState extends State<SuperTextField>
             padding: widget.padding,
             hintBehavior: widget.hintBehavior,
             hintBuilder: widget.hintBuilder,
-            caretStyle: widget.caretStyle ??
-                CaretStyle(
-                  color: widget.controlsColor ?? defaultIOSControlsColor,
-                ),
+            caretStyle: widget.caretStyle ?? CaretStyle(color: widget.controlsColor ?? defaultIOSControlsColor),
             selectionColor: widget.selectionColor ?? defaultSelectionColor,
             handlesColor: widget.controlsColor ?? defaultIOSControlsColor,
             minLines: widget.minLines,
@@ -484,8 +460,4 @@ class SuperTextFieldState extends State<SuperTextField>
 ///
 /// Desktop uses a blinking caret, while mobile uses a draggable caret
 /// and selection handles, styled per platform.
-enum SuperTextFieldPlatformConfiguration {
-  desktop,
-  android,
-  iOS,
-}
+enum SuperTextFieldPlatformConfiguration { desktop, android, iOS }

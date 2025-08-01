@@ -6,11 +6,7 @@ class OuterBoxShadow extends BoxShadow {
     Offset offset = Offset.zero,
     double blurRadius = 0.0,
     double spreadRadius = 0.0,
-  }) : super(
-            color: color,
-            offset: offset,
-            blurRadius: blurRadius,
-            spreadRadius: spreadRadius);
+  }) : super(color: color, offset: offset, blurRadius: blurRadius, spreadRadius: spreadRadius);
 
   @override
   Paint toPaint() {

@@ -5,21 +5,15 @@ import 'package:super_editor/src/infrastructure/sliver_hybrid_stack.dart';
 
 class SuperEditorDebugVisuals extends InheritedWidget {
   static SuperEditorDebugVisualsConfig of(BuildContext context) {
-    return context
-        .dependOnInheritedWidgetOfExactType<SuperEditorDebugVisuals>()!
-        .config;
+    return context.dependOnInheritedWidgetOfExactType<SuperEditorDebugVisuals>()!.config;
   }
 
   static SuperEditorDebugVisualsConfig? maybeOf(BuildContext context) {
-    return context
-        .dependOnInheritedWidgetOfExactType<SuperEditorDebugVisuals>()
-        ?.config;
+    return context.dependOnInheritedWidgetOfExactType<SuperEditorDebugVisuals>()?.config;
   }
 
-  const SuperEditorDebugVisuals({
-    this.config = const SuperEditorDebugVisualsConfig(),
-    required Widget child,
-  }) : super(child: child);
+  const SuperEditorDebugVisuals({this.config = const SuperEditorDebugVisualsConfig(), required Widget child})
+    : super(child: child);
 
   final SuperEditorDebugVisualsConfig config;
 
@@ -30,10 +24,7 @@ class SuperEditorDebugVisuals extends InheritedWidget {
 }
 
 class SuperEditorDebugVisualsConfig {
-  const SuperEditorDebugVisualsConfig({
-    this.showFocus = false,
-    this.showImeConnection = false,
-  });
+  const SuperEditorDebugVisualsConfig({this.showFocus = false, this.showImeConnection = false});
 
   final bool showFocus;
   final bool showImeConnection;
@@ -51,11 +42,7 @@ class SuperEditorDebugVisualsConfig {
 }
 
 class SuperEditorFocusDebugVisuals extends StatelessWidget {
-  const SuperEditorFocusDebugVisuals({
-    Key? key,
-    required this.focusNode,
-    required this.child,
-  }) : super(key: key);
+  const SuperEditorFocusDebugVisuals({Key? key, required this.focusNode, required this.child}) : super(key: key);
 
   final FocusNode focusNode;
 
@@ -74,16 +61,11 @@ class SuperEditorFocusDebugVisuals extends StatelessWidget {
         final color = focusNode.hasPrimaryFocus
             ? Colors.lightGreenAccent
             : focusNode.hasFocus
-                ? Colors.red
-                : Colors.grey;
+            ? Colors.red
+            : Colors.grey;
 
         return DecoratedBox(
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: color,
-              width: 2,
-            ),
-          ),
+          decoration: BoxDecoration(border: Border.all(color: color, width: 2)),
           position: DecorationPosition.foreground,
           child: child,
         );
@@ -93,11 +75,7 @@ class SuperEditorFocusDebugVisuals extends StatelessWidget {
 }
 
 class SuperEditorImeDebugVisuals extends StatelessWidget {
-  const SuperEditorImeDebugVisuals({
-    Key? key,
-    required this.imeConnection,
-    required this.child,
-  }) : super(key: key);
+  const SuperEditorImeDebugVisuals({Key? key, required this.imeConnection, required this.child}) : super(key: key);
 
   final ValueListenable<TextInputConnection?> imeConnection;
 
@@ -116,14 +94,14 @@ class SuperEditorImeDebugVisuals extends StatelessWidget {
         final color = imeConnection.value == null
             ? Colors.grey
             : imeConnection.value!.attached
-                ? Colors.greenAccent
-                : Colors.red;
+            ? Colors.greenAccent
+            : Colors.red;
 
         final message = imeConnection.value == null
             ? "NO IME CONNECTION"
             : imeConnection.value!.attached
-                ? "ATTACHED TO IME"
-                : "DETACHED FROM IME";
+            ? "ATTACHED TO IME"
+            : "DETACHED FROM IME";
 
         return SliverHybridStack(
           children: [
@@ -133,8 +111,7 @@ class SuperEditorImeDebugVisuals extends StatelessWidget {
             Align(
               alignment: Alignment.topCenter,
               child: Container(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                 decoration: BoxDecoration(
                   color: color,
                   borderRadius: const BorderRadius.only(
@@ -144,11 +121,7 @@ class SuperEditorImeDebugVisuals extends StatelessWidget {
                 ),
                 child: Text(
                   message,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
                 ),
               ),
             ),

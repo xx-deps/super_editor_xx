@@ -39,8 +39,7 @@ class KeyboardEditingToolbar extends StatefulWidget {
   final DocumentComposer composer;
   final CommonEditorOperations commonOps;
 
-  @Deprecated(
-      "To change the brightness, wrap KeyboardEditingToolbar with a Theme, instead")
+  @Deprecated("To change the brightness, wrap KeyboardEditingToolbar with a Theme, instead")
   final Brightness? brightness;
 
   /// Whether this widget should take up empty space in the current subtree that
@@ -59,12 +58,10 @@ class KeyboardEditingToolbar extends StatefulWidget {
   State<KeyboardEditingToolbar> createState() => _KeyboardEditingToolbarState();
 }
 
-class _KeyboardEditingToolbarState extends State<KeyboardEditingToolbar>
-    with WidgetsBindingObserver {
+class _KeyboardEditingToolbarState extends State<KeyboardEditingToolbar> with WidgetsBindingObserver {
   late KeyboardEditingToolbarOperations _toolbarOps;
 
-  final _portalController = GroupedOverlayPortalController(
-      displayPriority: OverlayGroupPriority.windowChrome);
+  final _portalController = GroupedOverlayPortalController(displayPriority: OverlayGroupPriority.windowChrome);
 
   double _toolbarHeight = 0;
 
@@ -124,8 +121,7 @@ class _KeyboardEditingToolbarState extends State<KeyboardEditingToolbar>
       overlayChildBuilder: _buildToolbarOverlay,
       // Take up empty space that's as tall as the toolbar so that other content
       // doesn't layout behind it.
-      child: SizedBox(
-          height: widget.takeUpSameSpaceAsToolbar ? _toolbarHeight : 0),
+      child: SizedBox(height: widget.takeUpSameSpaceAsToolbar ? _toolbarHeight : 0),
     );
   }
 
@@ -135,31 +131,30 @@ class _KeyboardEditingToolbarState extends State<KeyboardEditingToolbar>
       return const SizedBox();
     }
 
-    return KeyboardHeightBuilder(builder: (context, keyboardHeight) {
-      return Padding(
-        // Add padding that takes up the height of the software keyboard so
-        // that the toolbar sits just above the keyboard.
-        padding: EdgeInsets.only(bottom: keyboardHeight),
-        child: Align(
-          alignment: Alignment.bottomLeft,
-          child: _buildTheming(
-            child: Builder(
-              // Add a Builder so that _buildToolbar() uses theming from _buildTheming().
-              builder: (themedContext) {
-                return _buildToolbar(themedContext);
-              },
+    return KeyboardHeightBuilder(
+      builder: (context, keyboardHeight) {
+        return Padding(
+          // Add padding that takes up the height of the software keyboard so
+          // that the toolbar sits just above the keyboard.
+          padding: EdgeInsets.only(bottom: keyboardHeight),
+          child: Align(
+            alignment: Alignment.bottomLeft,
+            child: _buildTheming(
+              child: Builder(
+                // Add a Builder so that _buildToolbar() uses theming from _buildTheming().
+                builder: (themedContext) {
+                  return _buildToolbar(themedContext);
+                },
+              ),
             ),
           ),
-        ),
-      );
-    });
+        );
+      },
+    );
   }
 
-  Widget _buildTheming({
-    required Widget child,
-  }) {
-    final brightness =
-        widget.brightness ?? MediaQuery.of(context).platformBrightness;
+  Widget _buildTheming({required Widget child}) {
+    final brightness = widget.brightness ?? MediaQuery.of(context).platformBrightness;
 
     return Theme(
       data: Theme.of(context).copyWith(
@@ -169,9 +164,7 @@ class _KeyboardEditingToolbarState extends State<KeyboardEditingToolbar>
             : Colors.white.withValues(alpha: 0.5),
       ),
       child: IconTheme(
-        data: IconThemeData(
-          color: brightness == Brightness.light ? Colors.black : Colors.white,
-        ),
+        data: IconThemeData(color: brightness == Brightness.light ? Colors.black : Colors.white),
         child: child,
       ),
     );
@@ -184,154 +177,120 @@ class _KeyboardEditingToolbarState extends State<KeyboardEditingToolbar>
       child: Container(
         width: double.infinity,
         height: 48,
-        color: Theme.of(context).brightness == Brightness.light
-            ? const Color(0xFFDDDDDD)
-            : const Color(0xFF222222),
-        child: LayoutBuilder(builder: (context, constraints) {
-          _onToolbarLayout(constraints.maxHeight);
+        color: Theme.of(context).brightness == Brightness.light ? const Color(0xFFDDDDDD) : const Color(0xFF222222),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            _onToolbarLayout(constraints.maxHeight);
 
-          return Row(
-            children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: ListenableBuilder(
+            return Row(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: ListenableBuilder(
                       listenable: widget.composer,
                       builder: (context, _) {
-                        final selectedNode = widget.document
-                            .getNodeById(selection.extent.nodeId);
-                        final isSingleNodeSelected =
-                            selection.extent.nodeId == selection.base.nodeId;
+                        final selectedNode = widget.document.getNodeById(selection.extent.nodeId);
+                        final isSingleNodeSelected = selection.extent.nodeId == selection.base.nodeId;
 
                         return Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             IconButton(
-                              onPressed: selectedNode is TextNode
-                                  ? _toolbarOps.toggleBold
-                                  : null,
+                              onPressed: selectedNode is TextNode ? _toolbarOps.toggleBold : null,
                               icon: const Icon(Icons.format_bold),
-                              color: _toolbarOps.isBoldActive
-                                  ? Theme.of(context).primaryColor
-                                  : null,
+                              color: _toolbarOps.isBoldActive ? Theme.of(context).primaryColor : null,
                             ),
                             IconButton(
-                              onPressed: selectedNode is TextNode
-                                  ? _toolbarOps.toggleItalics
-                                  : null,
+                              onPressed: selectedNode is TextNode ? _toolbarOps.toggleItalics : null,
                               icon: const Icon(Icons.format_italic),
-                              color: _toolbarOps.isItalicsActive
-                                  ? Theme.of(context).primaryColor
-                                  : null,
+                              color: _toolbarOps.isItalicsActive ? Theme.of(context).primaryColor : null,
                             ),
                             IconButton(
-                              onPressed: selectedNode is TextNode
-                                  ? _toolbarOps.toggleUnderline
-                                  : null,
+                              onPressed: selectedNode is TextNode ? _toolbarOps.toggleUnderline : null,
                               icon: const Icon(Icons.format_underline),
-                              color: _toolbarOps.isUnderlineActive
-                                  ? Theme.of(context).primaryColor
-                                  : null,
+                              color: _toolbarOps.isUnderlineActive ? Theme.of(context).primaryColor : null,
                             ),
                             IconButton(
-                              onPressed: selectedNode is TextNode
-                                  ? _toolbarOps.toggleStrikethrough
-                                  : null,
+                              onPressed: selectedNode is TextNode ? _toolbarOps.toggleStrikethrough : null,
                               icon: const Icon(Icons.strikethrough_s),
-                              color: _toolbarOps.isStrikethroughActive
-                                  ? Theme.of(context).primaryColor
-                                  : null,
+                              color: _toolbarOps.isStrikethroughActive ? Theme.of(context).primaryColor : null,
                             ),
                             IconButton(
-                              onPressed: isSingleNodeSelected &&
+                              onPressed:
+                                  isSingleNodeSelected &&
                                       (selectedNode is TextNode &&
-                                          selectedNode.getMetadataValue(
-                                                  'blockType') !=
-                                              header1Attribution)
+                                          selectedNode.getMetadataValue('blockType') != header1Attribution)
                                   ? _toolbarOps.convertToHeader1
                                   : null,
                               icon: const Icon(Icons.title),
                             ),
                             IconButton(
-                              onPressed: isSingleNodeSelected &&
+                              onPressed:
+                                  isSingleNodeSelected &&
                                       (selectedNode is TextNode &&
-                                          selectedNode.getMetadataValue(
-                                                  'blockType') !=
-                                              header2Attribution)
+                                          selectedNode.getMetadataValue('blockType') != header2Attribution)
                                   ? _toolbarOps.convertToHeader2
                                   : null,
                               icon: const Icon(Icons.title),
                               iconSize: 18,
                             ),
                             IconButton(
-                              onPressed: isSingleNodeSelected &&
-                                      ((selectedNode is ParagraphNode &&
-                                              selectedNode.hasMetadataValue(
-                                                  'blockType')) ||
-                                          (selectedNode is TextNode &&
-                                              selectedNode is! ParagraphNode))
+                              onPressed:
+                                  isSingleNodeSelected &&
+                                      ((selectedNode is ParagraphNode && selectedNode.hasMetadataValue('blockType')) ||
+                                          (selectedNode is TextNode && selectedNode is! ParagraphNode))
                                   ? _toolbarOps.convertToParagraph
                                   : null,
                               icon: const Icon(Icons.wrap_text),
                             ),
                             IconButton(
-                              onPressed: isSingleNodeSelected &&
-                                      (selectedNode is TextNode &&
-                                              selectedNode is! ListItemNode ||
-                                          (selectedNode is ListItemNode &&
-                                              selectedNode.type !=
-                                                  ListItemType.ordered))
+                              onPressed:
+                                  isSingleNodeSelected &&
+                                      (selectedNode is TextNode && selectedNode is! ListItemNode ||
+                                          (selectedNode is ListItemNode && selectedNode.type != ListItemType.ordered))
                                   ? _toolbarOps.convertToOrderedListItem
                                   : null,
                               icon: const Icon(Icons.looks_one_rounded),
                             ),
                             IconButton(
-                              onPressed: isSingleNodeSelected &&
-                                      (selectedNode is TextNode &&
-                                              selectedNode is! ListItemNode ||
-                                          (selectedNode is ListItemNode &&
-                                              selectedNode.type !=
-                                                  ListItemType.unordered))
+                              onPressed:
+                                  isSingleNodeSelected &&
+                                      (selectedNode is TextNode && selectedNode is! ListItemNode ||
+                                          (selectedNode is ListItemNode && selectedNode.type != ListItemType.unordered))
                                   ? _toolbarOps.convertToUnorderedListItem
                                   : null,
                               icon: const Icon(Icons.list),
                             ),
                             IconButton(
-                              onPressed: isSingleNodeSelected &&
+                              onPressed:
+                                  isSingleNodeSelected &&
                                       selectedNode is TextNode &&
                                       (selectedNode is! ParagraphNode ||
-                                          selectedNode.getMetadataValue(
-                                                  'blockType') !=
-                                              blockquoteAttribution)
+                                          selectedNode.getMetadataValue('blockType') != blockquoteAttribution)
                                   ? _toolbarOps.convertToBlockquote
                                   : null,
                               icon: const Icon(Icons.format_quote),
                             ),
                             IconButton(
-                              onPressed: isSingleNodeSelected &&
-                                      selectedNode is ParagraphNode &&
-                                      selectedNode.text.isEmpty
+                              onPressed:
+                                  isSingleNodeSelected && selectedNode is ParagraphNode && selectedNode.text.isEmpty
                                   ? _toolbarOps.convertToHr
                                   : null,
                               icon: const Icon(Icons.horizontal_rule),
                             ),
                           ],
                         );
-                      }),
+                      },
+                    ),
+                  ),
                 ),
-              ),
-              Container(
-                width: 1,
-                height: 32,
-                color: const Color(0xFFCCCCCC),
-              ),
-              IconButton(
-                onPressed: _toolbarOps.closeKeyboard,
-                icon: const Icon(Icons.keyboard_hide),
-              ),
-            ],
-          );
-        }),
+                Container(width: 1, height: 32, color: const Color(0xFFCCCCCC)),
+                IconButton(onPressed: _toolbarOps.closeKeyboard, icon: const Icon(Icons.keyboard_hide)),
+              ],
+            );
+          },
+        ),
       ),
     );
   }
@@ -343,10 +302,7 @@ class _KeyboardEditingToolbarState extends State<KeyboardEditingToolbar>
 /// `EdgeInsets.fromViewPadding(View.of(context).viewInsets, View.of(context).devicePixelRatio).bottom`
 /// as a proxy for the height of the software keyboard.
 class KeyboardHeightBuilder extends StatefulWidget {
-  const KeyboardHeightBuilder({
-    super.key,
-    required this.builder,
-  });
+  const KeyboardHeightBuilder({super.key, required this.builder});
 
   final Widget Function(BuildContext, double keyboardHeight) builder;
 
@@ -354,8 +310,7 @@ class KeyboardHeightBuilder extends StatefulWidget {
   State<KeyboardHeightBuilder> createState() => _KeyboardHeightBuilderState();
 }
 
-class _KeyboardHeightBuilderState extends State<KeyboardHeightBuilder>
-    with WidgetsBindingObserver {
+class _KeyboardHeightBuilderState extends State<KeyboardHeightBuilder> with WidgetsBindingObserver {
   double _keyboardHeight = 0;
 
   @override
@@ -373,8 +328,9 @@ class _KeyboardHeightBuilderState extends State<KeyboardHeightBuilder>
   @override
   void didChangeMetrics() {
     final keyboardHeight = EdgeInsets.fromViewPadding(
-            View.of(context).viewInsets, View.of(context).devicePixelRatio)
-        .bottom;
+      View.of(context).viewInsets,
+      View.of(context).devicePixelRatio,
+    ).bottom;
     if (keyboardHeight == _keyboardHeight) {
       return;
     }
@@ -409,16 +365,13 @@ class KeyboardEditingToolbarOperations {
   bool get isBoldActive => _doesSelectionHaveAttributions({boldAttribution});
   void toggleBold() => _toggleAttributions({boldAttribution});
 
-  bool get isItalicsActive =>
-      _doesSelectionHaveAttributions({italicsAttribution});
+  bool get isItalicsActive => _doesSelectionHaveAttributions({italicsAttribution});
   void toggleItalics() => _toggleAttributions({italicsAttribution});
 
-  bool get isUnderlineActive =>
-      _doesSelectionHaveAttributions({underlineAttribution});
+  bool get isUnderlineActive => _doesSelectionHaveAttributions({underlineAttribution});
   void toggleUnderline() => _toggleAttributions({underlineAttribution});
 
-  bool get isStrikethroughActive =>
-      _doesSelectionHaveAttributions({strikethroughAttribution});
+  bool get isStrikethroughActive => _doesSelectionHaveAttributions({strikethroughAttribution});
   void toggleStrikethrough() => _toggleAttributions({strikethroughAttribution});
 
   bool _doesSelectionHaveAttributions(Set<Attribution> attributions) {
@@ -431,8 +384,7 @@ class KeyboardEditingToolbarOperations {
       return composer.preferences.currentAttributions.containsAll(attributions);
     }
 
-    return document.doesSelectedTextContainAttributions(
-        selection, attributions);
+    return document.doesSelectedTextContainAttributions(selection, attributions);
   }
 
   void _toggleAttributions(Set<Attribution> attributions) {
@@ -447,48 +399,28 @@ class KeyboardEditingToolbarOperations {
   }
 
   void convertToHeader1() {
-    final selectedNode =
-        document.getNodeById(composer.selection!.extent.nodeId);
+    final selectedNode = document.getNodeById(composer.selection!.extent.nodeId);
     if (selectedNode is! TextNode) {
       return;
     }
 
     if (selectedNode is ListItemNode) {
-      commonOps.convertToParagraph(
-        newMetadata: {
-          'blockType': header1Attribution,
-        },
-      );
+      commonOps.convertToParagraph(newMetadata: {'blockType': header1Attribution});
     } else {
-      editor.execute([
-        ChangeParagraphBlockTypeRequest(
-          nodeId: selectedNode.id,
-          blockType: header1Attribution,
-        ),
-      ]);
+      editor.execute([ChangeParagraphBlockTypeRequest(nodeId: selectedNode.id, blockType: header1Attribution)]);
     }
   }
 
   void convertToHeader2() {
-    final selectedNode =
-        document.getNodeById(composer.selection!.extent.nodeId);
+    final selectedNode = document.getNodeById(composer.selection!.extent.nodeId);
     if (selectedNode is! TextNode) {
       return;
     }
 
     if (selectedNode is ListItemNode) {
-      commonOps.convertToParagraph(
-        newMetadata: {
-          'blockType': header2Attribution,
-        },
-      );
+      commonOps.convertToParagraph(newMetadata: {'blockType': header2Attribution});
     } else {
-      editor.execute([
-        ChangeParagraphBlockTypeRequest(
-          nodeId: selectedNode.id,
-          blockType: header2Attribution,
-        ),
-      ]);
+      editor.execute([ChangeParagraphBlockTypeRequest(nodeId: selectedNode.id, blockType: header2Attribution)]);
     }
   }
 
@@ -497,44 +429,34 @@ class KeyboardEditingToolbarOperations {
   }
 
   void convertToOrderedListItem() {
-    final selectedNode =
-        document.getNodeById(composer.selection!.extent.nodeId)! as TextNode;
+    final selectedNode = document.getNodeById(composer.selection!.extent.nodeId)! as TextNode;
 
     commonOps.convertToListItem(ListItemType.ordered, selectedNode.text);
   }
 
   void convertToUnorderedListItem() {
-    final selectedNode =
-        document.getNodeById(composer.selection!.extent.nodeId)! as TextNode;
+    final selectedNode = document.getNodeById(composer.selection!.extent.nodeId)! as TextNode;
 
     commonOps.convertToListItem(ListItemType.unordered, selectedNode.text);
   }
 
   void convertToBlockquote() {
-    final selectedNode =
-        document.getNodeById(composer.selection!.extent.nodeId)! as TextNode;
+    final selectedNode = document.getNodeById(composer.selection!.extent.nodeId)! as TextNode;
 
     commonOps.convertToBlockquote(selectedNode.text);
   }
 
   void convertToHr() {
-    final selectedNode =
-        document.getNodeById(composer.selection!.extent.nodeId)! as TextNode;
+    final selectedNode = document.getNodeById(composer.selection!.extent.nodeId)! as TextNode;
 
     editor.execute([
       ReplaceNodeRequest(
         existingNodeId: selectedNode.id,
-        newNode: ParagraphNode(
-          id: selectedNode.id,
-          text: AttributedText('---'),
-        ),
+        newNode: ParagraphNode(id: selectedNode.id, text: AttributedText('---')),
       ),
       ChangeSelectionRequest(
         DocumentSelection.collapsed(
-          position: DocumentPosition(
-            nodeId: selectedNode.id,
-            nodePosition: const TextNodePosition(offset: 3),
-          ),
+          position: DocumentPosition(nodeId: selectedNode.id, nodePosition: const TextNodePosition(offset: 3)),
         ),
         SelectionChangeType.insertContent,
         SelectionReason.userInteraction,
@@ -545,11 +467,7 @@ class KeyboardEditingToolbarOperations {
 
   void closeKeyboard() {
     editor.execute([
-      const ChangeSelectionRequest(
-        null,
-        SelectionChangeType.clearSelection,
-        SelectionReason.userInteraction,
-      ),
+      const ChangeSelectionRequest(null, SelectionChangeType.clearSelection, SelectionReason.userInteraction),
     ]);
   }
 }

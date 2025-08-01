@@ -40,11 +40,7 @@ class DocumentScroller {
 
   /// Animates [scrollOffset] from its current offset to [to], over the given [duration]
   /// of time, following the given animation [curve].
-  void animateTo(
-    double to, {
-    required Duration duration,
-    Curve curve = Curves.easeInOut,
-  }) {
+  void animateTo(double to, {required Duration duration, Curve curve = Curves.easeInOut}) {
     _scrollPosition!.animateTo(to, duration: duration, curve: curve);
   }
 
@@ -62,11 +58,9 @@ class DocumentScroller {
 
   final _scrollChangeListeners = <VoidCallback>{};
 
-  void addScrollChangeListener(VoidCallback listener) =>
-      _scrollChangeListeners.add(listener);
+  void addScrollChangeListener(VoidCallback listener) => _scrollChangeListeners.add(listener);
 
-  void removeScrollChangeListener(VoidCallback listener) =>
-      _scrollChangeListeners.remove(listener);
+  void removeScrollChangeListener(VoidCallback listener) => _scrollChangeListeners.remove(listener);
 
   void _notifyScrollChangeListeners() {
     for (final listener in _scrollChangeListeners) {

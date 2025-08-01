@@ -74,8 +74,7 @@ mixin ProxyTextComposable implements TextComposable {
   }
 
   @override
-  TextNodeSelection getContiguousTextSelectionAt(
-      TextNodePosition textNodePosition) {
+  TextNodeSelection getContiguousTextSelectionAt(TextNodePosition textNodePosition) {
     return childTextComposable.getContiguousTextSelectionAt(textNodePosition);
   }
 

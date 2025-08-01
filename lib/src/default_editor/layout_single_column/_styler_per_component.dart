@@ -14,23 +14,17 @@ import '_presenter.dart';
 /// that it picks up any style related changes. Given that the entire style pipeline
 /// re-runs every time the document changes, this phase automatically runs at the
 /// appropriate time.
-class SingleColumnLayoutCustomComponentStyler
-    extends SingleColumnLayoutStylePhase {
+class SingleColumnLayoutCustomComponentStyler extends SingleColumnLayoutStylePhase {
   SingleColumnLayoutCustomComponentStyler();
 
   @override
-  SingleColumnLayoutViewModel style(
-      Document document, SingleColumnLayoutViewModel viewModel) {
-    editorStyleLog.finest(
-        "(Re)calculating custom component styles view model for document layout");
+  SingleColumnLayoutViewModel style(Document document, SingleColumnLayoutViewModel viewModel) {
+    editorStyleLog.finest("(Re)calculating custom component styles view model for document layout");
     return SingleColumnLayoutViewModel(
       padding: viewModel.padding,
       componentViewModels: [
         for (final previousViewModel in viewModel.componentViewModels)
-          _applyLayoutStyles(
-            document.getNodeById(previousViewModel.nodeId)!,
-            previousViewModel.copy(),
-          ),
+          _applyLayoutStyles(document.getNodeById(previousViewModel.nodeId)!, previousViewModel.copy()),
       ],
     );
   }
@@ -39,8 +33,7 @@ class SingleColumnLayoutCustomComponentStyler
     DocumentNode node,
     SingleColumnLayoutComponentViewModel viewModel,
   ) {
-    final componentStyles =
-        SingleColumnLayoutComponentStyles.fromMetadata(node);
+    final componentStyles = SingleColumnLayoutComponentStyles.fromMetadata(node);
 
     viewModel
       ..maxWidth = componentStyles.width ?? viewModel.maxWidth
@@ -62,29 +55,17 @@ class SingleColumnLayoutComponentStyles {
     );
   }
 
-  const SingleColumnLayoutComponentStyles({
-    this.width,
-    this.padding,
-  });
+  const SingleColumnLayoutComponentStyles({this.width, this.padding});
 
   final double? width;
   final EdgeInsetsGeometry? padding;
 
   Map<String, dynamic> toMetadata() => {
-        _metadataKey: {
-          _widthKey: width,
-          _paddingKey: padding,
-        },
-      };
+    _metadataKey: {_widthKey: width, _paddingKey: padding},
+  };
 
-  SingleColumnLayoutComponentStyles copyWith({
-    double? width,
-    EdgeInsetsGeometry? padding,
-  }) {
-    return SingleColumnLayoutComponentStyles(
-      width: width ?? this.width,
-      padding: padding ?? this.padding,
-    );
+  SingleColumnLayoutComponentStyles copyWith({double? width, EdgeInsetsGeometry? padding}) {
+    return SingleColumnLayoutComponentStyles(width: width ?? this.width, padding: padding ?? this.padding);
   }
 
   @override

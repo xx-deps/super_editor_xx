@@ -6,9 +6,7 @@ import '_presenter.dart';
 
 /// Style phase that applies a given [Stylesheet] to the document view model.
 class SingleColumnStylesheetStyler extends SingleColumnLayoutStylePhase {
-  SingleColumnStylesheetStyler({
-    required Stylesheet stylesheet,
-  }) : _stylesheet = stylesheet;
+  SingleColumnStylesheetStyler({required Stylesheet stylesheet}) : _stylesheet = stylesheet;
 
   Stylesheet _stylesheet;
 
@@ -31,17 +29,12 @@ class SingleColumnStylesheetStyler extends SingleColumnLayoutStylePhase {
   }
 
   @override
-  SingleColumnLayoutViewModel style(
-      Document document, SingleColumnLayoutViewModel viewModel) {
+  SingleColumnLayoutViewModel style(Document document, SingleColumnLayoutViewModel viewModel) {
     return SingleColumnLayoutViewModel(
       padding: _stylesheet.documentPadding ?? viewModel.padding,
       componentViewModels: [
         for (final componentViewModel in viewModel.componentViewModels)
-          _styleComponent(
-            document,
-            document.getNodeById(componentViewModel.nodeId)!,
-            componentViewModel.copy(),
-          ),
+          _styleComponent(document, document.getNodeById(componentViewModel.nodeId)!, componentViewModel.copy()),
       ],
     );
   }
@@ -59,10 +52,7 @@ class SingleColumnStylesheetStyler extends SingleColumnLayoutStylePhase {
     };
     for (final rule in _stylesheet.rules) {
       if (rule.selector.matches(document, node)) {
-        _mergeStyles(
-          existingStyles: aggregateStyles,
-          newStyles: rule.styler(document, node),
-        );
+        _mergeStyles(existingStyles: aggregateStyles, newStyles: rule.styler(document, node));
       }
     }
 
@@ -71,10 +61,7 @@ class SingleColumnStylesheetStyler extends SingleColumnLayoutStylePhase {
     return viewModel;
   }
 
-  void _mergeStyles({
-    required Map<String, dynamic> existingStyles,
-    required Map<String, dynamic> newStyles,
-  }) {
+  void _mergeStyles({required Map<String, dynamic> existingStyles, required Map<String, dynamic> newStyles}) {
     for (final entry in newStyles.entries) {
       if (existingStyles.containsKey(entry.key)) {
         // Try to merge. If we can't, then overwrite.
@@ -83,8 +70,7 @@ class SingleColumnStylesheetStyler extends SingleColumnLayoutStylePhase {
 
         if (oldValue is TextStyle && newValue is TextStyle) {
           existingStyles[entry.key] = oldValue.merge(newValue);
-        } else if (oldValue is CascadingPadding &&
-            newValue is CascadingPadding) {
+        } else if (oldValue is CascadingPadding && newValue is CascadingPadding) {
           existingStyles[entry.key] = newValue.applyOnTopOf(oldValue);
         }
       } else {

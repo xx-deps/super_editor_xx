@@ -84,8 +84,7 @@ abstract class Document implements Iterable<DocumentNode> {
 
   /// Returns all [DocumentNode]s from [position1] to [position2], including
   /// the nodes at [position1] and [position2].
-  List<DocumentNode> getNodesInside(
-      DocumentPosition position1, DocumentPosition position2);
+  List<DocumentNode> getNodesInside(DocumentPosition position1, DocumentPosition position2);
 
   /// Returns [true] if the content in the [other] document is equivalent to
   /// the content in this document, ignoring any details that are unrelated
@@ -169,11 +168,7 @@ class NodeInsertedEvent extends NodeDocumentChange {
 
 /// A [DocumentNode] was moved to a new index.
 class NodeMovedEvent extends NodeDocumentChange {
-  const NodeMovedEvent({
-    required this.nodeId,
-    required this.from,
-    required this.to,
-  });
+  const NodeMovedEvent({required this.nodeId, required this.from, required this.to});
 
   @override
   final String nodeId;
@@ -216,10 +211,7 @@ class NodeRemovedEvent extends NodeDocumentChange {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is NodeRemovedEvent &&
-          runtimeType == other.runtimeType &&
-          nodeId == other.nodeId;
+      identical(this, other) || other is NodeRemovedEvent && runtimeType == other.runtimeType && nodeId == other.nodeId;
 
   @override
   int get hashCode => nodeId.hashCode;
@@ -244,10 +236,7 @@ class NodeChangeEvent extends NodeDocumentChange {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is NodeChangeEvent &&
-          runtimeType == other.runtimeType &&
-          nodeId == other.nodeId;
+      identical(this, other) || other is NodeChangeEvent && runtimeType == other.runtimeType && nodeId == other.nodeId;
 
   @override
   int get hashCode => nodeId.hashCode;
@@ -278,10 +267,7 @@ class DocumentPosition {
   ///   nodePosition: TextNodePosition(offset: 1),
   /// );
   /// ```
-  const DocumentPosition({
-    required this.nodeId,
-    required this.nodePosition,
-  });
+  const DocumentPosition({required this.nodeId, required this.nodePosition});
 
   /// ID of a [DocumentNode] within a [Document].
   final String nodeId;
@@ -306,23 +292,15 @@ class DocumentPosition {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is DocumentPosition &&
-          nodeId == other.nodeId &&
-          nodePosition == other.nodePosition;
+      other is DocumentPosition && nodeId == other.nodeId && nodePosition == other.nodePosition;
 
   @override
   int get hashCode => nodeId.hashCode ^ nodePosition.hashCode;
 
   /// Creates a new [DocumentPosition] based on the current position, with the
   /// provided parameters overridden.
-  DocumentPosition copyWith({
-    String? nodeId,
-    NodePosition? nodePosition,
-  }) {
-    return DocumentPosition(
-      nodeId: nodeId ?? this.nodeId,
-      nodePosition: nodePosition ?? this.nodePosition,
-    );
+  DocumentPosition copyWith({String? nodeId, NodePosition? nodePosition}) {
+    return DocumentPosition(nodeId: nodeId ?? this.nodeId, nodePosition: nodePosition ?? this.nodePosition);
   }
 
   @override
@@ -334,9 +312,7 @@ class DocumentPosition {
 /// A single content node within a [Document].
 @immutable
 abstract class DocumentNode {
-  DocumentNode({
-    Map<String, dynamic>? metadata,
-  }) {
+  DocumentNode({Map<String, dynamic>? metadata}) {
     // We construct a new map here, instead of directly assigning from the
     // constructor, because we need to make sure that `_metadata` is mutable.
     _metadata = {
@@ -398,29 +374,20 @@ abstract class DocumentNode {
   ///
   /// For example, in a [TextNode], this returns the [TextPosition]
   /// for the character that appears earlier in the block of text.
-  NodePosition selectUpstreamPosition(
-    NodePosition position1,
-    NodePosition position2,
-  );
+  NodePosition selectUpstreamPosition(NodePosition position1, NodePosition position2);
 
   /// Inspects [position1] and [position2] and returns the one that's
   /// positioned further downstream in this [DocumentNode].
   ///
   /// For example, in a [TextNode], this returns the [TextPosition]
   /// for the character that appears later in the block of text.
-  NodePosition selectDownstreamPosition(
-    NodePosition position1,
-    NodePosition position2,
-  );
+  NodePosition selectDownstreamPosition(NodePosition position1, NodePosition position2);
 
   /// Returns a node-specific representation of a selection from
   /// [base] to [extent].
   ///
   /// For example, a [ParagraphNode] would return a [TextNodeSelection].
-  NodeSelection computeSelection({
-    required NodePosition base,
-    required NodePosition extent,
-  });
+  NodeSelection computeSelection({required NodePosition base, required NodePosition extent});
 
   /// Returns a plain-text version of the content in this node
   /// within [selection], or null if the given selection does
@@ -485,13 +452,8 @@ abstract class DocumentNode {
 
 extension InspectNodeAffinity on DocumentNode {
   /// Returns the affinity direction implied by the given [base] and [extent].
-  TextAffinity getAffinityBetween({
-    required NodePosition base,
-    required NodePosition extent,
-  }) {
-    return base == selectUpstreamPosition(base, extent)
-        ? TextAffinity.downstream
-        : TextAffinity.upstream;
+  TextAffinity getAffinityBetween({required NodePosition base, required NodePosition extent}) {
+    return base == selectUpstreamPosition(base, extent) ? TextAffinity.downstream : TextAffinity.upstream;
   }
 }
 

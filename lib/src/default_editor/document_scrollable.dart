@@ -71,8 +71,7 @@ class DocumentScrollable extends StatefulWidget {
   State<DocumentScrollable> createState() => _DocumentScrollableState();
 }
 
-class _DocumentScrollableState extends State<DocumentScrollable>
-    with SingleTickerProviderStateMixin {
+class _DocumentScrollableState extends State<DocumentScrollable> with SingleTickerProviderStateMixin {
   // The ScrollController that's used when we install our own Scrollable.
   late ScrollController _scrollController;
   // The ScrollPosition used when there's an ancestor Scrollable.
@@ -88,11 +87,7 @@ class _DocumentScrollableState extends State<DocumentScrollable>
     onNextFrame((_) {
       // Wait until the next frame to attach to auto-scroller because
       // our ScrollController isn't attached to the Scrollable, yet.
-      widget.autoScroller.attachScrollable(
-        this,
-        () => _viewport,
-        () => _scrollPosition,
-      );
+      widget.autoScroller.attachScrollable(this, () => _viewport, () => _scrollPosition);
 
       widget.scroller?.attach(_scrollPosition);
     });
@@ -109,8 +104,7 @@ class _DocumentScrollableState extends State<DocumentScrollable>
       _debugInstrumentation = ScrollableInstrumentation()
         ..viewport.value = Scrollable.of(context).context
         ..scrollPosition.value = Scrollable.of(context).position;
-      ScrollingMinimaps.of(context)
-          ?.put(widget.scrollingMinimapId!, _debugInstrumentation);
+      ScrollingMinimaps.of(context)?.put(widget.scrollingMinimapId!, _debugInstrumentation);
     }
   }
 
@@ -126,11 +120,7 @@ class _DocumentScrollableState extends State<DocumentScrollable>
 
     if (widget.autoScroller != oldWidget.autoScroller) {
       oldWidget.autoScroller.detachScrollable();
-      widget.autoScroller.attachScrollable(
-        this,
-        () => _viewport,
-        () => _scrollPosition,
-      );
+      widget.autoScroller.attachScrollable(this, () => _viewport, () => _scrollPosition);
     }
 
     if (widget.scroller != oldWidget.scroller) {
@@ -168,9 +158,8 @@ class _DocumentScrollableState extends State<DocumentScrollable>
   /// widget includes a `ScrollView` and this `State`'s render object
   /// is the viewport `RenderBox`.
   RenderBox get _viewport =>
-      (context.findAncestorScrollableWithVerticalScroll?.context
-              .findRenderObject() ??
-          context.findRenderObject()) as RenderBox;
+      (context.findAncestorScrollableWithVerticalScroll?.context.findRenderObject() ?? context.findRenderObject())
+          as RenderBox;
 
   /// Returns the `ScrollPosition` that controls the scroll offset of
   /// this widget.
@@ -182,8 +171,7 @@ class _DocumentScrollableState extends State<DocumentScrollable>
   /// If this widget doesn't have an ancestor `Scrollable`, then this
   /// widget includes a `ScrollView` and the `ScrollView`'s position
   /// is returned.
-  ScrollPosition get _scrollPosition =>
-      _ancestorScrollPosition ?? _scrollController.position;
+  ScrollPosition get _scrollPosition => _ancestorScrollPosition ?? _scrollController.position;
 
   @override
   Widget build(BuildContext context) {
@@ -194,38 +182,24 @@ class _DocumentScrollableState extends State<DocumentScrollable>
     }
     return Stack(
       children: [
-        _buildScroller(
-          child: widget.child,
-        ),
-        if (widget.showDebugPaint)
-          ..._buildScrollingDebugPaint(
-            includesScrollView: ancestorScrollable == null,
-          ),
+        _buildScroller(child: widget.child),
+        if (widget.showDebugPaint) ..._buildScrollingDebugPaint(includesScrollView: ancestorScrollable == null),
       ],
     );
   }
 
-  Widget _buildScroller({
-    required Widget child,
-  }) {
+  Widget _buildScroller({required Widget child}) {
     final scrollBehavior = ScrollConfiguration.of(context);
     return _maybeBuildScrollbar(
       behavior: scrollBehavior,
       child: ScrollConfiguration(
         behavior: scrollBehavior.copyWith(scrollbars: false),
-        child: CustomScrollView(
-          controller: _scrollController,
-          shrinkWrap: widget.shrinkWrap,
-          slivers: [child],
-        ),
+        child: CustomScrollView(controller: _scrollController, shrinkWrap: widget.shrinkWrap, slivers: [child]),
       ),
     );
   }
 
-  Widget _maybeBuildScrollbar({
-    required ScrollBehavior behavior,
-    required Widget child,
-  }) {
+  Widget _maybeBuildScrollbar({required ScrollBehavior behavior, required Widget child}) {
     // We allow apps to prevent the custom scrollbar from being added by
     // wrapping the editor with a `ScrollConfiguration` configured to not
     // display scrollbars. However, at this moment we can't query this
@@ -259,9 +233,7 @@ class _DocumentScrollableState extends State<DocumentScrollable>
     );
   }
 
-  List<Widget> _buildScrollingDebugPaint({
-    required bool includesScrollView,
-  }) {
+  List<Widget> _buildScrollingDebugPaint({required bool includesScrollView}) {
     return [
       if (includesScrollView) ...[
         Positioned(
@@ -269,22 +241,14 @@ class _DocumentScrollableState extends State<DocumentScrollable>
           right: 0,
           top: 0,
           height: widget.autoScroller._gutter.leading.toDouble(),
-          child: const DecoratedBox(
-            decoration: BoxDecoration(
-              color: Color(0x440088FF),
-            ),
-          ),
+          child: const DecoratedBox(decoration: BoxDecoration(color: Color(0x440088FF))),
         ),
         Positioned(
           left: 0,
           right: 0,
           bottom: 0,
           height: widget.autoScroller._gutter.trailing.toDouble(),
-          child: const DecoratedBox(
-            decoration: BoxDecoration(
-              color: Color(0x440088FF),
-            ),
-          ),
+          child: const DecoratedBox(decoration: BoxDecoration(color: Color(0x440088FF))),
         ),
       ],
     ];
@@ -298,8 +262,8 @@ class AutoScrollController with ChangeNotifier {
     double maxScrollSpeed = 20.0,
     this.selectionExtentAutoScrollBoundary = AxisOffset.zero,
     AxisOffset gutter = const AxisOffset(leading: 100, trailing: 100),
-  })  : _maxScrollSpeed = maxScrollSpeed,
-        _gutter = gutter;
+  }) : _maxScrollSpeed = maxScrollSpeed,
+       _gutter = gutter;
 
   @override
   void dispose() {
@@ -374,8 +338,11 @@ class AutoScrollController with ChangeNotifier {
   ///
   /// A [vsync] is needed to create a [Ticker], which is used to animate
   /// auto-scrolling.
-  void attachScrollable(TickerProvider vsync, ViewportResolver viewportResolver,
-      ScrollPositionResolver scrollPositionResolver) {
+  void attachScrollable(
+    TickerProvider vsync,
+    ViewportResolver viewportResolver,
+    ScrollPositionResolver scrollPositionResolver,
+  ) {
     detachScrollable();
     _ticker = vsync.createTicker(_onTick);
     _getViewport = viewportResolver;
@@ -417,7 +384,8 @@ class AutoScrollController with ChangeNotifier {
   void jumpBy(double delta) {
     if (_getScrollPosition == null) {
       editorScrollingLog.warning(
-          "Tried to jump a document scrollable by $delta pixels, but no scrollable is attached to this controller.");
+        "Tried to jump a document scrollable by $delta pixels, but no scrollable is attached to this controller.",
+      );
       return;
     }
 
@@ -427,10 +395,7 @@ class AutoScrollController with ChangeNotifier {
       return;
     }
 
-    scrollPosition.jumpTo(
-      (scrollPosition.pixels + delta)
-          .clamp(0.0, scrollPosition.maxScrollExtent),
-    );
+    scrollPosition.jumpTo((scrollPosition.pixels + delta).clamp(0.0, scrollPosition.maxScrollExtent));
   }
 
   /// Animates the scroll position like a ballistic particle with friction, beginning
@@ -459,8 +424,7 @@ class AutoScrollController with ChangeNotifier {
     }
 
     if (pos is ScrollPositionWithSingleContext) {
-      if (pos.pixels > pos.minScrollExtent &&
-          pos.pixels < pos.maxScrollExtent) {
+      if (pos.pixels > pos.minScrollExtent && pos.pixels < pos.maxScrollExtent) {
         pos.goIdle();
       }
     }
@@ -488,35 +452,26 @@ class AutoScrollController with ChangeNotifier {
 
     final beyondTopExtent = min(selectionExtentRectInViewport.top, 0).abs();
 
-    final beyondBottomExtent =
-        max(selectionExtentRectInViewport.bottom - viewportBox.size.height, 0);
+    final beyondBottomExtent = max(selectionExtentRectInViewport.bottom - viewportBox.size.height, 0);
 
     editorScrollingLog.finest('Ensuring extent is visible.');
     editorScrollingLog.finest(' - viewport size: ${viewportBox.size}');
-    editorScrollingLog
-        .finest(' - scroll controller offset: ${scrollPosition.pixels}');
-    editorScrollingLog.finest(
-        ' - selection extent rect in viewport: $selectionExtentRectInViewport');
+    editorScrollingLog.finest(' - scroll controller offset: ${scrollPosition.pixels}');
+    editorScrollingLog.finest(' - selection extent rect in viewport: $selectionExtentRectInViewport');
     editorScrollingLog.finest(' - beyond top: $beyondTopExtent');
     editorScrollingLog.finest(' - beyond bottom: $beyondBottomExtent');
 
     late double newScrollPosition;
     if (beyondTopExtent > 0) {
-      newScrollPosition = (scrollPosition.pixels - beyondTopExtent)
-          .clamp(0.0, scrollPosition.maxScrollExtent);
+      newScrollPosition = (scrollPosition.pixels - beyondTopExtent).clamp(0.0, scrollPosition.maxScrollExtent);
     } else if (beyondBottomExtent > 0) {
-      newScrollPosition = (beyondBottomExtent + scrollPosition.pixels)
-          .clamp(0.0, scrollPosition.maxScrollExtent);
+      newScrollPosition = (beyondBottomExtent + scrollPosition.pixels).clamp(0.0, scrollPosition.maxScrollExtent);
     } else {
       return;
     }
 
     editorScrollingLog.finest('Animating scroll offset to: $newScrollPosition');
-    scrollPosition.animateTo(
-      newScrollPosition,
-      duration: const Duration(milliseconds: 100),
-      curve: Curves.easeOut,
-    );
+    scrollPosition.animateTo(newScrollPosition, duration: const Duration(milliseconds: 100), curve: Curves.easeOut);
   }
 
   /// Starts auto-scrolling, when necessary.
@@ -600,22 +555,19 @@ class AutoScrollController with ChangeNotifier {
     if (_autoScrollGlobalRegion!.top < globalAutoScrollRect.top) {
       _scrollUp(globalAutoScrollRect.top - _autoScrollGlobalRegion!.top);
     } else if (_autoScrollGlobalRegion!.bottom > globalAutoScrollRect.bottom) {
-      _scrollDown(
-          _autoScrollGlobalRegion!.bottom - globalAutoScrollRect.bottom);
+      _scrollDown(_autoScrollGlobalRegion!.bottom - globalAutoScrollRect.bottom);
     }
 
     // We have to re-calculate the drag end in the doc (instead of
     // caching the value during the pan update) because the position
     // in the document is impacted by auto-scrolling behavior.
-    _deltaWhileAutoScrolling =
-        _autoScrollingStartOffset! - _getScrollPosition!().pixels;
+    _deltaWhileAutoScrolling = _autoScrollingStartOffset! - _getScrollPosition!().pixels;
   }
 
   void _scrollUp(double distanceInGutter) {
     final scrollPosition = _getScrollPosition!();
     if (scrollPosition.pixels <= 0) {
-      editorScrollingLog.finest(
-          "Tried to scroll up but the scroll position is already at the top");
+      editorScrollingLog.finest("Tried to scroll up but the scroll position is already at the top");
       return;
     }
 
@@ -625,8 +577,7 @@ class AutoScrollController with ChangeNotifier {
     final scrollAmount = lerpDouble(0, _maxScrollSpeed, speedPercent)!;
 
     editorScrollingLog.finest("Speed percent: $speedPercent");
-    editorScrollingLog.finest(
-        "Jumping from ${scrollPosition.pixels} to ${scrollPosition.pixels + scrollAmount}");
+    editorScrollingLog.finest("Jumping from ${scrollPosition.pixels} to ${scrollPosition.pixels + scrollAmount}");
 
     scrollPosition.jumpTo(scrollPosition.pixels - scrollAmount);
   }
@@ -634,8 +585,7 @@ class AutoScrollController with ChangeNotifier {
   void _scrollDown(double distanceInGutter) {
     final scrollPosition = _getScrollPosition!();
     if (scrollPosition.pixels >= scrollPosition.maxScrollExtent) {
-      editorScrollingLog.finest(
-          "Tried to scroll down but the scroll position is already beyond the max");
+      editorScrollingLog.finest("Tried to scroll down but the scroll position is already beyond the max");
       return;
     }
 
@@ -645,8 +595,7 @@ class AutoScrollController with ChangeNotifier {
     final scrollAmount = lerpDouble(0, _maxScrollSpeed, speedPercent)!;
 
     editorScrollingLog.finest("Speed percent: $speedPercent");
-    editorScrollingLog.finest(
-        "Jumping from ${scrollPosition.pixels} to ${scrollPosition.pixels + scrollAmount}");
+    editorScrollingLog.finest("Jumping from ${scrollPosition.pixels} to ${scrollPosition.pixels + scrollAmount}");
 
     scrollPosition.jumpTo(scrollPosition.pixels + scrollAmount);
   }

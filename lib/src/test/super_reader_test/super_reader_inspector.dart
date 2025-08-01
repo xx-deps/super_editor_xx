@@ -15,8 +15,7 @@ class SuperReaderInspector {
   /// finds it `byType`. To specify one [SuperReader] among many, pass a [superDocumentFinder].
   /// {@endtemplate}
   static bool hasFocus([Finder? finder]) {
-    final element = (finder ?? find.byType(SuperReader)).evaluate().single
-        as StatefulElement;
+    final element = (finder ?? find.byType(SuperReader)).evaluate().single as StatefulElement;
     final superDocument = element.state as SuperReaderState;
     return superDocument.focusNode.hasFocus;
   }
@@ -26,8 +25,7 @@ class SuperReaderInspector {
   ///
   /// {@macro super_document_finder}
   static Document? findDocument([Finder? finder]) {
-    final element = (finder ?? find.byType(SuperReader)).evaluate().single
-        as StatefulElement;
+    final element = (finder ?? find.byType(SuperReader)).evaluate().single as StatefulElement;
     final superDocument = element.state as SuperReaderState;
     return superDocument.document;
   }
@@ -38,8 +36,7 @@ class SuperReaderInspector {
   ///
   /// {@macro super_document_finder}
   static DocumentSelection? findDocumentSelection([Finder? finder]) {
-    final element = (finder ?? find.byType(SuperReader)).evaluate().single
-        as StatefulElement;
+    final element = (finder ?? find.byType(SuperReader)).evaluate().single as StatefulElement;
     final superDocument = element.state as SuperReaderState;
     return superDocument.selection;
   }
@@ -47,8 +44,7 @@ class SuperReaderInspector {
   /// Returns the (x,y) offset for the component which renders the node with the given [nodeId].
   ///
   /// {@macro super_document_finder}
-  static Offset findComponentOffset(String nodeId, Alignment alignment,
-      [Finder? finder]) {
+  static Offset findComponentOffset(String nodeId, Alignment alignment, [Finder? finder]) {
     final documentLayout = _findDocumentLayout(finder);
     final component = documentLayout.getComponentByNodeId(nodeId);
     assert(component != null);
@@ -61,15 +57,11 @@ class SuperReaderInspector {
   /// screen, or `false` otherwise.
   ///
   /// {@macro super_document_finder}
-  static bool isPositionVisibleGlobally(
-      DocumentPosition position, Size globalSize,
-      [Finder? finder]) {
+  static bool isPositionVisibleGlobally(DocumentPosition position, Size globalSize, [Finder? finder]) {
     final documentLayout = _findDocumentLayout(finder);
     final positionRect = documentLayout.getRectForPosition(position)!;
-    final globalDocumentOffset =
-        documentLayout.getGlobalOffsetFromDocumentOffset(Offset.zero);
-    final globalPositionRect = positionRect.translate(
-        globalDocumentOffset.dx, globalDocumentOffset.dy);
+    final globalDocumentOffset = documentLayout.getGlobalOffsetFromDocumentOffset(Offset.zero);
+    final globalPositionRect = positionRect.translate(globalDocumentOffset.dx, globalDocumentOffset.dy);
 
     return globalPositionRect.top >= 0 &&
         globalPositionRect.left >= 0 &&
@@ -84,15 +76,11 @@ class SuperReaderInspector {
   /// configures the give node must be of type [WidgetType].
   ///
   /// {@macro super_document_finder}
-  static WidgetType findWidgetForComponent<WidgetType>(String nodeId,
-      [Finder? superDocumentFinder]) {
+  static WidgetType findWidgetForComponent<WidgetType>(String nodeId, [Finder? superDocumentFinder]) {
     final documentLayout = _findDocumentLayout(superDocumentFinder);
-    final widget =
-        (documentLayout.getComponentByNodeId(nodeId) as TextComponentState)
-            .widget;
+    final widget = (documentLayout.getComponentByNodeId(nodeId) as TextComponentState).widget;
     if (widget is! WidgetType) {
-      throw Exception(
-          "Looking for a component's widget. Expected type $WidgetType, but found ${widget.runtimeType}");
+      throw Exception("Looking for a component's widget. Expected type $WidgetType, but found ${widget.runtimeType}");
     }
 
     return widget as WidgetType;
@@ -105,8 +93,7 @@ class SuperReaderInspector {
   /// [SuperReader].
   ///
   /// {@macro super_document_finder}
-  static AttributedText findTextInParagraph(String nodeId,
-      [Finder? superDocumentFinder]) {
+  static AttributedText findTextInParagraph(String nodeId, [Finder? superDocumentFinder]) {
     final documentLayout = _findDocumentLayout(superDocumentFinder);
     final component = documentLayout.getComponentByNodeId(nodeId);
 
@@ -115,14 +102,10 @@ class SuperReaderInspector {
     }
 
     if (component is ProxyDocumentComponent) {
-      return (component.childDocumentComponentKey.currentState
-              as TextComponentState)
-          .widget
-          .text;
+      return (component.childDocumentComponentKey.currentState as TextComponentState).widget.text;
     }
 
-    throw Exception(
-        'The component for node id $nodeId is not a TextComponent.');
+    throw Exception('The component for node id $nodeId is not a TextComponent.');
   }
 
   /// Finds the paragraph with the given [nodeId] and returns the paragraph's content as a [TextSpan].
@@ -131,18 +114,17 @@ class SuperReaderInspector {
   /// of what the user will see, short of rendering the actual UI.
   ///
   /// {@macro super_reader_finder}
-  static TextSpan findRichTextInParagraph(String nodeId,
-      [Finder? superReaderFinder]) {
+  static TextSpan findRichTextInParagraph(String nodeId, [Finder? superReaderFinder]) {
     final documentLayout = _findDocumentLayout(superReaderFinder);
 
     final textComponentState = documentLayout.getComponentByNodeId(nodeId)!;
-    final superText = find
-        .descendant(
-            of: find.byWidget(textComponentState.widget),
-            matching: find.byType(SuperText))
-        .evaluate()
-        .single
-        .widget as SuperText;
+    final superText =
+        find
+                .descendant(of: find.byWidget(textComponentState.widget), matching: find.byType(SuperText))
+                .evaluate()
+                .single
+                .widget
+            as SuperText;
     return superText.richText as TextSpan;
   }
 
@@ -150,18 +132,17 @@ class SuperReaderInspector {
   /// in the paragraph with the given [nodeId].
   ///
   /// {@macro super_document_finder}
-  static TextStyle? findParagraphStyle(String nodeId,
-      [Finder? superDocumentFinder]) {
+  static TextStyle? findParagraphStyle(String nodeId, [Finder? superDocumentFinder]) {
     final documentLayout = _findDocumentLayout(superDocumentFinder);
 
     final textComponentState = documentLayout.getComponentByNodeId(nodeId)!;
-    final superText = find
-        .descendant(
-            of: find.byWidget(textComponentState.widget),
-            matching: find.byType(SuperText))
-        .evaluate()
-        .single
-        .widget as SuperText;
+    final superText =
+        find
+                .descendant(of: find.byWidget(textComponentState.widget), matching: find.byType(SuperText))
+                .evaluate()
+                .single
+                .widget
+            as SuperText;
     return superText.richText.style;
   }
 
@@ -171,8 +152,7 @@ class SuperReaderInspector {
   /// must be of type [NodeType].
   ///
   /// {@macro super_document_finder}
-  static NodeType getNodeAt<NodeType extends DocumentNode>(int index,
-      [Finder? superDocumentFinder]) {
+  static NodeType getNodeAt<NodeType extends DocumentNode>(int index, [Finder? superDocumentFinder]) {
     final doc = findDocument(superDocumentFinder);
 
     if (doc == null) {
@@ -180,8 +160,7 @@ class SuperReaderInspector {
     }
 
     if (index >= doc.nodeCount) {
-      throw Exception(
-          'Tried to access index $index in a document where the max index is ${doc.nodeCount - 1}');
+      throw Exception('Tried to access index $index in a document where the max index is ${doc.nodeCount - 1}');
     }
 
     final node = doc.getNodeAt(index);
@@ -198,14 +177,11 @@ class SuperReaderInspector {
   static DocumentLayout _findDocumentLayout([Finder? superDocumentFinder]) {
     late final Finder layoutFinder;
     if (superDocumentFinder != null) {
-      layoutFinder = find.descendant(
-          of: superDocumentFinder,
-          matching: find.byType(SingleColumnDocumentLayout));
+      layoutFinder = find.descendant(of: superDocumentFinder, matching: find.byType(SingleColumnDocumentLayout));
     } else {
       layoutFinder = find.byType(SingleColumnDocumentLayout);
     }
-    final documentLayoutElement =
-        layoutFinder.evaluate().single as StatefulElement;
+    final documentLayoutElement = layoutFinder.evaluate().single as StatefulElement;
     return documentLayoutElement.state as DocumentLayout;
   }
 
@@ -223,11 +199,11 @@ class SuperReaderInspector {
   ///    is `false`.
   static bool wantsMobileToolbarToBeVisible([Finder? superReaderFinder]) {
     // TODO: add Android support
-    final toolbarManager =
-        find.state<SuperReaderIosToolbarOverlayManagerState>(superReaderFinder);
+    final toolbarManager = find.state<SuperReaderIosToolbarOverlayManagerState>(superReaderFinder);
     if (toolbarManager == null) {
       throw Exception(
-          "Tried to verify that SuperReader wants mobile toolbar to be visible, but couldn't find the toolbar manager widget.");
+        "Tried to verify that SuperReader wants mobile toolbar to be visible, but couldn't find the toolbar manager widget.",
+      );
     }
 
     return toolbarManager.wantsToDisplayToolbar;
@@ -263,11 +239,11 @@ class SuperReaderInspector {
   ///    is `false`.
   static bool wantsMobileMagnifierToBeVisible([Finder? superReaderFinder]) {
     // TODO: add Android support
-    final magnifierManager = find
-        .state<SuperReaderIosMagnifierOverlayManagerState>(superReaderFinder);
+    final magnifierManager = find.state<SuperReaderIosMagnifierOverlayManagerState>(superReaderFinder);
     if (magnifierManager == null) {
       throw Exception(
-          "Tried to verify that SuperReader wants mobile magnifier to be visible, but couldn't find the magnifier manager widget.");
+        "Tried to verify that SuperReader wants mobile magnifier to be visible, but couldn't find the magnifier manager widget.",
+      );
     }
 
     return magnifierManager.wantsToDisplayMagnifier;
@@ -356,9 +332,7 @@ class SuperReaderInspector {
       case TargetPlatform.android:
       case TargetPlatform.iOS:
         return find.byWidgetPredicate(
-          (widget) =>
-              widget.key == DocumentKeys.upstreamHandle ||
-              widget.key == DocumentKeys.downstreamHandle,
+          (widget) => widget.key == DocumentKeys.upstreamHandle || widget.key == DocumentKeys.downstreamHandle,
         );
       case TargetPlatform.macOS:
       case TargetPlatform.windows:

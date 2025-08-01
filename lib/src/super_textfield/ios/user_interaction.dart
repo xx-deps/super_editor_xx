@@ -106,12 +106,10 @@ class IOSTextFieldTouchInteractor extends StatefulWidget {
   final Widget child;
 
   @override
-  IOSTextFieldTouchInteractorState createState() =>
-      IOSTextFieldTouchInteractorState();
+  IOSTextFieldTouchInteractorState createState() => IOSTextFieldTouchInteractorState();
 }
 
-class IOSTextFieldTouchInteractorState
-    extends State<IOSTextFieldTouchInteractor> with TickerProviderStateMixin {
+class IOSTextFieldTouchInteractorState extends State<IOSTextFieldTouchInteractor> with TickerProviderStateMixin {
   /// The maximum horizontal distance that a user can press near the caret to enable
   /// a caret drag.
   static const _closeEnoughToDragCaret = 48.0;
@@ -160,8 +158,7 @@ class IOSTextFieldTouchInteractorState
     super.dispose();
   }
 
-  ProseTextLayout get _textLayout =>
-      widget.selectableTextKey.currentState!.textLayout;
+  ProseTextLayout get _textLayout => widget.selectableTextKey.currentState!.textLayout;
 
   void _onTextOrSelectionChange() {
     if (widget.textController.selection != _previousToolbarFocusSelection) {
@@ -242,29 +239,28 @@ class IOSTextFieldTouchInteractorState
       widget.focusNode.requestFocus();
     }
 
-    final exactTapTextPosition =
-        _getTextPositionNearestToOffset(details.localPosition);
+    final exactTapTextPosition = _getTextPositionNearestToOffset(details.localPosition);
     final adjustedTapTextPosition = exactTapTextPosition != null
         ? _moveTapPositionToWordBoundary(exactTapTextPosition)
         : null;
-    final didTapOnExistingSelection = exactTapTextPosition != null &&
+    final didTapOnExistingSelection =
+        exactTapTextPosition != null &&
         _selectionBeforeTap != null &&
         (_selectionBeforeTap!.isCollapsed
             ? exactTapTextPosition.offset == _selectionBeforeTap!.extent.offset
             : exactTapTextPosition.offset >= _selectionBeforeTap!.start &&
-                exactTapTextPosition.offset <= _selectionBeforeTap!.end);
+                  exactTapTextPosition.offset <= _selectionBeforeTap!.end);
 
     if (!didTapOnExistingSelection) {
       // Select the text that's nearest to where the user tapped.
       _selectPosition(adjustedTapTextPosition);
     }
 
-    final didCaretStayInSamePlace = _selectionBeforeTap != null &&
-        _selectionBeforeTap?.hasSameBoundsAs(widget.textController.selection) ==
-            true &&
+    final didCaretStayInSamePlace =
+        _selectionBeforeTap != null &&
+        _selectionBeforeTap?.hasSameBoundsAs(widget.textController.selection) == true &&
         _selectionBeforeTap!.isCollapsed;
-    if ((didCaretStayInSamePlace || didTapOnExistingSelection) &&
-        widget.focusNode.hasFocus) {
+    if ((didCaretStayInSamePlace || didTapOnExistingSelection) && widget.focusNode.hasFocus) {
       // The user either tapped directly on the caret, or on an expanded selection,
       // or the user tapped in empty space but didn't move the caret, for example
       // the user tapped in empty space after the text and the caret was already
@@ -309,8 +305,7 @@ class IOSTextFieldTouchInteractorState
     if (tapOffset == text.length) {
       return textPosition;
     }
-    final adjustedSelectionOffset =
-        IosHeuristics.adjustTapOffset(text, tapOffset);
+    final adjustedSelectionOffset = IosHeuristics.adjustTapOffset(text, tapOffset);
 
     return TextPosition(offset: adjustedSelectionOffset);
   }
@@ -318,14 +313,12 @@ class IOSTextFieldTouchInteractorState
   void _selectPosition(TextPosition? textPosition) {
     if (textPosition == null || textPosition.offset < 0) {
       // This situation indicates the user tapped in empty space
-      widget.textController.selection =
-          TextSelection.collapsed(offset: widget.textController.text.length);
+      widget.textController.selection = TextSelection.collapsed(offset: widget.textController.text.length);
       return;
     }
 
     // Update the text selection to a collapsed selection where the user tapped.
-    widget.textController.selection =
-        TextSelection.collapsed(offset: textPosition.offset);
+    widget.textController.selection = TextSelection.collapsed(offset: textPosition.offset);
     widget.textController.composingRegion = TextRange.empty;
   }
 
@@ -357,8 +350,7 @@ class IOSTextFieldTouchInteractorState
     // again.
     widget.editingOverlayController.hideToolbar();
 
-    final tapTextPosition =
-        _getTextPositionNearestToOffset(details.localPosition);
+    final tapTextPosition = _getTextPositionNearestToOffset(details.localPosition);
     if (tapTextPosition != null) {
       setState(() {
         final wordSelection = _getWordSelectionAt(tapTextPosition);
@@ -422,11 +414,13 @@ class IOSTextFieldTouchInteractorState
     }
 
     final textLayout = _textLayout;
-    final tapTextPosition =
-        textLayout.getPositionAtOffset(details.localPosition)!;
+    final tapTextPosition = textLayout.getPositionAtOffset(details.localPosition)!;
 
     widget.textController.selection = textLayout.expandSelection(
-        tapTextPosition, paragraphExpansionFilter, TextAffinity.downstream);
+      tapTextPosition,
+      paragraphExpansionFilter,
+      TextAffinity.downstream,
+    );
   }
 
   void _onTripleTapUp(TapUpDetails details) {
@@ -467,8 +461,7 @@ class IOSTextFieldTouchInteractorState
       // There's no caret, therefore the user shouldn't be able to drag the caret. Fizzle.
       return;
     }
-    if ((globalCaretRect.center - details.globalPosition).dx.abs() >
-        _closeEnoughToDragCaret) {
+    if ((globalCaretRect.center - details.globalPosition).dx.abs() > _closeEnoughToDragCaret) {
       // There's a caret, but the user's drag offset is far away. Fizzle.
       return;
     }
@@ -503,9 +496,7 @@ class IOSTextFieldTouchInteractorState
       _globalDragOffset = _globalDragOffset! + details.delta;
       _dragOffset = _dragOffset! + details.delta;
 
-      widget.textScrollController.updateAutoScrollingForTouchOffset(
-        userInteractionOffsetInViewport: _dragOffset!,
-      );
+      widget.textScrollController.updateAutoScrollingForTouchOffset(userInteractionOffsetInViewport: _dragOffset!);
 
       widget.editingOverlayController.showMagnifier(_globalDragOffset!);
     });
@@ -561,17 +552,14 @@ class IOSTextFieldTouchInteractorState
   /// Converts a screen-level offset to an offset relative to the top-left
   /// corner of the text within this text field.
   Offset _globalOffsetToTextOffset(Offset globalOffset) {
-    final textBox = widget.selectableTextKey.currentContext!.findRenderObject()
-        as RenderBox;
+    final textBox = widget.selectableTextKey.currentContext!.findRenderObject() as RenderBox;
     return textBox.globalToLocal(globalOffset);
   }
 
   /// Converts a screen-level offset to a [TextPosition] that sits at that
   /// global offset.
   TextPosition _globalOffsetToTextPosition(Offset globalOffset) {
-    return _textLayout.getPositionNearestToOffset(
-      _globalOffsetToTextOffset(globalOffset),
-    );
+    return _textLayout.getPositionNearestToOffset(_globalOffsetToTextOffset(globalOffset));
   }
 
   /// Returns the [TextPosition] that's nearest to the given [localOffset] within
@@ -584,11 +572,10 @@ class IOSTextFieldTouchInteractorState
       return const TextPosition(offset: -1);
     }
 
-    final globalOffset =
-        (context.findRenderObject() as RenderBox).localToGlobal(localOffset);
-    final textOffset = (widget.selectableTextKey.currentContext!
-            .findRenderObject() as RenderBox)
-        .globalToLocal(globalOffset);
+    final globalOffset = (context.findRenderObject() as RenderBox).localToGlobal(localOffset);
+    final textOffset = (widget.selectableTextKey.currentContext!.findRenderObject() as RenderBox).globalToLocal(
+      globalOffset,
+    );
     return _textLayout.getPositionNearestToOffset(textOffset);
   }
 
@@ -603,11 +590,10 @@ class IOSTextFieldTouchInteractorState
       return const TextPosition(offset: -1);
     }
 
-    final globalOffset =
-        (context.findRenderObject() as RenderBox).localToGlobal(localOffset);
-    final textOffset = (widget.selectableTextKey.currentContext!
-            .findRenderObject() as RenderBox)
-        .globalToLocal(globalOffset);
+    final globalOffset = (context.findRenderObject() as RenderBox).localToGlobal(localOffset);
+    final textOffset = (widget.selectableTextKey.currentContext!.findRenderObject() as RenderBox).globalToLocal(
+      globalOffset,
+    );
     return _textLayout.getPositionAtOffset(textOffset);
   }
 
@@ -638,11 +624,7 @@ class IOSTextFieldTouchInteractorState
           // no-op
         },
         child: DecoratedBox(
-          decoration: BoxDecoration(
-            border: widget.showDebugPaint
-                ? Border.all(color: Colors.purple)
-                : const Border(),
-          ),
+          decoration: BoxDecoration(border: widget.showDebugPaint ? Border.all(color: Colors.purple) : const Border()),
           child: Stack(
             clipBehavior: Clip.none,
             children: [
@@ -667,8 +649,7 @@ class IOSTextFieldTouchInteractorState
       child: RawGestureDetector(
         behavior: HitTestBehavior.translucent,
         gestures: <Type, GestureRecognizerFactory>{
-          TapSequenceGestureRecognizer: GestureRecognizerFactoryWithHandlers<
-              TapSequenceGestureRecognizer>(
+          TapSequenceGestureRecognizer: GestureRecognizerFactoryWithHandlers<TapSequenceGestureRecognizer>(
             () => TapSequenceGestureRecognizer(),
             (TapSequenceGestureRecognizer recognizer) {
               recognizer
@@ -684,19 +665,14 @@ class IOSTextFieldTouchInteractorState
                 ..gestureSettings = gestureSettings;
             },
           ),
-          PanGestureRecognizer:
-              GestureRecognizerFactoryWithHandlers<PanGestureRecognizer>(
+          PanGestureRecognizer: GestureRecognizerFactoryWithHandlers<PanGestureRecognizer>(
             () => PanGestureRecognizer(),
             (PanGestureRecognizer recognizer) {
               recognizer
                 ..onStart = widget.focusNode.hasFocus ? _onPanStart : null
                 ..onUpdate = widget.focusNode.hasFocus ? _onPanUpdate : null
-                ..onEnd = widget.focusNode.hasFocus || _isDraggingCaret
-                    ? _onPanEnd
-                    : null
-                ..onCancel = widget.focusNode.hasFocus || _isDraggingCaret
-                    ? _onPanCancel
-                    : null
+                ..onEnd = widget.focusNode.hasFocus || _isDraggingCaret ? _onPanEnd : null
+                ..onCancel = widget.focusNode.hasFocus || _isDraggingCaret ? _onPanCancel : null
                 ..gestureSettings = gestureSettings;
             },
           ),
@@ -717,9 +693,7 @@ class IOSTextFieldTouchInteractorState
           rect: selectionRect,
           child: Leader(
             link: widget.editingOverlayController.toolbarFocalPoint,
-            child: widget.showDebugPaint
-                ? ColoredBox(color: Colors.green.withValues(alpha: 0.2))
-                : const SizedBox(),
+            child: widget.showDebugPaint ? ColoredBox(color: Colors.green.withValues(alpha: 0.2)) : const SizedBox(),
           ),
         );
       },
@@ -739,18 +713,16 @@ class IOSTextFieldTouchInteractorState
       // Place the selection rect at the caret position.
       final selectionExtent = widget.textController.selection.extent;
       final caretOffset = _textLayout.getOffsetForCaret(selectionExtent);
-      final caretHeight = _textLayout.getHeightForCaret(selectionExtent) ??
-          _textLayout.getLineHeightAtPosition(selectionExtent);
-      _toolbarFocusSelectionRect.value =
-          Rect.fromLTWH(caretOffset.dx, caretOffset.dy, 0, caretHeight);
+      final caretHeight =
+          _textLayout.getHeightForCaret(selectionExtent) ?? _textLayout.getLineHeightAtPosition(selectionExtent);
+      _toolbarFocusSelectionRect.value = Rect.fromLTWH(caretOffset.dx, caretOffset.dy, 0, caretHeight);
 
       return;
     }
 
     // The selection is expanded.
     // Make the selection rect include all selected characters.
-    final textBoxes =
-        _textLayout.getBoxesForSelection(widget.textController.selection);
+    final textBoxes = _textLayout.getBoxesForSelection(widget.textController.selection);
 
     Rect boundingBox = textBoxes.first.toRect();
     for (int i = 1; i < textBoxes.length; i += 1) {
@@ -775,11 +747,7 @@ class IOSTextFieldTouchInteractorState
         child: widget.showDebugPaint
             ? FractionalTranslation(
                 translation: const Offset(-0.5, -0.5),
-                child: Container(
-                  width: 20,
-                  height: 20,
-                  color: Colors.purpleAccent.withValues(alpha: 0.5),
-                ),
+                child: Container(width: 20, height: 20, color: Colors.purpleAccent.withValues(alpha: 0.5)),
               )
             : const SizedBox(width: 1, height: 1),
       ),

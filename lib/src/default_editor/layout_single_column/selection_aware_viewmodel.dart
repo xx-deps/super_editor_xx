@@ -31,9 +31,5 @@ mixin SelectionAwareViewModelMixin on SingleColumnLayoutComponentViewModel {
           selectionColor == other.selectionColor;
 
   @override
-  int get hashCode =>
-      super.hashCode ^
-      nodeId.hashCode ^
-      selection.hashCode ^
-      selectionColor.hashCode;
+  int get hashCode => super.hashCode ^ nodeId.hashCode ^ selection.hashCode ^ selectionColor.hashCode;
 }
