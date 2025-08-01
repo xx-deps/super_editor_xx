@@ -2,7 +2,7 @@
   "dart.lineLength": 80,
   "[dart]": {
     "editor.rulers": [
-      12800
+      80
     ]
   },
   "dart.flutterSdkPath": ".fvm/versions/3.32.8"
