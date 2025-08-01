@@ -45,7 +45,9 @@ class FadeInStyler extends SingleColumnLayoutStylePhase {
 
   @override
   SingleColumnLayoutViewModel style(
-      Document document, SingleColumnLayoutViewModel viewModel) {
+    Document document,
+    SingleColumnLayoutViewModel viewModel,
+  ) {
     _isFading = false;
 
     final newViewModel = SingleColumnLayoutViewModel(
@@ -68,7 +70,8 @@ class FadeInStyler extends SingleColumnLayoutStylePhase {
   /// unchanged, otherwise, if it is animating, then this method copies the [viewModel],
   /// updates the copy's time to the current time, and returns the copy.
   SingleColumnLayoutComponentViewModel _updateViewModelAnimation(
-      SingleColumnLayoutComponentViewModel viewModel) {
+    SingleColumnLayoutComponentViewModel viewModel,
+  ) {
     if (viewModel is! TextComponentViewModel) {
       final createdAt = viewModel.createdAt;
       if (createdAt == null) {
@@ -79,12 +82,13 @@ class FadeInStyler extends SingleColumnLayoutStylePhase {
         return viewModel;
       }
 
-      final opacity = fadeCurve.transform(lerpDouble(
-        0,
-        1,
-        deltaTime.inMilliseconds / blockNodeFadeInDuration.inMilliseconds,
-      )!
-          .clamp(0, 1));
+      final opacity = fadeCurve.transform(
+        lerpDouble(
+          0,
+          1,
+          deltaTime.inMilliseconds / blockNodeFadeInDuration.inMilliseconds,
+        )!.clamp(0, 1),
+      );
 
       // An animation is ongoing. We need to schedule another frame to continue
       // updating the view model, which will then cause the component widget to
@@ -98,13 +102,17 @@ class FadeInStyler extends SingleColumnLayoutStylePhase {
     final fadeIns = viewModel.text
         .getAttributionSpansByFilter((a) => a is CreatedAtAttribution)
         .toList();
-    final fadeInAttributions =
-        fadeIns.map((s) => s.attribution).toList().cast<CreatedAtAttribution>();
+    final fadeInAttributions = fadeIns
+        .map((s) => s.attribution)
+        .toList()
+        .cast<CreatedAtAttribution>();
     if (fadeInAttributions.isEmpty) {
       return viewModel;
     }
     final isFading = fadeInAttributions.fold(
-        false, (isFading, fadeIn) => isFading || _isTextFading(fadeIn.start));
+      false,
+      (isFading, fadeIn) => isFading || _isTextFading(fadeIn.start),
+    );
     if (!isFading) {
       return viewModel;
     }
@@ -125,8 +133,10 @@ class FadeInStyler extends SingleColumnLayoutStylePhase {
       final deltaTime = DateTime.now().difference(fadeInAttribution.start);
       final opacity = deltaTime > textSnippetFadeInDuration
           ? 1.0
-          : fadeCurve.transform(deltaTime.inMilliseconds /
-              textSnippetFadeInDuration.inMilliseconds);
+          : fadeCurve.transform(
+              deltaTime.inMilliseconds /
+                  textSnippetFadeInDuration.inMilliseconds,
+            );
       if (opacity < 1) {
         textViewModel.text.addAttribution(
           OpacityAttribution(opacity),

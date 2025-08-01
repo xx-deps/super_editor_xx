@@ -20,7 +20,10 @@ void main() {
 
         await expectLater(
           find.byType(MaterialApp),
-          matchesGoldenFileWithPixelAllowance("goldens/super-editor_selection-color_default.png", 6),
+          matchesGoldenFileWithPixelAllowance(
+            "goldens/super-editor_selection-color_default.png",
+            6,
+          ),
         );
       });
 
@@ -28,14 +31,18 @@ void main() {
         await tester //
             .createDocument()
             .withSingleParagraph()
-            .withSelectionStyles(const SelectionStyles(selectionColor: Colors.deepPurple))
-            .useStylesheet(defaultStylesheet.copyWith(
-              selectedTextColorStrategy: ({
-                required Color originalTextColor,
-                required Color selectionHighlightColor,
-              }) =>
-                  Colors.white,
-            ))
+            .withSelectionStyles(
+              const SelectionStyles(selectionColor: Colors.deepPurple),
+            )
+            .useStylesheet(
+              defaultStylesheet.copyWith(
+                selectedTextColorStrategy:
+                    ({
+                      required Color originalTextColor,
+                      required Color selectionHighlightColor,
+                    }) => Colors.white,
+              ),
+            )
             .pump();
 
         // Select the whole paragraph so that the selection color is clearly visible.
@@ -43,7 +50,10 @@ void main() {
 
         await expectLater(
           find.byType(MaterialApp),
-          matchesGoldenFileWithPixelAllowance("goldens/super-editor_selection-color_custom.png", 6),
+          matchesGoldenFileWithPixelAllowance(
+            "goldens/super-editor_selection-color_custom.png",
+            6,
+          ),
         );
       });
     });

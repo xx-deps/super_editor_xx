@@ -6,9 +6,8 @@ import '_presenter.dart';
 
 /// Style phase that applies a given [Stylesheet] to the document view model.
 class SingleColumnStylesheetStyler extends SingleColumnLayoutStylePhase {
-  SingleColumnStylesheetStyler({
-    required Stylesheet stylesheet,
-  }) : _stylesheet = stylesheet;
+  SingleColumnStylesheetStyler({required Stylesheet stylesheet})
+    : _stylesheet = stylesheet;
 
   Stylesheet _stylesheet;
 
@@ -32,7 +31,9 @@ class SingleColumnStylesheetStyler extends SingleColumnLayoutStylePhase {
 
   @override
   SingleColumnLayoutViewModel style(
-      Document document, SingleColumnLayoutViewModel viewModel) {
+    Document document,
+    SingleColumnLayoutViewModel viewModel,
+  ) {
     return SingleColumnLayoutViewModel(
       padding: _stylesheet.documentPadding ?? viewModel.padding,
       componentViewModels: [

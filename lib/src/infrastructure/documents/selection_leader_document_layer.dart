@@ -41,12 +41,16 @@ class SelectionLeadersDocumentLayer extends DocumentLayoutLayerStatefulWidget {
 
   @override
   DocumentLayoutLayerState<ContentLayerStatefulWidget, DocumentSelectionLayout>
-      createState() => _SelectionLeadersDocumentLayerState();
+  createState() => _SelectionLeadersDocumentLayerState();
 }
 
-class _SelectionLeadersDocumentLayerState extends DocumentLayoutLayerState<
-    SelectionLeadersDocumentLayer,
-    DocumentSelectionLayout> with SingleTickerProviderStateMixin {
+class _SelectionLeadersDocumentLayerState
+    extends
+        DocumentLayoutLayerState<
+          SelectionLeadersDocumentLayer,
+          DocumentSelectionLayout
+        >
+    with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
@@ -85,16 +89,18 @@ class _SelectionLeadersDocumentLayerState extends DocumentLayoutLayerState<
   /// Updates the caret rect, immediately, without scheduling a rebuild.
   @override
   DocumentSelectionLayout? computeLayoutDataWithDocumentLayout(
-      BuildContext contentLayersContext,
-      BuildContext documentContext,
-      DocumentLayout documentLayout) {
+    BuildContext contentLayersContext,
+    BuildContext documentContext,
+    DocumentLayout documentLayout,
+  ) {
     final documentSelection = widget.selection.value;
     if (documentSelection == null) {
       return null;
     }
 
-    final selectedComponent = documentLayout
-        .getComponentByNodeId(widget.selection.value!.extent.nodeId);
+    final selectedComponent = documentLayout.getComponentByNodeId(
+      widget.selection.value!.extent.nodeId,
+    );
     if (selectedComponent == null) {
       // Assume that we're in a momentary transitive state where the document layout
       // just gained or lost a component. We expect this method ot run again in a moment
@@ -110,11 +116,15 @@ class _SelectionLeadersDocumentLayerState extends DocumentLayoutLayerState<
       return DocumentSelectionLayout(
         upstream: documentLayout.getRectForPosition(
           widget.document.selectUpstreamPosition(
-              documentSelection.base, documentSelection.extent),
+            documentSelection.base,
+            documentSelection.extent,
+          ),
         )!,
         downstream: documentLayout.getRectForPosition(
           widget.document.selectDownstreamPosition(
-              documentSelection.base, documentSelection.extent),
+            documentSelection.base,
+            documentSelection.extent,
+          ),
         )!,
         expandedSelectionBounds: documentLayout.getRectForSelection(
           documentSelection.base,
@@ -126,7 +136,9 @@ class _SelectionLeadersDocumentLayerState extends DocumentLayoutLayerState<
 
   @override
   Widget doBuild(
-      BuildContext context, DocumentSelectionLayout? selectionLayout) {
+    BuildContext context,
+    DocumentSelectionLayout? selectionLayout,
+  ) {
     if (selectionLayout == null) {
       return const SizedBox();
     }
@@ -145,8 +157,11 @@ class _SelectionLeadersDocumentLayerState extends DocumentLayoutLayerState<
                 child: widget.showDebugLeaderBounds
                     ? DecoratedBox(
                         decoration: BoxDecoration(
-                            border: Border.all(
-                                width: 4, color: const Color(0xFFFF0000))),
+                          border: Border.all(
+                            width: 4,
+                            color: const Color(0xFFFF0000),
+                          ),
+                        ),
                       )
                     : null,
               ),
@@ -162,8 +177,11 @@ class _SelectionLeadersDocumentLayerState extends DocumentLayoutLayerState<
                 child: widget.showDebugLeaderBounds
                     ? DecoratedBox(
                         decoration: BoxDecoration(
-                            border: Border.all(
-                                width: 4, color: const Color(0xFF00FF00))),
+                          border: Border.all(
+                            width: 4,
+                            color: const Color(0xFF00FF00),
+                          ),
+                        ),
                       )
                     : null,
               ),
@@ -179,8 +197,11 @@ class _SelectionLeadersDocumentLayerState extends DocumentLayoutLayerState<
                 child: widget.showDebugLeaderBounds
                     ? DecoratedBox(
                         decoration: BoxDecoration(
-                            border: Border.all(
-                                width: 4, color: const Color(0xFF0000FF))),
+                          border: Border.all(
+                            width: 4,
+                            color: const Color(0xFF0000FF),
+                          ),
+                        ),
                       )
                     : null,
               ),
@@ -193,8 +214,11 @@ class _SelectionLeadersDocumentLayerState extends DocumentLayoutLayerState<
                 child: widget.showDebugLeaderBounds
                     ? DecoratedBox(
                         decoration: BoxDecoration(
-                            border: Border.all(
-                                width: 4, color: const Color(0xFFFF00FF))),
+                          border: Border.all(
+                            width: 4,
+                            color: const Color(0xFFFF00FF),
+                          ),
+                        ),
                       )
                     : null,
               ),

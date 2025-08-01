@@ -14,13 +14,12 @@ void main() {
             .forDesktop() //
             .pump();
 
-        expect(
-          SuperEditorInspector.findDocument(),
-          equalsMarkdown(""),
-        );
+        expect(SuperEditorInspector.findDocument(), equalsMarkdown(""));
       });
 
-      testWidgetsOnMac("when the document has a single paragraph", (tester) async {
+      testWidgetsOnMac("when the document has a single paragraph", (
+        tester,
+      ) async {
         await tester //
             .createDocument() //
             .fromMarkdown("Hello, **world!**") //
@@ -33,7 +32,9 @@ void main() {
         );
       });
 
-      testWidgetsOnMac("when the document has multiple paragraphs", (tester) async {
+      testWidgetsOnMac("when the document has multiple paragraphs", (
+        tester,
+      ) async {
         await tester //
             .createDocument() //
             .fromMarkdown('''This is **paragraph 1**.

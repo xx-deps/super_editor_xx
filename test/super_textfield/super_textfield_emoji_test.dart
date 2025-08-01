@@ -10,11 +10,10 @@ import 'super_textfield_robot.dart';
 void main() {
   group('SuperTextField with keyboard', () {
     group('containing only one emoji', () {
-      testWidgetsOnAllPlatforms("moves caret upstream around the emoji", (tester) async {
-        await _pumpSuperTextFieldEmojiTest(
-          tester,
-          text: '🐢',
-        );
+      testWidgetsOnAllPlatforms("moves caret upstream around the emoji", (
+        tester,
+      ) async {
+        await _pumpSuperTextFieldEmojiTest(tester, text: '🐢');
 
         // TODO: placing caret on the right side of the emoji at the end of the text isn't working correctly
         // #549 - update to place caret at the end and remove the call to pressRightArrow when that bug is fixed.
@@ -33,14 +32,16 @@ void main() {
         await tester.pressLeftArrow();
 
         // Ensure caret is at the beginning of the text
-        expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: 0));
+        expect(
+          SuperTextFieldInspector.findSelection(),
+          const TextSelection.collapsed(offset: 0),
+        );
       });
 
-      testWidgetsOnAllPlatforms("expands selection upstream around the emoji", (tester) async {
-        await _pumpSuperTextFieldEmojiTest(
-          tester,
-          text: '🐢',
-        );
+      testWidgetsOnAllPlatforms("expands selection upstream around the emoji", (
+        tester,
+      ) async {
+        await _pumpSuperTextFieldEmojiTest(tester, text: '🐢');
 
         // TODO: placing caret on the right side of the emoji at the end of the text isn't working correctly
         // #549 - update to place caret at the end and remove the call to pressRightArrow when that bug is fixed.
@@ -61,18 +62,14 @@ void main() {
         // Ensure that the emoji is selected
         expect(
           SuperTextFieldInspector.findSelection(),
-          const TextSelection(
-            baseOffset: 2,
-            extentOffset: 0,
-          ),
+          const TextSelection(baseOffset: 2, extentOffset: 0),
         );
       });
 
-      testWidgetsOnAllPlatforms("moves caret downstream around the emoji", (tester) async {
-        await _pumpSuperTextFieldEmojiTest(
-          tester,
-          text: '🐢',
-        );
+      testWidgetsOnAllPlatforms("moves caret downstream around the emoji", (
+        tester,
+      ) async {
+        await _pumpSuperTextFieldEmojiTest(tester, text: '🐢');
 
         // Place caret before the emoji
         await tester.placeCaretInSuperTextField(0);
@@ -93,59 +90,51 @@ void main() {
         );
       });
 
-      testWidgetsOnAllPlatforms("expands selection downstream around the emoji", (tester) async {
-        await _pumpSuperTextFieldEmojiTest(
-          tester,
-          text: '🐢',
-        );
+      testWidgetsOnAllPlatforms(
+        "expands selection downstream around the emoji",
+        (tester) async {
+          await _pumpSuperTextFieldEmojiTest(tester, text: '🐢');
 
-        // Place caret before the emoji
-        await tester.placeCaretInSuperTextField(0);
+          // Place caret before the emoji
+          await tester.placeCaretInSuperTextField(0);
 
-        // Ensure we are at the beginning of the text
-        expect(
-          SuperTextFieldInspector.findSelection(),
-          const TextSelection.collapsed(offset: 0),
-        );
+          // Ensure we are at the beginning of the text
+          expect(
+            SuperTextFieldInspector.findSelection(),
+            const TextSelection.collapsed(offset: 0),
+          );
 
-        // Press shift + right arrow key to expand the selection to the right
-        await tester.pressShiftRightArrow();
+          // Press shift + right arrow key to expand the selection to the right
+          await tester.pressShiftRightArrow();
 
-        // Ensure that the emoji is selected
-        expect(
-          SuperTextFieldInspector.findSelection(),
-          const TextSelection(
-            baseOffset: 0,
-            extentOffset: 2,
-          ),
-        );
-      });
+          // Ensure that the emoji is selected
+          expect(
+            SuperTextFieldInspector.findSelection(),
+            const TextSelection(baseOffset: 0, extentOffset: 2),
+          );
+        },
+      );
 
-      testWidgetsOnAllPlatforms("selects the emoji on double tap", (tester) async {
-        await _pumpSuperTextFieldEmojiTest(
-          tester,
-          text: '🐢',
-        );
+      testWidgetsOnAllPlatforms("selects the emoji on double tap", (
+        tester,
+      ) async {
+        await _pumpSuperTextFieldEmojiTest(tester, text: '🐢');
 
         await tester.doubleTapAtSuperTextField(0);
 
         // Ensure that the emoji is selected
         expect(
           SuperTextFieldInspector.findSelection(),
-          const TextSelection(
-            baseOffset: 0,
-            extentOffset: 2,
-          ),
+          const TextSelection(baseOffset: 0, extentOffset: 2),
         );
       });
     });
 
     group('containing only two consecutive emojis', () {
-      testWidgetsOnAllPlatforms("moves caret upstream around the emoji", (tester) async {
-        await _pumpSuperTextFieldEmojiTest(
-          tester,
-          text: '🐢🐢',
-        );
+      testWidgetsOnAllPlatforms("moves caret upstream around the emoji", (
+        tester,
+      ) async {
+        await _pumpSuperTextFieldEmojiTest(tester, text: '🐢🐢');
 
         // TODO: placing caret on the right side of the emoji at the end of the text isn't working correctly
         // #549 - update to place caret at the end and remove the calls to pressRightArrow when that bug is fixed.
@@ -175,14 +164,16 @@ void main() {
         await tester.pressLeftArrow();
 
         // Ensure caret is at the beginning of the text
-        expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: 0));
+        expect(
+          SuperTextFieldInspector.findSelection(),
+          const TextSelection.collapsed(offset: 0),
+        );
       });
 
-      testWidgetsOnAllPlatforms("expands selection upstream around the emoji", (tester) async {
-        await _pumpSuperTextFieldEmojiTest(
-          tester,
-          text: '🐢🐢',
-        );
+      testWidgetsOnAllPlatforms("expands selection upstream around the emoji", (
+        tester,
+      ) async {
+        await _pumpSuperTextFieldEmojiTest(tester, text: '🐢🐢');
 
         // TODO: placing caret on the right side of the emoji at the end of the text isn't working correctly
         // #549 - update to place caret at the end and remove the calls to pressRightArrow when that bug is fixed.
@@ -205,10 +196,7 @@ void main() {
         // Ensure that the last emoji is selected
         expect(
           SuperTextFieldInspector.findSelection(),
-          const TextSelection(
-            baseOffset: 4,
-            extentOffset: 2,
-          ),
+          const TextSelection(baseOffset: 4, extentOffset: 2),
         );
 
         // Press shift + left arrow key to expand the selection to the left
@@ -217,18 +205,14 @@ void main() {
         // Ensure the whole text is selected
         expect(
           SuperTextFieldInspector.findSelection(),
-          const TextSelection(
-            baseOffset: 4,
-            extentOffset: 0,
-          ),
+          const TextSelection(baseOffset: 4, extentOffset: 0),
         );
       });
 
-      testWidgetsOnAllPlatforms("moves caret downstream around the emoji", (tester) async {
-        await _pumpSuperTextFieldEmojiTest(
-          tester,
-          text: '🐢🐢',
-        );
+      testWidgetsOnAllPlatforms("moves caret downstream around the emoji", (
+        tester,
+      ) async {
+        await _pumpSuperTextFieldEmojiTest(tester, text: '🐢🐢');
 
         // Place caret before the first emoji
         await tester.placeCaretInSuperTextField(0);
@@ -258,53 +242,46 @@ void main() {
         );
       });
 
-      testWidgetsOnAllPlatforms("expands selection downstream around the emoji", (tester) async {
-        await _pumpSuperTextFieldEmojiTest(
-          tester,
-          text: '🐢🐢',
-        );
+      testWidgetsOnAllPlatforms(
+        "expands selection downstream around the emoji",
+        (tester) async {
+          await _pumpSuperTextFieldEmojiTest(tester, text: '🐢🐢');
 
-        // Place caret before the first emoji
-        await tester.placeCaretInSuperTextField(0);
+          // Place caret before the first emoji
+          await tester.placeCaretInSuperTextField(0);
 
-        // Ensure we are at the beginning of the text
-        expect(
-          SuperTextFieldInspector.findSelection(),
-          const TextSelection.collapsed(offset: 0),
-        );
+          // Ensure we are at the beginning of the text
+          expect(
+            SuperTextFieldInspector.findSelection(),
+            const TextSelection.collapsed(offset: 0),
+          );
 
-        // Press shift + right arrow key to expand the selection to the right
-        await tester.pressShiftRightArrow();
+          // Press shift + right arrow key to expand the selection to the right
+          await tester.pressShiftRightArrow();
 
-        // Ensure the first emoji is selected
-        expect(
-          SuperTextFieldInspector.findSelection(),
-          const TextSelection(
-            baseOffset: 0,
-            extentOffset: 2,
-          ),
-        );
+          // Ensure the first emoji is selected
+          expect(
+            SuperTextFieldInspector.findSelection(),
+            const TextSelection(baseOffset: 0, extentOffset: 2),
+          );
 
-        // Press shift + right arrow key to expand the selection to the right
-        await tester.pressShiftRightArrow();
+          // Press shift + right arrow key to expand the selection to the right
+          await tester.pressShiftRightArrow();
 
-        // Ensure we selected the whole text
-        expect(
-          SuperTextFieldInspector.findSelection(),
-          const TextSelection(
-            baseOffset: 0,
-            extentOffset: 4,
-          ),
-        );
-      });
+          // Ensure we selected the whole text
+          expect(
+            SuperTextFieldInspector.findSelection(),
+            const TextSelection(baseOffset: 0, extentOffset: 4),
+          );
+        },
+      );
     });
 
     group('containing emojis and non-emojis', () {
-      testWidgetsOnAllPlatforms("moves caret upstream around the text", (tester) async {
-        await _pumpSuperTextFieldEmojiTest(
-          tester,
-          text: 'a🐢b',
-        );
+      testWidgetsOnAllPlatforms("moves caret upstream around the text", (
+        tester,
+      ) async {
+        await _pumpSuperTextFieldEmojiTest(tester, text: 'a🐢b');
 
         // Place caret at |b
         await tester.placeCaretInSuperTextField(3);
@@ -328,14 +305,16 @@ void main() {
         await tester.pressLeftArrow();
 
         // Ensure caret is at the beginning of the text
-        expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: 0));
+        expect(
+          SuperTextFieldInspector.findSelection(),
+          const TextSelection.collapsed(offset: 0),
+        );
       });
 
-      testWidgetsOnAllPlatforms("expands selection upstream around the text", (tester) async {
-        await _pumpSuperTextFieldEmojiTest(
-          tester,
-          text: 'a🐢b',
-        );
+      testWidgetsOnAllPlatforms("expands selection upstream around the text", (
+        tester,
+      ) async {
+        await _pumpSuperTextFieldEmojiTest(tester, text: 'a🐢b');
 
         // Place caret at |b
         await tester.placeCaretInSuperTextField(3);
@@ -352,10 +331,7 @@ void main() {
         // Ensure we selected the emoji
         expect(
           SuperTextFieldInspector.findSelection(),
-          const TextSelection(
-            baseOffset: 3,
-            extentOffset: 1,
-          ),
+          const TextSelection(baseOffset: 3, extentOffset: 1),
         );
 
         // Press shift + left arrow key to expand the selection to the left
@@ -364,18 +340,14 @@ void main() {
         // Ensure "a🐢" is selected
         expect(
           SuperTextFieldInspector.findSelection(),
-          const TextSelection(
-            baseOffset: 3,
-            extentOffset: 0,
-          ),
+          const TextSelection(baseOffset: 3, extentOffset: 0),
         );
       });
 
-      testWidgetsOnAllPlatforms("moves caret downstream around the text", (tester) async {
-        await _pumpSuperTextFieldEmojiTest(
-          tester,
-          text: 'a🐢b',
-        );
+      testWidgetsOnAllPlatforms("moves caret downstream around the text", (
+        tester,
+      ) async {
+        await _pumpSuperTextFieldEmojiTest(tester, text: 'a🐢b');
 
         // Place caret at the beginning of the text
         await tester.placeCaretInSuperTextField(0);
@@ -405,45 +377,39 @@ void main() {
         );
       });
 
-      testWidgetsOnAllPlatforms("expands selection downstream around the text", (tester) async {
-        await _pumpSuperTextFieldEmojiTest(
-          tester,
-          text: 'a🐢b',
-        );
+      testWidgetsOnAllPlatforms(
+        "expands selection downstream around the text",
+        (tester) async {
+          await _pumpSuperTextFieldEmojiTest(tester, text: 'a🐢b');
 
-        // Place caret at the beginning of the text
-        await tester.placeCaretInSuperTextField(0);
+          // Place caret at the beginning of the text
+          await tester.placeCaretInSuperTextField(0);
 
-        // Ensure we are at the beginning of the text
-        expect(
-          SuperTextFieldInspector.findSelection(),
-          const TextSelection.collapsed(offset: 0),
-        );
+          // Ensure we are at the beginning of the text
+          expect(
+            SuperTextFieldInspector.findSelection(),
+            const TextSelection.collapsed(offset: 0),
+          );
 
-        // Press shift + right arrow key to expand the selection to the right
-        await tester.pressShiftRightArrow();
+          // Press shift + right arrow key to expand the selection to the right
+          await tester.pressShiftRightArrow();
 
-        // Ensure 'a' is selected
-        expect(
-          SuperTextFieldInspector.findSelection(),
-          const TextSelection(
-            baseOffset: 0,
-            extentOffset: 1,
-          ),
-        );
+          // Ensure 'a' is selected
+          expect(
+            SuperTextFieldInspector.findSelection(),
+            const TextSelection(baseOffset: 0, extentOffset: 1),
+          );
 
-        // Press shift + right arrow key to expand the selection to the right
-        await tester.pressShiftRightArrow();
+          // Press shift + right arrow key to expand the selection to the right
+          await tester.pressShiftRightArrow();
 
-        // Ensure "a🐢" is selected
-        expect(
-          SuperTextFieldInspector.findSelection(),
-          const TextSelection(
-            baseOffset: 0,
-            extentOffset: 3,
-          ),
-        );
-      });
+          // Ensure "a🐢" is selected
+          expect(
+            SuperTextFieldInspector.findSelection(),
+            const TextSelection(baseOffset: 0, extentOffset: 3),
+          );
+        },
+      );
 
       testWidgetsOnAndroid('deletes emojis with BACKSPACE', (tester) async {
         await _pumpSuperTextFieldEmojiTest(
@@ -453,13 +419,18 @@ void main() {
         );
 
         // Place the caret at the end of the text field.
-        await tester.placeCaretInSuperTextField(SuperTextFieldInspector.findText().length);
+        await tester.placeCaretInSuperTextField(
+          SuperTextFieldInspector.findText().length,
+        );
 
         // Press backspace to delete the previous character.
         await tester.pressBackspace();
 
         // Ensure the emoji is deleted.
-        expect(SuperTextFieldInspector.findText().toPlainText(), 'This is a text with an emoji ');
+        expect(
+          SuperTextFieldInspector.findText().toPlainText(),
+          'This is a text with an emoji ',
+        );
       });
     });
   });
@@ -468,7 +439,8 @@ void main() {
 Future<void> _pumpSuperTextFieldEmojiTest(
   WidgetTester tester, {
   required String text,
-  SuperTextFieldPlatformConfiguration configuration = SuperTextFieldPlatformConfiguration.desktop,
+  SuperTextFieldPlatformConfiguration configuration =
+      SuperTextFieldPlatformConfiguration.desktop,
 }) async {
   final controller = AttributedTextEditingController(
     text: AttributedText(text),

@@ -220,7 +220,8 @@ class SuperTextField extends StatefulWidget {
   ///
   /// Only used on mobile.
   @Deprecated(
-      'This will be removed in a future release. Use imeConfiguration instead')
+    'This will be removed in a future release. Use imeConfiguration instead',
+  )
   final TextInputAction? textInputAction;
 
   /// Preferences for how the platform IME should look and behave during editing.
@@ -248,10 +249,11 @@ class SuperTextFieldState extends State<SuperTextField>
 
     _controller = widget.textController != null
         ? widget.textController is ImeAttributedTextEditingController
-            ? (widget.textController as ImeAttributedTextEditingController)
-            : ImeAttributedTextEditingController(
-                controller: widget.textController,
-                disposeClientController: false)
+              ? (widget.textController as ImeAttributedTextEditingController)
+              : ImeAttributedTextEditingController(
+                  controller: widget.textController,
+                  disposeClientController: false,
+                )
         : ImeAttributedTextEditingController();
   }
 
@@ -269,10 +271,11 @@ class SuperTextFieldState extends State<SuperTextField>
     if (widget.textController != oldWidget.textController) {
       _controller = widget.textController != null
           ? widget.textController is ImeAttributedTextEditingController
-              ? (widget.textController as ImeAttributedTextEditingController)
-              : ImeAttributedTextEditingController(
-                  controller: widget.textController,
-                  disposeClientController: false)
+                ? (widget.textController as ImeAttributedTextEditingController)
+                : ImeAttributedTextEditingController(
+                    controller: widget.textController,
+                    disposeClientController: false,
+                  )
           : ImeAttributedTextEditingController();
     }
   }
@@ -395,7 +398,8 @@ class SuperTextFieldState extends State<SuperTextField>
           selectionHighlightStyle: SelectionHighlightStyle(
             color: widget.selectionColor ?? defaultSelectionColor,
           ),
-          caretStyle: widget.caretStyle ??
+          caretStyle:
+              widget.caretStyle ??
               CaretStyle(
                 color: widget.controlsColor ?? defaultDesktopCaretColor,
                 width: 1,
@@ -410,7 +414,8 @@ class SuperTextFieldState extends State<SuperTextField>
           inputSource: _inputSource,
           textInputAction: _textInputAction,
           imeConfiguration: widget.imeConfiguration,
-          showComposingUnderline: widget.showComposingUnderline ??
+          showComposingUnderline:
+              widget.showComposingUnderline ??
               defaultTargetPlatform == TargetPlatform.macOS,
           blinkTimingMode: widget.blinkTimingMode,
         );
@@ -428,7 +433,8 @@ class SuperTextFieldState extends State<SuperTextField>
             inlineWidgetBuilders: widget.inlineWidgetBuilders,
             hintBehavior: widget.hintBehavior,
             hintBuilder: widget.hintBuilder,
-            caretStyle: widget.caretStyle ??
+            caretStyle:
+                widget.caretStyle ??
                 CaretStyle(
                   color: widget.controlsColor ?? defaultAndroidControlsColor,
                 ),
@@ -459,7 +465,8 @@ class SuperTextFieldState extends State<SuperTextField>
             padding: widget.padding,
             hintBehavior: widget.hintBehavior,
             hintBuilder: widget.hintBuilder,
-            caretStyle: widget.caretStyle ??
+            caretStyle:
+                widget.caretStyle ??
                 CaretStyle(
                   color: widget.controlsColor ?? defaultIOSControlsColor,
                 ),
@@ -484,8 +491,4 @@ class SuperTextFieldState extends State<SuperTextField>
 ///
 /// Desktop uses a blinking caret, while mobile uses a draggable caret
 /// and selection handles, styled per platform.
-enum SuperTextFieldPlatformConfiguration {
-  desktop,
-  android,
-  iOS,
-}
+enum SuperTextFieldPlatformConfiguration { desktop, android, iOS }

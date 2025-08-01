@@ -30,7 +30,7 @@ class _ScrollablesDemoState extends State<ScrollablesDemo> {
                   Spacer(),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -66,22 +66,24 @@ class _VerticalListState extends State<_VerticalList> {
     return Stack(
       children: [
         Positioned.fill(
-          child: LayoutBuilder(builder: (context, constraints) {
-            return ListView.builder(
-              controller: _scrollController,
-              itemBuilder: (context, index) {
-                if (index == 1) {
-                  return _LeaderAndFollowerListItem(
-                    height: constraints.maxHeight,
-                    recalculateGlobalOffset: _scrollController,
-                    boundsKey: _boundsKey,
-                  );
-                }
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return ListView.builder(
+                controller: _scrollController,
+                itemBuilder: (context, index) {
+                  if (index == 1) {
+                    return _LeaderAndFollowerListItem(
+                      height: constraints.maxHeight,
+                      recalculateGlobalOffset: _scrollController,
+                      boundsKey: _boundsKey,
+                    );
+                  }
 
-                return _EmptyListItem(height: constraints.maxHeight);
-              },
-            );
-          }),
+                  return _EmptyListItem(height: constraints.maxHeight);
+                },
+              );
+            },
+          ),
         ),
         Positioned.fill(
           child: IgnorePointer(
@@ -129,25 +131,25 @@ class _HorizontalListState extends State<_HorizontalList> {
     return Stack(
       children: [
         Positioned.fill(
-          child: LayoutBuilder(builder: (context, constraints) {
-            return ListView.builder(
-              controller: _scrollController,
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) {
-                if (index == 1) {
-                  return _LeaderAndFollowerListItem(
-                    width: constraints.maxWidth,
-                    recalculateGlobalOffset: _scrollController,
-                    boundsKey: _boundsKey,
-                  );
-                }
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return ListView.builder(
+                controller: _scrollController,
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) {
+                  if (index == 1) {
+                    return _LeaderAndFollowerListItem(
+                      width: constraints.maxWidth,
+                      recalculateGlobalOffset: _scrollController,
+                      boundsKey: _boundsKey,
+                    );
+                  }
 
-                return _EmptyListItem(
-                  width: constraints.maxWidth,
-                );
-              },
-            );
-          }),
+                  return _EmptyListItem(width: constraints.maxWidth);
+                },
+              );
+            },
+          ),
         ),
         Positioned.fill(
           child: IgnorePointer(
@@ -168,11 +170,7 @@ class _HorizontalListState extends State<_HorizontalList> {
 }
 
 class _EmptyListItem extends StatelessWidget {
-  const _EmptyListItem({
-    Key? key,
-    this.width,
-    this.height,
-  }) : super(key: key);
+  const _EmptyListItem({Key? key, this.width, this.height}) : super(key: key);
 
   final double? width;
   final double? height;
@@ -271,7 +269,8 @@ class _LeaderAndFollowerListItemState
           SizedBox.expand(
             child: DecoratedBox(
               decoration: BoxDecoration(
-                  border: Border.all(width: 1, color: Colors.red)),
+                border: Border.all(width: 1, color: Colors.red),
+              ),
               child: FollowerFadeOutBeyondBoundary(
                 boundary: _viewportBoundary,
                 link: _anchor,
@@ -286,14 +285,18 @@ class _LeaderAndFollowerListItemState
                       TextButton(
                         // ignore: avoid_print
                         onPressed: () => print("one"),
-                        child: const Text("One",
-                            style: TextStyle(color: Colors.white)),
+                        child: const Text(
+                          "One",
+                          style: TextStyle(color: Colors.white),
+                        ),
                       ),
                       TextButton(
                         // ignore: avoid_print
                         onPressed: () => print("two"),
-                        child: const Text("Two",
-                            style: TextStyle(color: Colors.white)),
+                        child: const Text(
+                          "Two",
+                          style: TextStyle(color: Colors.white),
+                        ),
                       ),
                     ],
                   ),

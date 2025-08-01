@@ -104,9 +104,9 @@ class MutableDocumentComposer extends DocumentComposer implements Editable {
     DocumentSelection? initialSelection,
     SuperEditorImeConfiguration? imeConfiguration,
   }) : super(
-          initialSelection: initialSelection,
-          imeConfiguration: imeConfiguration,
-        );
+         initialSelection: initialSelection,
+         imeConfiguration: imeConfiguration,
+       );
 
   bool _isInTransaction = false;
   bool _didChangeSelectionDuringTransaction = false;
@@ -115,8 +115,10 @@ class MutableDocumentComposer extends DocumentComposer implements Editable {
   /// Sets the current [selection] for a [Document].
   ///
   /// [reason] represents what caused the selection change to happen.
-  void setSelectionWithReason(DocumentSelection? newSelection,
-      [Object reason = SelectionReason.userInteraction]) {
+  void setSelectionWithReason(
+    DocumentSelection? newSelection, [
+    Object reason = SelectionReason.userInteraction,
+  ]) {
     if (_isInTransaction && newSelection != _latestSelectionChange?.selection) {
       _didChangeSelectionDuringTransaction = true;
     }
@@ -257,11 +259,12 @@ class ComposerPreferences with ChangeNotifier {
 /// user tag. In the case of pushing the caret, we know which direction to jump over that
 /// content.
 class PushCaretRequest extends ChangeSelectionRequest {
-  PushCaretRequest(
-    DocumentPosition newPosition,
-    this.direction,
-  ) : super(DocumentSelection.collapsed(position: newPosition),
-            SelectionChangeType.pushCaret, SelectionReason.userInteraction);
+  PushCaretRequest(DocumentPosition newPosition, this.direction)
+    : super(
+        DocumentSelection.collapsed(position: newPosition),
+        SelectionChangeType.pushCaret,
+        SelectionReason.userInteraction,
+      );
 
   final TextAffinity direction;
 
@@ -285,10 +288,12 @@ class PushCaretRequest extends ChangeSelectionRequest {
 /// such as a user tag. In the case of expanding the selection, we know which direction to jump
 /// over that content.
 class ExpandSelectionRequest extends ChangeSelectionRequest {
-  const ExpandSelectionRequest(
-    DocumentSelection newSelection,
-  ) : super(newSelection, SelectionChangeType.expandSelection,
-            SelectionReason.userInteraction);
+  const ExpandSelectionRequest(DocumentSelection newSelection)
+    : super(
+        newSelection,
+        SelectionChangeType.expandSelection,
+        SelectionReason.userInteraction,
+      );
 }
 
 /// A [ChangeSelectionRequest] that represents a user's desire to collapse an existing selection
@@ -299,13 +304,12 @@ class ExpandSelectionRequest extends ChangeSelectionRequest {
 /// such as a user tag. In the case of expanding the selection, we know which direction to jump
 /// over that content.
 class CollapseSelectionRequest extends ChangeSelectionRequest {
-  CollapseSelectionRequest(
-    DocumentPosition newPosition,
-  ) : super(
-          DocumentSelection.collapsed(position: newPosition),
-          SelectionChangeType.collapseSelection,
-          SelectionReason.userInteraction,
-        );
+  CollapseSelectionRequest(DocumentPosition newPosition)
+    : super(
+        DocumentSelection.collapsed(position: newPosition),
+        SelectionChangeType.collapseSelection,
+        SelectionReason.userInteraction,
+      );
 }
 
 class ClearSelectionRequest implements EditRequest {
@@ -393,7 +397,7 @@ class ChangeSelectionCommand extends EditCommand {
         newSelection: newSelection,
         changeType: changeType,
         reason: reason,
-      )
+      ),
     ]);
   }
 }
@@ -423,16 +427,19 @@ class SelectionChangeEvent extends EditEvent {
 
     if (newSelection!.isCollapsed) {
       buffer.write(
-          " (at ${newSelection!.extent.nodeId} - ${newSelection!.extent.nodePosition}");
+        " (at ${newSelection!.extent.nodeId} - ${newSelection!.extent.nodePosition}",
+      );
       return buffer.toString();
     }
 
     buffer
       ..writeln("")
       ..writeln(
-          " - from: ${newSelection!.base.nodeId} - ${newSelection!.base.nodePosition}")
+        " - from: ${newSelection!.base.nodeId} - ${newSelection!.base.nodePosition}",
+      )
       ..write(
-          " - to: ${newSelection!.extent.nodeId} - ${newSelection!.extent.nodePosition}");
+        " - to: ${newSelection!.extent.nodeId} - ${newSelection!.extent.nodePosition}",
+      );
     return buffer.toString();
   }
 
@@ -465,10 +472,7 @@ class ComposingRegionChangeEvent extends EditEvent {
 /// For example, [SelectionReason.userInteraction] represents
 /// a selection change caused by the user interacting with the editor.
 class DocumentSelectionChange {
-  DocumentSelectionChange({
-    this.selection,
-    required this.reason,
-  });
+  DocumentSelectionChange({this.selection, required this.reason});
 
   final DocumentSelection? selection;
   final Object reason;
@@ -565,7 +569,7 @@ class ChangeComposingRegionCommand extends EditCommand {
       ComposingRegionChangeEvent(
         oldComposingRegion: initialComposingRegion,
         newComposingRegion: composingRegion,
-      )
+      ),
     ]);
   }
 }
@@ -575,9 +579,7 @@ class ClearComposingRegionRequest implements EditRequest {
 }
 
 class ChangeInteractionModeRequest implements EditRequest {
-  const ChangeInteractionModeRequest({
-    required this.isInteractionModeDesired,
-  });
+  const ChangeInteractionModeRequest({required this.isInteractionModeDesired});
 
   final bool isInteractionModeDesired;
 
@@ -593,9 +595,7 @@ class ChangeInteractionModeRequest implements EditRequest {
 }
 
 class ChangeInteractionModeCommand extends EditCommand {
-  ChangeInteractionModeCommand({
-    required this.isInteractionModeDesired,
-  });
+  ChangeInteractionModeCommand({required this.isInteractionModeDesired});
 
   final bool isInteractionModeDesired;
 

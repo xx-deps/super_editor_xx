@@ -27,7 +27,9 @@ void main() {
         await screenMatchesGolden(tester, 'text-scaling-paragraph');
       });
 
-      testGoldensOnLinux('for paragraph with collapsed selection', (tester) async {
+      testGoldensOnLinux('for paragraph with collapsed selection', (
+        tester,
+      ) async {
         final regularEditorKey = GlobalKey();
         final scaledEditorKey = GlobalKey();
 
@@ -59,10 +61,15 @@ void main() {
           editorKey: scaledEditorKey,
         );
 
-        await screenMatchesGolden(tester, 'text-scaling-paragraph-collapsed-selection');
+        await screenMatchesGolden(
+          tester,
+          'text-scaling-paragraph-collapsed-selection',
+        );
       });
 
-      testGoldensOnLinux('for paragraph with expanded selection', (tester) async {
+      testGoldensOnLinux('for paragraph with expanded selection', (
+        tester,
+      ) async {
         final regularEditorKey = GlobalKey();
         final scaledEditorKey = GlobalKey();
 
@@ -150,7 +157,10 @@ void main() {
 
         await expectLater(
           find.byType(MaterialApp).first,
-          matchesGoldenFileWithPixelAllowance("goldens/text-scaling-header.png", 125),
+          matchesGoldenFileWithPixelAllowance(
+            "goldens/text-scaling-header.png",
+            125,
+          ),
         );
       });
 
@@ -169,7 +179,10 @@ void main() {
 
         await expectLater(
           find.byType(MaterialApp).first,
-          matchesGoldenFileWithPixelAllowance("goldens/text-scaling-blockquote.png", 40),
+          matchesGoldenFileWithPixelAllowance(
+            "goldens/text-scaling-blockquote.png",
+            40,
+          ),
         );
       });
     });
@@ -236,12 +249,8 @@ Widget _buildSuperEditorFromMarkdown(
 final _stylesheet = defaultStylesheet.copyWith(
   addRulesAfter: [
     StyleRule(BlockSelector.all, (doc, node) {
-      return {
-        Styles.textStyle: const TextStyle(
-          fontFamily: 'Roboto',
-        ),
-      };
-    })
+      return {Styles.textStyle: const TextStyle(fontFamily: 'Roboto')};
+    }),
   ],
 );
 
@@ -264,9 +273,7 @@ Future<void> _buildTextScaleScaffold(
       home: Scaffold(
         body: Row(
           children: [
-            Expanded(
-              child: regularEditor,
-            ),
+            Expanded(child: regularEditor),
             Expanded(
               child: MediaQuery(
                 data: const MediaQueryData(textScaler: TextScaler.linear(2.0)),

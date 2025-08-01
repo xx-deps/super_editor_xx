@@ -15,306 +15,489 @@ void main() {
   group('SuperEditor keyboard', () {
     group('on any desktop', () {
       group('moves caret', () {
-        testAllInputsOnDesktop("left by one character when LEFT_ARROW is pressed", (
-          tester, {
-          required TextInputSource inputSource,
-        }) async {
-          final nodeId = await _pumpSingleLineWithCaret(tester, offset: 2, inputSource: inputSource);
+        testAllInputsOnDesktop(
+          "left by one character when LEFT_ARROW is pressed",
+          (tester, {required TextInputSource inputSource}) async {
+            final nodeId = await _pumpSingleLineWithCaret(
+              tester,
+              offset: 2,
+              inputSource: inputSource,
+            );
 
-          await tester.pressLeftArrow();
+            await tester.pressLeftArrow();
 
-          expect(SuperEditorInspector.findDocumentSelection(), _caretInParagraph(nodeId, 1));
-        });
+            expect(
+              SuperEditorInspector.findDocumentSelection(),
+              _caretInParagraph(nodeId, 1),
+            );
+          },
+        );
 
-        testAllInputsOnDesktop("left by one character and expands when SHIFT + LEFT_ARROW is pressed", (
-          tester, {
-          required TextInputSource inputSource,
-        }) async {
-          final nodeId = await _pumpSingleLineWithCaret(tester, offset: 2, inputSource: inputSource);
+        testAllInputsOnDesktop(
+          "left by one character and expands when SHIFT + LEFT_ARROW is pressed",
+          (tester, {required TextInputSource inputSource}) async {
+            final nodeId = await _pumpSingleLineWithCaret(
+              tester,
+              offset: 2,
+              inputSource: inputSource,
+            );
 
-          await tester.pressShiftLeftArrow();
+            await tester.pressShiftLeftArrow();
 
-          expect(SuperEditorInspector.findDocumentSelection(), _selectionInParagraph(nodeId, from: 2, to: 1));
-        });
+            expect(
+              SuperEditorInspector.findDocumentSelection(),
+              _selectionInParagraph(nodeId, from: 2, to: 1),
+            );
+          },
+        );
 
-        testAllInputsOnDesktop("right by one character when RIGHT_ARROW is pressed", (
-          tester, {
-          required TextInputSource inputSource,
-        }) async {
-          final nodeId = await _pumpSingleLineWithCaret(tester, offset: 2, inputSource: inputSource);
+        testAllInputsOnDesktop(
+          "right by one character when RIGHT_ARROW is pressed",
+          (tester, {required TextInputSource inputSource}) async {
+            final nodeId = await _pumpSingleLineWithCaret(
+              tester,
+              offset: 2,
+              inputSource: inputSource,
+            );
 
-          await tester.pressRightArrow();
+            await tester.pressRightArrow();
 
-          expect(SuperEditorInspector.findDocumentSelection(), _caretInParagraph(nodeId, 3));
-        });
+            expect(
+              SuperEditorInspector.findDocumentSelection(),
+              _caretInParagraph(nodeId, 3),
+            );
+          },
+        );
 
-        testAllInputsOnDesktop("right by one character and expands when SHIFT + RIGHT_ARROW is pressed", (
-          tester, {
-          required TextInputSource inputSource,
-        }) async {
-          final nodeId = await _pumpSingleLineWithCaret(tester, offset: 2, inputSource: inputSource);
+        testAllInputsOnDesktop(
+          "right by one character and expands when SHIFT + RIGHT_ARROW is pressed",
+          (tester, {required TextInputSource inputSource}) async {
+            final nodeId = await _pumpSingleLineWithCaret(
+              tester,
+              offset: 2,
+              inputSource: inputSource,
+            );
 
-          await tester.pressShiftRightArrow();
+            await tester.pressShiftRightArrow();
 
-          expect(SuperEditorInspector.findDocumentSelection(), _selectionInParagraph(nodeId, from: 2, to: 3));
-        });
+            expect(
+              SuperEditorInspector.findDocumentSelection(),
+              _selectionInParagraph(nodeId, from: 2, to: 3),
+            );
+          },
+        );
 
-        testAllInputsOnApple("to beginning of word when ALT + LEFT_ARROW is pressed", (
-          tester, {
-          required TextInputSource inputSource,
-        }) async {
-          final nodeId = await _pumpSingleLineWithCaret(tester, offset: 10, inputSource: inputSource);
+        testAllInputsOnApple(
+          "to beginning of word when ALT + LEFT_ARROW is pressed",
+          (tester, {required TextInputSource inputSource}) async {
+            final nodeId = await _pumpSingleLineWithCaret(
+              tester,
+              offset: 10,
+              inputSource: inputSource,
+            );
 
-          await tester.pressAltLeftArrow();
+            await tester.pressAltLeftArrow();
 
-          expect(SuperEditorInspector.findDocumentSelection(), _caretInParagraph(nodeId, 8));
-        });
+            expect(
+              SuperEditorInspector.findDocumentSelection(),
+              _caretInParagraph(nodeId, 8),
+            );
+          },
+        );
 
-        testAllInputsOnApple("to beginning of word and expands when SHIFT + ALT + LEFT_ARROW is pressed", (
-          tester, {
-          required TextInputSource inputSource,
-        }) async {
-          final nodeId = await _pumpSingleLineWithCaret(tester, offset: 10, inputSource: inputSource);
+        testAllInputsOnApple(
+          "to beginning of word and expands when SHIFT + ALT + LEFT_ARROW is pressed",
+          (tester, {required TextInputSource inputSource}) async {
+            final nodeId = await _pumpSingleLineWithCaret(
+              tester,
+              offset: 10,
+              inputSource: inputSource,
+            );
 
-          await tester.pressShiftAltLeftArrow();
+            await tester.pressShiftAltLeftArrow();
 
-          expect(SuperEditorInspector.findDocumentSelection(), _selectionInParagraph(nodeId, from: 10, to: 8));
-        });
+            expect(
+              SuperEditorInspector.findDocumentSelection(),
+              _selectionInParagraph(nodeId, from: 10, to: 8),
+            );
+          },
+        );
 
-        testAllInputsOnApple("to end of word when ALT + RIGHT_ARROW is pressed", (
-          tester, {
-          required TextInputSource inputSource,
-        }) async {
-          final nodeId = await _pumpSingleLineWithCaret(tester, offset: 10, inputSource: inputSource);
+        testAllInputsOnApple(
+          "to end of word when ALT + RIGHT_ARROW is pressed",
+          (tester, {required TextInputSource inputSource}) async {
+            final nodeId = await _pumpSingleLineWithCaret(
+              tester,
+              offset: 10,
+              inputSource: inputSource,
+            );
 
-          await tester.pressAltRightArrow();
+            await tester.pressAltRightArrow();
 
-          expect(SuperEditorInspector.findDocumentSelection(), _caretInParagraph(nodeId, 12));
-        });
+            expect(
+              SuperEditorInspector.findDocumentSelection(),
+              _caretInParagraph(nodeId, 12),
+            );
+          },
+        );
 
-        testAllInputsOnApple("to end of word and expands when SHIFT + ALT + RIGHT_ARROW is pressed", (
-          tester, {
-          required TextInputSource inputSource,
-        }) async {
-          final nodeId = await _pumpSingleLineWithCaret(tester, offset: 10, inputSource: inputSource);
+        testAllInputsOnApple(
+          "to end of word and expands when SHIFT + ALT + RIGHT_ARROW is pressed",
+          (tester, {required TextInputSource inputSource}) async {
+            final nodeId = await _pumpSingleLineWithCaret(
+              tester,
+              offset: 10,
+              inputSource: inputSource,
+            );
 
-          await tester.pressShiftAltRightArrow();
+            await tester.pressShiftAltRightArrow();
 
-          expect(SuperEditorInspector.findDocumentSelection(), _selectionInParagraph(nodeId, from: 10, to: 12));
-        });
+            expect(
+              SuperEditorInspector.findDocumentSelection(),
+              _selectionInParagraph(nodeId, from: 10, to: 12),
+            );
+          },
+        );
 
-        testAllInputsOnApple("to beginning of line when CMD + LEFT_ARROW is pressed", (
-          tester, {
-          required TextInputSource inputSource,
-        }) async {
-          final nodeId = await _pumpSingleLineWithCaret(tester, offset: 10, inputSource: inputSource);
+        testAllInputsOnApple(
+          "to beginning of line when CMD + LEFT_ARROW is pressed",
+          (tester, {required TextInputSource inputSource}) async {
+            final nodeId = await _pumpSingleLineWithCaret(
+              tester,
+              offset: 10,
+              inputSource: inputSource,
+            );
 
-          await tester.pressCmdLeftArrow();
+            await tester.pressCmdLeftArrow();
 
-          expect(SuperEditorInspector.findDocumentSelection(), _caretInParagraph(nodeId, 0));
-        });
+            expect(
+              SuperEditorInspector.findDocumentSelection(),
+              _caretInParagraph(nodeId, 0),
+            );
+          },
+        );
 
-        testAllInputsOnApple("to beginning of line and expands when SHIFT + CMD + LEFT_ARROW is pressed", (
-          tester, {
-          required TextInputSource inputSource,
-        }) async {
-          final nodeId = await _pumpSingleLineWithCaret(tester, offset: 10, inputSource: inputSource);
+        testAllInputsOnApple(
+          "to beginning of line and expands when SHIFT + CMD + LEFT_ARROW is pressed",
+          (tester, {required TextInputSource inputSource}) async {
+            final nodeId = await _pumpSingleLineWithCaret(
+              tester,
+              offset: 10,
+              inputSource: inputSource,
+            );
 
-          await tester.pressShiftCmdLeftArrow();
+            await tester.pressShiftCmdLeftArrow();
 
-          expect(SuperEditorInspector.findDocumentSelection(), _selectionInParagraph(nodeId, from: 10, to: 0));
-        });
+            expect(
+              SuperEditorInspector.findDocumentSelection(),
+              _selectionInParagraph(nodeId, from: 10, to: 0),
+            );
+          },
+        );
 
-        testAllInputsOnApple("to end of line when CMD + RIGHT_ARROW is pressed", (
-          tester, {
-          required TextInputSource inputSource,
-        }) async {
-          final nodeId = await _pumpSingleLineWithCaret(tester, offset: 10, inputSource: inputSource);
+        testAllInputsOnApple(
+          "to end of line when CMD + RIGHT_ARROW is pressed",
+          (tester, {required TextInputSource inputSource}) async {
+            final nodeId = await _pumpSingleLineWithCaret(
+              tester,
+              offset: 10,
+              inputSource: inputSource,
+            );
 
-          await tester.pressCmdRightArrow();
+            await tester.pressCmdRightArrow();
 
-          expect(SuperEditorInspector.findDocumentSelection(), _caretInParagraph(nodeId, 26, TextAffinity.upstream));
-        });
+            expect(
+              SuperEditorInspector.findDocumentSelection(),
+              _caretInParagraph(nodeId, 26, TextAffinity.upstream),
+            );
+          },
+        );
 
-        testAllInputsOnApple("to end of line and expands when SHIFT + CMD + RIGHT_ARROW is pressed", (
-          tester, {
-          required TextInputSource inputSource,
-        }) async {
-          final nodeId = await _pumpSingleLineWithCaret(tester, offset: 10, inputSource: inputSource);
+        testAllInputsOnApple(
+          "to end of line and expands when SHIFT + CMD + RIGHT_ARROW is pressed",
+          (tester, {required TextInputSource inputSource}) async {
+            final nodeId = await _pumpSingleLineWithCaret(
+              tester,
+              offset: 10,
+              inputSource: inputSource,
+            );
 
-          await tester.pressShiftCmdRightArrow();
+            await tester.pressShiftCmdRightArrow();
 
-          expect(
-            SuperEditorInspector.findDocumentSelection(),
-            _selectionInParagraph(nodeId, from: 10, to: 26, toAffinity: TextAffinity.upstream),
-          );
-        });
+            expect(
+              SuperEditorInspector.findDocumentSelection(),
+              _selectionInParagraph(
+                nodeId,
+                from: 10,
+                to: 26,
+                toAffinity: TextAffinity.upstream,
+              ),
+            );
+          },
+        );
 
-        testAllInputsOnWindowsAndLinux("to beginning of word when CTL + LEFT_ARROW is pressed", (
-          tester, {
-          required TextInputSource inputSource,
-        }) async {
-          final nodeId = await _pumpSingleLineWithCaret(tester, offset: 10, inputSource: inputSource);
+        testAllInputsOnWindowsAndLinux(
+          "to beginning of word when CTL + LEFT_ARROW is pressed",
+          (tester, {required TextInputSource inputSource}) async {
+            final nodeId = await _pumpSingleLineWithCaret(
+              tester,
+              offset: 10,
+              inputSource: inputSource,
+            );
 
-          await tester.pressCtlLeftArrow();
+            await tester.pressCtlLeftArrow();
 
-          expect(SuperEditorInspector.findDocumentSelection(), _caretInParagraph(nodeId, 8));
-        });
+            expect(
+              SuperEditorInspector.findDocumentSelection(),
+              _caretInParagraph(nodeId, 8),
+            );
+          },
+        );
 
-        testAllInputsOnWindowsAndLinux("to beginning of word and expands when SHIFT + CTL + LEFT_ARROW is pressed", (
-          tester, {
-          required TextInputSource inputSource,
-        }) async {
-          final nodeId = await _pumpSingleLineWithCaret(tester, offset: 10, inputSource: inputSource);
+        testAllInputsOnWindowsAndLinux(
+          "to beginning of word and expands when SHIFT + CTL + LEFT_ARROW is pressed",
+          (tester, {required TextInputSource inputSource}) async {
+            final nodeId = await _pumpSingleLineWithCaret(
+              tester,
+              offset: 10,
+              inputSource: inputSource,
+            );
 
-          await tester.pressShiftCtlLeftArrow();
+            await tester.pressShiftCtlLeftArrow();
 
-          expect(SuperEditorInspector.findDocumentSelection(), _selectionInParagraph(nodeId, from: 10, to: 8));
-        });
+            expect(
+              SuperEditorInspector.findDocumentSelection(),
+              _selectionInParagraph(nodeId, from: 10, to: 8),
+            );
+          },
+        );
 
-        testAllInputsOnWindowsAndLinux("to end of word when CTL + Right_ARROW is pressed", (
-          tester, {
-          required TextInputSource inputSource,
-        }) async {
-          final nodeId = await _pumpSingleLineWithCaret(tester, offset: 10, inputSource: inputSource);
+        testAllInputsOnWindowsAndLinux(
+          "to end of word when CTL + Right_ARROW is pressed",
+          (tester, {required TextInputSource inputSource}) async {
+            final nodeId = await _pumpSingleLineWithCaret(
+              tester,
+              offset: 10,
+              inputSource: inputSource,
+            );
 
-          await tester.pressCtlRightArrow();
+            await tester.pressCtlRightArrow();
 
-          expect(SuperEditorInspector.findDocumentSelection(), _caretInParagraph(nodeId, 12));
-        });
+            expect(
+              SuperEditorInspector.findDocumentSelection(),
+              _caretInParagraph(nodeId, 12),
+            );
+          },
+        );
 
-        testAllInputsOnWindowsAndLinux("to end of word and expands when SHIFT + CTL + RIGHT_ARROW is pressed", (
-          tester, {
-          required TextInputSource inputSource,
-        }) async {
-          final nodeId = await _pumpSingleLineWithCaret(tester, offset: 10, inputSource: inputSource);
+        testAllInputsOnWindowsAndLinux(
+          "to end of word and expands when SHIFT + CTL + RIGHT_ARROW is pressed",
+          (tester, {required TextInputSource inputSource}) async {
+            final nodeId = await _pumpSingleLineWithCaret(
+              tester,
+              offset: 10,
+              inputSource: inputSource,
+            );
 
-          await tester.pressShiftCtlRightArrow();
+            await tester.pressShiftCtlRightArrow();
 
-          expect(SuperEditorInspector.findDocumentSelection(), _selectionInParagraph(nodeId, from: 10, to: 12));
-        });
+            expect(
+              SuperEditorInspector.findDocumentSelection(),
+              _selectionInParagraph(nodeId, from: 10, to: 12),
+            );
+          },
+        );
 
         testAllInputsOnDesktop("up one line when UP_ARROW is pressed", (
           tester, {
           required TextInputSource inputSource,
         }) async {
-          final nodeId = await _pumpDoubleLineWithCaret(tester, offset: 41, inputSource: inputSource);
+          final nodeId = await _pumpDoubleLineWithCaret(
+            tester,
+            offset: 41,
+            inputSource: inputSource,
+          );
 
           await tester.pressUpArrow();
 
-          expect(SuperEditorInspector.findDocumentSelection(), _caretInParagraph(nodeId, 12));
+          expect(
+            SuperEditorInspector.findDocumentSelection(),
+            _caretInParagraph(nodeId, 12),
+          );
         });
 
-        testAllInputsOnDesktop("up one line and expands when SHIFT + UP_ARROW is pressed", (
-          tester, {
-          required TextInputSource inputSource,
-        }) async {
-          final nodeId = await _pumpDoubleLineWithCaret(tester, offset: 41, inputSource: inputSource);
+        testAllInputsOnDesktop(
+          "up one line and expands when SHIFT + UP_ARROW is pressed",
+          (tester, {required TextInputSource inputSource}) async {
+            final nodeId = await _pumpDoubleLineWithCaret(
+              tester,
+              offset: 41,
+              inputSource: inputSource,
+            );
 
-          await tester.pressShiftUpArrow();
+            await tester.pressShiftUpArrow();
 
-          expect(SuperEditorInspector.findDocumentSelection(), _selectionInParagraph(nodeId, from: 41, to: 12));
-        });
+            expect(
+              SuperEditorInspector.findDocumentSelection(),
+              _selectionInParagraph(nodeId, from: 41, to: 12),
+            );
+          },
+        );
 
         testAllInputsOnDesktop("down one line when DOWN_ARROW is pressed", (
           tester, {
           required TextInputSource inputSource,
         }) async {
-          final nodeId = await _pumpDoubleLineWithCaret(tester, offset: 12, inputSource: inputSource);
+          final nodeId = await _pumpDoubleLineWithCaret(
+            tester,
+            offset: 12,
+            inputSource: inputSource,
+          );
 
           await tester.pressDownArrow();
 
-          expect(SuperEditorInspector.findDocumentSelection(), _caretInParagraph(nodeId, 41));
+          expect(
+            SuperEditorInspector.findDocumentSelection(),
+            _caretInParagraph(nodeId, 41),
+          );
         });
 
-        testAllInputsOnDesktop("down one line and expands when SHIFT + DOWN_ARROW is pressed", (
-          tester, {
-          required TextInputSource inputSource,
-        }) async {
-          final nodeId = await _pumpDoubleLineWithCaret(tester, offset: 12, inputSource: inputSource);
+        testAllInputsOnDesktop(
+          "down one line and expands when SHIFT + DOWN_ARROW is pressed",
+          (tester, {required TextInputSource inputSource}) async {
+            final nodeId = await _pumpDoubleLineWithCaret(
+              tester,
+              offset: 12,
+              inputSource: inputSource,
+            );
 
-          await tester.pressShiftDownArrow();
+            await tester.pressShiftDownArrow();
 
-          expect(SuperEditorInspector.findDocumentSelection(), _selectionInParagraph(nodeId, from: 12, to: 41));
-        });
+            expect(
+              SuperEditorInspector.findDocumentSelection(),
+              _selectionInParagraph(nodeId, from: 12, to: 41),
+            );
+          },
+        );
 
-        testAllInputsOnDesktop("to beginning of line when UP_ARROW is pressed at top of document", (
-          tester, {
-          required TextInputSource inputSource,
-        }) async {
-          final nodeId = await _pumpDoubleLineWithCaret(tester, offset: 12, inputSource: inputSource);
+        testAllInputsOnDesktop(
+          "to beginning of line when UP_ARROW is pressed at top of document",
+          (tester, {required TextInputSource inputSource}) async {
+            final nodeId = await _pumpDoubleLineWithCaret(
+              tester,
+              offset: 12,
+              inputSource: inputSource,
+            );
 
-          await tester.pressUpArrow();
+            await tester.pressUpArrow();
 
-          expect(SuperEditorInspector.findDocumentSelection(), _caretInParagraph(nodeId, 0));
-        });
+            expect(
+              SuperEditorInspector.findDocumentSelection(),
+              _caretInParagraph(nodeId, 0),
+            );
+          },
+        );
 
-        testAllInputsOnDesktop("to beginning of line and expands when SHIFT + UP_ARROW is pressed at top of document", (
-          tester, {
-          required TextInputSource inputSource,
-        }) async {
-          final nodeId = await _pumpDoubleLineWithCaret(tester, offset: 12, inputSource: inputSource);
+        testAllInputsOnDesktop(
+          "to beginning of line and expands when SHIFT + UP_ARROW is pressed at top of document",
+          (tester, {required TextInputSource inputSource}) async {
+            final nodeId = await _pumpDoubleLineWithCaret(
+              tester,
+              offset: 12,
+              inputSource: inputSource,
+            );
 
-          await tester.pressShiftUpArrow();
+            await tester.pressShiftUpArrow();
 
-          expect(SuperEditorInspector.findDocumentSelection(), _selectionInParagraph(nodeId, from: 12, to: 0));
-        });
+            expect(
+              SuperEditorInspector.findDocumentSelection(),
+              _selectionInParagraph(nodeId, from: 12, to: 0),
+            );
+          },
+        );
 
-        testAllInputsOnDesktop("to end of line when DOWN_ARROW is pressed at end of document", (
-          tester, {
-          required TextInputSource inputSource,
-        }) async {
-          final nodeId = await _pumpDoubleLineWithCaret(tester, offset: 41, inputSource: inputSource);
+        testAllInputsOnDesktop(
+          "to end of line when DOWN_ARROW is pressed at end of document",
+          (tester, {required TextInputSource inputSource}) async {
+            final nodeId = await _pumpDoubleLineWithCaret(
+              tester,
+              offset: 41,
+              inputSource: inputSource,
+            );
 
-          await tester.pressDownArrow();
+            await tester.pressDownArrow();
 
-          expect(SuperEditorInspector.findDocumentSelection(), _caretInParagraph(nodeId, 58));
-        });
+            expect(
+              SuperEditorInspector.findDocumentSelection(),
+              _caretInParagraph(nodeId, 58),
+            );
+          },
+        );
 
-        testAllInputsOnDesktop("end of line and expands when SHIFT + DOWN_ARROW is pressed at end of document", (
-          tester, {
-          required TextInputSource inputSource,
-        }) async {
-          final nodeId = await _pumpDoubleLineWithCaret(tester, offset: 41, inputSource: inputSource);
+        testAllInputsOnDesktop(
+          "end of line and expands when SHIFT + DOWN_ARROW is pressed at end of document",
+          (tester, {required TextInputSource inputSource}) async {
+            final nodeId = await _pumpDoubleLineWithCaret(
+              tester,
+              offset: 41,
+              inputSource: inputSource,
+            );
 
-          await tester.pressShiftDownArrow();
+            await tester.pressShiftDownArrow();
 
-          expect(SuperEditorInspector.findDocumentSelection(), _selectionInParagraph(nodeId, from: 41, to: 58));
-        });
+            expect(
+              SuperEditorInspector.findDocumentSelection(),
+              _selectionInParagraph(nodeId, from: 41, to: 58),
+            );
+          },
+        );
       });
     });
 
-    testWidgetsOnMacWeb("on web moves caret to beginning of line when CMD + LEFT_ARROW is pressed", (tester) async {
-      final nodeId = await _pumpSingleLineWithCaret(tester, offset: 10, inputSource: TextInputSource.ime);
+    testWidgetsOnMacWeb(
+      "on web moves caret to beginning of line when CMD + LEFT_ARROW is pressed",
+      (tester) async {
+        final nodeId = await _pumpSingleLineWithCaret(
+          tester,
+          offset: 10,
+          inputSource: TextInputSource.ime,
+        );
 
-      // Simulate the user pressing CMD + LEFT ARROW, which generates a delta moving
-      // the selection to the beginning of the line.
-      await tester.ime.sendDeltas([
-        const TextEditingDeltaNonTextUpdate(
-          oldText: '. This is some testing text.',
-          selection: TextSelection.collapsed(offset: 12),
-          composing: TextRange.empty,
-        ),
-        const TextEditingDeltaNonTextUpdate(
-          oldText: '. This is some testing text.',
-          selection: TextSelection.collapsed(offset: 0),
-          composing: TextRange.collapsed(0),
-        ),
-      ], getter: imeClientGetter);
+        // Simulate the user pressing CMD + LEFT ARROW, which generates a delta moving
+        // the selection to the beginning of the line.
+        await tester.ime.sendDeltas([
+          const TextEditingDeltaNonTextUpdate(
+            oldText: '. This is some testing text.',
+            selection: TextSelection.collapsed(offset: 12),
+            composing: TextRange.empty,
+          ),
+          const TextEditingDeltaNonTextUpdate(
+            oldText: '. This is some testing text.',
+            selection: TextSelection.collapsed(offset: 0),
+            composing: TextRange.collapsed(0),
+          ),
+        ], getter: imeClientGetter);
 
-      // Ensure the selection and composing region were updated.
-      expect(
-        SuperEditorInspector.findDocumentSelection(),
-        selectionEquivalentTo(_caretInParagraph(nodeId, 0)),
-      );
-      expect(
-        SuperEditorInspector.findComposingRegion(),
-        DocumentRange(
-          start: DocumentPosition(nodeId: nodeId, nodePosition: const TextNodePosition(offset: 0)),
-          end: DocumentPosition(nodeId: nodeId, nodePosition: const TextNodePosition(offset: 0)),
-        ),
-      );
-    });
+        // Ensure the selection and composing region were updated.
+        expect(
+          SuperEditorInspector.findDocumentSelection(),
+          selectionEquivalentTo(_caretInParagraph(nodeId, 0)),
+        );
+        expect(
+          SuperEditorInspector.findComposingRegion(),
+          DocumentRange(
+            start: DocumentPosition(
+              nodeId: nodeId,
+              nodePosition: const TextNodePosition(offset: 0),
+            ),
+            end: DocumentPosition(
+              nodeId: nodeId,
+              nodePosition: const TextNodePosition(offset: 0),
+            ),
+          ),
+        );
+      },
+    );
 
     testAllInputsOnAllPlatforms('does nothing without primary focus', (
       tester, {
@@ -334,12 +517,14 @@ void main() {
           .withSingleParagraph()
           .withFocusNode(editorFocusNode)
           .withInputSource(inputSource)
-          .withAddedKeyboardActions(append: [
-            ({required editContext, required keyEvent}) {
-              keyHandlerCalled = true;
-              return ExecutionInstruction.continueExecution;
-            }
-          ])
+          .withAddedKeyboardActions(
+            append: [
+              ({required editContext, required keyEvent}) {
+                keyHandlerCalled = true;
+                return ExecutionInstruction.continueExecution;
+              },
+            ],
+          )
           .withCustomWidgetTreeBuilder(
             (superEditor) => MaterialApp(
               home: Scaffold(
@@ -418,30 +603,31 @@ void main() {
     group('in automatic control mode', () {
       testWidgetsOnAndroid('clears selection when it closes', (tester) async {
         final keyboardController = SoftwareKeyboardController();
-        final testContext = await tester //
-            .createDocument()
-            .withSingleEmptyParagraph()
-            .withSoftwareKeyboardController(keyboardController)
-            .withSelectionPolicies(
-              const SuperEditorSelectionPolicies(
-                clearSelectionWhenEditorLosesFocus: true,
-                clearSelectionWhenImeConnectionCloses: true,
-              ),
-            )
-            .withImePolicies(
-              const SuperEditorImePolicies(
-                openKeyboardOnSelectionChange: true,
-              ),
-            )
-            .withCustomWidgetTreeBuilder(
-              (superEditor) => MaterialApp(
-                home: Scaffold(
-                  resizeToAvoidBottomInset: false,
-                  body: superEditor,
-                ),
-              ),
-            )
-            .pump();
+        final testContext =
+            await tester //
+                .createDocument()
+                .withSingleEmptyParagraph()
+                .withSoftwareKeyboardController(keyboardController)
+                .withSelectionPolicies(
+                  const SuperEditorSelectionPolicies(
+                    clearSelectionWhenEditorLosesFocus: true,
+                    clearSelectionWhenImeConnectionCloses: true,
+                  ),
+                )
+                .withImePolicies(
+                  const SuperEditorImePolicies(
+                    openKeyboardOnSelectionChange: true,
+                  ),
+                )
+                .withCustomWidgetTreeBuilder(
+                  (superEditor) => MaterialApp(
+                    home: Scaffold(
+                      resizeToAvoidBottomInset: false,
+                      body: superEditor,
+                    ),
+                  ),
+                )
+                .pump();
 
         // Place the caret in Super Editor to open the IME.
         final nodeId = testContext.findEditContext().document.first.id;
@@ -469,29 +655,30 @@ void main() {
 
       testWidgetsOnAndroid('re-opens when selection changes', (tester) async {
         final keyboardController = SoftwareKeyboardController();
-        final testContext = await tester //
-            .createDocument()
-            .withSingleParagraph()
-            .withSoftwareKeyboardController(keyboardController)
-            .withSelectionPolicies(
-              const SuperEditorSelectionPolicies(
-                clearSelectionWhenEditorLosesFocus: true,
-              ),
-            )
-            .withImePolicies(
-              const SuperEditorImePolicies(
-                openKeyboardOnSelectionChange: true,
-              ),
-            )
-            .withCustomWidgetTreeBuilder(
-              (superEditor) => MaterialApp(
-                home: Scaffold(
-                  resizeToAvoidBottomInset: false,
-                  body: superEditor,
-                ),
-              ),
-            )
-            .pump();
+        final testContext =
+            await tester //
+                .createDocument()
+                .withSingleParagraph()
+                .withSoftwareKeyboardController(keyboardController)
+                .withSelectionPolicies(
+                  const SuperEditorSelectionPolicies(
+                    clearSelectionWhenEditorLosesFocus: true,
+                  ),
+                )
+                .withImePolicies(
+                  const SuperEditorImePolicies(
+                    openKeyboardOnSelectionChange: true,
+                  ),
+                )
+                .withCustomWidgetTreeBuilder(
+                  (superEditor) => MaterialApp(
+                    home: Scaffold(
+                      resizeToAvoidBottomInset: false,
+                      body: superEditor,
+                    ),
+                  ),
+                )
+                .pump();
 
         // Place the caret in Super Editor.
         final nodeId = testContext.findEditContext().document.first.id;
@@ -512,7 +699,10 @@ void main() {
         // Move the caret somewhere else.
         await tester.placeCaretInParagraph(nodeId, 5);
         // Ensure the selection changed.
-        expect(SuperEditorInspector.findDocumentSelection(), isNot(selectionBefore));
+        expect(
+          SuperEditorInspector.findDocumentSelection(),
+          isNot(selectionBefore),
+        );
         // Ensure the keyboard re-opened.
         expect(keyboardController.isConnectedToIme, isTrue);
 
@@ -541,32 +731,35 @@ void main() {
     });
 
     group('in manual control mode', () {
-      testWidgetsOnAndroid('leaves selection active when it closes', (tester) async {
+      testWidgetsOnAndroid('leaves selection active when it closes', (
+        tester,
+      ) async {
         final keyboardController = SoftwareKeyboardController();
-        final testContext = await tester //
-            .createDocument()
-            .withSingleEmptyParagraph()
-            .withSoftwareKeyboardController(keyboardController)
-            .withSelectionPolicies(
-              const SuperEditorSelectionPolicies(
-                clearSelectionWhenEditorLosesFocus: false,
-                clearSelectionWhenImeConnectionCloses: false,
-              ),
-            )
-            .withImePolicies(
-              const SuperEditorImePolicies(
-                openKeyboardOnSelectionChange: false,
-              ),
-            )
-            .withCustomWidgetTreeBuilder(
-              (superEditor) => MaterialApp(
-                home: Scaffold(
-                  resizeToAvoidBottomInset: false,
-                  body: superEditor,
-                ),
-              ),
-            )
-            .pump();
+        final testContext =
+            await tester //
+                .createDocument()
+                .withSingleEmptyParagraph()
+                .withSoftwareKeyboardController(keyboardController)
+                .withSelectionPolicies(
+                  const SuperEditorSelectionPolicies(
+                    clearSelectionWhenEditorLosesFocus: false,
+                    clearSelectionWhenImeConnectionCloses: false,
+                  ),
+                )
+                .withImePolicies(
+                  const SuperEditorImePolicies(
+                    openKeyboardOnSelectionChange: false,
+                  ),
+                )
+                .withCustomWidgetTreeBuilder(
+                  (superEditor) => MaterialApp(
+                    home: Scaffold(
+                      resizeToAvoidBottomInset: false,
+                      body: superEditor,
+                    ),
+                  ),
+                )
+                .pump();
 
         // Place the caret in Super Editor to open the IME.
         final nodeId = testContext.findEditContext().document.first.id;
@@ -596,32 +789,35 @@ void main() {
         expect(SuperEditorInspector.findDocumentSelection(), selectionBefore);
       });
 
-      testWidgetsOnAndroid('stays closed when changing selection', (tester) async {
+      testWidgetsOnAndroid('stays closed when changing selection', (
+        tester,
+      ) async {
         final keyboardController = SoftwareKeyboardController();
-        final testContext = await tester //
-            .createDocument()
-            .withSingleParagraph()
-            .withSoftwareKeyboardController(keyboardController)
-            .withSelectionPolicies(
-              const SuperEditorSelectionPolicies(
-                clearSelectionWhenEditorLosesFocus: false,
-                clearSelectionWhenImeConnectionCloses: false,
-              ),
-            )
-            .withImePolicies(
-              const SuperEditorImePolicies(
-                openKeyboardOnSelectionChange: false,
-              ),
-            )
-            .withCustomWidgetTreeBuilder(
-              (superEditor) => MaterialApp(
-                home: Scaffold(
-                  resizeToAvoidBottomInset: false,
-                  body: superEditor,
-                ),
-              ),
-            )
-            .pump();
+        final testContext =
+            await tester //
+                .createDocument()
+                .withSingleParagraph()
+                .withSoftwareKeyboardController(keyboardController)
+                .withSelectionPolicies(
+                  const SuperEditorSelectionPolicies(
+                    clearSelectionWhenEditorLosesFocus: false,
+                    clearSelectionWhenImeConnectionCloses: false,
+                  ),
+                )
+                .withImePolicies(
+                  const SuperEditorImePolicies(
+                    openKeyboardOnSelectionChange: false,
+                  ),
+                )
+                .withCustomWidgetTreeBuilder(
+                  (superEditor) => MaterialApp(
+                    home: Scaffold(
+                      resizeToAvoidBottomInset: false,
+                      body: superEditor,
+                    ),
+                  ),
+                )
+                .pump();
 
         // Place the caret in Super Editor.
         final nodeId = testContext.findEditContext().document.first.id;
@@ -650,7 +846,10 @@ void main() {
         // Move the caret somewhere else.
         await tester.placeCaretInParagraph(nodeId, 5);
         // Ensure the selection changed.
-        expect(SuperEditorInspector.findDocumentSelection()!.extent, isNot(selectionBefore.extent));
+        expect(
+          SuperEditorInspector.findDocumentSelection()!.extent,
+          isNot(selectionBefore.extent),
+        );
         // Ensure the keyboard is still closed.
         expect(keyboardController.isConnectedToIme, isFalse);
 
@@ -671,32 +870,35 @@ void main() {
         expect(keyboardController.isConnectedToIme, isFalse);
       });
 
-      testWidgetsOnAndroid('opens when requested after previously closing', (tester) async {
+      testWidgetsOnAndroid('opens when requested after previously closing', (
+        tester,
+      ) async {
         final keyboardController = SoftwareKeyboardController();
-        final testContext = await tester //
-            .createDocument()
-            .withSingleParagraph()
-            .withSoftwareKeyboardController(keyboardController)
-            .withSelectionPolicies(
-              const SuperEditorSelectionPolicies(
-                clearSelectionWhenEditorLosesFocus: false,
-                clearSelectionWhenImeConnectionCloses: false,
-              ),
-            )
-            .withImePolicies(
-              const SuperEditorImePolicies(
-                openKeyboardOnSelectionChange: false,
-              ),
-            )
-            .withCustomWidgetTreeBuilder(
-              (superEditor) => MaterialApp(
-                home: Scaffold(
-                  resizeToAvoidBottomInset: false,
-                  body: superEditor,
-                ),
-              ),
-            )
-            .pump();
+        final testContext =
+            await tester //
+                .createDocument()
+                .withSingleParagraph()
+                .withSoftwareKeyboardController(keyboardController)
+                .withSelectionPolicies(
+                  const SuperEditorSelectionPolicies(
+                    clearSelectionWhenEditorLosesFocus: false,
+                    clearSelectionWhenImeConnectionCloses: false,
+                  ),
+                )
+                .withImePolicies(
+                  const SuperEditorImePolicies(
+                    openKeyboardOnSelectionChange: false,
+                  ),
+                )
+                .withCustomWidgetTreeBuilder(
+                  (superEditor) => MaterialApp(
+                    home: Scaffold(
+                      resizeToAvoidBottomInset: false,
+                      body: superEditor,
+                    ),
+                  ),
+                )
+                .pump();
 
         // Place the caret in Super Editor.
         final nodeId = testContext.findEditContext().document.first.id;
@@ -733,7 +935,9 @@ void main() {
         expect(SuperEditorInspector.findDocumentSelection(), selectionBefore);
       });
 
-      testWidgetsOnAndroid('closes when requested before navigation', (tester) async {
+      testWidgetsOnAndroid('closes when requested before navigation', (
+        tester,
+      ) async {
         final keyboardController = SoftwareKeyboardController();
         final navigationKey = GlobalKey<NavigatorState>();
         final firstPageKey = GlobalKey();
@@ -744,49 +948,56 @@ void main() {
             navigatorKey: navigationKey,
             home: Scaffold(
               key: firstPageKey,
-              body: const Center(
-                child: Text("Starting Page"),
-              ),
+              body: const Center(child: Text("Starting Page")),
             ),
           ),
         );
         expect(find.byKey(firstPageKey), findsOneWidget);
 
         // Push a page with SuperEditor.
-        final superEditorAndContext = tester //
-            .createDocument()
-            .withSingleParagraph()
-            .withSoftwareKeyboardController(keyboardController)
-            .withSelectionPolicies(
-              const SuperEditorSelectionPolicies(
-                clearSelectionWhenEditorLosesFocus: false,
-              ),
-            )
-            .withImePolicies(
-              const SuperEditorImePolicies(
-                openKeyboardOnSelectionChange: false,
-              ),
-            )
-            .withCustomWidgetTreeBuilder(
-              (superEditor) => _CloseKeyboardOnDispose(
-                keyboardController: keyboardController,
-                child: Scaffold(
-                  resizeToAvoidBottomInset: false,
-                  body: superEditor,
-                ),
-              ),
-            )
-            .build();
-        navigationKey.currentState!.push(MaterialPageRoute(builder: (context) {
-          return superEditorAndContext.widget;
-        }));
+        final superEditorAndContext =
+            tester //
+                .createDocument()
+                .withSingleParagraph()
+                .withSoftwareKeyboardController(keyboardController)
+                .withSelectionPolicies(
+                  const SuperEditorSelectionPolicies(
+                    clearSelectionWhenEditorLosesFocus: false,
+                  ),
+                )
+                .withImePolicies(
+                  const SuperEditorImePolicies(
+                    openKeyboardOnSelectionChange: false,
+                  ),
+                )
+                .withCustomWidgetTreeBuilder(
+                  (superEditor) => _CloseKeyboardOnDispose(
+                    keyboardController: keyboardController,
+                    child: Scaffold(
+                      resizeToAvoidBottomInset: false,
+                      body: superEditor,
+                    ),
+                  ),
+                )
+                .build();
+        navigationKey.currentState!.push(
+          MaterialPageRoute(
+            builder: (context) {
+              return superEditorAndContext.widget;
+            },
+          ),
+        );
         await tester.pumpAndSettle(); // navigation transition
 
         // Ensure the first page is no longer visible.
         expect(find.byKey(firstPageKey), findsNothing);
 
         // Place the caret in Super Editor.
-        final nodeId = superEditorAndContext.context.findEditContext().document.first.id;
+        final nodeId = superEditorAndContext.context
+            .findEditContext()
+            .document
+            .first
+            .id;
         await tester.placeCaretInParagraph(nodeId, 0);
 
         // Ensure that the document has a selection
@@ -848,7 +1059,9 @@ void main() {
   });
 
   group('SuperEditor inputSource', () {
-    testWidgetsOnAllPlatforms('configures for IME input by default', (tester) async {
+    testWidgetsOnAllPlatforms('configures for IME input by default', (
+      tester,
+    ) async {
       await tester //
           .createDocument()
           .withSingleEmptyParagraph()
@@ -879,11 +1092,12 @@ Future<String> _pumpSingleLineWithCaret(
   required int offset,
   required TextInputSource inputSource,
 }) async {
-  final testContext = await tester //
-      .createDocument()
-      .fromMarkdown("This is some testing text.") // Length is 26
-      .withInputSource(inputSource)
-      .pump();
+  final testContext =
+      await tester //
+          .createDocument()
+          .fromMarkdown("This is some testing text.") // Length is 26
+          .withInputSource(inputSource)
+          .pump();
 
   final nodeId = testContext.findEditContext().document.first.id;
 
@@ -892,16 +1106,22 @@ Future<String> _pumpSingleLineWithCaret(
   return nodeId;
 }
 
-Future<String> _pumpDoubleLineWithCaret(WidgetTester tester,
-    {required int offset, required TextInputSource inputSource}) async {
-  final testContext = await tester //
-      .createDocument()
-      // Text indices:
-      // - first line: [0, 28]
-      // - newline: 29
-      // - second line: [30, 58]
-      .fromMarkdown("This is the first paragraph.\nThis is the second paragraph.")
-      .pump();
+Future<String> _pumpDoubleLineWithCaret(
+  WidgetTester tester, {
+  required int offset,
+  required TextInputSource inputSource,
+}) async {
+  final testContext =
+      await tester //
+          .createDocument()
+          // Text indices:
+          // - first line: [0, 28]
+          // - newline: 29
+          // - second line: [30, 58]
+          .fromMarkdown(
+            "This is the first paragraph.\nThis is the second paragraph.",
+          )
+          .pump();
 
   final nodeId = testContext.findEditContext().document.first.id;
 
@@ -920,18 +1140,26 @@ Future<TestDocumentContext> _pumpUnorderedList(WidgetTester tester) async {
 
 ''';
 
-  final testContext = await tester //
-      .createDocument()
-      .fromMarkdown(markdown)
-      .withInputSource(TextInputSource.ime)
-      .pump();
+  final testContext =
+      await tester //
+          .createDocument()
+          .fromMarkdown(markdown)
+          .withInputSource(TextInputSource.ime)
+          .pump();
 
   return testContext;
 }
 
-DocumentSelection _caretInParagraph(String nodeId, int offset, [TextAffinity textAffinity = TextAffinity.downstream]) {
+DocumentSelection _caretInParagraph(
+  String nodeId,
+  int offset, [
+  TextAffinity textAffinity = TextAffinity.downstream,
+]) {
   return DocumentSelection.collapsed(
-    position: DocumentPosition(nodeId: nodeId, nodePosition: TextNodePosition(offset: offset, affinity: textAffinity)),
+    position: DocumentPosition(
+      nodeId: nodeId,
+      nodePosition: TextNodePosition(offset: offset, affinity: textAffinity),
+    ),
   );
 }
 
@@ -943,8 +1171,14 @@ DocumentSelection _selectionInParagraph(
   TextAffinity toAffinity = TextAffinity.downstream,
 }) {
   return DocumentSelection(
-    base: DocumentPosition(nodeId: nodeId, nodePosition: TextNodePosition(offset: from, affinity: fromAffinity)),
-    extent: DocumentPosition(nodeId: nodeId, nodePosition: TextNodePosition(offset: to, affinity: toAffinity)),
+    base: DocumentPosition(
+      nodeId: nodeId,
+      nodePosition: TextNodePosition(offset: from, affinity: fromAffinity),
+    ),
+    extent: DocumentPosition(
+      nodeId: nodeId,
+      nodePosition: TextNodePosition(offset: to, affinity: toAffinity),
+    ),
   );
 }
 
@@ -963,7 +1197,8 @@ class _CloseKeyboardOnDispose extends StatefulWidget {
   final Widget child;
 
   @override
-  State<_CloseKeyboardOnDispose> createState() => _CloseKeyboardOnDisposeState();
+  State<_CloseKeyboardOnDispose> createState() =>
+      _CloseKeyboardOnDisposeState();
 }
 
 class _CloseKeyboardOnDisposeState extends State<_CloseKeyboardOnDispose> {

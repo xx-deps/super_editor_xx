@@ -123,10 +123,11 @@ class _SuperEditorHardwareKeyHandlerState
 ///
 /// It is possible that an action does nothing and then returns
 /// `ExecutionInstruction.haltExecution` to prevent further execution.
-typedef DocumentKeyboardAction = ExecutionInstruction Function({
-  required SuperEditorContext editContext,
-  required KeyEvent keyEvent,
-});
+typedef DocumentKeyboardAction =
+    ExecutionInstruction Function({
+      required SuperEditorContext editContext,
+      required KeyEvent keyEvent,
+    });
 
 /// A [DocumentKeyboardAction] that reports [ExecutionInstruction.blocked]
 /// for any key combination that matches one of the given [keys].

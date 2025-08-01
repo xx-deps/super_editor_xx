@@ -69,17 +69,11 @@ TextStyle defaultHintStyleBuilder(Set<Attribution> attributions) {
         color: Colors.grey,
       );
     } else if (attribution == boldAttribution) {
-      newStyle = newStyle.copyWith(
-        fontWeight: FontWeight.bold,
-      );
+      newStyle = newStyle.copyWith(fontWeight: FontWeight.bold);
     } else if (attribution == italicsAttribution) {
-      newStyle = newStyle.copyWith(
-        fontStyle: FontStyle.italic,
-      );
+      newStyle = newStyle.copyWith(fontStyle: FontStyle.italic);
     } else if (attribution == strikethroughAttribution) {
-      newStyle = newStyle.copyWith(
-        decoration: TextDecoration.lineThrough,
-      );
+      newStyle = newStyle.copyWith(decoration: TextDecoration.lineThrough);
     } else if (attribution is LinkAttribution) {
       newStyle = newStyle.copyWith(
         color: Colors.lightBlue,

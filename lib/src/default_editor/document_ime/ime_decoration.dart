@@ -38,18 +38,19 @@ abstract class TextInputConnectionDecorator implements TextInputConnection {
   void setComposingRect(Rect rect) => client?.setComposingRect(rect);
 
   @override
-  void setStyle(
-          {required String? fontFamily,
-          required double? fontSize,
-          required FontWeight? fontWeight,
-          required TextDirection textDirection,
-          required TextAlign textAlign}) =>
-      client?.setStyle(
-          fontFamily: fontFamily,
-          fontSize: fontSize,
-          fontWeight: fontWeight,
-          textDirection: textDirection,
-          textAlign: textAlign);
+  void setStyle({
+    required String? fontFamily,
+    required double? fontSize,
+    required FontWeight? fontWeight,
+    required TextDirection textDirection,
+    required TextAlign textAlign,
+  }) => client?.setStyle(
+    fontFamily: fontFamily,
+    fontSize: fontSize,
+    fontWeight: fontWeight,
+    textDirection: textDirection,
+    textAlign: textAlign,
+  );
 
   @override
   void requestAutofill() => client?.requestAutofill();
@@ -158,7 +159,8 @@ class ClosureAwareDeltaTextInputClientDecorator
   @override
   void connectionClosed() {
     editorImeLog.fine(
-        "[ClosureAwareDeltaTextInputClientDecorator] - IME connection was closed");
+      "[ClosureAwareDeltaTextInputClientDecorator] - IME connection was closed",
+    );
     _onConnectionClosed();
     _client?.connectionClosed();
   }

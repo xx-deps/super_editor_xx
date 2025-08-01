@@ -73,8 +73,8 @@ class _BouncingBallSandboxState extends State<BouncingBallSandbox>
 
     final bounds =
         (widget.boundsKey.currentContext?.findRenderObject() as RenderBox?)
-                ?.size ??
-            Size.zero;
+            ?.size ??
+        Size.zero;
 
     // Offset where the leader hits the right edge.
     final maximumLeaderHorizontalOffset = bounds.width - _ballRadius * 2;
@@ -185,10 +185,7 @@ class _DraggableBallSandboxState extends State<DraggableBallSandbox> {
       followerKey: widget.followerKey,
       ballOffset: _ballOffset,
       ballDecorator: (ball) {
-        return GestureDetector(
-          onPanUpdate: _onPanUpdate,
-          child: ball,
-        );
+        return GestureDetector(onPanUpdate: _onPanUpdate, child: ball);
       },
       followerAligner: widget.followerAligner,
       follower: widget.follower,
@@ -238,10 +235,7 @@ class _BallSandboxState extends State<BallSandbox> {
   Widget build(BuildContext context) {
     return Stack(
       key: widget.boundsKey,
-      children: [
-        _buildLeader(),
-        _buildFollower(),
-      ],
+      children: [_buildLeader(), _buildFollower()],
     );
   }
 
@@ -252,7 +246,9 @@ class _BallSandboxState extends State<BallSandbox> {
       child: Leader(
         key: widget.leaderKey,
         link: _leaderLink,
-        child: widget.ballDecorator != null //
+        child:
+            widget.ballDecorator !=
+                null //
             ? widget.ballDecorator!.call(_buildBall()) //
             : _buildBall(),
       ),

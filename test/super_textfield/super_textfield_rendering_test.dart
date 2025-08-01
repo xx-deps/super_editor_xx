@@ -6,31 +6,34 @@ import 'package:super_text_layout/super_text_layout.dart';
 
 void main() {
   group('SuperTextField', () {
-    testWidgetsOnAllPlatforms('renders text on the first frame when given a line height', (tester) async {
-      final controller = AttributedTextEditingController(
-        text: AttributedText('Editing text'),
-      );
+    testWidgetsOnAllPlatforms(
+      'renders text on the first frame when given a line height',
+      (tester) async {
+        final controller = AttributedTextEditingController(
+          text: AttributedText('Editing text'),
+        );
 
-      // Indicates whether we should display the Text or the SuperTextField.
-      final showTextField = ValueNotifier<bool>(false);
+        // Indicates whether we should display the Text or the SuperTextField.
+        final showTextField = ValueNotifier<bool>(false);
 
-      // Pump the widget tree showing the Text widget.
-      await _pumpSwitchableTestApp(
-        tester,
-        controller: controller,
-        showTextField: showTextField,
-        lineHeight: 16,
-      );
+        // Pump the widget tree showing the Text widget.
+        await _pumpSwitchableTestApp(
+          tester,
+          controller: controller,
+          showTextField: showTextField,
+          lineHeight: 16,
+        );
 
-      // Switch to display the SuperTextField.
-      showTextField.value = true;
+        // Switch to display the SuperTextField.
+        showTextField.value = true;
 
-      // Pump exactly one frame to inspect if the text was rendered.
-      await tester.pump();
+        // Pump exactly one frame to inspect if the text was rendered.
+        await tester.pump();
 
-      // Ensure the SuperTextField rendered the text.
-      expect(find.text('Editing text', findRichText: true), findsOneWidget);
-    });
+        // Ensure the SuperTextField rendered the text.
+        expect(find.text('Editing text', findRichText: true), findsOneWidget);
+      },
+    );
 
     testWidgetsOnMobile('expands to respect minLines', (tester) async {
       // Indicates whether we should display the Text or the SuperTextField.
@@ -39,9 +42,7 @@ void main() {
       // Pump the widget tree showing the Text widget.
       await _pumpSwitchableTestApp(
         tester,
-        controller: AttributedTextEditingController(
-          text: AttributedText('1'),
-        ),
+        controller: AttributedTextEditingController(text: AttributedText('1')),
         showTextField: showTextField,
         minLines: 5,
       );
@@ -55,7 +56,9 @@ void main() {
 
       // Ensure the text field expanded to the height of minLines.
       final textHeight = tester.getSize(find.byType(SuperText)).height;
-      final textFieldHeight = tester.getSize(find.byType(SuperTextField)).height;
+      final textFieldHeight = tester
+          .getSize(find.byType(SuperTextField))
+          .height;
       final minLinesHeight = textHeight * 5;
       expect(textFieldHeight, moreOrLessEquals(minLinesHeight));
     });
@@ -83,34 +86,36 @@ void main() {
 
       // Ensure the text field shrank to half of the text size.
       final textHeight = tester.getSize(find.byType(SuperText)).height;
-      final textFieldHeight = tester.getSize(find.byType(SuperTextField)).height;
+      final textFieldHeight = tester
+          .getSize(find.byType(SuperTextField))
+          .height;
       final maxLinesHeight = textHeight / 2;
       expect(textFieldHeight, moreOrLessEquals(maxLinesHeight));
     });
 
-    testWidgetsOnAllPlatforms('renders a hint with baseline cross-axis alignment', (tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: SuperTextField(
-              textController: AttributedTextEditingController(),
-              minLines: 1,
-              maxLines: 3,
-              hintBuilder: (context) => const Row(
-                crossAxisAlignment: CrossAxisAlignment.baseline,
-                textBaseline: TextBaseline.alphabetic,
-                children: [
-                  Text('Hint one'),
-                  Text('Hint two'),
-                ],
+    testWidgetsOnAllPlatforms(
+      'renders a hint with baseline cross-axis alignment',
+      (tester) async {
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: SuperTextField(
+                textController: AttributedTextEditingController(),
+                minLines: 1,
+                maxLines: 3,
+                hintBuilder: (context) => const Row(
+                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                  textBaseline: TextBaseline.alphabetic,
+                  children: [Text('Hint one'), Text('Hint two')],
+                ),
               ),
             ),
           ),
-        ),
-      );
+        );
 
-      // Reaching this point means that SuperTextField was able to render without errors.
-    });
+        // Reaching this point means that SuperTextField was able to render without errors.
+      },
+    );
   });
 }
 

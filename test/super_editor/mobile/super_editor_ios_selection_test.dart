@@ -15,92 +15,98 @@ void main() {
   group("SuperEditor mobile selection >", () {
     group("iOS >", () {
       group("on tap >", () {
-        testWidgetsOnIos("when beyond first character > places caret at end of word", (tester) async {
-          // Note: We pump the following text.
-          // "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod...",
-          await _pumpAppWithLongText(tester);
+        testWidgetsOnIos(
+          "when beyond first character > places caret at end of word",
+          (tester) async {
+            // Note: We pump the following text.
+            // "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod...",
+            await _pumpAppWithLongText(tester);
 
-          // Tap near the end of a word "consectet|ur".
-          await tester.tapInParagraph("1", 37);
-          await tester.pumpAndSettle();
+            // Tap near the end of a word "consectet|ur".
+            await tester.tapInParagraph("1", 37);
+            await tester.pumpAndSettle();
 
-          // Ensure that the caret is at the end of the world "consectetur|".
-          expect(
-            SuperEditorInspector.findDocumentSelection(),
-            const DocumentSelection.collapsed(
-              position: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 39),
+            // Ensure that the caret is at the end of the world "consectetur|".
+            expect(
+              SuperEditorInspector.findDocumentSelection(),
+              const DocumentSelection.collapsed(
+                position: DocumentPosition(
+                  nodeId: "1",
+                  nodePosition: TextNodePosition(offset: 39),
+                ),
               ),
-            ),
-          );
+            );
 
-          // Tap near the middle of a word "adipi|scing".
-          await tester.tapInParagraph("1", 45);
-          await tester.pumpAndSettle();
+            // Tap near the middle of a word "adipi|scing".
+            await tester.tapInParagraph("1", 45);
+            await tester.pumpAndSettle();
 
-          // Ensure that the caret is at the end of the world "adipiscing|".
-          expect(
-            SuperEditorInspector.findDocumentSelection(),
-            const DocumentSelection.collapsed(
-              position: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 50),
+            // Ensure that the caret is at the end of the world "adipiscing|".
+            expect(
+              SuperEditorInspector.findDocumentSelection(),
+              const DocumentSelection.collapsed(
+                position: DocumentPosition(
+                  nodeId: "1",
+                  nodePosition: TextNodePosition(offset: 50),
+                ),
               ),
-            ),
-          );
+            );
 
-          // Tap near the beginning of a word "co|nsectetur".
-          await tester.tapInParagraph("1", 30);
-          await tester.pumpAndSettle();
+            // Tap near the beginning of a word "co|nsectetur".
+            await tester.tapInParagraph("1", 30);
+            await tester.pumpAndSettle();
 
-          // Ensure that the caret is at the end of the word "consectetur|".
-          expect(
-            SuperEditorInspector.findDocumentSelection(),
-            const DocumentSelection.collapsed(
-              position: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 39),
+            // Ensure that the caret is at the end of the word "consectetur|".
+            expect(
+              SuperEditorInspector.findDocumentSelection(),
+              const DocumentSelection.collapsed(
+                position: DocumentPosition(
+                  nodeId: "1",
+                  nodePosition: TextNodePosition(offset: 39),
+                ),
               ),
-            ),
-          );
-        });
+            );
+          },
+        );
 
-        testWidgetsOnIos("when near first character > places caret at start of word", (tester) async {
-          // Note: We pump the following text.
-          // "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod...",
-          await _pumpAppWithLongText(tester);
+        testWidgetsOnIos(
+          "when near first character > places caret at start of word",
+          (tester) async {
+            // Note: We pump the following text.
+            // "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod...",
+            await _pumpAppWithLongText(tester);
 
-          // Tap just before first character of word " |consectetur".
-          await tester.tapInParagraph("1", 28);
-          await tester.pumpAndSettle();
+            // Tap just before first character of word " |consectetur".
+            await tester.tapInParagraph("1", 28);
+            await tester.pumpAndSettle();
 
-          // Ensure that the caret is at the start of the world "|consectetur".
-          expect(
-            SuperEditorInspector.findDocumentSelection(),
-            const DocumentSelection.collapsed(
-              position: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 28),
+            // Ensure that the caret is at the start of the world "|consectetur".
+            expect(
+              SuperEditorInspector.findDocumentSelection(),
+              const DocumentSelection.collapsed(
+                position: DocumentPosition(
+                  nodeId: "1",
+                  nodePosition: TextNodePosition(offset: 28),
+                ),
               ),
-            ),
-          );
+            );
 
-          // Tap just after the start of the word " a|dipiscing".
-          await tester.tapInParagraph("1", 41);
-          await tester.pumpAndSettle();
+            // Tap just after the start of the word " a|dipiscing".
+            await tester.tapInParagraph("1", 41);
+            await tester.pumpAndSettle();
 
-          // Ensure that the caret is at the start of the word " |adipiscing".
-          expect(
-            SuperEditorInspector.findDocumentSelection(),
-            const DocumentSelection.collapsed(
-              position: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 40),
+            // Ensure that the caret is at the start of the word " |adipiscing".
+            expect(
+              SuperEditorInspector.findDocumentSelection(),
+              const DocumentSelection.collapsed(
+                position: DocumentPosition(
+                  nodeId: "1",
+                  nodePosition: TextNodePosition(offset: 40),
+                ),
               ),
-            ),
-          );
-        });
+            );
+          },
+        );
       });
 
       group("long press >", () {
@@ -116,13 +122,18 @@ void main() {
 
           // Ensure the word was selected.
           expect(SuperEditorInspector.findDocumentSelection(), isNotNull);
-          expect(SuperEditorInspector.findDocumentSelection(), _wordConsecteturSelection);
+          expect(
+            SuperEditorInspector.findDocumentSelection(),
+            _wordConsecteturSelection,
+          );
 
           // Ensure the drag handles and toolbar are visible, but the magnifier isn't.
           _expectHandlesAndToolbar();
         });
 
-        testWidgetsOnIos("does nothing with hack global property", (tester) async {
+        testWidgetsOnIos("does nothing with hack global property", (
+          tester,
+        ) async {
           disableLongPressSelectionForSuperlist = true;
           addTearDown(() => disableLongPressSelectionForSuperlist = false);
 
@@ -141,7 +152,10 @@ void main() {
 
           // Ensure that only the caret was placed, rather than an expanded selection due
           // to a long press.
-          expect(SuperEditorInspector.findDocumentSelection()!.isCollapsed, isTrue);
+          expect(
+            SuperEditorInspector.findDocumentSelection()!.isCollapsed,
+            isTrue,
+          );
         });
 
         testWidgetsOnIos("over handle does nothing", (tester) async {
@@ -153,155 +167,181 @@ void main() {
 
           // Ensure the word was selected.
           expect(SuperEditorInspector.findDocumentSelection(), isNotNull);
-          expect(SuperEditorInspector.findDocumentSelection(), _wordDolorSelection);
+          expect(
+            SuperEditorInspector.findDocumentSelection(),
+            _wordDolorSelection,
+          );
 
           // Long-press near the upstream handle, but just before the selected word.
           await tester.longPressInParagraph("1", 11);
           await tester.pumpAndSettle();
 
           // Ensure that the selection didn't change.
-          expect(SuperEditorInspector.findDocumentSelection(), _wordDolorSelection);
+          expect(
+            SuperEditorInspector.findDocumentSelection(),
+            _wordDolorSelection,
+          );
 
           // Long-press near the downstream handle, but just after the selected word.
           await tester.longPressInParagraph("1", 18);
           await tester.pumpAndSettle();
 
           // Ensure that the selection didn't change.
-          expect(SuperEditorInspector.findDocumentSelection(), _wordDolorSelection);
-        });
-
-        testWidgetsOnIos("selects by word when dragging upstream and then back downstream", (tester) async {
-          await _pumpAppWithLongText(tester);
-
-          // Long press on the middle of "do|lor".
-          final gesture = await tester.longPressDownInParagraph("1", 14);
-          await tester.pumpAndSettle();
-
-          // Ensure the word was selected.
-          expect(SuperEditorInspector.findDocumentSelection(), _wordDolorSelection);
-
-          // Ensure the drag handles and magnifier are visible, but the toolbar isn't.
-          _expectHandlesAndMagnifier();
-
-          // Drag upstream to the end of the previous word.
-          // "Lorem ipsu|m dolor sit amet"
-          //            ^ position 10
-          //
-          // We do this with manual distances because the attempt to look up character
-          // offsets was producing unpredictable results.
-          const dragIncrementCount = 10;
-          const upstreamDragDistance = -130 / dragIncrementCount;
-          for (int i = 0; i < dragIncrementCount; i += 1) {
-            await gesture.moveBy(const Offset(upstreamDragDistance, 0));
-            await tester.pump();
-          }
-
-          // Ensure the original word and upstream word are both selected.
           expect(
             SuperEditorInspector.findDocumentSelection(),
-            const DocumentSelection(
-              base: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 6),
-              ),
-              extent: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 17),
-              ),
-            ),
+            _wordDolorSelection,
           );
-
-          // Drag back towards the original long-press offset.
-          //
-          // We do this with manual distances because the attempt to look up character
-          // offsets was producing unpredictable results.
-          const downstreamDragDistance = 80 / dragIncrementCount;
-          for (int i = 0; i < dragIncrementCount; i += 1) {
-            await gesture.moveBy(const Offset(downstreamDragDistance, 0));
-            await tester.pump();
-          }
-
-          // Ensure that only the original word is selected.
-          expect(
-            SuperEditorInspector.findDocumentSelection(),
-            const DocumentSelection(
-              base: DocumentPosition(
-                nodeId: "1",
-                // Note: when we move the selection back the other way, the word calculation
-                // decided to include the leading space, which is why we pass a different
-                // selection here.
-                nodePosition: TextNodePosition(offset: 11),
-              ),
-              extent: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 17),
-              ),
-            ),
-          );
-
-          // Release the gesture so the test system doesn't complain.
-          await gesture.up();
         });
 
-        testWidgetsOnIos("selects by word when dragging downstream and then back upstream", (tester) async {
-          await _pumpAppWithLongText(tester);
+        testWidgetsOnIos(
+          "selects by word when dragging upstream and then back downstream",
+          (tester) async {
+            await _pumpAppWithLongText(tester);
 
-          // Long press on the middle of "do|lor".
-          final gesture = await tester.longPressDownInParagraph("1", 14);
-          await tester.pumpAndSettle();
+            // Long press on the middle of "do|lor".
+            final gesture = await tester.longPressDownInParagraph("1", 14);
+            await tester.pumpAndSettle();
 
-          // Ensure the word was selected.
-          expect(SuperEditorInspector.findDocumentSelection(), _wordDolorSelection);
+            // Ensure the word was selected.
+            expect(
+              SuperEditorInspector.findDocumentSelection(),
+              _wordDolorSelection,
+            );
 
-          // Ensure the drag handles and magnifier are visible, but the toolbar isn't.
-          _expectHandlesAndMagnifier();
+            // Ensure the drag handles and magnifier are visible, but the toolbar isn't.
+            _expectHandlesAndMagnifier();
 
-          // Drag downstream to the beginning of the next word.
-          // "Lorem ipsum dolor s|it amet"
-          //                     ^ position 19
-          //
-          // We do this with manual distances because the attempt to look up character
-          // offsets was producing unpredictable results.
-          const dragIncrementCount = 10;
-          const downstreamDragDistance = 80 / dragIncrementCount;
-          for (int i = 0; i < dragIncrementCount; i += 1) {
-            await gesture.moveBy(const Offset(downstreamDragDistance, 0));
-            await tester.pump();
-          }
+            // Drag upstream to the end of the previous word.
+            // "Lorem ipsu|m dolor sit amet"
+            //            ^ position 10
+            //
+            // We do this with manual distances because the attempt to look up character
+            // offsets was producing unpredictable results.
+            const dragIncrementCount = 10;
+            const upstreamDragDistance = -130 / dragIncrementCount;
+            for (int i = 0; i < dragIncrementCount; i += 1) {
+              await gesture.moveBy(const Offset(upstreamDragDistance, 0));
+              await tester.pump();
+            }
 
-          // Ensure the original word and downstream word are both selected.
-          expect(
-            SuperEditorInspector.findDocumentSelection(),
-            const DocumentSelection(
-              base: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 12),
+            // Ensure the original word and upstream word are both selected.
+            expect(
+              SuperEditorInspector.findDocumentSelection(),
+              const DocumentSelection(
+                base: DocumentPosition(
+                  nodeId: "1",
+                  nodePosition: TextNodePosition(offset: 6),
+                ),
+                extent: DocumentPosition(
+                  nodeId: "1",
+                  nodePosition: TextNodePosition(offset: 17),
+                ),
               ),
-              extent: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 21),
+            );
+
+            // Drag back towards the original long-press offset.
+            //
+            // We do this with manual distances because the attempt to look up character
+            // offsets was producing unpredictable results.
+            const downstreamDragDistance = 80 / dragIncrementCount;
+            for (int i = 0; i < dragIncrementCount; i += 1) {
+              await gesture.moveBy(const Offset(downstreamDragDistance, 0));
+              await tester.pump();
+            }
+
+            // Ensure that only the original word is selected.
+            expect(
+              SuperEditorInspector.findDocumentSelection(),
+              const DocumentSelection(
+                base: DocumentPosition(
+                  nodeId: "1",
+                  // Note: when we move the selection back the other way, the word calculation
+                  // decided to include the leading space, which is why we pass a different
+                  // selection here.
+                  nodePosition: TextNodePosition(offset: 11),
+                ),
+                extent: DocumentPosition(
+                  nodeId: "1",
+                  nodePosition: TextNodePosition(offset: 17),
+                ),
               ),
-            ),
-          );
+            );
 
-          // Drag back towards the original long-press offset.
-          //
-          // We do this with manual distances because the attempt to look up character
-          // offsets was producing unpredictable results.
-          const upstreamDragDistance = -40 / dragIncrementCount;
-          for (int i = 0; i < dragIncrementCount; i += 1) {
-            await gesture.moveBy(const Offset(upstreamDragDistance, 0));
-            await tester.pump();
-          }
+            // Release the gesture so the test system doesn't complain.
+            await gesture.up();
+          },
+        );
 
-          // Ensure that only the original word is selected.
-          expect(SuperEditorInspector.findDocumentSelection(), _wordDolorSelection);
+        testWidgetsOnIos(
+          "selects by word when dragging downstream and then back upstream",
+          (tester) async {
+            await _pumpAppWithLongText(tester);
 
-          // Release the gesture so the test system doesn't complain.
-          await gesture.up();
-        });
+            // Long press on the middle of "do|lor".
+            final gesture = await tester.longPressDownInParagraph("1", 14);
+            await tester.pumpAndSettle();
 
-        testWidgetsOnIos("selects an image and then by word when jumping down", (tester) async {
+            // Ensure the word was selected.
+            expect(
+              SuperEditorInspector.findDocumentSelection(),
+              _wordDolorSelection,
+            );
+
+            // Ensure the drag handles and magnifier are visible, but the toolbar isn't.
+            _expectHandlesAndMagnifier();
+
+            // Drag downstream to the beginning of the next word.
+            // "Lorem ipsum dolor s|it amet"
+            //                     ^ position 19
+            //
+            // We do this with manual distances because the attempt to look up character
+            // offsets was producing unpredictable results.
+            const dragIncrementCount = 10;
+            const downstreamDragDistance = 80 / dragIncrementCount;
+            for (int i = 0; i < dragIncrementCount; i += 1) {
+              await gesture.moveBy(const Offset(downstreamDragDistance, 0));
+              await tester.pump();
+            }
+
+            // Ensure the original word and downstream word are both selected.
+            expect(
+              SuperEditorInspector.findDocumentSelection(),
+              const DocumentSelection(
+                base: DocumentPosition(
+                  nodeId: "1",
+                  nodePosition: TextNodePosition(offset: 12),
+                ),
+                extent: DocumentPosition(
+                  nodeId: "1",
+                  nodePosition: TextNodePosition(offset: 21),
+                ),
+              ),
+            );
+
+            // Drag back towards the original long-press offset.
+            //
+            // We do this with manual distances because the attempt to look up character
+            // offsets was producing unpredictable results.
+            const upstreamDragDistance = -40 / dragIncrementCount;
+            for (int i = 0; i < dragIncrementCount; i += 1) {
+              await gesture.moveBy(const Offset(upstreamDragDistance, 0));
+              await tester.pump();
+            }
+
+            // Ensure that only the original word is selected.
+            expect(
+              SuperEditorInspector.findDocumentSelection(),
+              _wordDolorSelection,
+            );
+
+            // Release the gesture so the test system doesn't complain.
+            await gesture.up();
+          },
+        );
+
+        testWidgetsOnIos("selects an image and then by word when jumping down", (
+          tester,
+        ) async {
           await tester
               .createDocument()
               .withCustomContent(
@@ -311,20 +351,19 @@ void main() {
                     ParagraphNode(
                       id: '2',
                       text: AttributedText('Lorem ipsum dolor'),
-                    )
+                    ),
                   ],
                 ),
               )
-              .withAddedComponents(
-            [
-              const FakeImageComponentBuilder(
-                size: Size(100, 100),
-              ),
-            ],
-          ).pump();
+              .withAddedComponents([
+                const FakeImageComponentBuilder(size: Size(100, 100)),
+              ])
+              .pump();
 
           // Long press near the top of the image.
-          final tapDownOffset = tester.getTopLeft(find.byType(ImageComponent)) + const Offset(0, 10);
+          final tapDownOffset =
+              tester.getTopLeft(find.byType(ImageComponent)) +
+              const Offset(0, 10);
           final gesture = await tester.startGesture(tapDownOffset);
           await tester.pump(kLongPressTimeout + kPressTimeout);
 
@@ -332,15 +371,25 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection(
-              base: DocumentPosition(nodeId: '1', nodePosition: UpstreamDownstreamNodePosition.upstream()),
-              extent: DocumentPosition(nodeId: '1', nodePosition: UpstreamDownstreamNodePosition.downstream()),
+              base: DocumentPosition(
+                nodeId: '1',
+                nodePosition: UpstreamDownstreamNodePosition.upstream(),
+              ),
+              extent: DocumentPosition(
+                nodeId: '1',
+                nodePosition: UpstreamDownstreamNodePosition.downstream(),
+              ),
             ),
           );
 
           // Drag down from the image to the begining of the paragraph.
           const dragIncrementCount = 10;
-          final verticalDragDistance =
-              Offset(0, (tester.getTopLeft(find.byType(TextComponent)).dy - tapDownOffset.dy) / dragIncrementCount);
+          final verticalDragDistance = Offset(
+            0,
+            (tester.getTopLeft(find.byType(TextComponent)).dy -
+                    tapDownOffset.dy) /
+                dragIncrementCount,
+          );
           for (int i = 0; i < dragIncrementCount; i += 1) {
             await gesture.moveBy(verticalDragDistance);
             await tester.pump();
@@ -350,7 +399,10 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection(
-              base: DocumentPosition(nodeId: '1', nodePosition: UpstreamDownstreamNodePosition.upstream()),
+              base: DocumentPosition(
+                nodeId: '1',
+                nodePosition: UpstreamDownstreamNodePosition.upstream(),
+              ),
               extent: DocumentPosition(
                 nodeId: "2",
                 nodePosition: TextNodePosition(offset: 5),
@@ -363,7 +415,9 @@ void main() {
           await tester.pump();
         });
 
-        testWidgetsOnIos("selects an image and then by word when jumping up", (tester) async {
+        testWidgetsOnIos("selects an image and then by word when jumping up", (
+          tester,
+        ) async {
           await tester
               .createDocument()
               .withCustomContent(
@@ -377,16 +431,15 @@ void main() {
                   ],
                 ),
               )
-              .withAddedComponents(
-            [
-              const FakeImageComponentBuilder(
-                size: Size(100, 100),
-              ),
-            ],
-          ).pump();
+              .withAddedComponents([
+                const FakeImageComponentBuilder(size: Size(100, 100)),
+              ])
+              .pump();
 
           // Long press near the top of the image.
-          final tapDownOffset = tester.getTopLeft(find.byType(ImageComponent)) + const Offset(0, 10);
+          final tapDownOffset =
+              tester.getTopLeft(find.byType(ImageComponent)) +
+              const Offset(0, 10);
           final gesture = await tester.startGesture(tapDownOffset);
           await tester.pump(kLongPressTimeout + kPressTimeout);
 
@@ -394,15 +447,25 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection(
-              base: DocumentPosition(nodeId: '2', nodePosition: UpstreamDownstreamNodePosition.upstream()),
-              extent: DocumentPosition(nodeId: '2', nodePosition: UpstreamDownstreamNodePosition.downstream()),
+              base: DocumentPosition(
+                nodeId: '2',
+                nodePosition: UpstreamDownstreamNodePosition.upstream(),
+              ),
+              extent: DocumentPosition(
+                nodeId: '2',
+                nodePosition: UpstreamDownstreamNodePosition.downstream(),
+              ),
             ),
           );
 
           // Drag up from the image to the begining of the paragraph.
           const dragIncrementCount = 10;
-          final verticalDragDistance =
-              Offset(0, (tester.getTopLeft(find.byType(TextComponent)).dy - tapDownOffset.dy) / dragIncrementCount);
+          final verticalDragDistance = Offset(
+            0,
+            (tester.getTopLeft(find.byType(TextComponent)).dy -
+                    tapDownOffset.dy) /
+                dragIncrementCount,
+          );
           for (int i = 0; i < dragIncrementCount; i += 1) {
             await gesture.moveBy(verticalDragDistance);
             await tester.pump();
@@ -420,7 +483,10 @@ void main() {
                 nodeId: "1",
                 nodePosition: TextNodePosition(offset: 0),
               ),
-              extent: DocumentPosition(nodeId: '2', nodePosition: UpstreamDownstreamNodePosition.downstream()),
+              extent: DocumentPosition(
+                nodeId: '2',
+                nodePosition: UpstreamDownstreamNodePosition.downstream(),
+              ),
             ),
           );
 
@@ -461,7 +527,9 @@ void main() {
       });
 
       group("vertical drag", () {
-        testWidgetsOnIos("scrolls the editor after a horizontal drag", (tester) async {
+        testWidgetsOnIos("scrolls the editor after a horizontal drag", (
+          tester,
+        ) async {
           final scrollController = ScrollController();
 
           await tester //
@@ -499,7 +567,9 @@ void main() {
         });
       });
 
-      testWidgetsOnIos("converts entire paragraph selection to entire document selection", (tester) async {
+      testWidgetsOnIos("converts entire paragraph selection to entire document selection", (
+        tester,
+      ) async {
         // This test locks the behavior of a workaround for https://github.com/superlistapp/super_editor/issues/2579.
         //
         // When using the native text selection toolbar to select all text in a document, the IME sends a delta
@@ -509,18 +579,20 @@ void main() {
 
         await tester //
             .createDocument()
-            .withCustomContent(MutableDocument(
-              nodes: [
-                ParagraphNode(
-                  id: '1',
-                  text: AttributedText('First paragraph'),
-                ),
-                ParagraphNode(
-                  id: '2',
-                  text: AttributedText('Second paragraph'),
-                ),
-              ],
-            ))
+            .withCustomContent(
+              MutableDocument(
+                nodes: [
+                  ParagraphNode(
+                    id: '1',
+                    text: AttributedText('First paragraph'),
+                  ),
+                  ParagraphNode(
+                    id: '2',
+                    text: AttributedText('Second paragraph'),
+                  ),
+                ],
+              ),
+            )
             .pump();
 
         // Place the caret at the beginning of the document.
@@ -555,15 +627,15 @@ void main() {
     });
 
     group('within ancestor scrollable', () {
-      testWidgetsOnIos("expands selection when dragging horizontally", (tester) async {
+      testWidgetsOnIos("expands selection when dragging horizontally", (
+        tester,
+      ) async {
         final testContext = await tester
             .createDocument()
-            .fromMarkdown(
-              '''
+            .fromMarkdown('''
 SuperEditor containing a
 paragraph that spans 
-multiple lines.''',
-            )
+multiple lines.''')
             .insideCustomScrollView()
             .pump();
 
@@ -599,15 +671,15 @@ multiple lines.''',
         );
       });
 
-      testWidgetsOnIos("expands selection when dragging vertically", (tester) async {
+      testWidgetsOnIos("expands selection when dragging vertically", (
+        tester,
+      ) async {
         final testContext = await tester
             .createDocument()
-            .fromMarkdown(
-              '''
+            .fromMarkdown('''
 SuperEditor containing a
 paragraph that spans 
-multiple lines.''',
-            )
+multiple lines.''')
             .insideCustomScrollView()
             .pump();
 
@@ -656,8 +728,13 @@ Future<void> _pumpAppWithLongText(WidgetTester tester) async {
       // "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod...",
       .withSingleParagraph()
       .useIosSelectionHeuristics(true)
-      .withiOSToolbarBuilder((context, mobileToolbarKey, focalPoint) =>
-          IOSTextEditingFloatingToolbar(key: mobileToolbarKey, focalPoint: focalPoint))
+      .withiOSToolbarBuilder(
+        (context, mobileToolbarKey, focalPoint) =>
+            IOSTextEditingFloatingToolbar(
+              key: mobileToolbarKey,
+              focalPoint: focalPoint,
+            ),
+      )
       .pump();
 }
 

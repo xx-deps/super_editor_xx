@@ -11,7 +11,9 @@ void main() {
     const screenSizePortrait = Size(400.0, 1000.0);
     const screenSizeLandscape = Size(1000.0, 400);
 
-    testWidgetsOnMobile('does not crash the app when there is no selection', (tester) async {
+    testWidgetsOnMobile('does not crash the app when there is no selection', (
+      tester,
+    ) async {
       // Start the test in portrait mode.
       tester.view
         ..devicePixelRatio = 1.0
@@ -32,50 +34,56 @@ void main() {
       // Reaching this point means the reader didn't crash.
     });
 
-    testWidgetsOnMobile('does not crash the app when the selection is collapsed', (tester) async {
-      // Start the test in portrait mode.
-      tester.view
-        ..devicePixelRatio = 1.0
-        ..platformDispatcher.textScaleFactorTestValue = 1.0
-        ..physicalSize = screenSizePortrait;
-      addTearDown(() => tester.platformDispatcher.clearAllTestValues());
+    testWidgetsOnMobile(
+      'does not crash the app when the selection is collapsed',
+      (tester) async {
+        // Start the test in portrait mode.
+        tester.view
+          ..devicePixelRatio = 1.0
+          ..platformDispatcher.textScaleFactorTestValue = 1.0
+          ..physicalSize = screenSizePortrait;
+        addTearDown(() => tester.platformDispatcher.clearAllTestValues());
 
-      await tester //
-          .createDocument()
-          .withSingleParagraph()
-          .pump();
+        await tester //
+            .createDocument()
+            .withSingleParagraph()
+            .pump();
 
-      // Place the caret at the beginning of the document.
-      await tester.placeCaretInParagraph('1', 0);
+        // Place the caret at the beginning of the document.
+        await tester.placeCaretInParagraph('1', 0);
 
-      // Simulate a phone rotation.
-      tester.view.physicalSize = screenSizeLandscape;
-      await tester.pumpAndSettle();
+        // Simulate a phone rotation.
+        tester.view.physicalSize = screenSizeLandscape;
+        await tester.pumpAndSettle();
 
-      // Reaching this point means the reader didn't crash.
-    });
+        // Reaching this point means the reader didn't crash.
+      },
+    );
 
-    testWidgetsOnMobile('does not crash the app when the selection is expanded', (tester) async {
-      // Start the test in portrait mode.
-      tester.view
-        ..devicePixelRatio = 1.0
-        ..platformDispatcher.textScaleFactorTestValue = 1.0
-        ..physicalSize = screenSizePortrait;
-      addTearDown(() => tester.platformDispatcher.clearAllTestValues());
+    testWidgetsOnMobile(
+      'does not crash the app when the selection is expanded',
+      (tester) async {
+        // Start the test in portrait mode.
+        tester.view
+          ..devicePixelRatio = 1.0
+          ..platformDispatcher.textScaleFactorTestValue = 1.0
+          ..physicalSize = screenSizePortrait;
+        addTearDown(() => tester.platformDispatcher.clearAllTestValues());
 
-      await tester //
-          .createDocument()
-          .withSingleParagraph()
-          .pump();
+        await tester //
+            .createDocument()
+            .withSingleParagraph()
+            .pump();
 
-      // Double tap to select the first word.
-      await tester.doubleTapInParagraph('1', 0);
+        // Double tap to select the first word.
+        await tester.doubleTapInParagraph('1', 0);
 
-      // Simulate a phone rotation.
-      tester.view.physicalSize = screenSizeLandscape;
-      await tester.pumpAndSettle();
+        // Simulate a phone rotation.
+        tester.view.physicalSize = screenSizeLandscape;
+        await tester.pumpAndSettle();
 
-      // Reaching this point means the reader didn't crash.
-    });
+        // Reaching this point means the reader didn't crash.
+      },
+    );
   });
 }

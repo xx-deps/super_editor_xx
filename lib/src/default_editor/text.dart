@@ -34,11 +34,7 @@ import 'package:super_editor/src/default_editor/text_tools.dart';
 
 @immutable
 class TextNode extends DocumentNode {
-  TextNode({
-    required this.id,
-    required this.text,
-    super.metadata,
-  });
+  TextNode({required this.id, required this.text, super.metadata});
 
   @override
   final String id;
@@ -66,14 +62,18 @@ class TextNode extends DocumentNode {
   }
 
   @override
-  NodePosition selectUpstreamPosition(covariant TextNodePosition position1,
-      covariant TextNodePosition position2) {
+  NodePosition selectUpstreamPosition(
+    covariant TextNodePosition position1,
+    covariant TextNodePosition position2,
+  ) {
     return position1.offset < position2.offset ? position1 : position2;
   }
 
   @override
-  NodePosition selectDownstreamPosition(covariant TextNodePosition position1,
-      covariant TextNodePosition position2) {
+  NodePosition selectDownstreamPosition(
+    covariant TextNodePosition position1,
+    covariant TextNodePosition position2,
+  ) {
     return position1.offset > position2.offset ? position1 : position2;
   }
 
@@ -94,9 +94,7 @@ class TextNode extends DocumentNode {
   /// Returns a collapsed [DocumentSelection], positioned within this [TextNode] at the
   /// given [collapsedIndex].
   DocumentSelection selectionAt(int collapsedIndex) {
-    return DocumentSelection.collapsed(
-      position: positionAt(collapsedIndex),
-    );
+    return DocumentSelection.collapsed(position: positionAt(collapsedIndex));
   }
 
   /// Returns a [DocumentPosition] within this [TextNode] at the given text [index].
@@ -162,16 +160,12 @@ class TextNode extends DocumentNode {
 
   @override
   DocumentNode copyAndReplaceMetadata(Map<String, dynamic> newMetadata) {
-    return copyTextNodeWith(
-      metadata: newMetadata,
-    );
+    return copyTextNodeWith(metadata: newMetadata);
   }
 
   @override
   DocumentNode copyWithAddedMetadata(Map<String, dynamic> newProperties) {
-    return copyTextNodeWith(
-      metadata: {...metadata, ...newProperties},
-    );
+    return copyTextNodeWith(metadata: {...metadata, ...newProperties});
   }
 
   @override
@@ -181,7 +175,10 @@ class TextNode extends DocumentNode {
 
   TextNode copy() {
     return TextNode(
-        id: id, text: text.copyText(0), metadata: Map.from(metadata));
+      id: id,
+      text: text.copyText(0),
+      metadata: Map.from(metadata),
+    );
   }
 
   @override
@@ -210,7 +207,9 @@ extension DocumentSelectionWithText on Document {
   ///
   /// All non-text content is ignored.
   bool doesSelectedTextContainAttributions(
-      DocumentSelection selection, Set<Attribution> attributions) {
+    DocumentSelection selection,
+    Set<Attribution> attributions,
+  ) {
     final nodes = getNodesInside(selection.base, selection.extent);
     if (nodes.isEmpty) {
       return false;
@@ -320,9 +319,10 @@ extension DocumentSelectionWithText on Document {
 
       final selectionRange = SpanRange(startOffset, endOffset);
 
-      final attributionsInRange = textNode //
-          .text
-          .getAllAttributionsThroughout(selectionRange);
+      final attributionsInRange =
+          textNode //
+              .text
+              .getAllAttributionsThroughout(selectionRange);
 
       attributions.addAll(attributionsInRange);
     }
@@ -380,10 +380,11 @@ extension DocumentSelectionWithText on Document {
 
       final selectionRange = SpanRange(startOffset, endOffset);
 
-      final attributionsInRange = textNode //
-          .text
-          .getAllAttributionsThroughout(selectionRange)
-          .whereType<T>();
+      final attributionsInRange =
+          textNode //
+              .text
+              .getAllAttributionsThroughout(selectionRange)
+              .whereType<T>();
 
       attributions.addAll(attributionsInRange);
     }
@@ -405,8 +406,10 @@ extension Words on String {
       }
 
       final currentPosition = TextPosition(offset: offset);
-      final textSelection =
-          expandPositionToWord(text: this, textPosition: currentPosition);
+      final textSelection = expandPositionToWord(
+        text: this,
+        textPosition: currentPosition,
+      );
       textSelections.add(textSelection);
 
       offset += textSelection.end - textSelection.start + 1;
@@ -420,21 +423,17 @@ extension Words on String {
 /// The selection begins at [baseOffset] and ends at [extentOffset].
 class TextNodeSelection extends TextSelection implements NodeSelection {
   TextNodeSelection.fromTextSelection(TextSelection textSelection)
-      : super(
-          baseOffset: textSelection.baseOffset,
-          extentOffset: textSelection.extentOffset,
-          affinity: textSelection.affinity,
-          isDirectional: textSelection.isDirectional,
-        );
+    : super(
+        baseOffset: textSelection.baseOffset,
+        extentOffset: textSelection.extentOffset,
+        affinity: textSelection.affinity,
+        isDirectional: textSelection.isDirectional,
+      );
 
   const TextNodeSelection.collapsed({
     required int offset,
     TextAffinity affinity = TextAffinity.downstream,
-  }) : super(
-          baseOffset: offset,
-          extentOffset: offset,
-          affinity: affinity,
-        );
+  }) : super(baseOffset: offset, extentOffset: offset, affinity: affinity);
 
   const TextNodeSelection({
     required int baseOffset,
@@ -442,11 +441,11 @@ class TextNodeSelection extends TextSelection implements NodeSelection {
     TextAffinity affinity = TextAffinity.downstream,
     bool isDirectional = false,
   }) : super(
-          baseOffset: baseOffset,
-          extentOffset: extentOffset,
-          affinity: affinity,
-          isDirectional: isDirectional,
-        );
+         baseOffset: baseOffset,
+         extentOffset: extentOffset,
+         affinity: affinity,
+         isDirectional: isDirectional,
+       );
 
   @override
   TextNodePosition get base =>
@@ -460,7 +459,7 @@ class TextNodeSelection extends TextSelection implements NodeSelection {
 /// A logical position within a [TextNode].
 class TextNodePosition extends TextPosition implements NodePosition {
   TextNodePosition.fromTextPosition(TextPosition position)
-      : super(offset: position.offset, affinity: position.affinity);
+    : super(offset: position.offset, affinity: position.affinity);
 
   const TextNodePosition({
     required int offset,
@@ -479,10 +478,7 @@ class TextNodePosition extends TextPosition implements NodePosition {
     return offset == other.offset;
   }
 
-  TextNodePosition copyWith({
-    int? offset,
-    TextAffinity? affinity,
-  }) {
+  TextNodePosition copyWith({int? offset, TextAffinity? affinity}) {
     return TextNodePosition(
       offset: offset ?? this.offset,
       affinity: affinity ?? this.affinity,
@@ -552,8 +548,9 @@ mixin TextComponentViewModel on SingleColumnLayoutComponentViewModel {
   UnderlineStyle spellingErrorUnderlineStyle = const SquiggleUnderlineStyle();
 
   List<TextRange> grammarErrors = [];
-  UnderlineStyle grammarErrorUnderlineStyle =
-      const SquiggleUnderlineStyle(color: Colors.blue);
+  UnderlineStyle grammarErrorUnderlineStyle = const SquiggleUnderlineStyle(
+    color: Colors.blue,
+  );
 
   /// Given a [subclassInstance] of [TextComponentViewModel], copies all base-level text
   /// properties from this [TextComponentViewModel] into the given [subclassInstance].
@@ -569,7 +566,8 @@ mixin TextComponentViewModel on SingleColumnLayoutComponentViewModel {
   /// that a given class knows about, such as what you see in the implementation of this method.
   @protected
   TextComponentViewModel internalCopy(
-      covariant TextComponentViewModel subclassInstance) {
+    covariant TextComponentViewModel subclassInstance,
+  ) {
     subclassInstance
       ..createdAt = createdAt
       ..maxWidth = maxWidth
@@ -614,12 +612,13 @@ mixin TextComponentViewModel on SingleColumnLayoutComponentViewModel {
 
     composingRegionUnderlineStyle =
         styles[Styles.composingRegionUnderlineStyle] ??
-            composingRegionUnderlineStyle;
+        composingRegionUnderlineStyle;
     showComposingRegionUnderline =
         styles[Styles.showComposingRegionUnderline] ??
-            showComposingRegionUnderline;
+        showComposingRegionUnderline;
 
-    spellingErrorUnderlineStyle = styles[Styles.spellingErrorUnderlineStyle] ??
+    spellingErrorUnderlineStyle =
+        styles[Styles.spellingErrorUnderlineStyle] ??
         spellingErrorUnderlineStyle;
     grammarErrorUnderlineStyle =
         styles[Styles.grammarErrorUnderlineStyle] ?? grammarErrorUnderlineStyle;
@@ -629,7 +628,8 @@ mixin TextComponentViewModel on SingleColumnLayoutComponentViewModel {
     return [
       for (final underline in customUnderlines)
         Underlines(
-          style: customUnderlineStyles?.stylesByType[underline.type] ??
+          style:
+              customUnderlineStyles?.stylesByType[underline.type] ??
               const StraightUnderlineStyle(),
           underlines: [underline.textRange],
         ),
@@ -670,12 +670,18 @@ mixin TextComponentViewModel on SingleColumnLayoutComponentViewModel {
           grammarErrorUnderlineStyle == other.grammarErrorUnderlineStyle &&
           composingRegion == other.composingRegion &&
           showComposingRegionUnderline == other.showComposingRegionUnderline &&
-          const DeepCollectionEquality()
-              .equals(customUnderlines, other.customUnderlines) &&
-          const DeepCollectionEquality()
-              .equals(spellingErrors, other.spellingErrors) &&
-          const DeepCollectionEquality()
-              .equals(grammarErrors, other.grammarErrors);
+          const DeepCollectionEquality().equals(
+            customUnderlines,
+            other.customUnderlines,
+          ) &&
+          const DeepCollectionEquality().equals(
+            spellingErrors,
+            other.spellingErrors,
+          ) &&
+          const DeepCollectionEquality().equals(
+            grammarErrors,
+            other.grammarErrors,
+          );
 
   int get textViewModelHashCode =>
       super.hashCode ^
@@ -757,8 +763,8 @@ class _TextWithHintComponentState extends State<TextWithHintComponent>
 
     final contentStyle = widget.textStyleBuilder(attributionsWithBlock);
     final hintStyle = contentStyle.merge(
-        widget.hintStyleBuilder?.call(attributionsWithBlock) ??
-            const TextStyle());
+      widget.hintStyleBuilder?.call(attributionsWithBlock) ?? const TextStyle(),
+    );
     return hintStyle;
   }
 
@@ -890,14 +896,17 @@ class TextComponentState extends State<TextComponent>
   @override
   Rect getRectForPosition(covariant TextNodePosition nodePosition) {
     final offset = getOffsetForPosition(nodePosition);
-    final lineHeight = textLayout.getHeightForCaret(nodePosition) ??
+    final lineHeight =
+        textLayout.getHeightForCaret(nodePosition) ??
         textLayout.getLineHeightAtPosition(nodePosition);
     return Rect.fromLTWH(offset.dx, offset.dy, 0, lineHeight);
   }
 
   @override
-  Rect getRectForSelection(covariant TextNodePosition baseNodePosition,
-      covariant TextNodePosition extentNodePosition) {
+  Rect getRectForSelection(
+    covariant TextNodePosition baseNodePosition,
+    covariant TextNodePosition extentNodePosition,
+  ) {
     final selection = TextSelection(
       baseOffset: baseNodePosition.offset,
       extentOffset: extentNodePosition.offset,
@@ -923,7 +932,8 @@ class TextComponentState extends State<TextComponent>
       // of the text. Try looking one character upstream.
       characterBox = extentNodePosition.offset > 0
           ? textLayout.getCharacterBox(
-              TextPosition(offset: extentNodePosition.offset - 1))
+              TextPosition(offset: extentNodePosition.offset - 1),
+            )
           : null;
       if (characterBox != null) {
         final rect = characterBox.toRect();
@@ -963,8 +973,10 @@ class TextComponentState extends State<TextComponent>
   }
 
   @override
-  TextNodePosition? movePositionLeft(NodePosition textPosition,
-      [MovementModifier? movementModifier]) {
+  TextNodePosition? movePositionLeft(
+    NodePosition textPosition, [
+    MovementModifier? movementModifier,
+  ]) {
     if (textPosition is! TextNodePosition) {
       // We don't know how to interpret a non-text position.
       return null;
@@ -985,8 +997,9 @@ class TextComponentState extends State<TextComponent>
         TextNodePosition(offset: textPosition.offset),
       );
     } else if (movementModifier == MovementModifier.word) {
-      final newOffset =
-          getAllText().moveOffsetUpstreamByWord(textPosition.offset);
+      final newOffset = getAllText().moveOffsetUpstreamByWord(
+        textPosition.offset,
+      );
       if (newOffset == null) {
         return textPosition;
       }
@@ -996,16 +1009,19 @@ class TextComponentState extends State<TextComponent>
       return const TextNodePosition(offset: 0);
     }
 
-    final newOffset =
-        getAllText().moveOffsetUpstreamByCharacter(textPosition.offset);
+    final newOffset = getAllText().moveOffsetUpstreamByCharacter(
+      textPosition.offset,
+    );
     return newOffset != null
         ? TextNodePosition(offset: newOffset)
         : textPosition;
   }
 
   @override
-  TextNodePosition? movePositionRight(NodePosition textPosition,
-      [MovementModifier? movementModifier]) {
+  TextNodePosition? movePositionRight(
+    NodePosition textPosition, [
+    MovementModifier? movementModifier,
+  ]) {
     if (textPosition is! TextNodePosition) {
       // We don't know how to interpret a non-text position.
       return null;
@@ -1024,7 +1040,8 @@ class TextComponentState extends State<TextComponent>
       final TextPosition endPosition = getEndPosition();
 
       // Note: we compare offset values because we don't care if the affinitys are equal
-      final isAutoWrapLine = endOfLine.offset != endPosition.offset &&
+      final isAutoWrapLine =
+          endOfLine.offset != endPosition.offset &&
           (widget.text.toPlainText()[endOfLine.offset] != '\n');
 
       // Note: For lines that auto-wrap, moving the cursor to `offset` causes the
@@ -1044,8 +1061,9 @@ class TextComponentState extends State<TextComponent>
           : TextNodePosition.fromTextPosition(endOfLine);
     }
     if (movementModifier == MovementModifier.word) {
-      final newOffset =
-          getAllText().moveOffsetDownstreamByWord(textPosition.offset);
+      final newOffset = getAllText().moveOffsetDownstreamByWord(
+        textPosition.offset,
+      );
       if (newOffset == null) {
         return textPosition;
       }
@@ -1055,8 +1073,9 @@ class TextComponentState extends State<TextComponent>
       return TextNodePosition(offset: getAllText().length);
     }
 
-    final newOffset =
-        getAllText().moveOffsetDownstreamByCharacter(textPosition.offset);
+    final newOffset = getAllText().moveOffsetDownstreamByCharacter(
+      textPosition.offset,
+    );
     return newOffset != null
         ? TextNodePosition(offset: newOffset)
         : textPosition;
@@ -1110,21 +1129,26 @@ class TextComponentState extends State<TextComponent>
   @override
   TextNodePosition getEndPositionNearX(double x) {
     return TextNodePosition.fromTextPosition(
-        textLayout.getPositionInLastLineAtX(x));
+      textLayout.getPositionInLastLineAtX(x),
+    );
   }
 
   @override
   TextNodeSelection getSelectionInRange(
-      Offset localBaseOffset, Offset localExtentOffset) {
+    Offset localBaseOffset,
+    Offset localExtentOffset,
+  ) {
     return TextNodeSelection.fromTextSelection(
-        textLayout.getSelectionInRect(localBaseOffset, localExtentOffset));
+      textLayout.getSelectionInRect(localBaseOffset, localExtentOffset),
+    );
   }
 
   @override
   TextNodeSelection getCollapsedSelectionAt(NodePosition textNodePosition) {
     if (textNodePosition is! TextNodePosition) {
       throw Exception(
-          'The given node position ($textNodePosition) is not compatible with TextComponent');
+        'The given node position ($textNodePosition) is not compatible with TextComponent',
+      );
     }
 
     return TextNodeSelection.collapsed(offset: textNodePosition.offset);
@@ -1143,10 +1167,7 @@ class TextComponentState extends State<TextComponent>
 
   @override
   TextNodeSelection getSelectionOfEverything() {
-    return TextNodeSelection(
-      baseOffset: 0,
-      extentOffset: widget.text.length,
-    );
+    return TextNodeSelection(baseOffset: 0, extentOffset: widget.text.length);
   }
 
   @override
@@ -1163,8 +1184,9 @@ class TextComponentState extends State<TextComponent>
 
   @override
   String getContiguousTextAt(TextNodePosition textPosition) {
-    return getContiguousTextSelectionAt(textPosition)
-        .textInside(widget.text.toPlainText());
+    return getContiguousTextSelectionAt(
+      textPosition,
+    ).textInside(widget.text.toPlainText());
   }
 
   @override
@@ -1176,7 +1198,8 @@ class TextComponentState extends State<TextComponent>
 
   @override
   TextNodeSelection getContiguousTextSelectionAt(
-      TextNodePosition textPosition) {
+    TextNodePosition textPosition,
+  ) {
     final text = widget.text.toPlainText();
     if (text.isEmpty) {
       return const TextNodeSelection.collapsed(offset: -1);
@@ -1190,15 +1213,13 @@ class TextComponentState extends State<TextComponent>
     while (end < text.length && text[end] != '\n') {
       end += 1;
     }
-    return TextNodeSelection(
-      baseOffset: start,
-      extentOffset: end,
-    );
+    return TextNodeSelection(baseOffset: start, extentOffset: end);
   }
 
   @override
   TextNodePosition? getPositionOneLineUp(
-      covariant TextNodePosition textPosition) {
+    covariant TextNodePosition textPosition,
+  ) {
     final positionOneLineUp = textLayout.getPositionOneLineUp(textPosition);
     if (positionOneLineUp == null) {
       return null;
@@ -1208,7 +1229,8 @@ class TextComponentState extends State<TextComponent>
 
   @override
   TextNodePosition? getPositionOneLineDown(
-      covariant TextNodePosition textPosition) {
+    covariant TextNodePosition textPosition,
+  ) {
     final positionOneLineDown = textLayout.getPositionOneLineDown(textPosition);
     if (positionOneLineDown == null) {
       return null;
@@ -1241,10 +1263,14 @@ class TextComponentState extends State<TextComponent>
   /// If the text is empty, the style computed by the widget's `textStyleBuilder`
   /// without any attributions is returned.
   TextStyle getTextStyleAt(int offset) {
-    final attributions =
-        widget.text.getAllAttributionsAt(offset < widget.text.length //
-            ? offset
-            : widget.text.length - 1);
+    final attributions = widget.text.getAllAttributionsAt(
+      offset <
+              widget
+                  .text
+                  .length //
+          ? offset
+          : widget.text.length - 1,
+    );
 
     return _textStyleWithBlockType(attributions);
   }
@@ -1275,18 +1301,15 @@ class TextComponentState extends State<TextComponent>
               if (widget.text.length > 0)
                 TextLayoutSelectionHighlight(
                   textLayout: textLayout,
-                  style: SelectionHighlightStyle(
-                    color: widget.selectionColor,
-                  ),
-                  selection: widget.textSelection ??
+                  style: SelectionHighlightStyle(color: widget.selectionColor),
+                  selection:
+                      widget.textSelection ??
                       const TextSelection.collapsed(offset: -1),
                 )
               else if (widget.highlightWhenEmpty)
                 TextLayoutEmptyHighlight(
                   textLayout: textLayout,
-                  style: SelectionHighlightStyle(
-                    color: widget.selectionColor,
-                  ),
+                  style: SelectionHighlightStyle(color: widget.selectionColor),
                 ),
               for (final underlines in widget.underlines)
                 TextUnderlineLayer(
@@ -1326,20 +1349,23 @@ const defaultInlineWidgetBuilderChain = [
 
 /// An inline widget builder that displays an image from the network.
 Widget? inlineNetworkImageBuilder(
-    BuildContext context, TextStyle textStyle, Object placeholder) {
+  BuildContext context,
+  TextStyle textStyle,
+  Object placeholder,
+) {
   if (placeholder is! InlineNetworkImagePlaceholder) {
     return null;
   }
 
-  return LineHeight(
-    style: textStyle,
-    child: Image.network(placeholder.url),
-  );
+  return LineHeight(style: textStyle, child: Image.network(placeholder.url));
 }
 
 /// An inline widget builder that displays an image from local assets.
 Widget? inlineAssetImageBuilder(
-    BuildContext context, TextStyle textStyle, Object placeholder) {
+  BuildContext context,
+  TextStyle textStyle,
+  Object placeholder,
+) {
   if (placeholder is! InlineAssetImagePlaceholder) {
     return null;
   }
@@ -1352,11 +1378,7 @@ Widget? inlineAssetImageBuilder(
 
 /// A widget that sets its [child]'s height to the line-height of a given text [style].
 class LineHeight extends StatefulWidget {
-  const LineHeight({
-    super.key,
-    required this.style,
-    required this.child,
-  });
+  const LineHeight({super.key, required this.style, required this.child});
 
   final TextStyle style;
   final Widget child;
@@ -1394,21 +1416,14 @@ class _LineHeightState extends State<LineHeight> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: _lineHeight,
-      child: widget.child,
-    );
+    return SizedBox(height: _lineHeight, child: widget.child);
   }
 }
 
 /// A widget that sets its [child]'s width and height to the line-height of a
 /// given text [style].
 class LineHeightSquare extends StatefulWidget {
-  const LineHeightSquare({
-    super.key,
-    required this.style,
-    required this.child,
-  });
+  const LineHeightSquare({super.key, required this.style, required this.child});
 
   final TextStyle style;
   final Widget child;
@@ -1503,10 +1518,7 @@ class _ProxyTextDocumentComponentState extends State<ProxyTextDocumentComponent>
 /// A group of text ranges that should be displayed with underlines, along with the [style]
 /// of those underlines.
 class Underlines {
-  const Underlines({
-    required this.style,
-    required this.underlines,
-  });
+  const Underlines({required this.style, required this.underlines});
 
   final UnderlineStyle style;
   final List<TextRange> underlines;
@@ -1545,11 +1557,14 @@ class AddTextAttributionsCommand extends EditCommand {
   void execute(EditContext context, CommandExecutor executor) {
     editorDocLog.finest('Executing AddTextAttributionsCommand');
     final document = context.document;
-    final nodes =
-        document.getNodesInside(documentRange.start, documentRange.end);
+    final nodes = document.getNodesInside(
+      documentRange.start,
+      documentRange.end,
+    );
     if (nodes.isEmpty) {
       editorDocLog.shout(
-          ' - Bad DocumentSelection. Could not get range of nodes. Selection: $documentRange');
+        ' - Bad DocumentSelection. Could not get range of nodes. Selection: $documentRange',
+      );
       return;
     }
 
@@ -1571,8 +1586,9 @@ class AddTextAttributionsCommand extends EditCommand {
 
       if (textNode == nodes.first && textNode == nodes.last) {
         // Handle selection within a single node
-        editorDocLog
-            .finest(' - the selection is within a single node: ${textNode.id}');
+        editorDocLog.finest(
+          ' - the selection is within a single node: ${textNode.id}',
+        );
 
         startOffset = (normalRange.start.nodePosition as TextPosition).offset;
 
@@ -1581,8 +1597,9 @@ class AddTextAttributionsCommand extends EditCommand {
         endOffset = (normalRange.end.nodePosition as TextPosition).offset - 1;
       } else if (textNode == nodes.first) {
         // Handle partial node selection in first node.
-        editorDocLog
-            .finest(' - selecting part of the first node: ${textNode.id}');
+        editorDocLog.finest(
+          ' - selecting part of the first node: ${textNode.id}',
+        );
         startOffset = (normalRange.start.nodePosition as TextPosition).offset;
         endOffset = max(textNode.text.length - 1, 0);
       } else if (textNode == nodes.last) {
@@ -1610,8 +1627,9 @@ class AddTextAttributionsCommand extends EditCommand {
       for (Attribution attribution in attributions) {
         final node = entry.key;
         final range = entry.value.toSpanRange();
-        editorDocLog
-            .finest(' - adding attribution: $attribution. Range: $range');
+        editorDocLog.finest(
+          ' - adding attribution: $attribution. Range: $range',
+        );
 
         // Create a new AttributedText with updated attribution spans, so that the presentation system can
         // see that we made a change, and re-renders the text in the document.
@@ -1620,13 +1638,12 @@ class AddTextAttributionsCommand extends EditCommand {
           node.copyTextNodeWith(
             text: AttributedText(
               node.text.toPlainText(),
-              node.text.spans.copy()
-                ..addAttribution(
-                  newAttribution: attribution,
-                  start: range.start,
-                  end: range.end,
-                  autoMerge: autoMerge,
-                ),
+              node.text.spans.copy()..addAttribution(
+                newAttribution: attribution,
+                start: range.start,
+                end: range.end,
+                autoMerge: autoMerge,
+              ),
               Map.from(node.text.placeholders),
             ),
           ),
@@ -1676,11 +1693,14 @@ class RemoveTextAttributionsCommand extends EditCommand {
   void execute(EditContext context, CommandExecutor executor) {
     editorDocLog.finest('Executing RemoveTextAttributionsCommand');
     final document = context.document;
-    final nodes =
-        document.getNodesInside(documentRange.start, documentRange.end);
+    final nodes = document.getNodesInside(
+      documentRange.start,
+      documentRange.end,
+    );
     if (nodes.isEmpty) {
       editorDocLog.shout(
-          ' - Bad DocumentSelection. Could not get range of nodes. Selection: $documentRange');
+        ' - Bad DocumentSelection. Could not get range of nodes. Selection: $documentRange',
+      );
       return;
     }
 
@@ -1702,8 +1722,9 @@ class RemoveTextAttributionsCommand extends EditCommand {
 
       if (textNode == nodes.first && textNode == nodes.last) {
         // Handle selection within a single node
-        editorDocLog
-            .finest(' - the selection is within a single node: ${textNode.id}');
+        editorDocLog.finest(
+          ' - the selection is within a single node: ${textNode.id}',
+        );
 
         startOffset =
             (normalizedRange.start.nodePosition as TextPosition).offset;
@@ -1716,8 +1737,9 @@ class RemoveTextAttributionsCommand extends EditCommand {
             : startOffset;
       } else if (textNode == nodes.first) {
         // Handle partial node selection in first node.
-        editorDocLog
-            .finest(' - selecting part of the first node: ${textNode.id}');
+        editorDocLog.finest(
+          ' - selecting part of the first node: ${textNode.id}',
+        );
         startOffset =
             (normalizedRange.start.nodePosition as TextPosition).offset;
         endOffset = max(textNode.text.length - 1, 0);
@@ -1748,20 +1770,20 @@ class RemoveTextAttributionsCommand extends EditCommand {
       final range = entry.value.toSpanRange();
 
       for (Attribution attribution in attributions) {
-        editorDocLog
-            .finest(' - removing attribution: $attribution. Range: $range');
+        editorDocLog.finest(
+          ' - removing attribution: $attribution. Range: $range',
+        );
 
         // Create a new AttributedText with updated attribution spans, so that the presentation system can
         // see that we made a change, and re-renders the text in the document.
         node = node.copyTextNodeWith(
           text: AttributedText(
             node.text.toPlainText(),
-            node.text.spans.copy()
-              ..removeAttribution(
-                attributionToRemove: attribution,
-                start: range.start,
-                end: range.end,
-              ),
+            node.text.spans.copy()..removeAttribution(
+              attributionToRemove: attribution,
+              start: range.start,
+              end: range.end,
+            ),
           ),
         );
 
@@ -1820,11 +1842,14 @@ class ToggleTextAttributionsCommand extends EditCommand {
   void execute(EditContext context, CommandExecutor executor) {
     editorDocLog.finest('Executing ToggleTextAttributionsCommand');
     final document = context.document;
-    final nodes =
-        document.getNodesInside(documentRange.start, documentRange.end);
+    final nodes = document.getNodesInside(
+      documentRange.start,
+      documentRange.end,
+    );
     if (nodes.isEmpty) {
       editorDocLog.shout(
-          ' - Bad DocumentSelection. Could not get range of nodes. Selection: $documentRange');
+        ' - Bad DocumentSelection. Could not get range of nodes. Selection: $documentRange',
+      );
       return;
     }
 
@@ -1848,8 +1873,9 @@ class ToggleTextAttributionsCommand extends EditCommand {
 
       if (textNode == nodes.first && textNode == nodes.last) {
         // Handle selection within a single node
-        editorDocLog
-            .finest(' - the selection is within a single node: ${textNode.id}');
+        editorDocLog.finest(
+          ' - the selection is within a single node: ${textNode.id}',
+        );
 
         startOffset =
             (normalizedRange.start.nodePosition as TextPosition).offset;
@@ -1860,8 +1886,9 @@ class ToggleTextAttributionsCommand extends EditCommand {
             (normalizedRange.end.nodePosition as TextPosition).offset - 1;
       } else if (textNode == nodes.first) {
         // Handle partial node selection in first node.
-        editorDocLog
-            .finest(' - selecting part of the first node: ${textNode.id}');
+        editorDocLog.finest(
+          ' - selecting part of the first node: ${textNode.id}',
+        );
         startOffset =
             (normalizedRange.start.nodePosition as TextPosition).offset;
         endOffset = max(textNode.text.length - 1, 0);
@@ -1875,8 +1902,9 @@ class ToggleTextAttributionsCommand extends EditCommand {
         }
       } else if (textNode == nodes.last) {
         // Handle partial node selection in last node.
-        editorDocLog
-            .finest(' - toggling part of the last node: ${textNode.id}');
+        editorDocLog.finest(
+          ' - toggling part of the last node: ${textNode.id}',
+        );
         startOffset = 0;
 
         // -1 because TextPosition's offset indexes the character after the
@@ -1900,7 +1928,8 @@ class ToggleTextAttributionsCommand extends EditCommand {
 
       final selectionRange = SpanRange(startOffset, endOffset);
 
-      alreadyHasAttributions = alreadyHasAttributions &&
+      alreadyHasAttributions =
+          alreadyHasAttributions &&
           textNode.text.hasAttributionsThroughout(
             attributions: attributions,
             range: selectionRange,
@@ -1914,47 +1943,53 @@ class ToggleTextAttributionsCommand extends EditCommand {
       final range = entry.value;
 
       for (Attribution attribution in attributions) {
-        editorDocLog
-            .finest(' - toggling attribution: $attribution. Range: $range');
+        editorDocLog.finest(
+          ' - toggling attribution: $attribution. Range: $range',
+        );
 
         if (alreadyHasAttributions) {
           // Attribution is present throughout the user selection. Remove attribution.
-          editorDocLog
-              .finest(' - Removing attribution: $attribution. Range: $range');
+          editorDocLog.finest(
+            ' - Removing attribution: $attribution. Range: $range',
+          );
 
           // Create a new AttributedText with updated attribution spans, so that the presentation system can
           // see that we made a change, and re-renders the text in the document.
           node = node.copyTextNodeWith(
-            text: node.text.copy() //
-              ..removeAttribution(
-                attribution,
-                range,
-              ),
+            text:
+                node.text
+                    .copy() //
+                  ..removeAttribution(attribution, range),
           );
         } else {
           // Attribution isn't present throughout the user selection. Apply attribution.
-          editorDocLog
-              .finest(' - Adding attribution: $attribution. Range: $range');
+          editorDocLog.finest(
+            ' - Adding attribution: $attribution. Range: $range',
+          );
 
           // Create a new AttributedText with updated attribution spans, so that the presentation system can
           // see that we made a change, and re-renders the text in the document.
           node = node.copyTextNodeWith(
-            text: node.text.copy() //
-              ..addAttribution(
-                attribution,
-                range,
-                autoMerge: true,
-                // FIXME: I noticed that the default value for overwriteConflictingSpans on
-                //        AttributedText.addAttribution is `false`, but the default on AttributedSpans.addAttribution()
-                //        is `true`. This seems like a likely bug. Should they actually be different? If not,
-                //        update one of them. If so, add a comment to both places mentioning why.
-                overwriteConflictingSpans: true,
-              ),
+            text:
+                node.text
+                    .copy() //
+                  ..addAttribution(
+                    attribution,
+                    range,
+                    autoMerge: true,
+                    // FIXME: I noticed that the default value for overwriteConflictingSpans on
+                    //        AttributedText.addAttribution is `false`, but the default on AttributedSpans.addAttribution()
+                    //        is `true`. This seems like a likely bug. Should they actually be different? If not,
+                    //        update one of them. If so, add a comment to both places mentioning why.
+                    overwriteConflictingSpans: true,
+                  ),
           );
         }
 
-        final wasAttributionAdded =
-            node.text.hasAttributionAt(range.start, attribution: attribution);
+        final wasAttributionAdded = node.text.hasAttributionAt(
+          range.start,
+          attribution: attribution,
+        );
         executor.logChanges([
           DocumentEdit(
             AttributionChangeEvent(
@@ -2007,18 +2042,17 @@ class AttributionChangeEvent extends NodeChangeEvent {
           runtimeType == other.runtimeType &&
           change == other.change &&
           range == other.range &&
-          const DeepCollectionEquality()
-              .equals(attributions, other.attributions);
+          const DeepCollectionEquality().equals(
+            attributions,
+            other.attributions,
+          );
 
   @override
   int get hashCode =>
       super.hashCode ^ change.hashCode ^ range.hashCode ^ attributions.hashCode;
 }
 
-enum AttributionChange {
-  added,
-  removed;
-}
+enum AttributionChange { added, removed }
 
 /// Changes layout styles, like padding and width, of a component within a [SingleColumnDocumentLayout].
 class ChangeSingleColumnLayoutComponentStylesRequest implements EditRequest {
@@ -2053,11 +2087,7 @@ class ChangeSingleColumnLayoutComponentStylesCommand extends EditCommand {
       node.copyWithAddedMetadata(styles.toMetadata()),
     );
 
-    executor.logChanges([
-      DocumentEdit(
-        NodeChangeEvent(node.id),
-      ),
-    ]);
+    executor.logChanges([DocumentEdit(NodeChangeEvent(node.id))]);
   }
 }
 
@@ -2070,10 +2100,7 @@ class ChangeSingleColumnLayoutComponentStylesCommand extends EditCommand {
 /// If the [plainText] contains any newlines, those newlines will be inserted
 /// as characters. This request doesn't insert any new nodes.
 class InsertPlainTextAtCaretRequest implements EditRequest {
-  const InsertPlainTextAtCaretRequest(
-    this.plainText, {
-    this.createdAt,
-  });
+  const InsertPlainTextAtCaretRequest(this.plainText, {this.createdAt});
 
   final String plainText;
 
@@ -2108,9 +2135,7 @@ class InsertPlainTextAtCaretCommand extends EditCommand {
     }
 
     if (!range.isCollapsed) {
-      executor.executeCommand(
-        DeleteContentCommand(documentRange: range),
-      );
+      executor.executeCommand(DeleteContentCommand(documentRange: range));
     }
 
     executor.executeCommand(
@@ -2167,7 +2192,8 @@ class InsertTextCommand extends EditCommand {
     var textNode = document.getNodeById(documentPosition.nodeId);
     if (textNode is! TextNode) {
       editorDocLog.shout(
-          'ERROR: can\'t insert text in a node that isn\'t a TextNode: $textNode');
+        'ERROR: can\'t insert text in a node that isn\'t a TextNode: $textNode',
+      );
       return;
     }
 
@@ -2185,10 +2211,7 @@ class InsertTextCommand extends EditCommand {
         },
       ),
     );
-    document.replaceNodeById(
-      textNode.id,
-      textNode,
-    );
+    document.replaceNodeById(textNode.id, textNode);
 
     executor.logChanges([
       DocumentEdit(
@@ -2370,10 +2393,7 @@ class InsertNewlineInCodeBlockAtCaretCommand
         ..executeCommand(
           InsertNodeAfterNodeCommand(
             existingNodeId: node.id,
-            newNode: ParagraphNode(
-              id: newNodeId,
-              text: AttributedText(),
-            ),
+            newNode: ParagraphNode(id: newNodeId, text: AttributedText()),
           ),
         )
         ..executeCommand(
@@ -2448,14 +2468,23 @@ class DefaultInsertNewlineAtCaretCommand
     if (caretNodePosition is UpstreamDownstreamNodePosition) {
       // The caret is sitting at the edge of an upstream/downstream node.
       _insertNewlineInBinaryNode(
-          context, executor, caretPosition, caretNodePosition);
+        context,
+        executor,
+        caretPosition,
+        caretNodePosition,
+      );
       return;
     }
 
     final node = context.document.getNodeById(caretPosition.nodeId);
     if (caretNodePosition is TextNodePosition && node is TextNode) {
       _insertNewlineInTextNode(
-          context, executor, node, caretPosition, caretNodePosition);
+        context,
+        executor,
+        node,
+        caretPosition,
+        caretNodePosition,
+      );
       return;
     }
   }
@@ -2472,10 +2501,7 @@ class DefaultInsertNewlineAtCaretCommand
         ..executeCommand(
           InsertNodeBeforeNodeCommand(
             existingNodeId: caretPosition.nodeId,
-            newNode: ParagraphNode(
-              id: newNodeId,
-              text: AttributedText(),
-            ),
+            newNode: ParagraphNode(id: newNodeId, text: AttributedText()),
           ),
         )
         ..executeCommand(
@@ -2496,10 +2522,7 @@ class DefaultInsertNewlineAtCaretCommand
         ..executeCommand(
           InsertNodeAfterNodeCommand(
             existingNodeId: caretPosition.nodeId,
-            newNode: ParagraphNode(
-              id: newNodeId,
-              text: AttributedText(),
-            ),
+            newNode: ParagraphNode(id: newNodeId, text: AttributedText()),
           ),
         )
         ..executeCommand(
@@ -2572,8 +2595,10 @@ abstract class BaseInsertNewlineAtCaretCommand extends EditCommand {
     }
 
     // Ensure selection doesn't include any non-deletable nodes.
-    final selectedNodes = context.document
-        .getNodesInside(documentSelection.base, documentSelection.extent);
+    final selectedNodes = context.document.getNodesInside(
+      documentSelection.base,
+      documentSelection.extent,
+    );
     for (final node in selectedNodes) {
       if (!node.isDeletable) {
         // There's at least one non-deletable node. Fizzle.
@@ -2584,7 +2609,8 @@ abstract class BaseInsertNewlineAtCaretCommand extends EditCommand {
     if (!documentSelection.isCollapsed) {
       // The selection is expanded. Delete the selected content.
       executor.executeCommand(
-          DeleteSelectionCommand(affinity: TextAffinity.downstream));
+        DeleteSelectionCommand(affinity: TextAffinity.downstream),
+      );
     }
     assert(context.composer.selection!.isCollapsed);
 
@@ -2609,17 +2635,13 @@ abstract class BaseInsertNewlineAtCaretCommand extends EditCommand {
 /// If the selection is expanded, the selected content is deleted before
 /// the insertion.
 class InsertSoftNewlineAtCaretRequest implements EditRequest {
-  const InsertSoftNewlineAtCaretRequest({
-    this.createdAt,
-  });
+  const InsertSoftNewlineAtCaretRequest({this.createdAt});
 
   final DateTime? createdAt;
 }
 
 class InsertSoftNewlineCommand extends EditCommand {
-  const InsertSoftNewlineCommand({
-    this.createdAt,
-  });
+  const InsertSoftNewlineCommand({this.createdAt});
 
   final DateTime? createdAt;
 
@@ -2636,7 +2658,8 @@ class InsertSoftNewlineCommand extends EditCommand {
     if (!documentSelection.isCollapsed) {
       // The selection is expanded. Delete the selected content.
       executor.executeCommand(
-          DeleteSelectionCommand(affinity: TextAffinity.downstream));
+        DeleteSelectionCommand(affinity: TextAffinity.downstream),
+      );
     }
     assert(context.composer.selection!.isCollapsed);
 
@@ -2665,10 +2688,7 @@ class ConvertTextNodeToParagraphRequest implements EditRequest {
 }
 
 class ConvertTextNodeToParagraphCommand extends EditCommand {
-  ConvertTextNodeToParagraphCommand({
-    required this.nodeId,
-    this.newMetadata,
-  });
+  ConvertTextNodeToParagraphCommand({required this.nodeId, this.newMetadata});
 
   final String nodeId;
   final Map<String, dynamic>? newMetadata;
@@ -2690,16 +2710,9 @@ class ConvertTextNodeToParagraphCommand extends EditCommand {
         metadata: newMetadata,
       );
     }
-    document.replaceNodeById(
-      extentNode.id,
-      newParagraphNode,
-    );
+    document.replaceNodeById(extentNode.id, newParagraphNode);
 
-    executor.logChanges([
-      DocumentEdit(
-        NodeChangeEvent(extentNode.id),
-      ),
-    ]);
+    executor.logChanges([DocumentEdit(NodeChangeEvent(extentNode.id))]);
   }
 }
 
@@ -2737,7 +2750,8 @@ class InsertAttributedTextCommand extends EditCommand {
     final textNode = document.getNodeById(documentPosition.nodeId);
     if (textNode is! TextNode) {
       editorDocLog.shout(
-          'ERROR: can\'t insert text in a node that isn\'t a TextNode: $textNode');
+        'ERROR: can\'t insert text in a node that isn\'t a TextNode: $textNode',
+      );
       return;
     }
 
@@ -2777,10 +2791,7 @@ class InsertAttributedTextCommand extends EditCommand {
 }
 
 class InsertStyledTextAtCaretRequest implements EditRequest {
-  const InsertStyledTextAtCaretRequest(
-    this.text, {
-    this.createdAt,
-  });
+  const InsertStyledTextAtCaretRequest(this.text, {this.createdAt});
 
   final AttributedText text;
 
@@ -2789,10 +2800,7 @@ class InsertStyledTextAtCaretRequest implements EditRequest {
 }
 
 class InsertStyledTextAtCaretCommand extends EditCommand {
-  const InsertStyledTextAtCaretCommand(
-    this.text, {
-    this.createdAt,
-  });
+  const InsertStyledTextAtCaretCommand(this.text, {this.createdAt});
 
   final AttributedText text;
 
@@ -2838,7 +2846,7 @@ class InsertStyledTextAtCaretCommand extends EditCommand {
               nodePosition: TextNodePosition(
                 offset:
                     (selection.extent.nodePosition as TextNodePosition).offset +
-                        text.length,
+                    text.length,
               ),
             ),
           ),
@@ -2873,28 +2881,31 @@ class InsertInlinePlaceholderAtCaretCommand extends EditCommand {
 
   @override
   void execute(EditContext context, CommandExecutor executor) {
-    final createdAtAttribution =
-        createdAt != null ? CreatedAtAttribution(start: createdAt!) : null;
+    final createdAtAttribution = createdAt != null
+        ? CreatedAtAttribution(start: createdAt!)
+        : null;
 
     executor.executeCommand(
       InsertStyledTextAtCaretCommand(
         AttributedText(
           "",
           createdAt != null
-              ? AttributedSpans(attributions: [
-                  SpanMarker(
+              ? AttributedSpans(
+                  attributions: [
+                    SpanMarker(
                       attribution: createdAtAttribution!,
                       offset: 0,
-                      markerType: SpanMarkerType.start),
-                  SpanMarker(
+                      markerType: SpanMarkerType.start,
+                    ),
+                    SpanMarker(
                       attribution: createdAtAttribution,
                       offset: 0,
-                      markerType: SpanMarkerType.end),
-                ])
+                      markerType: SpanMarkerType.end,
+                    ),
+                  ],
+                )
               : null,
-          {
-            0: placeholder,
-          },
+          {0: placeholder},
         ),
       ),
     );
@@ -2990,10 +3001,7 @@ class InsertStyledTextAtEndOfDocumentCommand extends EditCommand {
       executor.executeCommand(
         InsertNodeAtIndexCommand(
           nodeIndex: context.document.length,
-          newNode: ParagraphNode(
-            id: newNodeId,
-            text: AttributedText(),
-          ),
+          newNode: ParagraphNode(id: newNodeId, text: AttributedText()),
         ),
       );
 
@@ -3144,16 +3152,16 @@ class InsertCharacterAtCaretCommand extends EditCommand {
     final extentNodePosition = composer.selection!.extent.nodePosition;
     if (extentNodePosition is UpstreamDownstreamNodePosition) {
       editorOpsLog.fine(
-          "The selected position is an UpstreamDownstreamPosition. Inserting new paragraph first.");
-      executor.executeCommand(
-        DefaultInsertNewlineAtCaretCommand(newNodeId),
+        "The selected position is an UpstreamDownstreamPosition. Inserting new paragraph first.",
       );
+      executor.executeCommand(DefaultInsertNewlineAtCaretCommand(newNodeId));
     }
 
     final extentNode = document.getNodeById(composer.selection!.extent.nodeId)!;
     if (extentNode is! TextNode) {
       editorOpsLog.fine(
-          "Couldn't insert character because Super Editor doesn't know how to handle a node of type: $extentNode");
+        "Couldn't insert character because Super Editor doesn't know how to handle a node of type: $extentNode",
+      );
       return;
     }
 
@@ -3187,9 +3195,7 @@ void _deleteExpandedSelection({
 
   // Delete the selected content.
   executor.executeCommand(
-    DeleteContentCommand(
-      documentRange: composer.selection!,
-    ),
+    DeleteContentCommand(documentRange: composer.selection!),
   );
 
   executor.executeCommand(
@@ -3216,24 +3222,32 @@ DocumentPosition _getDocumentPositionAfterExpandedDeletion({
   final baseNode = document.getNode(basePosition);
   if (baseNode == null) {
     throw Exception(
-        'Failed to _getDocumentPositionAfterDeletion because the base node no longer exists.');
+      'Failed to _getDocumentPositionAfterDeletion because the base node no longer exists.',
+    );
   }
 
   final extentPosition = selection.extent;
   final extentNode = document.getNode(extentPosition);
   if (extentNode == null) {
     throw Exception(
-        'Failed to _getDocumentPositionAfterDeletion because the extent node no longer exists.');
+      'Failed to _getDocumentPositionAfterDeletion because the extent node no longer exists.',
+    );
   }
 
   final selectionAffinity = document.getAffinityForSelection(selection);
-  final topPosition = selectionAffinity == TextAffinity.downstream //
+  final topPosition =
+      selectionAffinity ==
+          TextAffinity
+              .downstream //
       ? selection.base
       : selection.extent;
   final topNodePosition = topPosition.nodePosition;
   final topNode = document.getNodeById(topPosition.nodeId)!;
 
-  final bottomPosition = selectionAffinity == TextAffinity.downstream //
+  final bottomPosition =
+      selectionAffinity ==
+          TextAffinity
+              .downstream //
       ? selection.extent
       : selection.base;
   final bottomNodePosition = bottomPosition.nodePosition;
@@ -3299,7 +3313,8 @@ DocumentPosition _getDocumentPositionAfterExpandedDeletion({
       );
     } else {
       throw Exception(
-          'Unknown selection position type: $basePosition, for node: $baseNode, within document selection: $selection');
+        'Unknown selection position type: $basePosition, for node: $baseNode, within document selection: $selection',
+      );
     }
   }
 
@@ -3378,9 +3393,7 @@ ExecutionInstruction shiftEnterToInsertNewlineInBlock({
     return ExecutionInstruction.continueExecution;
   }
 
-  editContext.editor.execute([
-    const InsertSoftNewlineAtCaretRequest(),
-  ]);
+  editContext.editor.execute([const InsertSoftNewlineAtCaretRequest()]);
 
   return ExecutionInstruction.haltExecution;
 }

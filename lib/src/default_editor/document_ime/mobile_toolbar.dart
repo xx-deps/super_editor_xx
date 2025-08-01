@@ -40,7 +40,8 @@ class KeyboardEditingToolbar extends StatefulWidget {
   final CommonEditorOperations commonOps;
 
   @Deprecated(
-      "To change the brightness, wrap KeyboardEditingToolbar with a Theme, instead")
+    "To change the brightness, wrap KeyboardEditingToolbar with a Theme, instead",
+  )
   final Brightness? brightness;
 
   /// Whether this widget should take up empty space in the current subtree that
@@ -64,7 +65,8 @@ class _KeyboardEditingToolbarState extends State<KeyboardEditingToolbar>
   late KeyboardEditingToolbarOperations _toolbarOps;
 
   final _portalController = GroupedOverlayPortalController(
-      displayPriority: OverlayGroupPriority.windowChrome);
+    displayPriority: OverlayGroupPriority.windowChrome,
+  );
 
   double _toolbarHeight = 0;
 
@@ -125,7 +127,8 @@ class _KeyboardEditingToolbarState extends State<KeyboardEditingToolbar>
       // Take up empty space that's as tall as the toolbar so that other content
       // doesn't layout behind it.
       child: SizedBox(
-          height: widget.takeUpSameSpaceAsToolbar ? _toolbarHeight : 0),
+        height: widget.takeUpSameSpaceAsToolbar ? _toolbarHeight : 0,
+      ),
     );
   }
 
@@ -135,29 +138,29 @@ class _KeyboardEditingToolbarState extends State<KeyboardEditingToolbar>
       return const SizedBox();
     }
 
-    return KeyboardHeightBuilder(builder: (context, keyboardHeight) {
-      return Padding(
-        // Add padding that takes up the height of the software keyboard so
-        // that the toolbar sits just above the keyboard.
-        padding: EdgeInsets.only(bottom: keyboardHeight),
-        child: Align(
-          alignment: Alignment.bottomLeft,
-          child: _buildTheming(
-            child: Builder(
-              // Add a Builder so that _buildToolbar() uses theming from _buildTheming().
-              builder: (themedContext) {
-                return _buildToolbar(themedContext);
-              },
+    return KeyboardHeightBuilder(
+      builder: (context, keyboardHeight) {
+        return Padding(
+          // Add padding that takes up the height of the software keyboard so
+          // that the toolbar sits just above the keyboard.
+          padding: EdgeInsets.only(bottom: keyboardHeight),
+          child: Align(
+            alignment: Alignment.bottomLeft,
+            child: _buildTheming(
+              child: Builder(
+                // Add a Builder so that _buildToolbar() uses theming from _buildTheming().
+                builder: (themedContext) {
+                  return _buildToolbar(themedContext);
+                },
+              ),
             ),
           ),
-        ),
-      );
-    });
+        );
+      },
+    );
   }
 
-  Widget _buildTheming({
-    required Widget child,
-  }) {
+  Widget _buildTheming({required Widget child}) {
     final brightness =
         widget.brightness ?? MediaQuery.of(context).platformBrightness;
 
@@ -187,19 +190,21 @@ class _KeyboardEditingToolbarState extends State<KeyboardEditingToolbar>
         color: Theme.of(context).brightness == Brightness.light
             ? const Color(0xFFDDDDDD)
             : const Color(0xFF222222),
-        child: LayoutBuilder(builder: (context, constraints) {
-          _onToolbarLayout(constraints.maxHeight);
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            _onToolbarLayout(constraints.maxHeight);
 
-          return Row(
-            children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: ListenableBuilder(
+            return Row(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: ListenableBuilder(
                       listenable: widget.composer,
                       builder: (context, _) {
-                        final selectedNode = widget.document
-                            .getNodeById(selection.extent.nodeId);
+                        final selectedNode = widget.document.getNodeById(
+                          selection.extent.nodeId,
+                        );
                         final isSingleNodeSelected =
                             selection.extent.nodeId == selection.base.nodeId;
 
@@ -243,20 +248,24 @@ class _KeyboardEditingToolbarState extends State<KeyboardEditingToolbar>
                                   : null,
                             ),
                             IconButton(
-                              onPressed: isSingleNodeSelected &&
+                              onPressed:
+                                  isSingleNodeSelected &&
                                       (selectedNode is TextNode &&
                                           selectedNode.getMetadataValue(
-                                                  'blockType') !=
+                                                'blockType',
+                                              ) !=
                                               header1Attribution)
                                   ? _toolbarOps.convertToHeader1
                                   : null,
                               icon: const Icon(Icons.title),
                             ),
                             IconButton(
-                              onPressed: isSingleNodeSelected &&
+                              onPressed:
+                                  isSingleNodeSelected &&
                                       (selectedNode is TextNode &&
                                           selectedNode.getMetadataValue(
-                                                  'blockType') !=
+                                                'blockType',
+                                              ) !=
                                               header2Attribution)
                                   ? _toolbarOps.convertToHeader2
                                   : null,
@@ -264,10 +273,12 @@ class _KeyboardEditingToolbarState extends State<KeyboardEditingToolbar>
                               iconSize: 18,
                             ),
                             IconButton(
-                              onPressed: isSingleNodeSelected &&
+                              onPressed:
+                                  isSingleNodeSelected &&
                                       ((selectedNode is ParagraphNode &&
                                               selectedNode.hasMetadataValue(
-                                                  'blockType')) ||
+                                                'blockType',
+                                              )) ||
                                           (selectedNode is TextNode &&
                                               selectedNode is! ParagraphNode))
                                   ? _toolbarOps.convertToParagraph
@@ -275,7 +286,8 @@ class _KeyboardEditingToolbarState extends State<KeyboardEditingToolbar>
                               icon: const Icon(Icons.wrap_text),
                             ),
                             IconButton(
-                              onPressed: isSingleNodeSelected &&
+                              onPressed:
+                                  isSingleNodeSelected &&
                                       (selectedNode is TextNode &&
                                               selectedNode is! ListItemNode ||
                                           (selectedNode is ListItemNode &&
@@ -286,7 +298,8 @@ class _KeyboardEditingToolbarState extends State<KeyboardEditingToolbar>
                               icon: const Icon(Icons.looks_one_rounded),
                             ),
                             IconButton(
-                              onPressed: isSingleNodeSelected &&
+                              onPressed:
+                                  isSingleNodeSelected &&
                                       (selectedNode is TextNode &&
                                               selectedNode is! ListItemNode ||
                                           (selectedNode is ListItemNode &&
@@ -297,18 +310,21 @@ class _KeyboardEditingToolbarState extends State<KeyboardEditingToolbar>
                               icon: const Icon(Icons.list),
                             ),
                             IconButton(
-                              onPressed: isSingleNodeSelected &&
+                              onPressed:
+                                  isSingleNodeSelected &&
                                       selectedNode is TextNode &&
                                       (selectedNode is! ParagraphNode ||
                                           selectedNode.getMetadataValue(
-                                                  'blockType') !=
+                                                'blockType',
+                                              ) !=
                                               blockquoteAttribution)
                                   ? _toolbarOps.convertToBlockquote
                                   : null,
                               icon: const Icon(Icons.format_quote),
                             ),
                             IconButton(
-                              onPressed: isSingleNodeSelected &&
+                              onPressed:
+                                  isSingleNodeSelected &&
                                       selectedNode is ParagraphNode &&
                                       selectedNode.text.isEmpty
                                   ? _toolbarOps.convertToHr
@@ -317,21 +333,19 @@ class _KeyboardEditingToolbarState extends State<KeyboardEditingToolbar>
                             ),
                           ],
                         );
-                      }),
+                      },
+                    ),
+                  ),
                 ),
-              ),
-              Container(
-                width: 1,
-                height: 32,
-                color: const Color(0xFFCCCCCC),
-              ),
-              IconButton(
-                onPressed: _toolbarOps.closeKeyboard,
-                icon: const Icon(Icons.keyboard_hide),
-              ),
-            ],
-          );
-        }),
+                Container(width: 1, height: 32, color: const Color(0xFFCCCCCC)),
+                IconButton(
+                  onPressed: _toolbarOps.closeKeyboard,
+                  icon: const Icon(Icons.keyboard_hide),
+                ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }
@@ -343,10 +357,7 @@ class _KeyboardEditingToolbarState extends State<KeyboardEditingToolbar>
 /// `EdgeInsets.fromViewPadding(View.of(context).viewInsets, View.of(context).devicePixelRatio).bottom`
 /// as a proxy for the height of the software keyboard.
 class KeyboardHeightBuilder extends StatefulWidget {
-  const KeyboardHeightBuilder({
-    super.key,
-    required this.builder,
-  });
+  const KeyboardHeightBuilder({super.key, required this.builder});
 
   final Widget Function(BuildContext, double keyboardHeight) builder;
 
@@ -373,8 +384,9 @@ class _KeyboardHeightBuilderState extends State<KeyboardHeightBuilder>
   @override
   void didChangeMetrics() {
     final keyboardHeight = EdgeInsets.fromViewPadding(
-            View.of(context).viewInsets, View.of(context).devicePixelRatio)
-        .bottom;
+      View.of(context).viewInsets,
+      View.of(context).devicePixelRatio,
+    ).bottom;
     if (keyboardHeight == _keyboardHeight) {
       return;
     }
@@ -432,7 +444,9 @@ class KeyboardEditingToolbarOperations {
     }
 
     return document.doesSelectedTextContainAttributions(
-        selection, attributions);
+      selection,
+      attributions,
+    );
   }
 
   void _toggleAttributions(Set<Attribution> attributions) {
@@ -447,17 +461,16 @@ class KeyboardEditingToolbarOperations {
   }
 
   void convertToHeader1() {
-    final selectedNode =
-        document.getNodeById(composer.selection!.extent.nodeId);
+    final selectedNode = document.getNodeById(
+      composer.selection!.extent.nodeId,
+    );
     if (selectedNode is! TextNode) {
       return;
     }
 
     if (selectedNode is ListItemNode) {
       commonOps.convertToParagraph(
-        newMetadata: {
-          'blockType': header1Attribution,
-        },
+        newMetadata: {'blockType': header1Attribution},
       );
     } else {
       editor.execute([
@@ -470,17 +483,16 @@ class KeyboardEditingToolbarOperations {
   }
 
   void convertToHeader2() {
-    final selectedNode =
-        document.getNodeById(composer.selection!.extent.nodeId);
+    final selectedNode = document.getNodeById(
+      composer.selection!.extent.nodeId,
+    );
     if (selectedNode is! TextNode) {
       return;
     }
 
     if (selectedNode is ListItemNode) {
       commonOps.convertToParagraph(
-        newMetadata: {
-          'blockType': header2Attribution,
-        },
+        newMetadata: {'blockType': header2Attribution},
       );
     } else {
       editor.execute([

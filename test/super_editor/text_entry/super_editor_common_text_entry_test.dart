@@ -10,53 +10,89 @@ import '../supereditor_test_tools.dart';
 
 void main() {
   group("SuperEditor common text entry >", () {
-    testWidgetsOnDesktop("control keys don't impact content", (tester) async {
-      await _pumpApp(tester, _desktopInputSourceAndControlKeyVariant.currentValue!.inputSource);
+    testWidgetsOnDesktop(
+      "control keys don't impact content",
+      (tester) async {
+        await _pumpApp(
+          tester,
+          _desktopInputSourceAndControlKeyVariant.currentValue!.inputSource,
+        );
 
-      final initialParagraphText = SuperEditorInspector.findTextInComponent("1");
+        final initialParagraphText = SuperEditorInspector.findTextInComponent(
+          "1",
+        );
 
-      // Select some content -> "Lorem |ipsum| dolor sit..."
-      await tester.doubleTapInParagraph("1", 8);
-      const expectedSelection = DocumentSelection(
-        base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 6)),
-        extent: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 11)),
-      );
-      expect(SuperEditorInspector.findDocumentSelection(), expectedSelection);
+        // Select some content -> "Lorem |ipsum| dolor sit..."
+        await tester.doubleTapInParagraph("1", 8);
+        const expectedSelection = DocumentSelection(
+          base: DocumentPosition(
+            nodeId: "1",
+            nodePosition: TextNodePosition(offset: 6),
+          ),
+          extent: DocumentPosition(
+            nodeId: "1",
+            nodePosition: TextNodePosition(offset: 11),
+          ),
+        );
+        expect(SuperEditorInspector.findDocumentSelection(), expectedSelection);
 
-      // Press a control key.
-      await tester.sendKeyEvent(
-        _desktopInputSourceAndControlKeyVariant.currentValue!.controlKey,
-        platform: _platformNames[defaultTargetPlatform]!,
-      );
+        // Press a control key.
+        await tester.sendKeyEvent(
+          _desktopInputSourceAndControlKeyVariant.currentValue!.controlKey,
+          platform: _platformNames[defaultTargetPlatform]!,
+        );
 
-      // Make sure the content and selection remains the same.
-      expect(SuperEditorInspector.findTextInComponent("1"), initialParagraphText);
-      expect(SuperEditorInspector.findDocumentSelection(), expectedSelection);
-    }, variant: _desktopInputSourceAndControlKeyVariant);
+        // Make sure the content and selection remains the same.
+        expect(
+          SuperEditorInspector.findTextInComponent("1"),
+          initialParagraphText,
+        );
+        expect(SuperEditorInspector.findDocumentSelection(), expectedSelection);
+      },
+      variant: _desktopInputSourceAndControlKeyVariant,
+    );
 
-    testWidgetsOnMobile("control keys don't impact content", (tester) async {
-      await _pumpApp(tester, _mobileInputSourceAndControlKeyVariant.currentValue!.inputSource);
+    testWidgetsOnMobile(
+      "control keys don't impact content",
+      (tester) async {
+        await _pumpApp(
+          tester,
+          _mobileInputSourceAndControlKeyVariant.currentValue!.inputSource,
+        );
 
-      final initialParagraphText = SuperEditorInspector.findTextInComponent("1");
+        final initialParagraphText = SuperEditorInspector.findTextInComponent(
+          "1",
+        );
 
-      // Select some content -> "Lorem |ipsum| dolor sit..."
-      await tester.doubleTapInParagraph("1", 8);
-      const expectedSelection = DocumentSelection(
-        base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 6)),
-        extent: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 11)),
-      );
-      expect(SuperEditorInspector.findDocumentSelection(), expectedSelection);
+        // Select some content -> "Lorem |ipsum| dolor sit..."
+        await tester.doubleTapInParagraph("1", 8);
+        const expectedSelection = DocumentSelection(
+          base: DocumentPosition(
+            nodeId: "1",
+            nodePosition: TextNodePosition(offset: 6),
+          ),
+          extent: DocumentPosition(
+            nodeId: "1",
+            nodePosition: TextNodePosition(offset: 11),
+          ),
+        );
+        expect(SuperEditorInspector.findDocumentSelection(), expectedSelection);
 
-      // Press a control key.
-      await tester.sendKeyEvent(
-        _mobileInputSourceAndControlKeyVariant.currentValue!.controlKey,
-        platform: _platformNames[defaultTargetPlatform]!,
-      );
+        // Press a control key.
+        await tester.sendKeyEvent(
+          _mobileInputSourceAndControlKeyVariant.currentValue!.controlKey,
+          platform: _platformNames[defaultTargetPlatform]!,
+        );
 
-      // Make sure the content and selection remains the same.
-      expect(SuperEditorInspector.findTextInComponent("1"), initialParagraphText);
-      expect(SuperEditorInspector.findDocumentSelection(), expectedSelection);
-    }, variant: _mobileInputSourceAndControlKeyVariant);
+        // Make sure the content and selection remains the same.
+        expect(
+          SuperEditorInspector.findTextInComponent("1"),
+          initialParagraphText,
+        );
+        expect(SuperEditorInspector.findDocumentSelection(), expectedSelection);
+      },
+      variant: _mobileInputSourceAndControlKeyVariant,
+    );
   });
 }
 
@@ -66,22 +102,25 @@ Future<void> _pumpApp(WidgetTester tester, TextInputSource inputSource) async {
       .withSingleParagraph()
       .withInputSource(inputSource)
       .withCustomWidgetTreeBuilder((superEditor) {
-    return MaterialApp(
-      home: Scaffold(
-        body: Column(
-          children: [
-            // Add focusable widgets before and after SuperEditor so that we
-            // catch any keys that try to move focus forward or backward.
-            const Focus(child: SizedBox(width: double.infinity, height: 54)),
-            Expanded(
-              child: superEditor,
+        return MaterialApp(
+          home: Scaffold(
+            body: Column(
+              children: [
+                // Add focusable widgets before and after SuperEditor so that we
+                // catch any keys that try to move focus forward or backward.
+                const Focus(
+                  child: SizedBox(width: double.infinity, height: 54),
+                ),
+                Expanded(child: superEditor),
+                const Focus(
+                  child: SizedBox(width: double.infinity, height: 54),
+                ),
+              ],
             ),
-            const Focus(child: SizedBox(width: double.infinity, height: 54)),
-          ],
-        ),
-      ),
-    );
-  }).pump();
+          ),
+        );
+      })
+      .pump();
 }
 
 final _mobileInputSourceAndControlKeyVariant = ValueVariant({
@@ -106,10 +145,7 @@ final _platformNames = {
 };
 
 class _InputSourceAndControlKey {
-  _InputSourceAndControlKey(
-    this.inputSource,
-    this.controlKey,
-  );
+  _InputSourceAndControlKey(this.inputSource, this.controlKey);
 
   final TextInputSource inputSource;
   final LogicalKeyboardKey controlKey;

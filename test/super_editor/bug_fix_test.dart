@@ -17,7 +17,10 @@ void main() {
             ),
           ),
         );
-        final editor = createDefaultDocumentEditor(document: document, composer: composer);
+        final editor = createDefaultDocumentEditor(
+          document: document,
+          composer: composer,
+        );
 
         await tester.pumpWidget(
           MaterialApp(
@@ -87,7 +90,10 @@ void main() {
             ),
           ),
         );
-        final editor = createDefaultDocumentEditor(document: document, composer: composer);
+        final editor = createDefaultDocumentEditor(
+          document: document,
+          composer: composer,
+        );
 
         await tester.pumpWidget(
           MaterialApp(

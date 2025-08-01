@@ -14,7 +14,9 @@ import 'test_documents.dart';
 
 void main() {
   group('SuperEditor', () {
-    testWidgetsOnAllPlatforms('can be switched with a SuperReader', (tester) async {
+    testWidgetsOnAllPlatforms('can be switched with a SuperReader', (
+      tester,
+    ) async {
       final isEditable = ValueNotifier<bool>(true);
       final document = longDoc();
       final scrollController = ScrollController();
@@ -76,7 +78,8 @@ class _EditorReaderSwitchDemo extends StatefulWidget {
   final ScrollController scrollController;
 
   @override
-  State<_EditorReaderSwitchDemo> createState() => _EditorReaderSwitchDemoState();
+  State<_EditorReaderSwitchDemo> createState() =>
+      _EditorReaderSwitchDemoState();
 }
 
 class _EditorReaderSwitchDemoState extends State<_EditorReaderSwitchDemo> {
@@ -106,7 +109,7 @@ class _EditorReaderSwitchDemoState extends State<_EditorReaderSwitchDemo> {
             builder: (context, _) {
               return _buildEditorOrReader();
             },
-          )
+          ),
         ],
       ),
     );
@@ -114,13 +117,9 @@ class _EditorReaderSwitchDemoState extends State<_EditorReaderSwitchDemo> {
 
   Widget _buildEditorOrReader() {
     if (widget.isEditable.value) {
-      return SuperEditor(
-        editor: _docEditor,
-      );
+      return SuperEditor(editor: _docEditor);
     } else {
-      return SuperReader(
-        editor: _docEditor,
-      );
+      return SuperReader(editor: _docEditor);
     }
   }
 }

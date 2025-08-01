@@ -33,79 +33,77 @@ void main() {
       // Getting here without an error means the test passes.
     });
 
-    testWidgets("build with a single underlay and is same size as content", (tester) async {
+    testWidgets("build with a single underlay and is same size as content", (
+      tester,
+    ) async {
       await _pumpScaffold(
         tester,
         child: ContentLayers(
-          content: (_) => SliverToBoxAdapter(
-            child: SizedBox.fromSize(size: _windowSize),
-          ),
-          underlays: [
-            _buildSizeValidatingLayer(),
-          ],
+          content: (_) =>
+              SliverToBoxAdapter(child: SizedBox.fromSize(size: _windowSize)),
+          underlays: [_buildSizeValidatingLayer()],
         ),
       );
 
       // Getting here without an error means the test passes.
     });
 
-    testWidgets("build with a single overlay and is same size as content", (tester) async {
+    testWidgets("build with a single overlay and is same size as content", (
+      tester,
+    ) async {
       await _pumpScaffold(
         tester,
         child: ContentLayers(
-          content: (_) => SliverToBoxAdapter(
-            child: SizedBox.fromSize(size: _windowSize),
-          ),
-          overlays: [
-            _buildSizeValidatingLayer(),
-          ],
+          content: (_) =>
+              SliverToBoxAdapter(child: SizedBox.fromSize(size: _windowSize)),
+          overlays: [_buildSizeValidatingLayer()],
         ),
       );
 
       // Getting here without an error means the test passes.
     });
 
-    testWidgets("build with a single underlay and overlay and they are the same size as content", (tester) async {
-      await _pumpScaffold(
-        tester,
-        child: ContentLayers(
-          content: (_) => SliverToBoxAdapter(
-            child: SizedBox.fromSize(size: _windowSize),
+    testWidgets(
+      "build with a single underlay and overlay and they are the same size as content",
+      (tester) async {
+        await _pumpScaffold(
+          tester,
+          child: ContentLayers(
+            content: (_) =>
+                SliverToBoxAdapter(child: SizedBox.fromSize(size: _windowSize)),
+            underlays: [_buildSizeValidatingLayer()],
+            overlays: [_buildSizeValidatingLayer()],
           ),
-          underlays: [
-            _buildSizeValidatingLayer(),
-          ],
-          overlays: [
-            _buildSizeValidatingLayer(),
-          ],
-        ),
-      );
+        );
 
-      // Getting here without an error means the test passes.
-    });
+        // Getting here without an error means the test passes.
+      },
+    );
 
-    testWidgets("build with multiple underlays and overlays and they are the same size as content", (tester) async {
-      await _pumpScaffold(
-        tester,
-        child: ContentLayers(
-          content: (_) => SliverToBoxAdapter(
-            child: SizedBox.fromSize(size: _windowSize),
+    testWidgets(
+      "build with multiple underlays and overlays and they are the same size as content",
+      (tester) async {
+        await _pumpScaffold(
+          tester,
+          child: ContentLayers(
+            content: (_) =>
+                SliverToBoxAdapter(child: SizedBox.fromSize(size: _windowSize)),
+            underlays: [
+              _buildSizeValidatingLayer(),
+              _buildSizeValidatingLayer(),
+              _buildSizeValidatingLayer(),
+            ],
+            overlays: [
+              _buildSizeValidatingLayer(),
+              _buildSizeValidatingLayer(),
+              _buildSizeValidatingLayer(),
+            ],
           ),
-          underlays: [
-            _buildSizeValidatingLayer(),
-            _buildSizeValidatingLayer(),
-            _buildSizeValidatingLayer(),
-          ],
-          overlays: [
-            _buildSizeValidatingLayer(),
-            _buildSizeValidatingLayer(),
-            _buildSizeValidatingLayer(),
-          ],
-        ),
-      );
+        );
 
-      // Getting here without an error means the test passes.
-    });
+        // Getting here without an error means the test passes.
+      },
+    );
 
     testWidgets("rebuilds layers when they setState()", (tester) async {
       final contentRebuildSignal = ValueNotifier<int>(0);
@@ -130,17 +128,17 @@ void main() {
           ),
           underlays: [
             (context) => _RebuildableContentLayerWidget(
-                  rebuildSignal: underlayRebuildSignal,
-                  buildTracker: underlayBuildTracker,
-                  child: const SizedBox(),
-                ),
+              rebuildSignal: underlayRebuildSignal,
+              buildTracker: underlayBuildTracker,
+              child: const SizedBox(),
+            ),
           ],
           overlays: [
             (context) => _RebuildableContentLayerWidget(
-                  rebuildSignal: overlayRebuildSignal,
-                  buildTracker: overlayBuildTracker,
-                  child: const SizedBox(),
-                ),
+              rebuildSignal: overlayRebuildSignal,
+              buildTracker: overlayBuildTracker,
+              child: const SizedBox(),
+            ),
           ],
         ),
       );
@@ -161,163 +159,162 @@ void main() {
       expect(contentBuildTracker.value, 1);
     });
 
-    testWidgets("lays out the content before building the layers during full tree build", (tester) async {
-      final didContentLayout = ValueNotifier<bool>(false);
-      bool didUnderlayLayout = false;
+    testWidgets(
+      "lays out the content before building the layers during full tree build",
+      (tester) async {
+        final didContentLayout = ValueNotifier<bool>(false);
+        bool didUnderlayLayout = false;
 
-      await _pumpScaffold(
-        tester,
-        child: ContentLayers(
-          content: (_) => _LayoutTrackingWidget(
-            onLayout: () {
-              didContentLayout.value = true;
-            },
-            child: SliverToBoxAdapter(
-              child: SizedBox.fromSize(size: _windowSize),
-            ),
-          ),
-          underlays: [
-            (context) {
-              expect(didContentLayout.value, isTrue);
-              didUnderlayLayout = true;
-              return const ContentLayerProxyWidget(
-                child: SizedBox(),
-              );
-            },
-          ],
-          overlays: [
-            (context) {
-              expect(didContentLayout.value, isTrue);
-              expect(didUnderlayLayout, isTrue);
-              return const ContentLayerProxyWidget(
-                child: SizedBox(),
-              );
-            },
-          ],
-        ),
-      );
-
-      // Getting here without an error means the test passes.
-    });
-
-    testWidgets("lays out the content before building the layers when the content root rebuilds", (tester) async {
-      final rebuildSignal = ValueNotifier<int>(0);
-      final buildTracker = ValueNotifier<int>(0);
-      final contentLayoutCount = ValueNotifier<int>(0);
-      final layerLayoutCount = ValueNotifier<int>(0);
-
-      await _pumpScaffold(
-        tester,
-        child: ContentLayers(
-          content: (onBuildScheduled) => _RebuildableWidget(
-            rebuildSignal: rebuildSignal,
-            buildTracker: buildTracker,
-            onBuildScheduled: onBuildScheduled,
-            child: _LayoutTrackingWidget(
+        await _pumpScaffold(
+          tester,
+          child: ContentLayers(
+            content: (_) => _LayoutTrackingWidget(
               onLayout: () {
-                contentLayoutCount.value += 1;
+                didContentLayout.value = true;
               },
               child: SliverToBoxAdapter(
                 child: SizedBox.fromSize(size: _windowSize),
               ),
             ),
+            underlays: [
+              (context) {
+                expect(didContentLayout.value, isTrue);
+                didUnderlayLayout = true;
+                return const ContentLayerProxyWidget(child: SizedBox());
+              },
+            ],
+            overlays: [
+              (context) {
+                expect(didContentLayout.value, isTrue);
+                expect(didUnderlayLayout, isTrue);
+                return const ContentLayerProxyWidget(child: SizedBox());
+              },
+            ],
           ),
-          underlays: [
-            (context) {
-              expect(contentLayoutCount.value, layerLayoutCount.value + 1);
-              return const ContentLayerProxyWidget(
-                child: SizedBox(),
-              );
-            },
-          ],
-          overlays: [
-            (context) {
-              expect(contentLayoutCount.value, layerLayoutCount.value + 1);
-              layerLayoutCount.value += 1;
-              return const ContentLayerProxyWidget(
-                child: SizedBox(),
-              );
-            },
-          ],
-        ),
-      );
-      expect(buildTracker.value, 1);
+        );
 
-      // Tell the content widget to rebuild itself.
-      rebuildSignal.value += 1;
-      await tester.pump();
+        // Getting here without an error means the test passes.
+      },
+    );
 
-      // We expect build and layout to run twice. First, during the initial pump. Second,
-      // after we tell the content to rebuild.
-      expect(buildTracker.value, 2);
-      expect(contentLayoutCount.value, 2);
-      expect(layerLayoutCount.value, 2);
-    });
+    testWidgets(
+      "lays out the content before building the layers when the content root rebuilds",
+      (tester) async {
+        final rebuildSignal = ValueNotifier<int>(0);
+        final buildTracker = ValueNotifier<int>(0);
+        final contentLayoutCount = ValueNotifier<int>(0);
+        final layerLayoutCount = ValueNotifier<int>(0);
 
-    testWidgets("lays out the content before building the layers when a content descendant rebuilds", (tester) async {
-      final rebuildSignal = ValueNotifier<int>(0);
-      final buildTracker = ValueNotifier<int>(0);
-      final contentLayoutCount = ValueNotifier<int>(0);
-      final layerLayoutCount = ValueNotifier<int>(0);
+        await _pumpScaffold(
+          tester,
+          child: ContentLayers(
+            content: (onBuildScheduled) => _RebuildableWidget(
+              rebuildSignal: rebuildSignal,
+              buildTracker: buildTracker,
+              onBuildScheduled: onBuildScheduled,
+              child: _LayoutTrackingWidget(
+                onLayout: () {
+                  contentLayoutCount.value += 1;
+                },
+                child: SliverToBoxAdapter(
+                  child: SizedBox.fromSize(size: _windowSize),
+                ),
+              ),
+            ),
+            underlays: [
+              (context) {
+                expect(contentLayoutCount.value, layerLayoutCount.value + 1);
+                return const ContentLayerProxyWidget(child: SizedBox());
+              },
+            ],
+            overlays: [
+              (context) {
+                expect(contentLayoutCount.value, layerLayoutCount.value + 1);
+                layerLayoutCount.value += 1;
+                return const ContentLayerProxyWidget(child: SizedBox());
+              },
+            ],
+          ),
+        );
+        expect(buildTracker.value, 1);
 
-      await _pumpScaffold(
-        tester,
-        child: ContentLayers(
-          // Place a couple stateful widgets above the _RebuildableWidget to ensure that
-          // when a widget deeper in the tree rebuilds, we still rebuild ContentLayers.
-          content: (_) => _NoRebuildWidget(
-            child: _NoRebuildWidget(
-              child: _RebuildableWidget(
-                rebuildSignal: rebuildSignal,
-                buildTracker: buildTracker,
-                // We don't pass in the onBuildScheduled callback here because we're simulating
-                // an entire subtree that a client might provide as content.
-                child: _LayoutTrackingWidget(
-                  onLayout: () {
-                    contentLayoutCount.value += 1;
-                  },
-                  child: SliverToBoxAdapter(
-                    child: SizedBox.fromSize(size: _windowSize),
+        // Tell the content widget to rebuild itself.
+        rebuildSignal.value += 1;
+        await tester.pump();
+
+        // We expect build and layout to run twice. First, during the initial pump. Second,
+        // after we tell the content to rebuild.
+        expect(buildTracker.value, 2);
+        expect(contentLayoutCount.value, 2);
+        expect(layerLayoutCount.value, 2);
+      },
+    );
+
+    testWidgets(
+      "lays out the content before building the layers when a content descendant rebuilds",
+      (tester) async {
+        final rebuildSignal = ValueNotifier<int>(0);
+        final buildTracker = ValueNotifier<int>(0);
+        final contentLayoutCount = ValueNotifier<int>(0);
+        final layerLayoutCount = ValueNotifier<int>(0);
+
+        await _pumpScaffold(
+          tester,
+          child: ContentLayers(
+            // Place a couple stateful widgets above the _RebuildableWidget to ensure that
+            // when a widget deeper in the tree rebuilds, we still rebuild ContentLayers.
+            content: (_) => _NoRebuildWidget(
+              child: _NoRebuildWidget(
+                child: _RebuildableWidget(
+                  rebuildSignal: rebuildSignal,
+                  buildTracker: buildTracker,
+                  // We don't pass in the onBuildScheduled callback here because we're simulating
+                  // an entire subtree that a client might provide as content.
+                  child: _LayoutTrackingWidget(
+                    onLayout: () {
+                      contentLayoutCount.value += 1;
+                    },
+                    child: SliverToBoxAdapter(
+                      child: SizedBox.fromSize(size: _windowSize),
+                    ),
                   ),
                 ),
               ),
             ),
+            underlays: [
+              (context) {
+                expect(contentLayoutCount.value, layerLayoutCount.value + 1);
+                return const ContentLayerProxyWidget(child: SizedBox());
+              },
+            ],
+            overlays: [
+              (context) {
+                expect(contentLayoutCount.value, layerLayoutCount.value + 1);
+                layerLayoutCount.value += 1;
+                return const ContentLayerProxyWidget(child: SizedBox());
+              },
+            ],
           ),
-          underlays: [
-            (context) {
-              expect(contentLayoutCount.value, layerLayoutCount.value + 1);
-              return const ContentLayerProxyWidget(
-                child: SizedBox(),
-              );
-            },
-          ],
-          overlays: [
-            (context) {
-              expect(contentLayoutCount.value, layerLayoutCount.value + 1);
-              layerLayoutCount.value += 1;
-              return const ContentLayerProxyWidget(
-                child: SizedBox(),
-              );
-            },
-          ],
-        ),
-      );
-      expect(buildTracker.value, 1);
-      expect(contentLayoutCount.value, 1);
-      expect(layerLayoutCount.value, 1);
+        );
+        expect(buildTracker.value, 1);
+        expect(contentLayoutCount.value, 1);
+        expect(layerLayoutCount.value, 1);
 
-      // Tell the content widget to rebuild itself.
-      rebuildSignal.value += 1;
-      await tester.pump();
+        // Tell the content widget to rebuild itself.
+        rebuildSignal.value += 1;
+        await tester.pump();
 
-      // We expect build and layout to run twice. First, during the initial pump. Second,
-      // after we tell the content to rebuild.
-      expect(buildTracker.value, 2);
-      expect(contentLayoutCount.value, 2);
-      expect(layerLayoutCount.value, 2);
-    });
+        // We expect build and layout to run twice. First, during the initial pump. Second,
+        // after we tell the content to rebuild.
+        expect(buildTracker.value, 2);
+        expect(contentLayoutCount.value, 2);
+        expect(layerLayoutCount.value, 2);
+      },
+    );
 
-    testWidgets("re-uses layer Elements instead of always re-inflating layer Widgets", (tester) async {
+    testWidgets("re-uses layer Elements instead of always re-inflating layer Widgets", (
+      tester,
+    ) async {
       final rebuildSignal = ValueNotifier<int>(0);
       final buildTracker = ValueNotifier<int>(0);
       final contentKey = GlobalKey();
@@ -347,35 +344,47 @@ void main() {
           ),
           underlays: [
             (context) => _RebuildableContentLayerWidget(
-                  elementTracker: underlayElementTracker,
-                  onBuild: () {
-                    // Ensure that this layer can access the render object of the content.
-                    final contentSliver = contentKey.currentContext!.findRenderObject() as RenderSliver?;
-                    expect(contentSliver, isNotNull);
-                    expect(contentSliver!.geometry, isNotNull);
-                    final viewport = context.findAncestorRenderObjectOfType<RenderViewport>();
-                    // Build happens during viewport layout, which is not finished at this point. So transform to viewport
-                    // coordinate space is as far as we can go.
-                    expect(contentSliver.localToGlobal(Offset.zero, ancestor: viewport), isNotNull);
-                  },
-                  child: const SizedBox.expand(),
-                ),
+              elementTracker: underlayElementTracker,
+              onBuild: () {
+                // Ensure that this layer can access the render object of the content.
+                final contentSliver =
+                    contentKey.currentContext!.findRenderObject()
+                        as RenderSliver?;
+                expect(contentSliver, isNotNull);
+                expect(contentSliver!.geometry, isNotNull);
+                final viewport = context
+                    .findAncestorRenderObjectOfType<RenderViewport>();
+                // Build happens during viewport layout, which is not finished at this point. So transform to viewport
+                // coordinate space is as far as we can go.
+                expect(
+                  contentSliver.localToGlobal(Offset.zero, ancestor: viewport),
+                  isNotNull,
+                );
+              },
+              child: const SizedBox.expand(),
+            ),
           ],
           overlays: [
             (context) => _RebuildableContentLayerWidget(
-                  elementTracker: overlayElementTracker,
-                  onBuild: () {
-                    // Ensure that this layer can access the render object of the content.
-                    final contentSliver = contentKey.currentContext!.findRenderObject() as RenderSliver?;
-                    expect(contentSliver, isNotNull);
-                    expect(contentSliver!.geometry, isNotNull);
-                    final viewport = context.findAncestorRenderObjectOfType<RenderViewport>();
-                    // Build happens during viewport layout, which is not finished at this point. So transform to viewport
-                    // coordinate space is as far as we can go.
-                    expect(contentSliver.localToGlobal(Offset.zero, ancestor: viewport), isNotNull);
-                  },
-                  child: const SizedBox.expand(),
-                ),
+              elementTracker: overlayElementTracker,
+              onBuild: () {
+                // Ensure that this layer can access the render object of the content.
+                final contentSliver =
+                    contentKey.currentContext!.findRenderObject()
+                        as RenderSliver?;
+                expect(contentSliver, isNotNull);
+                expect(contentSliver!.geometry, isNotNull);
+                final viewport = context
+                    .findAncestorRenderObjectOfType<RenderViewport>();
+                // Build happens during viewport layout, which is not finished at this point. So transform to viewport
+                // coordinate space is as far as we can go.
+                expect(
+                  contentSliver.localToGlobal(Offset.zero, ancestor: viewport),
+                  isNotNull,
+                );
+              },
+              child: const SizedBox.expand(),
+            ),
           ],
         ),
       );
@@ -403,18 +412,15 @@ void main() {
       await _pumpScaffold(
         tester,
         child: ContentLayers(
-          content: (_) => SliverToBoxAdapter(
-            child: SizedBox.fromSize(size: _windowSize),
-          ),
+          content: (_) =>
+              SliverToBoxAdapter(child: SizedBox.fromSize(size: _windowSize)),
           underlays: [
             (context) {
               // Ensure that this layer can access ancestors.
               final directionality = Directionality.of(context);
               expect(directionality, isNotNull);
 
-              return const ContentLayerProxyWidget(
-                child: SizedBox(),
-              );
+              return const ContentLayerProxyWidget(child: SizedBox());
             },
           ],
           overlays: [
@@ -423,9 +429,7 @@ void main() {
               final directionality = Directionality.of(context);
               expect(directionality, isNotNull);
 
-              return const ContentLayerProxyWidget(
-                child: SizedBox(),
-              );
+              return const ContentLayerProxyWidget(child: SizedBox());
             },
           ],
         ),
@@ -442,10 +446,11 @@ void main() {
 
       final rebuildSignal = ValueNotifier<int>(0);
 
-      final editorContext = tester //
-          .createDocument()
-          .withSingleEmptyParagraph()
-          .build();
+      final editorContext =
+          tester //
+              .createDocument()
+              .withSingleEmptyParagraph()
+              .build();
 
       await tester.pumpWidget(
         MaterialApp(
@@ -483,10 +488,7 @@ void main() {
   });
 }
 
-Future<void> _pumpScaffold(
-  WidgetTester tester, {
-  required Widget child,
-}) async {
+Future<void> _pumpScaffold(WidgetTester tester, {required Widget child}) async {
   addTearDown(() => tester.platformDispatcher.clearAllTestValues());
 
   tester.view
@@ -495,13 +497,7 @@ Future<void> _pumpScaffold(
 
   await tester.pumpWidget(
     MaterialApp(
-      home: Scaffold(
-        body: CustomScrollView(
-          slivers: [
-            child,
-          ],
-        ),
-      ),
+      home: Scaffold(body: CustomScrollView(slivers: [child])),
     ),
   );
 }
@@ -521,12 +517,17 @@ class _SizeValidatingLayer extends ContentLayerStatefulWidget {
   const _SizeValidatingLayer();
 
   @override
-  ContentLayerState<ContentLayerStatefulWidget, Object> createState() => _SizeValidatingLayerState();
+  ContentLayerState<ContentLayerStatefulWidget, Object> createState() =>
+      _SizeValidatingLayerState();
 }
 
-class _SizeValidatingLayerState extends ContentLayerState<_SizeValidatingLayer, Object> {
+class _SizeValidatingLayerState
+    extends ContentLayerState<_SizeValidatingLayer, Object> {
   @override
-  Object? computeLayoutData(Element? contentElement, RenderObject? contentLayout) => null;
+  Object? computeLayoutData(
+    Element? contentElement,
+    RenderObject? contentLayout,
+  ) => null;
 
   @override
   Widget doBuild(BuildContext context, Object? layoutData) {
@@ -550,10 +551,7 @@ void _expectLayerConstraintsThatMatchContent(BoxConstraints constraints) {
 /// Used to inject an `Element` above another widget to test what happens when a descendant
 /// rebuilds, and that descendant isn't the top-level widget in a subtree.
 class _NoRebuildWidget extends StatefulWidget {
-  const _NoRebuildWidget({
-    Key? key,
-    required this.child,
-  }) : super(key: key);
+  const _NoRebuildWidget({Key? key, required this.child}) : super(key: key);
 
   final Widget child;
 
@@ -581,9 +579,15 @@ class _RebuildableWidget extends StatefulWidget {
     this.onBuild,
     this.builder,
     this.child,
-  })  : assert(child != null || builder != null, "Must provide either a child OR a builder."),
-        assert(child == null || builder == null, "Can't provide a child AND a builder. Choose one."),
-        super(key: key);
+  }) : assert(
+         child != null || builder != null,
+         "Must provide either a child OR a builder.",
+       ),
+       assert(
+         child == null || builder == null,
+         "Can't provide a child AND a builder. Choose one.",
+       ),
+       super(key: key);
 
   /// Signal that instructs this widget to call `setState()`.
   final Listenable? rebuildSignal;
@@ -676,9 +680,15 @@ class _RebuildableContentLayerWidget extends ContentLayerStatefulWidget {
     this.onBuild,
     this.builder,
     this.child,
-  })  : assert(child != null || builder != null, "Must provide either a child OR a builder."),
-        assert(child == null || builder == null, "Can't provide a child AND a builder. Choose one."),
-        super(key: key);
+  }) : assert(
+         child != null || builder != null,
+         "Must provide either a child OR a builder.",
+       ),
+       assert(
+         child == null || builder == null,
+         "Can't provide a child AND a builder. Choose one.",
+       ),
+       super(key: key);
 
   /// Signal that instructs this widget to call `setState()`.
   final Listenable? rebuildSignal;
@@ -699,10 +709,12 @@ class _RebuildableContentLayerWidget extends ContentLayerStatefulWidget {
   final Widget? child;
 
   @override
-  ContentLayerState<ContentLayerStatefulWidget, Object> createState() => _RebuildableContentLayerWidgetState();
+  ContentLayerState<ContentLayerStatefulWidget, Object> createState() =>
+      _RebuildableContentLayerWidgetState();
 }
 
-class _RebuildableContentLayerWidgetState extends ContentLayerState<_RebuildableContentLayerWidget, Object> {
+class _RebuildableContentLayerWidgetState
+    extends ContentLayerState<_RebuildableContentLayerWidget, Object> {
   @override
   void initState() {
     super.initState();
@@ -750,7 +762,10 @@ class _RebuildableContentLayerWidgetState extends ContentLayerState<_Rebuildable
   }
 
   @override
-  Object? computeLayoutData(Element? contentElement, RenderObject? contentLayout) => null;
+  Object? computeLayoutData(
+    Element? contentElement,
+    RenderObject? contentLayout,
+  ) => null;
 
   @override
   Widget doBuild(BuildContext context, Object? object) {
@@ -765,10 +780,8 @@ class _RebuildableContentLayerWidgetState extends ContentLayerState<_Rebuildable
 
 /// Widget that reports every time it runs layout.
 class _LayoutTrackingWidget extends SingleChildRenderObjectWidget {
-  const _LayoutTrackingWidget({
-    required this.onLayout,
-    required Widget child,
-  }) : super(child: child);
+  const _LayoutTrackingWidget({required this.onLayout, required Widget child})
+    : super(child: child);
 
   final VoidCallback onLayout;
 

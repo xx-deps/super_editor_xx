@@ -20,10 +20,10 @@ class SingleColumnLayoutSelectionStyler extends SingleColumnLayoutStylePhase {
     required ValueListenable<DocumentSelection?> selection,
     required SelectionStyles selectionStyles,
     SelectedTextColorStrategy? selectedTextColorStrategy,
-  })  : _document = document,
-        _selection = selection,
-        _selectionStyles = selectionStyles,
-        _selectedTextColorStrategy = selectedTextColorStrategy {
+  }) : _document = document,
+       _selection = selection,
+       _selectionStyles = selectionStyles,
+       _selectedTextColorStrategy = selectedTextColorStrategy {
     // Our styles need to be re-applied whenever the document selection changes.
     _selection.addListener(markDirty);
   }
@@ -65,17 +65,22 @@ class SingleColumnLayoutSelectionStyler extends SingleColumnLayoutStylePhase {
 
     _shouldDocumentShowCaret = newValue;
     editorStyleLog.fine(
-        "Change to 'document should show caret': $_shouldDocumentShowCaret");
+      "Change to 'document should show caret': $_shouldDocumentShowCaret",
+    );
     markDirty();
   }
 
   @override
   SingleColumnLayoutViewModel style(
-      Document document, SingleColumnLayoutViewModel viewModel) {
-    editorStyleLog
-        .finest("(Re)calculating selection view model for document layout");
-    editorStyleLog
-        .fine("Applying selection to components: ${_selection.value}");
+    Document document,
+    SingleColumnLayoutViewModel viewModel,
+  ) {
+    editorStyleLog.finest(
+      "(Re)calculating selection view model for document layout",
+    );
+    editorStyleLog.fine(
+      "Applying selection to components: ${_selection.value}",
+    );
     return SingleColumnLayoutViewModel(
       padding: viewModel.padding,
       componentViewModels: [
@@ -86,7 +91,8 @@ class SingleColumnLayoutSelectionStyler extends SingleColumnLayoutStylePhase {
   }
 
   SingleColumnLayoutComponentViewModel _applySelection(
-      SingleColumnLayoutComponentViewModel viewModel) {
+    SingleColumnLayoutComponentViewModel viewModel,
+  ) {
     final documentSelection = _selection.value;
     final node = _document.getNodeById(viewModel.nodeId)!;
 
@@ -110,21 +116,23 @@ class SingleColumnLayoutSelectionStyler extends SingleColumnLayoutStylePhase {
         selectedNodes = [];
       }
       nodeSelection = _computeNodeSelection(
-          documentSelection: documentSelection,
-          selectedNodes: selectedNodes,
-          node: node);
+        documentSelection: documentSelection,
+        selectedNodes: selectedNodes,
+        node: node,
+      );
     }
 
     editorStyleLog.fine("Node selection (${node.id}): $nodeSelection");
     if (node is TextNode) {
       final textSelection =
           nodeSelection == null || nodeSelection.nodeSelection is! TextSelection
-              ? null
-              : nodeSelection.nodeSelection as TextSelection;
+          ? null
+          : nodeSelection.nodeSelection as TextSelection;
       if (nodeSelection != null &&
           nodeSelection.nodeSelection is! TextSelection) {
         editorStyleLog.shout(
-            'ERROR: Building a paragraph component but the selection is not a TextSelection. Node: ${node.id}, Selection: ${nodeSelection.nodeSelection}');
+          'ERROR: Building a paragraph component but the selection is not a TextSelection. Node: ${node.id}, Selection: ${nodeSelection.nodeSelection}',
+        );
       }
       final showCaret = _shouldDocumentShowCaret && nodeSelection != null
           ? nodeSelection.isExtent
@@ -133,7 +141,7 @@ class SingleColumnLayoutSelectionStyler extends SingleColumnLayoutStylePhase {
       final highlightWhenEmpty = nodeSelection == null
           ? false
           : nodeSelection.highlightWhenEmpty &&
-              _selectionStyles.highlightEmptyTextBlocks;
+                _selectionStyles.highlightEmptyTextBlocks;
 
       editorStyleLog.finer(' - ${node.id}: $nodeSelection');
       if (showCaret) {
@@ -147,16 +155,18 @@ class SingleColumnLayoutSelectionStyler extends SingleColumnLayoutStylePhase {
       if (viewModel is TextComponentViewModel) {
         final componentTextColor = viewModel.textStyleBuilder({}).color;
 
-        final textWithSelectionAttributions = textSelection != null &&
+        final textWithSelectionAttributions =
+            textSelection != null &&
                 !textSelection.isCollapsed &&
                 _selectedTextColorStrategy != null &&
                 componentTextColor != null
-            ? (viewModel.text.copyText(0)
-              ..addAttribution(
-                ColorAttribution(_selectedTextColorStrategy!(
-                  originalTextColor: componentTextColor,
-                  selectionHighlightColor: _selectionStyles.selectionColor,
-                )),
+            ? (viewModel.text.copyText(0)..addAttribution(
+                ColorAttribution(
+                  _selectedTextColorStrategy!(
+                    originalTextColor: componentTextColor,
+                    selectionHighlightColor: _selectionStyles.selectionColor,
+                  ),
+                ),
                 SpanRange(textSelection.start, textSelection.end - 1),
                 // The selected range might already have a color attribution. We want to override it
                 // with the selected text color.
@@ -209,7 +219,9 @@ class SingleColumnLayoutSelectionStyler extends SingleColumnLayoutStylePhase {
       late NodeSelection? nodeSelection;
       try {
         nodeSelection = node.computeSelection(
-            base: baseNodePosition, extent: extentNodePosition);
+          base: baseNodePosition,
+          extent: extentNodePosition,
+        );
       } catch (exception) {
         // This situation can happen in the moment between a document change and
         // a corresponding selection change. For example: deleting an image and
@@ -236,8 +248,9 @@ class SingleColumnLayoutSelectionStyler extends SingleColumnLayoutStylePhase {
         editorStyleLog.finer('   - ${node.id}');
       }
 
-      if (selectedNodes
-              .firstWhereOrNull((selectedNode) => selectedNode.id == node.id) ==
+      if (selectedNodes.firstWhereOrNull(
+            (selectedNode) => selectedNode.id == node.id,
+          ) ==
           null) {
         // The document selection does not contain the node we're interested in. Return.
         editorStyleLog.finer(' - this node is not in the selection');
@@ -253,8 +266,9 @@ class SingleColumnLayoutSelectionStyler extends SingleColumnLayoutStylePhase {
         return DocumentNodeSelection(
           nodeId: node.id,
           nodeSelection: node.computeSelection(
-            base:
-                isBase ? documentSelection.base.nodePosition : node.endPosition,
+            base: isBase
+                ? documentSelection.base.nodePosition
+                : node.endPosition,
             extent: isBase
                 ? node.endPosition
                 : documentSelection.extent.nodePosition,
@@ -282,8 +296,9 @@ class SingleColumnLayoutSelectionStyler extends SingleColumnLayoutStylePhase {
           highlightWhenEmpty: isBase,
         );
       } else {
-        editorStyleLog
-            .finer(' - this node is fully selected within the selection');
+        editorStyleLog.finer(
+          ' - this node is fully selected within the selection',
+        );
         // Multiple nodes are selected and this node is neither the top
         // or the bottom node, therefore this entire node is selected.
         return DocumentNodeSelection(

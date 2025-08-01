@@ -55,8 +55,8 @@ class AndroidToolbarFocalPointDocumentLayer
 }
 
 class _AndroidToolbarFocalPointDocumentLayerState
-    extends DocumentLayoutLayerState<AndroidToolbarFocalPointDocumentLayer,
-        Rect> {
+    extends
+        DocumentLayoutLayerState<AndroidToolbarFocalPointDocumentLayer, Rect> {
   @override
   void initState() {
     super.initState();
@@ -90,15 +90,19 @@ class _AndroidToolbarFocalPointDocumentLayerState
   }
 
   @override
-  Rect? computeLayoutDataWithDocumentLayout(BuildContext contentLayersContext,
-      BuildContext documentContext, DocumentLayout documentLayout) {
+  Rect? computeLayoutDataWithDocumentLayout(
+    BuildContext contentLayersContext,
+    BuildContext documentContext,
+    DocumentLayout documentLayout,
+  ) {
     final documentSelection = widget.selection.value;
     if (documentSelection == null) {
       return null;
     }
 
-    final selectedComponent = documentLayout
-        .getComponentByNodeId(widget.selection.value!.extent.nodeId);
+    final selectedComponent = documentLayout.getComponentByNodeId(
+      widget.selection.value!.extent.nodeId,
+    );
     if (selectedComponent == null) {
       // Assume that we're in a momentary transitive state where the document layout
       // just gained or lost a component. We expect this method to run again in a moment
@@ -169,8 +173,11 @@ class AndroidHandlesDocumentLayer extends DocumentLayoutLayerStatefulWidget {
   final ValueListenable<DocumentSelection?> selection;
 
   final void Function(
-          DocumentSelection?, SelectionChangeType, String selectionReason)
-      changeSelection;
+    DocumentSelection?,
+    SelectionChangeType,
+    String selectionReason,
+  )
+  changeSelection;
 
   final double caretWidth;
 
@@ -182,13 +189,17 @@ class AndroidHandlesDocumentLayer extends DocumentLayoutLayerStatefulWidget {
 
   @override
   DocumentLayoutLayerState<AndroidHandlesDocumentLayer, DocumentSelectionLayout>
-      createState() => AndroidControlsDocumentLayerState();
+  createState() => AndroidControlsDocumentLayerState();
 }
 
 @visibleForTesting
-class AndroidControlsDocumentLayerState extends DocumentLayoutLayerState<
-    AndroidHandlesDocumentLayer,
-    DocumentSelectionLayout> with SingleTickerProviderStateMixin {
+class AndroidControlsDocumentLayerState
+    extends
+        DocumentLayoutLayerState<
+          AndroidHandlesDocumentLayer,
+          DocumentSelectionLayout
+        >
+    with SingleTickerProviderStateMixin {
   late BlinkController _caretBlinkController;
 
   SuperEditorAndroidControlsController? _controlsController;
@@ -210,20 +221,25 @@ class AndroidControlsDocumentLayerState extends DocumentLayoutLayerState<
 
     if (_controlsController != null) {
       _controlsController!.shouldCaretBlink.removeListener(_onBlinkModeChange);
-      _controlsController!.caretJumpToOpaqueSignal
-          .removeListener(_caretJumpToOpaque);
-      _controlsController!.shouldShowCollapsedHandle
-          .removeListener(_onShouldShowCollapsedHandleChange);
-      _controlsController!.areSelectionHandlesAllowed
-          .removeListener(_onSelectionHandlesAllowedChange);
+      _controlsController!.caretJumpToOpaqueSignal.removeListener(
+        _caretJumpToOpaque,
+      );
+      _controlsController!.shouldShowCollapsedHandle.removeListener(
+        _onShouldShowCollapsedHandleChange,
+      );
+      _controlsController!.areSelectionHandlesAllowed.removeListener(
+        _onSelectionHandlesAllowedChange,
+      );
     }
 
     _controlsController = SuperEditorAndroidControlsScope.rootOf(context);
     _controlsController!.shouldCaretBlink.addListener(_onBlinkModeChange);
-    _controlsController!.caretJumpToOpaqueSignal
-        .addListener(_caretJumpToOpaque);
-    _controlsController!.areSelectionHandlesAllowed
-        .addListener(_onSelectionHandlesAllowedChange);
+    _controlsController!.caretJumpToOpaqueSignal.addListener(
+      _caretJumpToOpaque,
+    );
+    _controlsController!.areSelectionHandlesAllowed.addListener(
+      _onSelectionHandlesAllowedChange,
+    );
 
     /// Listen for changes about whether we want to show the collapsed handle
     /// or whether we want to show expanded handles for a selection. We listen to
@@ -231,8 +247,9 @@ class AndroidControlsDocumentLayerState extends DocumentLayoutLayerState<
     /// ambiguous, such as when when the user drags an expanded handle such that
     /// the selection collapses. In that case, the selection is collapsed but we want
     /// to show the expanded handle. This signal clarifies which one we want.
-    _controlsController!.shouldShowCollapsedHandle
-        .addListener(_onShouldShowCollapsedHandleChange);
+    _controlsController!.shouldShowCollapsedHandle.addListener(
+      _onShouldShowCollapsedHandleChange,
+    );
     _onBlinkModeChange();
   }
 
@@ -250,10 +267,12 @@ class AndroidControlsDocumentLayerState extends DocumentLayoutLayerState<
   void dispose() {
     widget.selection.removeListener(_onSelectionChange);
     _controlsController?.shouldCaretBlink.removeListener(_onBlinkModeChange);
-    _controlsController!.shouldShowCollapsedHandle
-        .removeListener(_onShouldShowCollapsedHandleChange);
-    _controlsController!.areSelectionHandlesAllowed
-        .removeListener(_onSelectionHandlesAllowedChange);
+    _controlsController!.shouldShowCollapsedHandle.removeListener(
+      _onShouldShowCollapsedHandleChange,
+    );
+    _controlsController!.areSelectionHandlesAllowed.removeListener(
+      _onSelectionHandlesAllowedChange,
+    );
 
     _caretBlinkController.dispose();
     super.dispose();
@@ -340,9 +359,10 @@ class AndroidControlsDocumentLayerState extends DocumentLayoutLayerState<
 
   @override
   DocumentSelectionLayout? computeLayoutDataWithDocumentLayout(
-      BuildContext contentLayersContext,
-      BuildContext documentContext,
-      DocumentLayout documentLayout) {
+    BuildContext contentLayersContext,
+    BuildContext documentContext,
+    DocumentLayout documentLayout,
+  ) {
     final selection = widget.selection.value;
     if (selection == null) {
       return null;
@@ -387,18 +407,20 @@ class AndroidControlsDocumentLayerState extends DocumentLayoutLayerState<
         );
       }
 
-      return DocumentSelectionLayout(
-        caret: caretRect,
-      );
+      return DocumentSelectionLayout(caret: caretRect);
     } else {
       return DocumentSelectionLayout(
         upstream: documentLayout.getRectForPosition(
-          widget.document
-              .selectUpstreamPosition(selection.base, selection.extent),
+          widget.document.selectUpstreamPosition(
+            selection.base,
+            selection.extent,
+          ),
         )!,
         downstream: documentLayout.getRectForPosition(
-          widget.document
-              .selectDownstreamPosition(selection.base, selection.extent),
+          widget.document.selectDownstreamPosition(
+            selection.base,
+            selection.extent,
+          ),
         )!,
         expandedSelectionBounds: documentLayout.getRectForSelection(
           selection.base,
@@ -412,7 +434,9 @@ class AndroidControlsDocumentLayerState extends DocumentLayoutLayerState<
   Widget doBuild(BuildContext context, DocumentSelectionLayout? layoutData) {
     return IgnorePointer(
       child: SizedBox.expand(
-        child: layoutData != null //
+        child:
+            layoutData !=
+                null //
             ? _buildHandles(layoutData)
             : const SizedBox(),
       ),
@@ -421,8 +445,9 @@ class AndroidControlsDocumentLayerState extends DocumentLayoutLayerState<
 
   Widget _buildHandles(DocumentSelectionLayout layoutData) {
     if (widget.selection.value == null) {
-      editorGesturesLog
-          .finer("Not building overlay handles because there's no selection.");
+      editorGesturesLog.finer(
+        "Not building overlay handles because there's no selection.",
+      );
       return const SizedBox.shrink();
     }
 
@@ -439,9 +464,7 @@ class AndroidControlsDocumentLayerState extends DocumentLayoutLayerState<
     );
   }
 
-  Widget _buildCaret({
-    required Rect caret,
-  }) {
+  Widget _buildCaret({required Rect caret}) {
     return Positioned(
       left: caret.left,
       top: caret.top,
@@ -454,8 +477,9 @@ class AndroidControlsDocumentLayerState extends DocumentLayoutLayerState<
           builder: (context, child) {
             return ColoredBox(
               key: DocumentKeys.caret,
-              color:
-                  caretColor.withValues(alpha: _caretBlinkController.opacity),
+              color: caretColor.withValues(
+                alpha: _caretBlinkController.opacity,
+              ),
             );
           },
         ),
@@ -516,10 +540,7 @@ class AndroidDocumentGestureEditingController extends GestureEditingController {
   /// Updates the caret's size and position.
   ///
   /// The [top] offset is in the document layout's coordinate space.
-  void updateCaret({
-    Offset? top,
-    double? height,
-  }) {
+  void updateCaret({Offset? top, double? height}) {
     bool changed = false;
     if (top != null) {
       _caretTop = top;
@@ -613,8 +634,10 @@ class AndroidDocumentGestureEditingController extends GestureEditingController {
   /// Starts a countdown that, if reached, fades out the collapsed drag handle.
   void startCollapsedHandleAutoHideCountdown() {
     _collapsedHandleAutoHideTimer?.cancel();
-    _collapsedHandleAutoHideTimer =
-        Timer(_collapsedHandleAutoHideDuration, _hideCollapsedHandle);
+    _collapsedHandleAutoHideTimer = Timer(
+      _collapsedHandleAutoHideDuration,
+      _hideCollapsedHandle,
+    );
   }
 
   /// Cancels a countdown that started with [startCollapsedHandleAutoHideCountdown].

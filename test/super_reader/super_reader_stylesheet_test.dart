@@ -10,25 +10,37 @@ void main() {
   group("SuperReader stylesheets", () {
     group("style text", () {
       testWidgetsOnArbitraryDesktop("with left alignment", (tester) async {
-        await _pumpReader(tester, stylesheet: _stylesheetWithTextAlignment(TextAlign.left));
+        await _pumpReader(
+          tester,
+          stylesheet: _stylesheetWithTextAlignment(TextAlign.left),
+        );
 
         expect(_findTextWithAlignment(TextAlign.left), findsOneWidget);
       });
 
       testWidgetsOnArbitraryDesktop("with center alignment", (tester) async {
-        await _pumpReader(tester, stylesheet: _stylesheetWithTextAlignment(TextAlign.center));
+        await _pumpReader(
+          tester,
+          stylesheet: _stylesheetWithTextAlignment(TextAlign.center),
+        );
 
         expect(_findTextWithAlignment(TextAlign.center), findsOneWidget);
       });
 
       testWidgetsOnArbitraryDesktop("with right alignment", (tester) async {
-        await _pumpReader(tester, stylesheet: _stylesheetWithTextAlignment(TextAlign.right));
+        await _pumpReader(
+          tester,
+          stylesheet: _stylesheetWithTextAlignment(TextAlign.right),
+        );
 
         expect(_findTextWithAlignment(TextAlign.right), findsOneWidget);
       });
 
       testWidgetsOnArbitraryDesktop("with justify alignment", (tester) async {
-        await _pumpReader(tester, stylesheet: _stylesheetWithTextAlignment(TextAlign.justify));
+        await _pumpReader(
+          tester,
+          stylesheet: _stylesheetWithTextAlignment(TextAlign.justify),
+        );
 
         expect(_findTextWithAlignment(TextAlign.justify), findsOneWidget);
       });
@@ -36,8 +48,9 @@ void main() {
   });
 }
 
-Finder _findTextWithAlignment(TextAlign textAlign) =>
-    find.byWidgetPredicate((widget) => (widget is SuperText) && widget.textAlign == textAlign);
+Finder _findTextWithAlignment(TextAlign textAlign) => find.byWidgetPredicate(
+  (widget) => (widget is SuperText) && widget.textAlign == textAlign,
+);
 
 Future<void> _pumpReader(
   WidgetTester tester, {
@@ -62,14 +75,9 @@ Stylesheet _stylesheetWithTextAlignment(TextAlign textAlign) {
   return Stylesheet(
     inlineTextStyler: defaultInlineTextStyler,
     rules: [
-      StyleRule(
-        BlockSelector.all,
-        (doc, docNode) {
-          return {
-            "textAlign": textAlign,
-          };
-        },
-      ),
+      StyleRule(BlockSelector.all, (doc, docNode) {
+        return {"textAlign": textAlign};
+      }),
     ],
   );
 }

@@ -24,13 +24,18 @@ void main() {
 
           // Ensure the word was selected.
           expect(SuperReaderInspector.findDocumentSelection(), isNotNull);
-          expect(SuperReaderInspector.findDocumentSelection(), _wordConsecteturSelection);
+          expect(
+            SuperReaderInspector.findDocumentSelection(),
+            _wordConsecteturSelection,
+          );
 
           // Ensure the drag handles and toolbar are visible, but the magnifier isn't.
           _expectHandlesAndToolbar();
         });
 
-        testWidgetsOnAndroid("selects by word when dragging upstream", (tester) async {
+        testWidgetsOnAndroid("selects by word when dragging upstream", (
+          tester,
+        ) async {
           await _pumpAppWithLongText(tester);
 
           // Long press on the middle of "do|lor".
@@ -38,7 +43,10 @@ void main() {
           await tester.pumpAndSettle();
 
           // Ensure the word was selected.
-          expect(SuperReaderInspector.findDocumentSelection(), _wordDolorSelection);
+          expect(
+            SuperReaderInspector.findDocumentSelection(),
+            _wordDolorSelection,
+          );
 
           // Ensure the toolbar is visible, but drag handles and magnifier aren't.
           _expectOnlyToolbar();
@@ -85,7 +93,156 @@ void main() {
           _expectHandlesAndToolbar();
         });
 
-        testWidgetsOnAndroid("selects by character when dragging upstream in reverse", (tester) async {
+        testWidgetsOnAndroid(
+          "selects by character when dragging upstream in reverse",
+          (tester) async {
+            await _pumpAppWithLongText(tester);
+
+            // Long press on the middle of "do|lor".
+            final gesture = await tester.longPressDownInParagraph("1", 14);
+            await tester.pumpAndSettle();
+
+            // Ensure the word was selected.
+            expect(
+              SuperReaderInspector.findDocumentSelection(),
+              _wordDolorSelection,
+            );
+
+            // Drag near the end of the upstream word.
+            // "Lorem i|psum dolor sit amet"
+            //         ^ position 7
+            //
+            // We do this with manual distances because the attempt to look up character
+            // offsets was producing unpredictable results.
+            const dragIncrementCount = 10;
+            const upstreamDragDistance = -15.0;
+            for (int i = 0; i < dragIncrementCount; i += 1) {
+              await gesture.moveBy(const Offset(upstreamDragDistance, 0));
+              await tester.pump();
+            }
+
+            // Ensure the original word and upstream word are both selected.
+            expect(
+              SuperReaderInspector.findDocumentSelection(),
+              const DocumentSelection(
+                base: DocumentPosition(
+                  nodeId: "1",
+                  nodePosition: TextNodePosition(offset: 17),
+                ),
+                extent: DocumentPosition(
+                  nodeId: "1",
+                  nodePosition: TextNodePosition(offset: 6),
+                ),
+              ),
+            );
+
+            // Drag in reverse toward the initial selection.
+            //
+            // Drag far enough to trigger a per-character selection, and then
+            // drag a little more to deselect some characters.
+            const downstreamDragDistance = 110 / dragIncrementCount;
+            for (int i = 0; i < dragIncrementCount; i += 1) {
+              await gesture.moveBy(const Offset(downstreamDragDistance, 0));
+              await tester.pump();
+            }
+
+            // Ensure that part of the upstream word is selected because we're now
+            // in per-character selection mode.
+            //
+            // "Lorem ipsu|m dolor sit amet"
+            //            ^ position 10
+            expect(
+              SuperReaderInspector.findDocumentSelection(),
+              const DocumentSelection(
+                base: DocumentPosition(
+                  nodeId: "1",
+                  nodePosition: TextNodePosition(offset: 17),
+                ),
+                extent: DocumentPosition(
+                  nodeId: "1",
+                  nodePosition: TextNodePosition(offset: 10),
+                ),
+              ),
+            );
+
+            // Release the gesture so the test system doesn't complain.
+            await gesture.up();
+            await tester.pump();
+          },
+        );
+
+        testWidgetsOnAndroid(
+          "selects by word when jumping up a line and dragging upstream",
+          (tester) async {
+            await _pumpAppWithLongText(tester);
+
+            // Long press on the middle of "adi|piscing".
+            final gesture = await tester.longPressDownInParagraph("1", 42);
+            await tester.pumpAndSettle();
+
+            // Ensure the word was selected.
+            expect(
+              SuperReaderInspector.findDocumentSelection(),
+              _wordAdipiscingSelection,
+            );
+
+            // Ensure the toolbar is visible, but drag handles and magnifier aren't.
+            _expectOnlyToolbar();
+
+            // Drag up one line to select "dolor".
+            const dragIncrementCount = 10;
+            const verticalDragDistance = -24 / dragIncrementCount;
+            for (int i = 0; i < dragIncrementCount; i += 1) {
+              await gesture.moveBy(const Offset(0, verticalDragDistance));
+              await tester.pump();
+            }
+
+            // Ensure the selection begins at the end of "adipiscing" and goes to the
+            // beginning of "dolor", which is upstream.
+            expect(
+              SuperReaderInspector.findDocumentSelection(),
+              const DocumentSelection(
+                base: DocumentPosition(
+                  nodeId: "1",
+                  nodePosition: TextNodePosition(offset: _wordAdipiscingEnd),
+                ),
+                extent: DocumentPosition(
+                  nodeId: "1",
+                  nodePosition: TextNodePosition(offset: _wordDolorStart),
+                ),
+              ),
+            );
+
+            // Drag upstream to select the previous word.
+            const upstreamDragDistance = -80 / dragIncrementCount;
+            for (int i = 0; i < dragIncrementCount; i += 1) {
+              await gesture.moveBy(const Offset(upstreamDragDistance, 0));
+              await tester.pump();
+            }
+
+            expect(
+              SuperReaderInspector.findDocumentSelection(),
+              const DocumentSelection(
+                base: DocumentPosition(
+                  nodeId: "1",
+                  nodePosition: TextNodePosition(offset: _wordAdipiscingEnd),
+                ),
+                extent: DocumentPosition(
+                  nodeId: "1",
+                  nodePosition: TextNodePosition(offset: _wordIpsumStart),
+                ),
+              ),
+            );
+
+            // Release the gesture so the test system doesn't complain.
+            await gesture.up();
+            await tester.pump();
+          },
+        );
+
+        testWidgetsOnAndroid("selects by word when dragging downstream", (
+          tester,
+        ) async {
           await _pumpAppWithLongText(tester);
 
           // Long press on the middle of "do|lor".
@@ -93,142 +250,10 @@ void main() {
           await tester.pumpAndSettle();
 
           // Ensure the word was selected.
-          expect(SuperReaderInspector.findDocumentSelection(), _wordDolorSelection);
-
-          // Drag near the end of the upstream word.
-          // "Lorem i|psum dolor sit amet"
-          //         ^ position 7
-          //
-          // We do this with manual distances because the attempt to look up character
-          // offsets was producing unpredictable results.
-          const dragIncrementCount = 10;
-          const upstreamDragDistance = -15.0;
-          for (int i = 0; i < dragIncrementCount; i += 1) {
-            await gesture.moveBy(const Offset(upstreamDragDistance, 0));
-            await tester.pump();
-          }
-
-          // Ensure the original word and upstream word are both selected.
           expect(
             SuperReaderInspector.findDocumentSelection(),
-            const DocumentSelection(
-              base: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 17),
-              ),
-              extent: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 6),
-              ),
-            ),
+            _wordDolorSelection,
           );
-
-          // Drag in reverse toward the initial selection.
-          //
-          // Drag far enough to trigger a per-character selection, and then
-          // drag a little more to deselect some characters.
-          const downstreamDragDistance = 110 / dragIncrementCount;
-          for (int i = 0; i < dragIncrementCount; i += 1) {
-            await gesture.moveBy(const Offset(downstreamDragDistance, 0));
-            await tester.pump();
-          }
-
-          // Ensure that part of the upstream word is selected because we're now
-          // in per-character selection mode.
-          //
-          // "Lorem ipsu|m dolor sit amet"
-          //            ^ position 10
-          expect(
-            SuperReaderInspector.findDocumentSelection(),
-            const DocumentSelection(
-              base: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 17),
-              ),
-              extent: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 10),
-              ),
-            ),
-          );
-
-          // Release the gesture so the test system doesn't complain.
-          await gesture.up();
-          await tester.pump();
-        });
-
-        testWidgetsOnAndroid("selects by word when jumping up a line and dragging upstream", (tester) async {
-          await _pumpAppWithLongText(tester);
-
-          // Long press on the middle of "adi|piscing".
-          final gesture = await tester.longPressDownInParagraph("1", 42);
-          await tester.pumpAndSettle();
-
-          // Ensure the word was selected.
-          expect(SuperReaderInspector.findDocumentSelection(), _wordAdipiscingSelection);
-
-          // Ensure the toolbar is visible, but drag handles and magnifier aren't.
-          _expectOnlyToolbar();
-
-          // Drag up one line to select "dolor".
-          const dragIncrementCount = 10;
-          const verticalDragDistance = -24 / dragIncrementCount;
-          for (int i = 0; i < dragIncrementCount; i += 1) {
-            await gesture.moveBy(const Offset(0, verticalDragDistance));
-            await tester.pump();
-          }
-
-          // Ensure the selection begins at the end of "adipiscing" and goes to the
-          // beginning of "dolor", which is upstream.
-          expect(
-            SuperReaderInspector.findDocumentSelection(),
-            const DocumentSelection(
-              base: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: _wordAdipiscingEnd),
-              ),
-              extent: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: _wordDolorStart),
-              ),
-            ),
-          );
-
-          // Drag upstream to select the previous word.
-          const upstreamDragDistance = -80 / dragIncrementCount;
-          for (int i = 0; i < dragIncrementCount; i += 1) {
-            await gesture.moveBy(const Offset(upstreamDragDistance, 0));
-            await tester.pump();
-          }
-
-          expect(
-            SuperReaderInspector.findDocumentSelection(),
-            const DocumentSelection(
-              base: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: _wordAdipiscingEnd),
-              ),
-              extent: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: _wordIpsumStart),
-              ),
-            ),
-          );
-
-          // Release the gesture so the test system doesn't complain.
-          await gesture.up();
-          await tester.pump();
-        });
-
-        testWidgetsOnAndroid("selects by word when dragging downstream", (tester) async {
-          await _pumpAppWithLongText(tester);
-
-          // Long press on the middle of "do|lor".
-          final gesture = await tester.longPressDownInParagraph("1", 14);
-          await tester.pumpAndSettle();
-
-          // Ensure the word was selected.
-          expect(SuperReaderInspector.findDocumentSelection(), _wordDolorSelection);
 
           // Ensure the toolbar is visible, but drag handles and magnifier aren't.
           _expectOnlyToolbar();
@@ -277,137 +302,149 @@ void main() {
           _expectHandlesAndToolbar();
         });
 
-        testWidgetsOnAndroid("selects by character when dragging downstream in reverse", (tester) async {
-          await _pumpAppWithLongText(tester);
+        testWidgetsOnAndroid(
+          "selects by character when dragging downstream in reverse",
+          (tester) async {
+            await _pumpAppWithLongText(tester);
 
-          // Long press on the middle of "do|lor".
-          final gesture = await tester.longPressDownInParagraph("1", 14);
-          await tester.pumpAndSettle();
+            // Long press on the middle of "do|lor".
+            final gesture = await tester.longPressDownInParagraph("1", 14);
+            await tester.pumpAndSettle();
 
-          // Ensure the word was selected.
-          expect(SuperReaderInspector.findDocumentSelection(), _wordDolorSelection);
+            // Ensure the word was selected.
+            expect(
+              SuperReaderInspector.findDocumentSelection(),
+              _wordDolorSelection,
+            );
 
-          // Drag near the end of the downstream word.
-          // "Lorem ipsum dolor si|t amet"
-          //                      ^ position 20
-          //
-          // We do this with manual distances because the attempt to look up character
-          // offsets was producing unpredictable results.
-          const dragIncrementCount = 10;
-          const upstreamDragDistance = 100 / dragIncrementCount;
-          for (int i = 0; i < dragIncrementCount; i += 1) {
-            await gesture.moveBy(const Offset(upstreamDragDistance, 0));
+            // Drag near the end of the downstream word.
+            // "Lorem ipsum dolor si|t amet"
+            //                      ^ position 20
+            //
+            // We do this with manual distances because the attempt to look up character
+            // offsets was producing unpredictable results.
+            const dragIncrementCount = 10;
+            const upstreamDragDistance = 100 / dragIncrementCount;
+            for (int i = 0; i < dragIncrementCount; i += 1) {
+              await gesture.moveBy(const Offset(upstreamDragDistance, 0));
+              await tester.pump();
+            }
+
+            // Ensure the original word and downstream word are both selected.
+            expect(
+              SuperReaderInspector.findDocumentSelection(),
+              const DocumentSelection(
+                base: DocumentPosition(
+                  nodeId: "1",
+                  nodePosition: TextNodePosition(offset: 12),
+                ),
+                extent: DocumentPosition(
+                  nodeId: "1",
+                  nodePosition: TextNodePosition(offset: 21),
+                ),
+              ),
+            );
+
+            // Drag in reverse toward the initial selection.
+            //
+            // Drag far enough to trigger a per-character selection, and then
+            // drag a little more to deselect some characters.
+            const downstreamDragDistance = -40 / dragIncrementCount;
+            for (int i = 0; i < dragIncrementCount; i += 1) {
+              await gesture.moveBy(const Offset(downstreamDragDistance, 0));
+              await tester.pump();
+            }
+
+            // Ensure that part of the downstream word is selected because we're now
+            // in per-character selection mode.
+            //
+            // "Lorem ipsum dolor s|it amet"
+            //                     ^ position 19
+            expect(
+              SuperReaderInspector.findDocumentSelection(),
+              const DocumentSelection(
+                base: DocumentPosition(
+                  nodeId: "1",
+                  nodePosition: TextNodePosition(offset: 12),
+                ),
+                extent: DocumentPosition(
+                  nodeId: "1",
+                  nodePosition: TextNodePosition(offset: 19),
+                ),
+              ),
+            );
+
+            // Release the gesture so the test system doesn't complain.
+            await gesture.up();
             await tester.pump();
-          }
+          },
+        );
 
-          // Ensure the original word and downstream word are both selected.
-          expect(
-            SuperReaderInspector.findDocumentSelection(),
-            const DocumentSelection(
-              base: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 12),
-              ),
-              extent: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 21),
-              ),
-            ),
-          );
+        testWidgetsOnAndroid(
+          "selects by word when jumping down a line and dragging downstream",
+          (tester) async {
+            await _pumpAppWithLongText(tester);
 
-          // Drag in reverse toward the initial selection.
-          //
-          // Drag far enough to trigger a per-character selection, and then
-          // drag a little more to deselect some characters.
-          const downstreamDragDistance = -40 / dragIncrementCount;
-          for (int i = 0; i < dragIncrementCount; i += 1) {
-            await gesture.moveBy(const Offset(downstreamDragDistance, 0));
+            // Long press on the middle of "adi|piscing".
+            final gesture = await tester.longPressDownInParagraph("1", 42);
+            await tester.pumpAndSettle();
+
+            // Ensure the word was selected.
+            expect(
+              SuperReaderInspector.findDocumentSelection(),
+              _wordAdipiscingSelection,
+            );
+
+            // Drag down one line to select "tempor".
+            const dragIncrementCount = 10;
+            const verticalDragDistance = 24 / dragIncrementCount;
+            for (int i = 0; i < dragIncrementCount; i += 1) {
+              await gesture.moveBy(const Offset(0, verticalDragDistance));
+              await tester.pump();
+            }
+
+            // Ensure the selection begins at the start of "adipiscing" and goes to the
+            // end of "tempor", which is upstream.
+            expect(
+              SuperReaderInspector.findDocumentSelection(),
+              const DocumentSelection(
+                base: DocumentPosition(
+                  nodeId: "1",
+                  nodePosition: TextNodePosition(offset: _wordAdipiscingStart),
+                ),
+                extent: DocumentPosition(
+                  nodeId: "1",
+                  nodePosition: TextNodePosition(offset: _wordTemporEnd),
+                ),
+              ),
+            );
+
+            // Drag downstream to select the next word.
+            const downstreamDragDistance = 80 / dragIncrementCount;
+            for (int i = 0; i < dragIncrementCount; i += 1) {
+              await gesture.moveBy(const Offset(downstreamDragDistance, 0));
+              await tester.pump();
+            }
+
+            expect(
+              SuperReaderInspector.findDocumentSelection(),
+              const DocumentSelection(
+                base: DocumentPosition(
+                  nodeId: "1",
+                  nodePosition: TextNodePosition(offset: _wordAdipiscingStart),
+                ),
+                extent: DocumentPosition(
+                  nodeId: "1",
+                  nodePosition: TextNodePosition(offset: _wordIncididuntEnd),
+                ),
+              ),
+            );
+
+            // Release the gesture so the test system doesn't complain.
+            await gesture.up();
             await tester.pump();
-          }
-
-          // Ensure that part of the downstream word is selected because we're now
-          // in per-character selection mode.
-          //
-          // "Lorem ipsum dolor s|it amet"
-          //                     ^ position 19
-          expect(
-            SuperReaderInspector.findDocumentSelection(),
-            const DocumentSelection(
-              base: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 12),
-              ),
-              extent: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 19),
-              ),
-            ),
-          );
-
-          // Release the gesture so the test system doesn't complain.
-          await gesture.up();
-          await tester.pump();
-        });
-
-        testWidgetsOnAndroid("selects by word when jumping down a line and dragging downstream", (tester) async {
-          await _pumpAppWithLongText(tester);
-
-          // Long press on the middle of "adi|piscing".
-          final gesture = await tester.longPressDownInParagraph("1", 42);
-          await tester.pumpAndSettle();
-
-          // Ensure the word was selected.
-          expect(SuperReaderInspector.findDocumentSelection(), _wordAdipiscingSelection);
-
-          // Drag down one line to select "tempor".
-          const dragIncrementCount = 10;
-          const verticalDragDistance = 24 / dragIncrementCount;
-          for (int i = 0; i < dragIncrementCount; i += 1) {
-            await gesture.moveBy(const Offset(0, verticalDragDistance));
-            await tester.pump();
-          }
-
-          // Ensure the selection begins at the start of "adipiscing" and goes to the
-          // end of "tempor", which is upstream.
-          expect(
-            SuperReaderInspector.findDocumentSelection(),
-            const DocumentSelection(
-              base: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: _wordAdipiscingStart),
-              ),
-              extent: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: _wordTemporEnd),
-              ),
-            ),
-          );
-
-          // Drag downstream to select the next word.
-          const downstreamDragDistance = 80 / dragIncrementCount;
-          for (int i = 0; i < dragIncrementCount; i += 1) {
-            await gesture.moveBy(const Offset(downstreamDragDistance, 0));
-            await tester.pump();
-          }
-
-          expect(
-            SuperReaderInspector.findDocumentSelection(),
-            const DocumentSelection(
-              base: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: _wordAdipiscingStart),
-              ),
-              extent: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: _wordIncididuntEnd),
-              ),
-            ),
-          );
-
-          // Release the gesture so the test system doesn't complain.
-          await gesture.up();
-          await tester.pump();
-        });
+          },
+        );
       });
     });
   });
@@ -438,7 +475,9 @@ Future<void> _pumpAppWithLongText(WidgetTester tester) async {
       .createDocument()
       // "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod...",
       .withSingleParagraph()
-      .withAndroidToolbarBuilder((context) => const AndroidTextEditingFloatingToolbar())
+      .withAndroidToolbarBuilder(
+        (context) => const AndroidTextEditingFloatingToolbar(),
+      )
       .pump();
 }
 

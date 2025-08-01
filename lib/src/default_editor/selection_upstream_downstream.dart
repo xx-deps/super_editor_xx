@@ -5,9 +5,9 @@ import 'package:super_editor/src/core/document.dart';
 /// the given content, like sitting before or after an image.
 class UpstreamDownstreamNodePosition implements NodePosition {
   const UpstreamDownstreamNodePosition.upstream()
-      : affinity = TextAffinity.upstream;
+    : affinity = TextAffinity.upstream;
   const UpstreamDownstreamNodePosition.downstream()
-      : affinity = TextAffinity.downstream;
+    : affinity = TextAffinity.downstream;
 
   const UpstreamDownstreamNodePosition(this.affinity);
 
@@ -34,26 +34,23 @@ class UpstreamDownstreamNodePosition implements NodePosition {
 /// position, like a caret sitting before or after an image.
 class UpstreamDownstreamNodeSelection implements NodeSelection {
   const UpstreamDownstreamNodeSelection.all()
-      : base = const UpstreamDownstreamNodePosition.upstream(),
-        extent = const UpstreamDownstreamNodePosition.downstream();
+    : base = const UpstreamDownstreamNodePosition.upstream(),
+      extent = const UpstreamDownstreamNodePosition.downstream();
 
   const UpstreamDownstreamNodeSelection.collapsedUpstream()
-      : base = const UpstreamDownstreamNodePosition.upstream(),
-        extent = const UpstreamDownstreamNodePosition.upstream();
+    : base = const UpstreamDownstreamNodePosition.upstream(),
+      extent = const UpstreamDownstreamNodePosition.upstream();
 
   const UpstreamDownstreamNodeSelection.collapsedDownstream()
-      : base = const UpstreamDownstreamNodePosition.downstream(),
-        extent = const UpstreamDownstreamNodePosition.downstream();
+    : base = const UpstreamDownstreamNodePosition.downstream(),
+      extent = const UpstreamDownstreamNodePosition.downstream();
 
   UpstreamDownstreamNodeSelection.collapsed(
-      UpstreamDownstreamNodePosition position)
-      : base = position,
-        extent = position;
+    UpstreamDownstreamNodePosition position,
+  ) : base = position,
+      extent = position;
 
-  UpstreamDownstreamNodeSelection({
-    required this.base,
-    required this.extent,
-  });
+  UpstreamDownstreamNodeSelection({required this.base, required this.extent});
 
   final UpstreamDownstreamNodePosition base;
   final UpstreamDownstreamNodePosition extent;

@@ -3,71 +3,89 @@ import 'package:super_editor/super_editor.dart';
 
 void main() {
   group("MutableDocument", () {
-    test("calculates a range from an upstream selection within a single node", () {
-      final document = MutableDocument(
-        nodes: [
-          ParagraphNode(
-            id: "1",
-            text: AttributedText("This is a paragraph of text."),
+    test(
+      "calculates a range from an upstream selection within a single node",
+      () {
+        final document = MutableDocument(
+          nodes: [
+            ParagraphNode(
+              id: "1",
+              text: AttributedText("This is a paragraph of text."),
+            ),
+          ],
+        );
+
+        // Try to get an upstream range.
+        final range = document.getRangeBetween(
+          const DocumentPosition(
+            nodeId: "1",
+            nodePosition: TextNodePosition(offset: 20),
           ),
-        ],
-      );
-
-      // Try to get an upstream range.
-      final range = document.getRangeBetween(
-        const DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 20)),
-        const DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 10)),
-      );
-
-      // Ensure the range is upstream.
-      expect(
-        range.start,
-        const DocumentPosition(
-          nodeId: "1",
-          nodePosition: TextNodePosition(offset: 10),
-        ),
-      );
-      expect(
-        range.end,
-        const DocumentPosition(
-          nodeId: "1",
-          nodePosition: TextNodePosition(offset: 20),
-        ),
-      );
-    });
-
-    test("calculates a range from an downstream selection within a single node", () {
-      final document = MutableDocument(
-        nodes: [
-          ParagraphNode(
-            id: "1",
-            text: AttributedText("This is a paragraph of text."),
+          const DocumentPosition(
+            nodeId: "1",
+            nodePosition: TextNodePosition(offset: 10),
           ),
-        ],
-      );
+        );
 
-      // Try to get an upstream range.
-      final range = document.getRangeBetween(
-        const DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 10)),
-        const DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 20)),
-      );
+        // Ensure the range is upstream.
+        expect(
+          range.start,
+          const DocumentPosition(
+            nodeId: "1",
+            nodePosition: TextNodePosition(offset: 10),
+          ),
+        );
+        expect(
+          range.end,
+          const DocumentPosition(
+            nodeId: "1",
+            nodePosition: TextNodePosition(offset: 20),
+          ),
+        );
+      },
+    );
 
-      // Ensure the range is upstream.
-      expect(
-        range.start,
-        const DocumentPosition(
-          nodeId: "1",
-          nodePosition: TextNodePosition(offset: 10),
-        ),
-      );
-      expect(
-        range.end,
-        const DocumentPosition(
-          nodeId: "1",
-          nodePosition: TextNodePosition(offset: 20),
-        ),
-      );
-    });
+    test(
+      "calculates a range from an downstream selection within a single node",
+      () {
+        final document = MutableDocument(
+          nodes: [
+            ParagraphNode(
+              id: "1",
+              text: AttributedText("This is a paragraph of text."),
+            ),
+          ],
+        );
+
+        // Try to get an upstream range.
+        final range = document.getRangeBetween(
+          const DocumentPosition(
+            nodeId: "1",
+            nodePosition: TextNodePosition(offset: 10),
+          ),
+          const DocumentPosition(
+            nodeId: "1",
+            nodePosition: TextNodePosition(offset: 20),
+          ),
+        );
+
+        // Ensure the range is upstream.
+        expect(
+          range.start,
+          const DocumentPosition(
+            nodeId: "1",
+            nodePosition: TextNodePosition(offset: 10),
+          ),
+        );
+        expect(
+          range.end,
+          const DocumentPosition(
+            nodeId: "1",
+            nodePosition: TextNodePosition(offset: 20),
+          ),
+        );
+      },
+    );
 
     group("getNodeIndexById returns the correct index", () {
       test("when creating a document", () {
@@ -226,10 +244,7 @@ void main() {
         final secondNode = document.getNodeAt(1)!;
         final thirdNode = document.getNodeAt(2)!;
 
-        document.moveNode(
-          nodeId: firstNode.id,
-          targetIndex: 1,
-        );
+        document.moveNode(nodeId: firstNode.id, targetIndex: 1);
 
         // Ensure the indices are correct.
         expect(document.getNodeIndexById(secondNode.id), 0);
@@ -243,10 +258,7 @@ void main() {
         final secondNode = document.getNodeAt(1)!;
         final thirdNode = document.getNodeAt(2)!;
 
-        document.moveNode(
-          nodeId: secondNode.id,
-          targetIndex: 2,
-        );
+        document.moveNode(nodeId: secondNode.id, targetIndex: 2);
 
         // Ensure the indices are correct.
         expect(document.getNodeIndexById(firstNode.id), 0);
@@ -260,10 +272,7 @@ void main() {
         final secondNode = document.getNodeAt(1)!;
         final thirdNode = document.getNodeAt(2)!;
 
-        document.moveNode(
-          nodeId: thirdNode.id,
-          targetIndex: 1,
-        );
+        document.moveNode(nodeId: thirdNode.id, targetIndex: 1);
 
         // Ensure the indices are correct.
         expect(document.getNodeIndexById(firstNode.id), 0);
@@ -277,10 +286,7 @@ void main() {
         final secondNode = document.getNodeAt(1)!;
         final thirdNode = document.getNodeAt(2)!;
 
-        document.moveNode(
-          nodeId: secondNode.id,
-          targetIndex: 0,
-        );
+        document.moveNode(nodeId: secondNode.id, targetIndex: 0);
 
         // Ensure the indices are correct.
         expect(document.getNodeIndexById(secondNode.id), 0);
@@ -341,10 +347,7 @@ void main() {
           text: AttributedText("This is the third paragraph."),
         );
 
-        document.replaceNodeById(
-          firstNode.id,
-          fourthNode,
-        );
+        document.replaceNodeById(firstNode.id, fourthNode);
 
         // Ensure the indices are correct.
         expect(document.getNodeIndexById(firstNode.id), -1);
@@ -364,10 +367,7 @@ void main() {
           text: AttributedText("This is the third paragraph."),
         );
 
-        document.replaceNodeById(
-          secondNode.id,
-          fourthNode,
-        );
+        document.replaceNodeById(secondNode.id, fourthNode);
 
         // Ensure the indices are correct.
         expect(document.getNodeIndexById(secondNode.id), -1);
@@ -387,10 +387,7 @@ void main() {
           text: AttributedText("This is the third paragraph."),
         );
 
-        document.replaceNodeById(
-          thirdNode.id,
-          fourthNode,
-        );
+        document.replaceNodeById(thirdNode.id, fourthNode);
 
         // Ensure the indices are correct.
         expect(document.getNodeIndexById(thirdNode.id), -1);

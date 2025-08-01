@@ -44,8 +44,16 @@ void main() {
             // Notice that the markers are provided in reverse order:
             // end then start. Order shouldn't matter within a single
             // position index. This test ensures that.
-            const SpanMarker(attribution: ExpectedSpans.bold, offset: 1, markerType: SpanMarkerType.end),
-            const SpanMarker(attribution: ExpectedSpans.bold, offset: 1, markerType: SpanMarkerType.start),
+            const SpanMarker(
+              attribution: ExpectedSpans.bold,
+              offset: 1,
+              markerType: SpanMarkerType.end,
+            ),
+            const SpanMarker(
+              attribution: ExpectedSpans.bold,
+              offset: 1,
+              markerType: SpanMarkerType.start,
+            ),
           ],
         ),
       );
@@ -89,15 +97,25 @@ void main() {
     test('add styled character to existing styled text', () {
       final initialText = attributedTextFromMarkdown("abcdefghi**j**");
 
-      final newText = initialText.copyAndAppend(AttributedText(
-        'k',
-        AttributedSpans(
-          attributions: [
-            const SpanMarker(attribution: ExpectedSpans.bold, offset: 0, markerType: SpanMarkerType.start),
-            const SpanMarker(attribution: ExpectedSpans.bold, offset: 0, markerType: SpanMarkerType.end),
-          ],
+      final newText = initialText.copyAndAppend(
+        AttributedText(
+          'k',
+          AttributedSpans(
+            attributions: [
+              const SpanMarker(
+                attribution: ExpectedSpans.bold,
+                offset: 0,
+                markerType: SpanMarkerType.start,
+              ),
+              const SpanMarker(
+                attribution: ExpectedSpans.bold,
+                offset: 0,
+                markerType: SpanMarkerType.end,
+              ),
+            ],
+          ),
         ),
-      ));
+      );
 
       final textSpan = newText.computeTextSpan(_styleBuilder);
 
@@ -134,10 +152,26 @@ void main() {
         'abcdefghij',
         AttributedSpans(
           attributions: [
-            const SpanMarker(attribution: ExpectedSpans.bold, offset: 2, markerType: SpanMarkerType.start),
-            const SpanMarker(attribution: ExpectedSpans.italics, offset: 4, markerType: SpanMarkerType.start),
-            const SpanMarker(attribution: ExpectedSpans.bold, offset: 5, markerType: SpanMarkerType.end),
-            const SpanMarker(attribution: ExpectedSpans.italics, offset: 7, markerType: SpanMarkerType.end),
+            const SpanMarker(
+              attribution: ExpectedSpans.bold,
+              offset: 2,
+              markerType: SpanMarkerType.start,
+            ),
+            const SpanMarker(
+              attribution: ExpectedSpans.italics,
+              offset: 4,
+              markerType: SpanMarkerType.start,
+            ),
+            const SpanMarker(
+              attribution: ExpectedSpans.bold,
+              offset: 5,
+              markerType: SpanMarkerType.end,
+            ),
+            const SpanMarker(
+              attribution: ExpectedSpans.italics,
+              offset: 7,
+              markerType: SpanMarkerType.end,
+            ),
           ],
         ),
       );
@@ -173,17 +207,11 @@ TextStyle _styleBuilder(Set<Attribution> attributions) {
   TextStyle newStyle = const TextStyle();
   for (final attribution in attributions) {
     if (attribution == ExpectedSpans.bold) {
-      newStyle = newStyle.copyWith(
-        fontWeight: FontWeight.bold,
-      );
+      newStyle = newStyle.copyWith(fontWeight: FontWeight.bold);
     } else if (attribution == ExpectedSpans.italics) {
-      newStyle = newStyle.copyWith(
-        fontStyle: FontStyle.italic,
-      );
+      newStyle = newStyle.copyWith(fontStyle: FontStyle.italic);
     } else if (attribution == ExpectedSpans.strikethrough) {
-      newStyle = newStyle.copyWith(
-        decoration: TextDecoration.lineThrough,
-      );
+      newStyle = newStyle.copyWith(decoration: TextDecoration.lineThrough);
     }
   }
   return newStyle;

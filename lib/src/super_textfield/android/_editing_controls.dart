@@ -85,15 +85,19 @@ class AndroidEditingOverlayControls extends StatefulWidget {
   ///
   /// Typically, this bar includes actions like "copy", "cut", "paste", etc.
   final Widget Function(
-          BuildContext, AndroidEditingOverlayController, ToolbarConfig)
-      popoverToolbarBuilder;
+    BuildContext,
+    AndroidEditingOverlayController,
+    ToolbarConfig,
+  )
+  popoverToolbarBuilder;
 
   @override
   State createState() => _AndroidEditingOverlayControlsState();
 }
 
 class _AndroidEditingOverlayControlsState
-    extends State<AndroidEditingOverlayControls> with WidgetsBindingObserver {
+    extends State<AndroidEditingOverlayControls>
+    with WidgetsBindingObserver {
   // These global keys are assigned to each draggable handle to
   // prevent a strange dragging issue.
   //
@@ -160,8 +164,9 @@ class _AndroidEditingOverlayControlsState
     super.didUpdateWidget(oldWidget);
 
     if (widget.editingController != oldWidget.editingController) {
-      oldWidget.editingController.textController
-          .removeListener(_rebuildOnNextFrame);
+      oldWidget.editingController.textController.removeListener(
+        _rebuildOnNextFrame,
+      );
       widget.editingController.textController.addListener(_rebuildOnNextFrame);
 
       if (_shouldShowCollapsedHandle) {
@@ -208,7 +213,8 @@ class _AndroidEditingOverlayControlsState
 
     // TODO: de-dup the calculation of the mid-line focal point
     final globalOffsetInMiddleOfLine = _getGlobalOffsetOfMiddleOfLine(
-        widget.editingController.textController.selection.extent);
+      widget.editingController.textController.selection.extent,
+    );
     _touchHandleOffsetFromLineOfText =
         globalOffsetInMiddleOfLine - details.globalPosition;
 
@@ -218,16 +224,19 @@ class _AndroidEditingOverlayControlsState
           (widget.textFieldKey.currentContext!.findRenderObject() as RenderBox)
               .globalToLocal(globalOffsetInMiddleOfLine),
     );
-    widget.textScrollController
-        .addListener(_updateSelectionForDragHandleAfterScrollChange);
-    _dragHandleSelectionStrategy = AndroidDocumentDragHandleSelectionStrategy(
-      textContentKey: widget.textContentKey,
-      textLayout: _textLayout,
-      select: _updateDragHandleSelection,
-    )..onHandlePanStart(
-        details,
-        widget.editingController.textController.selection,
-        HandleType.collapsed);
+    widget.textScrollController.addListener(
+      _updateSelectionForDragHandleAfterScrollChange,
+    );
+    _dragHandleSelectionStrategy =
+        AndroidDocumentDragHandleSelectionStrategy(
+          textContentKey: widget.textContentKey,
+          textLayout: _textLayout,
+          select: _updateDragHandleSelection,
+        )..onHandlePanStart(
+          details,
+          widget.editingController.textController.selection,
+          HandleType.collapsed,
+        );
 
     setState(() {
       _isDraggingCollapsed = true;
@@ -254,30 +263,38 @@ class _AndroidEditingOverlayControlsState
 
     // TODO: de-dup the calculation of the mid-line focal point
     final globalOffsetInMiddleOfLine = _getGlobalOffsetOfMiddleOfLine(
-        widget.editingController.textController.selection.base);
+      widget.editingController.textController.selection.base,
+    );
     _touchHandleOffsetFromLineOfText =
         globalOffsetInMiddleOfLine - details.globalPosition;
     _log.fine(
-        ' - global offset in middle of line: $globalOffsetInMiddleOfLine');
+      ' - global offset in middle of line: $globalOffsetInMiddleOfLine',
+    );
 
     // TODO: de-dup the repeated calculations of the effective focal point: globalPosition + _touchHandleOffsetFromLineOfText
     widget.textScrollController.updateAutoScrollingForTouchOffset(
       userInteractionOffsetInViewport:
           (widget.textFieldKey.currentContext!.findRenderObject() as RenderBox)
               .globalToLocal(
-                  details.globalPosition + _touchHandleOffsetFromLineOfText!),
+                details.globalPosition + _touchHandleOffsetFromLineOfText!,
+              ),
     );
-    widget.textScrollController
-        .addListener(_updateSelectionForDragHandleAfterScrollChange);
+    widget.textScrollController.addListener(
+      _updateSelectionForDragHandleAfterScrollChange,
+    );
 
     _log.fine(' - updated auto scrolling for touch offset');
 
-    _dragHandleSelectionStrategy = AndroidDocumentDragHandleSelectionStrategy(
-      textContentKey: widget.textContentKey,
-      textLayout: _textLayout,
-      select: _updateDragHandleSelection,
-    )..onHandlePanStart(details,
-        widget.editingController.textController.selection, HandleType.upstream);
+    _dragHandleSelectionStrategy =
+        AndroidDocumentDragHandleSelectionStrategy(
+          textContentKey: widget.textContentKey,
+          textLayout: _textLayout,
+          select: _updateDragHandleSelection,
+        )..onHandlePanStart(
+          details,
+          widget.editingController.textController.selection,
+          HandleType.upstream,
+        );
 
     setState(() {
       _isDraggingCollapsed = false;
@@ -299,7 +316,8 @@ class _AndroidEditingOverlayControlsState
 
     // TODO: de-dup the calculation of the mid-line focal point
     final globalOffsetInMiddleOfLine = _getGlobalOffsetOfMiddleOfLine(
-        widget.editingController.textController.selection.extent);
+      widget.editingController.textController.selection.extent,
+    );
     _touchHandleOffsetFromLineOfText =
         globalOffsetInMiddleOfLine - details.globalPosition;
 
@@ -308,19 +326,23 @@ class _AndroidEditingOverlayControlsState
       userInteractionOffsetInViewport:
           (widget.textFieldKey.currentContext!.findRenderObject() as RenderBox)
               .globalToLocal(
-                  details.globalPosition + _touchHandleOffsetFromLineOfText!),
+                details.globalPosition + _touchHandleOffsetFromLineOfText!,
+              ),
     );
-    widget.textScrollController
-        .addListener(_updateSelectionForDragHandleAfterScrollChange);
+    widget.textScrollController.addListener(
+      _updateSelectionForDragHandleAfterScrollChange,
+    );
 
-    _dragHandleSelectionStrategy = AndroidDocumentDragHandleSelectionStrategy(
-      textContentKey: widget.textContentKey,
-      textLayout: _textLayout,
-      select: _updateDragHandleSelection,
-    )..onHandlePanStart(
-        details,
-        widget.editingController.textController.selection,
-        HandleType.downstream);
+    _dragHandleSelectionStrategy =
+        AndroidDocumentDragHandleSelectionStrategy(
+          textContentKey: widget.textContentKey,
+          textLayout: _textLayout,
+          select: _updateDragHandleSelection,
+        )..onHandlePanStart(
+          details,
+          widget.editingController.textController.selection,
+          HandleType.downstream,
+        );
 
     setState(() {
       _isDraggingCollapsed = false;
@@ -359,7 +381,8 @@ class _AndroidEditingOverlayControlsState
       userInteractionOffsetInViewport:
           (widget.textFieldKey.currentContext!.findRenderObject() as RenderBox)
               .globalToLocal(
-                  details.globalPosition + _touchHandleOffsetFromLineOfText!),
+                details.globalPosition + _touchHandleOffsetFromLineOfText!,
+              ),
     );
     _log.fine(' - updated auto scrolling for touch offset');
 
@@ -403,8 +426,9 @@ class _AndroidEditingOverlayControlsState
   void _updateSelectionForCurrentDragHandleOffset() {
     final textBox =
         (widget.textContentKey.currentContext!.findRenderObject() as RenderBox);
-    final textOffset = textBox
-        .globalToLocal(_globalDragOffset! + _touchHandleOffsetFromLineOfText!);
+    final textOffset = textBox.globalToLocal(
+      _globalDragOffset! + _touchHandleOffsetFromLineOfText!,
+    );
 
     _dragHandleSelectionStrategy!.onHandlePanUpdate(textOffset);
   }
@@ -422,8 +446,9 @@ class _AndroidEditingOverlayControlsState
   void _onHandleDragEnd() {
     _log.fine('_onHandleDragEnd()');
     widget.textScrollController.stopScrolling();
-    widget.textScrollController
-        .removeListener(_updateSelectionForDragHandleAfterScrollChange);
+    widget.textScrollController.removeListener(
+      _updateSelectionForDragHandleAfterScrollChange,
+    );
 
     // TODO: ensure that extent is visible
 
@@ -477,7 +502,7 @@ class _AndroidEditingOverlayControlsState
     final extentOffsetInText = textLayout.getOffsetAtPosition(position);
     final extentLineHeight =
         textLayout.getCharacterBox(position)?.toRect().height ??
-            textLayout.estimatedLineHeight;
+        textLayout.estimatedLineHeight;
     final extentGlobalOffset =
         (widget.textContentKey.currentContext!.findRenderObject() as RenderBox)
             .localToGlobal(extentOffsetInText);
@@ -486,8 +511,9 @@ class _AndroidEditingOverlayControlsState
   }
 
   Offset _getLocalOffsetOfMiddleOfLine(TextPosition position) {
-    return (context.findRenderObject() as RenderBox)
-        .globalToLocal(_getGlobalOffsetOfMiddleOfLine(position));
+    return (context.findRenderObject() as RenderBox).globalToLocal(
+      _getGlobalOffsetOfMiddleOfLine(position),
+    );
   }
 
   /// Update the offset for the collapsed handle.
@@ -513,8 +539,9 @@ class _AndroidEditingOverlayControlsState
     final extentTextPosition =
         widget.editingController.textController.selection.extent;
     _log.finer('Collapsed handle text position: $extentTextPosition');
-    final extentHandleOffsetInText =
-        _textPositionToTextOffset(extentTextPosition);
+    final extentHandleOffsetInText = _textPositionToTextOffset(
+      extentTextPosition,
+    );
     _log.finer('Collapsed handle text offset: $extentHandleOffsetInText');
 
     if (extentHandleOffsetInText == const Offset(0, 0) &&
@@ -527,15 +554,17 @@ class _AndroidEditingOverlayControlsState
 
     double extentLineHeight =
         _textLayout.getCharacterBox(extentTextPosition)?.toRect().height ??
-            _textLayout.estimatedLineHeight;
+        _textLayout.estimatedLineHeight;
     if (widget.editingController.textController.text.isEmpty) {
-      extentLineHeight =
-          _textLayout.getLineHeightAtPosition(extentTextPosition);
+      extentLineHeight = _textLayout.getLineHeightAtPosition(
+        extentTextPosition,
+      );
     }
 
     if (extentLineHeight == 0) {
       _log.finer(
-          'Not building collapsed handle because the text layout reported a zero line-height');
+        'Not building collapsed handle because the text layout reported a zero line-height',
+      );
       // A line height of zero indicates that the text isn't laid out yet.
       // We need to wait until the next frame.
       return null;
@@ -553,26 +582,24 @@ class _AndroidEditingOverlayControlsState
     }
 
     return MultiListenableBuilder(
-        listenables: {
-          widget.editingController,
-        },
-        builder: (context) {
-          return Stack(
-            children: [
-              // Build the focal point for the magnifier
-              if (_isDraggingCollapsed || _isDraggingBase || _isDraggingExtent)
-                _buildMagnifierFocalPoint(),
-              // Build the magnifier (this needs to be done before building
-              // the handles so that the magnifier doesn't show the handles
-              if (widget.editingController.isMagnifierVisible)
-                _buildMagnifier(),
-              // Build the base and extent draggable handles
-              ..._buildDraggableOverlayHandles(),
-              // Build the editing toolbar
-              _buildToolbar(),
-            ],
-          );
-        });
+      listenables: {widget.editingController},
+      builder: (context) {
+        return Stack(
+          children: [
+            // Build the focal point for the magnifier
+            if (_isDraggingCollapsed || _isDraggingBase || _isDraggingExtent)
+              _buildMagnifierFocalPoint(),
+            // Build the magnifier (this needs to be done before building
+            // the handles so that the magnifier doesn't show the handles
+            if (widget.editingController.isMagnifierVisible) _buildMagnifier(),
+            // Build the base and extent draggable handles
+            ..._buildDraggableOverlayHandles(),
+            // Build the editing toolbar
+            _buildToolbar(),
+          ],
+        );
+      },
+    );
   }
 
   Widget _buildToolbar() {
@@ -589,33 +616,41 @@ class _AndroidEditingOverlayControlsState
 
     if (widget.editingController.textController.selection.isCollapsed) {
       final extentOffsetInViewport = _textPositionToViewportOffset(
-          widget.editingController.textController.selection.extent);
+        widget.editingController.textController.selection.extent,
+      );
       final lineHeight = _textLayout.getLineHeightAtPosition(
-          widget.editingController.textController.selection.extent);
+        widget.editingController.textController.selection.extent,
+      );
 
       toolbarTopAnchor =
           extentOffsetInViewport - const Offset(0, gapBetweenToolbarAndContent);
-      toolbarBottomAnchor = extentOffsetInViewport +
+      toolbarBottomAnchor =
+          extentOffsetInViewport +
           Offset(0, lineHeight) +
           const Offset(0, gapBetweenToolbarAndContent);
     } else {
       final selectionBoxes = _textLayout.getBoxesForSelection(
-          widget.editingController.textController.selection);
+        widget.editingController.textController.selection,
+      );
       Rect selectionBounds = selectionBoxes.first.toRect();
       for (int i = 1; i < selectionBoxes.length; ++i) {
-        selectionBounds =
-            selectionBounds.expandToInclude(selectionBoxes[i].toRect());
+        selectionBounds = selectionBounds.expandToInclude(
+          selectionBoxes[i].toRect(),
+        );
       }
       final selectionTopInText = selectionBounds.topCenter;
-      final selectionTopInViewport =
-          _textOffsetToViewportOffset(selectionTopInText);
+      final selectionTopInViewport = _textOffsetToViewportOffset(
+        selectionTopInText,
+      );
       toolbarTopAnchor =
           selectionTopInViewport - const Offset(0, gapBetweenToolbarAndContent);
 
       final selectionBottomInText = selectionBounds.bottomCenter;
-      final selectionBottomInViewport =
-          _textOffsetToViewportOffset(selectionBottomInText);
-      toolbarBottomAnchor = selectionBottomInViewport +
+      final selectionBottomInViewport = _textOffsetToViewportOffset(
+        selectionBottomInText,
+      );
+      toolbarBottomAnchor =
+          selectionBottomInViewport +
           const Offset(0, gapBetweenToolbarAndContent);
     }
 
@@ -624,10 +659,7 @@ class _AndroidEditingOverlayControlsState
     // than [gapBetweenToolbarAndContent] above the text field.
     toolbarTopAnchor = Offset(
       toolbarTopAnchor.dx,
-      max(
-        toolbarTopAnchor.dy,
-        -gapBetweenToolbarAndContent,
-      ),
+      max(toolbarTopAnchor.dy, -gapBetweenToolbarAndContent),
     );
 
     // The selection might end below the visible area in a scrollable
@@ -639,10 +671,7 @@ class _AndroidEditingOverlayControlsState
             .height;
     toolbarTopAnchor = Offset(
       toolbarTopAnchor.dx,
-      min(
-        toolbarTopAnchor.dy,
-        viewportHeight + gapBetweenToolbarAndContent,
-      ),
+      min(toolbarTopAnchor.dy, viewportHeight + gapBetweenToolbarAndContent),
     );
 
     final textFieldGlobalOffset =
@@ -674,17 +703,20 @@ class _AndroidEditingOverlayControlsState
         child: AnimatedOpacity(
           opacity: widget.editingController.isToolbarVisible ? 1.0 : 0.0,
           duration: const Duration(milliseconds: 150),
-          child: Builder(builder: (context) {
-            return TapRegion(
-              groupId: widget.tapRegionGroupId,
-              child: widget.popoverToolbarBuilder(
-                context,
-                widget.editingController,
-                ToolbarConfig(
-                    focalPoint: textFieldGlobalOffset + toolbarTopAnchor),
-              ),
-            );
-          }),
+          child: Builder(
+            builder: (context) {
+              return TapRegion(
+                groupId: widget.tapRegionGroupId,
+                child: widget.popoverToolbarBuilder(
+                  context,
+                  widget.editingController,
+                  ToolbarConfig(
+                    focalPoint: textFieldGlobalOffset + toolbarTopAnchor,
+                  ),
+                ),
+              );
+            },
+          ),
         ),
       ),
     );
@@ -702,9 +734,7 @@ class _AndroidEditingOverlayControlsState
     }
 
     if (_shouldShowCollapsedHandle) {
-      return [
-        _buildCollapsedHandle(),
-      ];
+      return [_buildCollapsedHandle()];
     } else {
       return _buildExpandedHandles();
     }
@@ -737,41 +767,42 @@ class _AndroidEditingOverlayControlsState
     // TODO: handle RTL text orientation
     final selectionDirection =
         widget.editingController.textController.selection.extentOffset >=
-                widget.editingController.textController.selection.baseOffset
-            ? TextAffinity.downstream
-            : TextAffinity.upstream;
+            widget.editingController.textController.selection.baseOffset
+        ? TextAffinity.downstream
+        : TextAffinity.upstream;
 
     final upstreamTextPosition = selectionDirection == TextAffinity.downstream
         ? widget.editingController.textController.selection.base
         : widget.editingController.textController.selection.extent;
     final upstreamLineHeight =
         _textLayout.getCharacterBox(upstreamTextPosition)?.toRect().height ??
-            _textLayout.estimatedLineHeight;
+        _textLayout.estimatedLineHeight;
     final upstreamHandleOffsetInText =
         _textPositionToTextOffset(upstreamTextPosition) +
-            Offset(0, upstreamLineHeight);
+        Offset(0, upstreamLineHeight);
 
     final downstreamTextPosition = selectionDirection == TextAffinity.downstream
         ? widget.editingController.textController.selection.extent
         : widget.editingController.textController.selection.base;
     final downstreamLineHeight =
         _textLayout.getCharacterBox(downstreamTextPosition)?.toRect().height ??
-            _textLayout.estimatedLineHeight;
+        _textLayout.estimatedLineHeight;
     final downstreamHandleOffsetInText =
         _textPositionToTextOffset(downstreamTextPosition) +
-            Offset(0, downstreamLineHeight);
+        Offset(0, downstreamLineHeight);
 
     if (upstreamLineHeight == 0 || downstreamLineHeight == 0) {
       _log.finer(
-          'Not building expanded handles because the text layout reported a zero line-height');
+        'Not building expanded handles because the text layout reported a zero line-height',
+      );
       // A line height of zero indicates that the text isn't laid out yet.
       // Schedule a rebuild to give the text a frame to layout.
       _scheduleRebuildBecauseTextIsNotLaidOutYet();
       return [];
     }
 
-    final showUpstreamHandle =
-        widget.textScrollController.isTextPositionVisible(upstreamTextPosition);
+    final showUpstreamHandle = widget.textScrollController
+        .isTextPositionVisible(upstreamTextPosition);
     final showDownstreamHandle = widget.textScrollController
         .isTextPositionVisible(downstreamTextPosition);
 
@@ -814,8 +845,10 @@ class _AndroidEditingOverlayControlsState
     switch (handleType) {
       case HandleType.collapsed:
         fractionalTranslation = const Offset(-0.5, 0.0);
-        expandedTouchAreaAdjustment =
-            Offset(0, -AndroidSelectionHandle.defaultTouchRegionExpansion.top);
+        expandedTouchAreaAdjustment = Offset(
+          0,
+          -AndroidSelectionHandle.defaultTouchRegionExpansion.top,
+        );
         break;
       case HandleType.upstream:
         fractionalTranslation = const Offset(-1.0, 0.0);
@@ -849,7 +882,8 @@ class _AndroidEditingOverlayControlsState
             ),
             child: showHandle
                 ? AnimatedOpacity(
-                    opacity: handleType == HandleType.collapsed &&
+                    opacity:
+                        handleType == HandleType.collapsed &&
                             widget.editingController.isCollapsedHandleAutoHidden
                         ? 0.0
                         : 1.0,
@@ -905,8 +939,10 @@ class _AndroidEditingOverlayControlsState
     // positioning the LayerLink target.
     return AndroidFollowingMagnifier(
       layerLink: widget.editingController.magnifierFocalPoint,
-      offsetFromFocalPoint:
-          Offset(0, -54 * MediaQuery.devicePixelRatioOf(context)),
+      offsetFromFocalPoint: Offset(
+        0,
+        -54 * MediaQuery.devicePixelRatioOf(context),
+      ),
     );
   }
 

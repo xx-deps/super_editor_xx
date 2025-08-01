@@ -19,7 +19,10 @@ Future<void> main() async {
           // Place the caret at the upstream side of the inline widget.
           await tester.placeCaretInSuperTextField(7);
 
-          await screenMatchesGolden(tester, 'super-text-field_inline_widgets_single_line_caret_upstream');
+          await screenMatchesGolden(
+            tester,
+            'super-text-field_inline_widgets_single_line_caret_upstream',
+          );
         },
         windowSize: goldenSizeSmall,
       );
@@ -32,7 +35,10 @@ Future<void> main() async {
           // Place the caret at the downstream side of the inline widget.
           await tester.placeCaretInSuperTextField(8);
 
-          await screenMatchesGolden(tester, 'super-text-field_inline_widgets_single_line_caret_downstream');
+          await screenMatchesGolden(
+            tester,
+            'super-text-field_inline_widgets_single_line_caret_downstream',
+          );
         },
         windowSize: goldenSizeSmall,
       );
@@ -42,10 +48,16 @@ Future<void> main() async {
         (tester) async {
           await _pumpSingleLineTestApp(
             tester,
-            initialSelection: const TextSelection(baseOffset: 7, extentOffset: 8),
+            initialSelection: const TextSelection(
+              baseOffset: 7,
+              extentOffset: 8,
+            ),
           );
 
-          await screenMatchesGolden(tester, 'super-text-field_inline_widgets_single_line_selection_box_single');
+          await screenMatchesGolden(
+            tester,
+            'super-text-field_inline_widgets_single_line_selection_box_single',
+          );
         },
         windowSize: goldenSizeSmall,
       );
@@ -55,10 +67,16 @@ Future<void> main() async {
         (tester) async {
           await _pumpSingleLineTestApp(
             tester,
-            initialSelection: const TextSelection(baseOffset: 0, extentOffset: 7),
+            initialSelection: const TextSelection(
+              baseOffset: 0,
+              extentOffset: 7,
+            ),
           );
 
-          await screenMatchesGolden(tester, 'super-text-field_inline_widgets_single_line_selection_box_upstream');
+          await screenMatchesGolden(
+            tester,
+            'super-text-field_inline_widgets_single_line_selection_box_upstream',
+          );
         },
         windowSize: goldenSizeSmall,
       );
@@ -68,10 +86,16 @@ Future<void> main() async {
         (tester) async {
           await _pumpSingleLineTestApp(
             tester,
-            initialSelection: const TextSelection(baseOffset: 8, extentOffset: 14),
+            initialSelection: const TextSelection(
+              baseOffset: 8,
+              extentOffset: 14,
+            ),
           );
 
-          await screenMatchesGolden(tester, 'super-text-field_inline_widgets_single_line_selection_box_downstream');
+          await screenMatchesGolden(
+            tester,
+            'super-text-field_inline_widgets_single_line_selection_box_downstream',
+          );
         },
         windowSize: goldenSizeSmall,
       );
@@ -81,10 +105,16 @@ Future<void> main() async {
         (tester) async {
           await _pumpSingleLineTestApp(
             tester,
-            initialSelection: const TextSelection(baseOffset: 0, extentOffset: 14),
+            initialSelection: const TextSelection(
+              baseOffset: 0,
+              extentOffset: 14,
+            ),
           );
 
-          await screenMatchesGolden(tester, 'super-text-field_inline_widgets_single_line_selection_box_over');
+          await screenMatchesGolden(
+            tester,
+            'super-text-field_inline_widgets_single_line_selection_box_over',
+          );
         },
         windowSize: goldenSizeSmall,
       );
@@ -99,7 +129,10 @@ Future<void> main() async {
           // Place the caret at the upstream side of the inline widget.
           await tester.placeCaretInSuperTextField(27);
 
-          await screenMatchesGolden(tester, 'super-text-field_inline_widgets_multi_line_caret_upstream');
+          await screenMatchesGolden(
+            tester,
+            'super-text-field_inline_widgets_multi_line_caret_upstream',
+          );
         },
         windowSize: goldenSizeSmall,
       );
@@ -112,7 +145,10 @@ Future<void> main() async {
           // Place the caret at the downstream side of the inline widget.
           await tester.placeCaretInSuperTextField(28);
 
-          await screenMatchesGolden(tester, 'super-text-field_inline_widgets_multi_line_caret_downstream');
+          await screenMatchesGolden(
+            tester,
+            'super-text-field_inline_widgets_multi_line_caret_downstream',
+          );
         },
         windowSize: goldenSizeSmall,
       );
@@ -122,10 +158,16 @@ Future<void> main() async {
         (tester) async {
           await _pumpMultiLineTestApp(
             tester,
-            initialSelection: const TextSelection(baseOffset: 27, extentOffset: 28),
+            initialSelection: const TextSelection(
+              baseOffset: 27,
+              extentOffset: 28,
+            ),
           );
 
-          await screenMatchesGolden(tester, 'super-text-field_inline_widgets_multi_line_selection_box_single');
+          await screenMatchesGolden(
+            tester,
+            'super-text-field_inline_widgets_multi_line_selection_box_single',
+          );
         },
         windowSize: goldenSizeSmall,
       );
@@ -135,10 +177,16 @@ Future<void> main() async {
         (tester) async {
           await _pumpMultiLineTestApp(
             tester,
-            initialSelection: const TextSelection(baseOffset: 0, extentOffset: 27),
+            initialSelection: const TextSelection(
+              baseOffset: 0,
+              extentOffset: 27,
+            ),
           );
 
-          await screenMatchesGolden(tester, 'super-text-field_inline_widgets_multi_line_selection_box_upstream');
+          await screenMatchesGolden(
+            tester,
+            'super-text-field_inline_widgets_multi_line_selection_box_upstream',
+          );
         },
         windowSize: goldenSizeSmall,
       );
@@ -148,10 +196,16 @@ Future<void> main() async {
         (tester) async {
           await _pumpMultiLineTestApp(
             tester,
-            initialSelection: const TextSelection(baseOffset: 28, extentOffset: 53),
+            initialSelection: const TextSelection(
+              baseOffset: 28,
+              extentOffset: 53,
+            ),
           );
 
-          await screenMatchesGolden(tester, 'super-text-field_inline_widgets_multi_line_selection_box_downstream');
+          await screenMatchesGolden(
+            tester,
+            'super-text-field_inline_widgets_multi_line_selection_box_downstream',
+          );
         },
         windowSize: goldenSizeSmall,
       );
@@ -161,10 +215,16 @@ Future<void> main() async {
         (tester) async {
           await _pumpMultiLineTestApp(
             tester,
-            initialSelection: const TextSelection(baseOffset: 0, extentOffset: 53),
+            initialSelection: const TextSelection(
+              baseOffset: 0,
+              extentOffset: 53,
+            ),
           );
 
-          await screenMatchesGolden(tester, 'super-text-field_inline_widgets_multi_line_selection_box_over');
+          await screenMatchesGolden(
+            tester,
+            'super-text-field_inline_widgets_multi_line_selection_box_over',
+          );
         },
         windowSize: goldenSizeSmall,
       );
@@ -179,13 +239,9 @@ Future<void> _pumpSingleLineTestApp(
   TextSelection? initialSelection,
 }) async {
   final controller = AttributedTextEditingController(
-    text: AttributedText(
-      'before  after',
-      null,
-      {
-        7: const _NamedPlaceHolder('1'),
-      },
-    ),
+    text: AttributedText('before  after', null, {
+      7: const _NamedPlaceHolder('1'),
+    }),
     selection: initialSelection,
   );
   await _pumpTestApp(tester, controller: controller);
@@ -201,9 +257,7 @@ Future<void> _pumpMultiLineTestApp(
     text: AttributedText(
       'first line of text \nbefore  after\nthird line of text',
       null,
-      {
-        27: const _NamedPlaceHolder('1'),
-      },
+      {27: const _NamedPlaceHolder('1')},
     ),
     selection: initialSelection,
   );
@@ -233,9 +287,7 @@ Future<void> _pumpTestApp(
                   fontSize: 18,
                   color: Colors.black,
                 ),
-                inlineWidgetBuilders: const [
-                  _boxPlaceHolderBuilder,
-                ],
+                inlineWidgetBuilders: const [_boxPlaceHolderBuilder],
               ),
             ),
           ),
@@ -246,7 +298,11 @@ Future<void> _pumpTestApp(
 }
 
 /// A builder that renders a [ColoredBox] for a [_NamedPlaceHolder].
-Widget? _boxPlaceHolderBuilder(BuildContext context, TextStyle textStyle, Object placeholder) {
+Widget? _boxPlaceHolderBuilder(
+  BuildContext context,
+  TextStyle textStyle,
+  Object placeholder,
+) {
   if (placeholder is! _NamedPlaceHolder) {
     return null;
   }
@@ -255,12 +311,7 @@ Widget? _boxPlaceHolderBuilder(BuildContext context, TextStyle textStyle, Object
     key: ValueKey('placeholder-${placeholder.name}'),
     child: LineHeight(
       style: textStyle,
-      child: const SizedBox(
-        width: 24,
-        child: ColoredBox(
-          color: Colors.yellow,
-        ),
-      ),
+      child: const SizedBox(width: 24, child: ColoredBox(color: Colors.yellow)),
     ),
   );
 }
@@ -273,7 +324,10 @@ class _NamedPlaceHolder {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) || other is _NamedPlaceHolder && runtimeType == other.runtimeType && name == other.name;
+      identical(this, other) ||
+      other is _NamedPlaceHolder &&
+          runtimeType == other.runtimeType &&
+          name == other.name;
 
   @override
   int get hashCode => name.hashCode;

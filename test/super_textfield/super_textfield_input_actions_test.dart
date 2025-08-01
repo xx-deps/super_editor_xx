@@ -25,7 +25,9 @@ void main() {
       expect(focusNode.hasFocus, false);
     });
 
-    testWidgetsOnMobile("moves focus to next focusable item on NEXT", (tester) async {
+    testWidgetsOnMobile("moves focus to next focusable item on NEXT", (
+      tester,
+    ) async {
       FocusNode focusNodeFirstField = FocusNode();
       FocusNode focusNodeSecondField = FocusNode();
 
@@ -52,7 +54,9 @@ void main() {
       expect(focusNodeSecondField.hasFocus, true);
     });
 
-    testWidgetsOnMobile("moves focus to previous focusable item on PREVIOUS", (tester) async {
+    testWidgetsOnMobile("moves focus to previous focusable item on PREVIOUS", (
+      tester,
+    ) async {
       FocusNode focusNodeFirstField = FocusNode();
       FocusNode focusNodeSecondField = FocusNode();
 
@@ -84,10 +88,11 @@ void main() {
         FocusNode focusNode = FocusNode();
         bool callbackCalled = false;
 
-        ImeAttributedTextEditingController textController = ImeAttributedTextEditingController()
-          ..onPerformActionPressed = (action) {
-            callbackCalled = true;
-          };
+        ImeAttributedTextEditingController textController =
+            ImeAttributedTextEditingController()
+              ..onPerformActionPressed = (action) {
+                callbackCalled = true;
+              };
 
         await _pumpSingleFieldTestApp(
           tester,
@@ -117,10 +122,11 @@ void main() {
         FocusNode focusNode = FocusNode();
         bool callbackCalled = false;
 
-        ImeAttributedTextEditingController textController = ImeAttributedTextEditingController()
-          ..onPerformActionPressed = (action) {
-            callbackCalled = true;
-          };
+        ImeAttributedTextEditingController textController =
+            ImeAttributedTextEditingController()
+              ..onPerformActionPressed = (action) {
+                callbackCalled = true;
+              };
 
         await _pumpTripleFieldTestApp(
           tester,
@@ -150,10 +156,11 @@ void main() {
         FocusNode focusNode = FocusNode();
         bool callbackCalled = false;
 
-        ImeAttributedTextEditingController textController = ImeAttributedTextEditingController()
-          ..onPerformActionPressed = (action) {
-            callbackCalled = true;
-          };
+        ImeAttributedTextEditingController textController =
+            ImeAttributedTextEditingController()
+              ..onPerformActionPressed = (action) {
+                callbackCalled = true;
+              };
 
         await _pumpTripleFieldTestApp(
           tester,

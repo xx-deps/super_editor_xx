@@ -29,9 +29,7 @@ class ListItemNode extends TextNode {
     super.metadata,
     this.indent = 0,
   }) : type = ListItemType.ordered {
-    initAddToMetadata({
-      NodeMetadata.blockType: listItemAttribution,
-    });
+    initAddToMetadata({NodeMetadata.blockType: listItemAttribution});
   }
 
   ListItemNode.unordered({
@@ -40,9 +38,7 @@ class ListItemNode extends TextNode {
     super.metadata,
     this.indent = 0,
   }) : type = ListItemType.unordered {
-    initAddToMetadata({
-      NodeMetadata.blockType: listItemAttribution,
-    });
+    initAddToMetadata({NodeMetadata.blockType: listItemAttribution});
   }
 
   ListItemNode({
@@ -52,9 +48,7 @@ class ListItemNode extends TextNode {
     super.metadata,
     this.indent = 0,
   }) : type = itemType {
-    initAddToMetadata({
-      NodeMetadata.blockType: listItemAttribution,
-    });
+    initAddToMetadata({NodeMetadata.blockType: listItemAttribution});
   }
 
   final ListItemType type;
@@ -100,19 +94,12 @@ class ListItemNode extends TextNode {
 
   @override
   ListItemNode copyAndReplaceMetadata(Map<String, dynamic> newMetadata) {
-    return copyListItemWith(
-      metadata: newMetadata,
-    );
+    return copyListItemWith(metadata: newMetadata);
   }
 
   @override
   ListItemNode copyWithAddedMetadata(Map<String, dynamic> newProperties) {
-    return copyListItemWith(
-      metadata: {
-        ...metadata,
-        ...newProperties,
-      },
-    );
+    return copyListItemWith(metadata: {...metadata, ...newProperties});
   }
 
   @override
@@ -145,17 +132,16 @@ extension ListItemNodeType on DocumentNode {
 
 const listItemAttribution = NamedAttribution("listItem");
 
-enum ListItemType {
-  ordered,
-  unordered,
-}
+enum ListItemType { ordered, unordered }
 
 class ListItemComponentBuilder implements ComponentBuilder {
   const ListItemComponentBuilder();
 
   @override
   SingleColumnLayoutComponentViewModel? createViewModel(
-      Document document, DocumentNode node) {
+    Document document,
+    DocumentNode node,
+  ) {
     if (node is! ListItemNode) {
       return null;
     }
@@ -166,37 +152,40 @@ class ListItemComponentBuilder implements ComponentBuilder {
     }
 
     final textDirection = getParagraphDirection(node.text.toPlainText());
-    final textAlignment =
-        textDirection == TextDirection.ltr ? TextAlign.left : TextAlign.right;
+    final textAlignment = textDirection == TextDirection.ltr
+        ? TextAlign.left
+        : TextAlign.right;
 
     return switch (node.type) {
       ListItemType.unordered => UnorderedListItemComponentViewModel(
-          nodeId: node.id,
-          createdAt: node.metadata[NodeMetadata.createdAt],
-          indent: node.indent,
-          text: node.text,
-          textDirection: textDirection,
-          textAlignment: textAlignment,
-          textStyleBuilder: noStyleBuilder,
-          selectionColor: const Color(0x00000000),
-        ),
+        nodeId: node.id,
+        createdAt: node.metadata[NodeMetadata.createdAt],
+        indent: node.indent,
+        text: node.text,
+        textDirection: textDirection,
+        textAlignment: textAlignment,
+        textStyleBuilder: noStyleBuilder,
+        selectionColor: const Color(0x00000000),
+      ),
       ListItemType.ordered => OrderedListItemComponentViewModel(
-          nodeId: node.id,
-          createdAt: node.metadata[NodeMetadata.createdAt],
-          indent: node.indent,
-          ordinalValue: ordinalValue,
-          text: node.text,
-          textDirection: textDirection,
-          textAlignment: textAlignment,
-          textStyleBuilder: noStyleBuilder,
-          selectionColor: const Color(0x00000000),
-        ),
+        nodeId: node.id,
+        createdAt: node.metadata[NodeMetadata.createdAt],
+        indent: node.indent,
+        ordinalValue: ordinalValue,
+        text: node.text,
+        textDirection: textDirection,
+        textAlignment: textAlignment,
+        textStyleBuilder: noStyleBuilder,
+        selectionColor: const Color(0x00000000),
+      ),
     };
   }
 
   @override
-  Widget? createComponent(SingleColumnDocumentComponentContext componentContext,
-      SingleColumnLayoutComponentViewModel componentViewModel) {
+  Widget? createComponent(
+    SingleColumnDocumentComponentContext componentContext,
+    SingleColumnLayoutComponentViewModel componentViewModel,
+  ) {
     if (componentViewModel is! UnorderedListItemComponentViewModel &&
         componentViewModel is! OrderedListItemComponentViewModel) {
       return null;
@@ -236,13 +225,15 @@ class ListItemComponentBuilder implements ComponentBuilder {
     }
 
     editorLayoutLog.warning(
-        "Tried to build a component for a list item view model without a list item itemType: $componentViewModel");
+      "Tried to build a component for a list item view model without a list item itemType: $componentViewModel",
+    );
     return null;
   }
 }
 
 abstract class ListItemComponentViewModel
-    extends SingleColumnLayoutComponentViewModel with TextComponentViewModel {
+    extends SingleColumnLayoutComponentViewModel
+    with TextComponentViewModel {
   ListItemComponentViewModel({
     required super.nodeId,
     super.createdAt,
@@ -260,11 +251,13 @@ abstract class ListItemComponentViewModel
     this.highlightWhenEmpty = false,
     TextRange? composingRegion,
     bool showComposingRegionUnderline = false,
-    UnderlineStyle spellingErrorUnderlineStyle =
-        const SquiggleUnderlineStyle(color: Colors.red),
+    UnderlineStyle spellingErrorUnderlineStyle = const SquiggleUnderlineStyle(
+      color: Colors.red,
+    ),
     List<TextRange> spellingErrors = const <TextRange>[],
-    UnderlineStyle grammarErrorUnderlineStyle =
-        const SquiggleUnderlineStyle(color: Colors.blue),
+    UnderlineStyle grammarErrorUnderlineStyle = const SquiggleUnderlineStyle(
+      color: Colors.blue,
+    ),
     List<TextRange> grammarErrors = const <TextRange>[],
   }) {
     this.composingRegion = composingRegion;
@@ -298,7 +291,8 @@ abstract class ListItemComponentViewModel
 
   @override
   ListItemComponentViewModel internalCopy(
-      ListItemComponentViewModel viewModel) {
+    ListItemComponentViewModel viewModel,
+  ) {
     final copy = super.internalCopy(viewModel) as ListItemComponentViewModel;
 
     copy.indent = indent;
@@ -373,7 +367,8 @@ class UnorderedListItemComponentViewModel extends ListItemComponentViewModel {
 
   @override
   UnorderedListItemComponentViewModel internalCopy(
-      UnorderedListItemComponentViewModel viewModel) {
+    UnorderedListItemComponentViewModel viewModel,
+  ) {
     final copy =
         super.internalCopy(viewModel) as UnorderedListItemComponentViewModel;
 
@@ -448,7 +443,8 @@ class OrderedListItemComponentViewModel extends ListItemComponentViewModel {
 
   @override
   OrderedListItemComponentViewModel internalCopy(
-      OrderedListItemComponentViewModel viewModel) {
+    OrderedListItemComponentViewModel viewModel,
+  ) {
     final copy =
         super.internalCopy(viewModel) as OrderedListItemComponentViewModel;
 
@@ -487,11 +483,7 @@ class ListItemDotStyle {
 
   /// Returns a copy of this [ListItemDotStyle] with optional new values
   /// for [color], [shape], and [size].
-  ListItemDotStyle copyWith({
-    Color? color,
-    BoxShape? shape,
-    Size? size,
-  }) {
+  ListItemDotStyle copyWith({Color? color, BoxShape? shape, Size? size}) {
     return ListItemDotStyle(
       color: color ?? this.color,
       shape: shape ?? this.shape,
@@ -587,8 +579,9 @@ class _UnorderedListItemComponentState
 
     final indentSpace = widget.indentCalculator(textStyle, widget.indent);
     final textScaler = MediaQuery.textScalerOf(context);
-    final lineHeight =
-        textScaler.scale(textStyle.fontSize! * (textStyle.height ?? 1.25));
+    final lineHeight = textScaler.scale(
+      textStyle.fontSize! * (textStyle.height ?? 1.25),
+    );
 
     return ProxyTextDocumentComponent(
       key: widget.componentKey,
@@ -651,11 +644,13 @@ enum OrderedListNumeralStyle {
   upperRoman,
 }
 
-typedef UnorderedListItemDotBuilder = Widget Function(
-    BuildContext, UnorderedListItemComponent);
+typedef UnorderedListItemDotBuilder =
+    Widget Function(BuildContext, UnorderedListItemComponent);
 
 Widget _defaultUnorderedListItemDotBuilder(
-    BuildContext context, UnorderedListItemComponent component) {
+  BuildContext context,
+  UnorderedListItemComponent component,
+) {
   // Usually, the font size is obtained via the stylesheet. But the attributions might
   // also contain a FontSizeAttribution, which overrides the stylesheet. Use the attributions
   // of the first character to determine the text style.
@@ -769,8 +764,9 @@ class _OrderedListItemComponentState extends State<OrderedListItemComponent> {
 
     final indentSpace = widget.indentCalculator(textStyle, widget.indent);
     final textScaler = MediaQuery.textScalerOf(context);
-    final lineHeight =
-        textScaler.scale(textStyle.fontSize! * (textStyle.height ?? 1.0));
+    final lineHeight = textScaler.scale(
+      textStyle.fontSize! * (textStyle.height ?? 1.0),
+    );
 
     return ProxyTextDocumentComponent(
       key: widget.componentKey,
@@ -816,8 +812,8 @@ class _OrderedListItemComponentState extends State<OrderedListItemComponent> {
   }
 }
 
-typedef OrderedListItemNumeralBuilder = Widget Function(
-    BuildContext, OrderedListItemComponent);
+typedef OrderedListItemNumeralBuilder =
+    Widget Function(BuildContext, OrderedListItemComponent);
 
 /// The standard [TextBlockIndentCalculator] used by list items in `SuperEditor`.
 double defaultListItemIndentCalculator(TextStyle textStyle, int indent) {
@@ -825,7 +821,9 @@ double defaultListItemIndentCalculator(TextStyle textStyle, int indent) {
 }
 
 Widget _defaultOrderedListItemNumeralBuilder(
-    BuildContext context, OrderedListItemComponent component) {
+  BuildContext context,
+  OrderedListItemComponent component,
+) {
   // Usually, the font size is obtained via the stylesheet. But the attributions might
   // also contain a FontSizeAttribution, which overrides the stylesheet. Use the attributions
   // of the first character to determine the text style.
@@ -835,9 +833,9 @@ Widget _defaultOrderedListItemNumeralBuilder(
   // textStyle with the default textStyle. This might cause it to apply a font family,
   // letter spacing, etc. That might cause the numeral to be misaligned with the
   // list item's text.
-  final textStyle = component.styleBuilder(attributions).copyWith(
-        inherit: false,
-      );
+  final textStyle = component
+      .styleBuilder(attributions)
+      .copyWith(inherit: false);
 
   return OverflowBox(
     maxWidth: double.infinity,
@@ -875,7 +873,8 @@ String _numeralForIndex(int numeral, OrderedListNumeralStyle numeralStyle) {
 String? _intToRoman(int number) {
   if (number <= 0) {
     throw ArgumentError(
-        'Roman numerals are only defined for positive integers');
+      'Roman numerals are only defined for positive integers',
+    );
   }
 
   if (number > 3999) {
@@ -976,17 +975,13 @@ String _intToAlpha(int num) {
 }
 
 class IndentListItemRequest implements EditRequest {
-  IndentListItemRequest({
-    required this.nodeId,
-  });
+  IndentListItemRequest({required this.nodeId});
 
   final String nodeId;
 }
 
 class IndentListItemCommand extends EditCommand {
-  IndentListItemCommand({
-    required this.nodeId,
-  });
+  IndentListItemCommand({required this.nodeId});
 
   final String nodeId;
 
@@ -999,38 +994,30 @@ class IndentListItemCommand extends EditCommand {
     final node = document.getNodeById(nodeId);
     final listItem = node as ListItemNode;
     if (listItem.indent >= 6) {
-      _log.log('IndentListItemCommand',
-          'WARNING: Editor does not support an indent level beyond 6.');
+      _log.log(
+        'IndentListItemCommand',
+        'WARNING: Editor does not support an indent level beyond 6.',
+      );
       return;
     }
 
     document.replaceNodeById(
       node.id,
-      node.copyListItemWith(
-        indent: listItem.indent + 1,
-      ),
+      node.copyListItemWith(indent: listItem.indent + 1),
     );
 
-    executor.logChanges([
-      DocumentEdit(
-        NodeChangeEvent(nodeId),
-      )
-    ]);
+    executor.logChanges([DocumentEdit(NodeChangeEvent(nodeId))]);
   }
 }
 
 class UnIndentListItemRequest implements EditRequest {
-  UnIndentListItemRequest({
-    required this.nodeId,
-  });
+  UnIndentListItemRequest({required this.nodeId});
 
   final String nodeId;
 }
 
 class UnIndentListItemCommand extends EditCommand {
-  UnIndentListItemCommand({
-    required this.nodeId,
-  });
+  UnIndentListItemCommand({required this.nodeId});
 
   final String nodeId;
 
@@ -1045,21 +1032,13 @@ class UnIndentListItemCommand extends EditCommand {
     if (listItem.indent > 0) {
       document.replaceNodeById(
         node.id,
-        node.copyListItemWith(
-          indent: listItem.indent - 1,
-        ),
+        node.copyListItemWith(indent: listItem.indent - 1),
       );
 
-      executor.logChanges([
-        DocumentEdit(
-          NodeChangeEvent(nodeId),
-        )
-      ]);
+      executor.logChanges([DocumentEdit(NodeChangeEvent(nodeId))]);
     } else {
       executor.executeCommand(
-        ConvertListItemToParagraphCommand(
-          nodeId: nodeId,
-        ),
+        ConvertListItemToParagraphCommand(nodeId: nodeId),
       );
     }
   }
@@ -1167,29 +1146,19 @@ class ConvertListItemToParagraphCommand extends EditCommand {
     );
     document.replaceNodeById(listItem.id, newParagraphNode);
 
-    executor.logChanges([
-      DocumentEdit(
-        NodeChangeEvent(listItem.id),
-      )
-    ]);
+    executor.logChanges([DocumentEdit(NodeChangeEvent(listItem.id))]);
   }
 }
 
 class ConvertParagraphToListItemRequest implements EditRequest {
-  ConvertParagraphToListItemRequest({
-    required this.nodeId,
-    required this.type,
-  });
+  ConvertParagraphToListItemRequest({required this.nodeId, required this.type});
 
   final String nodeId;
   final ListItemType type;
 }
 
 class ConvertParagraphToListItemCommand extends EditCommand {
-  ConvertParagraphToListItemCommand({
-    required this.nodeId,
-    required this.type,
-  });
+  ConvertParagraphToListItemCommand({required this.nodeId, required this.type});
 
   final String nodeId;
   final ListItemType type;
@@ -1210,29 +1179,19 @@ class ConvertParagraphToListItemCommand extends EditCommand {
     );
     document.replaceNodeById(paragraphNode.id, newListItemNode);
 
-    executor.logChanges([
-      DocumentEdit(
-        NodeChangeEvent(paragraphNode.id),
-      )
-    ]);
+    executor.logChanges([DocumentEdit(NodeChangeEvent(paragraphNode.id))]);
   }
 }
 
 class ChangeListItemTypeRequest implements EditRequest {
-  ChangeListItemTypeRequest({
-    required this.nodeId,
-    required this.newType,
-  });
+  ChangeListItemTypeRequest({required this.nodeId, required this.newType});
 
   final String nodeId;
   final ListItemType newType;
 }
 
 class ChangeListItemTypeCommand extends EditCommand {
-  ChangeListItemTypeCommand({
-    required this.nodeId,
-    required this.newType,
-  });
+  ChangeListItemTypeCommand({required this.nodeId, required this.newType});
 
   final String nodeId;
   final ListItemType newType;
@@ -1252,11 +1211,7 @@ class ChangeListItemTypeCommand extends EditCommand {
     );
     document.replaceNodeById(existingListItem.id, newListItemNode);
 
-    executor.logChanges([
-      DocumentEdit(
-        NodeChangeEvent(existingListItem.id),
-      )
-    ]);
+    executor.logChanges([DocumentEdit(NodeChangeEvent(existingListItem.id))]);
   }
 }
 
@@ -1303,13 +1258,12 @@ class SplitListItemCommand extends EditCommand {
     _log.log('SplitListItemCommand', ' - end text: "$endText"');
 
     // Change the current node's content to just the text before the caret.
-    _log.log('SplitListItemCommand',
-        ' - changing the original list item text due to split');
-    final updatedListItemNode = listItemNode.copyListItemWith(text: startText);
-    document.replaceNodeById(
-      listItemNode.id,
-      updatedListItemNode,
+    _log.log(
+      'SplitListItemCommand',
+      ' - changing the original list item text due to split',
     );
+    final updatedListItemNode = listItemNode.copyListItemWith(text: startText);
+    document.replaceNodeById(listItemNode.id, updatedListItemNode);
 
     // Create a new node that will follow the current node. Set its text
     // to the text that was removed from the current node.
@@ -1336,14 +1290,14 @@ class SplitListItemCommand extends EditCommand {
     // node that was split.
     composer.setComposingRegion(null);
 
-    _log.log('SplitListItemCommand',
-        ' - inserted new node: ${newNode.id} after old one: ${node.id}');
+    _log.log(
+      'SplitListItemCommand',
+      ' - inserted new node: ${newNode.id} after old one: ${node.id}',
+    );
 
     executor.logChanges([
       SplitListItemIntention.start(),
-      DocumentEdit(
-        NodeChangeEvent(nodeId),
-      ),
+      DocumentEdit(NodeChangeEvent(nodeId)),
       DocumentEdit(
         NodeInsertedEvent(newNodeId, document.getNodeIndexById(newNodeId)),
       ),
@@ -1421,8 +1375,9 @@ ExecutionInstruction backspaceToUnIndentListItem({
     return ExecutionInstruction.continueExecution;
   }
 
-  final node = editContext.document
-      .getNodeById(editContext.composer.selection!.extent.nodeId);
+  final node = editContext.document.getNodeById(
+    editContext.composer.selection!.extent.nodeId,
+  );
   if (node is! ListItemNode) {
     return ExecutionInstruction.continueExecution;
   }

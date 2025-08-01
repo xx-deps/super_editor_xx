@@ -111,10 +111,12 @@ class ScrollbarWithCustomPhysics extends StatelessWidget {
         thumbVisibility: thumbVisibility ?? false,
         thickness:
             thickness ?? CupertinoScrollbarWithCustomPhysics.defaultThickness,
-        thicknessWhileDragging: thickness ??
+        thicknessWhileDragging:
+            thickness ??
             CupertinoScrollbarWithCustomPhysics.defaultThicknessWhileDragging,
         radius: radius ?? CupertinoScrollbarWithCustomPhysics.defaultRadius,
-        radiusWhileDragging: radius ??
+        radiusWhileDragging:
+            radius ??
             CupertinoScrollbarWithCustomPhysics.defaultRadiusWhileDragging,
         controller: controller,
         notificationPredicate: notificationPredicate,
@@ -150,12 +152,12 @@ class _MaterialScrollbar extends RawScrollbarWithCustomPhysics {
     super.interactive,
     super.scrollbarOrientation,
   }) : super(
-          fadeDuration: _kScrollbarFadeDuration,
-          timeToFade: _kScrollbarTimeToFade,
-          pressDuration: Duration.zero,
-          notificationPredicate:
-              notificationPredicate ?? defaultScrollNotificationPredicate,
-        );
+         fadeDuration: _kScrollbarFadeDuration,
+         timeToFade: _kScrollbarTimeToFade,
+         pressDuration: Duration.zero,
+         notificationPredicate:
+             notificationPredicate ?? defaultScrollNotificationPredicate,
+       );
 
   @override
   _MaterialScrollbarState createState() => _MaterialScrollbarState();
@@ -191,9 +193,9 @@ class _MaterialScrollbarState
       });
 
   Set<WidgetState> get _states => <WidgetState>{
-        if (_dragIsActive) WidgetState.dragged,
-        if (_hoverIsActive) WidgetState.hovered,
-      };
+    if (_dragIsActive) WidgetState.dragged,
+    if (_hoverIsActive) WidgetState.hovered,
+  };
 
   WidgetStateProperty<Color> get _thumbColor {
     final Color onSurface = _colorScheme.onSurface;
@@ -315,10 +317,12 @@ class _MaterialScrollbarState
       ..trackBorderColor = _trackBorderColor.resolve(_states)
       ..textDirection = Directionality.of(context)
       ..thickness = _thickness.resolve(_states)
-      ..radius = widget.radius ??
+      ..radius =
+          widget.radius ??
           _scrollbarTheme.radius ??
           (_useAndroidScrollbar ? null : _kScrollbarRadius)
-      ..crossAxisMargin = _scrollbarTheme.crossAxisMargin ??
+      ..crossAxisMargin =
+          _scrollbarTheme.crossAxisMargin ??
           (_useAndroidScrollbar ? 0.0 : _kScrollbarMargin)
       ..mainAxisMargin = _scrollbarTheme.mainAxisMargin ?? 0.0
       ..minLength = _scrollbarTheme.minThumbLength ?? _kScrollbarMinLength

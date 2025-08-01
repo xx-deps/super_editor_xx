@@ -39,13 +39,18 @@ class EagerPanGestureRecognizer extends DragGestureRecognizer {
 
   @override
   DragEndDetails? considerFling(
-      VelocityEstimate estimate, PointerDeviceKind kind) {
+    VelocityEstimate estimate,
+    PointerDeviceKind kind,
+  ) {
     if (!isFlingGesture(estimate, kind)) {
       return null;
     }
     final maxVelocity = maxFlingVelocity ?? kMaxFlingVelocity;
-    final dy =
-        clampDouble(estimate.pixelsPerSecond.dy, -maxVelocity, maxVelocity);
+    final dy = clampDouble(
+      estimate.pixelsPerSecond.dy,
+      -maxVelocity,
+      maxVelocity,
+    );
     return DragEndDetails(
       velocity: Velocity(pixelsPerSecond: Offset(0, dy)),
       primaryVelocity: dy,
@@ -56,11 +61,14 @@ class EagerPanGestureRecognizer extends DragGestureRecognizer {
 
   @override
   bool hasSufficientGlobalDistanceToAccept(
-      PointerDeviceKind pointerDeviceKind, double? deviceTouchSlop) {
+    PointerDeviceKind pointerDeviceKind,
+    double? deviceTouchSlop,
+  ) {
     // Flutter's PanGestureRecognizer uses the pan slop, which is twice bigger than the hit slop,
     // to determine if the gesture should be accepted. Use the same distance used by the
     // VerticalDragGestureRecognizer.
-    final res = globalDistanceMoved.abs() >
+    final res =
+        globalDistanceMoved.abs() >
         computeHitSlop(pointerDeviceKind, gestureSettings);
     if (res && shouldAccept != null) {
       return shouldAccept!();

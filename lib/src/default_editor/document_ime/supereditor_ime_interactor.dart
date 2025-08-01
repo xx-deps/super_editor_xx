@@ -202,8 +202,9 @@ class SuperEditorImeInteractorState extends State<SuperEditorImeInteractor>
     _controlsController = SuperEditorIosControlsScope.maybeRootOf(context);
     _documentImeClient.floatingCursorController =
         widget.floatingCursorController ??
-            _controlsController?.floatingCursorController;
-    _textInputConfiguration = widget.imeConfiguration //
+        _controlsController?.floatingCursorController;
+    _textInputConfiguration = widget
+        .imeConfiguration //
         .toTextInputConfiguration(viewId: View.of(context).viewId);
   }
 
@@ -215,7 +216,7 @@ class SuperEditorImeInteractorState extends State<SuperEditorImeInteractor>
       _setupImeConnection();
       _documentImeClient.floatingCursorController =
           widget.floatingCursorController ??
-              _controlsController?.floatingCursorController;
+          _controlsController?.floatingCursorController;
       _imeConnection.notifyListeners();
     }
 
@@ -404,18 +405,21 @@ class SuperEditorImeInteractorState extends State<SuperEditorImeInteractor>
 
     final docLayout = widget.editContext.documentLayout;
 
-    DocumentComponent? selectedComponent =
-        docLayout.getComponentByNodeId(selection.extent.nodeId);
+    DocumentComponent? selectedComponent = docLayout.getComponentByNodeId(
+      selection.extent.nodeId,
+    );
     if (selectedComponent is ProxyDocumentComponent) {
       // The selected componente is a proxy.
       // If this component displays text, the text component is bounded to childDocumentComponentKey.
-      selectedComponent = selectedComponent
-          .childDocumentComponentKey.currentState as DocumentComponent?;
+      selectedComponent =
+          selectedComponent.childDocumentComponentKey.currentState
+              as DocumentComponent?;
     }
 
     if (selectedComponent == null) {
       editorImeLog.warning(
-          'A selection exists but no component for node ${selection.extent.nodeId} was found');
+        'A selection exists but no component for node ${selection.extent.nodeId} was found',
+      );
       return;
     }
 
@@ -476,18 +480,21 @@ class SuperEditorImeInteractorState extends State<SuperEditorImeInteractor>
 
     final documentLayout = widget.editContext.documentLayout;
 
-    DocumentComponent? selectedComponent =
-        documentLayout.getComponentByNodeId(selection.extent.nodeId);
+    DocumentComponent? selectedComponent = documentLayout.getComponentByNodeId(
+      selection.extent.nodeId,
+    );
     if (selectedComponent is ProxyDocumentComponent) {
       // The selected componente is a proxy.
       // If this component displays text, the text component is bounded to childDocumentComponentKey.
-      selectedComponent = selectedComponent
-          .childDocumentComponentKey.currentState as DocumentComponent;
+      selectedComponent =
+          selectedComponent.childDocumentComponentKey.currentState
+              as DocumentComponent;
     }
 
     if (selectedComponent == null) {
       editorImeLog.warning(
-          'A selection exists but no component for node ${selection.extent.nodeId} was found');
+        'A selection exists but no component for node ${selection.extent.nodeId} was found',
+      );
       return null;
     }
 
@@ -585,8 +592,9 @@ void moveWordLeft(SuperEditorContext context) {
 }
 
 void moveWordRight(SuperEditorContext context) {
-  context.commonOps
-      .moveCaretDownstream(movementModifier: MovementModifier.word);
+  context.commonOps.moveCaretDownstream(
+    movementModifier: MovementModifier.word,
+  );
 }
 
 void moveToLeftEndOfLine(SuperEditorContext context) {
@@ -594,18 +602,21 @@ void moveToLeftEndOfLine(SuperEditorContext context) {
 }
 
 void moveToRightEndOfLine(SuperEditorContext context) {
-  context.commonOps
-      .moveCaretDownstream(movementModifier: MovementModifier.line);
+  context.commonOps.moveCaretDownstream(
+    movementModifier: MovementModifier.line,
+  );
 }
 
 void moveToBeginningOfParagraph(SuperEditorContext context) {
-  context.commonOps
-      .moveCaretUpstream(movementModifier: MovementModifier.paragraph);
+  context.commonOps.moveCaretUpstream(
+    movementModifier: MovementModifier.paragraph,
+  );
 }
 
 void moveToEndOfParagraph(SuperEditorContext context) {
-  context.commonOps
-      .moveCaretDownstream(movementModifier: MovementModifier.paragraph);
+  context.commonOps.moveCaretDownstream(
+    movementModifier: MovementModifier.paragraph,
+  );
 }
 
 void moveToBeginningOfDocument(SuperEditorContext context) {
@@ -694,9 +705,7 @@ void insertNewLine(SuperEditorContext context) {
   if (CurrentPlatform.isWeb) {
     return;
   }
-  context.editor.execute([
-    InsertNewlineAtCaretRequest(),
-  ]);
+  context.editor.execute([InsertNewlineAtCaretRequest()]);
 }
 
 void deleteWordBackward(SuperEditorContext context) {
@@ -783,8 +792,10 @@ void scrollToEndOfDocument(SuperEditorContext context) {
 
 void scrollPageUp(SuperEditorContext context) {
   context.scroller.animateTo(
-    max(context.scroller.scrollOffset - context.scroller.viewportDimension,
-        context.scroller.minScrollExtent),
+    max(
+      context.scroller.scrollOffset - context.scroller.viewportDimension,
+      context.scroller.minScrollExtent,
+    ),
     duration: const Duration(milliseconds: 150),
     curve: Curves.decelerate,
   );
@@ -792,8 +803,10 @@ void scrollPageUp(SuperEditorContext context) {
 
 void scrollPageDown(SuperEditorContext context) {
   context.scroller.animateTo(
-    min(context.scroller.scrollOffset + context.scroller.viewportDimension,
-        context.scroller.maxScrollExtent),
+    min(
+      context.scroller.scrollOffset + context.scroller.viewportDimension,
+      context.scroller.maxScrollExtent,
+    ),
     duration: const Duration(milliseconds: 150),
     curve: Curves.decelerate,
   );
@@ -907,9 +920,7 @@ class SuperEditorImeConfiguration {
   ///
   /// The [viewId] is required do determine the view that the text input belongs to. You can call
   /// `View.of(context).viewId` to get the current view's ID.
-  TextInputConfiguration toTextInputConfiguration({
-    required int viewId,
-  }) {
+  TextInputConfiguration toTextInputConfiguration({required int viewId}) {
     return TextInputConfiguration(
       viewId: viewId,
       enableDeltaModel: true,

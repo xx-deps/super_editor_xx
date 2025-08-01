@@ -33,9 +33,7 @@ void main() {
   });
 }
 
-const _hintStyle = TextStyle(
-  color: Color(0xFFDDDDDD),
-);
+const _hintStyle = TextStyle(color: Color(0xFFDDDDDD));
 
 TextStyle _textStyleBuilder(Set<Attribution> attributions) {
   return const TextStyle(

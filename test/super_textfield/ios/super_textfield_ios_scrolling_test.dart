@@ -10,11 +10,17 @@ import '../super_textfield_robot.dart';
 
 void main() {
   group("SuperTextField > scrolling >", () {
-    testWidgetsOnIos('auto-scrolls to caret position upon widget initialization', (tester) async {
+    testWidgetsOnIos('auto-scrolls to caret position upon widget initialization', (
+      tester,
+    ) async {
       final controller = AttributedTextEditingController(
-        text: AttributedText("This is long text that extends beyond the right side of the text field."),
+        text: AttributedText(
+          "This is long text that extends beyond the right side of the text field.",
+        ),
       );
-      controller.selection = TextSelection.collapsed(offset: controller.text.length);
+      controller.selection = TextSelection.collapsed(
+        offset: controller.text.length,
+      );
 
       // Pump the widget tree with a SuperTextField with a maxWidth smaller
       // than the text width.
@@ -34,7 +40,9 @@ void main() {
 
     testWidgetsOnIos('single-line auto-scrolls to the right', (tester) async {
       final controller = AttributedTextEditingController(
-        text: AttributedText("This is long text that extends beyond the right side of the text field."),
+        text: AttributedText(
+          "This is long text that extends beyond the right side of the text field.",
+        ),
       );
 
       // Pump the widget tree with a SuperTextField with a maxWidth smaller
@@ -54,22 +62,28 @@ void main() {
 
       // Drag caret from left side of text field to right side of text field, into the
       // right auto-scroll region.
-      final gesture = await tester.dragCaretByDistanceInSuperTextField(const Offset(220, 0));
+      final gesture = await tester.dragCaretByDistanceInSuperTextField(
+        const Offset(220, 0),
+      );
 
       // Pump a few more frames and ensure that every frame moves the caret further.
       int previousCaretPosition = controller.selection.extentOffset;
       for (int i = 0; i < 10; i += 1) {
         await tester.pump(const Duration(milliseconds: 50));
         final newCaretPosition = controller.selection.extentOffset;
-        expect(newCaretPosition, greaterThan(previousCaretPosition),
-            reason: "Caret position didn't move on drag frame $i");
+        expect(
+          newCaretPosition,
+          greaterThan(previousCaretPosition),
+          reason: "Caret position didn't move on drag frame $i",
+        );
         previousCaretPosition = newCaretPosition;
       }
 
       // Log the scroll offset to make sure that the scroll offset doesn't jump back
       // to the left when we move out of the auto-scroll region. This is a glitch that
       // we saw in #1673.
-      final scrollOffsetAfterAutoScroll = SuperTextFieldInspector.findScrollOffset();
+      final scrollOffsetAfterAutoScroll =
+          SuperTextFieldInspector.findScrollOffset();
 
       // Drag back to the left to leave the auto-scroll region.
       await gesture.moveBy(const Offset(-50, 0));
@@ -83,20 +97,30 @@ void main() {
 
       // Ensure that when we moved slightly back to the left, to move out of the auto-scroll
       // region, the scroll offset didn't jump somewhere else.
-      expect(SuperTextFieldInspector.findScrollOffset(), scrollOffsetAfterAutoScroll);
+      expect(
+        SuperTextFieldInspector.findScrollOffset(),
+        scrollOffsetAfterAutoScroll,
+      );
 
       // Release the gesture.
       await gesture.up();
 
       // Ensure that the scroll offset didn't change after we released.
-      expect(SuperTextFieldInspector.findScrollOffset(), scrollOffsetAfterAutoScroll);
+      expect(
+        SuperTextFieldInspector.findScrollOffset(),
+        scrollOffsetAfterAutoScroll,
+      );
     });
 
     testWidgetsOnIos('single-line auto-scrolls to the left', (tester) async {
       final controller = AttributedTextEditingController(
-        text: AttributedText("This is long text that extends beyond the right side of the text field."),
+        text: AttributedText(
+          "This is long text that extends beyond the right side of the text field.",
+        ),
       );
-      controller.selection = TextSelection.collapsed(offset: controller.text.length);
+      controller.selection = TextSelection.collapsed(
+        offset: controller.text.length,
+      );
 
       // Pump the widget tree with a SuperTextField with a maxWidth smaller
       // than the text width.
@@ -119,22 +143,28 @@ void main() {
 
       // Drag caret from right side of text field to left side of text field, into the
       // left auto-scroll region.
-      final gesture = await tester.dragCaretByDistanceInSuperTextField(const Offset(-220, 0));
+      final gesture = await tester.dragCaretByDistanceInSuperTextField(
+        const Offset(-220, 0),
+      );
 
       // Pump a few more frames and ensure that every frame moves the caret further.
       int previousCaretPosition = controller.selection.extentOffset;
       for (int i = 0; i < 10; i += 1) {
         await tester.pump(const Duration(milliseconds: 50));
         final newCaretPosition = controller.selection.extentOffset;
-        expect(newCaretPosition, lessThan(previousCaretPosition),
-            reason: "Caret position didn't move on drag frame $i");
+        expect(
+          newCaretPosition,
+          lessThan(previousCaretPosition),
+          reason: "Caret position didn't move on drag frame $i",
+        );
         previousCaretPosition = newCaretPosition;
       }
 
       // Log the scroll offset to make sure that the scroll offset doesn't jump back
       // to the left when we move out of the auto-scroll region. This is a glitch that
       // we saw in #1673.
-      final scrollOffsetAfterAutoScroll = SuperTextFieldInspector.findScrollOffset();
+      final scrollOffsetAfterAutoScroll =
+          SuperTextFieldInspector.findScrollOffset();
 
       // Drag back to the right to leave the auto-scroll region.
       await gesture.moveBy(const Offset(50, 0));
@@ -148,18 +178,25 @@ void main() {
 
       // Ensure that when we moved slightly back to the right, to move out of the auto-scroll
       // region, the scroll offset didn't jump somewhere else.
-      expect(SuperTextFieldInspector.findScrollOffset(), scrollOffsetAfterAutoScroll);
+      expect(
+        SuperTextFieldInspector.findScrollOffset(),
+        scrollOffsetAfterAutoScroll,
+      );
 
       // Release the gesture.
       await gesture.up();
     });
 
-    testWidgetsOnIos('single-line drag does nothing without a selection', (tester) async {
+    testWidgetsOnIos('single-line drag does nothing without a selection', (
+      tester,
+    ) async {
       // Test explanation: I experimented with single-line text fields in a few iOS apps
       // and I found that dragging in an area away from the caret doesn't have any effect.
       // It doesn't scroll the text field, it doesn't move the caret, nothing.
       final controller = AttributedTextEditingController(
-        text: AttributedText("This is long text that extends beyond the right side of the text field."),
+        text: AttributedText(
+          "This is long text that extends beyond the right side of the text field.",
+        ),
       );
 
       // Pump the widget tree with a SuperTextField with a maxWidth smaller
@@ -190,12 +227,16 @@ void main() {
       await tester.pump(kTapTimeout);
     });
 
-    testWidgetsOnIos('single-line drag does nothing with collapsed selection', (tester) async {
+    testWidgetsOnIos('single-line drag does nothing with collapsed selection', (
+      tester,
+    ) async {
       // Test explanation: I experimented with single-line text fields in a few iOS apps
       // and I found that dragging in an area away from the caret doesn't have any effect.
       // It doesn't scroll the text field, it doesn't move the caret, nothing.
       final controller = AttributedTextEditingController(
-        text: AttributedText("This is long text that extends beyond the right side of the text field."),
+        text: AttributedText(
+          "This is long text that extends beyond the right side of the text field.",
+        ),
       );
 
       // Pump the widget tree with a SuperTextField with a maxWidth smaller
@@ -259,7 +300,8 @@ Future<void> _pumpTestApp(
               focusNode: focusNode,
               textController: textController,
               lineHeight: 20,
-              textStyleBuilder: (_) => const TextStyle(fontSize: 20, color: Colors.black),
+              textStyleBuilder: (_) =>
+                  const TextStyle(fontSize: 20, color: Colors.black),
               minLines: minLines,
               maxLines: maxLines,
               padding: padding,

@@ -3,7 +3,11 @@ import 'package:golden_toolkit/golden_toolkit.dart';
 
 import '../../test_tools_goldens.dart';
 
-void testComponentGolden(String description, Widget componentBuilder, String fileName) {
+void testComponentGolden(
+  String description,
+  Widget componentBuilder,
+  String fileName,
+) {
   testGoldensOnAndroid(description, (tester) async {
     tester.view
       ..physicalSize = const Size(600, 400)
@@ -12,11 +16,7 @@ void testComponentGolden(String description, Widget componentBuilder, String fil
 
     await tester.pumpWidget(
       MaterialApp(
-        home: Scaffold(
-          body: Center(
-            child: componentBuilder,
-          ),
-        ),
+        home: Scaffold(body: Center(child: componentBuilder)),
         debugShowCheckedModeBanner: false,
       ),
     );

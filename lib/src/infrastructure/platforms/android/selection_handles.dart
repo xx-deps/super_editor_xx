@@ -15,8 +15,11 @@ import 'package:super_editor/src/infrastructure/touch_controls.dart';
 ///  * Upstream: The pointy corner points to the upper right (marking the start of a selection).
 ///  * Downstream: The pointy corner points to the upper left (marking the end of a selection).
 class AndroidSelectionHandle extends StatelessWidget {
-  static const defaultTouchRegionExpansion =
-      EdgeInsets.only(left: 16, right: 16, bottom: 16);
+  static const defaultTouchRegionExpansion = EdgeInsets.only(
+    left: 16,
+    right: 16,
+    bottom: 16,
+  );
 
   const AndroidSelectionHandle({
     Key? key,

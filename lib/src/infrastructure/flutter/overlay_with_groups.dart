@@ -15,7 +15,8 @@ import 'package:flutter/widgets.dart';
 class GroupedOverlayPortalController extends OverlayPortalController {
   static final _visibleControllers =
       PriorityQueue<GroupedOverlayPortalController>(
-          (a, b) => a.displayPriority.compareTo(b.displayPriority));
+        (a, b) => a.displayPriority.compareTo(b.displayPriority),
+      );
 
   static bool _isReworkingOrder = false;
 

@@ -57,9 +57,9 @@ class AndroidDocumentLongPressSelectionStrategy {
     required Document document,
     required DocumentLayout documentLayout,
     required void Function(DocumentSelection) select,
-  })  : _document = document,
-        _docLayout = documentLayout,
-        _select = select;
+  }) : _document = document,
+       _docLayout = documentLayout,
+       _select = select;
 
   final Document _document;
   final DocumentLayout _docLayout;
@@ -158,12 +158,11 @@ class AndroidDocumentLongPressSelectionStrategy {
   ///
   /// Returns `true` if a long-press selection started, or `false` if the user's
   /// press didn't occur over selectable content.
-  bool onLongPressStart({
-    required Offset tapDownDocumentOffset,
-  }) {
+  bool onLongPressStart({required Offset tapDownDocumentOffset}) {
     longPressSelectionLog.fine("Long press start");
-    final docPosition =
-        _docLayout.getDocumentPositionNearestToOffset(tapDownDocumentOffset);
+    final docPosition = _docLayout.getDocumentPositionNearestToOffset(
+      tapDownDocumentOffset,
+    );
     if (docPosition == null) {
       longPressSelectionLog.finer("No doc position where the user pressed");
       return false;
@@ -182,8 +181,10 @@ class AndroidDocumentLongPressSelectionStrategy {
         ),
       );
     } else {
-      _longPressInitialSelection =
-          getWordSelection(docPosition: docPosition, docLayout: _docLayout);
+      _longPressInitialSelection = getWordSelection(
+        docPosition: docPosition,
+        docLayout: _docLayout,
+      );
     }
 
     _select(_longPressInitialSelection!);
@@ -191,7 +192,8 @@ class AndroidDocumentLongPressSelectionStrategy {
     // Initially, the word vs character selection bound tracking is set equal to
     // the word boundaries of the first selected word.
     longPressSelectionLog.finer(
-        "Setting initial long-press upstream bound to: ${_longPressInitialSelection!.start}");
+      "Setting initial long-press upstream bound to: ${_longPressInitialSelection!.start}",
+    );
     _longPressMostRecentBoundaryNodeId =
         _longPressInitialSelection!.start.nodeId;
 
@@ -218,7 +220,9 @@ class AndroidDocumentLongPressSelectionStrategy {
   /// Clients should call this method whenever a long-press gesture pans, after
   /// initially calling [onLongPressStart].
   void onLongPressDragUpdate(
-      Offset fingerDocumentOffset, DocumentPosition? fingerDocumentPosition) {
+    Offset fingerDocumentOffset,
+    DocumentPosition? fingerDocumentPosition,
+  ) {
     longPressSelectionLog.finer("--------------------------------------------");
     longPressSelectionLog.fine("Long press drag update");
     longPressSelectionLog.finer("Finger offset: $fingerDocumentOffset");
@@ -237,8 +241,9 @@ class AndroidDocumentLongPressSelectionStrategy {
           _longPressInitialSelection!.base.nodeId) {
         // The user is dragging over content that isn't text, therefore it doesn't have
         // a concept of "words". Select the whole node.
-        longPressSelectionLog
-            .finer("Dragging over non-text node. Selecting the whole node.");
+        longPressSelectionLog.finer(
+          "Dragging over non-text node. Selecting the whole node.",
+        );
         _select(_longPressInitialSelection!.expandTo(fingerDocumentPosition));
       }
       return;
@@ -249,11 +254,14 @@ class AndroidDocumentLongPressSelectionStrategy {
         : fingerDocumentOffset + Offset(_longPressCharacterSelectionXOffset, 0);
     final focalPointDocumentPosition = !_isSelectingByCharacter
         ? fingerDocumentPosition
-        : _docLayout
-            .getDocumentPositionNearestToOffset(focalPointDocumentOffset)!;
+        : _docLayout.getDocumentPositionNearestToOffset(
+            focalPointDocumentOffset,
+          )!;
 
     final fingerIsInInitialWord = _document.doesSelectionContainPosition(
-        _longPressInitialSelection!, focalPointDocumentPosition);
+      _longPressInitialSelection!,
+      focalPointDocumentPosition,
+    );
 
     if (fingerIsInInitialWord) {
       longPressSelectionLog.finer("Dragging in the initial word.");
@@ -261,8 +269,9 @@ class AndroidDocumentLongPressSelectionStrategy {
       return;
     }
 
-    final componentUnderFinger =
-        _docLayout.getComponentByNodeId(fingerDocumentPosition.nodeId);
+    final componentUnderFinger = _docLayout.getComponentByNodeId(
+      fingerDocumentPosition.nodeId,
+    );
     final textComponent = componentUnderFinger is TextComponentState
         ? componentUnderFinger
         : componentUnderFinger as ProxyTextComposable;
@@ -279,16 +288,18 @@ class AndroidDocumentLongPressSelectionStrategy {
               .offset;
       final mostRecentBoundaryTextOffset =
           _longPressSelectionDirection == TextAffinity.upstream
-              ? _longPressMostRecentUpstreamWordBoundary ??
-                  initialSelectionStartOffset
-              : _longPressMostRecentDownstreamWordBoundary ??
-                  initialSelectionEndOffset;
+          ? _longPressMostRecentUpstreamWordBoundary ??
+                initialSelectionStartOffset
+          : _longPressMostRecentDownstreamWordBoundary ??
+                initialSelectionEndOffset;
       mostRecentBoundaryLine = textComponent.getPositionAtStartOfLine(
-          TextNodePosition(offset: mostRecentBoundaryTextOffset));
+        TextNodePosition(offset: mostRecentBoundaryTextOffset),
+      );
     }
 
-    final fingerLine = textComponent
-        .getPositionAtStartOfLine(TextNodePosition(offset: fingerTextOffset));
+    final fingerLine = textComponent.getPositionAtStartOfLine(
+      TextNodePosition(offset: fingerTextOffset),
+    );
     final fingerIsOnNewLine = fingerLine != mostRecentBoundaryLine;
     if (fingerIsOnNewLine ||
         fingerDocumentPosition.nodeId != _longPressMostRecentBoundaryNodeId) {
@@ -298,9 +309,11 @@ class AndroidDocumentLongPressSelectionStrategy {
       _resetWordVsCharacterTracking();
     }
 
-    final fingerIsUpstream = _document.getAffinityBetween(
-            base: fingerDocumentPosition,
-            extent: _longPressInitialSelection!.end) ==
+    final fingerIsUpstream =
+        _document.getAffinityBetween(
+          base: fingerDocumentPosition,
+          extent: _longPressInitialSelection!.end,
+        ) ==
         TextAffinity.downstream;
     if (fingerIsUpstream) {
       _onLongPressDragUpstreamOfInitialWord(
@@ -349,7 +362,9 @@ class AndroidDocumentLongPressSelectionStrategy {
     _longPressCharacterSelectionXOffset = 0;
 
     final initialWordRect = _docLayout.getRectForSelection(
-        _longPressInitialSelection!.base, _longPressInitialSelection!.extent)!;
+      _longPressInitialSelection!.base,
+      _longPressInitialSelection!.extent,
+    )!;
     final distanceToUpstream =
         (fingerOffsetInDocument.dx - initialWordRect.left).abs();
     final distanceToDownstream =
@@ -359,18 +374,22 @@ class AndroidDocumentLongPressSelectionStrategy {
       // The user's finger is closer to the downstream side than the upstream side.
       // Report the selection with the extent at the downstream edge to indicate the
       // direction the user is likely to move.
-      _select(DocumentSelection(
-        base: _longPressInitialSelection!.start,
-        extent: _longPressInitialSelection!.end,
-      ));
+      _select(
+        DocumentSelection(
+          base: _longPressInitialSelection!.start,
+          extent: _longPressInitialSelection!.end,
+        ),
+      );
     } else {
       // The user's finger is closer to the upstream side than the downstream side.
       // Report the selection with the extent at the upstream edge to indicate the
       // direction the user is likely to move.
-      _select(DocumentSelection(
-        base: _longPressInitialSelection!.end,
-        extent: _longPressInitialSelection!.start,
-      ));
+      _select(
+        DocumentSelection(
+          base: _longPressInitialSelection!.end,
+          extent: _longPressInitialSelection!.start,
+        ),
+      );
     }
   }
 
@@ -405,24 +424,29 @@ class AndroidDocumentLongPressSelectionStrategy {
         (focalPointDocumentPosition.nodePosition as TextNodePosition).offset;
     final focalPointIsBeyondMostRecentUpstreamWordBoundary =
         focalPointNodeId == _longPressMostRecentBoundaryNodeId &&
-            focalPointTextOffset < _longPressMostRecentUpstreamWordBoundary!;
+        focalPointTextOffset < _longPressMostRecentUpstreamWordBoundary!;
     longPressSelectionLog.finest(
-        "Focal point: $focalPointTextOffset, boundary: $_longPressMostRecentUpstreamWordBoundary, most recent touch position: $_longPressMostRecentTouchDocumentPosition");
+      "Focal point: $focalPointTextOffset, boundary: $_longPressMostRecentUpstreamWordBoundary, most recent touch position: $_longPressMostRecentTouchDocumentPosition",
+    );
 
     late final bool selectByWord;
     if (focalPointIsBeyondMostRecentUpstreamWordBoundary) {
       longPressSelectionLog.finest(
-          "Select by word because finger is beyond most recent boundary.");
+        "Select by word because finger is beyond most recent boundary.",
+      );
       longPressSelectionLog.finest(
-          " - most recent boundary position: $_longPressMostRecentUpstreamWordBoundary");
-      longPressSelectionLog
-          .finest(" - focal point position: $focalPointDocumentPosition");
+        " - most recent boundary position: $_longPressMostRecentUpstreamWordBoundary",
+      );
+      longPressSelectionLog.finest(
+        " - focal point position: $focalPointDocumentPosition",
+      );
       selectByWord = true;
     } else {
       longPressSelectionLog.finest(
-          "Focal point is NOT beyond boundary. Considering per-character selection.");
-      final isMovingBackward = _longPressMostRecentTouchDocumentPosition !=
-              null &&
+        "Focal point is NOT beyond boundary. Considering per-character selection.",
+      );
+      final isMovingBackward =
+          _longPressMostRecentTouchDocumentPosition != null &&
           fingerDocumentPosition != _longPressMostRecentTouchDocumentPosition &&
           _document.getAffinityBetween(
                 base: _longPressMostRecentTouchDocumentPosition!,
@@ -431,39 +455,50 @@ class AndroidDocumentLongPressSelectionStrategy {
               TextAffinity.downstream;
       final longPressMostRecentUpstreamWordBoundaryPosition = DocumentPosition(
         nodeId: _longPressMostRecentBoundaryNodeId!,
-        nodePosition:
-            TextNodePosition(offset: _longPressMostRecentUpstreamWordBoundary!),
+        nodePosition: TextNodePosition(
+          offset: _longPressMostRecentUpstreamWordBoundary!,
+        ),
       );
       final upstreamSelectionX = _docLayout
-          .getRectForSelection(longPressMostRecentUpstreamWordBoundaryPosition,
-              _longPressInitialSelection!.start)!
+          .getRectForSelection(
+            longPressMostRecentUpstreamWordBoundaryPosition,
+            _longPressInitialSelection!.start,
+          )!
           .left;
       final reverseDirectionDistance =
           fingerDocumentOffset.dx - upstreamSelectionX;
-      final startedMovingBackward = !_isSelectingByCharacter &&
+      final startedMovingBackward =
+          !_isSelectingByCharacter &&
           isMovingBackward &&
           reverseDirectionDistance >
               _defaultBoundaryDistanceToSwitchToCharacterSelection;
-      longPressSelectionLog
-          .finest(" - current doc drag position: $fingerDocumentPosition");
       longPressSelectionLog.finest(
-          " - most recent drag position: $_longPressMostRecentTouchDocumentPosition");
+        " - current doc drag position: $fingerDocumentPosition",
+      );
+      longPressSelectionLog.finest(
+        " - most recent drag position: $_longPressMostRecentTouchDocumentPosition",
+      );
       longPressSelectionLog.finest(" - is moving backward? $isMovingBackward");
       longPressSelectionLog.finest(
-          " - is already selecting by character? $_isSelectingByCharacter");
-      longPressSelectionLog
-          .finest(" - reverse direction distance: $reverseDirectionDistance");
+        " - is already selecting by character? $_isSelectingByCharacter",
+      );
+      longPressSelectionLog.finest(
+        " - reverse direction distance: $reverseDirectionDistance",
+      );
 
       if (startedMovingBackward || _isSelectingByCharacter) {
         longPressSelectionLog.finest("Selecting by character:");
-        longPressSelectionLog
-            .finest(" - just started moving backward: $startedMovingBackward");
         longPressSelectionLog.finest(
-            " - continuing an existing character selection: $_isSelectingByCharacter");
+          " - just started moving backward: $startedMovingBackward",
+        );
+        longPressSelectionLog.finest(
+          " - continuing an existing character selection: $_isSelectingByCharacter",
+        );
         selectByWord = false;
       } else {
         longPressSelectionLog.finest(
-            "User is still dragging away from initial word, selecting by word.");
+          "User is still dragging away from initial word, selecting by word.",
+        );
         selectByWord = true;
       }
     }
@@ -479,36 +514,44 @@ class AndroidDocumentLongPressSelectionStrategy {
         // selection, but that information is null. Log a warning and skip this
         // calculation.
         longPressSelectionLog.warning(
-            "The user triggered per-character selection, but we don't know which direction the user started moving the selection. We expected to know that information at this point.");
+          "The user triggered per-character selection, but we don't know which direction the user started moving the selection. We expected to know that information at this point.",
+        );
       } else {
         longPressSelectionLog.finest("Switched to per-character...");
         // The user is selecting upstream. The end of the current selected word
         // is the upstream bound of the current selection.
         final longPressMostRecentUpstreamWordBoundaryPosition =
             DocumentPosition(
-          nodeId: _longPressMostRecentBoundaryNodeId!,
-          nodePosition: TextNodePosition(
-              offset: _longPressMostRecentUpstreamWordBoundary!),
-        );
+              nodeId: _longPressMostRecentBoundaryNodeId!,
+              nodePosition: TextNodePosition(
+                offset: _longPressMostRecentUpstreamWordBoundary!,
+              ),
+            );
         final DocumentPosition boundary =
             longPressMostRecentUpstreamWordBoundaryPosition;
 
-        final boundaryOffsetInDocument =
-            _docLayout.getRectForPosition(boundary)!.center;
+        final boundaryOffsetInDocument = _docLayout
+            .getRectForPosition(boundary)!
+            .center;
         _longPressCharacterSelectionXOffset =
             boundaryOffsetInDocument.dx - fingerDocumentOffset.dx;
 
-        longPressSelectionLog
-            .finest(" - Upstream boundary position: $boundary");
         longPressSelectionLog.finest(
-            " - Upstream boundary offset in document: $boundaryOffsetInDocument");
-        longPressSelectionLog
-            .finest(" - Touch document offset: $fingerDocumentOffset");
+          " - Upstream boundary position: $boundary",
+        );
         longPressSelectionLog.finest(
-            " - Per-character selection x-offset: $_longPressCharacterSelectionXOffset");
+          " - Upstream boundary offset in document: $boundaryOffsetInDocument",
+        );
+        longPressSelectionLog.finest(
+          " - Touch document offset: $fingerDocumentOffset",
+        );
+        longPressSelectionLog.finest(
+          " - Per-character selection x-offset: $_longPressCharacterSelectionXOffset",
+        );
 
         // Calculate an updated focal point now that we've started selecting by character.
-        final focalPointDocumentOffset = fingerDocumentOffset +
+        final focalPointDocumentOffset =
+            fingerDocumentOffset +
             Offset(_longPressCharacterSelectionXOffset, 0);
         focalPointDocumentPosition = _docLayout
             .getDocumentPositionNearestToOffset(focalPointDocumentOffset)!;
@@ -516,9 +559,11 @@ class AndroidDocumentLongPressSelectionStrategy {
             (focalPointDocumentPosition.nodePosition as TextNodePosition)
                 .offset;
         longPressSelectionLog.finest(
-            "Updated the focal point because we just started selecting by character");
-        longPressSelectionLog
-            .finest(" - new focal point text offset: $focalPointTextOffset");
+          "Updated the focal point because we just started selecting by character",
+        );
+        longPressSelectionLog.finest(
+          " - new focal point text offset: $focalPointTextOffset",
+        );
       }
     }
 
@@ -528,15 +573,19 @@ class AndroidDocumentLongPressSelectionStrategy {
     if (selectByWord) {
       longPressSelectionLog.finest("Selecting by word...");
       longPressSelectionLog.finest(
-          " - finding word around finger position: ${fingerDocumentPosition.nodePosition}");
+        " - finding word around finger position: ${fingerDocumentPosition.nodePosition}",
+      );
       final wordUnderFinger = getWordSelection(
-          docPosition: fingerDocumentPosition, docLayout: _docLayout);
+        docPosition: fingerDocumentPosition,
+        docLayout: _docLayout,
+      );
       if (wordUnderFinger == null) {
         // This shouldn't happen. If we've gotten here, the user is selecting over
         // text content but we couldn't find a word selection. The best we can do
         // is fizzle.
         longPressSelectionLog.warning(
-            "Long-press selecting. Couldn't find word at position: $fingerDocumentPosition");
+          "Long-press selecting. Couldn't find word at position: $fingerDocumentPosition",
+        );
         return;
       }
 
@@ -549,57 +598,71 @@ class AndroidDocumentLongPressSelectionStrategy {
       longPressSelectionLog.finest(" - word selection: $wordSelection");
       final textNode =
           _document.getNodeById(wordUnderFinger.base.nodeId) as TextNode;
-      final wordText =
-          textNode.text.substringInRange(wordSelection.toSpanRange());
+      final wordText = textNode.text.substringInRange(
+        wordSelection.toSpanRange(),
+      );
       longPressSelectionLog.finest("Selected word text: '$wordText'");
 
       newSelection = DocumentSelection(
-          base: _longPressInitialSelection!.end, extent: wordUnderFinger.start);
+        base: _longPressInitialSelection!.end,
+        extent: wordUnderFinger.start,
+      );
 
       // Update the most recent bounds for word-by-word selection.
       final longPressMostRecentUpstreamTextOffset =
           _longPressMostRecentUpstreamWordBoundary!;
       longPressSelectionLog.finest(
-          "Word upstream offset: ${wordSelection.start}, long press upstream bound: $longPressMostRecentUpstreamTextOffset");
+        "Word upstream offset: ${wordSelection.start}, long press upstream bound: $longPressMostRecentUpstreamTextOffset",
+      );
       final newSelectionIsBeyondLastUpstreamWordBoundary =
           wordSelection.start < longPressMostRecentUpstreamTextOffset;
       if (newSelectionIsBeyondLastUpstreamWordBoundary) {
         _longPressMostRecentUpstreamWordBoundary = wordSelection.start;
         longPressSelectionLog.finest(
-            "Updating long-press most recent upstream word boundary: $_longPressMostRecentUpstreamWordBoundary");
+          "Updating long-press most recent upstream word boundary: $_longPressMostRecentUpstreamWordBoundary",
+        );
       }
     } else {
       // Select by character.
       longPressSelectionLog.finest("Selecting by character...");
       longPressSelectionLog.finest("Calculating the character drag position:");
-      longPressSelectionLog
-          .finest(" - character drag position: $focalPointDocumentPosition");
       longPressSelectionLog.finest(
-          " - long-press character x-offset: $_longPressCharacterSelectionXOffset");
-      newSelection = _document.getAffinityBetween(
-                  base: focalPointDocumentPosition,
-                  extent: _longPressInitialSelection!.end) ==
+        " - character drag position: $focalPointDocumentPosition",
+      );
+      longPressSelectionLog.finest(
+        " - long-press character x-offset: $_longPressCharacterSelectionXOffset",
+      );
+      newSelection =
+          _document.getAffinityBetween(
+                base: focalPointDocumentPosition,
+                extent: _longPressInitialSelection!.end,
+              ) ==
               TextAffinity.downstream
           ? DocumentSelection(
               base: _longPressInitialSelection!.end,
-              extent: focalPointDocumentPosition)
+              extent: focalPointDocumentPosition,
+            )
           : DocumentSelection(
               base: _longPressInitialSelection!.start,
-              extent: focalPointDocumentPosition);
+              extent: focalPointDocumentPosition,
+            );
 
       // When dragging by character, if the user drags backward far enough to move to
       // an earlier word, we want to re-activate drag-by-word for the word that we just
       // moved away from. To accomplish this, we update our word boundary as the user
       // drags by character.
       final focalPointWord = getWordSelection(
-          docPosition: focalPointDocumentPosition, docLayout: _docLayout);
+        docPosition: focalPointDocumentPosition,
+        docLayout: _docLayout,
+      );
       if (focalPointWord != null) {
         final upstreamWordBoundary =
             (focalPointWord.start.nodePosition as TextNodePosition).offset;
 
         if (upstreamWordBoundary > _longPressMostRecentUpstreamWordBoundary!) {
           longPressSelectionLog.finest(
-              "The user moved backward into another word. We're pushing back the upstream boundary from $_longPressMostRecentUpstreamWordBoundary to $upstreamWordBoundary");
+            "The user moved backward into another word. We're pushing back the upstream boundary from $_longPressMostRecentUpstreamWordBoundary to $upstreamWordBoundary",
+          );
           _longPressMostRecentUpstreamWordBoundary = upstreamWordBoundary;
         }
       }
@@ -642,24 +705,29 @@ class AndroidDocumentLongPressSelectionStrategy {
         (focalPointDocumentPosition.nodePosition as TextNodePosition).offset;
     final focalPointIsBeyondMostRecentDownstreamWordBoundary =
         focalPointNodeId == _longPressMostRecentBoundaryNodeId &&
-            focalPointTextOffset > _longPressMostRecentDownstreamWordBoundary!;
+        focalPointTextOffset > _longPressMostRecentDownstreamWordBoundary!;
     longPressSelectionLog.finest(
-        "Focal point: $focalPointTextOffset, boundary: $_longPressMostRecentDownstreamWordBoundary, most recent touch position: $_longPressMostRecentTouchDocumentPosition");
+      "Focal point: $focalPointTextOffset, boundary: $_longPressMostRecentDownstreamWordBoundary, most recent touch position: $_longPressMostRecentTouchDocumentPosition",
+    );
 
     late final bool selectByWord;
     if (focalPointIsBeyondMostRecentDownstreamWordBoundary) {
       longPressSelectionLog.finest(
-          "Select by word because finger is beyond most recent boundary.");
+        "Select by word because finger is beyond most recent boundary.",
+      );
       longPressSelectionLog.finest(
-          " - most recent boundary position: $_longPressMostRecentDownstreamWordBoundary");
-      longPressSelectionLog
-          .finest(" - focal point position: $focalPointDocumentPosition");
+        " - most recent boundary position: $_longPressMostRecentDownstreamWordBoundary",
+      );
+      longPressSelectionLog.finest(
+        " - focal point position: $focalPointDocumentPosition",
+      );
       selectByWord = true;
     } else {
       longPressSelectionLog.finest(
-          "Focal point is NOT beyond boundary. Considering per-character selection.");
-      final isMovingBackward = _longPressMostRecentTouchDocumentPosition !=
-              null &&
+        "Focal point is NOT beyond boundary. Considering per-character selection.",
+      );
+      final isMovingBackward =
+          _longPressMostRecentTouchDocumentPosition != null &&
           fingerDocumentPosition != _longPressMostRecentTouchDocumentPosition &&
           _document.getAffinityBetween(
                 base: fingerDocumentPosition,
@@ -668,41 +736,51 @@ class AndroidDocumentLongPressSelectionStrategy {
               TextAffinity.downstream;
       final longPressMostRecentDownstreamWordBoundaryPosition =
           DocumentPosition(
-        nodeId: _longPressMostRecentBoundaryNodeId!,
-        nodePosition: TextNodePosition(
-            offset: _longPressMostRecentDownstreamWordBoundary!),
-      );
+            nodeId: _longPressMostRecentBoundaryNodeId!,
+            nodePosition: TextNodePosition(
+              offset: _longPressMostRecentDownstreamWordBoundary!,
+            ),
+          );
       final downstreamSelectionX = _docLayout
           .getRectForSelection(
-              longPressMostRecentDownstreamWordBoundaryPosition,
-              _longPressInitialSelection!.start)!
+            longPressMostRecentDownstreamWordBoundaryPosition,
+            _longPressInitialSelection!.start,
+          )!
           .right;
       final reverseDirectionDistance =
           downstreamSelectionX - fingerDocumentOffset.dx;
-      final startedMovingBackward = !_isSelectingByCharacter &&
+      final startedMovingBackward =
+          !_isSelectingByCharacter &&
           isMovingBackward &&
           reverseDirectionDistance >
               _defaultBoundaryDistanceToSwitchToCharacterSelection;
-      longPressSelectionLog
-          .finest(" - current doc drag position: $fingerDocumentPosition");
       longPressSelectionLog.finest(
-          " - most recent drag position: $_longPressMostRecentTouchDocumentPosition");
+        " - current doc drag position: $fingerDocumentPosition",
+      );
+      longPressSelectionLog.finest(
+        " - most recent drag position: $_longPressMostRecentTouchDocumentPosition",
+      );
       longPressSelectionLog.finest(" - is moving backward? $isMovingBackward");
       longPressSelectionLog.finest(
-          " - is already selecting by character? $_isSelectingByCharacter");
-      longPressSelectionLog
-          .finest(" - reverse direction distance: $reverseDirectionDistance");
+        " - is already selecting by character? $_isSelectingByCharacter",
+      );
+      longPressSelectionLog.finest(
+        " - reverse direction distance: $reverseDirectionDistance",
+      );
 
       if (startedMovingBackward || _isSelectingByCharacter) {
         longPressSelectionLog.finest("Selecting by character:");
-        longPressSelectionLog
-            .finest(" - just started moving backward: $startedMovingBackward");
         longPressSelectionLog.finest(
-            " - continuing an existing character selection: $_isSelectingByCharacter");
+          " - just started moving backward: $startedMovingBackward",
+        );
+        longPressSelectionLog.finest(
+          " - continuing an existing character selection: $_isSelectingByCharacter",
+        );
         selectByWord = false;
       } else {
         longPressSelectionLog.finest(
-            "User is still dragging away from initial word, selecting by word.");
+          "User is still dragging away from initial word, selecting by word.",
+        );
         selectByWord = true;
       }
     }
@@ -718,36 +796,44 @@ class AndroidDocumentLongPressSelectionStrategy {
         // selection, but that information is null. Log a warning and skip this
         // calculation.
         longPressSelectionLog.warning(
-            "The user triggered per-character selection, but we don't know which direction the user started moving the selection. We expected to know that information at this point.");
+          "The user triggered per-character selection, but we don't know which direction the user started moving the selection. We expected to know that information at this point.",
+        );
       } else {
         longPressSelectionLog.finest("Switched to per-character...");
         // The user is selecting downstream. The end of the current selected word
         // is the downstream bound of the current selection.
         final longPressMostRecentDownstreamWordBoundaryPosition =
             DocumentPosition(
-          nodeId: _longPressMostRecentBoundaryNodeId!,
-          nodePosition: TextNodePosition(
-              offset: _longPressMostRecentDownstreamWordBoundary!),
-        );
+              nodeId: _longPressMostRecentBoundaryNodeId!,
+              nodePosition: TextNodePosition(
+                offset: _longPressMostRecentDownstreamWordBoundary!,
+              ),
+            );
         final DocumentPosition boundary =
             longPressMostRecentDownstreamWordBoundaryPosition;
 
-        final boundaryOffsetInDocument =
-            _docLayout.getRectForPosition(boundary)!.center;
+        final boundaryOffsetInDocument = _docLayout
+            .getRectForPosition(boundary)!
+            .center;
         _longPressCharacterSelectionXOffset =
             boundaryOffsetInDocument.dx - fingerDocumentOffset.dx;
 
-        longPressSelectionLog
-            .finest(" - Downstream boundary position: $boundary");
         longPressSelectionLog.finest(
-            " - Downstream boundary offset in document: $boundaryOffsetInDocument");
-        longPressSelectionLog
-            .finest(" - Touch document offset: $fingerDocumentOffset");
+          " - Downstream boundary position: $boundary",
+        );
         longPressSelectionLog.finest(
-            " - Per-character selection x-offset: $_longPressCharacterSelectionXOffset");
+          " - Downstream boundary offset in document: $boundaryOffsetInDocument",
+        );
+        longPressSelectionLog.finest(
+          " - Touch document offset: $fingerDocumentOffset",
+        );
+        longPressSelectionLog.finest(
+          " - Per-character selection x-offset: $_longPressCharacterSelectionXOffset",
+        );
 
         // Calculate an updated focal point now that we've started selecting by character.
-        final focalPointDocumentOffset = fingerDocumentOffset +
+        final focalPointDocumentOffset =
+            fingerDocumentOffset +
             Offset(_longPressCharacterSelectionXOffset, 0);
         focalPointDocumentPosition = _docLayout
             .getDocumentPositionNearestToOffset(focalPointDocumentOffset)!;
@@ -755,9 +841,11 @@ class AndroidDocumentLongPressSelectionStrategy {
             (focalPointDocumentPosition.nodePosition as TextNodePosition)
                 .offset;
         longPressSelectionLog.finest(
-            "Updated the focal point because we just started selecting by character");
-        longPressSelectionLog
-            .finest(" - new focal point text offset: $focalPointTextOffset");
+          "Updated the focal point because we just started selecting by character",
+        );
+        longPressSelectionLog.finest(
+          " - new focal point text offset: $focalPointTextOffset",
+        );
       }
     }
 
@@ -766,16 +854,20 @@ class AndroidDocumentLongPressSelectionStrategy {
     late final DocumentSelection newSelection;
     if (selectByWord) {
       longPressSelectionLog.finest("Selecting by word...");
-      longPressSelectionLog
-          .finest(" - finger document position: $fingerDocumentPosition");
+      longPressSelectionLog.finest(
+        " - finger document position: $fingerDocumentPosition",
+      );
       final wordUnderFinger = getWordSelection(
-          docPosition: fingerDocumentPosition, docLayout: _docLayout);
+        docPosition: fingerDocumentPosition,
+        docLayout: _docLayout,
+      );
       if (wordUnderFinger == null) {
         // This shouldn't happen. If we've gotten here, the user is selecting over
         // text content but we couldn't find a word selection. The best we can do
         // is fizzle.
         longPressSelectionLog.warning(
-            "Long-press selecting. Couldn't find word at position: $fingerDocumentPosition");
+          "Long-press selecting. Couldn't find word at position: $fingerDocumentPosition",
+        );
         return;
       }
 
@@ -787,43 +879,53 @@ class AndroidDocumentLongPressSelectionStrategy {
       );
       final textNode =
           _document.getNodeById(wordUnderFinger.base.nodeId) as TextNode;
-      final wordText =
-          textNode.text.substringInRange(wordSelection.toSpanRange());
+      final wordText = textNode.text.substringInRange(
+        wordSelection.toSpanRange(),
+      );
       longPressSelectionLog.finest("Selected word text: '$wordText'");
 
       newSelection = DocumentSelection(
-          base: _longPressInitialSelection!.start, extent: wordUnderFinger.end);
+        base: _longPressInitialSelection!.start,
+        extent: wordUnderFinger.end,
+      );
 
       // Update the most recent bounds for word-by-word selection.
       final longPressMostRecentDownstreamTextOffset =
           _longPressMostRecentDownstreamWordBoundary!;
       longPressSelectionLog.finest(
-          "Word downstream offset: ${wordSelection.end}, long press downstream bound: $longPressMostRecentDownstreamTextOffset");
+        "Word downstream offset: ${wordSelection.end}, long press downstream bound: $longPressMostRecentDownstreamTextOffset",
+      );
       final newSelectionIsBeyondLastDownstreamWordBoundary =
           wordSelection.end > longPressMostRecentDownstreamTextOffset;
       if (newSelectionIsBeyondLastDownstreamWordBoundary) {
         _longPressMostRecentDownstreamWordBoundary = wordSelection.end;
         longPressSelectionLog.finest(
-            "Updating long-press most recent downstream word boundary: $_longPressMostRecentDownstreamWordBoundary");
+          "Updating long-press most recent downstream word boundary: $_longPressMostRecentDownstreamWordBoundary",
+        );
       }
     } else {
       // Select by character.
       longPressSelectionLog.finest("Selecting by character...");
       longPressSelectionLog.finest("Calculating the character drag position:");
-      longPressSelectionLog
-          .finest(" - character drag position: $focalPointDocumentPosition");
       longPressSelectionLog.finest(
-          " - long-press character x-offset: $_longPressCharacterSelectionXOffset");
+        " - character drag position: $focalPointDocumentPosition",
+      );
+      longPressSelectionLog.finest(
+        " - long-press character x-offset: $_longPressCharacterSelectionXOffset",
+      );
       newSelection = DocumentSelection(
-          base: _longPressInitialSelection!.start,
-          extent: focalPointDocumentPosition);
+        base: _longPressInitialSelection!.start,
+        extent: focalPointDocumentPosition,
+      );
 
       // When dragging by character, if the user drags backward far enough to move to
       // an earlier word, we want to re-activate drag-by-word for the word that we just
       // moved away from. To accomplish this, we update our word boundary as the user
       // drags by character.
       final focalPointWord = getWordSelection(
-          docPosition: focalPointDocumentPosition, docLayout: _docLayout);
+        docPosition: focalPointDocumentPosition,
+        docLayout: _docLayout,
+      );
       if (focalPointWord != null) {
         final downstreamWordBoundary =
             (focalPointWord.end.nodePosition as TextNodePosition).offset;
@@ -831,7 +933,8 @@ class AndroidDocumentLongPressSelectionStrategy {
         if (downstreamWordBoundary <
             _longPressMostRecentDownstreamWordBoundary!) {
           longPressSelectionLog.finest(
-              "The user moved backward into another word. We're pushing back the downstream boundary from $_longPressMostRecentDownstreamWordBoundary to $downstreamWordBoundary");
+            "The user moved backward into another word. We're pushing back the downstream boundary from $_longPressMostRecentDownstreamWordBoundary to $downstreamWordBoundary",
+          );
           _longPressMostRecentDownstreamWordBoundary = downstreamWordBoundary;
         }
       }

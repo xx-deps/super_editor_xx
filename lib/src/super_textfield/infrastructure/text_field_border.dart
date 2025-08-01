@@ -54,10 +54,10 @@ class TextFieldBorder extends StatelessWidget {
   }
 
   TextFieldBorderState get _borderState => TextFieldBorderState(
-        hasFocus: focusNode.hasFocus,
-        hasPrimaryFocus: focusNode.hasPrimaryFocus,
-        hasError: hasError?.value ?? false,
-      );
+    hasFocus: focusNode.hasFocus,
+    hasPrimaryFocus: focusNode.hasPrimaryFocus,
+    hasError: hasError?.value ?? false,
+  );
 }
 
 /// Properties that might impact the visual appearance of a text field border.
@@ -76,5 +76,5 @@ class TextFieldBorderState {
   final bool hasError;
 }
 
-typedef TextFieldBorderBuilder = BoxDecoration Function(
-    TextFieldBorderState borderState);
+typedef TextFieldBorderBuilder =
+    BoxDecoration Function(TextFieldBorderState borderState);

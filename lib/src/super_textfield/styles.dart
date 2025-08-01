@@ -19,31 +19,29 @@ TextStyle defaultTextFieldStyleBuilder(Set<Attribution> attributions) {
 
   for (final attribution in attributions) {
     if (attribution == boldAttribution) {
-      newStyle = newStyle.copyWith(
-        fontWeight: FontWeight.bold,
-      );
+      newStyle = newStyle.copyWith(fontWeight: FontWeight.bold);
     } else if (attribution == italicsAttribution) {
-      newStyle = newStyle.copyWith(
-        fontStyle: FontStyle.italic,
-      );
+      newStyle = newStyle.copyWith(fontStyle: FontStyle.italic);
     } else if (attribution == underlineAttribution) {
       newStyle = newStyle.copyWith(
         decoration: newStyle.decoration == null
             ? TextDecoration.underline
-            : TextDecoration.combine(
-                [TextDecoration.underline, newStyle.decoration!]),
+            : TextDecoration.combine([
+                TextDecoration.underline,
+                newStyle.decoration!,
+              ]),
       );
     } else if (attribution == strikethroughAttribution) {
       newStyle = newStyle.copyWith(
         decoration: newStyle.decoration == null
             ? TextDecoration.lineThrough
-            : TextDecoration.combine(
-                [TextDecoration.lineThrough, newStyle.decoration!]),
+            : TextDecoration.combine([
+                TextDecoration.lineThrough,
+                newStyle.decoration!,
+              ]),
       );
     } else if (attribution is ColorAttribution) {
-      newStyle = newStyle.copyWith(
-        color: attribution.color,
-      );
+      newStyle = newStyle.copyWith(color: attribution.color);
     } else if (attribution is LinkAttribution) {
       newStyle = newStyle.copyWith(
         color: Colors.lightBlue,

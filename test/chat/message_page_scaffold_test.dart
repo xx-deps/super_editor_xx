@@ -4,7 +4,9 @@ import 'package:super_editor/super_editor.dart';
 
 void main() {
   group('Message page scaffold >', () {
-    testWidgets('can add and remove ancestor inherited widgets', (tester) async {
+    testWidgets('can add and remove ancestor inherited widgets', (
+      tester,
+    ) async {
       double? mostRecentTextSize;
 
       final messagePageScaffold = MessagePageScaffold(
@@ -18,11 +20,7 @@ void main() {
       );
 
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: messagePageScaffold,
-          ),
-        ),
+        MaterialApp(home: Scaffold(body: messagePageScaffold)),
       );
       expect(mostRecentTextSize, 14);
 
@@ -30,9 +28,7 @@ void main() {
         MaterialApp(
           home: Scaffold(
             body: DefaultTextStyle(
-              style: const TextStyle(
-                fontSize: 28,
-              ),
+              style: const TextStyle(fontSize: 28),
               child: messagePageScaffold,
             ),
           ),
@@ -41,94 +37,100 @@ void main() {
       expect(mostRecentTextSize, 28);
 
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: messagePageScaffold,
-          ),
-        ),
+        MaterialApp(home: Scaffold(body: messagePageScaffold)),
       );
       expect(mostRecentTextSize, 14);
     });
 
-    testWidgets('re-runs child builder functions when inherited widget changes', (tester) async {
-      final textDirection = ValueNotifier(TextDirection.ltr);
-      TextDirection? mostRecentContentTextDirection;
-      TextDirection? mostRecentBottomSheetTextDirection;
+    testWidgets(
+      're-runs child builder functions when inherited widget changes',
+      (tester) async {
+        final textDirection = ValueNotifier(TextDirection.ltr);
+        TextDirection? mostRecentContentTextDirection;
+        TextDirection? mostRecentBottomSheetTextDirection;
 
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: _TextDirectionChanger(
-              textDirection: textDirection,
-              child: MessagePageScaffold(
-                contentBuilder: (context, __) {
-                  mostRecentContentTextDirection = Directionality.of(context);
-                  return const SizedBox();
-                },
-                bottomSheetBuilder: (context) {
-                  mostRecentBottomSheetTextDirection = Directionality.of(context);
-                  return const SizedBox();
-                },
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: _TextDirectionChanger(
+                textDirection: textDirection,
+                child: MessagePageScaffold(
+                  contentBuilder: (context, __) {
+                    mostRecentContentTextDirection = Directionality.of(context);
+                    return const SizedBox();
+                  },
+                  bottomSheetBuilder: (context) {
+                    mostRecentBottomSheetTextDirection = Directionality.of(
+                      context,
+                    );
+                    return const SizedBox();
+                  },
+                ),
               ),
             ),
           ),
-        ),
-      );
-      expect(mostRecentContentTextDirection, TextDirection.ltr);
-      expect(mostRecentBottomSheetTextDirection, TextDirection.ltr);
+        );
+        expect(mostRecentContentTextDirection, TextDirection.ltr);
+        expect(mostRecentBottomSheetTextDirection, TextDirection.ltr);
 
-      textDirection.value = TextDirection.rtl;
-      await tester.pump();
-      expect(mostRecentContentTextDirection, TextDirection.rtl);
-      expect(mostRecentBottomSheetTextDirection, TextDirection.rtl);
+        textDirection.value = TextDirection.rtl;
+        await tester.pump();
+        expect(mostRecentContentTextDirection, TextDirection.rtl);
+        expect(mostRecentBottomSheetTextDirection, TextDirection.rtl);
 
-      textDirection.value = TextDirection.ltr;
-      await tester.pump();
-      expect(mostRecentContentTextDirection, TextDirection.ltr);
-      expect(mostRecentBottomSheetTextDirection, TextDirection.ltr);
-    });
+        textDirection.value = TextDirection.ltr;
+        await tester.pump();
+        expect(mostRecentContentTextDirection, TextDirection.ltr);
+        expect(mostRecentBottomSheetTextDirection, TextDirection.ltr);
+      },
+    );
 
-    testWidgets('rebuilds stateful child widgets when inherited widget changes', (tester) async {
-      final textDirection = ValueNotifier(TextDirection.ltr);
-      TextDirection? mostRecentContentTextDirection;
-      TextDirection? mostRecentBottomSheetTextDirection;
+    testWidgets(
+      'rebuilds stateful child widgets when inherited widget changes',
+      (tester) async {
+        final textDirection = ValueNotifier(TextDirection.ltr);
+        TextDirection? mostRecentContentTextDirection;
+        TextDirection? mostRecentBottomSheetTextDirection;
 
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: _TextDirectionChanger(
-              textDirection: textDirection,
-              child: MessagePageScaffold(
-                contentBuilder: (context, __) {
-                  return _StatefulWidgetThatUsesInheritedWidget(
-                    onBuildWithTextDirection: (newDirection) => mostRecentContentTextDirection = newDirection,
-                    child: const SizedBox(),
-                  );
-                },
-                bottomSheetBuilder: (context) {
-                  return _StatefulWidgetThatUsesInheritedWidget(
-                    onBuildWithTextDirection: (newDirection) => mostRecentBottomSheetTextDirection = newDirection,
-                    child: const SizedBox(),
-                  );
-                },
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: _TextDirectionChanger(
+                textDirection: textDirection,
+                child: MessagePageScaffold(
+                  contentBuilder: (context, __) {
+                    return _StatefulWidgetThatUsesInheritedWidget(
+                      onBuildWithTextDirection: (newDirection) =>
+                          mostRecentContentTextDirection = newDirection,
+                      child: const SizedBox(),
+                    );
+                  },
+                  bottomSheetBuilder: (context) {
+                    return _StatefulWidgetThatUsesInheritedWidget(
+                      onBuildWithTextDirection: (newDirection) =>
+                          mostRecentBottomSheetTextDirection = newDirection,
+                      child: const SizedBox(),
+                    );
+                  },
+                ),
               ),
             ),
           ),
-        ),
-      );
-      expect(mostRecentContentTextDirection, TextDirection.ltr);
-      expect(mostRecentBottomSheetTextDirection, TextDirection.ltr);
+        );
+        expect(mostRecentContentTextDirection, TextDirection.ltr);
+        expect(mostRecentBottomSheetTextDirection, TextDirection.ltr);
 
-      textDirection.value = TextDirection.rtl;
-      await tester.pump();
-      expect(mostRecentContentTextDirection, TextDirection.rtl);
-      expect(mostRecentBottomSheetTextDirection, TextDirection.rtl);
+        textDirection.value = TextDirection.rtl;
+        await tester.pump();
+        expect(mostRecentContentTextDirection, TextDirection.rtl);
+        expect(mostRecentBottomSheetTextDirection, TextDirection.rtl);
 
-      textDirection.value = TextDirection.ltr;
-      await tester.pump();
-      expect(mostRecentContentTextDirection, TextDirection.ltr);
-      expect(mostRecentBottomSheetTextDirection, TextDirection.ltr);
-    });
+        textDirection.value = TextDirection.ltr;
+        await tester.pump();
+        expect(mostRecentContentTextDirection, TextDirection.ltr);
+        expect(mostRecentBottomSheetTextDirection, TextDirection.ltr);
+      },
+    );
 
     testWidgets('can navigate to and from', (tester) async {
       final navigatorKey = GlobalKey<NavigatorState>();
@@ -137,11 +139,7 @@ void main() {
           navigatorKey: navigatorKey,
           routes: {
             '/': (context) {
-              return const Scaffold(
-                body: Center(
-                  child: Text('Home'),
-                ),
-              );
+              return const Scaffold(body: Center(child: Text('Home')));
             },
             'message-scaffold': (context) {
               return Scaffold(
@@ -206,10 +204,12 @@ class _StatefulWidgetThatUsesInheritedWidget extends StatefulWidget {
   final Widget child;
 
   @override
-  State<_StatefulWidgetThatUsesInheritedWidget> createState() => _StatefulWidgetThatUsesInheritedWidgetState();
+  State<_StatefulWidgetThatUsesInheritedWidget> createState() =>
+      _StatefulWidgetThatUsesInheritedWidgetState();
 }
 
-class _StatefulWidgetThatUsesInheritedWidgetState extends State<_StatefulWidgetThatUsesInheritedWidget> {
+class _StatefulWidgetThatUsesInheritedWidgetState
+    extends State<_StatefulWidgetThatUsesInheritedWidget> {
   @override
   Widget build(BuildContext context) {
     widget.onBuildWithTextDirection(Directionality.of(context));

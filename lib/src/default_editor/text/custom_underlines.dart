@@ -18,7 +18,9 @@ import 'package:super_text_layout/super_text_layout.dart';
 class CustomUnderlineStyler extends SingleColumnLayoutStylePhase {
   @override
   SingleColumnLayoutViewModel style(
-      Document document, SingleColumnLayoutViewModel viewModel) {
+    Document document,
+    SingleColumnLayoutViewModel viewModel,
+  ) {
     final updatedViewModel = SingleColumnLayoutViewModel(
       padding: viewModel.padding,
       componentViewModels: [
@@ -31,13 +33,15 @@ class CustomUnderlineStyler extends SingleColumnLayoutStylePhase {
   }
 
   SingleColumnLayoutComponentViewModel _applyUnderlines(
-      SingleColumnLayoutComponentViewModel viewModel) {
+    SingleColumnLayoutComponentViewModel viewModel,
+  ) {
     if (viewModel is! TextComponentViewModel) {
       return viewModel;
     }
 
-    final underlineSpans = viewModel.text
-        .getAttributionSpansByFilter((a) => a is CustomUnderlineAttribution);
+    final underlineSpans = viewModel.text.getAttributionSpansByFilter(
+      (a) => a is CustomUnderlineAttribution,
+    );
     if (underlineSpans.isEmpty) {
       return viewModel;
     }
@@ -80,10 +84,7 @@ class CustomUnderlineStyles {
   }
 
   CustomUnderlineStyles addStyles(Map<String, UnderlineStyle> newStyles) {
-    return CustomUnderlineStyles({
-      ...stylesByType,
-      ...newStyles,
-    });
+    return CustomUnderlineStyles({...stylesByType, ...newStyles});
   }
 }
 

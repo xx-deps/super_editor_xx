@@ -14,21 +14,14 @@ class _HoverDemoState extends State<HoverDemo> {
       width: double.infinity,
       height: double.infinity,
       color: const Color(0xFF222222),
-      child: const Center(
-        child: HoverPuck(
-          color: Colors.red,
-        ),
-      ),
+      child: const Center(child: HoverPuck(color: Colors.red)),
     );
   }
 }
 
 class HoverPuck extends StatelessWidget {
-  const HoverPuck({
-    Key? key,
-    required this.color,
-    this.elevation = 15,
-  }) : super(key: key);
+  const HoverPuck({Key? key, required this.color, this.elevation = 15})
+    : super(key: key);
 
   final Color color;
   final double elevation;
@@ -39,10 +32,7 @@ class HoverPuck extends StatelessWidget {
       shape: const CircleBorder(),
       color: color,
       elevation: elevation,
-      child: const SizedBox(
-        width: 42,
-        height: 42,
-      ),
+      child: const SizedBox(width: 42, height: 42),
     );
   }
 }

@@ -20,14 +20,13 @@ void main() {
         await tester.placeCaretInSuperTextField(0);
 
         // Type the text "Example".
-        await tester.ime.typeText(
-          'مثال',
-          getter: imeClientGetter,
-        );
+        await tester.ime.typeText('مثال', getter: imeClientGetter);
         await tester.pumpAndSettle();
 
         await screenMatchesGolden(
-            tester, 'super-text-field_rtl-caret-at-leftmost-character-${defaultTargetPlatform.name}');
+          tester,
+          'super-text-field_rtl-caret-at-leftmost-character-${defaultTargetPlatform.name}',
+        );
       },
       windowSize: const Size(600, 600),
     );

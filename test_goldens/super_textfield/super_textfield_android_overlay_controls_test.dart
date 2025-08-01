@@ -8,7 +8,9 @@ import '../test_tools_goldens.dart';
 
 void main() {
   group("SuperTextField > Android > overlay controls >", () {
-    testGoldensOnAndroid("confines magnifier within screen bounds", (tester) async {
+    testGoldensOnAndroid("confines magnifier within screen bounds", (
+      tester,
+    ) async {
       tester.view
         ..devicePixelRatio = 1.0
         ..platformDispatcher.textScaleFactorTestValue = 1.0
@@ -46,12 +48,17 @@ void main() {
       await tester.placeCaretInSuperTextField(30);
 
       // Press and drag the caret to the beginning of the line.
-      final gesture = await tester.dragCaretByDistanceInSuperTextField(const Offset(-200, 0));
+      final gesture = await tester.dragCaretByDistanceInSuperTextField(
+        const Offset(-200, 0),
+      );
       await tester.pump();
 
       await expectLater(
         find.byType(MaterialApp),
-        matchesGoldenFileWithPixelAllowance("goldens/super_textfield_android_magnifier_screen_edges.png", 38),
+        matchesGoldenFileWithPixelAllowance(
+          "goldens/super_textfield_android_magnifier_screen_edges.png",
+          38,
+        ),
       );
 
       // Release the gesture.

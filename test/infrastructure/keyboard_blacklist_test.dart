@@ -10,7 +10,8 @@ void main() {
           expect(
             isCharacterBlacklisted(invalidCharacter),
             isTrue,
-            reason: "'$invalidCharacter' should be black-listed, but it's permitted.",
+            reason:
+                "'$invalidCharacter' should be black-listed, but it's permitted.",
           );
         }
 
@@ -19,7 +20,8 @@ void main() {
           expect(
             isCharacterBlacklisted(validCharacter),
             isFalse,
-            reason: "'$validCharacter' should be permitted, but it's black-listed.",
+            reason:
+                "'$validCharacter' should be permitted, but it's black-listed.",
           );
         }
       });

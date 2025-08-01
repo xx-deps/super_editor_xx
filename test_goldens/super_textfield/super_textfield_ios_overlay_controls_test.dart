@@ -45,12 +45,17 @@ void main() {
       await tester.placeCaretInSuperTextField(30);
 
       // Press and drag the caret to the beginning of the line.
-      final gesture = await tester.dragCaretByDistanceInSuperTextField(const Offset(-200, 0));
+      final gesture = await tester.dragCaretByDistanceInSuperTextField(
+        const Offset(-200, 0),
+      );
       await tester.pump();
 
       await expectLater(
         find.byType(MaterialApp),
-        matchesGoldenFileWithPixelAllowance("goldens/super_textfield_ios_magnifier_screen_edges.png", 4),
+        matchesGoldenFileWithPixelAllowance(
+          "goldens/super_textfield_ios_magnifier_screen_edges.png",
+          4,
+        ),
       );
 
       // Release the gesture.

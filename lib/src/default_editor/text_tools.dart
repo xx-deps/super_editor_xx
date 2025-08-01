@@ -36,10 +36,11 @@ DocumentSelection? getWordSelection({
 
   // Create a new TextNodePosition to ensure that we're searching with downstream affinity, for consistent results.
   final searchPosition = TextNodePosition(offset: nodePosition.offset);
-  final TextSelection wordTextSelection =
-      (component as TextComposable).getWordSelectionAt(searchPosition);
-  final wordNodeSelection =
-      TextNodeSelection.fromTextSelection(wordTextSelection);
+  final TextSelection wordTextSelection = (component as TextComposable)
+      .getWordSelectionAt(searchPosition);
+  final wordNodeSelection = TextNodeSelection.fromTextSelection(
+    wordTextSelection,
+  );
 
   _log.log('getWordSelection', ' - word selection: $wordNodeSelection');
   return DocumentSelection(
@@ -75,10 +76,7 @@ TextSelection expandPositionToWord({
   while (end < text.length && text[end] != ' ') {
     end += 1;
   }
-  return TextSelection(
-    baseOffset: start,
-    extentOffset: end,
-  );
+  return TextSelection(baseOffset: start, extentOffset: end);
 }
 
 /// Returns the paragraph of text that contains the given `docPosition`, or `null`
@@ -103,8 +101,8 @@ DocumentSelection? getParagraphSelection({
     return null;
   }
 
-  final paragraphNodeSelection =
-      (component as TextComposable).getContiguousTextSelectionAt(nodePosition);
+  final paragraphNodeSelection = (component as TextComposable)
+      .getContiguousTextSelectionAt(nodePosition);
 
   return DocumentSelection(
     base: DocumentPosition(
@@ -136,10 +134,7 @@ TextSelection expandPositionToParagraph({
   while (end < text.length && text[end] != '\n') {
     end += 1;
   }
-  return TextSelection(
-    baseOffset: start,
-    extentOffset: end,
-  );
+  return TextSelection(baseOffset: start, extentOffset: end);
 }
 
 // copied from: flutter/lib/src/widgets/editable_text.dart

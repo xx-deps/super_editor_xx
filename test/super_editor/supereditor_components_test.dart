@@ -47,11 +47,18 @@ void main() {
         final pointer = TestPointer(1, PointerDeviceKind.mouse);
 
         // Hover the image.
-        pointer.hover(SuperEditorInspector.findComponentOffset('img-node', Alignment.center));
+        pointer.hover(
+          SuperEditorInspector.findComponentOffset(
+            'img-node',
+            Alignment.center,
+          ),
+        );
         await tester.pump();
 
         // Simulate scrolling with mouse wheel.
-        await tester.sendEventToBinding(pointer.scroll(const Offset(0.0, 50.0)));
+        await tester.sendEventToBinding(
+          pointer.scroll(const Offset(0.0, 50.0)),
+        );
         await tester.pumpAndSettle();
 
         // Ensure the document scrolled down.
@@ -62,37 +69,49 @@ void main() {
         await _pumpImageTestApp(tester);
 
         // Start a gesture outside the image bounds. (The image is 100x100)
-        final gesture = await tester.createGesture(kind: PointerDeviceKind.mouse);
+        final gesture = await tester.createGesture(
+          kind: PointerDeviceKind.mouse,
+        );
         await gesture.addPointer(location: const Offset(0, 110));
         addTearDown(gesture.removePointer);
         await tester.pump();
 
         // Ensure the cursor type is 'text' when not hovering the image.
-        expect(RendererBinding.instance.mouseTracker.debugDeviceActiveCursor(1), SystemMouseCursors.text);
+        expect(
+          RendererBinding.instance.mouseTracker.debugDeviceActiveCursor(1),
+          SystemMouseCursors.text,
+        );
 
         // Hover the image.
-        await gesture.moveTo(SuperEditorInspector.findComponentOffset('img-node', Alignment.center));
+        await gesture.moveTo(
+          SuperEditorInspector.findComponentOffset(
+            'img-node',
+            Alignment.center,
+          ),
+        );
         await tester.pump();
 
         // Ensure the cursor type is 'basic' when hovering the image.
-        expect(RendererBinding.instance.mouseTracker.debugDeviceActiveCursor(1), SystemMouseCursors.basic);
+        expect(
+          RendererBinding.instance.mouseTracker.debugDeviceActiveCursor(1),
+          SystemMouseCursors.basic,
+        );
       });
     });
 
-    testWidgetsOnArbitraryDesktop('does not crash when if finds an unkown node type', (tester) async {
-      // Pump an editor with a node that has no corresponding component builder.
-      await tester //
-          .createDocument()
-          .withCustomContent(
-            MutableDocument(
-              nodes: [_UnknownNode(id: '1')],
-            ),
-          )
-          .pump();
+    testWidgetsOnArbitraryDesktop(
+      'does not crash when if finds an unkown node type',
+      (tester) async {
+        // Pump an editor with a node that has no corresponding component builder.
+        await tester //
+            .createDocument()
+            .withCustomContent(MutableDocument(nodes: [_UnknownNode(id: '1')]))
+            .pump();
 
-      // Reaching this point means the editor did not crash because of the
-      // unkown node.
-    });
+        // Reaching this point means the editor did not crash because of the
+        // unkown node.
+      },
+    );
   });
 }
 
@@ -100,7 +119,10 @@ class HintTextComponentBuilder implements ComponentBuilder {
   const HintTextComponentBuilder();
 
   @override
-  SingleColumnLayoutComponentViewModel? createViewModel(Document document, DocumentNode node) {
+  SingleColumnLayoutComponentViewModel? createViewModel(
+    Document document,
+    DocumentNode node,
+  ) {
     // This component builder can work with the standard paragraph view model.
     // We'll defer to the standard paragraph component builder to create it.
     return null;
@@ -108,7 +130,9 @@ class HintTextComponentBuilder implements ComponentBuilder {
 
   @override
   Widget? createComponent(
-      SingleColumnDocumentComponentContext componentContext, SingleColumnLayoutComponentViewModel componentViewModel) {
+    SingleColumnDocumentComponentContext componentContext,
+    SingleColumnLayoutComponentViewModel componentViewModel,
+  ) {
     if (componentViewModel is! ParagraphComponentViewModel) {
       return null;
     }
@@ -120,24 +144,30 @@ class HintTextComponentBuilder implements ComponentBuilder {
       text: componentViewModel.text,
       textStyleBuilder: defaultStyleBuilder,
       metadata: componentViewModel.blockType != null
-          ? {
-              'blockType': componentViewModel.blockType,
-            }
+          ? {'blockType': componentViewModel.blockType}
           : {},
       // This is the text displayed as a hint.
       hintText: AttributedText(
         'this is hint text...',
         AttributedSpans(
           attributions: [
-            const SpanMarker(attribution: italicsAttribution, offset: 12, markerType: SpanMarkerType.start),
-            const SpanMarker(attribution: italicsAttribution, offset: 15, markerType: SpanMarkerType.end),
+            const SpanMarker(
+              attribution: italicsAttribution,
+              offset: 12,
+              markerType: SpanMarkerType.start,
+            ),
+            const SpanMarker(
+              attribution: italicsAttribution,
+              offset: 15,
+              markerType: SpanMarkerType.end,
+            ),
           ],
         ),
       ),
       // This is the function that selects styles for the hint text.
-      hintStyleBuilder: (Set<Attribution> attributions) => defaultStyleBuilder(attributions).copyWith(
-        color: const Color(0xFFDDDDDD),
-      ),
+      hintStyleBuilder: (Set<Attribution> attributions) => defaultStyleBuilder(
+        attributions,
+      ).copyWith(color: const Color(0xFFDDDDDD)),
       textSelection: textSelection,
       selectionColor: componentViewModel.selectionColor,
       underlines: componentViewModel.createUnderlines(),
@@ -179,13 +209,18 @@ class _FakeImageComponentBuilder implements ComponentBuilder {
   const _FakeImageComponentBuilder();
 
   @override
-  SingleColumnLayoutComponentViewModel? createViewModel(Document document, DocumentNode node) {
+  SingleColumnLayoutComponentViewModel? createViewModel(
+    Document document,
+    DocumentNode node,
+  ) {
     return null;
   }
 
   @override
   Widget? createComponent(
-      SingleColumnDocumentComponentContext componentContext, SingleColumnLayoutComponentViewModel componentViewModel) {
+    SingleColumnDocumentComponentContext componentContext,
+    SingleColumnLayoutComponentViewModel componentViewModel,
+  ) {
     if (componentViewModel is! ImageComponentViewModel) {
       return null;
     }
@@ -193,9 +228,12 @@ class _FakeImageComponentBuilder implements ComponentBuilder {
     return ImageComponent(
       componentKey: componentContext.componentKey,
       imageUrl: componentViewModel.imageUrl,
-      selection: componentViewModel.selection?.nodeSelection as UpstreamDownstreamNodeSelection?,
+      selection:
+          componentViewModel.selection?.nodeSelection
+              as UpstreamDownstreamNodeSelection?,
       selectionColor: componentViewModel.selectionColor,
-      imageBuilder: (context, imageUrl) => const SizedBox(height: 100, width: 100),
+      imageBuilder: (context, imageUrl) =>
+          const SizedBox(height: 100, width: 100),
     );
   }
 }

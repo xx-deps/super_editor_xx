@@ -29,7 +29,10 @@ class IOSTextEditingFloatingToolbar extends StatelessWidget {
 
     return Theme(
       data: ThemeData(
-        colorScheme: brightness == Brightness.light //
+        colorScheme:
+            brightness ==
+                Brightness
+                    .light //
             ? const ColorScheme.light(primary: Colors.black)
             : const ColorScheme.dark(primary: Colors.white),
       ),
@@ -37,31 +40,31 @@ class IOSTextEditingFloatingToolbar extends StatelessWidget {
         key: floatingToolbarKey,
         focalPoint: LeaderMenuFocalPoint(link: focalPoint),
         elevation: 8.0,
-        backgroundColor: brightness == Brightness.dark //
+        backgroundColor:
+            brightness ==
+                Brightness
+                    .dark //
             ? iOSToolbarDarkBackgroundColor
             : iOSToolbarLightBackgroundColor,
-        activeButtonTextColor: brightness == Brightness.dark //
+        activeButtonTextColor:
+            brightness ==
+                Brightness
+                    .dark //
             ? iOSToolbarDarkArrowActiveColor
             : iOSToolbarLightArrowActiveColor,
-        inactiveButtonTextColor: brightness == Brightness.dark //
+        inactiveButtonTextColor:
+            brightness ==
+                Brightness
+                    .dark //
             ? iOSToolbarDarkArrowInactiveColor
             : iOSToolbarLightArrowInactiveColor,
         children: [
           if (onCutPressed != null)
-            _buildButton(
-              onPressed: onCutPressed!,
-              title: 'Cut',
-            ),
+            _buildButton(onPressed: onCutPressed!, title: 'Cut'),
           if (onCopyPressed != null)
-            _buildButton(
-              onPressed: onCopyPressed!,
-              title: 'Copy',
-            ),
+            _buildButton(onPressed: onCopyPressed!, title: 'Copy'),
           if (onPastePressed != null)
-            _buildButton(
-              onPressed: onPastePressed!,
-              title: 'Paste',
-            ),
+            _buildButton(onPressed: onPastePressed!, title: 'Paste'),
         ],
       ),
     );
@@ -89,10 +92,7 @@ class IOSTextEditingFloatingToolbar extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 12.0),
         child: Text(
           title,
-          style: const TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w300,
-          ),
+          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w300),
         ),
       ),
     );

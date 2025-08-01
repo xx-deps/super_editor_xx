@@ -18,9 +18,7 @@ import 'package:flutter/rendering.dart';
 /// a constrained width. It's also used to constrain and align single-line text within
 /// a horizontal scrollable.
 class FillWidthIfConstrained extends SingleChildRenderObjectWidget {
-  const FillWidthIfConstrained({
-    required Widget child,
-  }) : super(child: child);
+  const FillWidthIfConstrained({required Widget child}) : super(child: child);
 
   @override
   RenderObject createRenderObject(BuildContext context) {
@@ -31,9 +29,12 @@ class FillWidthIfConstrained extends SingleChildRenderObjectWidget {
 
   @override
   void updateRenderObject(
-      BuildContext context, RenderFillWidthIfConstrained renderObject) {
-    renderObject.findAncestorScrollableWidth =
-        _createViewportWidthLookup(context);
+    BuildContext context,
+    RenderFillWidthIfConstrained renderObject,
+  ) {
+    renderObject.findAncestorScrollableWidth = _createViewportWidthLookup(
+      context,
+    );
   }
 
   double? Function() _createViewportWidthLookup(BuildContext context) {

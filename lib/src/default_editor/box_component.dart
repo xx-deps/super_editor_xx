@@ -17,9 +17,7 @@ final _log = Logger(scope: 'box_component.dart');
 /// Base implementation for a [DocumentNode] that only supports [UpstreamDownstreamNodeSelection]s.
 @immutable
 abstract class BlockNode extends DocumentNode {
-  BlockNode({
-    Map<String, dynamic>? metadata,
-  }) : super(metadata: metadata);
+  BlockNode({Map<String, dynamic>? metadata}) : super(metadata: metadata);
 
   @override
   UpstreamDownstreamNodePosition get beginningPosition =>
@@ -103,8 +101,10 @@ class _BoxComponentState extends State<BoxComponent> with DocumentComponent {
   }
 
   @override
-  UpstreamDownstreamNodePosition? movePositionLeft(NodePosition currentPosition,
-      [MovementModifier? movementModifier]) {
+  UpstreamDownstreamNodePosition? movePositionLeft(
+    NodePosition currentPosition, [
+    MovementModifier? movementModifier,
+  ]) {
     if (currentPosition == const UpstreamDownstreamNodePosition.upstream()) {
       // Can't move any further left.
       return null;
@@ -115,8 +115,9 @@ class _BoxComponentState extends State<BoxComponent> with DocumentComponent {
 
   @override
   UpstreamDownstreamNodePosition? movePositionRight(
-      NodePosition currentPosition,
-      [MovementModifier? movementModifier]) {
+    NodePosition currentPosition, [
+    MovementModifier? movementModifier,
+  ]) {
     if (currentPosition == const UpstreamDownstreamNodePosition.downstream()) {
       // Can't move any further right.
       return null;
@@ -133,14 +134,16 @@ class _BoxComponentState extends State<BoxComponent> with DocumentComponent {
 
   @override
   UpstreamDownstreamNodePosition? movePositionDown(
-      NodePosition currentPosition) {
+    NodePosition currentPosition,
+  ) {
     // BoxComponents don't support vertical movement.
     return null;
   }
 
   @override
   UpstreamDownstreamNodeSelection getCollapsedSelectionAt(
-      covariant UpstreamDownstreamNodePosition nodePosition) {
+    covariant UpstreamDownstreamNodePosition nodePosition,
+  ) {
     return UpstreamDownstreamNodeSelection.collapsed(nodePosition);
   }
 
@@ -165,7 +168,8 @@ class _BoxComponentState extends State<BoxComponent> with DocumentComponent {
 
   @override
   Offset getOffsetForPosition(
-      covariant UpstreamDownstreamNodePosition nodePosition) {
+    covariant UpstreamDownstreamNodePosition nodePosition,
+  ) {
     final myBox = context.findRenderObject() as RenderBox;
 
     if (nodePosition.affinity == TextAffinity.upstream) {
@@ -183,7 +187,8 @@ class _BoxComponentState extends State<BoxComponent> with DocumentComponent {
 
   @override
   Rect getEdgeForPosition(
-      covariant UpstreamDownstreamNodePosition nodePosition) {
+    covariant UpstreamDownstreamNodePosition nodePosition,
+  ) {
     final boundingBox = getRectForPosition(nodePosition);
 
     final boxPosition = nodePosition;
@@ -200,7 +205,8 @@ class _BoxComponentState extends State<BoxComponent> with DocumentComponent {
   /// [nodePosition] is `upstream` or `downstream`.
   @override
   Rect getRectForPosition(
-      covariant UpstreamDownstreamNodePosition nodePosition) {
+    covariant UpstreamDownstreamNodePosition nodePosition,
+  ) {
     final myBox = context.findRenderObject() as RenderBox;
 
     return Rect.fromLTWH(0, 0, myBox.size.width, myBox.size.height);
@@ -212,7 +218,9 @@ class _BoxComponentState extends State<BoxComponent> with DocumentComponent {
     covariant UpstreamDownstreamNodePosition extentPosition,
   ) {
     final selection = UpstreamDownstreamNodeSelection(
-        base: basePosition, extent: extentPosition);
+      base: basePosition,
+      extent: extentPosition,
+    );
     if (selection.isCollapsed) {
       return getRectForPosition(selection.extent);
     }
@@ -239,12 +247,16 @@ class _BoxComponentState extends State<BoxComponent> with DocumentComponent {
     required covariant UpstreamDownstreamNodePosition extentPosition,
   }) {
     return UpstreamDownstreamNodeSelection(
-        base: basePosition, extent: extentPosition);
+      base: basePosition,
+      extent: extentPosition,
+    );
   }
 
   @override
   UpstreamDownstreamNodeSelection getSelectionInRange(
-      Offset localBaseOffset, Offset localExtentOffset) {
+    Offset localBaseOffset,
+    Offset localExtentOffset,
+  ) {
     return getSelectionBetween(
       basePosition: getPositionAtOffset(localBaseOffset),
       extentPosition: getPositionAtOffset(localExtentOffset),
@@ -261,10 +273,7 @@ class _BoxComponentState extends State<BoxComponent> with DocumentComponent {
 
   @override
   Widget build(BuildContext context) {
-    return Opacity(
-      opacity: widget.opacity,
-      child: widget.child,
-    );
+    return Opacity(opacity: widget.opacity, child: widget.child);
   }
 }
 
@@ -313,11 +322,14 @@ class DeleteUpstreamAtBeginningOfBlockNodeCommand extends EditCommand {
   void execute(EditContext context, CommandExecutor executor) {
     final document = context.document;
     final composer = context.find<MutableDocumentComposer>(Editor.composerKey);
-    final documentLayoutEditable =
-        context.find<DocumentLayoutEditable>(Editor.layoutKey);
+    final documentLayoutEditable = context.find<DocumentLayoutEditable>(
+      Editor.layoutKey,
+    );
 
-    final deletionPosition =
-        DocumentPosition(nodeId: node.id, nodePosition: node.beginningPosition);
+    final deletionPosition = DocumentPosition(
+      nodeId: node.id,
+      nodePosition: node.beginningPosition,
+    );
 
     final nodePosition =
         deletionPosition.nodePosition as UpstreamDownstreamNodePosition;
@@ -326,7 +338,8 @@ class DeleteUpstreamAtBeginningOfBlockNodeCommand extends EditCommand {
       // whole block by replacing it with an empty paragraph.
       executor.executeCommand(
         ReplaceNodeWithEmptyParagraphWithCaretCommand(
-            nodeId: deletionPosition.nodeId),
+          nodeId: deletionPosition.nodeId,
+        ),
       );
       return;
     }
@@ -342,9 +355,7 @@ class DeleteUpstreamAtBeginningOfBlockNodeCommand extends EditCommand {
     }
 
     if (nodeBefore is TextNode && nodeBefore.text.isEmpty) {
-      executor.executeCommand(
-        DeleteNodeCommand(nodeId: nodeBefore.id),
-      );
+      executor.executeCommand(DeleteNodeCommand(nodeId: nodeBefore.id));
       return;
     }
 
@@ -352,9 +363,7 @@ class DeleteUpstreamAtBeginningOfBlockNodeCommand extends EditCommand {
         .getComponentByNodeId(nodeBefore.id)!;
     if (!componentBefore.isVisualSelectionSupported()) {
       // The node/component above is not selectable. Delete it.
-      executor.executeCommand(
-        DeleteNodeCommand(nodeId: nodeBefore.id),
-      );
+      executor.executeCommand(DeleteNodeCommand(nodeId: nodeBefore.id));
       return;
     }
 

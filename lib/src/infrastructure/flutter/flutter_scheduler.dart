@@ -17,24 +17,29 @@ extension Scheduler on WidgetsBinding {
   ///
   /// When [runAsSoonAsPossible] is called *during* a Flutter build phase, [action] is
   /// executed at the end of the current frame with [addPostFrameCallback].
-  void runAsSoonAsPossible(VoidCallback action,
-      {String debugLabel = "anonymous action"}) {
+  void runAsSoonAsPossible(
+    VoidCallback action, {
+    String debugLabel = "anonymous action",
+  }) {
     schedulerLog.finest("Running action as soon as possible: '$debugLabel'.");
     if (schedulerPhase == SchedulerPhase.persistentCallbacks) {
       // The Flutter pipeline is in the middle of a build phase. Schedule the desired
       // action for the end of the current frame.
       schedulerLog.finest(
-          "Scheduling another frame to run '$debugLabel' because Flutter is building widgets right now.");
+        "Scheduling another frame to run '$debugLabel' because Flutter is building widgets right now.",
+      );
       addPostFrameCallback((timeStamp) {
         schedulerLog.finest(
-            "Flutter is done building widgets. Running '$debugLabel' at the end of the frame.");
+          "Flutter is done building widgets. Running '$debugLabel' at the end of the frame.",
+        );
         action();
       });
     } else {
       // The Flutter pipeline isn't building widgets right now. Execute the action
       // immediately.
       schedulerLog.finest(
-          "Flutter isn't building widgets right now. Running '$debugLabel' immediately.");
+        "Flutter isn't building widgets right now. Running '$debugLabel' immediately.",
+      );
       action();
     }
   }
@@ -50,18 +55,16 @@ extension Frames on State {
   /// phase, another frame is scheduled, and [stateChange] is run after the
   /// current build phase completes. Otherwise, [stateChange] is run immediately.
   void setStateAsSoonAsPossible(VoidCallback stateChange) {
-    WidgetsBinding.instance.runAsSoonAsPossible(
-      () {
-        if (!mounted) {
-          return;
-        }
+    WidgetsBinding.instance.runAsSoonAsPossible(() {
+      if (!mounted) {
+        return;
+      }
 
-        // ignore: invalid_use_of_protected_member
-        setState(() {
-          stateChange();
-        });
-      },
-    );
+      // ignore: invalid_use_of_protected_member
+      setState(() {
+        stateChange();
+      });
+    });
   }
 
   /// Runs the given [work] in a post-frame callback, but only if the [State]

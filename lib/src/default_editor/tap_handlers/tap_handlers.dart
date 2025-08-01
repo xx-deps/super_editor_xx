@@ -13,11 +13,12 @@ import 'package:super_editor/src/infrastructure/_logging.dart';
 import 'package:super_editor/src/infrastructure/document_gestures_interaction_overrides.dart';
 import 'package:super_editor/src/infrastructure/links.dart';
 
-typedef SuperEditorContentTapDelegateFactory = ContentTapDelegate Function(
-    SuperEditorContext editContext);
+typedef SuperEditorContentTapDelegateFactory =
+    ContentTapDelegate Function(SuperEditorContext editContext);
 
 SuperEditorLaunchLinkTapHandler superEditorLaunchLinkTapHandlerFactory(
-        SuperEditorContext editContext) =>
+  SuperEditorContext editContext,
+) =>
     SuperEditorLaunchLinkTapHandler(editContext.document, editContext.composer);
 
 /// A [ContentTapDelegate] that opens links when the user taps text with
@@ -84,12 +85,14 @@ class SuperEditorLaunchLinkTapHandler extends ContentTapDelegate {
     final textNode = document.getNodeById(position.nodeId);
     if (textNode is! TextNode) {
       editorGesturesLog.shout(
-          "Received a report of a tap on a TextNodePosition, but the node with that ID is a: $textNode");
+        "Received a report of a tap on a TextNodePosition, but the node with that ID is a: $textNode",
+      );
       return null;
     }
 
-    final tappedAttributions =
-        textNode.text.getAllAttributionsAt(nodePosition.offset);
+    final tappedAttributions = textNode.text.getAllAttributionsAt(
+      nodePosition.offset,
+    );
     for (final tappedAttribution in tappedAttributions) {
       if (tappedAttribution is LinkAttribution) {
         return tappedAttribution.launchableUri;
@@ -101,18 +104,15 @@ class SuperEditorLaunchLinkTapHandler extends ContentTapDelegate {
 }
 
 SuperEditorAddEmptyParagraphTapHandler
-    superEditorAddEmptyParagraphTapHandlerFactory(
-            SuperEditorContext editContext) =>
-        SuperEditorAddEmptyParagraphTapHandler(editContext: editContext);
+superEditorAddEmptyParagraphTapHandlerFactory(SuperEditorContext editContext) =>
+    SuperEditorAddEmptyParagraphTapHandler(editContext: editContext);
 
 /// A [ContentTapDelegate] that adds an empty paragraph at the end of the document
 /// when the user taps below the last node in the document.
 ///
 /// Does nothing if the last node is a [TextNode].
 class SuperEditorAddEmptyParagraphTapHandler extends ContentTapDelegate {
-  SuperEditorAddEmptyParagraphTapHandler({
-    required this.editContext,
-  });
+  SuperEditorAddEmptyParagraphTapHandler({required this.editContext});
 
   final SuperEditorContext editContext;
 
@@ -145,10 +145,7 @@ class SuperEditorAddEmptyParagraphTapHandler extends ContentTapDelegate {
     editor.execute([
       InsertNodeAfterNodeRequest(
         existingNodeId: node.id,
-        newNode: ParagraphNode(
-          id: newNodeId,
-          text: AttributedText(),
-        ),
+        newNode: ParagraphNode(id: newNodeId, text: AttributedText()),
       ),
       ChangeSelectionRequest(
         DocumentSelection.collapsed(

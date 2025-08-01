@@ -81,8 +81,8 @@ class RenderLeader extends RenderProxyBox {
     required LeaderLink link,
     Listenable? recalculateGlobalOffset,
     RenderBox? child,
-  })  : _link = link,
-        super(child) {
+  }) : _link = link,
+       super(child) {
     // Call the setter so that the listener is added.
     this.recalculateGlobalOffset = recalculateGlobalOffset;
   }
@@ -171,17 +171,14 @@ class RenderLeader extends RenderProxyBox {
       ..leaderToScreen = leaderToScreenTransform
       ..leaderContentBoundsInLeaderSpace = child != null
           ? Offset.zero &
-              child!
-                  .size // TODO: query the actual child offset for cases where its not zero
+                child!
+                    .size // TODO: query the actual child offset for cases where its not zero
           : Rect.zero
       ..offset = globalOffset
       ..scale = scale;
 
     if (layer == null) {
-      layer = LeaderLayer(
-        link: link,
-        offset: offset,
-      );
+      layer = LeaderLayer(link: link, offset: offset);
     } else {
       final LeaderLayer leaderLayer = layer! as LeaderLayer;
       leaderLayer
@@ -191,7 +188,8 @@ class RenderLeader extends RenderProxyBox {
 
     context.pushLayer(layer!, (paintContext, offset) {
       FtlLogs.leader.finer(
-          "Painting leader content within LeaderLayer. Paint offset: $offset");
+        "Painting leader content within LeaderLayer. Paint offset: $offset",
+      );
       super.paint(paintContext, offset);
     }, Offset.zero);
     assert(layer != null);
@@ -219,8 +217,8 @@ class LeaderLayer extends ContainerLayer {
   /// The [offset] property must be non-null before the compositing phase of the
   /// pipeline.
   LeaderLayer({required LeaderLink link, Offset offset = Offset.zero})
-      : _link = link,
-        _offset = offset;
+    : _link = link,
+      _offset = offset;
 
   /// The object with which this layer should register.
   ///
@@ -285,10 +283,15 @@ class LeaderLayer extends ContainerLayer {
 
   @override
   bool findAnnotations<S extends Object>(
-      AnnotationResult<S> result, Offset localPosition,
-      {required bool onlyFirst}) {
-    return super.findAnnotations<S>(result, localPosition - offset,
-        onlyFirst: onlyFirst);
+    AnnotationResult<S> result,
+    Offset localPosition, {
+    required bool onlyFirst,
+  }) {
+    return super.findAnnotations<S>(
+      result,
+      localPosition - offset,
+      onlyFirst: onlyFirst,
+    );
   }
 
   @override

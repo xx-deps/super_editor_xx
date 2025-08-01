@@ -32,11 +32,17 @@ Checkbox _findTaskCheckbox(String nodeId, [Finder? superEditorFinder]) {
 
   final checkboxes = find
       .descendant(
-          of: find.byWidget(taskWidget), matching: find.byType(Checkbox))
+        of: find.byWidget(taskWidget),
+        matching: find.byType(Checkbox),
+      )
       .evaluate();
-  assert(checkboxes.isNotEmpty,
-      "Couldn't find the Checkbox widget within a task widget with node ID: $nodeId");
-  assert(checkboxes.length == 1,
-      "Found multiple Checkbox widgets within a task widget. We don't know which one to use. Node id: $nodeId");
+  assert(
+    checkboxes.isNotEmpty,
+    "Couldn't find the Checkbox widget within a task widget with node ID: $nodeId",
+  );
+  assert(
+    checkboxes.length == 1,
+    "Found multiple Checkbox widgets within a task widget. We don't know which one to use. Node id: $nodeId",
+  );
   return checkboxes.first.widget as Checkbox;
 }

@@ -57,16 +57,15 @@ class _ExampleAppState extends State<ExampleApp> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
+      appBar: AppBar(backgroundColor: Colors.transparent, elevation: 0),
       extendBodyBehindAppBar: true,
-      body: Builder(builder: (bodyContext) {
-        // Use an intermediate Builder so that the BuildContext that we
-        // give to the pageBuilder has finite layout bounds.
-        return _selectedMenu.pageBuilder(bodyContext);
-      }),
+      body: Builder(
+        builder: (bodyContext) {
+          // Use an intermediate Builder so that the BuildContext that we
+          // give to the pageBuilder has finite layout bounds.
+          return _selectedMenu.pageBuilder(bodyContext);
+        },
+      ),
       drawer: _buildDrawer(),
     );
   }
@@ -112,18 +111,12 @@ final _items = [
     title: 'Interactive Viewer',
     pageBuilder: (context) => const InteractiveViewerDemo(),
   ),
-  _MenuItem(
-    title: 'Hover',
-    pageBuilder: (context) => const HoverDemo(),
-  ),
+  _MenuItem(title: 'Hover', pageBuilder: (context) => const HoverDemo()),
   _MenuItem(
     title: 'Orbiting Circles',
     pageBuilder: (context) => const OrbitingCirclesDemo(),
   ),
-  _MenuItem(
-    title: 'Scaling',
-    pageBuilder: (context) => const ScalingDemo(),
-  ),
+  _MenuItem(title: 'Scaling', pageBuilder: (context) => const ScalingDemo()),
   _MenuItem(
     title: 'Scrollables',
     pageBuilder: (context) => const ScrollablesDemo(),
@@ -148,22 +141,25 @@ class _DrawerButton extends StatelessWidget {
       width: double.infinity,
       child: ElevatedButton(
         style: ButtonStyle(
-            backgroundColor: MaterialStateColor.resolveWith((states) {
-              if (isSelected) {
-                return const Color(0xFFBBBBBB);
-              }
+          backgroundColor: MaterialStateColor.resolveWith((states) {
+            if (isSelected) {
+              return const Color(0xFFBBBBBB);
+            }
 
-              if (states.contains(MaterialState.hovered)) {
-                return Colors.grey.withOpacity(0.1);
-              }
+            if (states.contains(MaterialState.hovered)) {
+              return Colors.grey.withOpacity(0.1);
+            }
 
-              return Colors.transparent;
-            }),
-            foregroundColor: MaterialStateColor.resolveWith((states) =>
-                isSelected ? Colors.white : const Color(0xFFBBBBBB)),
-            elevation: MaterialStateProperty.resolveWith((states) => 0),
-            padding: MaterialStateProperty.resolveWith(
-                (states) => const EdgeInsets.all(16))),
+            return Colors.transparent;
+          }),
+          foregroundColor: MaterialStateColor.resolveWith(
+            (states) => isSelected ? Colors.white : const Color(0xFFBBBBBB),
+          ),
+          elevation: MaterialStateProperty.resolveWith((states) => 0),
+          padding: MaterialStateProperty.resolveWith(
+            (states) => const EdgeInsets.all(16),
+          ),
+        ),
         onPressed: isSelected ? null : onPressed,
         child: Center(child: Text(title)),
       ),
@@ -172,10 +168,7 @@ class _DrawerButton extends StatelessWidget {
 }
 
 class _MenuItem {
-  const _MenuItem({
-    required this.title,
-    required this.pageBuilder,
-  });
+  const _MenuItem({required this.title, required this.pageBuilder});
 
   final String title;
   final WidgetBuilder pageBuilder;

@@ -10,13 +10,16 @@ import 'supereditor_test_tools.dart';
 
 void main() {
   group('SuperEditor', () {
-    testWidgets("re-runs its presenter when the stylesheet changes", (tester) async {
+    testWidgets("re-runs its presenter when the stylesheet changes", (
+      tester,
+    ) async {
       // Configure and render a document.
-      final testDocumentContext = await tester //
-          .createDocument()
-          .withSingleParagraph()
-          .useStylesheet(_stylesheetWithBlackText)
-          .pump();
+      final testDocumentContext =
+          await tester //
+              .createDocument()
+              .withSingleParagraph()
+              .useStylesheet(_stylesheetWithBlackText)
+              .pump();
 
       // Ensure that the initial text is black
       expect(SuperEditorInspector.findParagraphStyle("1")!.color, Colors.black);
@@ -31,125 +34,146 @@ void main() {
       expect(SuperEditorInspector.findParagraphStyle("1")!.color, Colors.white);
     });
 
-    testWidgetsOnArbitraryDesktop('changes visual text style when attributions change', (tester) async {
-      final testContext = await tester
-          .createDocument() //
-          .withSingleParagraph()
-          .pump();
+    testWidgetsOnArbitraryDesktop(
+      'changes visual text style when attributions change',
+      (tester) async {
+        final testContext = await tester
+            .createDocument() //
+            .withSingleParagraph()
+            .pump();
 
-      // Double tap to select the first word.
-      await tester.doubleTapInParagraph('1', 0);
+        // Double tap to select the first word.
+        await tester.doubleTapInParagraph('1', 0);
 
-      // Apply italic to the word.
-      testContext.findEditContext().commonOps.toggleAttributionsOnSelection({italicsAttribution});
-      await tester.pump();
+        // Apply italic to the word.
+        testContext.findEditContext().commonOps.toggleAttributionsOnSelection({
+          italicsAttribution,
+        });
+        await tester.pump();
 
-      // Ensure italic was applied.
-      expect(
-        _findSpanAtOffset(tester, offset: 0).style!.fontStyle,
-        FontStyle.italic,
-      );
-    });
+        // Ensure italic was applied.
+        expect(
+          _findSpanAtOffset(tester, offset: 0).style!.fontStyle,
+          FontStyle.italic,
+        );
+      },
+    );
 
-    testWidgetsOnArbitraryDesktop('changes visual text style when style rule changes', (tester) async {
-      final testContext = await tester //
-          .createDocument()
-          .withTwoEmptyParagraphs()
-          .useStylesheet(_stylesheetWithNodePositionRule)
-          .pump();
+    testWidgetsOnArbitraryDesktop(
+      'changes visual text style when style rule changes',
+      (tester) async {
+        final testContext =
+            await tester //
+                .createDocument()
+                .withTwoEmptyParagraphs()
+                .useStylesheet(_stylesheetWithNodePositionRule)
+                .pump();
 
-      final doc = testContext.findEditContext().document;
+        final doc = testContext.findEditContext().document;
 
-      final firstParagraphId = doc.getNodeAt(0)!.id;
-      final secondParagraphId = doc.getNodeAt(1)!.id;
+        final firstParagraphId = doc.getNodeAt(0)!.id;
+        final secondParagraphId = doc.getNodeAt(1)!.id;
 
-      // Ensure the rule for paragraph is applied.
-      expect(SuperEditorInspector.findParagraphStyle(firstParagraphId)!.color, Colors.red);
+        // Ensure the rule for paragraph is applied.
+        expect(
+          SuperEditorInspector.findParagraphStyle(firstParagraphId)!.color,
+          Colors.red,
+        );
 
-      // Remove the second paragraph.
-      testContext.findEditContext().editor.execute([
-        DeleteNodeRequest(nodeId: secondParagraphId),
-      ]);
-      await tester.pump();
+        // Remove the second paragraph.
+        testContext.findEditContext().editor.execute([
+          DeleteNodeRequest(nodeId: secondParagraphId),
+        ]);
+        await tester.pump();
 
-      // The first paragraph is now the only paragraph in the document.
-      // Therefore, the rule for "last paragraph" should be applied.
-      expect(SuperEditorInspector.findParagraphStyle(firstParagraphId)!.color, Colors.blue);
-    });
+        // The first paragraph is now the only paragraph in the document.
+        // Therefore, the rule for "last paragraph" should be applied.
+        expect(
+          SuperEditorInspector.findParagraphStyle(firstParagraphId)!.color,
+          Colors.blue,
+        );
+      },
+    );
 
-    testWidgetsOnArbitraryDesktop('retains visual text style when combining a list item with a paragraph',
-        (tester) async {
-      await tester //
-          .createDocument()
-          .fromMarkdown("""
+    testWidgetsOnArbitraryDesktop(
+      'retains visual text style when combining a list item with a paragraph',
+      (tester) async {
+        await tester //
+            .createDocument()
+            .fromMarkdown("""
 * 1
 * 2
 
 A paragraph
           """)
-          .useStylesheet(Stylesheet(
-            inlineTextStyler: inlineTextStyler,
-            rules: [
-              StyleRule(
-                const BlockSelector("listItem"),
-                (doc, docNode) {
-                  return {
-                    Styles.textStyle: const TextStyle(
-                      color: Colors.blue,
-                      fontSize: 16,
-                    ),
-                  };
-                },
+            .useStylesheet(
+              Stylesheet(
+                inlineTextStyler: inlineTextStyler,
+                rules: [
+                  StyleRule(const BlockSelector("listItem"), (doc, docNode) {
+                    return {
+                      Styles.textStyle: const TextStyle(
+                        color: Colors.blue,
+                        fontSize: 16,
+                      ),
+                    };
+                  }),
+                  StyleRule(const BlockSelector("paragraph"), (doc, docNode) {
+                    return {
+                      Styles.textStyle: const TextStyle(
+                        color: Colors.red,
+                        fontSize: 16,
+                      ),
+                    };
+                  }),
+                ],
               ),
-              StyleRule(
-                const BlockSelector("paragraph"),
-                (doc, docNode) {
-                  return {
-                    Styles.textStyle: const TextStyle(
-                      color: Colors.red,
-                      fontSize: 16,
-                    ),
-                  };
-                },
-              ),
-            ],
-          ))
-          .pump();
+            )
+            .pump();
 
-      // Ensure the correct style was applied to the list item.
-      expect(
-        SuperEditorInspector.findParagraphStyle(SuperEditorInspector.getNodeAt(1).id)!.color,
-        Colors.blue,
-      );
+        // Ensure the correct style was applied to the list item.
+        expect(
+          SuperEditorInspector.findParagraphStyle(
+            SuperEditorInspector.getNodeAt(1).id,
+          )!.color,
+          Colors.blue,
+        );
 
-      // Ensure the correct style was applied to the paragraph.
-      expect(
-        SuperEditorInspector.findParagraphStyle(SuperEditorInspector.getNodeAt(2).id)!.color,
-        Colors.red,
-      );
+        // Ensure the correct style was applied to the paragraph.
+        expect(
+          SuperEditorInspector.findParagraphStyle(
+            SuperEditorInspector.getNodeAt(2).id,
+          )!.color,
+          Colors.red,
+        );
 
-      // Place the caret at the end of the second list item.
-      final secondListItem = SuperEditorInspector.getNodeAt<ListItemNode>(1);
-      await tester.placeCaretInParagraph(secondListItem.id, 1);
+        // Place the caret at the end of the second list item.
+        final secondListItem = SuperEditorInspector.getNodeAt<ListItemNode>(1);
+        await tester.placeCaretInParagraph(secondListItem.id, 1);
 
-      // Press backspace to delete the list item text. The content will be empty.
-      await tester.pressBackspace();
+        // Press backspace to delete the list item text. The content will be empty.
+        await tester.pressBackspace();
 
-      // Place the caret at the beginning of the paragraph.
-      final paragraph = SuperEditorInspector.getNodeAt<ParagraphNode>(2);
-      await tester.placeCaretInParagraph(paragraph.id, 0);
+        // Place the caret at the beginning of the paragraph.
+        final paragraph = SuperEditorInspector.getNodeAt<ParagraphNode>(2);
+        await tester.placeCaretInParagraph(paragraph.id, 0);
 
-      // Press backspace to combine the list item and the paragraph.
-      await tester.pressBackspace();
+        // Press backspace to combine the list item and the paragraph.
+        await tester.pressBackspace();
 
-      // Ensure the list item retained the correct style.
-      expect(
-        SuperEditorInspector.findParagraphStyle(SuperEditorInspector.getNodeAt(1).id)!.color,
-        Colors.blue,
-      );
-    });
+        // Ensure the list item retained the correct style.
+        expect(
+          SuperEditorInspector.findParagraphStyle(
+            SuperEditorInspector.getNodeAt(1).id,
+          )!.color,
+          Colors.blue,
+        );
+      },
+    );
 
-    testWidgetsOnArbitraryDesktop('rebuilds only changed nodes', (tester) async {
+    testWidgetsOnArbitraryDesktop('rebuilds only changed nodes', (
+      tester,
+    ) async {
       int componentChangedCount = 0;
 
       await tester
@@ -157,25 +181,33 @@ A paragraph
           .withLongTextContent()
           .pump();
 
-      await tester.placeCaretInParagraph(SuperEditorInspector.findDocument()!.last.id, 0);
+      await tester.placeCaretInParagraph(
+        SuperEditorInspector.findDocument()!.last.id,
+        0,
+      );
 
-      final presenter = tester.state<SuperEditorState>(find.byType(SuperEditor)).presenter;
-      presenter.addChangeListener(SingleColumnLayoutPresenterChangeListener(
-        onViewModelChange: ({
-          required addedComponents,
-          required movedComponents,
-          required changedComponents,
-          required removedComponents,
-        }) {
-          if (componentChangedCount != 0) {
-            // The listener is called two times. The first one for the text change, which is the one
-            // we care about, and the second one for the selection change.
-            // Return early to avoid overriding the value.
-            return;
-          }
-          componentChangedCount = changedComponents.length;
-        },
-      ));
+      final presenter = tester
+          .state<SuperEditorState>(find.byType(SuperEditor))
+          .presenter;
+      presenter.addChangeListener(
+        SingleColumnLayoutPresenterChangeListener(
+          onViewModelChange:
+              ({
+                required addedComponents,
+                required movedComponents,
+                required changedComponents,
+                required removedComponents,
+              }) {
+                if (componentChangedCount != 0) {
+                  // The listener is called two times. The first one for the text change, which is the one
+                  // we care about, and the second one for the selection change.
+                  // Return early to avoid overriding the value.
+                  return;
+                }
+                componentChangedCount = changedComponents.length;
+              },
+        ),
+      );
 
       // Type text, changing only one node.
       await tester.typeKeyboardText('a');
@@ -195,24 +227,31 @@ A paragraph
           .withLongTextContent()
           .pump();
 
-      final presenter = tester.state<SuperEditorState>(find.byType(SuperEditor)).presenter;
-      presenter.addChangeListener(SingleColumnLayoutPresenterChangeListener(
-        onViewModelChange: ({
-          required addedComponents,
-          required movedComponents,
-          required changedComponents,
-          required removedComponents,
-        }) {
-          if (componentChangedCount != 0) {
-            throw Exception("Expected only one view model change, but there was more than one.");
-          }
+      final presenter = tester
+          .state<SuperEditorState>(find.byType(SuperEditor))
+          .presenter;
+      presenter.addChangeListener(
+        SingleColumnLayoutPresenterChangeListener(
+          onViewModelChange:
+              ({
+                required addedComponents,
+                required movedComponents,
+                required changedComponents,
+                required removedComponents,
+              }) {
+                if (componentChangedCount != 0) {
+                  throw Exception(
+                    "Expected only one view model change, but there was more than one.",
+                  );
+                }
 
-          componentAddedCount = addedComponents.length;
-          componentMoveCount = movedComponents.length;
-          componentChangedCount = changedComponents.length;
-          componentRemovedCount = removedComponents.length;
-        },
-      ));
+                componentAddedCount = addedComponents.length;
+                componentMoveCount = movedComponents.length;
+                componentChangedCount = changedComponents.length;
+                componentRemovedCount = removedComponents.length;
+              },
+        ),
+      );
 
       // Move the 2nd node to the end of the document. This should impact nodes 2, 3, and 4,
       // but not node 1.
@@ -231,24 +270,27 @@ A paragraph
       // visual components.
       expect(
         SuperEditorInspector.findComponentOffset("1", Alignment.bottomLeft).dy,
-        lessThanOrEqualTo(SuperEditorInspector.findComponentOffset("3", Alignment.topLeft).dy),
+        lessThanOrEqualTo(
+          SuperEditorInspector.findComponentOffset("3", Alignment.topLeft).dy,
+        ),
       );
       expect(
         SuperEditorInspector.findComponentOffset("3", Alignment.bottomLeft).dy,
-        lessThanOrEqualTo(SuperEditorInspector.findComponentOffset("4", Alignment.topLeft).dy),
+        lessThanOrEqualTo(
+          SuperEditorInspector.findComponentOffset("4", Alignment.topLeft).dy,
+        ),
       );
       expect(
         SuperEditorInspector.findComponentOffset("4", Alignment.bottomLeft).dy,
-        lessThanOrEqualTo(SuperEditorInspector.findComponentOffset("2", Alignment.topLeft).dy),
+        lessThanOrEqualTo(
+          SuperEditorInspector.findComponentOffset("2", Alignment.topLeft).dy,
+        ),
       );
     });
   });
 }
 
-InlineSpan _findSpanAtOffset(
-  WidgetTester tester, {
-  required int offset,
-}) {
+InlineSpan _findSpanAtOffset(WidgetTester tester, {required int offset}) {
   final superText = tester.widget<SuperText>(find.byType(SuperText));
   return superText.richText.getSpanForPosition(TextPosition(offset: offset))!;
 }
@@ -256,26 +298,12 @@ InlineSpan _findSpanAtOffset(
 final _stylesheetWithNodePositionRule = Stylesheet(
   inlineTextStyler: inlineTextStyler,
   rules: [
-    StyleRule(
-      const BlockSelector("paragraph"),
-      (doc, docNode) {
-        return {
-          Styles.textStyle: const TextStyle(
-            color: Colors.red,
-          ),
-        };
-      },
-    ),
-    StyleRule(
-      const BlockSelector("paragraph").last(),
-      (doc, docNode) {
-        return {
-          Styles.textStyle: const TextStyle(
-            color: Colors.blue,
-          )
-        };
-      },
-    ),
+    StyleRule(const BlockSelector("paragraph"), (doc, docNode) {
+      return {Styles.textStyle: const TextStyle(color: Colors.red)};
+    }),
+    StyleRule(const BlockSelector("paragraph").last(), (doc, docNode) {
+      return {Styles.textStyle: const TextStyle(color: Colors.blue)};
+    }),
   ],
 );
 
@@ -283,11 +311,7 @@ final _stylesheetWithBlackText = Stylesheet(
   inlineTextStyler: inlineTextStyler,
   rules: [
     StyleRule(BlockSelector.all, (document, node) {
-      return {
-        Styles.textStyle: const TextStyle(
-          color: Colors.black,
-        ),
-      };
+      return {Styles.textStyle: const TextStyle(color: Colors.black)};
     }),
   ],
 );
@@ -296,11 +320,7 @@ final _stylesheetWithWhiteText = Stylesheet(
   inlineTextStyler: inlineTextStyler,
   rules: [
     StyleRule(BlockSelector.all, (document, node) {
-      return {
-        Styles.textStyle: const TextStyle(
-          color: Colors.white,
-        ),
-      };
+      return {Styles.textStyle: const TextStyle(color: Colors.white)};
     }),
   ],
 );

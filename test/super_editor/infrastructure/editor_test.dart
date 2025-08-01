@@ -12,9 +12,7 @@ void main() {
 
       test('throws exception when there is no command for a given request', () {
         final editor = Editor(
-          editables: {
-            Editor.documentKey: MutableDocument.empty(),
-          },
+          editables: {Editor.documentKey: MutableDocument.empty()},
           requestHandlers: [],
         );
 
@@ -33,16 +31,23 @@ void main() {
           ),
         );
         List<EditEvent>? changeLog;
-        editorPieces.editor.addListener(FunctionalEditListener((changeList) {
-          changeLog = changeList;
-        }));
+        editorPieces.editor.addListener(
+          FunctionalEditListener((changeList) {
+            changeLog = changeList;
+          }),
+        );
 
-        editorPieces.editor.execute([InsertCharacterAtCaretRequest(character: "a")]);
+        editorPieces.editor.execute([
+          InsertCharacterAtCaretRequest(character: "a"),
+        ]);
 
         expect(changeLog, isNotNull);
         expect(changeLog!.length, 2);
         expect(changeLog!.first, isA<DocumentEdit>());
-        expect((changeLog!.first as DocumentEdit).change, isA<NodeChangeEvent>());
+        expect(
+          (changeLog!.first as DocumentEdit).change,
+          isA<NodeChangeEvent>(),
+        );
         expect(changeLog!.last, isA<SelectionChangeEvent>());
       });
 
@@ -57,10 +62,12 @@ void main() {
         );
         int changeLogCount = 0;
         int changeEventCount = 0;
-        editorPieces.editor.addListener(FunctionalEditListener((changeList) {
-          changeLogCount += 1;
-          changeEventCount += changeList.length;
-        }));
+        editorPieces.editor.addListener(
+          FunctionalEditListener((changeList) {
+            changeLogCount += 1;
+            changeEventCount += changeList.length;
+          }),
+        );
 
         editorPieces.editor
           ..execute([InsertCharacterAtCaretRequest(character: "H")])
@@ -71,7 +78,11 @@ void main() {
 
         expect(changeLogCount, 5);
         expect(changeEventCount, 10); // 2 events per character insertion
-        expect((editorPieces.document.getNodeAt(0) as ParagraphNode).text.toPlainText(), "Hello");
+        expect(
+          (editorPieces.document.getNodeAt(0) as ParagraphNode).text
+              .toPlainText(),
+          "Hello",
+        );
       });
 
       test('executes multiple expanding commands', () {
@@ -95,7 +106,9 @@ void main() {
             Editor.composerKey: composer,
           },
           requestHandlers: [
-            (editor, request) => request is _ExpandingCommandRequest //
+            (editor, request) =>
+                request
+                    is _ExpandingCommandRequest //
                 ? _ExpandingCommand(request)
                 : null,
           ],
@@ -122,9 +135,7 @@ void main() {
         // within the generation. The output should look like a depth first tree
         // traversal.
         final paragraph = document.getNodeAt(0) as ParagraphNode;
-        expect(
-          paragraph.text.toPlainText(),
-          '''(0.0)
+        expect(paragraph.text.toPlainText(), '''(0.0)
   (1.0)
     (2.0)
     (2.1)
@@ -136,11 +147,13 @@ void main() {
   (1.2)
     (2.0)
     (2.1)
-    (2.2)''',
-        );
+    (2.2)''');
 
         expect(changeList, isNotNull);
-        expect(changeList!.length, 13 * 2); // 13 commands * 2 events per command
+        expect(
+          changeList!.length,
+          13 * 2,
+        ); // 13 commands * 2 events per command
       });
 
       test('runs reactions after a command', () {
@@ -205,36 +218,42 @@ void main() {
           },
           requestHandlers: List.from(defaultRequestHandlers),
           reactionPipeline: [
-            FunctionalEditReaction(react: (editorContext, requestDispatcher, changeList) {
-              TextInsertionEvent? insertEEvent;
-              for (final edit in changeList) {
-                if (edit is! DocumentEdit) {
-                  continue;
+            FunctionalEditReaction(
+              react: (editorContext, requestDispatcher, changeList) {
+                TextInsertionEvent? insertEEvent;
+                for (final edit in changeList) {
+                  if (edit is! DocumentEdit) {
+                    continue;
+                  }
+                  final change = edit.change;
+                  if (change is! TextInsertionEvent) {
+                    continue;
+                  }
+
+                  insertEEvent = change.text.toPlainText().endsWith("e")
+                      ? change
+                      : null;
                 }
-                final change = edit.change;
-                if (change is! TextInsertionEvent) {
-                  continue;
+
+                if (insertEEvent == null) {
+                  return;
                 }
 
-                insertEEvent = change.text.toPlainText().endsWith("e") ? change : null;
-              }
-
-              if (insertEEvent == null) {
-                return;
-              }
-
-              // Insert "ll" after "e" to get "Hello" when all the commands are done.
-              requestDispatcher.execute([
-                InsertTextRequest(
-                  documentPosition: DocumentPosition(
-                    nodeId: insertEEvent.nodeId,
-                    nodePosition: TextNodePosition(offset: insertEEvent.offset + 1), // +1 for "e"
+                // Insert "ll" after "e" to get "Hello" when all the commands are done.
+                requestDispatcher.execute([
+                  InsertTextRequest(
+                    documentPosition: DocumentPosition(
+                      nodeId: insertEEvent.nodeId,
+                      nodePosition: TextNodePosition(
+                        offset: insertEEvent.offset + 1,
+                      ), // +1 for "e"
+                    ),
+                    textToInsert: "ll",
+                    attributions: {},
                   ),
-                  textToInsert: "ll",
-                  attributions: {},
-                ),
-              ]);
-            }),
+                ]);
+              },
+            ),
           ],
         );
 
@@ -274,89 +293,107 @@ void main() {
         expect((document.first as TextNode).text.toPlainText(), "Hello");
       });
 
-      test('reactions receive a change list with events from earlier reactions', () {
-        final document = MutableDocument.empty("1");
+      test(
+        'reactions receive a change list with events from earlier reactions',
+        () {
+          final document = MutableDocument.empty("1");
 
-        final composer = MutableDocumentComposer(
-          initialSelection: const DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 0),
+          final composer = MutableDocumentComposer(
+            initialSelection: const DocumentSelection.collapsed(
+              position: DocumentPosition(
+                nodeId: "1",
+                nodePosition: TextNodePosition(offset: 0),
+              ),
             ),
-          ),
-        );
+          );
 
-        final editor = Editor(
-          editables: {
-            Editor.documentKey: document,
-            Editor.composerKey: composer,
-          },
-          requestHandlers: List.from(defaultRequestHandlers),
-          reactionPipeline: [
-            // Reaction 1 causes a change
-            FunctionalEditReaction(react: (editorContext, requestDispatcher, changeList) {
-              TextInsertionEvent? insertHEvent;
-              for (final edit in changeList) {
-                if (edit is! DocumentEdit) {
-                  continue;
-                }
-                final change = edit.change;
-                if (change is! TextInsertionEvent) {
-                  continue;
-                }
+          final editor = Editor(
+            editables: {
+              Editor.documentKey: document,
+              Editor.composerKey: composer,
+            },
+            requestHandlers: List.from(defaultRequestHandlers),
+            reactionPipeline: [
+              // Reaction 1 causes a change
+              FunctionalEditReaction(
+                react: (editorContext, requestDispatcher, changeList) {
+                  TextInsertionEvent? insertHEvent;
+                  for (final edit in changeList) {
+                    if (edit is! DocumentEdit) {
+                      continue;
+                    }
+                    final change = edit.change;
+                    if (change is! TextInsertionEvent) {
+                      continue;
+                    }
 
-                insertHEvent = change.text.toPlainText() == "H" ? change : null;
-              }
+                    insertHEvent = change.text.toPlainText() == "H"
+                        ? change
+                        : null;
+                  }
 
-              if (insertHEvent == null) {
-                return;
-              }
+                  if (insertHEvent == null) {
+                    return;
+                  }
 
-              // Insert "e" after "H".
-              requestDispatcher.execute([
-                InsertTextRequest(
-                  documentPosition: DocumentPosition(
-                    nodeId: insertHEvent.nodeId,
-                    nodePosition: TextNodePosition(offset: insertHEvent.offset),
-                  ),
-                  textToInsert: "e",
-                  attributions: {},
-                ),
-              ]);
-            }),
-            // Reaction 2 verifies that it sees the change event from reaction 1.
-            FunctionalEditReaction(react: (editorContext, requestDispatcher, changeList) {
-              TextInsertionEvent? insertEEvent;
-              for (final edit in changeList) {
-                if (edit is! DocumentEdit) {
-                  continue;
-                }
-                final change = edit.change;
-                if (change is! TextInsertionEvent) {
-                  continue;
-                }
+                  // Insert "e" after "H".
+                  requestDispatcher.execute([
+                    InsertTextRequest(
+                      documentPosition: DocumentPosition(
+                        nodeId: insertHEvent.nodeId,
+                        nodePosition: TextNodePosition(
+                          offset: insertHEvent.offset,
+                        ),
+                      ),
+                      textToInsert: "e",
+                      attributions: {},
+                    ),
+                  ]);
+                },
+              ),
+              // Reaction 2 verifies that it sees the change event from reaction 1.
+              FunctionalEditReaction(
+                react: (editorContext, requestDispatcher, changeList) {
+                  TextInsertionEvent? insertEEvent;
+                  for (final edit in changeList) {
+                    if (edit is! DocumentEdit) {
+                      continue;
+                    }
+                    final change = edit.change;
+                    if (change is! TextInsertionEvent) {
+                      continue;
+                    }
 
-                insertEEvent = change.text.toPlainText() == "e" ? change : null;
-              }
+                    insertEEvent = change.text.toPlainText() == "e"
+                        ? change
+                        : null;
+                  }
 
-              expect(insertEEvent, isNotNull, reason: "Reaction 2 didn't receive the change from reaction 1");
-            }),
-          ],
-        );
+                  expect(
+                    insertEEvent,
+                    isNotNull,
+                    reason:
+                        "Reaction 2 didn't receive the change from reaction 1",
+                  );
+                },
+              ),
+            ],
+          );
 
-        editor.execute([
-          InsertTextRequest(
-            documentPosition: const DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 0),
+          editor.execute([
+            InsertTextRequest(
+              documentPosition: const DocumentPosition(
+                nodeId: "1",
+                nodePosition: TextNodePosition(offset: 0),
+              ),
+              textToInsert: "H",
+              attributions: const {},
             ),
-            textToInsert: "H",
-            attributions: const {},
-          ),
-        ]);
+          ]);
 
-        // If execution makes it here then the test is successful.
-      });
+          // If execution makes it here then the test is successful.
+        },
+      );
 
       test('reactions do not run in response to reactions', () {
         final document = MutableDocument.empty("1");
@@ -379,33 +416,35 @@ void main() {
           },
           requestHandlers: List.from(defaultRequestHandlers),
           reactionPipeline: [
-            FunctionalEditReaction(react: (editorContext, requestDispatcher, changeList) {
-              reactionRunCount += 1;
+            FunctionalEditReaction(
+              react: (editorContext, requestDispatcher, changeList) {
+                reactionRunCount += 1;
 
-              // We expect this reaction to run after we execute a command, but we don't
-              // expect this reaction to react to its own command.
-              expect(reactionRunCount, lessThan(2));
+                // We expect this reaction to run after we execute a command, but we don't
+                // expect this reaction to react to its own command.
+                expect(reactionRunCount, lessThan(2));
 
-              // Insert "e" after "H".
-              requestDispatcher.execute([
-                InsertTextRequest(
-                  documentPosition: const DocumentPosition(
-                    nodeId: "1",
-                    nodePosition: TextNodePosition(offset: 1),
+                // Insert "e" after "H".
+                requestDispatcher.execute([
+                  InsertTextRequest(
+                    documentPosition: const DocumentPosition(
+                      nodeId: "1",
+                      nodePosition: TextNodePosition(offset: 1),
+                    ),
+                    textToInsert: "e",
+                    attributions: {},
                   ),
-                  textToInsert: "e",
-                  attributions: {},
-                ),
-                InsertTextRequest(
-                  documentPosition: const DocumentPosition(
-                    nodeId: "1",
-                    nodePosition: TextNodePosition(offset: 2),
+                  InsertTextRequest(
+                    documentPosition: const DocumentPosition(
+                      nodeId: "1",
+                      nodePosition: TextNodePosition(offset: 2),
+                    ),
+                    textToInsert: "l",
+                    attributions: {},
                   ),
-                  textToInsert: "l",
-                  attributions: {},
-                ),
-              ]);
-            }),
+                ]);
+              },
+            ),
           ],
         );
 
@@ -459,7 +498,10 @@ void main() {
           ]);
 
         // Ensure the character was inserted, and the caret moved forward.
-        expect((editorPieces.document.getNodeAt(0) as TextNode).text.toPlainText(), "H");
+        expect(
+          (editorPieces.document.getNodeAt(0) as TextNode).text.toPlainText(),
+          "H",
+        );
         expect(editorPieces.composer.selection, isNotNull);
         expect(
           editorPieces.composer.selection,
@@ -484,10 +526,12 @@ void main() {
         int changeLogCount = 0;
         int changeEventCount = 0;
         final document = editorPieces.document;
-        editorPieces.editor.addListener(FunctionalEditListener((changeList) {
-          changeLogCount += 1;
-          changeEventCount += changeList.length;
-        }));
+        editorPieces.editor.addListener(
+          FunctionalEditListener((changeList) {
+            changeLogCount += 1;
+            changeEventCount += changeList.length;
+          }),
+        );
 
         editorPieces.editor.execute([
           SplitParagraphRequest(
@@ -495,7 +539,7 @@ void main() {
             splitPosition: const TextNodePosition(offset: 0),
             newNodeId: "2",
             replicateExistingMetadata: true,
-          )
+          ),
         ]);
 
         // Verify content changes.
@@ -528,17 +572,21 @@ void main() {
 
         int changeLogCount = 0;
         int changeEventCount = 0;
-        editorPieces.editor.addListener(FunctionalEditListener((changeList) {
-          changeLogCount += 1;
-          changeEventCount += changeList.length;
-        }));
+        editorPieces.editor.addListener(
+          FunctionalEditListener((changeList) {
+            changeLogCount += 1;
+            changeEventCount += changeList.length;
+          }),
+        );
 
         late DocumentChangeLog documentChangeLog;
         editorPieces.document.addListener((changeLog) {
           documentChangeLog = changeLog;
         });
 
-        editorPieces.editor.execute([const MoveNodeRequest(nodeId: "1", newIndex: 2)]);
+        editorPieces.editor.execute([
+          const MoveNodeRequest(nodeId: "1", newIndex: 2),
+        ]);
 
         // Verify final node indices.
         expect(editorPieces.document.getNodeAt(0)!.id, "2");
@@ -551,14 +599,11 @@ void main() {
         expect(changeEventCount, 3); // 3 nodes were moved
 
         // Verify reported document changes.
-        expect(
-          documentChangeLog.changes,
-          [
-            const NodeMovedEvent(nodeId: "1", from: 0, to: 2),
-            const NodeMovedEvent(nodeId: "2", from: 1, to: 0),
-            const NodeMovedEvent(nodeId: "3", from: 2, to: 1),
-          ],
-        );
+        expect(documentChangeLog.changes, [
+          const NodeMovedEvent(nodeId: "1", from: 0, to: 2),
+          const NodeMovedEvent(nodeId: "2", from: 1, to: 0),
+          const NodeMovedEvent(nodeId: "3", from: 2, to: 1),
+        ]);
       });
 
       test('moves a document node to a lower index', () {
@@ -574,17 +619,21 @@ void main() {
 
         int changeLogCount = 0;
         int changeEventCount = 0;
-        editorPieces.editor.addListener(FunctionalEditListener((changeList) {
-          changeLogCount += 1;
-          changeEventCount += changeList.length;
-        }));
+        editorPieces.editor.addListener(
+          FunctionalEditListener((changeList) {
+            changeLogCount += 1;
+            changeEventCount += changeList.length;
+          }),
+        );
 
         late DocumentChangeLog documentChangeLog;
         editorPieces.document.addListener((changeLog) {
           documentChangeLog = changeLog;
         });
 
-        editorPieces.editor.execute([const MoveNodeRequest(nodeId: "3", newIndex: 0)]);
+        editorPieces.editor.execute([
+          const MoveNodeRequest(nodeId: "3", newIndex: 0),
+        ]);
 
         // Verify final node indices.
         expect(editorPieces.document.getNodeAt(0)!.id, "3");
@@ -596,14 +645,11 @@ void main() {
         expect(changeEventCount, 3); // 3 nodes were moved
 
         // Verify reported document changes.
-        expect(
-          documentChangeLog.changes,
-          [
-            const NodeMovedEvent(nodeId: "1", from: 0, to: 1),
-            const NodeMovedEvent(nodeId: "2", from: 1, to: 2),
-            const NodeMovedEvent(nodeId: "3", from: 2, to: 0),
-          ],
-        );
+        expect(documentChangeLog.changes, [
+          const NodeMovedEvent(nodeId: "1", from: 0, to: 1),
+          const NodeMovedEvent(nodeId: "2", from: 1, to: 2),
+          const NodeMovedEvent(nodeId: "3", from: 2, to: 0),
+        ]);
       });
 
       test('reports the node that was removed', () {
@@ -611,13 +657,15 @@ void main() {
         final editorPieces = _createStandardEditor(
           initialDocument: longTextDoc(),
           additionalReactions: [
-            FunctionalEditReaction(react: (editorContext, requestDispatcher, changeList) {
-              expect(changeList.length, 1);
+            FunctionalEditReaction(
+              react: (editorContext, requestDispatcher, changeList) {
+                expect(changeList.length, 1);
 
-              final event = changeList.first as DocumentEdit;
-              final change = event.change as NodeRemovedEvent;
-              removedNode = change.removedNode;
-            }),
+                final event = changeList.first as DocumentEdit;
+                final change = event.change as NodeRemovedEvent;
+                removedNode = change.removedNode;
+              },
+            ),
           ],
         );
 
@@ -643,10 +691,7 @@ StandardEditorPieces _createStandardEditor({
 
   final composer = MutableDocumentComposer(initialSelection: initialSelection);
   final editor = Editor(
-    editables: {
-      Editor.documentKey: document,
-      Editor.composerKey: composer,
-    },
+    editables: {Editor.documentKey: document, Editor.composerKey: composer},
     requestHandlers: List.from(defaultRequestHandlers),
     reactionPipeline: [
       ...additionalReactions,
@@ -727,7 +772,8 @@ class _ExpandingCommand extends EditCommand {
               generationId: request.generationId + 1, // +1 for next generation
               batchId: i, // i'th member of this generation
               newCommandCount: request.newCommandCount,
-              levelsOfGeneration: request.levelsOfGeneration - 1, // -1 generations to go
+              levelsOfGeneration:
+                  request.levelsOfGeneration - 1, // -1 generations to go
             ),
           ),
         );

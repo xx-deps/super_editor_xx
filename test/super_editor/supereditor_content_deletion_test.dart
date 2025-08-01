@@ -9,10 +9,11 @@ import 'supereditor_test_tools.dart';
 void main() {
   group('SuperEditor > content deletion >', () {
     testWidgetsOnAllPlatforms('clears document', (tester) async {
-      final testContext = await tester //
-          .createDocument()
-          .withLongDoc()
-          .pump();
+      final testContext =
+          await tester //
+              .createDocument()
+              .withLongDoc()
+              .pump();
 
       // Place the caret at an arbitraty node. We don't place the caret at the
       // beginning of the document to make sure the selection will move
@@ -30,20 +31,17 @@ void main() {
       // Intercept the setEditingState message sent to the platform.
       tester
           .interceptChannel(SystemChannels.textInput.name) //
-          .interceptMethod(
-        'TextInput.setEditingState',
-        (methodCall) {
-          if (methodCall.method == 'TextInput.setEditingState') {
-            text = methodCall.arguments['text'];
-            selectionBase = methodCall.arguments['selectionBase'];
-            selectionExtent = methodCall.arguments['selectionExtent'];
-            selectionAffinity = methodCall.arguments['selectionAffinity'];
-            composingBase = methodCall.arguments["composingBase"];
-            composingExtent = methodCall.arguments["composingExtent"];
-          }
-          return null;
-        },
-      );
+          .interceptMethod('TextInput.setEditingState', (methodCall) {
+            if (methodCall.method == 'TextInput.setEditingState') {
+              text = methodCall.arguments['text'];
+              selectionBase = methodCall.arguments['selectionBase'];
+              selectionExtent = methodCall.arguments['selectionExtent'];
+              selectionAffinity = methodCall.arguments['selectionAffinity'];
+              composingBase = methodCall.arguments["composingBase"];
+              composingExtent = methodCall.arguments["composingExtent"];
+            }
+            return null;
+          });
 
       // Delete all content.
       testContext.editor.execute([const ClearDocumentRequest()]);
@@ -79,7 +77,10 @@ void main() {
 
       // Ensure the user can still type text.
       await tester.typeImeText('Hello world!');
-      expect((document.first as ParagraphNode).text.text, equals('Hello world!'));
+      expect(
+        (document.first as ParagraphNode).text.text,
+        equals('Hello world!'),
+      );
     });
   });
 }

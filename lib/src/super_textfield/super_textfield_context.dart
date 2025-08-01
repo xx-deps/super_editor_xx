@@ -35,8 +35,8 @@ class SuperTextFieldContext {
   /// if [controller] is not an [ImeAttributedTextEditingController].
   ImeAttributedTextEditingController? get imeController =>
       controller is ImeAttributedTextEditingController
-          ? controller as ImeAttributedTextEditingController
-          : null;
+      ? controller as ImeAttributedTextEditingController
+      : null;
 
   /// Returns a `Function`, which, when invoked, returns a reference to the
   /// text field's [ProseTextLayout], which can be used to query the visual

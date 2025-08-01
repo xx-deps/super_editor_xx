@@ -71,10 +71,7 @@ class AndroidMagnifyingGlass extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(_cornerRadius),
             boxShadow: const [
-              OuterBoxShadow(
-                color: Color(0x44000000),
-                blurRadius: 8,
-              ),
+              OuterBoxShadow(color: Color(0x44000000), blurRadius: 8),
             ],
           ),
         ),

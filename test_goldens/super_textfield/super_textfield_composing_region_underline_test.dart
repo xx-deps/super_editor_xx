@@ -8,14 +8,34 @@ import '../test_tools_goldens.dart';
 
 void main() {
   group("SuperTextField > composing region >", () {
-    testGoldensOnAndroid("is underlined", _composingRegionIsUnderlined, windowSize: goldenSizeSmall);
-    testGoldensOniOS("is underlined", _composingRegionIsUnderlined, windowSize: goldenSizeSmall);
-    testGoldensOnMac("is underlined", _composingRegionIsUnderlined, windowSize: goldenSizeSmall);
+    testGoldensOnAndroid(
+      "is underlined",
+      _composingRegionIsUnderlined,
+      windowSize: goldenSizeSmall,
+    );
+    testGoldensOniOS(
+      "is underlined",
+      _composingRegionIsUnderlined,
+      windowSize: goldenSizeSmall,
+    );
+    testGoldensOnMac(
+      "is underlined",
+      _composingRegionIsUnderlined,
+      windowSize: goldenSizeSmall,
+    );
   });
 
   group("SuperTextField > composing region >", () {
-    testGoldensOnWindows("shows nothing", _composingRegionShowsNothing, windowSize: goldenSizeSmall);
-    testGoldensOnLinux("shows nothing", _composingRegionShowsNothing, windowSize: goldenSizeSmall);
+    testGoldensOnWindows(
+      "shows nothing",
+      _composingRegionShowsNothing,
+      windowSize: goldenSizeSmall,
+    );
+    testGoldensOnLinux(
+      "shows nothing",
+      _composingRegionShowsNothing,
+      windowSize: goldenSizeSmall,
+    );
   });
 }
 
@@ -35,16 +55,21 @@ Future<void> _composingRegionIsUnderlined(WidgetTester tester) async {
   // await screenMatchesGolden(
   //     tester, "super-text-field_composing-region-shows-underline_${defaultTargetPlatform.name}_1");
   await expectLater(
-      find.byType(MaterialApp),
-      matchesGoldenFileWithPixelAllowance(
-          "goldens/super-text-field_composing-region-shows-underline_${defaultTargetPlatform.name}_1.png", 1));
+    find.byType(MaterialApp),
+    matchesGoldenFileWithPixelAllowance(
+      "goldens/super-text-field_composing-region-shows-underline_${defaultTargetPlatform.name}_1.png",
+      1,
+    ),
+  );
 
   textController.composingRegion = const TextRange.collapsed(-1);
   await tester.pump();
 
   // Ensure the underline disappeared now that the composing region is null.
   await screenMatchesGolden(
-      tester, "super-text-field_composing-region-shows-underline_${defaultTargetPlatform.name}_2");
+    tester,
+    "super-text-field_composing-region-shows-underline_${defaultTargetPlatform.name}_2",
+  );
 }
 
 Future<void> _composingRegionShowsNothing(WidgetTester tester) async {
@@ -60,7 +85,9 @@ Future<void> _composingRegionShowsNothing(WidgetTester tester) async {
 
   // Ensure that no underline is shown.
   await screenMatchesGolden(
-      tester, "super-text-field_composing-region-underline-shows-nothing_${defaultTargetPlatform.name}");
+    tester,
+    "super-text-field_composing-region-underline-shows-nothing_${defaultTargetPlatform.name}",
+  );
 }
 
 Future<void> _pumpScaffold(

@@ -1,4 +1,3 @@
-
 import 'package:super_editor/super_editor.dart';
 
 class InsertImageCommandRequest implements EditRequest {

@@ -78,13 +78,17 @@ abstract class DocumentLayout {
   /// Returns a [Rect] that bounds the content selected between
   /// [basePosition] and [extentPosition].
   Rect? getRectForSelection(
-      DocumentPosition basePosition, DocumentPosition extentPosition);
+    DocumentPosition basePosition,
+    DocumentPosition extentPosition,
+  );
 
   /// Returns a [DocumentSelection] that begins near [baseOffset] and extends
   /// to [extentOffset], or [null] if no document content sits between the
   /// provided points.
   DocumentSelection? getDocumentSelectionInRegion(
-      Offset baseOffset, Offset extentOffset);
+    Offset baseOffset,
+    Offset extentOffset,
+  );
 
   /// Returns the [MouseCursor] that's desired by the component at [documentOffset], or
   /// [null] if the document has no preference for the [MouseCursor] at the given
@@ -97,13 +101,17 @@ abstract class DocumentLayout {
 
   /// Converts [ancestorOffset] from the [ancestor]'s coordinate space to the
   /// same location on the screen within this [DocumentLayout]'s coordinate space.
-  Offset getDocumentOffsetFromAncestorOffset(Offset ancestorOffset,
-      [RenderObject? ancestor]);
+  Offset getDocumentOffsetFromAncestorOffset(
+    Offset ancestorOffset, [
+    RenderObject? ancestor,
+  ]);
 
   /// Converts [documentOffset] from this [DocumentLayout]'s coordinate space
   /// to the same location on the screen within the [ancestor]'s coordinate space.
-  Offset getAncestorOffsetFromDocumentOffset(Offset documentOffset,
-      [RenderObject? ancestor]);
+  Offset getAncestorOffsetFromDocumentOffset(
+    Offset documentOffset, [
+    RenderObject? ancestor,
+  ]);
 
   /// Converts [documentOffset] from this [DocumentLayout]'s coordinate space
   /// to the same location on the screen in the global coordinate space.
@@ -175,7 +183,9 @@ mixin DocumentComponent<T extends StatefulWidget> on State<T> {
   /// See [Document] for more information about [DocumentNode]s and
   /// node positions.
   Rect getRectForSelection(
-      NodePosition baseNodePosition, NodePosition extentNodePosition);
+    NodePosition baseNodePosition,
+    NodePosition extentNodePosition,
+  );
 
   /// Returns the node position that represents the "beginning" of
   /// the content within this component, such as the first character
@@ -207,8 +217,10 @@ mixin DocumentComponent<T extends StatefulWidget> on State<T> {
   /// Returns [null] if there is nowhere to move left within this
   /// component, such as when the [currentPosition] is the first
   /// character within a paragraph.
-  NodePosition? movePositionLeft(NodePosition currentPosition,
-      [MovementModifier? movementModifier]);
+  NodePosition? movePositionLeft(
+    NodePosition currentPosition, [
+    MovementModifier? movementModifier,
+  ]);
 
   /// Returns a new position within this component's node that
   /// corresponds to the [currentPosition] moved right one unit,
@@ -224,8 +236,10 @@ mixin DocumentComponent<T extends StatefulWidget> on State<T> {
   /// Returns null if there is nowhere to move right within this
   /// component, such as when the [currentPosition] refers to the
   /// last character in a paragraph.
-  NodePosition? movePositionRight(NodePosition currentPosition,
-      [MovementModifier? movementModifier]);
+  NodePosition? movePositionRight(
+    NodePosition currentPosition, [
+    MovementModifier? movementModifier,
+  ]);
 
   /// Returns a new position within this component's node that
   /// corresponds to the [currentPosition] moved up one unit,
@@ -274,7 +288,9 @@ mixin DocumentComponent<T extends StatefulWidget> on State<T> {
   /// The selection type depends on the type of [DocumentNode] that this
   /// component displays.
   NodeSelection? getSelectionInRange(
-      Offset localBaseOffset, Offset localExtentOffset);
+    Offset localBaseOffset,
+    Offset localExtentOffset,
+  );
 
   /// Returns a [NodeSelection] within this component's [DocumentNode] that
   /// is collapsed at the given [nodePosition]
@@ -336,15 +352,17 @@ mixin ProxyDocumentComponent<T extends StatefulWidget>
 
   Offset _getChildOffset(Offset myOffset) {
     final myBox = context.findRenderObject() as RenderBox;
-    final childBox = childDocumentComponentKey.currentContext!
-        .findRenderObject() as RenderBox;
+    final childBox =
+        childDocumentComponentKey.currentContext!.findRenderObject()
+            as RenderBox;
     return childBox.globalToLocal(myOffset, ancestor: myBox);
   }
 
   Offset _getOffsetFromChild(Offset childOffset) {
     final myBox = context.findRenderObject() as RenderBox;
-    final childBox = childDocumentComponentKey.currentContext!
-        .findRenderObject() as RenderBox;
+    final childBox =
+        childDocumentComponentKey.currentContext!.findRenderObject()
+            as RenderBox;
     return childBox.localToGlobal(childOffset, ancestor: myBox);
   }
 
@@ -357,8 +375,9 @@ mixin ProxyDocumentComponent<T extends StatefulWidget>
 
   @override
   NodePosition? getPositionAtOffset(Offset localOffset) {
-    return _childDocumentComponent
-        .getPositionAtOffset(_getChildOffset(localOffset));
+    return _childDocumentComponent.getPositionAtOffset(
+      _getChildOffset(localOffset),
+    );
   }
 
   @override
@@ -387,9 +406,13 @@ mixin ProxyDocumentComponent<T extends StatefulWidget>
 
   @override
   Rect getRectForSelection(
-      NodePosition baseNodePosition, NodePosition extentNodePosition) {
+    NodePosition baseNodePosition,
+    NodePosition extentNodePosition,
+  ) {
     final childRect = _childDocumentComponent.getRectForSelection(
-        baseNodePosition, extentNodePosition);
+      baseNodePosition,
+      extentNodePosition,
+    );
     return _getRectFromChild(childRect);
   }
 
@@ -400,22 +423,31 @@ mixin ProxyDocumentComponent<T extends StatefulWidget>
 
   @override
   NodePosition getBeginningPositionNearX(double x) {
-    return _childDocumentComponent
-        .getBeginningPositionNearX(_getChildOffset(Offset(x, 0)).dx);
+    return _childDocumentComponent.getBeginningPositionNearX(
+      _getChildOffset(Offset(x, 0)).dx,
+    );
   }
 
   @override
-  NodePosition? movePositionLeft(NodePosition currentPosition,
-      [MovementModifier? movementModifier]) {
+  NodePosition? movePositionLeft(
+    NodePosition currentPosition, [
+    MovementModifier? movementModifier,
+  ]) {
     return _childDocumentComponent.movePositionLeft(
-        currentPosition, movementModifier);
+      currentPosition,
+      movementModifier,
+    );
   }
 
   @override
-  NodePosition? movePositionRight(NodePosition currentPosition,
-      [MovementModifier? movementModifier]) {
+  NodePosition? movePositionRight(
+    NodePosition currentPosition, [
+    MovementModifier? movementModifier,
+  ]) {
     return _childDocumentComponent.movePositionRight(
-        currentPosition, movementModifier);
+      currentPosition,
+      movementModifier,
+    );
   }
 
   @override
@@ -435,13 +467,16 @@ mixin ProxyDocumentComponent<T extends StatefulWidget>
 
   @override
   NodePosition getEndPositionNearX(double x) {
-    return _childDocumentComponent
-        .getEndPositionNearX(_getChildOffset(Offset(x, 0)).dx);
+    return _childDocumentComponent.getEndPositionNearX(
+      _getChildOffset(Offset(x, 0)).dx,
+    );
   }
 
   @override
   NodeSelection? getSelectionInRange(
-      Offset localBaseOffset, Offset localExtentOffset) {
+    Offset localBaseOffset,
+    Offset localExtentOffset,
+  ) {
     return _childDocumentComponent.getSelectionInRange(
       _getChildOffset(localBaseOffset),
       _getChildOffset(localExtentOffset),
@@ -459,7 +494,9 @@ mixin ProxyDocumentComponent<T extends StatefulWidget>
     required NodePosition extentPosition,
   }) {
     return _childDocumentComponent.getSelectionBetween(
-        basePosition: basePosition, extentPosition: extentPosition);
+      basePosition: basePosition,
+      extentPosition: extentPosition,
+    );
   }
 
   @override
@@ -473,8 +510,9 @@ mixin ProxyDocumentComponent<T extends StatefulWidget>
 
   @override
   MouseCursor? getDesiredCursorAtOffset(Offset localOffset) {
-    return _childDocumentComponent
-        .getDesiredCursorAtOffset(_getChildOffset(localOffset));
+    return _childDocumentComponent.getDesiredCursorAtOffset(
+      _getChildOffset(localOffset),
+    );
   }
 }
 

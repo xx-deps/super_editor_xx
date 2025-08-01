@@ -21,8 +21,8 @@ String extractTextFromSelection({
       // This is the first node and it may be partially selected.
       final baseSelectionPosition =
           selectedNode.id == documentSelection.base.nodeId
-              ? documentSelection.base.nodePosition
-              : documentSelection.extent.nodePosition;
+          ? documentSelection.base.nodePosition
+          : documentSelection.extent.nodePosition;
 
       final extentSelectionPosition = selectedNodes.length > 1
           ? selectedNode.endPosition

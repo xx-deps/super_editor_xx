@@ -11,7 +11,9 @@ class CurrentPlatform {
   /// By default this is the same as [kIsWeb].
   ///
   /// [debugIsWebOverride] may be used to override the natural value of [isWeb].
-  static bool get isWeb => debugIsWebOverride == null //
+  static bool get isWeb =>
+      debugIsWebOverride ==
+          null //
       ? kIsWeb
       : debugIsWebOverride == WebPlatformOverride.web;
 }

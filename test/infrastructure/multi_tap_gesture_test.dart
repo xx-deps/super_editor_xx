@@ -43,7 +43,9 @@ void main() {
         ),
       );
 
-      TestGesture gesture = await tester.startGesture(tester.getCenter(tapTargetFinder));
+      TestGesture gesture = await tester.startGesture(
+        tester.getCenter(tapTargetFinder),
+      );
       await tester.pump();
       expect(tapDownCount, 1);
       expect(tapCount, 0);
@@ -120,24 +122,35 @@ void main() {
       int timeoutCount = 0;
 
       await tester.pumpWidget(
-        _buildGestureScaffold(recognizer, onTapDown: (_) {
-          tapDownCount += 1;
-        }, onTap: () {
-          tapCount += 1;
-        }, onDoubleTapDown: (_) {
-          doubleTapDownCount += 1;
-        }, onDoubleTap: () {
-          doubleTapCount += 1;
-        }, onTripleTapDown: (_) {
-          tripleTapDownCount += 1;
-        }, onTripleTap: () {
-          tripleTapCount += 1;
-        }, onTimeout: () {
-          timeoutCount += 1;
-        }),
+        _buildGestureScaffold(
+          recognizer,
+          onTapDown: (_) {
+            tapDownCount += 1;
+          },
+          onTap: () {
+            tapCount += 1;
+          },
+          onDoubleTapDown: (_) {
+            doubleTapDownCount += 1;
+          },
+          onDoubleTap: () {
+            doubleTapCount += 1;
+          },
+          onTripleTapDown: (_) {
+            tripleTapDownCount += 1;
+          },
+          onTripleTap: () {
+            tripleTapCount += 1;
+          },
+          onTimeout: () {
+            timeoutCount += 1;
+          },
+        ),
       );
 
-      TestGesture gesture = await tester.startGesture(tester.getCenter(tapTargetFinder));
+      TestGesture gesture = await tester.startGesture(
+        tester.getCenter(tapTargetFinder),
+      );
       await tester.pump();
       expect(tapDownCount, 0);
       expect(tapCount, 0);
@@ -213,7 +226,9 @@ void main() {
         ),
       );
 
-      TestGesture gesture = await tester.startGesture(tester.getCenter(tapTargetFinder));
+      TestGesture gesture = await tester.startGesture(
+        tester.getCenter(tapTargetFinder),
+      );
       await tester.pump();
       expect(tapDownCount, 0);
       expect(tapCount, 0);
@@ -266,7 +281,9 @@ void main() {
       expect(timeoutCount, 1);
     });
 
-    testWidgets("can ignore single tap and double tap gestures", (tester) async {
+    testWidgets("can ignore single tap and double tap gestures", (
+      tester,
+    ) async {
       final recognizer = TapSequenceGestureRecognizer(
         supportedDevices: {PointerDeviceKind.touch},
         reportPrecedingGestures: false,
@@ -307,7 +324,9 @@ void main() {
         ),
       );
 
-      TestGesture gesture = await tester.startGesture(tester.getCenter(tapTargetFinder));
+      TestGesture gesture = await tester.startGesture(
+        tester.getCenter(tapTargetFinder),
+      );
       await tester.pump();
       expect(tapDownCount, 0);
       expect(tapCount, 0);
@@ -370,7 +389,9 @@ void main() {
       await tester.pumpAndSettle();
     });
 
-    testWidgets("cancels tap if another recognizer wins after tap down", (tester) async {
+    testWidgets("cancels tap if another recognizer wins after tap down", (
+      tester,
+    ) async {
       int tapDownCount = 0;
       int tapCancelCount = 0;
       int tapUpCount = 0;
@@ -383,29 +404,33 @@ void main() {
           home: Center(
             child: RawGestureDetector(
               gestures: {
-                HorizontalDragGestureRecognizer: GestureRecognizerFactoryWithHandlers<HorizontalDragGestureRecognizer>(
-                  () => HorizontalDragGestureRecognizer(),
-                  (HorizontalDragGestureRecognizer recognizer) {
-                    recognizer.onUpdate = (_) {
-                      dragUpdateCount += 1;
-                    };
-                  },
-                ),
-                TapSequenceGestureRecognizer: GestureRecognizerFactoryWithHandlers<TapSequenceGestureRecognizer>(
-                  () => TapSequenceGestureRecognizer(),
-                  (TapSequenceGestureRecognizer recognizer) {
-                    recognizer
-                      ..onTapDown = (_) {
-                        tapDownCount += 1;
-                      }
-                      ..onTapUp = (_) {
-                        tapUpCount += 1;
-                      }
-                      ..onTapCancel = () {
-                        tapCancelCount += 1;
+                HorizontalDragGestureRecognizer:
+                    GestureRecognizerFactoryWithHandlers<
+                      HorizontalDragGestureRecognizer
+                    >(() => HorizontalDragGestureRecognizer(), (
+                      HorizontalDragGestureRecognizer recognizer,
+                    ) {
+                      recognizer.onUpdate = (_) {
+                        dragUpdateCount += 1;
                       };
-                  },
-                ),
+                    }),
+                TapSequenceGestureRecognizer:
+                    GestureRecognizerFactoryWithHandlers<
+                      TapSequenceGestureRecognizer
+                    >(() => TapSequenceGestureRecognizer(), (
+                      TapSequenceGestureRecognizer recognizer,
+                    ) {
+                      recognizer
+                        ..onTapDown = (_) {
+                          tapDownCount += 1;
+                        }
+                        ..onTapUp = (_) {
+                          tapUpCount += 1;
+                        }
+                        ..onTapCancel = () {
+                          tapCancelCount += 1;
+                        };
+                    }),
               },
               child: Container(
                 key: const ValueKey('tap-target'),
@@ -419,7 +444,9 @@ void main() {
       );
 
       // Start the gesture, this should fire onTapDown.
-      final gesture = await tester.startGesture(tester.getCenter(tapTargetFinder));
+      final gesture = await tester.startGesture(
+        tester.getCenter(tapTargetFinder),
+      );
       await tester.pump(kTapMinTime);
 
       // Trigger a horizontal drag.
@@ -455,19 +482,19 @@ Widget _buildGestureScaffold(
     home: Center(
       child: RawGestureDetector(
         gestures: {
-          TapSequenceGestureRecognizer: GestureRecognizerFactoryWithHandlers<TapSequenceGestureRecognizer>(
-            () => recognizer,
-            (TapSequenceGestureRecognizer recognizer) {
-              recognizer
-                ..onTapDown = onTapDown
-                ..onTap = onTap
-                ..onDoubleTapDown = onDoubleTapDown
-                ..onDoubleTap = onDoubleTap
-                ..onTripleTapDown = onTripleTapDown
-                ..onTripleTap = onTripleTap
-                ..onTimeout = onTimeout;
-            },
-          ),
+          TapSequenceGestureRecognizer:
+              GestureRecognizerFactoryWithHandlers<
+                TapSequenceGestureRecognizer
+              >(() => recognizer, (TapSequenceGestureRecognizer recognizer) {
+                recognizer
+                  ..onTapDown = onTapDown
+                  ..onTap = onTap
+                  ..onDoubleTapDown = onDoubleTapDown
+                  ..onDoubleTap = onDoubleTap
+                  ..onTripleTapDown = onTripleTapDown
+                  ..onTripleTap = onTripleTap
+                  ..onTimeout = onTimeout;
+              }),
         },
         child: Container(
           key: const ValueKey('tap-target'),

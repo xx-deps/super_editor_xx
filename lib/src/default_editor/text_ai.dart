@@ -3,9 +3,7 @@ import 'package:attributed_text/attributed_text.dart';
 /// An [Attribution] that logs the timestamp when a piece of content was created,
 /// such as typing text, or inserting an image.
 class CreatedAtAttribution implements Attribution {
-  const CreatedAtAttribution({
-    required this.start,
-  });
+  const CreatedAtAttribution({required this.start});
 
   final DateTime start;
 

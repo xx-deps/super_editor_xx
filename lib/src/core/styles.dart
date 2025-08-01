@@ -54,11 +54,7 @@ class Stylesheet {
       inlineWidgetBuilders: inlineWidgetBuilders ?? this.inlineWidgetBuilders,
       selectedTextColorStrategy:
           selectedTextColorStrategy ?? this.selectedTextColorStrategy,
-      rules: [
-        ...addRulesBefore,
-        ...(rules ?? this.rules),
-        ...addRulesAfter,
-      ],
+      rules: [...addRulesBefore, ...(rules ?? this.rules), ...addRulesAfter],
     );
   }
 }
@@ -74,14 +70,15 @@ Color defaultSelectedTextColorStrategy({
 
 /// Returns the [Color] that should be used for selected text, possibly based
 /// on the [originalTextColor].
-typedef SelectedTextColorStrategy = Color Function({
-  required Color originalTextColor,
-  required Color selectionHighlightColor,
-});
+typedef SelectedTextColorStrategy =
+    Color Function({
+      required Color originalTextColor,
+      required Color selectionHighlightColor,
+    });
 
 /// Adjusts the given [existingStyle] based on the given [attributions].
-typedef AttributionStyleAdjuster = TextStyle Function(
-    Set<Attribution> attributions, TextStyle existingStyle);
+typedef AttributionStyleAdjuster =
+    TextStyle Function(Set<Attribution> attributions, TextStyle existingStyle);
 
 /// A single style rule within a [Stylesheet].
 ///
@@ -112,19 +109,19 @@ class BlockSelector {
   static const all = BlockSelector._();
 
   const BlockSelector(this._blockType)
-      : _precedingBlockType = null,
-        _followingBlockType = null,
-        _indexMatcher = null;
+    : _precedingBlockType = null,
+      _followingBlockType = null,
+      _indexMatcher = null;
 
   const BlockSelector._({
     String? blockType,
     String? precedingBlockType,
     String? followingBlockType,
     _BlockMatcher? indexMatcher,
-  })  : _blockType = blockType,
-        _precedingBlockType = precedingBlockType,
-        _followingBlockType = followingBlockType,
-        _indexMatcher = indexMatcher;
+  }) : _blockType = blockType,
+       _precedingBlockType = precedingBlockType,
+       _followingBlockType = followingBlockType,
+       _indexMatcher = indexMatcher;
 
   /// The desired type of block, or `null` to match any block.
   final String? _blockType;
@@ -135,10 +132,10 @@ class BlockSelector {
   /// Returns a modified version of this selector that only selects blocks
   /// that appear immediately after the given [_blockType].
   BlockSelector after(String precedingBlockType) => BlockSelector._(
-        blockType: _blockType,
-        precedingBlockType: precedingBlockType,
-        followingBlockType: _followingBlockType,
-      );
+    blockType: _blockType,
+    precedingBlockType: precedingBlockType,
+    followingBlockType: _followingBlockType,
+  );
 
   /// Type of block that appears immediately after the desired block.
   final String? _followingBlockType;
@@ -146,33 +143,33 @@ class BlockSelector {
   /// Returns a modified version of this selector that only selects blocks
   /// that appear immediately before the given [_blockType].
   BlockSelector before(String followingBlockType) => BlockSelector._(
-        blockType: _blockType,
-        precedingBlockType: _precedingBlockType,
-        followingBlockType: followingBlockType,
-      );
+    blockType: _blockType,
+    precedingBlockType: _precedingBlockType,
+    followingBlockType: followingBlockType,
+  );
 
   final _BlockMatcher? _indexMatcher;
 
   BlockSelector first() => BlockSelector._(
-        blockType: _blockType,
-        precedingBlockType: _precedingBlockType,
-        followingBlockType: _followingBlockType,
-        indexMatcher: const _FirstBlockMatcher(),
-      );
+    blockType: _blockType,
+    precedingBlockType: _precedingBlockType,
+    followingBlockType: _followingBlockType,
+    indexMatcher: const _FirstBlockMatcher(),
+  );
 
   BlockSelector last() => BlockSelector._(
-        blockType: _blockType,
-        precedingBlockType: _precedingBlockType,
-        followingBlockType: _followingBlockType,
-        indexMatcher: const _LastBlockMatcher(),
-      );
+    blockType: _blockType,
+    precedingBlockType: _precedingBlockType,
+    followingBlockType: _followingBlockType,
+    indexMatcher: const _LastBlockMatcher(),
+  );
 
   BlockSelector atIndex(int index) => BlockSelector._(
-        blockType: _blockType,
-        precedingBlockType: _precedingBlockType,
-        followingBlockType: _followingBlockType,
-        indexMatcher: _IndexBlockMatcher(index),
-      );
+    blockType: _blockType,
+    precedingBlockType: _precedingBlockType,
+    followingBlockType: _followingBlockType,
+    indexMatcher: _IndexBlockMatcher(index),
+  );
 
   /// Returns `true` if this selector matches the block for the given [node], or
   /// `false`, otherwise.
@@ -254,28 +251,21 @@ class _IndexBlockMatcher implements _BlockMatcher {
 class CascadingPadding {
   /// Padding where all four sides have the given [padding].
   const CascadingPadding.all(double padding)
-      : left = padding,
-        right = padding,
-        top = padding,
-        bottom = padding;
+    : left = padding,
+      right = padding,
+      top = padding,
+      bottom = padding;
 
   /// Padding where the left/right sides have [horizontal] padding, and
   /// top/bottom sides have [vertical] padding.
-  const CascadingPadding.symmetric({
-    double? horizontal,
-    double? vertical,
-  })  : left = horizontal,
-        right = horizontal,
-        top = vertical,
-        bottom = vertical;
+  const CascadingPadding.symmetric({double? horizontal, double? vertical})
+    : left = horizontal,
+      right = horizontal,
+      top = vertical,
+      bottom = vertical;
 
   /// Padding with the given [left], [right], [top], and [bottom] padding values.
-  const CascadingPadding.only({
-    this.left,
-    this.right,
-    this.top,
-    this.bottom,
-  });
+  const CascadingPadding.only({this.left, this.right, this.top, this.bottom});
 
   final double? left;
   final double? right;
@@ -291,11 +281,11 @@ class CascadingPadding {
       );
 
   EdgeInsets toEdgeInsets() => EdgeInsets.only(
-        left: left ?? 0.0,
-        right: right ?? 0.0,
-        top: top ?? 0.0,
-        bottom: bottom ?? 0.0,
-      );
+    left: left ?? 0.0,
+    right: right ?? 0.0,
+    top: top ?? 0.0,
+    bottom: bottom ?? 0.0,
+  );
 
   @override
   bool operator ==(Object other) =>

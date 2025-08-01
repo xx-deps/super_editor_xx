@@ -85,8 +85,10 @@ class LeaderLink with ChangeNotifier {
     }
 
     final leaderOriginOnScreenVec = leaderToScreen!.transform3(Vector3.zero());
-    final leaderOriginOnScreen =
-        Offset(leaderOriginOnScreenVec.x, leaderOriginOnScreenVec.y);
+    final leaderOriginOnScreen = Offset(
+      leaderOriginOnScreenVec.x,
+      leaderOriginOnScreenVec.y,
+    );
     final offsetInLeader = alignment.alongSize(leaderSize! * scale!);
     return leaderOriginOnScreen + offsetInLeader;
   }
