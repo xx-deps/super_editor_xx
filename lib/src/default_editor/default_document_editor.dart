@@ -470,7 +470,6 @@ final defaultRequestHandlers = List.unmodifiable(<EditRequestHandler>[
 
 final defaultEditorReactions = List.unmodifiable([
   UpdateComposerTextStylesReaction(),
-  const LinkifyReaction(),
 
   //---- Start Content Conversions ----
   HeaderConversionReaction(),
@@ -478,7 +477,6 @@ final defaultEditorReactions = List.unmodifiable([
   const OrderedListItemConversionReaction(),
   const BlockquoteConversionReaction(),
   const HorizontalRuleConversionReaction(),
-  const ImageUrlConversionReaction(),
   const DashConversionReaction(),
 
   //---- End Content Conversions ---
