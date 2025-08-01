@@ -139,10 +139,11 @@ void main() {
       });
 
       testWidgetsOnIos('collapses an expanded selection', (tester) async {
-        final testContext = await tester //
-            .createDocument()
-            .fromMarkdown('This is a paragraph')
-            .pump();
+        final testContext =
+            await tester //
+                .createDocument()
+                .fromMarkdown('This is a paragraph')
+                .pump();
 
         final nodeId = testContext.document.first.id;
 
@@ -153,14 +154,8 @@ void main() {
         expect(
           SuperEditorInspector.findDocumentSelection(),
           DocumentSelection(
-            base: DocumentPosition(
-              nodeId: nodeId,
-              nodePosition: const TextNodePosition(offset: 0),
-            ),
-            extent: DocumentPosition(
-              nodeId: nodeId,
-              nodePosition: const TextNodePosition(offset: 4),
-            ),
+            base: DocumentPosition(nodeId: nodeId, nodePosition: const TextNodePosition(offset: 0)),
+            extent: DocumentPosition(nodeId: nodeId, nodePosition: const TextNodePosition(offset: 4)),
           ),
         );
 
@@ -172,22 +167,20 @@ void main() {
         expect(
           SuperEditorInspector.findDocumentSelection(),
           DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: nodeId,
-              nodePosition: const TextNodePosition(offset: 4),
-            ),
+            position: DocumentPosition(nodeId: nodeId, nodePosition: const TextNodePosition(offset: 4)),
           ),
         );
       });
 
       testWidgetsOnIos('moves selection between paragraphs', (tester) async {
-        final testContext = await tester //
-            .createDocument()
-            .fromMarkdown('''
+        final testContext =
+            await tester //
+                .createDocument()
+                .fromMarkdown('''
 This is the first paragraph
 
 Second paragraph''') //
-            .pump();
+                .pump();
 
         // Place the caret at the end of the first paragraph.
         await tester.placeCaretInParagraph(testContext.document.first.id, 27);
@@ -208,7 +201,7 @@ Second paragraph''') //
             oldText: 'This is the first paragraph',
             selection: TextSelection.collapsed(offset: 27),
             composing: TextRange.empty,
-          )
+          ),
         ], getter: imeClientGetter);
         await tester.pump();
 

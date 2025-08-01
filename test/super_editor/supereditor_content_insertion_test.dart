@@ -14,12 +14,12 @@ void main() {
     group('inserts an image', () {
       testWidgetsOnAllPlatforms('when the selection sits at the beginning of a non-empty paragraph', (tester) async {
         // Pump a widget with an arbitrary size for the images.
-        final context = await tester //
-            .createDocument()
-            .fromMarkdown("First paragraph")
-            .withAddedComponents(
-          [const FakeImageComponentBuilder(size: Size(100, 100))],
-        ).pump();
+        final context =
+            await tester //
+                .createDocument()
+                .fromMarkdown("First paragraph")
+                .withAddedComponents([const FakeImageComponentBuilder(size: Size(100, 100))])
+                .pump();
 
         // Place caret at the beginning of the paragraph.
         await tester.placeCaretInParagraph(context.findEditContext().document.first.id, 0);
@@ -44,21 +44,18 @@ void main() {
         expect(
           SuperEditorInspector.findDocumentSelection(),
           DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: doc.getNodeAt(1)!.id,
-              nodePosition: const TextNodePosition(offset: 0),
-            ),
+            position: DocumentPosition(nodeId: doc.getNodeAt(1)!.id, nodePosition: const TextNodePosition(offset: 0)),
           ),
         );
       });
       testWidgetsOnAllPlatforms('when the selection sits at the middle of a paragraph', (tester) async {
         // Pump a widget with an arbitrary size for the images.
-        final context = await tester //
-            .createDocument()
-            .fromMarkdown("Before the image after the image")
-            .withAddedComponents(
-          [const FakeImageComponentBuilder(size: Size(100, 100))],
-        ).pump();
+        final context =
+            await tester //
+                .createDocument()
+                .fromMarkdown("Before the image after the image")
+                .withAddedComponents([const FakeImageComponentBuilder(size: Size(100, 100))])
+                .pump();
 
         // Place caret at "Before the image| after the image".
         await tester.placeCaretInParagraph(context.findEditContext().document.first.id, 16);
@@ -87,22 +84,19 @@ void main() {
         expect(
           SuperEditorInspector.findDocumentSelection(),
           DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: doc.last.id,
-              nodePosition: const TextNodePosition(offset: 0),
-            ),
+            position: DocumentPosition(nodeId: doc.last.id, nodePosition: const TextNodePosition(offset: 0)),
           ),
         );
       });
 
       testWidgetsOnAllPlatforms('when a downstream selection sits at the end of a paragraph', (tester) async {
         // Pump a widget with an arbitrary size for the images.
-        final context = await tester //
-            .createDocument()
-            .fromMarkdown("First paragraph")
-            .withAddedComponents(
-          [const FakeImageComponentBuilder(size: Size(100, 100))],
-        ).pump();
+        final context =
+            await tester //
+                .createDocument()
+                .fromMarkdown("First paragraph")
+                .withAddedComponents([const FakeImageComponentBuilder(size: Size(100, 100))])
+                .pump();
 
         // Place caret at the end of the paragraph.
         await tester.placeCaretInParagraph(context.findEditContext().document.first.id, 15);
@@ -131,24 +125,22 @@ void main() {
         expect(
           SuperEditorInspector.findDocumentSelection(),
           DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: doc.last.id,
-              nodePosition: const TextNodePosition(offset: 0),
-            ),
+            position: DocumentPosition(nodeId: doc.last.id, nodePosition: const TextNodePosition(offset: 0)),
           ),
         );
       });
 
       testWidgetsOnAllPlatforms('when an upstream selection sits at the end of a paragraph', (tester) async {
         // Pump a widget with an arbitrary size for the images.
-        final context = await tester //
-            .createDocument()
-            .fromMarkdown("""First paragraph
+        final context =
+            await tester //
+                .createDocument()
+                .fromMarkdown("""First paragraph
             
-Second paragraph"""). //
-            withAddedComponents(
-          [const FakeImageComponentBuilder(size: Size(100, 100))],
-        ).pump();
+Second paragraph""")
+                . //
+                withAddedComponents([const FakeImageComponentBuilder(size: Size(100, 100))])
+                .pump();
 
         // Place caret at the end of the first paragraph by selecting the second paragraph and pressing left.
         //
@@ -180,22 +172,19 @@ Second paragraph"""). //
         expect(
           SuperEditorInspector.findDocumentSelection(),
           DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: doc.getNodeAt(2)!.id,
-              nodePosition: const TextNodePosition(offset: 0),
-            ),
+            position: DocumentPosition(nodeId: doc.getNodeAt(2)!.id, nodePosition: const TextNodePosition(offset: 0)),
           ),
         );
       });
 
       testWidgetsOnAllPlatforms('when the selection sits at an empty paragraph', (tester) async {
         // Pump a widget with an arbitrary size for the images.
-        final context = await tester //
-            .createDocument()
-            .withSingleEmptyParagraph()
-            .withAddedComponents(
-          [const FakeImageComponentBuilder(size: Size(100, 100))],
-        ).pump();
+        final context =
+            await tester //
+                .createDocument()
+                .withSingleEmptyParagraph()
+                .withAddedComponents([const FakeImageComponentBuilder(size: Size(100, 100))])
+                .pump();
 
         // Place caret at the empty paragraph.
         await tester.placeCaretInParagraph("1", 0);
@@ -220,10 +209,7 @@ Second paragraph"""). //
         expect(
           SuperEditorInspector.findDocumentSelection(),
           DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: doc.getNodeAt(1)!.id,
-              nodePosition: const TextNodePosition(offset: 0),
-            ),
+            position: DocumentPosition(nodeId: doc.getNodeAt(1)!.id, nodePosition: const TextNodePosition(offset: 0)),
           ),
         );
       });
@@ -231,10 +217,11 @@ Second paragraph"""). //
 
     group('inserts a horizontal rule', () {
       testWidgetsOnAllPlatforms('when the selection sits at the beginning of a non-empty paragraph', (tester) async {
-        final context = await tester //
-            .createDocument()
-            .fromMarkdown("First paragraph")
-            .pump();
+        final context =
+            await tester //
+                .createDocument()
+                .fromMarkdown("First paragraph")
+                .pump();
 
         // Place caret at the beginning of the paragraph.
         await tester.placeCaretInParagraph(context.findEditContext().document.first.id, 0);
@@ -259,18 +246,16 @@ Second paragraph"""). //
         expect(
           SuperEditorInspector.findDocumentSelection(),
           DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: doc.getNodeAt(1)!.id,
-              nodePosition: const TextNodePosition(offset: 0),
-            ),
+            position: DocumentPosition(nodeId: doc.getNodeAt(1)!.id, nodePosition: const TextNodePosition(offset: 0)),
           ),
         );
       });
       testWidgetsOnAllPlatforms('when the selection sits at the middle of a paragraph', (tester) async {
-        final context = await tester //
-            .createDocument()
-            .fromMarkdown("Before the hr after the hr")
-            .pump();
+        final context =
+            await tester //
+                .createDocument()
+                .fromMarkdown("Before the hr after the hr")
+                .pump();
 
         // Place caret at "Before the hr| after the hr".
         await tester.placeCaretInParagraph(context.findEditContext().document.first.id, 13);
@@ -299,19 +284,17 @@ Second paragraph"""). //
         expect(
           SuperEditorInspector.findDocumentSelection(),
           DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: doc.last.id,
-              nodePosition: const TextNodePosition(offset: 0),
-            ),
+            position: DocumentPosition(nodeId: doc.last.id, nodePosition: const TextNodePosition(offset: 0)),
           ),
         );
       });
 
       testWidgetsOnAllPlatforms('when a downstream selection sits at the end of a paragraph', (tester) async {
-        final context = await tester //
-            .createDocument()
-            .fromMarkdown("First paragraph")
-            .pump();
+        final context =
+            await tester //
+                .createDocument()
+                .fromMarkdown("First paragraph")
+                .pump();
 
         // Place caret at the end of the paragraph.
         await tester.placeCaretInParagraph(context.findEditContext().document.first.id, 15);
@@ -340,21 +323,19 @@ Second paragraph"""). //
         expect(
           SuperEditorInspector.findDocumentSelection(),
           DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: doc.last.id,
-              nodePosition: const TextNodePosition(offset: 0),
-            ),
+            position: DocumentPosition(nodeId: doc.last.id, nodePosition: const TextNodePosition(offset: 0)),
           ),
         );
       });
 
       testWidgetsOnAllPlatforms('when an upstream selection sits at the end of a paragraph', (tester) async {
-        final context = await tester //
-            .createDocument()
-            .fromMarkdown("""First paragraph
+        final context =
+            await tester //
+                .createDocument()
+                .fromMarkdown("""First paragraph
             
  Second paragraph""") //
-            .pump();
+                .pump();
 
         // Place caret at the end of the first paragraph by selecting the second paragraph and pressing left.
         //
@@ -386,19 +367,17 @@ Second paragraph"""). //
         expect(
           SuperEditorInspector.findDocumentSelection(),
           DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: doc.getNodeAt(2)!.id,
-              nodePosition: const TextNodePosition(offset: 0),
-            ),
+            position: DocumentPosition(nodeId: doc.getNodeAt(2)!.id, nodePosition: const TextNodePosition(offset: 0)),
           ),
         );
       });
 
       testWidgetsOnAllPlatforms('when the selection sits at an empty paragraph', (tester) async {
-        final context = await tester //
-            .createDocument()
-            .withSingleEmptyParagraph()
-            .pump();
+        final context =
+            await tester //
+                .createDocument()
+                .withSingleEmptyParagraph()
+                .pump();
 
         // Place caret at the empty paragraph.
         await tester.placeCaretInParagraph("1", 0);
@@ -423,10 +402,7 @@ Second paragraph"""). //
         expect(
           SuperEditorInspector.findDocumentSelection(),
           DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: doc.getNodeAt(1)!.id,
-              nodePosition: const TextNodePosition(offset: 0),
-            ),
+            position: DocumentPosition(nodeId: doc.getNodeAt(1)!.id, nodePosition: const TextNodePosition(offset: 0)),
           ),
         );
       });
@@ -442,14 +418,9 @@ Second paragraph"""). //
                   ImageNode(
                     id: "img-node",
                     imageUrl: 'https://this.is.a.fake.image',
-                    metadata: const SingleColumnLayoutComponentStyles(
-                      width: double.infinity,
-                    ).toMetadata(),
+                    metadata: const SingleColumnLayoutComponentStyles(width: double.infinity).toMetadata(),
                   ),
-                  ParagraphNode(
-                    id: 'text-node',
-                    text: AttributedText('Paragraph'),
-                  ),
+                  ParagraphNode(id: 'text-node', text: AttributedText('Paragraph')),
                 ],
               ),
             )
@@ -465,10 +436,7 @@ Second paragraph"""). //
         expect(
           SuperEditorInspector.findDocumentSelection(),
           const DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: 'img-node',
-              nodePosition: UpstreamDownstreamNodePosition.downstream(),
-            ),
+            position: DocumentPosition(nodeId: 'img-node', nodePosition: UpstreamDownstreamNodePosition.downstream()),
           ),
         );
 
@@ -491,8 +459,9 @@ Second paragraph"""). //
         );
       });
 
-      testWidgetsOnAndroid('when the user presses the newline button on the software keyboard at the end of an image',
-          (tester) async {
+      testWidgetsOnAndroid('when the user presses the newline button on the software keyboard at the end of an image', (
+        tester,
+      ) async {
         final testContext = await tester
             .createDocument()
             .withCustomContent(
@@ -501,14 +470,9 @@ Second paragraph"""). //
                   ImageNode(
                     id: "img-node",
                     imageUrl: 'https://this.is.a.fake.image',
-                    metadata: const SingleColumnLayoutComponentStyles(
-                      width: double.infinity,
-                    ).toMetadata(),
+                    metadata: const SingleColumnLayoutComponentStyles(width: double.infinity).toMetadata(),
                   ),
-                  ParagraphNode(
-                    id: 'text-node',
-                    text: AttributedText('Paragraph'),
-                  ),
+                  ParagraphNode(id: 'text-node', text: AttributedText('Paragraph')),
                 ],
               ),
             )
@@ -523,10 +487,7 @@ Second paragraph"""). //
         expect(
           SuperEditorInspector.findDocumentSelection(),
           const DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: 'img-node',
-              nodePosition: UpstreamDownstreamNodePosition.downstream(),
-            ),
+            position: DocumentPosition(nodeId: 'img-node', nodePosition: UpstreamDownstreamNodePosition.downstream()),
           ),
         );
 
@@ -549,8 +510,9 @@ Second paragraph"""). //
         );
       });
 
-      testWidgetsOnIos('when the user presses the newline button on the software keyboard at the end of an image',
-          (tester) async {
+      testWidgetsOnIos('when the user presses the newline button on the software keyboard at the end of an image', (
+        tester,
+      ) async {
         final testContext = await tester
             .createDocument()
             .withCustomContent(
@@ -559,14 +521,9 @@ Second paragraph"""). //
                   ImageNode(
                     id: "img-node",
                     imageUrl: 'https://this.is.a.fake.image',
-                    metadata: const SingleColumnLayoutComponentStyles(
-                      width: double.infinity,
-                    ).toMetadata(),
+                    metadata: const SingleColumnLayoutComponentStyles(width: double.infinity).toMetadata(),
                   ),
-                  ParagraphNode(
-                    id: 'text-node',
-                    text: AttributedText('Paragraph'),
-                  ),
+                  ParagraphNode(id: 'text-node', text: AttributedText('Paragraph')),
                 ],
               ),
             )
@@ -581,10 +538,7 @@ Second paragraph"""). //
         expect(
           SuperEditorInspector.findDocumentSelection(),
           const DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: 'img-node',
-              nodePosition: UpstreamDownstreamNodePosition.downstream(),
-            ),
+            position: DocumentPosition(nodeId: 'img-node', nodePosition: UpstreamDownstreamNodePosition.downstream()),
           ),
         );
 

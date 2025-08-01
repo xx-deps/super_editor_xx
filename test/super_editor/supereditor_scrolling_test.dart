@@ -28,10 +28,7 @@ void main() {
       final firstParagraph = document.first as ParagraphNode;
 
       final dragGesture = await tester.startDocumentDragFromPosition(
-        from: DocumentPosition(
-          nodeId: firstParagraph.id,
-          nodePosition: firstParagraph.beginningPosition,
-        ),
+        from: DocumentPosition(nodeId: firstParagraph.id, nodePosition: firstParagraph.beginningPosition),
         startAlignmentWithinPosition: Alignment.topLeft,
         deviceKind: PointerDeviceKind.trackpad,
       );
@@ -67,10 +64,7 @@ void main() {
       await tester.pump();
 
       final dragGesture = await tester.startDocumentDragFromPosition(
-        from: DocumentPosition(
-          nodeId: lastParagraph.id,
-          nodePosition: lastParagraph.endPosition,
-        ),
+        from: DocumentPosition(nodeId: lastParagraph.id, nodePosition: lastParagraph.endPosition),
         startAlignmentWithinPosition: Alignment.bottomRight,
         deviceKind: PointerDeviceKind.trackpad,
       );
@@ -104,10 +98,7 @@ void main() {
       final lastParagraph = document.last as ParagraphNode;
 
       final dragGesture = await tester.startDocumentDragFromPosition(
-        from: DocumentPosition(
-          nodeId: firstParagraph.id,
-          nodePosition: firstParagraph.beginningPosition,
-        ),
+        from: DocumentPosition(nodeId: firstParagraph.id, nodePosition: firstParagraph.beginningPosition),
         startAlignmentWithinPosition: Alignment.topLeft,
       );
       await dragGesture.moveBy(Offset(windowSize.width - 20, windowSize.height - 20));
@@ -122,14 +113,8 @@ void main() {
       expect(
         SuperEditorInspector.findDocumentSelection(),
         DocumentSelection(
-          base: DocumentPosition(
-            nodeId: firstParagraph.id,
-            nodePosition: firstParagraph.beginningPosition,
-          ),
-          extent: DocumentPosition(
-            nodeId: lastParagraph.id,
-            nodePosition: lastParagraph.endPosition,
-          ),
+          base: DocumentPosition(nodeId: firstParagraph.id, nodePosition: firstParagraph.beginningPosition),
+          extent: DocumentPosition(nodeId: lastParagraph.id, nodePosition: lastParagraph.endPosition),
         ),
       );
     });
@@ -138,11 +123,12 @@ void main() {
       const windowSize = Size(800, 600);
       tester.view.physicalSize = windowSize;
 
-      final docContext = await tester //
-          .createDocument() //
-          .withLongTextContent() //
-          .forDesktop() //
-          .pump();
+      final docContext =
+          await tester //
+              .createDocument() //
+              .withLongTextContent() //
+              .forDesktop() //
+              .pump();
 
       final document = SuperEditorInspector.findDocument()!;
       final firstParagraph = document.first as ParagraphNode;
@@ -153,10 +139,7 @@ void main() {
       docContext.findEditContext().editor.execute([
         ChangeSelectionRequest(
           DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: lastParagraph.id,
-              nodePosition: lastParagraph.endPosition,
-            ),
+            position: DocumentPosition(nodeId: lastParagraph.id, nodePosition: lastParagraph.endPosition),
           ),
           SelectionChangeType.placeCaret,
           SelectionReason.userInteraction,
@@ -167,10 +150,7 @@ void main() {
       await tester.pumpAndSettle();
 
       final dragGesture = await tester.startDocumentDragFromPosition(
-        from: DocumentPosition(
-          nodeId: lastParagraph.id,
-          nodePosition: lastParagraph.endPosition,
-        ),
+        from: DocumentPosition(nodeId: lastParagraph.id, nodePosition: lastParagraph.endPosition),
         startAlignmentWithinPosition: Alignment.bottomRight,
       );
       await dragGesture.moveBy(-Offset(windowSize.width - 20, windowSize.height - 20));
@@ -188,15 +168,9 @@ void main() {
           DocumentSelection(
             base: DocumentPosition(
               nodeId: lastParagraph.id,
-              nodePosition: TextNodePosition(
-                offset: lastParagraph.endPosition.offset,
-                affinity: TextAffinity.upstream,
-              ),
+              nodePosition: TextNodePosition(offset: lastParagraph.endPosition.offset, affinity: TextAffinity.upstream),
             ),
-            extent: DocumentPosition(
-              nodeId: firstParagraph.id,
-              nodePosition: firstParagraph.beginningPosition,
-            ),
+            extent: DocumentPosition(nodeId: firstParagraph.id, nodePosition: firstParagraph.beginningPosition),
           ),
         ),
       );
@@ -228,9 +202,7 @@ void main() {
       final scrollOffsetBeforeDrag = scrollController.offset;
 
       // Drag the handle a bit to the top.
-      final dragGesture = await tester.startGesture(tester.getCenter(
-        SuperEditorInspector.findMobileCaretDragHandle(),
-      ));
+      final dragGesture = await tester.startGesture(tester.getCenter(SuperEditorInspector.findMobileCaretDragHandle()));
       await dragGesture.moveBy(const Offset(0, -20));
       await tester.pump();
 
@@ -254,11 +226,12 @@ void main() {
       const windowSize = Size(800, 600);
       tester.view.physicalSize = windowSize;
 
-      final docContext = await tester //
-          .createDocument() //
-          .withLongTextContent() //
-          .forDesktop() //
-          .pump();
+      final docContext =
+          await tester //
+              .createDocument() //
+              .withLongTextContent() //
+              .forDesktop() //
+              .pump();
       final document = SuperEditorInspector.findDocument()!;
       final lastParagraph = document.last as ParagraphNode;
 
@@ -267,10 +240,7 @@ void main() {
       docContext.findEditContext().editor.execute([
         ChangeSelectionRequest(
           DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: lastParagraph.id,
-              nodePosition: lastParagraph.endPosition,
-            ),
+            position: DocumentPosition(nodeId: lastParagraph.id, nodePosition: lastParagraph.endPosition),
           ),
           SelectionChangeType.placeCaret,
           SelectionReason.userInteraction,
@@ -282,10 +252,7 @@ void main() {
       // Ensure that the last character in the document is visible.
       expect(
         SuperEditorInspector.isPositionVisibleGlobally(
-          DocumentPosition(
-            nodeId: lastParagraph.id,
-            nodePosition: lastParagraph.endPosition,
-          ),
+          DocumentPosition(nodeId: lastParagraph.id, nodePosition: lastParagraph.endPosition),
           windowSize,
         ),
         isTrue,
@@ -314,16 +281,13 @@ void main() {
       const destinationOffset = 226;
       int currentOffset = 0;
       while (currentOffset < destinationOffset) {
-        await tester.ime.sendDeltas(
-          [
-            TextEditingDeltaNonTextUpdate(
-              oldText: paragraphImeText,
-              selection: TextSelection.collapsed(offset: currentOffset),
-              composing: TextRange.empty,
-            ),
-          ],
-          getter: imeClientGetter,
-        );
+        await tester.ime.sendDeltas([
+          TextEditingDeltaNonTextUpdate(
+            oldText: paragraphImeText,
+            selection: TextSelection.collapsed(offset: currentOffset),
+            composing: TextRange.empty,
+          ),
+        ], getter: imeClientGetter);
 
         await tester.pump();
         currentOffset += 1;
@@ -359,11 +323,7 @@ void main() {
               },
               rules: [
                 StyleRule(BlockSelector.all, (document, node) {
-                  return {
-                    Styles.textStyle: const TextStyle(
-                      color: Colors.black,
-                    ),
-                  };
+                  return {Styles.textStyle: const TextStyle(color: Colors.black)};
                 }),
               ],
             ),
@@ -402,11 +362,7 @@ void main() {
               },
               rules: [
                 StyleRule(BlockSelector.all, (document, node) {
-                  return {
-                    Styles.textStyle: const TextStyle(
-                      color: Colors.black,
-                    ),
-                  };
+                  return {Styles.textStyle: const TextStyle(color: Colors.black)};
                 }),
               ],
             ),
@@ -437,12 +393,13 @@ void main() {
       final scrollController = ScrollController();
 
       // Pump a editor with a size we know will cause the editor to be scrollable.
-      final docContext = await tester //
-          .createDocument()
-          .withLongTextContent()
-          .withEditorSize(const Size(300, 100))
-          .withScrollController(scrollController)
-          .pump();
+      final docContext =
+          await tester //
+              .createDocument()
+              .withLongTextContent()
+              .withEditorSize(const Size(300, 100))
+              .withScrollController(scrollController)
+              .pump();
 
       // Select the first paragraph.
       await tester.placeCaretInParagraph('1', 0);
@@ -452,10 +409,7 @@ void main() {
       docContext.findEditContext().editor.execute([
         const ChangeSelectionRequest(
           DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: '4',
-              nodePosition: TextNodePosition(offset: 0),
-            ),
+            position: DocumentPosition(nodeId: '4', nodePosition: TextNodePosition(offset: 0)),
           ),
           SelectionChangeType.placeCaret,
           SelectionReason.contentChange,
@@ -471,12 +425,13 @@ void main() {
       final scrollController = ScrollController();
 
       // Pump an editor with a size we know will cause the editor to be scrollable.
-      final docContext = await tester //
-          .createDocument()
-          .withLongTextContent()
-          .withEditorSize(const Size(300, 100))
-          .withScrollController(scrollController)
-          .pump();
+      final docContext =
+          await tester //
+              .createDocument()
+              .withLongTextContent()
+              .withEditorSize(const Size(300, 100))
+              .withScrollController(scrollController)
+              .pump();
 
       // Select the first paragraph.
       await tester.placeCaretInParagraph('1', 0);
@@ -488,10 +443,7 @@ void main() {
       docContext.findEditContext().editor.execute([
         const ChangeSelectionRequest(
           DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: '1',
-              nodePosition: TextNodePosition(offset: 0),
-            ),
+            position: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 0)),
           ),
           SelectionChangeType.placeCaret,
           SelectionReason.userInteraction,
@@ -525,20 +477,12 @@ void main() {
           .withCustomContent(
             MutableDocument(
               nodes: [
-                ParagraphNode(
-                  id: "1",
-                  text: AttributedText("First Paragraph"),
-                ),
-                ParagraphNode(
-                  id: "2",
-                  text: AttributedText("Second Paragraph"),
-                ),
+                ParagraphNode(id: "1", text: AttributedText("First Paragraph")),
+                ParagraphNode(id: "2", text: AttributedText("Second Paragraph")),
                 ImageNode(
                   id: "img-node",
                   imageUrl: 'https://this.is.a.fake.image',
-                  metadata: const SingleColumnLayoutComponentStyles(
-                    width: double.infinity,
-                  ).toMetadata(),
+                  metadata: const SingleColumnLayoutComponentStyles(width: double.infinity).toMetadata(),
                 ),
               ],
             ),
@@ -549,20 +493,14 @@ void main() {
 
       // Drag from the second paragraph to the image.
       await tester.dragSelectDocumentFromPositionByOffset(
-        from: const DocumentPosition(
-          nodeId: '2',
-          nodePosition: TextNodePosition(offset: 1),
-        ),
+        from: const DocumentPosition(nodeId: '2', nodePosition: TextNodePosition(offset: 1)),
         delta: const Offset(0, 50),
       );
 
       // Ensure the bottom of the image isn't visible.
       expect(
         SuperEditorInspector.isPositionVisibleGlobally(
-          const DocumentPosition(
-            nodeId: 'img-node',
-            nodePosition: UpstreamDownstreamNodePosition.downstream(),
-          ),
+          const DocumentPosition(nodeId: 'img-node', nodePosition: UpstreamDownstreamNodePosition.downstream()),
           editorSize,
         ),
         false,
@@ -668,11 +606,7 @@ void main() {
           .pump();
 
       // Fling scroll with the trackpad to generate momentum.
-      await tester.trackpadFling(
-        find.byType(SuperEditor),
-        const Offset(0.0, -300),
-        300.0,
-      );
+      await tester.trackpadFling(find.byType(SuperEditor), const Offset(0.0, -300), 300.0);
 
       final scrollOffsetInMiddleOfMomentum = scrollController.offset;
 
@@ -820,11 +754,7 @@ void main() {
             .withLongDoc()
             .withEditorSize(const Size(300, 300))
             .withScrollController(scrollController)
-            .useStylesheet(
-              defaultStylesheet.copyWith(
-                documentPadding: const EdgeInsets.symmetric(horizontal: 100),
-              ),
-            )
+            .useStylesheet(defaultStylesheet.copyWith(documentPadding: const EdgeInsets.symmetric(horizontal: 100)))
             .pump();
 
         // Place the caret at the beginning of the document.
@@ -843,12 +773,11 @@ void main() {
         expect(scrollController.offset, greaterThan(scrollOffsetBeforeDrag));
         expect(
           SuperEditorInspector.findDocumentSelection(),
-          selectionEquivalentTo(const DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: '1',
-              nodePosition: TextNodePosition(offset: 0),
+          selectionEquivalentTo(
+            const DocumentSelection.collapsed(
+              position: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 0)),
             ),
-          )),
+          ),
         );
 
         // Let the long-press timer resolve.
@@ -864,11 +793,7 @@ void main() {
             .withLongDoc()
             .withEditorSize(const Size(300, 300))
             .withScrollController(scrollController)
-            .useStylesheet(
-              defaultStylesheet.copyWith(
-                documentPadding: const EdgeInsets.symmetric(horizontal: 100),
-              ),
-            )
+            .useStylesheet(defaultStylesheet.copyWith(documentPadding: const EdgeInsets.symmetric(horizontal: 100)))
             .pump();
 
         // Double tap the word "Lorem".
@@ -887,16 +812,12 @@ void main() {
         expect(scrollController.offset, greaterThan(scrollOffsetBeforeDrag));
         expect(
           SuperEditorInspector.findDocumentSelection(),
-          selectionEquivalentTo(const DocumentSelection(
-            base: DocumentPosition(
-              nodeId: '1',
-              nodePosition: TextNodePosition(offset: 0),
+          selectionEquivalentTo(
+            const DocumentSelection(
+              base: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 0)),
+              extent: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 5)),
             ),
-            extent: DocumentPosition(
-              nodeId: '1',
-              nodePosition: TextNodePosition(offset: 5),
-            ),
-          )),
+          ),
         );
 
         // Let the long-press timer resolve.
@@ -912,11 +833,7 @@ void main() {
             .withLongDoc()
             .withEditorSize(const Size(300, 300))
             .withScrollController(scrollController)
-            .useStylesheet(
-              defaultStylesheet.copyWith(
-                documentPadding: const EdgeInsets.symmetric(horizontal: 100),
-              ),
-            )
+            .useStylesheet(defaultStylesheet.copyWith(documentPadding: const EdgeInsets.symmetric(horizontal: 100)))
             .pump();
 
         final scrollOffsetBeforeDrag = scrollController.offset;
@@ -950,11 +867,7 @@ void main() {
           ..platformDispatcher.textScaleFactorTestValue = 1.0
           ..devicePixelRatio = 1.0;
 
-        await tester.pumpWidget(
-          const _SliverTestEditor(
-            gestureMode: DocumentGestureMode.android,
-          ),
-        );
+        await tester.pumpWidget(const _SliverTestEditor(gestureMode: DocumentGestureMode.android));
 
         // Select text near the bottom of the screen, where the keyboard will appear
         final tapPosition = Offset(screenSizeWithoutKeyboard.width / 2, screenSizeWithoutKeyboard.height - 1);
@@ -991,11 +904,7 @@ void main() {
           ..platformDispatcher.textScaleFactorTestValue = 1.0
           ..devicePixelRatio = 1.0;
 
-        await tester.pumpWidget(
-          const _SliverTestEditor(
-            gestureMode: DocumentGestureMode.iOS,
-          ),
-        );
+        await tester.pumpWidget(const _SliverTestEditor(gestureMode: DocumentGestureMode.iOS));
 
         // Select text near the bottom of the screen, where the keyboard will appear
         final tapPosition = Offset(screenSizeWithoutKeyboard.width / 2, screenSizeWithoutKeyboard.height - 1);
@@ -1255,10 +1164,7 @@ void main() {
               .withCustomWidgetTreeBuilder(
                 (superEditor) => MaterialApp(
                   home: ConstrainedBox(
-                    constraints: const BoxConstraints(
-                      minWidth: 300,
-                      maxHeight: 100,
-                    ),
+                    constraints: const BoxConstraints(minWidth: 300, maxHeight: 100),
                     child: Scaffold(
                       appBar: AppBar(
                         bottom: TabBar(
@@ -1269,13 +1175,7 @@ void main() {
                           ],
                         ),
                       ),
-                      body: TabBarView(
-                        controller: tabController,
-                        children: [
-                          superEditor,
-                          const SizedBox(),
-                        ],
-                      ),
+                      body: TabBarView(controller: tabController, children: [superEditor, const SizedBox()]),
                     ),
                   ),
                 ),
@@ -1311,19 +1211,12 @@ void main() {
                 (superEditor) => MaterialApp(
                   home: Scaffold(
                     body: ConstrainedBox(
-                      constraints: const BoxConstraints(
-                        minWidth: 300,
-                        maxHeight: 100,
-                        maxWidth: 300,
-                      ),
+                      constraints: const BoxConstraints(minWidth: 300, maxHeight: 100, maxWidth: 300),
                       child: ListView(
                         scrollDirection: Axis.horizontal,
                         controller: listScrollController,
                         children: [
-                          ConstrainedBox(
-                            constraints: const BoxConstraints(maxWidth: 100),
-                            child: superEditor,
-                          ),
+                          ConstrainedBox(constraints: const BoxConstraints(maxWidth: 100), child: superEditor),
                           ...List.generate(20, (index) => Text('Text $index')),
                         ],
                       ),
@@ -1346,96 +1239,71 @@ void main() {
       });
 
       group("when all content fits in the viewport", () {
-        testWidgetsOnDesktop(
-          "trackpad doesn't scroll content",
-          (tester) async {
-            tester.view.physicalSize = const Size(800, 600);
+        testWidgetsOnDesktop("trackpad doesn't scroll content", (tester) async {
+          tester.view.physicalSize = const Size(800, 600);
 
-            final isScrollingUp = _scrollDirectionVariant.currentValue == _ScrollDirection.up;
+          final isScrollingUp = _scrollDirectionVariant.currentValue == _ScrollDirection.up;
 
-            await tester //
-                .createDocument()
-                .withCustomContent(
-                  paragraphThenHrThenParagraphDoc()
-                    ..insertNodeAt(
-                      0,
-                      ParagraphNode(
-                        id: Editor.createNodeId(),
-                        text: AttributedText('Document #1'),
-                        metadata: {
-                          'blockType': header1Attribution,
-                        },
-                      ),
-                    ),
-                )
-                .pump();
-
-            final scrollState = tester.state<ScrollableState>(find.byType(Scrollable));
-
-            // Perform a fling on the editor to attemp scrolling.
-            await tester.trackpadFling(
-              find.byType(SuperEditor),
-              Offset(0.0, isScrollingUp ? 100 : -100),
-              300,
-            );
-
-            await tester.pump();
-
-            // Ensure SuperEditor is not scrolling.
-            expect(scrollState.position.activity?.isScrolling, false);
-          },
-          variant: _scrollDirectionVariant,
-        );
-
-        testWidgetsOnDesktop(
-          "mouse scroll wheel doesn't scroll content",
-          (tester) async {
-            tester.view.physicalSize = const Size(800, 600);
-
-            final isScrollUp = _scrollDirectionVariant.currentValue == _ScrollDirection.up;
-
-            await tester //
-                .createDocument()
-                .withCustomContent(
-                  paragraphThenHrThenParagraphDoc()
-                    ..insertNodeAt(
-                      0,
-                      ParagraphNode(
-                        id: Editor.createNodeId(),
-                        text: AttributedText('Document #1'),
-                        metadata: {
-                          'blockType': header1Attribution,
-                        },
-                      ),
-                    ),
-                )
-                .pump();
-
-            final scrollState = tester.state<ScrollableState>(find.byType(Scrollable));
-
-            final Offset scrollEventLocation = tester.getCenter(find.byType(SuperEditor));
-            final TestPointer testPointer = TestPointer(1, PointerDeviceKind.mouse);
-
-            // Send initial pointer event to set the location for subsequent pointer scroll events.
-            await tester.sendEventToBinding(testPointer.hover(scrollEventLocation));
-
-            // Send pointer scroll event to start scrolling.
-            await tester.sendEventToBinding(
-              testPointer.scroll(
-                Offset(
-                  0.0,
-                  isScrollUp ? 100 : -100.0,
+          await tester //
+              .createDocument()
+              .withCustomContent(
+                paragraphThenHrThenParagraphDoc()..insertNodeAt(
+                  0,
+                  ParagraphNode(
+                    id: Editor.createNodeId(),
+                    text: AttributedText('Document #1'),
+                    metadata: {'blockType': header1Attribution},
+                  ),
                 ),
-              ),
-            );
+              )
+              .pump();
 
-            await tester.pump();
+          final scrollState = tester.state<ScrollableState>(find.byType(Scrollable));
 
-            // Ensure SuperReader is not scrolling.
-            expect(scrollState.position.activity!.isScrolling, false);
-          },
-          variant: _scrollDirectionVariant,
-        );
+          // Perform a fling on the editor to attemp scrolling.
+          await tester.trackpadFling(find.byType(SuperEditor), Offset(0.0, isScrollingUp ? 100 : -100), 300);
+
+          await tester.pump();
+
+          // Ensure SuperEditor is not scrolling.
+          expect(scrollState.position.activity?.isScrolling, false);
+        }, variant: _scrollDirectionVariant);
+
+        testWidgetsOnDesktop("mouse scroll wheel doesn't scroll content", (tester) async {
+          tester.view.physicalSize = const Size(800, 600);
+
+          final isScrollUp = _scrollDirectionVariant.currentValue == _ScrollDirection.up;
+
+          await tester //
+              .createDocument()
+              .withCustomContent(
+                paragraphThenHrThenParagraphDoc()..insertNodeAt(
+                  0,
+                  ParagraphNode(
+                    id: Editor.createNodeId(),
+                    text: AttributedText('Document #1'),
+                    metadata: {'blockType': header1Attribution},
+                  ),
+                ),
+              )
+              .pump();
+
+          final scrollState = tester.state<ScrollableState>(find.byType(Scrollable));
+
+          final Offset scrollEventLocation = tester.getCenter(find.byType(SuperEditor));
+          final TestPointer testPointer = TestPointer(1, PointerDeviceKind.mouse);
+
+          // Send initial pointer event to set the location for subsequent pointer scroll events.
+          await tester.sendEventToBinding(testPointer.hover(scrollEventLocation));
+
+          // Send pointer scroll event to start scrolling.
+          await tester.sendEventToBinding(testPointer.scroll(Offset(0.0, isScrollUp ? 100 : -100.0)));
+
+          await tester.pump();
+
+          // Ensure SuperReader is not scrolling.
+          expect(scrollState.position.activity!.isScrolling, false);
+        }, variant: _scrollDirectionVariant);
       });
     });
 
@@ -1453,10 +1321,7 @@ void main() {
 
       // Ensure the scrollbar is displayed.
       expect(
-        find.descendant(
-          of: find.byType(SuperEditor),
-          matching: find.byType(ScrollbarWithCustomPhysics),
-        ),
+        find.descendant(of: find.byType(SuperEditor), matching: find.byType(ScrollbarWithCustomPhysics)),
         findsOneWidget,
       );
     });
@@ -1485,10 +1350,7 @@ void main() {
 
       // Ensure no scrollbar is displayed.
       expect(
-        find.descendant(
-          of: find.byType(SuperEditor),
-          matching: find.byType(ScrollbarWithCustomPhysics),
-        ),
+        find.descendant(of: find.byType(SuperEditor), matching: find.byType(ScrollbarWithCustomPhysics)),
         findsNothing,
       );
     });
@@ -1522,10 +1384,7 @@ void main() {
 ///
 /// By including content on top of [Scrollable], it doesn't have the origin at [Offset.zero].
 class _SliverTestEditor extends StatefulWidget {
-  const _SliverTestEditor({
-    Key? key,
-    required this.gestureMode,
-  }) : super(key: key);
+  const _SliverTestEditor({Key? key, required this.gestureMode}) : super(key: key);
 
   final DocumentGestureMode gestureMode;
 
@@ -1556,22 +1415,15 @@ class _SliverTestEditorState extends State<_SliverTestEditor> {
           child: CustomScrollView(
             slivers: [
               SliverAppBar(
-                title: const Text(
-                  'Rich Text Editor Sliver Example',
-                ),
+                title: const Text('Rich Text Editor Sliver Example'),
                 expandedHeight: 200.0,
                 leading: const SizedBox(),
-                flexibleSpace: FlexibleSpaceBar(
-                  background: Container(color: Colors.blue),
-                ),
+                flexibleSpace: FlexibleSpaceBar(background: Container(color: Colors.blue)),
               ),
               const SliverToBoxAdapter(
                 child: Text(
                   'Lorem Ipsum Dolor',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12,
-                  ),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -1584,11 +1436,9 @@ class _SliverTestEditorState extends State<_SliverTestEditor> {
                 inputSource: TextInputSource.ime,
               ),
               SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    return ListTile(title: Text('$index'));
-                  },
-                ),
+                delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
+                  return ListTile(title: Text('$index'));
+                }),
               ),
             ],
           ),
@@ -1620,10 +1470,7 @@ Future<void> _simulateKeyboardAppearance({
 }
 
 /// Adds [count] new lines using IME actions
-Future<void> _addNewLines(
-  WidgetTester tester, {
-  required int count,
-}) async {
+Future<void> _addNewLines(WidgetTester tester, {required int count}) async {
   for (int i = 0; i < count; i++) {
     await tester.testTextInput.receiveAction(TextInputAction.newline);
     await tester.pump();
@@ -1635,12 +1482,8 @@ MutableDocument _createExampleDocumentForScrolling() {
     nodes: [
       ParagraphNode(
         id: Editor.createNodeId(),
-        text: AttributedText(
-          'Example Document',
-        ),
-        metadata: {
-          'blockType': header1Attribution,
-        },
+        text: AttributedText('Example Document'),
+        metadata: {'blockType': header1Attribution},
       ),
       HorizontalRuleNode(id: Editor.createNodeId()),
       ParagraphNode(
@@ -1671,12 +1514,6 @@ MutableDocument _createExampleDocumentForScrolling() {
   );
 }
 
-final _scrollDirectionVariant = ValueVariant<_ScrollDirection>({
-  _ScrollDirection.up,
-  _ScrollDirection.down,
-});
+final _scrollDirectionVariant = ValueVariant<_ScrollDirection>({_ScrollDirection.up, _ScrollDirection.down});
 
-enum _ScrollDirection {
-  up,
-  down;
-}
+enum _ScrollDirection { up, down }

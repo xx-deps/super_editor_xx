@@ -5,12 +5,7 @@ void main() {
   group("MutableDocument", () {
     test("calculates a range from an upstream selection within a single node", () {
       final document = MutableDocument(
-        nodes: [
-          ParagraphNode(
-            id: "1",
-            text: AttributedText("This is a paragraph of text."),
-          ),
-        ],
+        nodes: [ParagraphNode(id: "1", text: AttributedText("This is a paragraph of text."))],
       );
 
       // Try to get an upstream range.
@@ -20,30 +15,13 @@ void main() {
       );
 
       // Ensure the range is upstream.
-      expect(
-        range.start,
-        const DocumentPosition(
-          nodeId: "1",
-          nodePosition: TextNodePosition(offset: 10),
-        ),
-      );
-      expect(
-        range.end,
-        const DocumentPosition(
-          nodeId: "1",
-          nodePosition: TextNodePosition(offset: 20),
-        ),
-      );
+      expect(range.start, const DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 10)));
+      expect(range.end, const DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 20)));
     });
 
     test("calculates a range from an downstream selection within a single node", () {
       final document = MutableDocument(
-        nodes: [
-          ParagraphNode(
-            id: "1",
-            text: AttributedText("This is a paragraph of text."),
-          ),
-        ],
+        nodes: [ParagraphNode(id: "1", text: AttributedText("This is a paragraph of text."))],
       );
 
       // Try to get an upstream range.
@@ -53,20 +31,8 @@ void main() {
       );
 
       // Ensure the range is upstream.
-      expect(
-        range.start,
-        const DocumentPosition(
-          nodeId: "1",
-          nodePosition: TextNodePosition(offset: 10),
-        ),
-      );
-      expect(
-        range.end,
-        const DocumentPosition(
-          nodeId: "1",
-          nodePosition: TextNodePosition(offset: 20),
-        ),
-      );
+      expect(range.start, const DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 10)));
+      expect(range.end, const DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 20)));
     });
 
     group("getNodeIndexById returns the correct index", () {
@@ -88,10 +54,7 @@ void main() {
         final secondNode = document.getNodeAt(1)!;
 
         // Insert a new node at the beginning.
-        final thirdNode = ParagraphNode(
-          id: "3",
-          text: AttributedText("This is the third paragraph."),
-        );
+        final thirdNode = ParagraphNode(id: "3", text: AttributedText("This is the third paragraph."));
         document.insertNodeAt(0, thirdNode);
 
         // Ensure the indices are correct.
@@ -106,10 +69,7 @@ void main() {
         final secondNode = document.getNodeAt(1)!;
 
         // Insert a new node between firstNode and secondNode.
-        final thirdNode = ParagraphNode(
-          id: "3",
-          text: AttributedText("This is the third paragraph."),
-        );
+        final thirdNode = ParagraphNode(id: "3", text: AttributedText("This is the third paragraph."));
         document.insertNodeAt(1, thirdNode);
 
         // Ensure the indices are correct.
@@ -124,10 +84,7 @@ void main() {
         final secondNode = document.getNodeAt(1)!;
 
         // Insert a new node at the end.
-        final thirdNode = ParagraphNode(
-          id: "3",
-          text: AttributedText("This is the third paragraph."),
-        );
+        final thirdNode = ParagraphNode(id: "3", text: AttributedText("This is the third paragraph."));
         document.insertNodeAt(2, thirdNode);
 
         // Ensure the indices are correct.
@@ -142,14 +99,8 @@ void main() {
         final secondNode = document.getNodeAt(1)!;
 
         // Insert a new node at the beginning.
-        final thirdNode = ParagraphNode(
-          id: "3",
-          text: AttributedText("This is the third paragraph."),
-        );
-        document.insertNodeBefore(
-          existingNodeId: firstNode.id,
-          newNode: thirdNode,
-        );
+        final thirdNode = ParagraphNode(id: "3", text: AttributedText("This is the third paragraph."));
+        document.insertNodeBefore(existingNodeId: firstNode.id, newNode: thirdNode);
 
         // Ensure the indices are correct.
         expect(document.getNodeIndexById(thirdNode.id), 0);
@@ -163,14 +114,8 @@ void main() {
         final secondNode = document.getNodeAt(1)!;
 
         // Insert a new node between the two nodes.
-        final thirdNode = ParagraphNode(
-          id: "3",
-          text: AttributedText("This is the third paragraph."),
-        );
-        document.insertNodeBefore(
-          existingNodeId: secondNode.id,
-          newNode: thirdNode,
-        );
+        final thirdNode = ParagraphNode(id: "3", text: AttributedText("This is the third paragraph."));
+        document.insertNodeBefore(existingNodeId: secondNode.id, newNode: thirdNode);
 
         // Ensure the indices are correct.
         expect(document.getNodeIndexById(firstNode.id), 0);
@@ -184,14 +129,8 @@ void main() {
         final secondNode = document.getNodeAt(1)!;
 
         // Insert a new node between the two nodes.
-        final thirdNode = ParagraphNode(
-          id: "3",
-          text: AttributedText("This is the third paragraph."),
-        );
-        document.insertNodeAfter(
-          existingNodeId: firstNode.id,
-          newNode: thirdNode,
-        );
+        final thirdNode = ParagraphNode(id: "3", text: AttributedText("This is the third paragraph."));
+        document.insertNodeAfter(existingNodeId: firstNode.id, newNode: thirdNode);
 
         // Ensure the indices are correct.
         expect(document.getNodeIndexById(firstNode.id), 0);
@@ -205,14 +144,8 @@ void main() {
         final secondNode = document.getNodeAt(1)!;
 
         // Insert a new node at the end.
-        final thirdNode = ParagraphNode(
-          id: "3",
-          text: AttributedText("This is the third paragraph."),
-        );
-        document.insertNodeAfter(
-          existingNodeId: secondNode.id,
-          newNode: thirdNode,
-        );
+        final thirdNode = ParagraphNode(id: "3", text: AttributedText("This is the third paragraph."));
+        document.insertNodeAfter(existingNodeId: secondNode.id, newNode: thirdNode);
 
         // Ensure the indices are correct.
         expect(document.getNodeIndexById(firstNode.id), 0);
@@ -226,10 +159,7 @@ void main() {
         final secondNode = document.getNodeAt(1)!;
         final thirdNode = document.getNodeAt(2)!;
 
-        document.moveNode(
-          nodeId: firstNode.id,
-          targetIndex: 1,
-        );
+        document.moveNode(nodeId: firstNode.id, targetIndex: 1);
 
         // Ensure the indices are correct.
         expect(document.getNodeIndexById(secondNode.id), 0);
@@ -243,10 +173,7 @@ void main() {
         final secondNode = document.getNodeAt(1)!;
         final thirdNode = document.getNodeAt(2)!;
 
-        document.moveNode(
-          nodeId: secondNode.id,
-          targetIndex: 2,
-        );
+        document.moveNode(nodeId: secondNode.id, targetIndex: 2);
 
         // Ensure the indices are correct.
         expect(document.getNodeIndexById(firstNode.id), 0);
@@ -260,10 +187,7 @@ void main() {
         final secondNode = document.getNodeAt(1)!;
         final thirdNode = document.getNodeAt(2)!;
 
-        document.moveNode(
-          nodeId: thirdNode.id,
-          targetIndex: 1,
-        );
+        document.moveNode(nodeId: thirdNode.id, targetIndex: 1);
 
         // Ensure the indices are correct.
         expect(document.getNodeIndexById(firstNode.id), 0);
@@ -277,10 +201,7 @@ void main() {
         final secondNode = document.getNodeAt(1)!;
         final thirdNode = document.getNodeAt(2)!;
 
-        document.moveNode(
-          nodeId: secondNode.id,
-          targetIndex: 0,
-        );
+        document.moveNode(nodeId: secondNode.id, targetIndex: 0);
 
         // Ensure the indices are correct.
         expect(document.getNodeIndexById(secondNode.id), 0);
@@ -336,15 +257,9 @@ void main() {
         final secondNode = document.getNodeAt(1)!;
         final thirdNode = document.getNodeAt(2)!;
 
-        final fourthNode = ParagraphNode(
-          id: "4",
-          text: AttributedText("This is the third paragraph."),
-        );
+        final fourthNode = ParagraphNode(id: "4", text: AttributedText("This is the third paragraph."));
 
-        document.replaceNodeById(
-          firstNode.id,
-          fourthNode,
-        );
+        document.replaceNodeById(firstNode.id, fourthNode);
 
         // Ensure the indices are correct.
         expect(document.getNodeIndexById(firstNode.id), -1);
@@ -359,15 +274,9 @@ void main() {
         final secondNode = document.getNodeAt(1)!;
         final thirdNode = document.getNodeAt(2)!;
 
-        final fourthNode = ParagraphNode(
-          id: "4",
-          text: AttributedText("This is the third paragraph."),
-        );
+        final fourthNode = ParagraphNode(id: "4", text: AttributedText("This is the third paragraph."));
 
-        document.replaceNodeById(
-          secondNode.id,
-          fourthNode,
-        );
+        document.replaceNodeById(secondNode.id, fourthNode);
 
         // Ensure the indices are correct.
         expect(document.getNodeIndexById(secondNode.id), -1);
@@ -382,15 +291,9 @@ void main() {
         final secondNode = document.getNodeAt(1)!;
         final thirdNode = document.getNodeAt(2)!;
 
-        final fourthNode = ParagraphNode(
-          id: "4",
-          text: AttributedText("This is the third paragraph."),
-        );
+        final fourthNode = ParagraphNode(id: "4", text: AttributedText("This is the third paragraph."));
 
-        document.replaceNodeById(
-          thirdNode.id,
-          fourthNode,
-        );
+        document.replaceNodeById(thirdNode.id, fourthNode);
 
         // Ensure the indices are correct.
         expect(document.getNodeIndexById(thirdNode.id), -1);
@@ -405,14 +308,8 @@ void main() {
 MutableDocument _createTwoParagraphDoc() {
   return MutableDocument(
     nodes: [
-      ParagraphNode(
-        id: "1",
-        text: AttributedText("This is the first paragraph."),
-      ),
-      ParagraphNode(
-        id: "2",
-        text: AttributedText("This is the second paragraph."),
-      ),
+      ParagraphNode(id: "1", text: AttributedText("This is the first paragraph.")),
+      ParagraphNode(id: "2", text: AttributedText("This is the second paragraph.")),
     ],
   );
 }
@@ -420,18 +317,9 @@ MutableDocument _createTwoParagraphDoc() {
 MutableDocument _createThreeParagraphDoc() {
   return MutableDocument(
     nodes: [
-      ParagraphNode(
-        id: "1",
-        text: AttributedText("This is the first paragraph."),
-      ),
-      ParagraphNode(
-        id: "2",
-        text: AttributedText("This is the second paragraph."),
-      ),
-      ParagraphNode(
-        id: "3",
-        text: AttributedText("This is the third paragraph."),
-      ),
+      ParagraphNode(id: "1", text: AttributedText("This is the first paragraph.")),
+      ParagraphNode(id: "2", text: AttributedText("This is the second paragraph.")),
+      ParagraphNode(id: "3", text: AttributedText("This is the third paragraph.")),
     ],
   );
 }

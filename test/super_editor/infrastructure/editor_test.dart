@@ -11,12 +11,7 @@ void main() {
       //       is based on document structure, not the other way around
 
       test('throws exception when there is no command for a given request', () {
-        final editor = Editor(
-          editables: {
-            Editor.documentKey: MutableDocument.empty(),
-          },
-          requestHandlers: [],
-        );
+        final editor = Editor(editables: {Editor.documentKey: MutableDocument.empty()}, requestHandlers: []);
 
         expectLater(() {
           editor.execute([InsertCharacterAtCaretRequest(character: "a")]);
@@ -26,16 +21,15 @@ void main() {
       test('executes a single command', () {
         final editorPieces = _createStandardEditor(
           initialSelection: const DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 0),
-            ),
+            position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 0)),
           ),
         );
         List<EditEvent>? changeLog;
-        editorPieces.editor.addListener(FunctionalEditListener((changeList) {
-          changeLog = changeList;
-        }));
+        editorPieces.editor.addListener(
+          FunctionalEditListener((changeList) {
+            changeLog = changeList;
+          }),
+        );
 
         editorPieces.editor.execute([InsertCharacterAtCaretRequest(character: "a")]);
 
@@ -49,18 +43,17 @@ void main() {
       test('executes a series of commands', () {
         final editorPieces = _createStandardEditor(
           initialSelection: const DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 0),
-            ),
+            position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 0)),
           ),
         );
         int changeLogCount = 0;
         int changeEventCount = 0;
-        editorPieces.editor.addListener(FunctionalEditListener((changeList) {
-          changeLogCount += 1;
-          changeEventCount += changeList.length;
-        }));
+        editorPieces.editor.addListener(
+          FunctionalEditListener((changeList) {
+            changeLogCount += 1;
+            changeEventCount += changeList.length;
+          }),
+        );
 
         editorPieces.editor
           ..execute([InsertCharacterAtCaretRequest(character: "H")])
@@ -83,19 +76,15 @@ void main() {
 
         final composer = MutableDocumentComposer(
           initialSelection: const DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 0),
-            ),
+            position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 0)),
           ),
         );
         final editor = Editor(
-          editables: {
-            Editor.documentKey: document,
-            Editor.composerKey: composer,
-          },
+          editables: {Editor.documentKey: document, Editor.composerKey: composer},
           requestHandlers: [
-            (editor, request) => request is _ExpandingCommandRequest //
+            (editor, request) =>
+                request
+                    is _ExpandingCommandRequest //
                 ? _ExpandingCommand(request)
                 : null,
           ],
@@ -107,12 +96,7 @@ void main() {
         );
 
         editor.execute([
-          const _ExpandingCommandRequest(
-            generationId: 0,
-            batchId: 0,
-            newCommandCount: 3,
-            levelsOfGeneration: 2,
-          ),
+          const _ExpandingCommandRequest(generationId: 0, batchId: 0, newCommandCount: 3, levelsOfGeneration: 2),
         ]);
 
         // Ensure that the commands printed the number and spacing that we expected,
@@ -122,9 +106,7 @@ void main() {
         // within the generation. The output should look like a depth first tree
         // traversal.
         final paragraph = document.getNodeAt(0) as ParagraphNode;
-        expect(
-          paragraph.text.toPlainText(),
-          '''(0.0)
+        expect(paragraph.text.toPlainText(), '''(0.0)
   (1.0)
     (2.0)
     (2.1)
@@ -136,8 +118,7 @@ void main() {
   (1.2)
     (2.0)
     (2.1)
-    (2.2)''',
-        );
+    (2.2)''');
 
         expect(changeList, isNotNull);
         expect(changeList!.length, 13 * 2); // 13 commands * 2 events per command
@@ -150,17 +131,11 @@ void main() {
 
         final composer = MutableDocumentComposer(
           initialSelection: const DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 0),
-            ),
+            position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 0)),
           ),
         );
         final editor = Editor(
-          editables: {
-            Editor.documentKey: document,
-            Editor.composerKey: composer,
-          },
+          editables: {Editor.documentKey: document, Editor.composerKey: composer},
           requestHandlers: List.from(defaultRequestHandlers),
           reactionPipeline: [
             FunctionalEditReaction(
@@ -173,10 +148,7 @@ void main() {
 
         editor.execute([
           InsertTextRequest(
-            documentPosition: const DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 0),
-            ),
+            documentPosition: const DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 0)),
             textToInsert: "H",
             attributions: const {},
           ),
@@ -191,80 +163,67 @@ void main() {
 
         final composer = MutableDocumentComposer(
           initialSelection: const DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 0),
-            ),
+            position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 0)),
           ),
         );
 
         final editor = Editor(
-          editables: {
-            Editor.documentKey: document,
-            Editor.composerKey: composer,
-          },
+          editables: {Editor.documentKey: document, Editor.composerKey: composer},
           requestHandlers: List.from(defaultRequestHandlers),
           reactionPipeline: [
-            FunctionalEditReaction(react: (editorContext, requestDispatcher, changeList) {
-              TextInsertionEvent? insertEEvent;
-              for (final edit in changeList) {
-                if (edit is! DocumentEdit) {
-                  continue;
+            FunctionalEditReaction(
+              react: (editorContext, requestDispatcher, changeList) {
+                TextInsertionEvent? insertEEvent;
+                for (final edit in changeList) {
+                  if (edit is! DocumentEdit) {
+                    continue;
+                  }
+                  final change = edit.change;
+                  if (change is! TextInsertionEvent) {
+                    continue;
+                  }
+
+                  insertEEvent = change.text.toPlainText().endsWith("e") ? change : null;
                 }
-                final change = edit.change;
-                if (change is! TextInsertionEvent) {
-                  continue;
+
+                if (insertEEvent == null) {
+                  return;
                 }
 
-                insertEEvent = change.text.toPlainText().endsWith("e") ? change : null;
-              }
-
-              if (insertEEvent == null) {
-                return;
-              }
-
-              // Insert "ll" after "e" to get "Hello" when all the commands are done.
-              requestDispatcher.execute([
-                InsertTextRequest(
-                  documentPosition: DocumentPosition(
-                    nodeId: insertEEvent.nodeId,
-                    nodePosition: TextNodePosition(offset: insertEEvent.offset + 1), // +1 for "e"
+                // Insert "ll" after "e" to get "Hello" when all the commands are done.
+                requestDispatcher.execute([
+                  InsertTextRequest(
+                    documentPosition: DocumentPosition(
+                      nodeId: insertEEvent.nodeId,
+                      nodePosition: TextNodePosition(offset: insertEEvent.offset + 1), // +1 for "e"
+                    ),
+                    textToInsert: "ll",
+                    attributions: {},
                   ),
-                  textToInsert: "ll",
-                  attributions: {},
-                ),
-              ]);
-            }),
+                ]);
+              },
+            ),
           ],
         );
 
         editor
           ..execute([
             InsertTextRequest(
-              documentPosition: const DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 0),
-              ),
+              documentPosition: const DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 0)),
               textToInsert: "H",
               attributions: const {},
             ),
           ])
           ..execute([
             InsertTextRequest(
-              documentPosition: const DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 1),
-              ),
+              documentPosition: const DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 1)),
               textToInsert: "e",
               attributions: const {},
             ),
           ])
           ..execute([
             InsertTextRequest(
-              documentPosition: const DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 4),
-              ),
+              documentPosition: const DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 4)),
               textToInsert: "o",
               attributions: const {},
             ),
@@ -279,77 +238,72 @@ void main() {
 
         final composer = MutableDocumentComposer(
           initialSelection: const DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 0),
-            ),
+            position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 0)),
           ),
         );
 
         final editor = Editor(
-          editables: {
-            Editor.documentKey: document,
-            Editor.composerKey: composer,
-          },
+          editables: {Editor.documentKey: document, Editor.composerKey: composer},
           requestHandlers: List.from(defaultRequestHandlers),
           reactionPipeline: [
             // Reaction 1 causes a change
-            FunctionalEditReaction(react: (editorContext, requestDispatcher, changeList) {
-              TextInsertionEvent? insertHEvent;
-              for (final edit in changeList) {
-                if (edit is! DocumentEdit) {
-                  continue;
+            FunctionalEditReaction(
+              react: (editorContext, requestDispatcher, changeList) {
+                TextInsertionEvent? insertHEvent;
+                for (final edit in changeList) {
+                  if (edit is! DocumentEdit) {
+                    continue;
+                  }
+                  final change = edit.change;
+                  if (change is! TextInsertionEvent) {
+                    continue;
+                  }
+
+                  insertHEvent = change.text.toPlainText() == "H" ? change : null;
                 }
-                final change = edit.change;
-                if (change is! TextInsertionEvent) {
-                  continue;
+
+                if (insertHEvent == null) {
+                  return;
                 }
 
-                insertHEvent = change.text.toPlainText() == "H" ? change : null;
-              }
-
-              if (insertHEvent == null) {
-                return;
-              }
-
-              // Insert "e" after "H".
-              requestDispatcher.execute([
-                InsertTextRequest(
-                  documentPosition: DocumentPosition(
-                    nodeId: insertHEvent.nodeId,
-                    nodePosition: TextNodePosition(offset: insertHEvent.offset),
+                // Insert "e" after "H".
+                requestDispatcher.execute([
+                  InsertTextRequest(
+                    documentPosition: DocumentPosition(
+                      nodeId: insertHEvent.nodeId,
+                      nodePosition: TextNodePosition(offset: insertHEvent.offset),
+                    ),
+                    textToInsert: "e",
+                    attributions: {},
                   ),
-                  textToInsert: "e",
-                  attributions: {},
-                ),
-              ]);
-            }),
+                ]);
+              },
+            ),
             // Reaction 2 verifies that it sees the change event from reaction 1.
-            FunctionalEditReaction(react: (editorContext, requestDispatcher, changeList) {
-              TextInsertionEvent? insertEEvent;
-              for (final edit in changeList) {
-                if (edit is! DocumentEdit) {
-                  continue;
-                }
-                final change = edit.change;
-                if (change is! TextInsertionEvent) {
-                  continue;
+            FunctionalEditReaction(
+              react: (editorContext, requestDispatcher, changeList) {
+                TextInsertionEvent? insertEEvent;
+                for (final edit in changeList) {
+                  if (edit is! DocumentEdit) {
+                    continue;
+                  }
+                  final change = edit.change;
+                  if (change is! TextInsertionEvent) {
+                    continue;
+                  }
+
+                  insertEEvent = change.text.toPlainText() == "e" ? change : null;
                 }
 
-                insertEEvent = change.text.toPlainText() == "e" ? change : null;
-              }
-
-              expect(insertEEvent, isNotNull, reason: "Reaction 2 didn't receive the change from reaction 1");
-            }),
+                expect(insertEEvent, isNotNull, reason: "Reaction 2 didn't receive the change from reaction 1");
+              },
+            ),
           ],
         );
 
         editor.execute([
           InsertTextRequest(
-            documentPosition: const DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 0),
-            ),
+            documentPosition: const DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 0)),
             textToInsert: "H",
             attributions: const {},
           ),
@@ -363,58 +317,45 @@ void main() {
 
         final composer = MutableDocumentComposer(
           initialSelection: const DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 0),
-            ),
+            position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 0)),
           ),
         );
 
         int reactionRunCount = 0;
 
         final editor = Editor(
-          editables: {
-            Editor.documentKey: document,
-            Editor.composerKey: composer,
-          },
+          editables: {Editor.documentKey: document, Editor.composerKey: composer},
           requestHandlers: List.from(defaultRequestHandlers),
           reactionPipeline: [
-            FunctionalEditReaction(react: (editorContext, requestDispatcher, changeList) {
-              reactionRunCount += 1;
+            FunctionalEditReaction(
+              react: (editorContext, requestDispatcher, changeList) {
+                reactionRunCount += 1;
 
-              // We expect this reaction to run after we execute a command, but we don't
-              // expect this reaction to react to its own command.
-              expect(reactionRunCount, lessThan(2));
+                // We expect this reaction to run after we execute a command, but we don't
+                // expect this reaction to react to its own command.
+                expect(reactionRunCount, lessThan(2));
 
-              // Insert "e" after "H".
-              requestDispatcher.execute([
-                InsertTextRequest(
-                  documentPosition: const DocumentPosition(
-                    nodeId: "1",
-                    nodePosition: TextNodePosition(offset: 1),
+                // Insert "e" after "H".
+                requestDispatcher.execute([
+                  InsertTextRequest(
+                    documentPosition: const DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 1)),
+                    textToInsert: "e",
+                    attributions: {},
                   ),
-                  textToInsert: "e",
-                  attributions: {},
-                ),
-                InsertTextRequest(
-                  documentPosition: const DocumentPosition(
-                    nodeId: "1",
-                    nodePosition: TextNodePosition(offset: 2),
+                  InsertTextRequest(
+                    documentPosition: const DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 2)),
+                    textToInsert: "l",
+                    attributions: {},
                   ),
-                  textToInsert: "l",
-                  attributions: {},
-                ),
-              ]);
-            }),
+                ]);
+              },
+            ),
           ],
         );
 
         editor.execute([
           InsertTextRequest(
-            documentPosition: const DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 0),
-            ),
+            documentPosition: const DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 0)),
             textToInsert: "H",
             attributions: const {},
           ),
@@ -427,20 +368,14 @@ void main() {
       test('inserts character at caret', () {
         final editorPieces = _createStandardEditor(
           initialSelection: const DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 0),
-            ),
+            position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 0)),
           ),
         );
 
         editorPieces.editor
           ..execute([
             InsertTextRequest(
-              documentPosition: const DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 0),
-              ),
+              documentPosition: const DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 0)),
               textToInsert: 'H',
               attributions: const {},
             ),
@@ -448,10 +383,7 @@ void main() {
           ..execute([
             const ChangeSelectionRequest(
               DocumentSelection.collapsed(
-                position: DocumentPosition(
-                  nodeId: "1",
-                  nodePosition: TextNodePosition(offset: 1),
-                ),
+                position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 1)),
               ),
               SelectionChangeType.placeCaret,
               "test",
@@ -464,10 +396,7 @@ void main() {
         expect(
           editorPieces.composer.selection,
           const DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 1),
-            ),
+            position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 1)),
           ),
         );
       });
@@ -475,19 +404,18 @@ void main() {
       test('inserts new paragraph node at caret', () {
         final editorPieces = _createStandardEditor(
           initialSelection: const DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 0),
-            ),
+            position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 0)),
           ),
         );
         int changeLogCount = 0;
         int changeEventCount = 0;
         final document = editorPieces.document;
-        editorPieces.editor.addListener(FunctionalEditListener((changeList) {
-          changeLogCount += 1;
-          changeEventCount += changeList.length;
-        }));
+        editorPieces.editor.addListener(
+          FunctionalEditListener((changeList) {
+            changeLogCount += 1;
+            changeEventCount += changeList.length;
+          }),
+        );
 
         editorPieces.editor.execute([
           SplitParagraphRequest(
@@ -495,7 +423,7 @@ void main() {
             splitPosition: const TextNodePosition(offset: 0),
             newNodeId: "2",
             replicateExistingMetadata: true,
-          )
+          ),
         ]);
 
         // Verify content changes.
@@ -519,19 +447,18 @@ void main() {
         final editorPieces = _createStandardEditor(
           initialDocument: longTextDoc(),
           initialSelection: const DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 0),
-            ),
+            position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 0)),
           ),
         );
 
         int changeLogCount = 0;
         int changeEventCount = 0;
-        editorPieces.editor.addListener(FunctionalEditListener((changeList) {
-          changeLogCount += 1;
-          changeEventCount += changeList.length;
-        }));
+        editorPieces.editor.addListener(
+          FunctionalEditListener((changeList) {
+            changeLogCount += 1;
+            changeEventCount += changeList.length;
+          }),
+        );
 
         late DocumentChangeLog documentChangeLog;
         editorPieces.document.addListener((changeLog) {
@@ -551,33 +478,29 @@ void main() {
         expect(changeEventCount, 3); // 3 nodes were moved
 
         // Verify reported document changes.
-        expect(
-          documentChangeLog.changes,
-          [
-            const NodeMovedEvent(nodeId: "1", from: 0, to: 2),
-            const NodeMovedEvent(nodeId: "2", from: 1, to: 0),
-            const NodeMovedEvent(nodeId: "3", from: 2, to: 1),
-          ],
-        );
+        expect(documentChangeLog.changes, [
+          const NodeMovedEvent(nodeId: "1", from: 0, to: 2),
+          const NodeMovedEvent(nodeId: "2", from: 1, to: 0),
+          const NodeMovedEvent(nodeId: "3", from: 2, to: 1),
+        ]);
       });
 
       test('moves a document node to a lower index', () {
         final editorPieces = _createStandardEditor(
           initialDocument: longTextDoc(),
           initialSelection: const DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 0),
-            ),
+            position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 0)),
           ),
         );
 
         int changeLogCount = 0;
         int changeEventCount = 0;
-        editorPieces.editor.addListener(FunctionalEditListener((changeList) {
-          changeLogCount += 1;
-          changeEventCount += changeList.length;
-        }));
+        editorPieces.editor.addListener(
+          FunctionalEditListener((changeList) {
+            changeLogCount += 1;
+            changeEventCount += changeList.length;
+          }),
+        );
 
         late DocumentChangeLog documentChangeLog;
         editorPieces.document.addListener((changeLog) {
@@ -596,14 +519,11 @@ void main() {
         expect(changeEventCount, 3); // 3 nodes were moved
 
         // Verify reported document changes.
-        expect(
-          documentChangeLog.changes,
-          [
-            const NodeMovedEvent(nodeId: "1", from: 0, to: 1),
-            const NodeMovedEvent(nodeId: "2", from: 1, to: 2),
-            const NodeMovedEvent(nodeId: "3", from: 2, to: 0),
-          ],
-        );
+        expect(documentChangeLog.changes, [
+          const NodeMovedEvent(nodeId: "1", from: 0, to: 1),
+          const NodeMovedEvent(nodeId: "2", from: 1, to: 2),
+          const NodeMovedEvent(nodeId: "3", from: 2, to: 0),
+        ]);
       });
 
       test('reports the node that was removed', () {
@@ -611,21 +531,21 @@ void main() {
         final editorPieces = _createStandardEditor(
           initialDocument: longTextDoc(),
           additionalReactions: [
-            FunctionalEditReaction(react: (editorContext, requestDispatcher, changeList) {
-              expect(changeList.length, 1);
+            FunctionalEditReaction(
+              react: (editorContext, requestDispatcher, changeList) {
+                expect(changeList.length, 1);
 
-              final event = changeList.first as DocumentEdit;
-              final change = event.change as NodeRemovedEvent;
-              removedNode = change.removedNode;
-            }),
+                final event = changeList.first as DocumentEdit;
+                final change = event.change as NodeRemovedEvent;
+                removedNode = change.removedNode;
+              },
+            ),
           ],
         );
 
         final nodeToRemove = editorPieces.document.getNodeById("2")!;
 
-        editorPieces.editor.execute([
-          DeleteNodeRequest(nodeId: nodeToRemove.id),
-        ]);
+        editorPieces.editor.execute([DeleteNodeRequest(nodeId: nodeToRemove.id)]);
 
         expect(removedNode, nodeToRemove);
       });
@@ -643,10 +563,7 @@ StandardEditorPieces _createStandardEditor({
 
   final composer = MutableDocumentComposer(initialSelection: initialSelection);
   final editor = Editor(
-    editables: {
-      Editor.documentKey: document,
-      Editor.composerKey: composer,
-    },
+    editables: {Editor.documentKey: document, Editor.composerKey: composer},
     requestHandlers: List.from(defaultRequestHandlers),
     reactionPipeline: [
       ...additionalReactions,

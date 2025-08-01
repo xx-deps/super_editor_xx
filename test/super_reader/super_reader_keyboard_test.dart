@@ -12,11 +12,12 @@ import 'reader_test_tools.dart';
 void main() {
   group('SuperReader keyboard >', () {
     testWidgetsOnDesktop("copies text regardless of key order", (tester) async {
-      final testContext = await tester //
-          .createDocument()
-          .fromMarkdown("This is some testing text.") // Length is 26
-          .autoFocus(true)
-          .pump();
+      final testContext =
+          await tester //
+              .createDocument()
+              .fromMarkdown("This is some testing text.") // Length is 26
+              .autoFocus(true)
+              .pump();
 
       // Select "This".
       final nodeId = testContext.documentContext.document.first.id;
@@ -259,10 +260,7 @@ void main() {
       await tester.sendKeyUpEvent(LogicalKeyboardKey.shift);
 
       // Ensure that the selection is gone.
-      expect(
-        SuperReaderInspector.findDocumentSelection(),
-        null,
-      );
+      expect(SuperReaderInspector.findDocumentSelection(), null);
     });
 
     testAllInputsOnWindowsAndLinux("and removes selection when it collapses without holding the SHIFT key", (
@@ -280,10 +278,7 @@ void main() {
       await tester.releaseKeyUp(LogicalKeyboardKey.shift);
 
       // Ensure that the selection is gone.
-      expect(
-        SuperReaderInspector.findDocumentSelection(),
-        null,
-      );
+      expect(SuperReaderInspector.findDocumentSelection(), null);
     });
 
     testAllInputsOnApple("and retains the selection when collapsed and the SHIFT key is pressed", (
@@ -333,11 +328,12 @@ Future<String> _pumpSingleLineAndSelectAWord(
   required int offset,
   required TextInputSource inputSource,
 }) async {
-  final testContext = await tester //
-      .createDocument()
-      .fromMarkdown("This is some testing text.") // Length is 26
-      .autoFocus(true)
-      .pump();
+  final testContext =
+      await tester //
+          .createDocument()
+          .fromMarkdown("This is some testing text.") // Length is 26
+          .autoFocus(true)
+          .pump();
 
   final nodeId = testContext.documentContext.document.first.id;
 
@@ -346,20 +342,17 @@ Future<String> _pumpSingleLineAndSelectAWord(
   return nodeId;
 }
 
-Future<String> _pumpDoubleLine(
-  WidgetTester tester, {
-  required int offset,
-  required TextInputSource inputSource,
-}) async {
-  final testContext = await tester //
-      .createDocument()
-      // Text indices:
-      // - first line: [0, 28] -> "first" word is [12, 17)
-      // - newline: 29
-      // - second line: [30, 58] -> "second" word is [41, 47)
-      .fromMarkdown("This is the first paragraph.\nThis is the second paragraph.")
-      .autoFocus(true)
-      .pump();
+Future<String> _pumpDoubleLine(WidgetTester tester, {required int offset, required TextInputSource inputSource}) async {
+  final testContext =
+      await tester //
+          .createDocument()
+          // Text indices:
+          // - first line: [0, 28] -> "first" word is [12, 17)
+          // - newline: 29
+          // - second line: [30, 58] -> "second" word is [41, 47)
+          .fromMarkdown("This is the first paragraph.\nThis is the second paragraph.")
+          .autoFocus(true)
+          .pump();
 
   final nodeId = testContext.documentContext.document.first.id;
 
@@ -376,7 +369,13 @@ DocumentSelection _selectionInParagraph(
   TextAffinity toAffinity = TextAffinity.downstream,
 }) {
   return DocumentSelection(
-    base: DocumentPosition(nodeId: nodeId, nodePosition: TextNodePosition(offset: from, affinity: fromAffinity)),
-    extent: DocumentPosition(nodeId: nodeId, nodePosition: TextNodePosition(offset: to, affinity: toAffinity)),
+    base: DocumentPosition(
+      nodeId: nodeId,
+      nodePosition: TextNodePosition(offset: from, affinity: fromAffinity),
+    ),
+    extent: DocumentPosition(
+      nodeId: nodeId,
+      nodePosition: TextNodePosition(offset: to, affinity: toAffinity),
+    ),
   );
 }

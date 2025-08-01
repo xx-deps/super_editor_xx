@@ -12,47 +12,35 @@ void main() {
       testWidgetsOnAllPlatforms("to full text", (tester) async {
         await tester //
             .createDocument()
-            .withCustomContent(
-              singleParagraphFullColor(),
-            )
+            .withCustomContent(singleParagraphFullColor())
             .pump();
 
         // Ensure the text is colored orange.
         final text = SuperReaderInspector.findTextInParagraph("1");
         final richText = SuperReaderInspector.findRichTextInParagraph("1");
-        expect(
-          richText.getSpanForPosition(const TextPosition(offset: 1))!.style!.color,
-          Colors.orange,
-        );
-        expect(
-          richText.getSpanForPosition(TextPosition(offset: text.length - 1))!.style!.color,
-          Colors.orange,
-        );
+        expect(richText.getSpanForPosition(const TextPosition(offset: 1))!.style!.color, Colors.orange);
+        expect(richText.getSpanForPosition(TextPosition(offset: text.length - 1))!.style!.color, Colors.orange);
       });
 
       testWidgetsOnAllPlatforms("to partial text", (tester) async {
         await tester //
             .createDocument()
-            .withCustomContent(
-              singleParagraphWithPartialColor(),
-            )
+            .withCustomContent(singleParagraphWithPartialColor())
             .pump();
 
         // Ensure the first span is colored black.
         expect(
-          SuperReaderInspector.findRichTextInParagraph("1")
-              .getSpanForPosition(const TextPosition(offset: 0))!
-              .style!
-              .color,
+          SuperReaderInspector.findRichTextInParagraph(
+            "1",
+          ).getSpanForPosition(const TextPosition(offset: 0))!.style!.color,
           Colors.black,
         );
 
         // Ensure the second span is colored orange.
         expect(
-          SuperReaderInspector.findRichTextInParagraph("1")
-              .getSpanForPosition(const TextPosition(offset: 5))!
-              .style!
-              .color,
+          SuperReaderInspector.findRichTextInParagraph(
+            "1",
+          ).getSpanForPosition(const TextPosition(offset: 5))!.style!.color,
           Colors.orange,
         );
       });

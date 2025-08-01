@@ -14,12 +14,10 @@ import '../supereditor_test_tools.dart';
 void main() {
   group('List items', () {
     group('node conversion', () {
-      testWidgetsOnArbitraryDesktop("applies styles when unordered list item is converted to and from a paragraph",
-          (WidgetTester tester) async {
-        final testContext = await _pumpUnorderedList(
-          tester,
-          styleSheet: _styleSheet,
-        );
+      testWidgetsOnArbitraryDesktop("applies styles when unordered list item is converted to and from a paragraph", (
+        WidgetTester tester,
+      ) async {
+        final testContext = await _pumpUnorderedList(tester, styleSheet: _styleSheet);
         final doc = SuperEditorInspector.findDocument()!;
 
         LayoutAwareRichText richText;
@@ -34,9 +32,7 @@ void main() {
 
         // Convert the list item to a paragraph.
         testContext.findEditContext().commonOps.convertToParagraph(
-          newMetadata: {
-            'blockType': const NamedAttribution("paragraph"),
-          },
+          newMetadata: {'blockType': const NamedAttribution("paragraph")},
         );
         await tester.pumpAndSettle();
 
@@ -47,9 +43,9 @@ void main() {
 
         // Convert the paragraph back to an unordered list item.
         testContext.findEditContext().commonOps.convertToListItem(
-              ListItemType.unordered,
-              (doc.first as ParagraphNode).text,
-            );
+          ListItemType.unordered,
+          (doc.first as ParagraphNode).text,
+        );
         await tester.pumpAndSettle();
 
         // Ensure that the textStyle for a list item was applied.
@@ -58,12 +54,10 @@ void main() {
         expect(richText.text.style!.color, Colors.blue);
       });
 
-      testWidgetsOnArbitraryDesktop("applies styles when ordered list item is converted to and from a paragraph",
-          (WidgetTester tester) async {
-        final testContext = await _pumpOrderedList(
-          tester,
-          styleSheet: _styleSheet,
-        );
+      testWidgetsOnArbitraryDesktop("applies styles when ordered list item is converted to and from a paragraph", (
+        WidgetTester tester,
+      ) async {
+        final testContext = await _pumpOrderedList(tester, styleSheet: _styleSheet);
         final doc = SuperEditorInspector.findDocument()!;
 
         LayoutAwareRichText richText;
@@ -78,9 +72,7 @@ void main() {
 
         // Convert the list item to a paragraph.
         testContext.findEditContext().commonOps.convertToParagraph(
-          newMetadata: {
-            'blockType': const NamedAttribution("paragraph"),
-          },
+          newMetadata: {'blockType': const NamedAttribution("paragraph")},
         );
         await tester.pumpAndSettle();
 
@@ -91,9 +83,9 @@ void main() {
 
         // Convert the paragraph back to an ordered list item.
         testContext.findEditContext().commonOps.convertToListItem(
-              ListItemType.ordered,
-              (doc.first as ParagraphNode).text,
-            );
+          ListItemType.ordered,
+          (doc.first as ParagraphNode).text,
+        );
         await tester.pumpAndSettle();
 
         // Ensure that the textStyle for a list item was applied.
@@ -113,14 +105,9 @@ void main() {
                   ListItemNode.unordered(
                     id: "1",
                     text: AttributedText("Non-deletable list item."),
-                    metadata: const {
-                      NodeMetadata.isDeletable: false,
-                    },
+                    metadata: const {NodeMetadata.isDeletable: false},
                   ),
-                  ParagraphNode(
-                    id: "2",
-                    text: AttributedText("A deletable paragraph."),
-                  ),
+                  ParagraphNode(id: "2", text: AttributedText("A deletable paragraph.")),
                 ],
               ),
             )
@@ -159,16 +146,8 @@ void main() {
             .withCustomContent(
               MutableDocument(
                 nodes: [
-                  ListItemNode.ordered(
-                    id: "1",
-                    text: AttributedText("A list item."),
-                  ),
-                  HorizontalRuleNode(
-                    id: "2",
-                    metadata: const {
-                      NodeMetadata.isDeletable: false,
-                    },
-                  ),
+                  ListItemNode.ordered(id: "1", text: AttributedText("A list item.")),
+                  HorizontalRuleNode(id: "2", metadata: const {NodeMetadata.isDeletable: false}),
                 ],
               ),
             )
@@ -179,14 +158,8 @@ void main() {
         editContext.editor.execute([
           const ChangeSelectionRequest(
             DocumentSelection(
-              base: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 5),
-              ),
-              extent: DocumentPosition(
-                nodeId: "2",
-                nodePosition: UpstreamDownstreamNodePosition.downstream(),
-              ),
+              base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 5)),
+              extent: DocumentPosition(nodeId: "2", nodePosition: UpstreamDownstreamNodePosition.downstream()),
             ),
             SelectionChangeType.expandSelection,
             SelectionReason.userInteraction,
@@ -348,10 +321,11 @@ void main() {
       });
 
       testWidgetsOnAllPlatforms("inserts new item on ENTER at end of existing item", (tester) async {
-        final context = await tester //
-            .createDocument()
-            .fromMarkdown('* Item 1')
-            .pump();
+        final context =
+            await tester //
+                .createDocument()
+                .fromMarkdown('* Item 1')
+                .pump();
 
         final document = context.findEditContext().document;
 
@@ -387,19 +361,17 @@ void main() {
         expect(
           SuperEditorInspector.findDocumentSelection(),
           DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: document.last.id,
-              nodePosition: const TextNodePosition(offset: 0),
-            ),
+            position: DocumentPosition(nodeId: document.last.id, nodePosition: const TextNodePosition(offset: 0)),
           ),
         );
       });
 
       testWidgetsOnAndroid("inserts new item upon new line insertion at end of existing item", (tester) async {
-        final context = await tester //
-            .createDocument()
-            .fromMarkdown('* Item 1')
-            .pump();
+        final context =
+            await tester //
+                .createDocument()
+                .fromMarkdown('* Item 1')
+                .pump();
 
         final document = context.findEditContext().document;
 
@@ -435,19 +407,17 @@ void main() {
         expect(
           SuperEditorInspector.findDocumentSelection(),
           DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: document.last.id,
-              nodePosition: const TextNodePosition(offset: 0),
-            ),
+            position: DocumentPosition(nodeId: document.last.id, nodePosition: const TextNodePosition(offset: 0)),
           ),
         );
       });
 
       testWidgetsOnWebAndroid("inserts new item upon new line insertion at end of existing item", (tester) async {
-        final context = await tester //
-            .createDocument()
-            .fromMarkdown('* Item 1')
-            .pump();
+        final context =
+            await tester //
+                .createDocument()
+                .fromMarkdown('* Item 1')
+                .pump();
 
         final document = context.findEditContext().document;
 
@@ -483,19 +453,17 @@ void main() {
         expect(
           SuperEditorInspector.findDocumentSelection(),
           DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: document.last.id,
-              nodePosition: const TextNodePosition(offset: 0),
-            ),
+            position: DocumentPosition(nodeId: document.last.id, nodePosition: const TextNodePosition(offset: 0)),
           ),
         );
       });
 
       testWidgetsOnMobile("inserts new item upon new line input action at end of existing item", (tester) async {
-        final context = await tester //
-            .createDocument()
-            .fromMarkdown('* Item 1')
-            .pump();
+        final context =
+            await tester //
+                .createDocument()
+                .fromMarkdown('* Item 1')
+                .pump();
 
         final document = context.findEditContext().document;
 
@@ -531,19 +499,17 @@ void main() {
         expect(
           SuperEditorInspector.findDocumentSelection(),
           DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: document.last.id,
-              nodePosition: const TextNodePosition(offset: 0),
-            ),
+            position: DocumentPosition(nodeId: document.last.id, nodePosition: const TextNodePosition(offset: 0)),
           ),
         );
       });
 
       testWidgetsOnAllPlatforms("splits list item into two on ENTER in middle of existing item", (tester) async {
-        final context = await tester //
-            .createDocument()
-            .fromMarkdown('* List Item')
-            .pump();
+        final context =
+            await tester //
+                .createDocument()
+                .fromMarkdown('* List Item')
+                .pump();
 
         final document = context.findEditContext().document;
 
@@ -564,20 +530,19 @@ void main() {
         expect(
           SuperEditorInspector.findDocumentSelection(),
           DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: document.last.id,
-              nodePosition: const TextNodePosition(offset: 0),
-            ),
+            position: DocumentPosition(nodeId: document.last.id, nodePosition: const TextNodePosition(offset: 0)),
           ),
         );
       });
 
-      testWidgetsOnAndroid("splits list item into two upon new line insertion in middle of existing item",
-          (tester) async {
-        final context = await tester //
-            .createDocument()
-            .fromMarkdown('* List Item')
-            .pump();
+      testWidgetsOnAndroid("splits list item into two upon new line insertion in middle of existing item", (
+        tester,
+      ) async {
+        final context =
+            await tester //
+                .createDocument()
+                .fromMarkdown('* List Item')
+                .pump();
 
         final document = context.findEditContext().document;
 
@@ -598,20 +563,19 @@ void main() {
         expect(
           SuperEditorInspector.findDocumentSelection(),
           DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: document.last.id,
-              nodePosition: const TextNodePosition(offset: 0),
-            ),
+            position: DocumentPosition(nodeId: document.last.id, nodePosition: const TextNodePosition(offset: 0)),
           ),
         );
       });
 
-      testWidgetsOnWebAndroid("splits list item into two upon new line insertion in middle of existing item",
-          (tester) async {
-        final context = await tester //
-            .createDocument()
-            .fromMarkdown('* List Item')
-            .pump();
+      testWidgetsOnWebAndroid("splits list item into two upon new line insertion in middle of existing item", (
+        tester,
+      ) async {
+        final context =
+            await tester //
+                .createDocument()
+                .fromMarkdown('* List Item')
+                .pump();
 
         final document = context.findEditContext().document;
 
@@ -632,20 +596,19 @@ void main() {
         expect(
           SuperEditorInspector.findDocumentSelection(),
           DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: document.last.id,
-              nodePosition: const TextNodePosition(offset: 0),
-            ),
+            position: DocumentPosition(nodeId: document.last.id, nodePosition: const TextNodePosition(offset: 0)),
           ),
         );
       });
 
-      testWidgetsOnMobile("splits list item into two upon new line input action in middle of existing item",
-          (tester) async {
-        final context = await tester //
-            .createDocument()
-            .fromMarkdown('* List Item')
-            .pump();
+      testWidgetsOnMobile("splits list item into two upon new line input action in middle of existing item", (
+        tester,
+      ) async {
+        final context =
+            await tester //
+                .createDocument()
+                .fromMarkdown('* List Item')
+                .pump();
 
         final document = context.findEditContext().document;
 
@@ -666,10 +629,7 @@ void main() {
         expect(
           SuperEditorInspector.findDocumentSelection(),
           DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: document.last.id,
-              nodePosition: const TextNodePosition(offset: 0),
-            ),
+            position: DocumentPosition(nodeId: document.last.id, nodePosition: const TextNodePosition(offset: 0)),
           ),
         );
       });
@@ -677,9 +637,10 @@ void main() {
 
     group('ordered list', () {
       testWidgetsOnArbitraryDesktop('keeps sequence for items split by unordered list', (tester) async {
-        final context = await tester //
-            .createDocument()
-            .fromMarkdown("""
+        final context =
+            await tester //
+                .createDocument()
+                .fromMarkdown("""
 1. First ordered item
    - First unordered item
    - Second unoredered item
@@ -687,7 +648,7 @@ void main() {
 2. Second ordered item
    - First unordered item
    - Second unoredered item""") //
-            .pump();
+                .pump();
 
         expect(context.document.nodeCount, 6);
 
@@ -728,11 +689,13 @@ void main() {
         expect(secondOrderedItem.listIndex, 2);
       });
 
-      testWidgetsOnArbitraryDesktop('keeps sequence for items split by ordered list items with higher indentation',
-          (tester) async {
-        final context = await tester //
-            .createDocument()
-            .fromMarkdown("""
+      testWidgetsOnArbitraryDesktop('keeps sequence for items split by ordered list items with higher indentation', (
+        tester,
+      ) async {
+        final context =
+            await tester //
+                .createDocument()
+                .fromMarkdown("""
  1. list item 1
  2. list item 2
     1. list item 2.1
@@ -740,7 +703,7 @@ void main() {
  3. list item 3
     1. list item 3.1
 """) //
-            .pump();
+                .pump();
 
         expect(context.document.nodeCount, 6);
 
@@ -760,16 +723,17 @@ void main() {
       });
 
       testWidgetsOnArbitraryDesktop('restarts item order when separated by an unordered item', (tester) async {
-        final context = await tester //
-            .createDocument()
-            .fromMarkdown("""
+        final context =
+            await tester //
+                .createDocument()
+                .fromMarkdown("""
 1. First ordered item
 2. Second ordered item
 - First unordered item
 - Second unordered item
 1. First ordered item
 2. Second ordered item""") //
-            .pump();
+                .pump();
 
         expect(context.document.nodeCount, 6);
 
@@ -800,15 +764,16 @@ void main() {
       });
 
       testWidgetsOnArbitraryDesktop('does not keep sequence for items split by paragraphs', (tester) async {
-        final context = await tester //
-            .createDocument()
-            .fromMarkdown("""
+        final context =
+            await tester //
+                .createDocument()
+                .fromMarkdown("""
 1. First ordered item
 
 A paragraph
 
 2. Second ordered item""") //
-            .pump();
+                .pump();
 
         expect(context.document.nodeCount, 3);
 
@@ -948,10 +913,11 @@ A paragraph
       });
 
       testWidgetsOnAllPlatforms("inserts new item on ENTER at end of existing item", (tester) async {
-        final context = await tester //
-            .createDocument()
-            .fromMarkdown('1. Item 1')
-            .pump();
+        final context =
+            await tester //
+                .createDocument()
+                .fromMarkdown('1. Item 1')
+                .pump();
 
         final document = context.findEditContext().document;
 
@@ -976,19 +942,17 @@ A paragraph
         expect(
           SuperEditorInspector.findDocumentSelection(),
           DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: document.last.id,
-              nodePosition: const TextNodePosition(offset: 0),
-            ),
+            position: DocumentPosition(nodeId: document.last.id, nodePosition: const TextNodePosition(offset: 0)),
           ),
         );
       });
 
       testWidgetsOnAndroid("inserts new item upon new line insertion at end of existing item", (tester) async {
-        final context = await tester //
-            .createDocument()
-            .fromMarkdown('1. Item 1')
-            .pump();
+        final context =
+            await tester //
+                .createDocument()
+                .fromMarkdown('1. Item 1')
+                .pump();
 
         final document = context.findEditContext().document;
 
@@ -1013,19 +977,17 @@ A paragraph
         expect(
           SuperEditorInspector.findDocumentSelection(),
           DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: document.last.id,
-              nodePosition: const TextNodePosition(offset: 0),
-            ),
+            position: DocumentPosition(nodeId: document.last.id, nodePosition: const TextNodePosition(offset: 0)),
           ),
         );
       });
 
       testWidgetsOnWebAndroid("inserts new item upon new line insertion at end of existing item", (tester) async {
-        final context = await tester //
-            .createDocument()
-            .fromMarkdown('1. Item 1')
-            .pump();
+        final context =
+            await tester //
+                .createDocument()
+                .fromMarkdown('1. Item 1')
+                .pump();
 
         final document = context.findEditContext().document;
 
@@ -1050,19 +1012,17 @@ A paragraph
         expect(
           SuperEditorInspector.findDocumentSelection(),
           DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: document.last.id,
-              nodePosition: const TextNodePosition(offset: 0),
-            ),
+            position: DocumentPosition(nodeId: document.last.id, nodePosition: const TextNodePosition(offset: 0)),
           ),
         );
       });
 
       testWidgetsOnMobile("inserts new item upon new line input action at end of existing item", (tester) async {
-        final context = await tester //
-            .createDocument()
-            .fromMarkdown('1. Item 1')
-            .pump();
+        final context =
+            await tester //
+                .createDocument()
+                .fromMarkdown('1. Item 1')
+                .pump();
 
         final document = context.findEditContext().document;
 
@@ -1087,19 +1047,17 @@ A paragraph
         expect(
           SuperEditorInspector.findDocumentSelection(),
           DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: document.last.id,
-              nodePosition: const TextNodePosition(offset: 0),
-            ),
+            position: DocumentPosition(nodeId: document.last.id, nodePosition: const TextNodePosition(offset: 0)),
           ),
         );
       });
 
       testWidgetsOnAllPlatforms("splits list item into two on ENTER in middle of existing item", (tester) async {
-        final context = await tester //
-            .createDocument()
-            .fromMarkdown('1. List Item')
-            .pump();
+        final context =
+            await tester //
+                .createDocument()
+                .fromMarkdown('1. List Item')
+                .pump();
 
         final document = context.findEditContext().document;
 
@@ -1120,20 +1078,19 @@ A paragraph
         expect(
           SuperEditorInspector.findDocumentSelection(),
           DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: document.last.id,
-              nodePosition: const TextNodePosition(offset: 0),
-            ),
+            position: DocumentPosition(nodeId: document.last.id, nodePosition: const TextNodePosition(offset: 0)),
           ),
         );
       });
 
-      testWidgetsOnAndroid("splits list item into two upon new line insertion in middle of existing item",
-          (tester) async {
-        final context = await tester //
-            .createDocument()
-            .fromMarkdown('1. List Item')
-            .pump();
+      testWidgetsOnAndroid("splits list item into two upon new line insertion in middle of existing item", (
+        tester,
+      ) async {
+        final context =
+            await tester //
+                .createDocument()
+                .fromMarkdown('1. List Item')
+                .pump();
 
         final document = context.findEditContext().document;
 
@@ -1154,20 +1111,19 @@ A paragraph
         expect(
           SuperEditorInspector.findDocumentSelection(),
           DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: document.last.id,
-              nodePosition: const TextNodePosition(offset: 0),
-            ),
+            position: DocumentPosition(nodeId: document.last.id, nodePosition: const TextNodePosition(offset: 0)),
           ),
         );
       });
 
-      testWidgetsOnWebAndroid("splits list item into two upon new line insertion in middle of existing item",
-          (tester) async {
-        final context = await tester //
-            .createDocument()
-            .fromMarkdown('1. List Item')
-            .pump();
+      testWidgetsOnWebAndroid("splits list item into two upon new line insertion in middle of existing item", (
+        tester,
+      ) async {
+        final context =
+            await tester //
+                .createDocument()
+                .fromMarkdown('1. List Item')
+                .pump();
 
         final document = context.findEditContext().document;
 
@@ -1188,20 +1144,19 @@ A paragraph
         expect(
           SuperEditorInspector.findDocumentSelection(),
           DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: document.last.id,
-              nodePosition: const TextNodePosition(offset: 0),
-            ),
+            position: DocumentPosition(nodeId: document.last.id, nodePosition: const TextNodePosition(offset: 0)),
           ),
         );
       });
 
-      testWidgetsOnMobile("splits list item into two upon new line input action in middle of existing item",
-          (tester) async {
-        final context = await tester //
-            .createDocument()
-            .fromMarkdown('1. List Item')
-            .pump();
+      testWidgetsOnMobile("splits list item into two upon new line input action in middle of existing item", (
+        tester,
+      ) async {
+        final context =
+            await tester //
+                .createDocument()
+                .fromMarkdown('1. List Item')
+                .pump();
 
         final document = context.findEditContext().document;
 
@@ -1222,10 +1177,7 @@ A paragraph
         expect(
           SuperEditorInspector.findDocumentSelection(),
           DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: document.last.id,
-              nodePosition: const TextNodePosition(offset: 0),
-            ),
+            position: DocumentPosition(nodeId: document.last.id, nodePosition: const TextNodePosition(offset: 0)),
           ),
         );
       });
@@ -1238,10 +1190,7 @@ A paragraph
 /// The first two items have one level of indentation.
 ///
 /// The last two items have two levels of indentation.
-Future<TestDocumentContext> _pumpUnorderedList(
-  WidgetTester tester, {
-  Stylesheet? styleSheet,
-}) async {
+Future<TestDocumentContext> _pumpUnorderedList(WidgetTester tester, {Stylesheet? styleSheet}) async {
   const markdown = '''
  * list item 1
  * list item 2
@@ -1260,10 +1209,7 @@ Future<TestDocumentContext> _pumpUnorderedList(
 /// The first two items have one level of indentation.
 ///
 /// The last two items have two levels of indentation.
-Future<TestDocumentContext> _pumpUnorderedListWithTextField(
-  WidgetTester tester, {
-  Stylesheet? styleSheet,
-}) async {
+Future<TestDocumentContext> _pumpUnorderedListWithTextField(WidgetTester tester, {Stylesheet? styleSheet}) async {
   const markdown = '''
  * list item 1
  * list item 2
@@ -1296,10 +1242,7 @@ Future<TestDocumentContext> _pumpUnorderedListWithTextField(
 /// The first two items have one level of indentation.
 ///
 /// The last two items have two levels of indentation.
-Future<TestDocumentContext> _pumpOrderedList(
-  WidgetTester tester, {
-  Stylesheet? styleSheet,
-}) async {
+Future<TestDocumentContext> _pumpOrderedList(WidgetTester tester, {Stylesheet? styleSheet}) async {
   const markdown = '''
  1. list item 1
  1. list item 2
@@ -1318,10 +1261,7 @@ Future<TestDocumentContext> _pumpOrderedList(
 /// The first two items have one level of indentation.
 ///
 /// The last two items have two levels of indentation.
-Future<TestDocumentContext> _pumpOrderedListWithTextField(
-  WidgetTester tester, {
-  Stylesheet? styleSheet,
-}) async {
+Future<TestDocumentContext> _pumpOrderedListWithTextField(WidgetTester tester, {Stylesheet? styleSheet}) async {
   const markdown = '''
  1. list item 1
  1. list item 2
@@ -1361,27 +1301,11 @@ TextStyle _inlineTextStyler(Set<Attribution> attributions, TextStyle base) => ba
 final _styleSheet = Stylesheet(
   inlineTextStyler: _inlineTextStyler,
   rules: [
-    StyleRule(
-      const BlockSelector("paragraph"),
-      (doc, docNode) {
-        return {
-          Styles.textStyle: const TextStyle(
-            color: Colors.red,
-            fontSize: 16,
-          ),
-        };
-      },
-    ),
-    StyleRule(
-      const BlockSelector("listItem"),
-      (doc, docNode) {
-        return {
-          Styles.textStyle: const TextStyle(
-            color: Colors.blue,
-            fontSize: 16,
-          ),
-        };
-      },
-    ),
+    StyleRule(const BlockSelector("paragraph"), (doc, docNode) {
+      return {Styles.textStyle: const TextStyle(color: Colors.red, fontSize: 16)};
+    }),
+    StyleRule(const BlockSelector("listItem"), (doc, docNode) {
+      return {Styles.textStyle: const TextStyle(color: Colors.blue, fontSize: 16)};
+    }),
   ],
 );

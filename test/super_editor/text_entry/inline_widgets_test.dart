@@ -14,20 +14,12 @@ void main() {
       final editor = await _pumpScaffold(tester);
 
       await tester.typeImeText("Hello ");
-      editor.execute([
-        const InsertInlinePlaceholderAtCaretRequest(_TestPlaceholder()),
-      ]);
+      editor.execute([const InsertInlinePlaceholderAtCaretRequest(_TestPlaceholder())]);
       await tester.typeImeText(" inline widgets");
 
       expect(
         SuperEditorInspector.findTextInComponent("1"),
-        AttributedText(
-          "Hello  inline widgets",
-          null,
-          {
-            6: const _TestPlaceholder(),
-          },
-        ),
+        AttributedText("Hello  inline widgets", null, {6: const _TestPlaceholder()}),
       );
     });
 
@@ -36,46 +28,30 @@ void main() {
 
       // Insert text with an inline placeholder.
       await tester.typeImeText("Hello ");
-      editor.execute([
-        const InsertInlinePlaceholderAtCaretRequest(_TestPlaceholder()),
-      ]);
+      editor.execute([const InsertInlinePlaceholderAtCaretRequest(_TestPlaceholder())]);
       await tester.pump();
 
       // Ensure we inserted the placeholder.
       expect(
         SuperEditorInspector.findTextInComponent("1"),
-        AttributedText(
-          "Hello ",
-          null,
-          {
-            6: const _TestPlaceholder(),
-          },
-        ),
+        AttributedText("Hello ", null, {6: const _TestPlaceholder()}),
       );
 
       // Backspace to delete the placeholder.
       await tester.pressBackspace();
 
       // Ensure the inline placeholder was deleted.
-      expect(
-        SuperEditorInspector.findTextInComponent("1"),
-        AttributedText(
-          "Hello ",
-          null,
-          {},
-        ),
-      );
+      expect(SuperEditorInspector.findTextInComponent("1"), AttributedText("Hello ", null, {}));
     });
 
-    testWidgetsOnArbitraryDesktop("can select text and apply a style change without losing placeholder",
-        (tester) async {
+    testWidgetsOnArbitraryDesktop("can select text and apply a style change without losing placeholder", (
+      tester,
+    ) async {
       final editor = await _pumpScaffold(tester);
 
       // Insert text with an inline placeholder in the middle.
       await tester.typeImeText("Hello ");
-      editor.execute([
-        const InsertInlinePlaceholderAtCaretRequest(_TestPlaceholder()),
-      ]);
+      editor.execute([const InsertInlinePlaceholderAtCaretRequest(_TestPlaceholder())]);
       await tester.typeImeText(" inline widgets");
 
       // Select text and also the inline placeholder.
@@ -83,14 +59,8 @@ void main() {
       editor.execute([
         const ChangeSelectionRequest(
           DocumentSelection(
-            base: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 6),
-            ),
-            extent: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 14),
-            ),
+            base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 6)),
+            extent: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 14)),
           ),
           SelectionChangeType.expandSelection,
           SelectionReason.userInteraction,
@@ -112,9 +82,7 @@ void main() {
               SpanMarker(attribution: boldAttribution, offset: 13, markerType: SpanMarkerType.end),
             ],
           ),
-          {
-            6: const _TestPlaceholder(),
-          },
+          {6: const _TestPlaceholder()},
         ),
       );
 
@@ -124,42 +92,28 @@ void main() {
       // Ensure the inline placeholder is still there.
       expect(
         SuperEditorInspector.findTextInComponent("1"),
-        AttributedText(
-          "Hello  inline widgets",
-          null,
-          {
-            6: const _TestPlaceholder(),
-          },
-        ),
+        AttributedText("Hello  inline widgets", null, {6: const _TestPlaceholder()}),
       );
     });
 
-    testWidgetsOnArbitraryDesktop("can insert an inline widget with attributions in an empty paragraph",
-        (tester) async {
+    testWidgetsOnArbitraryDesktop("can insert an inline widget with attributions in an empty paragraph", (
+      tester,
+    ) async {
       final editor = await _pumpScaffold(tester);
 
       // Insert an empty text containing a placeholder with an attribution around it.
       editor.execute([
         InsertStyledTextAtCaretRequest(
           AttributedText(
-              '',
-              AttributedSpans(
-                attributions: [
-                  const SpanMarker(
-                    attribution: _emojiAttribution,
-                    offset: 0,
-                    markerType: SpanMarkerType.start,
-                  ),
-                  const SpanMarker(
-                    attribution: _emojiAttribution,
-                    offset: 0,
-                    markerType: SpanMarkerType.end,
-                  ),
-                ],
-              ),
-              {
-                0: const _TestPlaceholder(),
-              }),
+            '',
+            AttributedSpans(
+              attributions: [
+                const SpanMarker(attribution: _emojiAttribution, offset: 0, markerType: SpanMarkerType.start),
+                const SpanMarker(attribution: _emojiAttribution, offset: 0, markerType: SpanMarkerType.end),
+              ],
+            ),
+            {0: const _TestPlaceholder()},
+          ),
         ),
       ]);
       await tester.pump();
@@ -179,9 +133,7 @@ void main() {
               SpanMarker(attribution: _emojiAttribution, offset: 0, markerType: SpanMarkerType.end),
             ],
           ),
-          {
-            0: const _TestPlaceholder(),
-          },
+          {0: const _TestPlaceholder()},
         ),
       );
     });
@@ -193,9 +145,7 @@ Future<Editor> _pumpScaffold(WidgetTester tester) async {
       .createDocument()
       .withSingleEmptyParagraph()
       .withInputSource(TextInputSource.ime)
-      .useStylesheet(defaultStylesheet.copyWith(
-        inlineWidgetBuilders: [_buildInlineTestWidget],
-      ))
+      .useStylesheet(defaultStylesheet.copyWith(inlineWidgetBuilders: [_buildInlineTestWidget]))
       .autoFocus(true)
       .pump();
 
@@ -207,11 +157,7 @@ Widget? _buildInlineTestWidget(BuildContext context, TextStyle style, Object pla
     return null;
   }
 
-  return Container(
-    width: 16,
-    height: 16,
-    color: Colors.black,
-  );
+  return Container(width: 16, height: 16, color: Colors.black);
 }
 
 class _TestPlaceholder {

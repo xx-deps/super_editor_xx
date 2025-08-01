@@ -29,13 +29,12 @@ void main() {
             .createDocument()
             .withSingleParagraph()
             .withSelectionStyles(const SelectionStyles(selectionColor: Colors.deepPurple))
-            .useStylesheet(defaultStylesheet.copyWith(
-              selectedTextColorStrategy: ({
-                required Color originalTextColor,
-                required Color selectionHighlightColor,
-              }) =>
-                  Colors.white,
-            ))
+            .useStylesheet(
+              defaultStylesheet.copyWith(
+                selectedTextColorStrategy:
+                    ({required Color originalTextColor, required Color selectionHighlightColor}) => Colors.white,
+              ),
+            )
             .pump();
 
         // Select the whole paragraph so that the selection color is clearly visible.

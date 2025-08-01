@@ -64,10 +64,7 @@ void main() {
               trackBuilds: true,
               child: SuperEditor(
                 editor: editor,
-                componentBuilders: [
-                  TaskComponentBuilder(editor),
-                  ...defaultComponentBuilders,
-                ],
+                componentBuilders: [TaskComponentBuilder(editor), ...defaultComponentBuilders],
               ),
             ),
           ),
@@ -152,11 +149,11 @@ Map<String, int> _findRebuildCountPerNode(Document document) {
   for (final node in document) {
     final widget = SuperEditorInspector.findWidgetForComponent<Widget>(node.id);
 
-    final superTextState = (find
-            .descendant(of: find.byWidget(widget), matching: find.byType(SuperText))
-            .evaluate()
-            .first as StatefulElement)
-        .state as SuperTextState;
+    final superTextState =
+        (find.descendant(of: find.byWidget(widget), matching: find.byType(SuperText)).evaluate().first
+                    as StatefulElement)
+                .state
+            as SuperTextState;
 
     rebuildCountPerNode[node.id] = superTextState.textBuildCount;
   }
@@ -173,12 +170,18 @@ void _ensureOnlyExpectedNodesRebuilt({
   for (final pair in previousBuildCount.entries) {
     if (expectedRebuiltNodes.contains(pair.key)) {
       // Ensure that this node was rebuilt.
-      expect(currentBuildCount[pair.key], greaterThan(pair.value),
-          reason: 'Node with id ${pair.key} wasn\'t rebuilt when it should');
+      expect(
+        currentBuildCount[pair.key],
+        greaterThan(pair.value),
+        reason: 'Node with id ${pair.key} wasn\'t rebuilt when it should',
+      );
     } else {
       // Ensure that this node wasn't rebuilt.
-      expect(currentBuildCount[pair.key], equals(pair.value),
-          reason: 'Node with id ${pair.key} was rebuilt when it shouldn\'t');
+      expect(
+        currentBuildCount[pair.key],
+        equals(pair.value),
+        reason: 'Node with id ${pair.key} was rebuilt when it shouldn\'t',
+      );
     }
   }
 }

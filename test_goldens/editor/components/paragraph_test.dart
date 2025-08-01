@@ -20,36 +20,22 @@ MutableDocument _createParagraphTestDoc() {
     nodes: [
       ParagraphNode(
         id: Editor.createNodeId(),
-        text: AttributedText(
-          'Various paragraph formations',
-        ),
-        metadata: {
-          'blockType': header1Attribution,
-        },
+        text: AttributedText('Various paragraph formations'),
+        metadata: {'blockType': header1Attribution},
       ),
       ParagraphNode(
         id: Editor.createNodeId(),
-        text: AttributedText(
-          'This is a short\nparagraph of text\nthat is left aligned',
-        ),
+        text: AttributedText('This is a short\nparagraph of text\nthat is left aligned'),
       ),
       ParagraphNode(
         id: Editor.createNodeId(),
-        text: AttributedText(
-          'This is a short\nparagraph of text\nthat is center aligned',
-        ),
-        metadata: {
-          'textAlign': 'center',
-        },
+        text: AttributedText('This is a short\nparagraph of text\nthat is center aligned'),
+        metadata: {'textAlign': 'center'},
       ),
       ParagraphNode(
         id: Editor.createNodeId(),
-        text: AttributedText(
-          'This is a short\nparagraph of text\nthat is right aligned',
-        ),
-        metadata: {
-          'textAlign': 'right',
-        },
+        text: AttributedText('This is a short\nparagraph of text\nthat is right aligned'),
+        metadata: {'textAlign': 'right'},
       ),
       ParagraphNode(
         id: Editor.createNodeId(),

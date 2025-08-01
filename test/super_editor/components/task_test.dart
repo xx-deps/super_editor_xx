@@ -15,9 +15,7 @@ void main() {
   group("SuperEditor task component", () {
     testWidgetsOnAllPlatforms("toggles on tap", (tester) async {
       final document = MutableDocument(
-        nodes: [
-          TaskNode(id: "1", text: AttributedText("This is a task"), isComplete: false),
-        ],
+        nodes: [TaskNode(id: "1", text: AttributedText("This is a task"), isComplete: false)],
       );
       await _pumpScaffold(tester, document: document);
 
@@ -42,9 +40,7 @@ void main() {
 
     testWidgetsOnAllPlatforms("can be created from empty paragraph", (tester) async {
       final document = MutableDocument(
-        nodes: [
-          ParagraphNode(id: "1", text: AttributedText("This will be a task")),
-        ],
+        nodes: [ParagraphNode(id: "1", text: AttributedText("This will be a task"))],
       );
       final editor = await _pumpScaffold(tester, document: document);
 
@@ -60,9 +56,7 @@ void main() {
     group("inserts", () {
       testWidgetsOnAllPlatforms("new task on ENTER at end of existing task", (tester) async {
         final document = MutableDocument(
-          nodes: [
-            TaskNode(id: "1", text: AttributedText("This is a task"), isComplete: false),
-          ],
+          nodes: [TaskNode(id: "1", text: AttributedText("This is a task"), isComplete: false)],
         );
         final task = document.getNodeAt(0) as TaskNode;
         await _pumpScaffold(tester, document: document);
@@ -82,19 +76,14 @@ void main() {
         expect(
           SuperEditorInspector.findDocumentSelection(),
           DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: document.last.id,
-              nodePosition: const TextNodePosition(offset: 0),
-            ),
+            position: DocumentPosition(nodeId: document.last.id, nodePosition: const TextNodePosition(offset: 0)),
           ),
         );
       });
 
       testWidgetsOnWebDesktop("new task on ENTER at end of existing task", (tester) async {
         final document = MutableDocument(
-          nodes: [
-            TaskNode(id: "1", text: AttributedText("This is a task"), isComplete: false),
-          ],
+          nodes: [TaskNode(id: "1", text: AttributedText("This is a task"), isComplete: false)],
         );
         final task = document.getNodeAt(0) as TaskNode;
         await _pumpScaffold(tester, document: document);
@@ -117,19 +106,14 @@ void main() {
         expect(
           SuperEditorInspector.findDocumentSelection(),
           DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: document.last.id,
-              nodePosition: const TextNodePosition(offset: 0),
-            ),
+            position: DocumentPosition(nodeId: document.last.id, nodePosition: const TextNodePosition(offset: 0)),
           ),
         );
       });
 
       testWidgetsOnAndroid("new task upon new line insertion at end of existing task", (tester) async {
         final document = MutableDocument(
-          nodes: [
-            TaskNode(id: "1", text: AttributedText("This is a task"), isComplete: false),
-          ],
+          nodes: [TaskNode(id: "1", text: AttributedText("This is a task"), isComplete: false)],
         );
         final task = document.getNodeAt(0) as TaskNode;
         await _pumpScaffold(tester, document: document);
@@ -149,19 +133,14 @@ void main() {
         expect(
           SuperEditorInspector.findDocumentSelection(),
           DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: document.last.id,
-              nodePosition: const TextNodePosition(offset: 0),
-            ),
+            position: DocumentPosition(nodeId: document.last.id, nodePosition: const TextNodePosition(offset: 0)),
           ),
         );
       });
 
       testWidgetsOnWebAndroid("new task upon new line insertion at end of existing task", (tester) async {
         final document = MutableDocument(
-          nodes: [
-            TaskNode(id: "1", text: AttributedText("This is a task"), isComplete: false),
-          ],
+          nodes: [TaskNode(id: "1", text: AttributedText("This is a task"), isComplete: false)],
         );
         final task = document.getNodeAt(0) as TaskNode;
         await _pumpScaffold(tester, document: document);
@@ -181,19 +160,14 @@ void main() {
         expect(
           SuperEditorInspector.findDocumentSelection(),
           DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: document.last.id,
-              nodePosition: const TextNodePosition(offset: 0),
-            ),
+            position: DocumentPosition(nodeId: document.last.id, nodePosition: const TextNodePosition(offset: 0)),
           ),
         );
       });
 
       testWidgetsOnMobile("new task upon new line input action at end of existing task", (tester) async {
         final document = MutableDocument(
-          nodes: [
-            TaskNode(id: "1", text: AttributedText("This is a task"), isComplete: false),
-          ],
+          nodes: [TaskNode(id: "1", text: AttributedText("This is a task"), isComplete: false)],
         );
         final task = document.getNodeAt(0) as TaskNode;
         await _pumpScaffold(tester, document: document);
@@ -213,10 +187,7 @@ void main() {
         expect(
           SuperEditorInspector.findDocumentSelection(),
           DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: document.last.id,
-              nodePosition: const TextNodePosition(offset: 0),
-            ),
+            position: DocumentPosition(nodeId: document.last.id, nodePosition: const TextNodePosition(offset: 0)),
           ),
         );
       });
@@ -225,9 +196,7 @@ void main() {
     group("splits", () {
       testWidgetsOnAllPlatforms("task into two on ENTER in middle of existing task", (tester) async {
         final document = MutableDocument(
-          nodes: [
-            TaskNode(id: "1", text: AttributedText("This is a task"), isComplete: false),
-          ],
+          nodes: [TaskNode(id: "1", text: AttributedText("This is a task"), isComplete: false)],
         );
         await _pumpScaffold(tester, document: document);
 
@@ -246,19 +215,14 @@ void main() {
         expect(
           SuperEditorInspector.findDocumentSelection(),
           DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: document.last.id,
-              nodePosition: const TextNodePosition(offset: 0),
-            ),
+            position: DocumentPosition(nodeId: document.last.id, nodePosition: const TextNodePosition(offset: 0)),
           ),
         );
       });
 
       testWidgetsOnAndroid("task into two upon new line insertion in middle of existing task", (tester) async {
         final document = MutableDocument(
-          nodes: [
-            TaskNode(id: "1", text: AttributedText("This is a task"), isComplete: false),
-          ],
+          nodes: [TaskNode(id: "1", text: AttributedText("This is a task"), isComplete: false)],
         );
         await _pumpScaffold(tester, document: document);
 
@@ -277,19 +241,14 @@ void main() {
         expect(
           SuperEditorInspector.findDocumentSelection(),
           DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: document.last.id,
-              nodePosition: const TextNodePosition(offset: 0),
-            ),
+            position: DocumentPosition(nodeId: document.last.id, nodePosition: const TextNodePosition(offset: 0)),
           ),
         );
       });
 
       testWidgetsOnWebAndroid("task into two upon new line insertion in middle of existing task", (tester) async {
         final document = MutableDocument(
-          nodes: [
-            TaskNode(id: "1", text: AttributedText("This is a task"), isComplete: false),
-          ],
+          nodes: [TaskNode(id: "1", text: AttributedText("This is a task"), isComplete: false)],
         );
         await _pumpScaffold(tester, document: document);
 
@@ -308,19 +267,14 @@ void main() {
         expect(
           SuperEditorInspector.findDocumentSelection(),
           DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: document.last.id,
-              nodePosition: const TextNodePosition(offset: 0),
-            ),
+            position: DocumentPosition(nodeId: document.last.id, nodePosition: const TextNodePosition(offset: 0)),
           ),
         );
       });
 
       testWidgetsOnMobile("task into two upon new line input action in middle of existing task", (tester) async {
         final document = MutableDocument(
-          nodes: [
-            TaskNode(id: "1", text: AttributedText("This is a task"), isComplete: false),
-          ],
+          nodes: [TaskNode(id: "1", text: AttributedText("This is a task"), isComplete: false)],
         );
         await _pumpScaffold(tester, document: document);
 
@@ -339,10 +293,7 @@ void main() {
         expect(
           SuperEditorInspector.findDocumentSelection(),
           DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: document.last.id,
-              nodePosition: const TextNodePosition(offset: 0),
-            ),
+            position: DocumentPosition(nodeId: document.last.id, nodePosition: const TextNodePosition(offset: 0)),
           ),
         );
       });
@@ -351,9 +302,7 @@ void main() {
     group("converts", () {
       testWidgetsOnAllPlatforms("task to paragraph when the user presses BACKSPACE at the beginning", (tester) async {
         final document = MutableDocument(
-          nodes: [
-            TaskNode(id: "1", text: AttributedText("This is a task"), isComplete: false),
-          ],
+          nodes: [TaskNode(id: "1", text: AttributedText("This is a task"), isComplete: false)],
         );
         await _pumpScaffold(tester, document: document);
 
@@ -370,37 +319,38 @@ void main() {
       });
 
       testWidgetsOnAllPlatforms(
-          "task to paragraph when the user presses BACKSPACE with software keyboard at the beginning", (tester) async {
-        final document = MutableDocument(
-          nodes: [
-            TaskNode(id: "1", text: AttributedText("This is a task"), isComplete: false),
-          ],
-        );
-        await _pumpScaffold(tester, document: document);
+        "task to paragraph when the user presses BACKSPACE with software keyboard at the beginning",
+        (tester) async {
+          final document = MutableDocument(
+            nodes: [TaskNode(id: "1", text: AttributedText("This is a task"), isComplete: false)],
+          );
+          await _pumpScaffold(tester, document: document);
 
-        // Place the caret at the beginning of the task.
-        await tester.placeCaretInParagraph("1", 0);
+          // Place the caret at the beginning of the task.
+          await tester.placeCaretInParagraph("1", 0);
 
-        // Press backspace to convert the task into a paragraph.
-        // Simulate the user pressing BACKSPACE on a software keyboard.
-        await tester.ime.sendDeltas([
-          const TextEditingDeltaNonTextUpdate(
-            oldText: ". This is a task",
-            selection: TextSelection.collapsed(offset: 2),
-            composing: TextRange.empty,
-          ),
-          const TextEditingDeltaDeletion(
+          // Press backspace to convert the task into a paragraph.
+          // Simulate the user pressing BACKSPACE on a software keyboard.
+          await tester.ime.sendDeltas([
+            const TextEditingDeltaNonTextUpdate(
+              oldText: ". This is a task",
+              selection: TextSelection.collapsed(offset: 2),
+              composing: TextRange.empty,
+            ),
+            const TextEditingDeltaDeletion(
               oldText: ". This is a task",
               deletedRange: TextRange(start: 1, end: 2),
               selection: TextSelection.collapsed(offset: 1),
-              composing: TextRange.empty),
-        ], getter: imeClientGetter);
+              composing: TextRange.empty,
+            ),
+          ], getter: imeClientGetter);
 
-        // Ensure the task converted to a paragraph.
-        expect(document.nodeCount, 1);
-        expect(document.first, isA<ParagraphNode>());
-        expect((document.first as ParagraphNode).text.toPlainText(), "This is a task");
-      });
+          // Ensure the task converted to a paragraph.
+          expect(document.nodeCount, 1);
+          expect(document.first, isA<ParagraphNode>());
+          expect((document.first as ParagraphNode).text.toPlainText(), "This is a task");
+        },
+      );
 
       testWidgetsOnAllPlatforms("task to paragraph when the user presses ENTER on an empty task", (tester) async {
         await _pumpScaffold(tester);
@@ -477,16 +427,12 @@ void main() {
 
       testWidgets("paragraph to task for incomplete task", (tester) async {
         final document = MutableDocument(
-          nodes: [
-            ParagraphNode(id: "1", text: AttributedText("This is a task")),
-          ],
+          nodes: [ParagraphNode(id: "1", text: AttributedText("This is a task"))],
         );
         final editor = await _pumpScaffold(tester, document: document);
 
         // Convert the paragraph to a task.
-        editor.execute([
-          const ConvertParagraphToTaskRequest(nodeId: "1"),
-        ]);
+        editor.execute([const ConvertParagraphToTaskRequest(nodeId: "1")]);
 
         // Ensure the paragraph is a task, and it's not checked.
         expect(document.first, isA<TaskNode>());
@@ -495,16 +441,12 @@ void main() {
 
       testWidgets("paragraph to task for complete task", (tester) async {
         final document = MutableDocument(
-          nodes: [
-            ParagraphNode(id: "1", text: AttributedText("This is a task")),
-          ],
+          nodes: [ParagraphNode(id: "1", text: AttributedText("This is a task"))],
         );
         final editor = await _pumpScaffold(tester, document: document);
 
         // Convert the paragraph to a task.
-        editor.execute([
-          const ConvertParagraphToTaskRequest(nodeId: "1", isComplete: true),
-        ]);
+        editor.execute([const ConvertParagraphToTaskRequest(nodeId: "1", isComplete: true)]);
 
         // Ensure the paragraph is a task, and it IS checked.
         expect(document.first, isA<TaskNode>());
@@ -515,9 +457,7 @@ void main() {
     group("indentation >", () {
       testWidgetsOnDesktop("does nothing without parent task", (tester) async {
         final document = MutableDocument(
-          nodes: [
-            TaskNode(id: "1", text: AttributedText("can't indent"), isComplete: false),
-          ],
+          nodes: [TaskNode(id: "1", text: AttributedText("can't indent"), isComplete: false)],
         );
         await _pumpScaffold(tester, document: document);
 
@@ -708,9 +648,7 @@ void main() {
         final editor = await _pumpScaffold(tester, document: document);
 
         // Delete the 2nd task.
-        editor.execute([
-          DeleteNodeRequest(nodeId: "2"),
-        ]);
+        editor.execute([DeleteNodeRequest(nodeId: "2")]);
         await tester.pump();
 
         // Ensure that the third task automatically decreased its indent.
@@ -727,9 +665,7 @@ void main() {
 
 Future<Editor> _pumpScaffold(WidgetTester tester, {MutableDocument? document}) async {
   document ??= MutableDocument(
-    nodes: [
-      TaskNode(id: "1", text: AttributedText(), isComplete: false),
-    ],
+    nodes: [TaskNode(id: "1", text: AttributedText(), isComplete: false)],
   );
 
   final composer = MutableDocumentComposer();
@@ -737,11 +673,7 @@ Future<Editor> _pumpScaffold(WidgetTester tester, {MutableDocument? document}) a
 
   await tester.pumpWidget(
     MaterialApp(
-      home: Scaffold(
-        body: SuperEditor(
-          editor: editor,
-        ),
-      ),
+      home: Scaffold(body: SuperEditor(editor: editor)),
     ),
   );
 

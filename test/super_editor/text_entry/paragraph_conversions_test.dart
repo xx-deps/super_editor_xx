@@ -11,38 +11,36 @@ import '../supereditor_test_tools.dart';
 void main() {
   group("SuperEditor content conversion >", () {
     group("paragraph to headers >", () {
-      testWidgetsOnAllPlatforms(
-        "with '#'",
-        (tester) async {
-          final headerVariant = _headerVariant.currentValue!;
+      testWidgetsOnAllPlatforms("with '#'", (tester) async {
+        final headerVariant = _headerVariant.currentValue!;
 
-          final context = await tester //
-              .createDocument()
-              .withSingleEmptyParagraph()
-              .withInputSource(TextInputSource.ime)
-              .autoFocus(true)
-              .pump();
+        final context =
+            await tester //
+                .createDocument()
+                .withSingleEmptyParagraph()
+                .withInputSource(TextInputSource.ime)
+                .autoFocus(true)
+                .pump();
 
-          // Type the token that should cause an auto-conversion.
-          await tester.typeImeText(headerVariant.$1);
+        // Type the token that should cause an auto-conversion.
+        await tester.typeImeText(headerVariant.$1);
 
-          // Ensure that the paragraph is now a header, and it's content is empty.
-          final document = context.findEditContext().document;
-          final paragraph = document.first as ParagraphNode;
+        // Ensure that the paragraph is now a header, and it's content is empty.
+        final document = context.findEditContext().document;
+        final paragraph = document.first as ParagraphNode;
 
-          expect(paragraph.metadata['blockType'], headerVariant.$2);
-          expect(paragraph.text.toPlainText().isEmpty, isTrue);
-        },
-        variant: _headerVariant,
-      );
+        expect(paragraph.metadata['blockType'], headerVariant.$2);
+        expect(paragraph.text.toPlainText().isEmpty, isTrue);
+      }, variant: _headerVariant);
 
       testWidgetsOnAllPlatforms("does not convert with 7 or more #", (tester) async {
-        final context = await tester //
-            .createDocument()
-            .withSingleEmptyParagraph()
-            .withInputSource(TextInputSource.ime)
-            .autoFocus(true)
-            .pump();
+        final context =
+            await tester //
+                .createDocument()
+                .withSingleEmptyParagraph()
+                .withInputSource(TextInputSource.ime)
+                .autoFocus(true)
+                .pump();
 
         // Type a header token that's longer than the smallest supported header
         await tester.typeImeText("####### ");
@@ -58,12 +56,13 @@ void main() {
 
     group("paragraph to unordered list >", () {
       testWidgetsOnAllPlatforms('with', (tester) async {
-        final context = await tester //
-            .createDocument()
-            .withSingleEmptyParagraph()
-            .withInputSource(TextInputSource.ime)
-            .autoFocus(true)
-            .pump();
+        final context =
+            await tester //
+                .createDocument()
+                .withSingleEmptyParagraph()
+                .withInputSource(TextInputSource.ime)
+                .autoFocus(true)
+                .pump();
 
         final unorderedListItemPattern = _unorderedListVariant.currentValue!;
         await tester.typeImeText(unorderedListItemPattern);
@@ -75,12 +74,13 @@ void main() {
       }, variant: _unorderedListVariant);
 
       testWidgetsOnAllPlatforms('does not convert "1 "', (tester) async {
-        final context = await tester //
-            .createDocument()
-            .withSingleEmptyParagraph()
-            .withInputSource(TextInputSource.ime)
-            .autoFocus(true)
-            .pump();
+        final context =
+            await tester //
+                .createDocument()
+                .withSingleEmptyParagraph()
+                .withInputSource(TextInputSource.ime)
+                .autoFocus(true)
+                .pump();
 
         await tester.typeImeText("1 ");
 
@@ -90,12 +90,13 @@ void main() {
       });
 
       testWidgetsOnAllPlatforms('does not convert " 1 "', (tester) async {
-        final context = await tester //
-            .createDocument()
-            .withSingleEmptyParagraph()
-            .withInputSource(TextInputSource.ime)
-            .autoFocus(true)
-            .pump();
+        final context =
+            await tester //
+                .createDocument()
+                .withSingleEmptyParagraph()
+                .withInputSource(TextInputSource.ime)
+                .autoFocus(true)
+                .pump();
 
         await tester.typeImeText(" 1 ");
 
@@ -107,12 +108,13 @@ void main() {
 
     group("paragraph to ordered list >", () {
       testWidgetsOnAllPlatforms('with', (tester) async {
-        final context = await tester //
-            .createDocument()
-            .withSingleEmptyParagraph()
-            .withInputSource(TextInputSource.ime)
-            .autoFocus(true)
-            .pump();
+        final context =
+            await tester //
+                .createDocument()
+                .withSingleEmptyParagraph()
+                .withInputSource(TextInputSource.ime)
+                .autoFocus(true)
+                .pump();
 
         final orderedListItemPattern = _orderedListVariant.currentValue!;
         await tester.typeImeText(orderedListItemPattern);
@@ -124,18 +126,19 @@ void main() {
       }, variant: _orderedListVariant);
 
       testWidgetsOnAllPlatforms('with a number that continues the sequence', (tester) async {
-        final context = await tester //
-            .createDocument()
-            .fromMarkdown('''
+        final context =
+            await tester //
+                .createDocument()
+                .fromMarkdown('''
 1. First item
 2. Second item
 3. Third item
 
 
 ''')
-            .withInputSource(TextInputSource.ime)
-            .autoFocus(true)
-            .pump();
+                .withInputSource(TextInputSource.ime)
+                .autoFocus(true)
+                .pump();
 
         final document = context.document;
         await tester.placeCaretInParagraph(document.getNodeAt(3)!.id, 0);
@@ -151,18 +154,19 @@ void main() {
       }, variant: _orderedListNumberVariant);
 
       testWidgetsOnAllPlatforms('does not convert with a number that does not continues the sequence', (tester) async {
-        final context = await tester //
-            .createDocument()
-            .fromMarkdown('''
+        final context =
+            await tester //
+                .createDocument()
+                .fromMarkdown('''
 1. First item
 2. Second item
 3. Third item
 
 
 ''')
-            .withInputSource(TextInputSource.ime)
-            .autoFocus(true)
-            .pump();
+                .withInputSource(TextInputSource.ime)
+                .autoFocus(true)
+                .pump();
 
         final document = context.document;
         await tester.placeCaretInParagraph(document.getNodeAt(3)!.id, 0);
@@ -178,12 +182,13 @@ void main() {
       }, variant: _orderedListNumberVariant);
 
       testWidgetsOnAllPlatforms('does not start a list with a number bigger than one', (tester) async {
-        final context = await tester //
-            .createDocument()
-            .withSingleEmptyParagraph()
-            .withInputSource(TextInputSource.ime)
-            .autoFocus(true)
-            .pump();
+        final context =
+            await tester //
+                .createDocument()
+                .withSingleEmptyParagraph()
+                .withInputSource(TextInputSource.ime)
+                .autoFocus(true)
+                .pump();
 
         final document = context.document;
         await tester.placeCaretInParagraph('1', 0);
@@ -199,12 +204,13 @@ void main() {
       }, variant: _orderedListNumberVariant);
 
       testWidgetsOnAllPlatforms('does not convert "1 "', (tester) async {
-        final context = await tester //
-            .createDocument()
-            .withSingleEmptyParagraph()
-            .withInputSource(TextInputSource.ime)
-            .autoFocus(true)
-            .pump();
+        final context =
+            await tester //
+                .createDocument()
+                .withSingleEmptyParagraph()
+                .withInputSource(TextInputSource.ime)
+                .autoFocus(true)
+                .pump();
 
         await tester.typeImeText("1 ");
 
@@ -214,12 +220,13 @@ void main() {
       });
 
       testWidgetsOnAllPlatforms('does not convert " 1 "', (tester) async {
-        final context = await tester //
-            .createDocument()
-            .withSingleEmptyParagraph()
-            .withInputSource(TextInputSource.ime)
-            .autoFocus(true)
-            .pump();
+        final context =
+            await tester //
+                .createDocument()
+                .withSingleEmptyParagraph()
+                .withInputSource(TextInputSource.ime)
+                .autoFocus(true)
+                .pump();
 
         await tester.typeImeText(" 1 ");
 
@@ -234,12 +241,13 @@ void main() {
         tester, {
         required TextInputSource inputSource,
       }) async {
-        final context = await tester //
-            .createDocument()
-            .withSingleEmptyParagraph()
-            .withInputSource(inputSource)
-            .autoFocus(true)
-            .pump();
+        final context =
+            await tester //
+                .createDocument()
+                .withSingleEmptyParagraph()
+                .withInputSource(inputSource)
+                .autoFocus(true)
+                .pump();
 
         await tester.typeTextAdaptive("--- ");
 
@@ -256,11 +264,12 @@ void main() {
         tester, {
         required TextInputSource inputSource,
       }) async {
-        final context = await tester //
-            .createDocument()
-            .fromMarkdown('Existing paragraph')
-            .withInputSource(inputSource)
-            .pump();
+        final context =
+            await tester //
+                .createDocument()
+                .fromMarkdown('Existing paragraph')
+                .withInputSource(inputSource)
+                .pump();
 
         // Place the caret at the beginning of the document.
         await tester.placeCaretInParagraph(context.document.first.id, 0);
@@ -288,12 +297,13 @@ void main() {
       });
 
       testWidgetsOnAllPlatforms('does not convert non-HR dashes', (tester) async {
-        final context = await tester //
-            .createDocument()
-            .withSingleEmptyParagraph()
-            .withInputSource(TextInputSource.ime)
-            .autoFocus(true)
-            .pump();
+        final context =
+            await tester //
+                .createDocument()
+                .withSingleEmptyParagraph()
+                .withInputSource(TextInputSource.ime)
+                .autoFocus(true)
+                .pump();
 
         final nonHrInputAndResult = _nonHrVariant.currentValue!;
         final input = nonHrInputAndResult.input;
@@ -309,12 +319,13 @@ void main() {
 
     group("paragraph to blockquote >", () {
       testWidgetsOnAllPlatforms("with '> '", (tester) async {
-        final context = await tester //
-            .createDocument()
-            .withSingleEmptyParagraph()
-            .withInputSource(TextInputSource.ime)
-            .autoFocus(true)
-            .pump();
+        final context =
+            await tester //
+                .createDocument()
+                .withSingleEmptyParagraph()
+                .withInputSource(TextInputSource.ime)
+                .autoFocus(true)
+                .pump();
 
         await tester.typeImeText("> ");
 
@@ -329,11 +340,12 @@ void main() {
 
     group("converts to paragraph when backspace is pressed >", () {
       testWidgetsOnAllPlatforms("headers", (tester) async {
-        final context = await tester //
-            .createDocument()
-            .fromMarkdown("# My Header")
-            .withInputSource(TextInputSource.ime)
-            .pump();
+        final context =
+            await tester //
+                .createDocument()
+                .fromMarkdown("# My Header")
+                .withInputSource(TextInputSource.ime)
+                .pump();
         final document = context.document;
 
         await tester.placeCaretInParagraph(document.first.id, 0);
@@ -342,22 +354,19 @@ void main() {
         expect(document.first.metadata["blockType"], header1Attribution);
 
         // Simulate a backspace deletion delta.
-        await tester.ime.sendDeltas(
-          [
-            const TextEditingDeltaNonTextUpdate(
-              oldText: ". My Header",
-              selection: TextSelection(baseOffset: 1, extentOffset: 2),
-              composing: TextRange.empty,
-            ),
-            const TextEditingDeltaDeletion(
-              oldText: ". My Header",
-              selection: TextSelection.collapsed(offset: 1),
-              deletedRange: TextRange(start: 1, end: 2),
-              composing: TextRange.empty,
-            ),
-          ],
-          getter: imeClientGetter,
-        );
+        await tester.ime.sendDeltas([
+          const TextEditingDeltaNonTextUpdate(
+            oldText: ". My Header",
+            selection: TextSelection(baseOffset: 1, extentOffset: 2),
+            composing: TextRange.empty,
+          ),
+          const TextEditingDeltaDeletion(
+            oldText: ". My Header",
+            selection: TextSelection.collapsed(offset: 1),
+            deletedRange: TextRange(start: 1, end: 2),
+            composing: TextRange.empty,
+          ),
+        ], getter: imeClientGetter);
 
         // Ensure that the header became a paragraph.
         expect(document.first.metadata["blockType"], paragraphAttribution);
@@ -365,11 +374,12 @@ void main() {
       });
 
       testWidgetsOnAllPlatforms("blockquotes", (tester) async {
-        final context = await tester //
-            .createDocument()
-            .fromMarkdown("> My Blockquote")
-            .withInputSource(TextInputSource.ime)
-            .pump();
+        final context =
+            await tester //
+                .createDocument()
+                .fromMarkdown("> My Blockquote")
+                .withInputSource(TextInputSource.ime)
+                .pump();
         final document = context.document;
 
         await tester.placeCaretInParagraph(document.first.id, 0);
@@ -378,22 +388,19 @@ void main() {
         expect(document.first.metadata["blockType"], blockquoteAttribution);
 
         // Simulate a backspace deletion delta.
-        await tester.ime.sendDeltas(
-          [
-            const TextEditingDeltaNonTextUpdate(
-              oldText: ". My Blockquote",
-              selection: TextSelection(baseOffset: 1, extentOffset: 2),
-              composing: TextRange.empty,
-            ),
-            const TextEditingDeltaDeletion(
-              oldText: ". My Blockquote",
-              selection: TextSelection.collapsed(offset: 1),
-              deletedRange: TextRange(start: 1, end: 2),
-              composing: TextRange.empty,
-            ),
-          ],
-          getter: imeClientGetter,
-        );
+        await tester.ime.sendDeltas([
+          const TextEditingDeltaNonTextUpdate(
+            oldText: ". My Blockquote",
+            selection: TextSelection(baseOffset: 1, extentOffset: 2),
+            composing: TextRange.empty,
+          ),
+          const TextEditingDeltaDeletion(
+            oldText: ". My Blockquote",
+            selection: TextSelection.collapsed(offset: 1),
+            deletedRange: TextRange(start: 1, end: 2),
+            composing: TextRange.empty,
+          ),
+        ], getter: imeClientGetter);
 
         // Ensure that the blockquote became a paragraph.
         expect(document.first.metadata["blockType"], paragraphAttribution);
@@ -401,11 +408,12 @@ void main() {
       });
 
       testWidgetsOnAllPlatforms("ordered list items", (tester) async {
-        final context = await tester //
-            .createDocument()
-            .fromMarkdown("1. My list item")
-            .withInputSource(TextInputSource.ime)
-            .pump();
+        final context =
+            await tester //
+                .createDocument()
+                .fromMarkdown("1. My list item")
+                .withInputSource(TextInputSource.ime)
+                .pump();
         final document = context.document;
 
         await tester.placeCaretInParagraph(document.first.id, 0);
@@ -414,22 +422,19 @@ void main() {
         expect(document.first, isA<ListItemNode>());
 
         // Simulate a backspace deletion delta.
-        await tester.ime.sendDeltas(
-          [
-            const TextEditingDeltaNonTextUpdate(
-              oldText: ". My list item",
-              selection: TextSelection(baseOffset: 1, extentOffset: 2),
-              composing: TextRange.empty,
-            ),
-            const TextEditingDeltaDeletion(
-              oldText: ". My list item",
-              selection: TextSelection.collapsed(offset: 1),
-              deletedRange: TextRange(start: 1, end: 2),
-              composing: TextRange.empty,
-            ),
-          ],
-          getter: imeClientGetter,
-        );
+        await tester.ime.sendDeltas([
+          const TextEditingDeltaNonTextUpdate(
+            oldText: ". My list item",
+            selection: TextSelection(baseOffset: 1, extentOffset: 2),
+            composing: TextRange.empty,
+          ),
+          const TextEditingDeltaDeletion(
+            oldText: ". My list item",
+            selection: TextSelection.collapsed(offset: 1),
+            deletedRange: TextRange(start: 1, end: 2),
+            composing: TextRange.empty,
+          ),
+        ], getter: imeClientGetter);
 
         // Ensure that the list item became a paragraph.
         final newNode = document.first;
@@ -450,26 +455,11 @@ final _headerVariant = ValueVariant({
   ("###### ", header6Attribution),
 });
 
-final _unorderedListVariant = ValueVariant({
-  "* ",
-  " * ",
-  "- ",
-  " - ",
-});
+final _unorderedListVariant = ValueVariant({"* ", " * ", "- ", " - "});
 
-final _orderedListVariant = ValueVariant({
-  "1. ",
-  " 1. ",
-  "1) ",
-  " 1) ",
-});
+final _orderedListVariant = ValueVariant({"1. ", " 1. ", "1) ", " 1) "});
 
-final _orderedListNumberVariant = ValueVariant({
-  "n. ",
-  " n. ",
-  "n) ",
-  " n) ",
-});
+final _orderedListNumberVariant = ValueVariant({"n. ", " n. ", "n) ", " n) "});
 
 /// Holds sequence of character that shouldn't produce a horizontal rule
 /// and the expected resulting text after running the editor reactions.
@@ -483,10 +473,7 @@ final _nonHrVariant = ValueVariant(const {
 /// A test text input and the expected resulting text after running
 /// the editor reactions.
 class _TestInput {
-  const _TestInput({
-    required this.input,
-    required this.expectedResult,
-  });
+  const _TestInput({required this.input, required this.expectedResult});
 
   final String input;
   final String expectedResult;

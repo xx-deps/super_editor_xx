@@ -40,45 +40,27 @@ class TestDocumentSelector {
   /// Configures the editor with a [Document] that's parsed from the
   /// given [markdown].
   TestDocumentConfigurator fromMarkdown(String markdown) {
-    return TestDocumentConfigurator._(
-      _widgetTester,
-      deserializeMarkdownToDocument(markdown),
-    );
+    return TestDocumentConfigurator._(_widgetTester, deserializeMarkdownToDocument(markdown));
   }
 
   TestDocumentConfigurator withSingleEmptyParagraph() {
-    return TestDocumentConfigurator._(
-      _widgetTester,
-      singleParagraphEmptyDoc(),
-    );
+    return TestDocumentConfigurator._(_widgetTester, singleParagraphEmptyDoc());
   }
 
   TestDocumentConfigurator withSingleParagraph() {
-    return TestDocumentConfigurator._(
-      _widgetTester,
-      singleParagraphDoc(),
-    );
+    return TestDocumentConfigurator._(_widgetTester, singleParagraphDoc());
   }
 
   TestDocumentConfigurator withSingleParagraphShort() {
-    return TestDocumentConfigurator._(
-      _widgetTester,
-      singleParagraphShortDoc(),
-    );
+    return TestDocumentConfigurator._(_widgetTester, singleParagraphShortDoc());
   }
 
   TestDocumentConfigurator withTwoEmptyParagraphs() {
-    return TestDocumentConfigurator._(
-      _widgetTester,
-      twoParagraphEmptyDoc(),
-    );
+    return TestDocumentConfigurator._(_widgetTester, twoParagraphEmptyDoc());
   }
 
   TestDocumentConfigurator withLongTextContent() {
-    return TestDocumentConfigurator._(
-      _widgetTester,
-      longTextDoc(),
-    );
+    return TestDocumentConfigurator._(_widgetTester, longTextDoc());
   }
 }
 
@@ -107,9 +89,7 @@ class TestDocumentConfigurator {
 
   /// Configures the [SuperReader] for standard desktop interactions,
   /// e.g., mouse and keyboard input.
-  TestDocumentConfigurator forDesktop({
-    TextInputSource inputSource = TextInputSource.keyboard,
-  }) {
+  TestDocumentConfigurator forDesktop({TextInputSource inputSource = TextInputSource.keyboard}) {
     _gestureMode = DocumentGestureMode.mouse;
     return this;
   }
@@ -257,10 +237,7 @@ class TestDocumentConfigurator {
 
     final layoutKey = GlobalKey();
     final documentContext = SuperReaderContext(
-      editor: createDefaultDocumentEditor(
-        document: _document!,
-        composer: MutableDocumentComposer(),
-      ),
+      editor: createDefaultDocumentEditor(document: _document!, composer: MutableDocumentComposer()),
       getDocumentLayout: () => layoutKey.currentState as DocumentLayout,
       scroller: DocumentScroller(),
     );
@@ -274,9 +251,7 @@ class TestDocumentConfigurator {
     final superDocument = _buildConstrainedContent(
       _buildAncestorScrollable(
         child: SuperReaderIosControlsScope(
-          controller: SuperReaderIosControlsController(
-            toolbarBuilder: _iOSToolbarBuilder,
-          ),
+          controller: SuperReaderIosControlsController(toolbarBuilder: _iOSToolbarBuilder),
           child: SuperReader(
             focusNode: testContext.focusNode,
             autofocus: _autoFocus,
@@ -286,10 +261,7 @@ class TestDocumentConfigurator {
             selectionStyle: _selectionStyles,
             gestureMode: _gestureMode ?? _defaultGestureMode,
             stylesheet: _stylesheet,
-            componentBuilders: [
-              ..._addedComponents,
-              ...(_componentBuilders ?? readOnlyDefaultComponentBuilders),
-            ],
+            componentBuilders: [..._addedComponents, ...(_componentBuilders ?? readOnlyDefaultComponentBuilders)],
             scrollController: _scrollController,
             androidToolbarBuilder: _androidToolbarBuilder,
           ),
@@ -297,9 +269,7 @@ class TestDocumentConfigurator {
       ),
     );
 
-    await _widgetTester.pumpWidget(
-      _buildWidgetTree(superDocument),
-    );
+    await _widgetTester.pumpWidget(_buildWidgetTree(superDocument));
 
     return testContext;
   }
@@ -307,10 +277,7 @@ class TestDocumentConfigurator {
   Widget _buildConstrainedContent(Widget superReader) {
     if (_editorSize != null) {
       return ConstrainedBox(
-        constraints: BoxConstraints(
-          maxWidth: _editorSize!.width,
-          maxHeight: _editorSize!.height,
-        ),
+        constraints: BoxConstraints(maxWidth: _editorSize!.width, maxHeight: _editorSize!.height),
         child: superReader,
       );
     }
@@ -323,12 +290,7 @@ class TestDocumentConfigurator {
       return child;
     }
 
-    return CustomScrollView(
-      controller: _scrollController,
-      slivers: [
-        child,
-      ],
-    );
+    return CustomScrollView(controller: _scrollController, slivers: [child]);
   }
 
   Widget _buildWidgetTree(Widget superReader) {
@@ -337,9 +299,7 @@ class TestDocumentConfigurator {
     }
     return MaterialApp(
       theme: _appTheme,
-      home: Scaffold(
-        body: superReader,
-      ),
+      home: Scaffold(body: superReader),
       debugShowCheckedModeBanner: false,
     );
   }
@@ -382,12 +342,7 @@ class DocumentEqualsMarkdownMatcher extends Matcher {
   }
 
   @override
-  Description describeMismatch(
-    covariant Object target,
-    Description mismatchDescription,
-    Map matchState,
-    bool verbose,
-  ) {
+  Description describeMismatch(covariant Object target, Description mismatchDescription, Map matchState, bool verbose) {
     final mismatchReason = _calculateMismatchReason(target, matchState);
     if (mismatchReason != null) {
       mismatchDescription.add(mismatchReason);
@@ -395,10 +350,7 @@ class DocumentEqualsMarkdownMatcher extends Matcher {
     return mismatchDescription;
   }
 
-  String? _calculateMismatchReason(
-    Object target,
-    Map<dynamic, dynamic> matchState,
-  ) {
+  String? _calculateMismatchReason(Object target, Map<dynamic, dynamic> matchState) {
     late Document actualDocument;
     if (target is Document) {
       actualDocument = target;
@@ -447,12 +399,7 @@ class EquivalentDocumentMatcher extends Matcher {
   }
 
   @override
-  Description describeMismatch(
-    covariant Object target,
-    Description mismatchDescription,
-    Map matchState,
-    bool verbose,
-  ) {
+  Description describeMismatch(covariant Object target, Description mismatchDescription, Map matchState, bool verbose) {
     final mismatchReason = _calculateMismatchReason(target, matchState);
     if (mismatchReason != null) {
       mismatchDescription.add(mismatchReason);
@@ -460,10 +407,7 @@ class EquivalentDocumentMatcher extends Matcher {
     return mismatchDescription;
   }
 
-  String? _calculateMismatchReason(
-    Object target,
-    Map<dynamic, dynamic> matchState,
-  ) {
+  String? _calculateMismatchReason(Object target, Map<dynamic, dynamic> matchState) {
     late Document actualDocument;
     if (target is Document) {
       actualDocument = target;

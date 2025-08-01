@@ -16,9 +16,7 @@ void main() {
 
       addTearDown(() => tester.platformDispatcher.clearAllTestValues());
 
-      final controller = AttributedTextEditingController(
-        text: AttributedText('Lorem ipsum dolor sit amet'),
-      );
+      final controller = AttributedTextEditingController(text: AttributedText('Lorem ipsum dolor sit amet'));
 
       await tester.pumpWidget(
         MaterialApp(

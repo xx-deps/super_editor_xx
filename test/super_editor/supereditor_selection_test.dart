@@ -59,9 +59,15 @@ void main() {
                       AttributedSpans(
                         attributions: [
                           const SpanMarker(
-                              attribution: ColorAttribution(Colors.green), offset: 0, markerType: SpanMarkerType.start),
+                            attribution: ColorAttribution(Colors.green),
+                            offset: 0,
+                            markerType: SpanMarkerType.start,
+                          ),
                           const SpanMarker(
-                              attribution: ColorAttribution(Colors.green), offset: 16, markerType: SpanMarkerType.end),
+                            attribution: ColorAttribution(Colors.green),
+                            offset: 16,
+                            markerType: SpanMarkerType.end,
+                          ),
                         ],
                       ),
                     ),
@@ -160,10 +166,11 @@ void main() {
     });
 
     testWidgetsOnArbitraryDesktop("calculates downstream document selection within a single node", (tester) async {
-      final testContext = await tester //
-          .createDocument() //
-          .fromMarkdown("This is paragraph one.\nThis is paragraph two.") //
-          .pump();
+      final testContext =
+          await tester //
+              .createDocument() //
+              .fromMarkdown("This is paragraph one.\nThis is paragraph two.") //
+              .pump();
       final nodeId = testContext.findEditContext().document.first.id;
 
       /// Triple tap on the first line in the paragraph node.
@@ -191,8 +198,9 @@ void main() {
       );
     });
 
-    testWidgetsOnArbitraryDesktop("doesn't select an unselectable component at base (dragging upstream)",
-        (tester) async {
+    testWidgetsOnArbitraryDesktop("doesn't select an unselectable component at base (dragging upstream)", (
+      tester,
+    ) async {
       final testContext = await _pumpUnselectableComponentTestApp(tester);
 
       final firstParagraphId = testContext.findEditContext().document.first.id;
@@ -218,8 +226,9 @@ void main() {
       );
     });
 
-    testWidgetsOnArbitraryDesktop("doesn't select an unselectable component at extent (dragging upstream)",
-        (tester) async {
+    testWidgetsOnArbitraryDesktop("doesn't select an unselectable component at extent (dragging upstream)", (
+      tester,
+    ) async {
       final testContext = await _pumpUnselectableComponentTestApp(tester);
 
       final secondParagraphId = testContext.findEditContext().document.last.id;
@@ -240,18 +249,17 @@ void main() {
         selection,
         DocumentSelection(
           base: DocumentPosition(
-              nodeId: secondParagraphId,
-              nodePosition: const TextNodePosition(
-                offset: 16,
-                affinity: TextAffinity.upstream,
-              )),
+            nodeId: secondParagraphId,
+            nodePosition: const TextNodePosition(offset: 16, affinity: TextAffinity.upstream),
+          ),
           extent: DocumentPosition(nodeId: secondParagraphId, nodePosition: const TextNodePosition(offset: 0)),
         ),
       );
     });
 
-    testWidgetsOnArbitraryDesktop("doesn't select an unselectable component at base (dragging downstream)",
-        (tester) async {
+    testWidgetsOnArbitraryDesktop("doesn't select an unselectable component at base (dragging downstream)", (
+      tester,
+    ) async {
       final testContext = await _pumpUnselectableComponentTestApp(tester);
 
       final secondParagraphId = testContext.findEditContext().document.last.id;
@@ -273,17 +281,16 @@ void main() {
         DocumentSelection(
           base: DocumentPosition(nodeId: secondParagraphId, nodePosition: const TextNodePosition(offset: 0)),
           extent: DocumentPosition(
-              nodeId: secondParagraphId,
-              nodePosition: const TextNodePosition(
-                offset: 16,
-                affinity: TextAffinity.upstream,
-              )),
+            nodeId: secondParagraphId,
+            nodePosition: const TextNodePosition(offset: 16, affinity: TextAffinity.upstream),
+          ),
         ),
       );
     });
 
-    testWidgetsOnArbitraryDesktop("doesn't select an unselectable component at extent (dragging downstream)",
-        (tester) async {
+    testWidgetsOnArbitraryDesktop("doesn't select an unselectable component at extent (dragging downstream)", (
+      tester,
+    ) async {
       final testContext = await _pumpUnselectableComponentTestApp(tester);
 
       final firstParagraphId = testContext.findEditContext().document.first.id;
@@ -309,8 +316,9 @@ void main() {
       );
     });
 
-    testWidgetsOnArbitraryDesktop("selects paragraphs surrounding an unselectable component (dragging upstream)",
-        (tester) async {
+    testWidgetsOnArbitraryDesktop("selects paragraphs surrounding an unselectable component (dragging upstream)", (
+      tester,
+    ) async {
       final testContext = await _pumpUnselectableComponentTestApp(tester);
 
       final firstParagraphId = testContext.findEditContext().document.first.id;
@@ -340,8 +348,9 @@ void main() {
       );
     });
 
-    testWidgetsOnArbitraryDesktop("selects paragraphs surrounding an unselectable component (dragging downstream)",
-        (tester) async {
+    testWidgetsOnArbitraryDesktop("selects paragraphs surrounding an unselectable component (dragging downstream)", (
+      tester,
+    ) async {
       final testContext = await _pumpUnselectableComponentTestApp(tester);
 
       final firstParagraphId = testContext.findEditContext().document.first.id;
@@ -364,93 +373,69 @@ void main() {
         DocumentSelection(
           base: DocumentPosition(nodeId: firstParagraphId, nodePosition: const TextNodePosition(offset: 0)),
           extent: DocumentPosition(
-              nodeId: secondParagraphId,
-              nodePosition: const TextNodePosition(
-                offset: 16,
-                affinity: TextAffinity.upstream,
-              )),
+            nodeId: secondParagraphId,
+            nodePosition: const TextNodePosition(offset: 16, affinity: TextAffinity.upstream),
+          ),
         ),
       );
     });
 
-    testWidgetsOnArbitraryDesktop("keeps selection base while dragging a selection across components that change size",
-        (tester) async {
-      final document = MutableDocument(
-        nodes: [
-          TaskNode(
-            id: '1',
-            text: AttributedText('Task 1'),
-            isComplete: false,
-          ),
-          TaskNode(
-            id: '2',
-            text: AttributedText('Task 2'),
-            isComplete: false,
-          ),
-          TaskNode(
-            id: '3',
-            text: AttributedText('Task 3'),
-            isComplete: false,
-          ),
-        ],
-      );
+    testWidgetsOnArbitraryDesktop(
+      "keeps selection base while dragging a selection across components that change size",
+      (tester) async {
+        final document = MutableDocument(
+          nodes: [
+            TaskNode(id: '1', text: AttributedText('Task 1'), isComplete: false),
+            TaskNode(id: '2', text: AttributedText('Task 2'), isComplete: false),
+            TaskNode(id: '3', text: AttributedText('Task 3'), isComplete: false),
+          ],
+        );
 
-      await tester //
-          .createDocument()
-          .withCustomContent(document)
-          .withAddedComponents([ExpandingTaskComponentBuilder()]) //
-          .pump();
+        await tester //
+            .createDocument()
+            .withCustomContent(document)
+            .withAddedComponents([ExpandingTaskComponentBuilder()]) //
+            .pump();
 
-      // Place the caret at "Tas|k 3" to make it expand.
-      await tester.placeCaretInParagraph('3', 3);
-      expect(
-        SuperEditorInspector.findDocumentSelection(),
-        selectionEquivalentTo(
-          const DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: '3',
-              nodePosition: TextNodePosition(offset: 3),
+        // Place the caret at "Tas|k 3" to make it expand.
+        await tester.placeCaretInParagraph('3', 3);
+        expect(
+          SuperEditorInspector.findDocumentSelection(),
+          selectionEquivalentTo(
+            const DocumentSelection.collapsed(
+              position: DocumentPosition(nodeId: '3', nodePosition: TextNodePosition(offset: 3)),
             ),
           ),
-        ),
-      );
+        );
 
-      // Start dragging from "Tas|k 3" to the beginning of the document.
-      final gesture = await tester.startDocumentDragFromPosition(
-        from: const DocumentPosition(
-          nodeId: '3',
-          nodePosition: TextNodePosition(offset: 3),
-        ),
-      );
-      addTearDown(() => gesture.removePointer());
+        // Start dragging from "Tas|k 3" to the beginning of the document.
+        final gesture = await tester.startDocumentDragFromPosition(
+          from: const DocumentPosition(nodeId: '3', nodePosition: TextNodePosition(offset: 3)),
+        );
+        addTearDown(() => gesture.removePointer());
 
-      // Gradually move up until the beginning of the document.
-      for (int i = 0; i <= 10; i++) {
-        await gesture.moveBy(const Offset(0, -30));
-        await tester.pump();
-      }
+        // Gradually move up until the beginning of the document.
+        for (int i = 0; i <= 10; i++) {
+          await gesture.moveBy(const Offset(0, -30));
+          await tester.pump();
+        }
 
-      // Ensure the selection expanded to the beginning of the document
-      // and the selection base was retained.
-      expect(
-        SuperEditorInspector.findDocumentSelection(),
-        selectionEquivalentTo(
-          const DocumentSelection(
-            base: DocumentPosition(
-              nodeId: '3',
-              nodePosition: TextNodePosition(offset: 3),
-            ),
-            extent: DocumentPosition(
-              nodeId: '1',
-              nodePosition: TextNodePosition(offset: 0),
+        // Ensure the selection expanded to the beginning of the document
+        // and the selection base was retained.
+        expect(
+          SuperEditorInspector.findDocumentSelection(),
+          selectionEquivalentTo(
+            const DocumentSelection(
+              base: DocumentPosition(nodeId: '3', nodePosition: TextNodePosition(offset: 3)),
+              extent: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 0)),
             ),
           ),
-        ),
-      );
+        );
 
-      // Pump with enough time to expire the tap recognizer timer.
-      await tester.pump(kTapTimeout);
-    });
+        // Pump with enough time to expire the tap recognizer timer.
+        await tester.pump(kTapTimeout);
+      },
+    );
 
     testWidgetsOnAllPlatforms("removes caret when it loses focus", (tester) async {
       await tester
@@ -515,10 +500,7 @@ void main() {
       expect(
         SuperEditorInspector.findDocumentSelection(),
         DocumentSelection.collapsed(
-          position: DocumentPosition(
-            nodeId: doc!.last.id,
-            nodePosition: const TextNodePosition(offset: 477),
-          ),
+          position: DocumentPosition(nodeId: doc!.last.id, nodePosition: const TextNodePosition(offset: 477)),
         ),
       );
 
@@ -559,10 +541,7 @@ void main() {
       expect(
         SuperEditorInspector.findDocumentSelection(),
         DocumentSelection.collapsed(
-          position: DocumentPosition(
-            nodeId: doc!.last.id,
-            nodePosition: const TextNodePosition(offset: 477),
-          ),
+          position: DocumentPosition(nodeId: doc!.last.id, nodePosition: const TextNodePosition(offset: 477)),
         ),
       );
 
@@ -570,15 +549,17 @@ void main() {
       expect(_caretFinder(), findsOneWidget);
     });
 
-    testWidgetsOnAllPlatforms("places caret at end of document upon first editor focus when requesting focus",
-        (tester) async {
+    testWidgetsOnAllPlatforms("places caret at end of document upon first editor focus when requesting focus", (
+      tester,
+    ) async {
       final focusNode = FocusNode();
 
       await tester //
           .createDocument()
           .withLongTextContent()
           .withFocusNode(focusNode)
-          .withAddedComponents([const _UnselectableHrComponentBuilder()]).pump();
+          .withAddedComponents([const _UnselectableHrComponentBuilder()])
+          .pump();
 
       // Ensure the editor doesn't have a selection.
       expect(SuperEditorInspector.findDocumentSelection(), isNull);
@@ -593,10 +574,7 @@ void main() {
       expect(
         SuperEditorInspector.findDocumentSelection(),
         DocumentSelection.collapsed(
-          position: DocumentPosition(
-            nodeId: doc!.last.id,
-            nodePosition: const TextNodePosition(offset: 477),
-          ),
+          position: DocumentPosition(nodeId: doc!.last.id, nodePosition: const TextNodePosition(offset: 477)),
         ),
       );
 
@@ -609,7 +587,8 @@ void main() {
           .createDocument()
           .withLongTextContent()
           .autoFocus(true)
-          .withAddedComponents([const _UnselectableHrComponentBuilder()]).pump();
+          .withAddedComponents([const _UnselectableHrComponentBuilder()])
+          .pump();
 
       await tester.pumpAndSettle();
 
@@ -619,10 +598,7 @@ void main() {
       expect(
         SuperEditorInspector.findDocumentSelection(),
         DocumentSelection.collapsed(
-          position: DocumentPosition(
-            nodeId: doc!.last.id,
-            nodePosition: const TextNodePosition(offset: 477),
-          ),
+          position: DocumentPosition(nodeId: doc!.last.id, nodePosition: const TextNodePosition(offset: 477)),
         ),
       );
 
@@ -669,10 +645,7 @@ Second Paragraph
       expect(
         SuperEditorInspector.findDocumentSelection(),
         DocumentSelection.collapsed(
-          position: DocumentPosition(
-            nodeId: secondParagraphNodeId,
-            nodePosition: const TextNodePosition(offset: 16),
-          ),
+          position: DocumentPosition(nodeId: secondParagraphNodeId, nodePosition: const TextNodePosition(offset: 16)),
         ),
       );
 
@@ -710,9 +683,7 @@ Second Paragraph
                         inputSource: TextInputSource.keyboard,
                       ),
                     ),
-                    Expanded(
-                      child: superEditor,
-                    ),
+                    Expanded(child: superEditor),
                   ],
                 ),
               ),
@@ -761,9 +732,7 @@ Second Paragraph
           .withSingleParagraph()
           .withInputSource(TextInputSource.ime)
           .withFocusNode(editorFocus)
-          .withImePolicies(
-            const SuperEditorImePolicies(closeKeyboardOnLosePrimaryFocus: true),
-          )
+          .withImePolicies(const SuperEditorImePolicies(closeKeyboardOnLosePrimaryFocus: true))
           .withCustomWidgetTreeBuilder(
             (superEditor) => MaterialApp(
               home: Scaffold(
@@ -781,9 +750,7 @@ Second Paragraph
                         inputSource: TextInputSource.keyboard,
                       ),
                     ),
-                    Expanded(
-                      child: superEditor,
-                    ),
+                    Expanded(child: superEditor),
                   ],
                 ),
               ),
@@ -834,9 +801,7 @@ Second Paragraph
           .withInputSource(TextInputSource.ime)
           .withFocusNode(editorFocus)
           .withSelection(initialEditorSelection)
-          .withSelectionPolicies(const SuperEditorSelectionPolicies(
-            clearSelectionWhenEditorLosesFocus: true,
-          ))
+          .withSelectionPolicies(const SuperEditorSelectionPolicies(clearSelectionWhenEditorLosesFocus: true))
           .withCustomWidgetTreeBuilder(
             (superEditor) => MaterialApp(
               home: Scaffold(
@@ -851,9 +816,7 @@ Second Paragraph
                         inputSource: TextInputSource.ime,
                       ),
                     ),
-                    Expanded(
-                      child: superEditor,
-                    ),
+                    Expanded(child: superEditor),
                   ],
                 ),
               ),
@@ -903,10 +866,7 @@ Second Paragraph
       expect(
         SuperEditorInspector.findDocumentSelection(),
         const DocumentSelection.collapsed(
-          position: DocumentPosition(
-            nodeId: '1',
-            nodePosition: TextNodePosition(offset: 8),
-          ),
+          position: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 8)),
         ),
       );
 
@@ -925,10 +885,7 @@ Second Paragraph
       expect(
         SuperEditorInspector.findDocumentSelection(),
         const DocumentSelection.collapsed(
-          position: DocumentPosition(
-            nodeId: '1',
-            nodePosition: TextNodePosition(offset: 8),
-          ),
+          position: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 8)),
         ),
       );
 
@@ -960,10 +917,7 @@ Second Paragraph
       expect(
         SuperEditorInspector.findDocumentSelection(),
         const DocumentSelection.collapsed(
-          position: DocumentPosition(
-            nodeId: '1',
-            nodePosition: TextNodePosition(offset: 8),
-          ),
+          position: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 8)),
         ),
       );
 
@@ -982,10 +936,7 @@ Second Paragraph
       expect(
         SuperEditorInspector.findDocumentSelection(),
         const DocumentSelection.collapsed(
-          position: DocumentPosition(
-            nodeId: '1',
-            nodePosition: TextNodePosition(offset: 8),
-          ),
+          position: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 8)),
         ),
       );
 
@@ -993,8 +944,9 @@ Second Paragraph
       expect(_caretFinder(), findsOneWidget);
     });
 
-    testWidgetsOnAllPlatforms("places caret at the previous selection when re-focusing by requesting focus",
-        (tester) async {
+    testWidgetsOnAllPlatforms("places caret at the previous selection when re-focusing by requesting focus", (
+      tester,
+    ) async {
       final focusNode = FocusNode();
 
       await tester
@@ -1021,10 +973,7 @@ Second Paragraph
       expect(
         SuperEditorInspector.findDocumentSelection(),
         const DocumentSelection.collapsed(
-          position: DocumentPosition(
-            nodeId: '1',
-            nodePosition: TextNodePosition(offset: 8),
-          ),
+          position: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 8)),
         ),
       );
 
@@ -1043,10 +992,7 @@ Second Paragraph
       expect(
         SuperEditorInspector.findDocumentSelection(),
         const DocumentSelection.collapsed(
-          position: DocumentPosition(
-            nodeId: '1',
-            nodePosition: TextNodePosition(offset: 8),
-          ),
+          position: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 8)),
         ),
       );
 
@@ -1054,8 +1000,9 @@ Second Paragraph
       expect(_caretFinder(), findsOneWidget);
     });
 
-    testWidgetsOnAllPlatforms("doesn't restore previous selection upon re-focusing when selected node was deleted",
-        (tester) async {
+    testWidgetsOnAllPlatforms("doesn't restore previous selection upon re-focusing when selected node was deleted", (
+      tester,
+    ) async {
       final focusNode = FocusNode();
 
       final context = await tester
@@ -1082,10 +1029,7 @@ Second Paragraph
       expect(
         SuperEditorInspector.findDocumentSelection(),
         const DocumentSelection.collapsed(
-          position: DocumentPosition(
-            nodeId: '1',
-            nodePosition: TextNodePosition(offset: 0),
-          ),
+          position: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 0)),
         ),
       );
 
@@ -1097,9 +1041,7 @@ Second Paragraph
       expect(SuperEditorInspector.findDocumentSelection(), isNull);
 
       // Delete the selected node.
-      context.findEditContext().editor.execute([
-        DeleteNodeRequest(nodeId: "1"),
-      ]);
+      context.findEditContext().editor.execute([DeleteNodeRequest(nodeId: "1")]);
 
       // Focus the editor.
       focusNode.requestFocus();
@@ -1113,10 +1055,7 @@ Second Paragraph
       final focusNode = FocusNode();
 
       const initialSelection = DocumentSelection.collapsed(
-        position: DocumentPosition(
-          nodeId: '1',
-          nodePosition: TextNodePosition(offset: 6),
-        ),
+        position: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 6)),
       );
 
       await tester //
@@ -1149,39 +1088,35 @@ Second Paragraph
 
       final text = SuperEditorInspector.findTextInComponent('1').toPlainText();
 
-      await tester.ime.sendDeltas(
-        [
-          TextEditingDeltaNonTextUpdate(
-            oldText: '. $text',
-            selection: const TextSelection.collapsed(offset: 8),
-            composing: const TextSelection.collapsed(offset: 8),
-          )
-        ],
-        getter: imeClientGetter,
-      );
+      await tester.ime.sendDeltas([
+        TextEditingDeltaNonTextUpdate(
+          oldText: '. $text',
+          selection: const TextSelection.collapsed(offset: 8),
+          composing: const TextSelection.collapsed(offset: 8),
+        ),
+      ], getter: imeClientGetter);
 
       expect(
         SuperEditorInspector.findDocumentSelection(),
         const DocumentSelection.collapsed(
-          position: DocumentPosition(
-            nodeId: '1',
-            nodePosition: TextNodePosition(offset: 6),
-          ),
+          position: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 6)),
         ),
       );
     });
 
-    testWidgetsOnAllPlatforms("doesn't notify about selection changes when the selection hasn't changed",
-        (tester) async {
+    testWidgetsOnAllPlatforms("doesn't notify about selection changes when the selection hasn't changed", (
+      tester,
+    ) async {
       // The composer pauses and restarts selection notifications, which is an unusual
       // behavior. We want to ensure that when the selection doesn't actually change,
       // this system doesn't send selection change notifications.
 
-      final context = await tester //
-          .createDocument()
-          .withLongTextContent()
-          .autoFocus(true)
-          .pump();
+      final context =
+          await tester //
+              .createDocument()
+              .withLongTextContent()
+              .autoFocus(true)
+              .pump();
 
       final doc = context.findEditContext().document;
       final composer = context.findEditContext().composer;
@@ -1199,10 +1134,7 @@ Second Paragraph
       expect(
         SuperEditorInspector.findDocumentSelection(),
         DocumentSelection.collapsed(
-          position: DocumentPosition(
-            nodeId: doc.last.id,
-            nodePosition: const TextNodePosition(offset: 477),
-          ),
+          position: DocumentPosition(nodeId: doc.last.id, nodePosition: const TextNodePosition(offset: 477)),
         ),
       );
 
@@ -1210,10 +1142,7 @@ Second Paragraph
       context.findEditContext().editor.execute([
         ChangeSelectionRequest(
           DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: doc.last.id,
-              nodePosition: const TextNodePosition(offset: 477),
-            ),
+            position: DocumentPosition(nodeId: doc.last.id, nodePosition: const TextNodePosition(offset: 477)),
           ),
           SelectionChangeType.placeCaret,
           SelectionReason.userInteraction,
@@ -1238,10 +1167,7 @@ First Paragraph
 
 Second Paragraph
 """)
-      .withComponentBuilders([
-        const _UnselectableHrComponentBuilder(),
-        ...defaultComponentBuilders,
-      ])
+      .withComponentBuilders([const _UnselectableHrComponentBuilder(), ...defaultComponentBuilders])
       .withEditorSize(const Size(300, 300))
       .pump();
 }
@@ -1260,22 +1186,19 @@ class _UnselectableHrComponentBuilder implements ComponentBuilder {
 
   @override
   Widget? createComponent(
-      SingleColumnDocumentComponentContext componentContext, SingleColumnLayoutComponentViewModel componentViewModel) {
+    SingleColumnDocumentComponentContext componentContext,
+    SingleColumnLayoutComponentViewModel componentViewModel,
+  ) {
     if (componentViewModel is! HorizontalRuleComponentViewModel) {
       return null;
     }
 
-    return _UnselectableHorizontalRuleComponent(
-      componentKey: componentContext.componentKey,
-    );
+    return _UnselectableHorizontalRuleComponent(componentKey: componentContext.componentKey);
   }
 }
 
 class _UnselectableHorizontalRuleComponent extends StatelessWidget {
-  const _UnselectableHorizontalRuleComponent({
-    Key? key,
-    required this.componentKey,
-  }) : super(key: key);
+  const _UnselectableHorizontalRuleComponent({Key? key, required this.componentKey}) : super(key: key);
 
   final GlobalKey componentKey;
 
@@ -1284,10 +1207,7 @@ class _UnselectableHorizontalRuleComponent extends StatelessWidget {
     return BoxComponent(
       key: componentKey,
       isVisuallySelectable: false,
-      child: const Divider(
-        color: Color(0xFF000000),
-        thickness: 1.0,
-      ),
+      child: const Divider(color: Color(0xFF000000), thickness: 1.0),
     );
   }
 }

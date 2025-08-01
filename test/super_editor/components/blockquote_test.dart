@@ -27,8 +27,9 @@ void main() {
     });
 
     group("insert newlines >", () {
-      testWidgetsOnAllPlatforms("inserts newline in middle and splits blockquote into two blockquotes",
-          (WidgetTester tester) async {
+      testWidgetsOnAllPlatforms("inserts newline in middle and splits blockquote into two blockquotes", (
+        WidgetTester tester,
+      ) async {
         await tester
             .createDocument() //
             .withCustomContent(_singleBlockquoteDoc())
@@ -66,8 +67,9 @@ void main() {
         expect(document.last.asTextNode.text.toPlainText(), "a blockquote.");
       });
 
-      testWidgetsOnAllPlatforms("inserts newline at end of blockquote to create a new empty paragraph",
-          (WidgetTester tester) async {
+      testWidgetsOnAllPlatforms("inserts newline at end of blockquote to create a new empty paragraph", (
+        WidgetTester tester,
+      ) async {
         await tester
             .createDocument() //
             .withCustomContent(_singleBlockquoteDoc())
@@ -108,26 +110,21 @@ void main() {
 }
 
 MutableDocument _singleBlockquoteDoc() => MutableDocument(
-      nodes: [
-        ParagraphNode(
-          id: '1',
-          text: AttributedText("This is a blockquote."),
-          metadata: const {'blockType': blockquoteAttribution},
-        )
-      ],
-    );
+  nodes: [
+    ParagraphNode(
+      id: '1',
+      text: AttributedText("This is a blockquote."),
+      metadata: const {'blockType': blockquoteAttribution},
+    ),
+  ],
+);
 
 final _styleSheet = Stylesheet(
   inlineTextStyler: _inlineTextStyler,
   rules: [
-    StyleRule(
-      const BlockSelector("blockquote"),
-      (doc, docNode) {
-        return {
-          Styles.textStyle: const TextStyle(color: Colors.blue, fontSize: 16),
-        };
-      },
-    ),
+    StyleRule(const BlockSelector("blockquote"), (doc, docNode) {
+      return {Styles.textStyle: const TextStyle(color: Colors.blue, fontSize: 16)};
+    }),
   ],
 );
 

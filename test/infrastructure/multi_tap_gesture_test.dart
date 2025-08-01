@@ -120,21 +120,30 @@ void main() {
       int timeoutCount = 0;
 
       await tester.pumpWidget(
-        _buildGestureScaffold(recognizer, onTapDown: (_) {
-          tapDownCount += 1;
-        }, onTap: () {
-          tapCount += 1;
-        }, onDoubleTapDown: (_) {
-          doubleTapDownCount += 1;
-        }, onDoubleTap: () {
-          doubleTapCount += 1;
-        }, onTripleTapDown: (_) {
-          tripleTapDownCount += 1;
-        }, onTripleTap: () {
-          tripleTapCount += 1;
-        }, onTimeout: () {
-          timeoutCount += 1;
-        }),
+        _buildGestureScaffold(
+          recognizer,
+          onTapDown: (_) {
+            tapDownCount += 1;
+          },
+          onTap: () {
+            tapCount += 1;
+          },
+          onDoubleTapDown: (_) {
+            doubleTapDownCount += 1;
+          },
+          onDoubleTap: () {
+            doubleTapCount += 1;
+          },
+          onTripleTapDown: (_) {
+            tripleTapDownCount += 1;
+          },
+          onTripleTap: () {
+            tripleTapCount += 1;
+          },
+          onTimeout: () {
+            timeoutCount += 1;
+          },
+        ),
       );
 
       TestGesture gesture = await tester.startGesture(tester.getCenter(tapTargetFinder));
@@ -407,12 +416,7 @@ void main() {
                   },
                 ),
               },
-              child: Container(
-                key: const ValueKey('tap-target'),
-                width: 48,
-                height: 48,
-                color: Colors.red,
-              ),
+              child: Container(key: const ValueKey('tap-target'), width: 48, height: 48, color: Colors.red),
             ),
           ),
         ),
@@ -469,12 +473,7 @@ Widget _buildGestureScaffold(
             },
           ),
         },
-        child: Container(
-          key: const ValueKey('tap-target'),
-          width: 48,
-          height: 48,
-          color: Colors.red,
-        ),
+        child: Container(key: const ValueKey('tap-target'), width: 48, height: 48, color: Colors.red),
       ),
     ),
   );

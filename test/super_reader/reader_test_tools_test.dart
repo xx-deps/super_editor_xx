@@ -14,10 +14,7 @@ void main() {
             .forDesktop() //
             .pump();
 
-        expect(
-          SuperReaderInspector.findDocument(),
-          equalsMarkdown(""),
-        );
+        expect(SuperReaderInspector.findDocument(), equalsMarkdown(""));
       });
 
       testWidgetsOnMac("when the document has a single paragraph", (tester) async {
@@ -27,10 +24,7 @@ void main() {
             .forDesktop() //
             .pump();
 
-        expect(
-          SuperReaderInspector.findDocument()!,
-          equalsMarkdown("Hello, **world!**"),
-        );
+        expect(SuperReaderInspector.findDocument()!, equalsMarkdown("Hello, **world!**"));
       });
 
       testWidgetsOnMac("when the document has multiple paragraphs", (tester) async {

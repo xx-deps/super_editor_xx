@@ -85,14 +85,8 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection(
-              base: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 17),
-              ),
-              extent: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 6),
-              ),
+              base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 17)),
+              extent: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 6)),
             ),
           );
 
@@ -137,14 +131,8 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection(
-              base: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 17),
-              ),
-              extent: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 6),
-              ),
+              base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 17)),
+              extent: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 6)),
             ),
           );
 
@@ -166,14 +154,8 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection(
-              base: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 17),
-              ),
-              extent: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 10),
-              ),
+              base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 17)),
+              extent: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 10)),
             ),
           );
 
@@ -278,14 +260,8 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection(
-              base: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 12),
-              ),
-              extent: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 21),
-              ),
+              base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 12)),
+              extent: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 21)),
             ),
           );
 
@@ -329,14 +305,8 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection(
-              base: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 12),
-              ),
-              extent: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 21),
-              ),
+              base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 12)),
+              extent: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 21)),
             ),
           );
 
@@ -358,14 +328,8 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection(
-              base: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 12),
-              ),
-              extent: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 19),
-              ),
+              base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 12)),
+              extent: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 19)),
             ),
           );
 
@@ -441,20 +405,12 @@ void main() {
                 MutableDocument(
                   nodes: [
                     ImageNode(id: '1', imageUrl: ''),
-                    ParagraphNode(
-                      id: '2',
-                      text: AttributedText('Lorem ipsum dolor'),
-                    )
+                    ParagraphNode(id: '2', text: AttributedText('Lorem ipsum dolor')),
                   ],
                 ),
               )
-              .withAddedComponents(
-            [
-              const FakeImageComponentBuilder(
-                size: Size(100, 100),
-              ),
-            ],
-          ).pump();
+              .withAddedComponents([const FakeImageComponentBuilder(size: Size(100, 100))])
+              .pump();
 
           // Long press near the top of the image.
           final tapDownOffset = tester.getTopLeft(find.byType(ImageComponent)) + const Offset(0, 10);
@@ -472,8 +428,10 @@ void main() {
 
           // Drag down from the image to the begining of the paragraph.
           const dragIncrementCount = 10;
-          final verticalDragDistance =
-              Offset(0, (tester.getTopLeft(find.byType(TextComponent)).dy - tapDownOffset.dy) / dragIncrementCount);
+          final verticalDragDistance = Offset(
+            0,
+            (tester.getTopLeft(find.byType(TextComponent)).dy - tapDownOffset.dy) / dragIncrementCount,
+          );
           for (int i = 0; i < dragIncrementCount; i += 1) {
             await gesture.moveBy(verticalDragDistance);
             await tester.pump();
@@ -484,10 +442,7 @@ void main() {
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection(
               base: DocumentPosition(nodeId: '1', nodePosition: UpstreamDownstreamNodePosition.upstream()),
-              extent: DocumentPosition(
-                nodeId: "2",
-                nodePosition: TextNodePosition(offset: 5),
-              ),
+              extent: DocumentPosition(nodeId: "2", nodePosition: TextNodePosition(offset: 5)),
             ),
           );
 
@@ -502,21 +457,13 @@ void main() {
               .withCustomContent(
                 MutableDocument(
                   nodes: [
-                    ParagraphNode(
-                      id: '1',
-                      text: AttributedText('Lorem ipsum dolor'),
-                    ),
+                    ParagraphNode(id: '1', text: AttributedText('Lorem ipsum dolor')),
                     ImageNode(id: '2', imageUrl: ''),
                   ],
                 ),
               )
-              .withAddedComponents(
-            [
-              const FakeImageComponentBuilder(
-                size: Size(100, 100),
-              ),
-            ],
-          ).pump();
+              .withAddedComponents([const FakeImageComponentBuilder(size: Size(100, 100))])
+              .pump();
 
           // Long press near the top of the image.
           final tapDownOffset = tester.getTopLeft(find.byType(ImageComponent)) + const Offset(0, 10);
@@ -534,8 +481,10 @@ void main() {
 
           // Drag up from the image to the begining of the paragraph.
           const dragIncrementCount = 10;
-          final verticalDragDistance =
-              Offset(0, (tester.getTopLeft(find.byType(TextComponent)).dy - tapDownOffset.dy) / dragIncrementCount);
+          final verticalDragDistance = Offset(
+            0,
+            (tester.getTopLeft(find.byType(TextComponent)).dy - tapDownOffset.dy) / dragIncrementCount,
+          );
           for (int i = 0; i < dragIncrementCount; i += 1) {
             await gesture.moveBy(verticalDragDistance);
             await tester.pump();
@@ -546,10 +495,7 @@ void main() {
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection(
               base: DocumentPosition(nodeId: '2', nodePosition: UpstreamDownstreamNodePosition.downstream()),
-              extent: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 0),
-              ),
+              extent: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 0)),
             ),
           );
 
@@ -592,14 +538,8 @@ void main() {
             SuperEditorInspector.findDocumentSelection(),
             selectionEquivalentTo(
               const DocumentSelection(
-                base: DocumentPosition(
-                  nodeId: "1",
-                  nodePosition: TextNodePosition(offset: 12),
-                ),
-                extent: DocumentPosition(
-                  nodeId: "1",
-                  nodePosition: TextNodePosition(offset: 21),
-                ),
+                base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 12)),
+                extent: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 21)),
               ),
             ),
           );
@@ -638,14 +578,8 @@ void main() {
             SuperEditorInspector.findDocumentSelection(),
             selectionEquivalentTo(
               const DocumentSelection(
-                base: DocumentPosition(
-                  nodeId: "1",
-                  nodePosition: TextNodePosition(offset: 12),
-                ),
-                extent: DocumentPosition(
-                  nodeId: "1",
-                  nodePosition: TextNodePosition(offset: 21),
-                ),
+                base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 12)),
+                extent: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 21)),
               ),
             ),
           );
@@ -669,14 +603,8 @@ void main() {
             SuperEditorInspector.findDocumentSelection(),
             selectionEquivalentTo(
               const DocumentSelection(
-                base: DocumentPosition(
-                  nodeId: "1",
-                  nodePosition: TextNodePosition(offset: 12),
-                ),
-                extent: DocumentPosition(
-                  nodeId: "1",
-                  nodePosition: TextNodePosition(offset: 19),
-                ),
+                base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 12)),
+                extent: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 19)),
               ),
             ),
           );
@@ -714,14 +642,8 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection(
-              base: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 6),
-              ),
-              extent: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 17),
-              ),
+              base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 6)),
+              extent: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 17)),
             ),
           );
 
@@ -758,14 +680,8 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection(
-              base: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 6),
-              ),
-              extent: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 17),
-              ),
+              base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 6)),
+              extent: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 17)),
             ),
           );
 
@@ -784,14 +700,8 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection(
-              base: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 10),
-              ),
-              extent: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 17),
-              ),
+              base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 10)),
+              extent: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 17)),
             ),
           );
 
@@ -830,22 +740,14 @@ Future<void> _pumpAppWithLongText(WidgetTester tester) async {
       // "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod...",
       .withSingleParagraph()
       .withAndroidToolbarBuilder(
-        (context, key, leaderLink) => AndroidTextEditingFloatingToolbar(
-          floatingToolbarKey: key,
-        ),
+        (context, key, leaderLink) => AndroidTextEditingFloatingToolbar(floatingToolbarKey: key),
       )
       .pump();
 }
 
 const _wordConsecteturSelection = DocumentSelection(
-  base: DocumentPosition(
-    nodeId: "1",
-    nodePosition: TextNodePosition(offset: 28),
-  ),
-  extent: DocumentPosition(
-    nodeId: "1",
-    nodePosition: TextNodePosition(offset: 39),
-  ),
+  base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 28)),
+  extent: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 39)),
 );
 
 const _wordIpsumStart = 6;

@@ -63,10 +63,7 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection.collapsed(
-              position: DocumentPosition(
-                nodeId: '1',
-                nodePosition: TextNodePosition(offset: 8),
-              ),
+              position: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 8)),
             ),
           );
 
@@ -102,10 +99,7 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection.collapsed(
-              position: DocumentPosition(
-                nodeId: '1',
-                nodePosition: TextNodePosition(offset: 8),
-              ),
+              position: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 8)),
             ),
           );
 
@@ -148,14 +142,8 @@ void main() {
           testContext.editor.execute([
             const ChangeSelectionRequest(
               DocumentSelection(
-                base: DocumentPosition(
-                  nodeId: '1',
-                  nodePosition: TextNodePosition(offset: 0),
-                ),
-                extent: DocumentPosition(
-                  nodeId: '1',
-                  nodePosition: TextNodePosition(offset: 8),
-                ),
+                base: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 0)),
+                extent: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 8)),
               ),
               SelectionChangeType.placeCaret,
               SelectionReason.userInteraction,
@@ -164,14 +152,8 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection(
-              base: DocumentPosition(
-                nodeId: '1',
-                nodePosition: TextNodePosition(offset: 0),
-              ),
-              extent: DocumentPosition(
-                nodeId: '1',
-                nodePosition: TextNodePosition(offset: 8),
-              ),
+              base: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 0)),
+              extent: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 8)),
             ),
           );
 
@@ -212,14 +194,8 @@ void main() {
           testContext.editor.execute([
             const ChangeSelectionRequest(
               DocumentSelection(
-                base: DocumentPosition(
-                  nodeId: '1',
-                  nodePosition: TextNodePosition(offset: 0),
-                ),
-                extent: DocumentPosition(
-                  nodeId: '1',
-                  nodePosition: TextNodePosition(offset: 8),
-                ),
+                base: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 0)),
+                extent: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 8)),
               ),
               SelectionChangeType.placeCaret,
               SelectionReason.userInteraction,
@@ -228,14 +204,8 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection(
-              base: DocumentPosition(
-                nodeId: '1',
-                nodePosition: TextNodePosition(offset: 0),
-              ),
-              extent: DocumentPosition(
-                nodeId: '1',
-                nodePosition: TextNodePosition(offset: 8),
-              ),
+              base: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 0)),
+              extent: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 8)),
             ),
           );
 
@@ -275,14 +245,8 @@ void main() {
           testContext.editor.execute([
             const ChangeSelectionRequest(
               DocumentSelection(
-                base: DocumentPosition(
-                  nodeId: '1',
-                  nodePosition: TextNodePosition(offset: 0),
-                ),
-                extent: DocumentPosition(
-                  nodeId: '2',
-                  nodePosition: TextNodePosition(offset: 8),
-                ),
+                base: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 0)),
+                extent: DocumentPosition(nodeId: '2', nodePosition: TextNodePosition(offset: 8)),
               ),
               SelectionChangeType.placeCaret,
               SelectionReason.userInteraction,
@@ -291,14 +255,8 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection(
-              base: DocumentPosition(
-                nodeId: '1',
-                nodePosition: TextNodePosition(offset: 0),
-              ),
-              extent: DocumentPosition(
-                nodeId: '2',
-                nodePosition: TextNodePosition(offset: 8),
-              ),
+              base: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 0)),
+              extent: DocumentPosition(nodeId: '2', nodePosition: TextNodePosition(offset: 8)),
             ),
           );
 
@@ -340,14 +298,8 @@ void main() {
           testContext.editor.execute([
             const ChangeSelectionRequest(
               DocumentSelection(
-                base: DocumentPosition(
-                  nodeId: '1',
-                  nodePosition: TextNodePosition(offset: 0),
-                ),
-                extent: DocumentPosition(
-                  nodeId: '2',
-                  nodePosition: TextNodePosition(offset: 8),
-                ),
+                base: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 0)),
+                extent: DocumentPosition(nodeId: '2', nodePosition: TextNodePosition(offset: 8)),
               ),
               SelectionChangeType.placeCaret,
               SelectionReason.userInteraction,
@@ -356,14 +308,8 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection(
-              base: DocumentPosition(
-                nodeId: '1',
-                nodePosition: TextNodePosition(offset: 0),
-              ),
-              extent: DocumentPosition(
-                nodeId: '2',
-                nodePosition: TextNodePosition(offset: 8),
-              ),
+              base: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 0)),
+              extent: DocumentPosition(nodeId: '2', nodePosition: TextNodePosition(offset: 8)),
             ),
           );
 
@@ -401,14 +347,8 @@ void main() {
           testContext.editor.execute([
             const ChangeSelectionRequest(
               DocumentSelection(
-                base: DocumentPosition(
-                  nodeId: '1',
-                  nodePosition: TextNodePosition(offset: 0),
-                ),
-                extent: DocumentPosition(
-                  nodeId: '2',
-                  nodePosition: TextNodePosition(offset: 8),
-                ),
+                base: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 0)),
+                extent: DocumentPosition(nodeId: '2', nodePosition: TextNodePosition(offset: 8)),
               ),
               SelectionChangeType.placeCaret,
               SelectionReason.userInteraction,
@@ -417,14 +357,8 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection(
-              base: DocumentPosition(
-                nodeId: '1',
-                nodePosition: TextNodePosition(offset: 0),
-              ),
-              extent: DocumentPosition(
-                nodeId: '2',
-                nodePosition: TextNodePosition(offset: 8),
-              ),
+              base: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 0)),
+              extent: DocumentPosition(nodeId: '2', nodePosition: TextNodePosition(offset: 8)),
             ),
           );
 
@@ -462,14 +396,8 @@ void main() {
           testContext.editor.execute([
             const ChangeSelectionRequest(
               DocumentSelection(
-                base: DocumentPosition(
-                  nodeId: '1',
-                  nodePosition: TextNodePosition(offset: 1),
-                ),
-                extent: DocumentPosition(
-                  nodeId: '2',
-                  nodePosition: TextNodePosition(offset: 8),
-                ),
+                base: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 1)),
+                extent: DocumentPosition(nodeId: '2', nodePosition: TextNodePosition(offset: 8)),
               ),
               SelectionChangeType.placeCaret,
               SelectionReason.userInteraction,
@@ -478,14 +406,8 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection(
-              base: DocumentPosition(
-                nodeId: '1',
-                nodePosition: TextNodePosition(offset: 1),
-              ),
-              extent: DocumentPosition(
-                nodeId: '2',
-                nodePosition: TextNodePosition(offset: 8),
-              ),
+              base: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 1)),
+              extent: DocumentPosition(nodeId: '2', nodePosition: TextNodePosition(offset: 8)),
             ),
           );
 
@@ -526,14 +448,8 @@ void main() {
           testContext.editor.execute([
             const ChangeSelectionRequest(
               DocumentSelection(
-                base: DocumentPosition(
-                  nodeId: '1',
-                  nodePosition: TextNodePosition(offset: 0),
-                ),
-                extent: DocumentPosition(
-                  nodeId: '2',
-                  nodePosition: TextNodePosition(offset: 8),
-                ),
+                base: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 0)),
+                extent: DocumentPosition(nodeId: '2', nodePosition: TextNodePosition(offset: 8)),
               ),
               SelectionChangeType.placeCaret,
               SelectionReason.userInteraction,
@@ -542,14 +458,8 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection(
-              base: DocumentPosition(
-                nodeId: '1',
-                nodePosition: TextNodePosition(offset: 0),
-              ),
-              extent: DocumentPosition(
-                nodeId: '2',
-                nodePosition: TextNodePosition(offset: 8),
-              ),
+              base: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 0)),
+              extent: DocumentPosition(nodeId: '2', nodePosition: TextNodePosition(offset: 8)),
             ),
           );
 
@@ -599,9 +509,7 @@ Future<TestDocumentContext> _pumpFocusChangeLayoutWithSingleParagraph(
             body: Column(
               children: [
                 // Add a textfield as a place to temporarily move focus.
-                TextField(
-                  focusNode: textFieldFocusNode,
-                ),
+                TextField(focusNode: textFieldFocusNode),
                 Expanded(child: superEditor),
               ],
             ),
@@ -618,10 +526,14 @@ Future<TestDocumentContext> _pumpFocusChangeLayoutWithTwoParagraphs(
 }) async {
   return await tester
       .createDocument()
-      .withCustomContent(MutableDocument(nodes: [
-        ParagraphNode(id: "1", text: AttributedText("Hello, world - 1")),
-        ParagraphNode(id: "2", text: AttributedText("Hello, world - 2")),
-      ]))
+      .withCustomContent(
+        MutableDocument(
+          nodes: [
+            ParagraphNode(id: "1", text: AttributedText("Hello, world - 1")),
+            ParagraphNode(id: "2", text: AttributedText("Hello, world - 2")),
+          ],
+        ),
+      )
       .withInputSource(TextInputSource.ime)
       .withFocusNode(editorFocusNode)
       .withCustomWidgetTreeBuilder(
@@ -630,9 +542,7 @@ Future<TestDocumentContext> _pumpFocusChangeLayoutWithTwoParagraphs(
             body: Column(
               children: [
                 // Add a textfield as a place to temporarily move focus.
-                TextField(
-                  focusNode: textFieldFocusNode,
-                ),
+                TextField(focusNode: textFieldFocusNode),
                 Expanded(child: superEditor),
               ],
             ),

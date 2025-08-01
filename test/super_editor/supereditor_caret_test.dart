@@ -13,7 +13,10 @@ void main() {
     // text position sits at a location that should move to a different line when the available space
     // is reduced.
     const textPosition = TextPosition(offset: 46);
-    final documentPosition = DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: textPosition.offset));
+    final documentPosition = DocumentPosition(
+      nodeId: "1",
+      nodePosition: TextNodePosition(offset: textPosition.offset),
+    );
     final tapPosition = documentPosition;
 
     group('text affinity', () {
@@ -26,8 +29,9 @@ void main() {
       const xExpectBuffer = 300;
       const yExpectBuffer = 24;
 
-      testWidgetsOnAllPlatforms('upstream and downstream positions render differently at a line break',
-          (WidgetTester tester) async {
+      testWidgetsOnAllPlatforms('upstream and downstream positions render differently at a line break', (
+        WidgetTester tester,
+      ) async {
         await tester //
             .createDocument()
             .withSingleParagraph()
@@ -62,8 +66,9 @@ void main() {
         expect(downstreamCaretOffset.dy, greaterThan(startOfFirstLineCaretOffset.dy + yExpectBuffer));
       });
 
-      testWidgetsOnAllPlatforms('upstream and downstream positions render the same if not at a line break',
-          (WidgetTester tester) async {
+      testWidgetsOnAllPlatforms('upstream and downstream positions render the same if not at a line break', (
+        WidgetTester tester,
+      ) async {
         await tester //
             .createDocument()
             .withSingleParagraph()
@@ -107,11 +112,7 @@ void main() {
           ..physicalSize = screenSizeBigger;
 
         final docKey = GlobalKey();
-        await _pumpScaffold(
-          tester,
-          gestureMode: DocumentGestureMode.mouse,
-          docKey: docKey,
-        );
+        await _pumpScaffold(tester, gestureMode: DocumentGestureMode.mouse, docKey: docKey);
         await tester.pumpAndSettle();
 
         // Place caret at a position that will move to the next line when the width contracts
@@ -122,7 +123,11 @@ void main() {
 
         // Make the window more narrow, pushing the caret text position down a line.
         await _resizeWindow(
-            tester: tester, frameCount: 60, initialScreenSize: screenSizeBigger, finalScreenSize: screenSizeSmaller);
+          tester: tester,
+          frameCount: 60,
+          initialScreenSize: screenSizeBigger,
+          finalScreenSize: screenSizeSmaller,
+        );
 
         // Ensure that the caret jumped down at least a line height. It probably jumped
         // down multiple lines.
@@ -138,11 +143,7 @@ void main() {
           ..physicalSize = screenSizeSmaller;
 
         final docKey = GlobalKey();
-        await _pumpScaffold(
-          tester,
-          gestureMode: DocumentGestureMode.mouse,
-          docKey: docKey,
-        );
+        await _pumpScaffold(tester, gestureMode: DocumentGestureMode.mouse, docKey: docKey);
         await tester.pumpAndSettle();
 
         // Place caret at a position that will move to the preceding line when the width expands
@@ -153,7 +154,11 @@ void main() {
 
         // Make the window wider, pushing the caret text position up a line.
         await _resizeWindow(
-            tester: tester, frameCount: 60, initialScreenSize: screenSizeSmaller, finalScreenSize: screenSizeBigger);
+          tester: tester,
+          frameCount: 60,
+          initialScreenSize: screenSizeSmaller,
+          finalScreenSize: screenSizeBigger,
+        );
 
         // Ensure that the caret jumped up at least a line height. It probably jumped
         // down multiple lines.
@@ -175,11 +180,7 @@ void main() {
             ..physicalSize = screenSizePortrait;
 
           final docKey = GlobalKey();
-          await _pumpScaffold(
-            tester,
-            gestureMode: DocumentGestureMode.android,
-            docKey: docKey,
-          );
+          await _pumpScaffold(tester, gestureMode: DocumentGestureMode.android, docKey: docKey);
           await tester.pumpAndSettle();
 
           // Place caret at a position that will move to the preceding line when the width expands
@@ -208,11 +209,7 @@ void main() {
             ..physicalSize = screenSizeLandscape;
 
           final docKey = GlobalKey();
-          await _pumpScaffold(
-            tester,
-            gestureMode: DocumentGestureMode.android,
-            docKey: docKey,
-          );
+          await _pumpScaffold(tester, gestureMode: DocumentGestureMode.android, docKey: docKey);
           await tester.pumpAndSettle();
 
           // Place caret at a position that will move to the next line when the width contracts
@@ -221,8 +218,11 @@ void main() {
 
           // Ensure that the caret is displayed at the correct (x,y) in the document before phone rotation
           final initialCaretOffset = SuperEditorInspector.findCaretOffsetInDocument();
-          final expectedInitialCaretOffset =
-              _computeExpectedMobileCaretOffsetInDocumentLayout(tester, docKey, tapPosition);
+          final expectedInitialCaretOffset = _computeExpectedMobileCaretOffsetInDocumentLayout(
+            tester,
+            docKey,
+            tapPosition,
+          );
           expect(initialCaretOffset, expectedInitialCaretOffset);
 
           // Make the window more narrow, pushing the caret text position up a line.
@@ -232,8 +232,11 @@ void main() {
           // Ensure that after rotating the phone, the caret updated its (x,y) to match the text
           // position that was pushed down to the next line.
           final finalCaretOffset = SuperEditorInspector.findCaretOffsetInDocument();
-          final expectedFinalCaretOffset =
-              _computeExpectedMobileCaretOffsetInDocumentLayout(tester, docKey, tapPosition);
+          final expectedFinalCaretOffset = _computeExpectedMobileCaretOffsetInDocumentLayout(
+            tester,
+            docKey,
+            tapPosition,
+          );
           expect(finalCaretOffset, expectedFinalCaretOffset);
         });
       });
@@ -246,11 +249,7 @@ void main() {
             ..physicalSize = screenSizePortrait;
 
           final docKey = GlobalKey();
-          await _pumpScaffold(
-            tester,
-            gestureMode: DocumentGestureMode.iOS,
-            docKey: docKey,
-          );
+          await _pumpScaffold(tester, gestureMode: DocumentGestureMode.iOS, docKey: docKey);
           await tester.pumpAndSettle();
 
           // Place caret at a position that will move to the preceding line when the width expands
@@ -259,8 +258,11 @@ void main() {
 
           // Ensure that the caret is displayed at the correct (x,y) in the document before phone rotation
           final initialOffset = SuperEditorInspector.findCaretOffsetInDocument();
-          final expectedInitialCaretOffset =
-              _computeExpectedMobileCaretOffsetInDocumentLayout(tester, docKey, tapPosition);
+          final expectedInitialCaretOffset = _computeExpectedMobileCaretOffsetInDocumentLayout(
+            tester,
+            docKey,
+            tapPosition,
+          );
           expect(initialOffset, expectedInitialCaretOffset);
 
           // Make the window wider, pushing the caret text position up a line.
@@ -270,8 +272,11 @@ void main() {
           // Ensure that after rotating the phone, the caret updated its (x,y) to match the text
           // position that was pushed up to the preceding line.
           final finalCaretOffset = SuperEditorInspector.findCaretOffsetInDocument();
-          final expectedFinalCaretOffset =
-              _computeExpectedMobileCaretOffsetInDocumentLayout(tester, docKey, tapPosition);
+          final expectedFinalCaretOffset = _computeExpectedMobileCaretOffsetInDocumentLayout(
+            tester,
+            docKey,
+            tapPosition,
+          );
           expect(finalCaretOffset, expectedFinalCaretOffset);
         });
 
@@ -282,11 +287,7 @@ void main() {
             ..physicalSize = screenSizeLandscape;
 
           final docKey = GlobalKey();
-          await _pumpScaffold(
-            tester,
-            gestureMode: DocumentGestureMode.iOS,
-            docKey: docKey,
-          );
+          await _pumpScaffold(tester, gestureMode: DocumentGestureMode.iOS, docKey: docKey);
           await tester.pumpAndSettle();
 
           // Place caret at a position that will move to the next line when the width contracts
@@ -295,8 +296,11 @@ void main() {
 
           // Ensure that the caret is displayed at the correct (x,y) in the document before phone rotation
           final initialOffset = SuperEditorInspector.findCaretOffsetInDocument();
-          final expectedInitialCaretOffset =
-              _computeExpectedMobileCaretOffsetInDocumentLayout(tester, docKey, tapPosition);
+          final expectedInitialCaretOffset = _computeExpectedMobileCaretOffsetInDocumentLayout(
+            tester,
+            docKey,
+            tapPosition,
+          );
           expect(initialOffset, expectedInitialCaretOffset);
 
           // Make the window more narrow, pushing the caret text position down a line.
@@ -306,8 +310,11 @@ void main() {
           // Ensure that after rotating the phone, the caret updated its (x,y) to match the text
           // position that was pushed down to the next line.
           final finalCaretOffset = SuperEditorInspector.findCaretOffsetInDocument();
-          final expectedFinalCaretOffset =
-              _computeExpectedMobileCaretOffsetInDocumentLayout(tester, docKey, tapPosition);
+          final expectedFinalCaretOffset = _computeExpectedMobileCaretOffsetInDocumentLayout(
+            tester,
+            docKey,
+            tapPosition,
+          );
           expect(finalCaretOffset, expectedFinalCaretOffset);
         });
       });
@@ -354,9 +361,7 @@ void main() {
       await tester //
           .createDocument()
           .withSingleParagraph()
-          .withCaretPolicies(
-            displayCaretWithExpandedSelection: false,
-          )
+          .withCaretPolicies(displayCaretWithExpandedSelection: false)
           .pump();
 
       // Place the caret in the paragraph.
@@ -395,7 +400,10 @@ Future<TestDocumentContext> _pumpScaffold(
 /// Should be used only when the document gesture mode is equal to [DocumentGestureMode.android]
 /// or [DocumentGestureMode.iOS]
 Offset _computeExpectedMobileCaretOffsetInDocumentLayout(
-    WidgetTester tester, GlobalKey docKey, DocumentPosition documentPosition) {
+  WidgetTester tester,
+  GlobalKey docKey,
+  DocumentPosition documentPosition,
+) {
   final docLayout = docKey.currentState as DocumentLayout;
   final extentRect = docLayout.getRectForPosition(documentPosition)!;
   return Offset(extentRect.left, extentRect.top);
@@ -415,7 +423,7 @@ MutableDocument _createTestDocument() {
         text: AttributedText(
           "Super Editor is a toolkit to help you build document editors, document layouts, text fields, and more.",
         ),
-      )
+      ),
     ],
   );
 }

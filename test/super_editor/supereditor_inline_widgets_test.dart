@@ -17,18 +17,12 @@ void main() {
               nodes: [
                 ParagraphNode(
                   id: '1',
-                  text: AttributedText('Hello, world!', null, {
-                    7: const _NamedPlaceHolder('world'),
-                  }),
+                  text: AttributedText('Hello, world!', null, {7: const _NamedPlaceHolder('world')}),
                 ),
               ],
             ),
           )
-          .useStylesheet(
-            defaultStylesheet.copyWith(
-              inlineWidgetBuilders: [_boxPlaceHolderBuilder],
-            ),
-          )
+          .useStylesheet(defaultStylesheet.copyWith(inlineWidgetBuilders: [_boxPlaceHolderBuilder]))
           .pump();
 
       // Place the caret at the beginning of the paragraph.
@@ -37,11 +31,13 @@ void main() {
       // Keep track of whether of not the layout was invalidated.
       bool wasLayoutInvalidated = false;
 
-      final renderParagraph = find
-          .byType(LayoutAwareRichText) //
-          .evaluate()
-          .first
-          .findRenderObject() as RenderLayoutAwareParagraph;
+      final renderParagraph =
+          find
+                  .byType(LayoutAwareRichText) //
+                  .evaluate()
+                  .first
+                  .findRenderObject()
+              as RenderLayoutAwareParagraph;
       renderParagraph.onMarkNeedsLayout = () {
         wasLayoutInvalidated = true;
       };
@@ -65,12 +61,7 @@ Widget? _boxPlaceHolderBuilder(BuildContext context, TextStyle textStyle, Object
     key: ValueKey('placeholder-${placeholder.name}'),
     child: LineHeight(
       style: textStyle,
-      child: const SizedBox(
-        width: 24,
-        child: ColoredBox(
-          color: Colors.yellow,
-        ),
-      ),
+      child: const SizedBox(width: 24, child: ColoredBox(color: Colors.yellow)),
     ),
   );
 }

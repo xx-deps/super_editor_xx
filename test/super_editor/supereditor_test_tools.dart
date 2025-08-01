@@ -49,59 +49,35 @@ class TestDocumentSelector {
   /// Configures the editor with a [Document] that's parsed from the
   /// given [markdown].
   TestSuperEditorConfigurator fromMarkdown(String markdown) {
-    return TestSuperEditorConfigurator._(
-      _widgetTester,
-      deserializeMarkdownToDocument(markdown),
-    );
+    return TestSuperEditorConfigurator._(_widgetTester, deserializeMarkdownToDocument(markdown));
   }
 
   TestSuperEditorConfigurator withSingleEmptyParagraph() {
-    return TestSuperEditorConfigurator._(
-      _widgetTester,
-      singleParagraphEmptyDoc(),
-    );
+    return TestSuperEditorConfigurator._(_widgetTester, singleParagraphEmptyDoc());
   }
 
   TestSuperEditorConfigurator withSingleParagraph() {
-    return TestSuperEditorConfigurator._(
-      _widgetTester,
-      singleParagraphDoc(),
-    );
+    return TestSuperEditorConfigurator._(_widgetTester, singleParagraphDoc());
   }
 
   TestSuperEditorConfigurator withSingleShortParagraph() {
-    return TestSuperEditorConfigurator._(
-      _widgetTester,
-      singleParagraphDocShortText(),
-    );
+    return TestSuperEditorConfigurator._(_widgetTester, singleParagraphDocShortText());
   }
 
   TestSuperEditorConfigurator withSingleParagraphAndLink() {
-    return TestSuperEditorConfigurator._(
-      _widgetTester,
-      singleParagraphWithLinkDoc(),
-    );
+    return TestSuperEditorConfigurator._(_widgetTester, singleParagraphWithLinkDoc());
   }
 
   TestSuperEditorConfigurator withTwoEmptyParagraphs() {
-    return TestSuperEditorConfigurator._(
-      _widgetTester,
-      twoParagraphEmptyDoc(),
-    );
+    return TestSuperEditorConfigurator._(_widgetTester, twoParagraphEmptyDoc());
   }
 
   TestSuperEditorConfigurator withLongTextContent() {
-    return TestSuperEditorConfigurator._(
-      _widgetTester,
-      longTextDoc(),
-    );
+    return TestSuperEditorConfigurator._(_widgetTester, longTextDoc());
   }
 
   TestSuperEditorConfigurator withLongDoc() {
-    return TestSuperEditorConfigurator._(
-      _widgetTester,
-      longDoc(),
-    );
+    return TestSuperEditorConfigurator._(_widgetTester, longDoc());
   }
 }
 
@@ -110,7 +86,7 @@ class TestSuperEditorConfigurator {
   TestSuperEditorConfigurator._fromExistingConfiguration(this._widgetTester, this._config);
 
   TestSuperEditorConfigurator._(this._widgetTester, MutableDocument document)
-      : _config = SuperEditorTestConfiguration(_widgetTester, document);
+    : _config = SuperEditorTestConfiguration(_widgetTester, document);
 
   final WidgetTester _widgetTester;
   final SuperEditorTestConfiguration _config;
@@ -127,9 +103,7 @@ class TestSuperEditorConfigurator {
 
   /// Configures the [SuperEditor] for standard desktop interactions,
   /// e.g., mouse and keyboard input.
-  TestSuperEditorConfigurator forDesktop({
-    TextInputSource inputSource = TextInputSource.ime,
-  }) {
+  TestSuperEditorConfigurator forDesktop({TextInputSource inputSource = TextInputSource.ime}) {
     _config.inputSource = inputSource;
     _config.gestureMode = DocumentGestureMode.mouse;
     return this;
@@ -176,9 +150,7 @@ class TestSuperEditorConfigurator {
     return this;
   }
 
-  TestSuperEditorConfigurator withCaretPolicies({
-    bool? displayCaretWithExpandedSelection,
-  }) {
+  TestSuperEditorConfigurator withCaretPolicies({bool? displayCaretWithExpandedSelection}) {
     if (displayCaretWithExpandedSelection != null) {
       _config.displayCaretWithExpandedSelection = displayCaretWithExpandedSelection;
     }
@@ -190,21 +162,14 @@ class TestSuperEditorConfigurator {
     return this;
   }
 
-  TestSuperEditorConfigurator withIosCaretStyle({
-    double? width,
-    Color? color,
-    double? handleBallDiameter,
-  }) {
+  TestSuperEditorConfigurator withIosCaretStyle({double? width, Color? color, double? handleBallDiameter}) {
     _config.iosCaretWidth = width;
     _config.iosHandleColor = color;
     _config.iosHandleBallDiameter = handleBallDiameter;
     return this;
   }
 
-  TestSuperEditorConfigurator withAndroidCaretStyle({
-    double? width,
-    Color? color,
-  }) {
+  TestSuperEditorConfigurator withAndroidCaretStyle({double? width, Color? color}) {
     _config.androidCaretWidth = width;
     _config.androidCaretColor = color;
     return this;
@@ -396,7 +361,8 @@ class TestSuperEditorConfigurator {
 
   /// Configures the [SuperEditor] to use only the given [tapDelegateFactories].
   TestSuperEditorConfigurator withTapDelegateFactories(
-      List<SuperEditorContentTapDelegateFactory>? tapDelegateFactories) {
+    List<SuperEditorContentTapDelegateFactory>? tapDelegateFactories,
+  ) {
     _config.tapDelegateFactories = tapDelegateFactories;
     return this;
   }
@@ -433,9 +399,7 @@ class TestSuperEditorConfigurator {
   /// and then call [WidgetTester.pump] with the returned [Widget].
   Future<TestDocumentContext> pump() async {
     final testDocumentContext = _createTestDocumentContext();
-    await _widgetTester.pumpWidget(
-      _build(testDocumentContext).widget,
-    );
+    await _widgetTester.pumpWidget(_build(testDocumentContext).widget);
     return testDocumentContext;
   }
 
@@ -456,16 +420,9 @@ class TestSuperEditorConfigurator {
   /// configuration of this class.
   ConfiguredSuperEditorWidget _build([TestDocumentContext? testDocumentContext]) {
     final context = testDocumentContext ?? _createTestDocumentContext();
-    final superEditor = _buildConstrainedContent(
-      _buildAncestorScrollable(
-        child: _buildSuperEditor(context),
-      ),
-    );
+    final superEditor = _buildConstrainedContent(_buildAncestorScrollable(child: _buildSuperEditor(context)));
 
-    return ConfiguredSuperEditorWidget(
-      context,
-      _buildWidgetTree(superEditor),
-    );
+    return ConfiguredSuperEditorWidget(context, _buildWidgetTree(superEditor));
   }
 
   /// Creates a [TestDocumentContext] based on the configurations in this class.
@@ -480,14 +437,15 @@ class TestSuperEditorConfigurator {
     final layoutKey = _config.layoutKey!;
     final focusNode = _config.focusNode ?? FocusNode();
     final composer = MutableDocumentComposer(initialSelection: _config.selection);
-    final editor = createDefaultDocumentEditor(
-      document: _config.document,
-      composer: composer,
-      historyGroupingPolicy: _config.historyGroupPolicy ?? neverMergePolicy,
-      isHistoryEnabled: _config.isHistoryEnabled,
-    )
-      ..requestHandlers.insertAll(0, _config.addedRequestHandlers)
-      ..reactionPipeline.insertAll(0, _config.addedReactions);
+    final editor =
+        createDefaultDocumentEditor(
+            document: _config.document,
+            composer: composer,
+            historyGroupingPolicy: _config.historyGroupPolicy ?? neverMergePolicy,
+            isHistoryEnabled: _config.isHistoryEnabled,
+          )
+          ..requestHandlers.insertAll(0, _config.addedRequestHandlers)
+          ..reactionPipeline.insertAll(0, _config.addedReactions);
 
     return TestDocumentContext._(
       focusNode: focusNode,
@@ -502,9 +460,7 @@ class TestSuperEditorConfigurator {
   /// Builds a complete screen experience, which includes the given [superEditor].
   Widget _buildWidgetTree(Widget superEditor) {
     if (_config.widgetTreeBuilder != null) {
-      return _buildSimulatedSoftwareKeyboard(
-        child: _config.widgetTreeBuilder!(superEditor),
-      );
+      return _buildSimulatedSoftwareKeyboard(child: _config.widgetTreeBuilder!(superEditor));
     }
     return MaterialApp(
       theme: _config.appTheme,
@@ -539,9 +495,7 @@ class TestSuperEditorConfigurator {
     );
   }
 
-  Widget _buildSimulatedSoftwareKeyboard({
-    required Widget child,
-  }) {
+  Widget _buildSimulatedSoftwareKeyboard({required Widget child}) {
     return SoftwareKeyboardHeightSimulator(
       tester: _config.tester,
       isEnabled: _config.simulateSoftwareKeyboardInsets,
@@ -556,10 +510,7 @@ class TestSuperEditorConfigurator {
   Widget _buildConstrainedContent(Widget superEditor) {
     if (_config.editorSize != null) {
       return ConstrainedBox(
-        constraints: BoxConstraints(
-          maxWidth: _config.editorSize!.width,
-          maxHeight: _config.editorSize!.height,
-        ),
+        constraints: BoxConstraints(maxWidth: _config.editorSize!.width, maxHeight: _config.editorSize!.height),
         child: superEditor,
       );
     }
@@ -572,29 +523,18 @@ class TestSuperEditorConfigurator {
       return child;
     }
 
-    return CustomScrollView(
-      controller: _config.scrollController,
-      slivers: [
-        child,
-      ],
-    );
+    return CustomScrollView(controller: _config.scrollController, slivers: [child]);
   }
 
   /// Builds a [SuperEditor] widget based on the configuration of the given
   /// [testDocumentContext], as well as other configurations in this class.
   Widget _buildSuperEditor(TestDocumentContext testDocumentContext) {
-    return _TestSuperEditor(
-      testDocumentContext: testDocumentContext,
-      testConfiguration: _config,
-    );
+    return _TestSuperEditor(testDocumentContext: testDocumentContext, testConfiguration: _config);
   }
 }
 
 class _TestSuperEditor extends StatefulWidget {
-  const _TestSuperEditor({
-    required this.testDocumentContext,
-    required this.testConfiguration,
-  });
+  const _TestSuperEditor({required this.testDocumentContext, required this.testConfiguration});
 
   final TestDocumentContext testDocumentContext;
   final SuperEditorTestConfiguration testConfiguration;
@@ -636,10 +576,7 @@ class _TestSuperEditorState extends State<_TestSuperEditor> {
     Widget testSuperEditor = _buildSuperEditor();
 
     if (_iOsControlsController != null) {
-      testSuperEditor = SuperEditorIosControlsScope(
-        controller: _iOsControlsController!,
-        child: testSuperEditor,
-      );
+      testSuperEditor = SuperEditorIosControlsScope(controller: _iOsControlsController!, child: testSuperEditor);
     }
 
     if (_androidControlsController != null) {
@@ -683,7 +620,7 @@ class _TestSuperEditorState extends State<_TestSuperEditor> {
       componentBuilders: [
         ...widget.testConfiguration.addedComponents,
         ...(widget.testConfiguration.componentBuilders ?? defaultComponentBuilders),
-        if (widget.testConfiguration.componentBuilders == null) TaskComponentBuilder(widget.testDocumentContext.editor)
+        if (widget.testConfiguration.componentBuilders == null) TaskComponentBuilder(widget.testDocumentContext.editor),
       ],
       scrollController: widget.testConfiguration.scrollController,
       documentOverlayBuilders: _createOverlayBuilders(),
@@ -855,12 +792,7 @@ class DocumentEqualsMarkdownMatcher extends Matcher {
   }
 
   @override
-  Description describeMismatch(
-    covariant Object target,
-    Description mismatchDescription,
-    Map matchState,
-    bool verbose,
-  ) {
+  Description describeMismatch(covariant Object target, Description mismatchDescription, Map matchState, bool verbose) {
     final mismatchReason = _calculateMismatchReason(target, matchState);
     if (mismatchReason != null) {
       mismatchDescription.add(mismatchReason);
@@ -868,10 +800,7 @@ class DocumentEqualsMarkdownMatcher extends Matcher {
     return mismatchDescription;
   }
 
-  String? _calculateMismatchReason(
-    Object target,
-    Map<dynamic, dynamic> matchState,
-  ) {
+  String? _calculateMismatchReason(Object target, Map<dynamic, dynamic> matchState) {
     late Document actualDocument;
     if (target is Document) {
       actualDocument = target;
@@ -920,12 +849,7 @@ class EquivalentDocumentMatcher extends Matcher {
   }
 
   @override
-  Description describeMismatch(
-    covariant Object target,
-    Description mismatchDescription,
-    Map matchState,
-    bool verbose,
-  ) {
+  Description describeMismatch(covariant Object target, Description mismatchDescription, Map matchState, bool verbose) {
     final mismatchReason = _calculateMismatchReason(target, matchState);
     if (mismatchReason != null) {
       mismatchDescription.add(mismatchReason);
@@ -933,10 +857,7 @@ class EquivalentDocumentMatcher extends Matcher {
     return mismatchDescription;
   }
 
-  String? _calculateMismatchReason(
-    Object target,
-    Map<dynamic, dynamic> matchState,
-  ) {
+  String? _calculateMismatchReason(Object target, Map<dynamic, dynamic> matchState) {
     late Document actualDocument;
     if (target is Document) {
       actualDocument = target;
@@ -1004,10 +925,7 @@ class EquivalentDocumentMatcher extends Matcher {
 /// A [ComponentBuilder] which builds an [ImageComponent] that always renders
 /// images as a [SizedBox] with the given [size].
 class FakeImageComponentBuilder implements ComponentBuilder {
-  const FakeImageComponentBuilder({
-    required this.size,
-    this.fillColor,
-  });
+  const FakeImageComponentBuilder({required this.size, this.fillColor});
 
   /// The size of the image component.
   final ui.Size size;
@@ -1022,7 +940,9 @@ class FakeImageComponentBuilder implements ComponentBuilder {
 
   @override
   Widget? createComponent(
-      SingleColumnDocumentComponentContext componentContext, SingleColumnLayoutComponentViewModel componentViewModel) {
+    SingleColumnDocumentComponentContext componentContext,
+    SingleColumnLayoutComponentViewModel componentViewModel,
+  ) {
     if (componentViewModel is! ImageComponentViewModel) {
       return null;
     }
@@ -1034,10 +954,7 @@ class FakeImageComponentBuilder implements ComponentBuilder {
       selectionColor: componentViewModel.selectionColor,
       imageBuilder: (context, imageUrl) => ColoredBox(
         color: fillColor ?? Colors.transparent,
-        child: SizedBox(
-          height: size.height,
-          width: size.width,
-        ),
+        child: SizedBox(height: size.height, width: size.width),
       ),
     );
   }
@@ -1065,24 +982,20 @@ class ExpandingTaskComponentBuilder extends ComponentBuilder {
 
   @override
   Widget? createComponent(
-      SingleColumnDocumentComponentContext componentContext, SingleColumnLayoutComponentViewModel componentViewModel) {
+    SingleColumnDocumentComponentContext componentContext,
+    SingleColumnLayoutComponentViewModel componentViewModel,
+  ) {
     if (componentViewModel is! TaskComponentViewModel) {
       return null;
     }
 
-    return ExpandingTaskComponent(
-      key: componentContext.componentKey,
-      viewModel: componentViewModel,
-    );
+    return ExpandingTaskComponent(key: componentContext.componentKey, viewModel: componentViewModel);
   }
 }
 
 /// A task component which expands its height when it's selected.
 class ExpandingTaskComponent extends StatefulWidget {
-  const ExpandingTaskComponent({
-    super.key,
-    required this.viewModel,
-  });
+  const ExpandingTaskComponent({super.key, required this.viewModel});
 
   final TaskComponentViewModel viewModel;
 
@@ -1114,7 +1027,7 @@ class _ExpandingTaskComponentState extends State<ExpandingTaskComponent>
           highlightWhenEmpty: widget.viewModel.highlightWhenEmpty,
         ),
         if (widget.viewModel.selection != null) //
-          const SizedBox(height: 20)
+          const SizedBox(height: 20),
       ],
     );
   }

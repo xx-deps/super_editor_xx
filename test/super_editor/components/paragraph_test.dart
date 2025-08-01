@@ -12,10 +12,11 @@ import '../supereditor_test_tools.dart';
 void main() {
   group("SuperEditor > Paragraph Component >", () {
     testWidgetsOnAllPlatforms("visually updates alignment immediately after it is changed", (tester) async {
-      final editorContext = await tester //
-          .createDocument()
-          .withSingleParagraph()
-          .pump();
+      final editorContext =
+          await tester //
+              .createDocument()
+              .withSingleParagraph()
+              .pump();
 
       // Place the caret at the beginning of the paragraph.
       await tester.placeCaretInParagraph("1", 0);
@@ -28,9 +29,7 @@ void main() {
       expect(paragraphComponent.textAlign, TextAlign.left);
 
       // Change the paragraph to right-alignment.
-      editorContext.editor.execute([
-        ChangeParagraphAlignmentRequest(nodeId: "1", alignment: TextAlign.right),
-      ]);
+      editorContext.editor.execute([ChangeParagraphAlignmentRequest(nodeId: "1", alignment: TextAlign.right)]);
       await tester.pump();
 
       // Ensure that the paragraph's associated widget is now right-aligned.
@@ -47,8 +46,9 @@ void main() {
     });
 
     group("block newlines >", () {
-      testWidgetsOnAllPlatforms("inserts newline in middle and splits paragraph into two paragraphs",
-          (WidgetTester tester) async {
+      testWidgetsOnAllPlatforms("inserts newline in middle and splits paragraph into two paragraphs", (
+        WidgetTester tester,
+      ) async {
         await tester
             .createDocument() //
             .withSingleShortParagraph()
@@ -86,8 +86,9 @@ void main() {
         expect(document.last.asTextNode.text.toPlainText(), "node in a document.");
       });
 
-      testWidgetsOnAllPlatforms("inserts newline at end of paragraph to create a new empty paragraph",
-          (WidgetTester tester) async {
+      testWidgetsOnAllPlatforms("inserts newline at end of paragraph to create a new empty paragraph", (
+        WidgetTester tester,
+      ) async {
         await tester
             .createDocument() //
             .withSingleShortParagraph()
@@ -133,14 +134,9 @@ void main() {
                   ParagraphNode(
                     id: "1",
                     text: AttributedText("Non-deletable paragraph."),
-                    metadata: const {
-                      NodeMetadata.isDeletable: false,
-                    },
+                    metadata: const {NodeMetadata.isDeletable: false},
                   ),
-                  ParagraphNode(
-                    id: "2",
-                    text: AttributedText("A deletable paragraph."),
-                  ),
+                  ParagraphNode(id: "2", text: AttributedText("A deletable paragraph.")),
                 ],
               ),
             )
@@ -178,16 +174,8 @@ void main() {
             .withCustomContent(
               MutableDocument(
                 nodes: [
-                  ParagraphNode(
-                    id: "1",
-                    text: AttributedText("A paragraph."),
-                  ),
-                  HorizontalRuleNode(
-                    id: "2",
-                    metadata: const {
-                      NodeMetadata.isDeletable: false,
-                    },
-                  ),
+                  ParagraphNode(id: "1", text: AttributedText("A paragraph.")),
+                  HorizontalRuleNode(id: "2", metadata: const {NodeMetadata.isDeletable: false}),
                 ],
               ),
             )
@@ -198,14 +186,8 @@ void main() {
         editContext.editor.execute([
           const ChangeSelectionRequest(
             DocumentSelection(
-              base: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 5),
-              ),
-              extent: DocumentPosition(
-                nodeId: "2",
-                nodePosition: UpstreamDownstreamNodePosition.downstream(),
-              ),
+              base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 5)),
+              extent: DocumentPosition(nodeId: "2", nodePosition: UpstreamDownstreamNodePosition.downstream()),
             ),
             SelectionChangeType.expandSelection,
             SelectionReason.userInteraction,
@@ -241,10 +223,11 @@ void main() {
 
     group("soft newlines >", () {
       testWidgetsOnDesktop("SHIFT + ENTER inserts a soft newline in middle of paragraph", (tester) async {
-        final editorContext = await tester //
-            .createDocument()
-            .withSingleShortParagraph()
-            .pump();
+        final editorContext =
+            await tester //
+                .createDocument()
+                .withSingleShortParagraph()
+                .pump();
 
         // Place the caret in the middle of the paragraph:
         // "This is the first |node in a document."
@@ -259,10 +242,11 @@ void main() {
       });
 
       testWidgetsOnDesktop("SHIFT + ENTER inserts a soft newline at end of paragraph", (tester) async {
-        final editorContext = await tester //
-            .createDocument()
-            .withSingleShortParagraph()
-            .pump();
+        final editorContext =
+            await tester //
+                .createDocument()
+                .withSingleShortParagraph()
+                .pump();
 
         // Place the caret at the end of the paragraph.
         await tester.placeCaretInParagraph("1", 37);

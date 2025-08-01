@@ -21,11 +21,12 @@ void main() {
         tester, {
         required TextInputSource inputSource,
       }) async {
-        final context = await tester //
-            .createDocument()
-            .withSingleEmptyParagraph()
-            .withInputSource(inputSource)
-            .pump();
+        final context =
+            await tester //
+                .createDocument()
+                .withSingleEmptyParagraph()
+                .withInputSource(inputSource)
+                .pump();
 
         // Place the caret at the beginning of the document.
         await tester.placeCaretInParagraph('1', 0);
@@ -54,11 +55,12 @@ void main() {
         tester, {
         required TextInputSource inputSource,
       }) async {
-        final context = await tester //
-            .createDocument()
-            .fromMarkdown('was inserted')
-            .withInputSource(inputSource)
-            .pump();
+        final context =
+            await tester //
+                .createDocument()
+                .fromMarkdown('was inserted')
+                .withInputSource(inputSource)
+                .pump();
 
         final nodeId = context.document.first.id;
 
@@ -89,11 +91,12 @@ void main() {
         tester, {
         required TextInputSource inputSource,
       }) async {
-        final context = await tester //
-            .createDocument()
-            .fromMarkdown('Inserting with a reaction')
-            .withInputSource(inputSource)
-            .pump();
+        final context =
+            await tester //
+                .createDocument()
+                .fromMarkdown('Inserting with a reaction')
+                .withInputSource(inputSource)
+                .pump();
 
         final nodeId = context.document.first.id;
 
@@ -119,25 +122,27 @@ void main() {
         // Type three dashes. The first two should be converted to an em-dash
         // and the second should be inserted as is.
         await tester.typeTextAdaptive('---');
-        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
-            'Inserting — typing two dashes —-with a reaction');
+        expect(
+          SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+          'Inserting — typing two dashes —-with a reaction',
+        );
 
         // Type another dash. The previously inserted dash and the current one
         // should be converted to an em-dash.
         await tester.typeTextAdaptive('-');
-        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
-            'Inserting — typing two dashes ——with a reaction');
+        expect(
+          SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+          'Inserting — typing two dashes ——with a reaction',
+        );
       });
 
-      testAllInputsOnAllPlatforms('at the end of a paragraph', (
-        tester, {
-        required TextInputSource inputSource,
-      }) async {
-        final context = await tester //
-            .createDocument()
-            .fromMarkdown('Inserting')
-            .withInputSource(inputSource)
-            .pump();
+      testAllInputsOnAllPlatforms('at the end of a paragraph', (tester, {required TextInputSource inputSource}) async {
+        final context =
+            await tester //
+                .createDocument()
+                .fromMarkdown('Inserting')
+                .withInputSource(inputSource)
+                .pump();
 
         final nodeId = context.document.first.id;
 
@@ -171,11 +176,12 @@ void main() {
         tester, {
         required TextInputSource inputSource,
       }) async {
-        final context = await tester //
-            .createDocument()
-            .fromMarkdown('* ')
-            .withInputSource(inputSource)
-            .pump();
+        final context =
+            await tester //
+                .createDocument()
+                .fromMarkdown('* ')
+                .withInputSource(inputSource)
+                .pump();
 
         final nodeId = context.document.first.id;
 
@@ -206,11 +212,12 @@ void main() {
         tester, {
         required TextInputSource inputSource,
       }) async {
-        final context = await tester //
-            .createDocument()
-            .fromMarkdown('* was inserted')
-            .withInputSource(inputSource)
-            .pump();
+        final context =
+            await tester //
+                .createDocument()
+                .fromMarkdown('* was inserted')
+                .withInputSource(inputSource)
+                .pump();
 
         final nodeId = context.document.first.id;
 
@@ -248,11 +255,12 @@ void main() {
         tester, {
         required TextInputSource inputSource,
       }) async {
-        final context = await tester //
-            .createDocument()
-            .fromMarkdown('* Inserting with a reaction')
-            .withInputSource(inputSource)
-            .pump();
+        final context =
+            await tester //
+                .createDocument()
+                .fromMarkdown('* Inserting with a reaction')
+                .withInputSource(inputSource)
+                .pump();
 
         final nodeId = context.document.first.id;
 
@@ -278,25 +286,27 @@ void main() {
         // Type three dashes. The first two should be converted to an em-dash
         // and the second should be inserted as is.
         await tester.typeTextAdaptive('---');
-        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
-            'Inserting — typing two dashes —-with a reaction');
+        expect(
+          SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+          'Inserting — typing two dashes —-with a reaction',
+        );
 
         // Type another dash. The previously inserted dash and the current one
         // should be converted to an em-dash.
         await tester.typeTextAdaptive('-');
-        expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
-            'Inserting — typing two dashes ——with a reaction');
+        expect(
+          SuperEditorInspector.findTextInComponent(nodeId).toPlainText(),
+          'Inserting — typing two dashes ——with a reaction',
+        );
       });
 
-      testAllInputsOnAllPlatforms('at the end of a list item', (
-        tester, {
-        required TextInputSource inputSource,
-      }) async {
-        final context = await tester //
-            .createDocument()
-            .fromMarkdown('* Inserting')
-            .withInputSource(inputSource)
-            .pump();
+      testAllInputsOnAllPlatforms('at the end of a list item', (tester, {required TextInputSource inputSource}) async {
+        final context =
+            await tester //
+                .createDocument()
+                .fromMarkdown('* Inserting')
+                .withInputSource(inputSource)
+                .pump();
 
         final nodeId = context.document.first.id;
 
@@ -331,9 +341,7 @@ void main() {
         required TextInputSource inputSource,
       }) async {
         final document = MutableDocument(
-          nodes: [
-            TaskNode(id: "1", text: AttributedText(""), isComplete: false),
-          ],
+          nodes: [TaskNode(id: "1", text: AttributedText(""), isComplete: false)],
         );
         final composer = MutableDocumentComposer();
         final editor = createDefaultDocumentEditor(document: document, composer: composer);
@@ -343,10 +351,7 @@ void main() {
             home: Scaffold(
               body: SuperEditor(
                 editor: editor,
-                componentBuilders: [
-                  TaskComponentBuilder(editor),
-                  ...defaultComponentBuilders,
-                ],
+                componentBuilders: [TaskComponentBuilder(editor), ...defaultComponentBuilders],
               ),
             ),
           ),
@@ -382,9 +387,7 @@ void main() {
         required TextInputSource inputSource,
       }) async {
         final document = MutableDocument(
-          nodes: [
-            TaskNode(id: "1", text: AttributedText("was inserted"), isComplete: false),
-          ],
+          nodes: [TaskNode(id: "1", text: AttributedText("was inserted"), isComplete: false)],
         );
         final composer = MutableDocumentComposer();
         final editor = createDefaultDocumentEditor(document: document, composer: composer);
@@ -394,10 +397,7 @@ void main() {
             home: Scaffold(
               body: SuperEditor(
                 editor: editor,
-                componentBuilders: [
-                  TaskComponentBuilder(editor),
-                  ...defaultComponentBuilders,
-                ],
+                componentBuilders: [TaskComponentBuilder(editor), ...defaultComponentBuilders],
               ),
             ),
           ),
@@ -433,14 +433,9 @@ void main() {
         expect((document.first as TaskNode).text.toPlainText(), '—-(em-dash) was inserted');
       });
 
-      testAllInputsOnAllPlatforms('at the middle of a task', (
-        tester, {
-        required TextInputSource inputSource,
-      }) async {
+      testAllInputsOnAllPlatforms('at the middle of a task', (tester, {required TextInputSource inputSource}) async {
         final document = MutableDocument(
-          nodes: [
-            TaskNode(id: "1", text: AttributedText("Inserting with a reaction"), isComplete: false),
-          ],
+          nodes: [TaskNode(id: "1", text: AttributedText("Inserting with a reaction"), isComplete: false)],
         );
         final composer = MutableDocumentComposer();
         final editor = createDefaultDocumentEditor(document: document, composer: composer);
@@ -450,10 +445,7 @@ void main() {
             home: Scaffold(
               body: SuperEditor(
                 editor: editor,
-                componentBuilders: [
-                  TaskComponentBuilder(editor),
-                  ...defaultComponentBuilders,
-                ],
+                componentBuilders: [TaskComponentBuilder(editor), ...defaultComponentBuilders],
               ),
             ),
           ),
@@ -489,14 +481,9 @@ void main() {
         expect((document.first as TaskNode).text.toPlainText(), 'Inserting — typing two dashes ——with a reaction');
       });
 
-      testAllInputsOnAllPlatforms('at the end of a task', (
-        tester, {
-        required TextInputSource inputSource,
-      }) async {
+      testAllInputsOnAllPlatforms('at the end of a task', (tester, {required TextInputSource inputSource}) async {
         final document = MutableDocument(
-          nodes: [
-            TaskNode(id: "1", text: AttributedText("Inserting"), isComplete: false),
-          ],
+          nodes: [TaskNode(id: "1", text: AttributedText("Inserting"), isComplete: false)],
         );
         final composer = MutableDocumentComposer();
         final editor = createDefaultDocumentEditor(document: document, composer: composer);
@@ -506,10 +493,7 @@ void main() {
             home: Scaffold(
               body: SuperEditor(
                 editor: editor,
-                componentBuilders: [
-                  TaskComponentBuilder(editor),
-                  ...defaultComponentBuilders,
-                ],
+                componentBuilders: [TaskComponentBuilder(editor), ...defaultComponentBuilders],
               ),
             ),
           ),

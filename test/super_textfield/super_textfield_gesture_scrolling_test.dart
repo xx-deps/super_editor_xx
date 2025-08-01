@@ -10,19 +10,11 @@ import 'super_textfield_inspector.dart';
 void main() {
   group('SuperTextField', () {
     testWidgetsOnAllPlatforms('single-line jumps scroll position horizontally as the user types', (tester) async {
-      final controller = AttributedTextEditingController(
-        text: AttributedText("ABCDEFG"),
-      );
+      final controller = AttributedTextEditingController(text: AttributedText("ABCDEFG"));
 
       // Pump the widget tree with a SuperTextField with a maxWidth smaller
       // than the text width
-      await _pumpTestApp(
-        tester,
-        textController: controller,
-        minLines: 1,
-        maxLines: 1,
-        maxWidth: 50,
-      );
+      await _pumpTestApp(tester, textController: controller, minLines: 1, maxLines: 1, maxWidth: 50);
 
       // Move selection to the end of the text
       // TODO: change to simulate user input when IME simulation is available
@@ -40,19 +32,11 @@ void main() {
     });
 
     testWidgetsOnAllPlatforms('multi-line jumps scroll position vertically as the user types', (tester) async {
-      final controller = AttributedTextEditingController(
-        text: AttributedText("A\nB\nC\nD"),
-      );
+      final controller = AttributedTextEditingController(text: AttributedText("A\nB\nC\nD"));
 
       // Pump the widget tree with a SuperTextField with a maxHeight smaller
       // than the text heght
-      await _pumpTestApp(
-        tester,
-        textController: controller,
-        minLines: 1,
-        maxLines: 2,
-        maxHeight: 20,
-      );
+      await _pumpTestApp(tester, textController: controller, minLines: 1, maxLines: 2, maxHeight: 20);
 
       // Move selection to the end of the text
       // TODO: change to simulate user input when IME simulation is available
@@ -70,57 +54,41 @@ void main() {
     });
 
     testWidgetsOnAllPlatforms(
-        "multi-line jumps scroll position vertically when selection extent moves above or below the visible viewport area",
-        (tester) async {
+      "multi-line jumps scroll position vertically when selection extent moves above or below the visible viewport area",
+      (tester) async {
+        final controller = AttributedTextEditingController(
+          text: AttributedText("First line\nSecond Line\nThird Line\nFourth Line"),
+        );
+
+        // Pump the widget tree with a SuperTextField which is two lines tall.
+        await _pumpTestApp(tester, textController: controller, minLines: 1, maxLines: 2, maxHeight: 40);
+
+        // Move selection to the end of the text.
+        // This will scroll the text field to the end.
+        controller.selection = const TextSelection.collapsed(offset: 45);
+        await tester.pumpAndSettle();
+
+        // Ensure the text field has scrolled.
+        expect(SuperTextFieldInspector.findScrollOffset(), greaterThan(0.0));
+
+        // Place the caret at the beginning of the text.
+        controller.selection = const TextSelection.collapsed(offset: 0);
+        await tester.pumpAndSettle();
+
+        // Ensure the text field scrolled to the top.
+        expect(SuperTextFieldInspector.findScrollOffset(), 0.0);
+      },
+    );
+
+    testWidgetsOnAllPlatforms("multi-line doesn't jump scroll position vertically when selection extent is visible", (
+      tester,
+    ) async {
       final controller = AttributedTextEditingController(
         text: AttributedText("First line\nSecond Line\nThird Line\nFourth Line"),
       );
 
       // Pump the widget tree with a SuperTextField which is two lines tall.
-      await _pumpTestApp(
-        tester,
-        textController: controller,
-        minLines: 1,
-        maxLines: 2,
-        maxHeight: 40,
-      );
-
-      // Move selection to the end of the text.
-      // This will scroll the text field to the end.
-      controller.selection = const TextSelection.collapsed(offset: 45);
-      await tester.pumpAndSettle();
-
-      // Ensure the text field has scrolled.
-      expect(
-        SuperTextFieldInspector.findScrollOffset(),
-        greaterThan(0.0),
-      );
-
-      // Place the caret at the beginning of the text.
-      controller.selection = const TextSelection.collapsed(offset: 0);
-      await tester.pumpAndSettle();
-
-      // Ensure the text field scrolled to the top.
-      expect(
-        SuperTextFieldInspector.findScrollOffset(),
-        0.0,
-      );
-    });
-
-    testWidgetsOnAllPlatforms("multi-line doesn't jump scroll position vertically when selection extent is visible",
-        (tester) async {
-      final controller = AttributedTextEditingController(
-        text: AttributedText("First line\nSecond Line\nThird Line\nFourth Line"),
-      );
-
-      // Pump the widget tree with a SuperTextField which is two lines tall.
-      await _pumpTestApp(
-        tester,
-        textController: controller,
-        minLines: 1,
-        maxLines: 2,
-        maxHeight: 40,
-      );
+      await _pumpTestApp(tester, textController: controller, minLines: 1, maxLines: 2, maxHeight: 40);
 
       // Move selection to the end of the text.
       // This will scroll the text field to the end.
@@ -136,10 +104,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Ensure the content didn't scroll.
-      expect(
-        SuperTextFieldInspector.findScrollOffset(),
-        scrollOffsetBefore,
-      );
+      expect(SuperTextFieldInspector.findScrollOffset(), scrollOffsetBefore);
     });
 
     testWidgetsOnDesktop("doesn't scroll vertically when maxLines is null", (tester) async {
@@ -155,14 +120,8 @@ void main() {
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: verticalPadding),
                 minLines: 1,
                 maxLines: null,
-                textController: AttributedTextEditingController(
-                  text: AttributedText("SuperTextField"),
-                ),
-                textStyleBuilder: (_) => const TextStyle(
-                  fontSize: 14,
-                  height: 1,
-                  fontFamily: 'Roboto',
-                ),
+                textController: AttributedTextEditingController(text: AttributedText("SuperTextField")),
+                textStyleBuilder: (_) => const TextStyle(fontSize: 14, height: 1, fontFamily: 'Roboto'),
               ),
             ),
           ),
@@ -196,19 +155,11 @@ void main() {
           'Line $i',
       ];
 
-      final controller = AttributedTextEditingController(
-        text: AttributedText(text.join('\n')),
-      );
+      final controller = AttributedTextEditingController(text: AttributedText(text.join('\n')));
 
       // Pump the widget tree with a SuperTextField with a maxHeight smaller
       // than the text height.
-      await _pumpTestApp(
-        tester,
-        textController: controller,
-        minLines: 1,
-        maxLines: 2,
-        maxHeight: 20,
-      );
+      await _pumpTestApp(tester, textController: controller, minLines: 1, maxLines: 2, maxHeight: 20);
 
       // Ensure the textfield initially has no selection.
       expect(SuperTextFieldInspector.findSelection(), TextRange.empty);
@@ -251,22 +202,15 @@ void main() {
     });
 
     testWidgetsOnMobile("multi-line is vertically scrollable when text spans more lines than maxLines", (tester) async {
-      const initialText = "The first line of text in the field\n"
+      const initialText =
+          "The first line of text in the field\n"
           "The second line of text in the field\n"
           "The third line of text in the field";
-      final controller = AttributedTextEditingController(
-        text: AttributedText(initialText),
-      );
+      final controller = AttributedTextEditingController(text: AttributedText(initialText));
 
       // Pump the widget tree with a SuperTextField with a maxHeight of 2 lines
       // of text, which should overflow considering there are 3 lines of text.
-      await _pumpTestApp(
-        tester,
-        textController: controller,
-        minLines: 1,
-        maxLines: 2,
-        maxHeight: 40,
-      );
+      await _pumpTestApp(tester, textController: controller, minLines: 1, maxLines: 2, maxHeight: 40);
 
       // Ensure the text field has not yet scrolled.
       var textTop = tester.getTopRight(find.byType(SuperTextField)).dy;
@@ -292,24 +236,18 @@ void main() {
       expect(textTop, moreOrLessEquals(viewportTop));
     });
 
-    testWidgetsOnDesktop("multi-line is vertically scrollable when text spans more lines than maxLines",
-        (tester) async {
-      const initialText = "The first line of text in the field\n"
+    testWidgetsOnDesktop("multi-line is vertically scrollable when text spans more lines than maxLines", (
+      tester,
+    ) async {
+      const initialText =
+          "The first line of text in the field\n"
           "The second line of text in the field\n"
           "The third line of text in the field";
-      final controller = AttributedTextEditingController(
-        text: AttributedText(initialText),
-      );
+      final controller = AttributedTextEditingController(text: AttributedText(initialText));
 
       // Pump the widget tree with a SuperTextField with a maxHeight of 2 lines
       // of text, which should overflow considering there are 3 lines of text.
-      await _pumpTestApp(
-        tester,
-        textController: controller,
-        minLines: 1,
-        maxLines: 2,
-        maxHeight: 40,
-      );
+      await _pumpTestApp(tester, textController: controller, minLines: 1, maxLines: 2, maxHeight: 40);
 
       // Ensure the text field has not yet scrolled.
       var textTop = tester.getTopRight(find.byType(SuperTextField)).dy;
@@ -317,11 +255,7 @@ void main() {
       expect(textTop, moreOrLessEquals(viewportTop));
 
       // Scroll down to reveal the last line of text.
-      await tester.drag(
-        find.byType(SuperTextField),
-        const Offset(0, -1000.0),
-        kind: PointerDeviceKind.trackpad,
-      );
+      await tester.drag(find.byType(SuperTextField), const Offset(0, -1000.0), kind: PointerDeviceKind.trackpad);
       await tester.pumpAndSettle();
 
       // Ensure the text field has scrolled to the bottom.
@@ -330,11 +264,7 @@ void main() {
       expect(textBottom, moreOrLessEquals(viewportBottom));
 
       // Scroll back up to the top of the text field.
-      await tester.drag(
-        find.byType(SuperTextField),
-        const Offset(0, 1000.0),
-        kind: PointerDeviceKind.trackpad,
-      );
+      await tester.drag(find.byType(SuperTextField), const Offset(0, 1000.0), kind: PointerDeviceKind.trackpad);
       await tester.pumpAndSettle();
 
       // Ensure the text field has scrolled back to the top.
@@ -358,10 +288,7 @@ Future<void> _pumpTestApp(
     MaterialApp(
       home: Scaffold(
         body: ConstrainedBox(
-          constraints: BoxConstraints(
-            maxWidth: maxWidth ?? double.infinity,
-            maxHeight: maxHeight ?? double.infinity,
-          ),
+          constraints: BoxConstraints(maxWidth: maxWidth ?? double.infinity, maxHeight: maxHeight ?? double.infinity),
           child: SuperTextField(
             textController: textController,
             lineHeight: 20,

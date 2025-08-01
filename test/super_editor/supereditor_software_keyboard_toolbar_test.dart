@@ -12,11 +12,12 @@ import 'supereditor_test_tools.dart';
 void main() {
   group('SuperEditor software keyboard toolbar >', () {
     testWidgetsOnAllPlatforms('converts empty paragraph a horizontal rule', (tester) async {
-      final context = await tester //
-          .createDocument()
-          .withSingleEmptyParagraph()
-          .withInputSource(TextInputSource.ime)
-          .pump();
+      final context =
+          await tester //
+              .createDocument()
+              .withSingleEmptyParagraph()
+              .withInputSource(TextInputSource.ime)
+              .pump();
 
       final document = SuperEditorInspector.findDocument()!;
 

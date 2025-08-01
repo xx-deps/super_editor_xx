@@ -303,10 +303,7 @@ void main() {
       ], getter: imeClientGetter);
 
       // Ensure the selection and composing region were updated.
-      expect(
-        SuperEditorInspector.findDocumentSelection(),
-        selectionEquivalentTo(_caretInParagraph(nodeId, 0)),
-      );
+      expect(SuperEditorInspector.findDocumentSelection(), selectionEquivalentTo(_caretInParagraph(nodeId, 0)));
       expect(
         SuperEditorInspector.findComposingRegion(),
         DocumentRange(
@@ -334,12 +331,14 @@ void main() {
           .withSingleParagraph()
           .withFocusNode(editorFocusNode)
           .withInputSource(inputSource)
-          .withAddedKeyboardActions(append: [
-            ({required editContext, required keyEvent}) {
-              keyHandlerCalled = true;
-              return ExecutionInstruction.continueExecution;
-            }
-          ])
+          .withAddedKeyboardActions(
+            append: [
+              ({required editContext, required keyEvent}) {
+                keyHandlerCalled = true;
+                return ExecutionInstruction.continueExecution;
+              },
+            ],
+          )
           .withCustomWidgetTreeBuilder(
             (superEditor) => MaterialApp(
               home: Scaffold(
@@ -348,10 +347,7 @@ void main() {
                   overlayChildBuilder: (context) => Focus(
                     focusNode: popoverFocusNode,
                     parentNode: editorFocusNode,
-                    child: SuperTextField(
-                      focusNode: textFieldFocusNode,
-                      inputSource: inputSource,
-                    ),
+                    child: SuperTextField(focusNode: textFieldFocusNode, inputSource: inputSource),
                   ),
                   child: superEditor,
                 ),
@@ -400,14 +396,8 @@ void main() {
         SuperEditorInspector.findDocumentSelection(),
         selectionEquivalentTo(
           const DocumentSelection(
-            base: DocumentPosition(
-              nodeId: '1',
-              nodePosition: TextNodePosition(offset: 0),
-            ),
-            extent: DocumentPosition(
-              nodeId: '1',
-              nodePosition: TextNodePosition(offset: 5),
-            ),
+            base: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 0)),
+            extent: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 5)),
           ),
         ),
       );
@@ -418,30 +408,22 @@ void main() {
     group('in automatic control mode', () {
       testWidgetsOnAndroid('clears selection when it closes', (tester) async {
         final keyboardController = SoftwareKeyboardController();
-        final testContext = await tester //
-            .createDocument()
-            .withSingleEmptyParagraph()
-            .withSoftwareKeyboardController(keyboardController)
-            .withSelectionPolicies(
-              const SuperEditorSelectionPolicies(
-                clearSelectionWhenEditorLosesFocus: true,
-                clearSelectionWhenImeConnectionCloses: true,
-              ),
-            )
-            .withImePolicies(
-              const SuperEditorImePolicies(
-                openKeyboardOnSelectionChange: true,
-              ),
-            )
-            .withCustomWidgetTreeBuilder(
-              (superEditor) => MaterialApp(
-                home: Scaffold(
-                  resizeToAvoidBottomInset: false,
-                  body: superEditor,
-                ),
-              ),
-            )
-            .pump();
+        final testContext =
+            await tester //
+                .createDocument()
+                .withSingleEmptyParagraph()
+                .withSoftwareKeyboardController(keyboardController)
+                .withSelectionPolicies(
+                  const SuperEditorSelectionPolicies(
+                    clearSelectionWhenEditorLosesFocus: true,
+                    clearSelectionWhenImeConnectionCloses: true,
+                  ),
+                )
+                .withImePolicies(const SuperEditorImePolicies(openKeyboardOnSelectionChange: true))
+                .withCustomWidgetTreeBuilder(
+                  (superEditor) => MaterialApp(home: Scaffold(resizeToAvoidBottomInset: false, body: superEditor)),
+                )
+                .pump();
 
         // Place the caret in Super Editor to open the IME.
         final nodeId = testContext.findEditContext().document.first.id;
@@ -469,29 +451,17 @@ void main() {
 
       testWidgetsOnAndroid('re-opens when selection changes', (tester) async {
         final keyboardController = SoftwareKeyboardController();
-        final testContext = await tester //
-            .createDocument()
-            .withSingleParagraph()
-            .withSoftwareKeyboardController(keyboardController)
-            .withSelectionPolicies(
-              const SuperEditorSelectionPolicies(
-                clearSelectionWhenEditorLosesFocus: true,
-              ),
-            )
-            .withImePolicies(
-              const SuperEditorImePolicies(
-                openKeyboardOnSelectionChange: true,
-              ),
-            )
-            .withCustomWidgetTreeBuilder(
-              (superEditor) => MaterialApp(
-                home: Scaffold(
-                  resizeToAvoidBottomInset: false,
-                  body: superEditor,
-                ),
-              ),
-            )
-            .pump();
+        final testContext =
+            await tester //
+                .createDocument()
+                .withSingleParagraph()
+                .withSoftwareKeyboardController(keyboardController)
+                .withSelectionPolicies(const SuperEditorSelectionPolicies(clearSelectionWhenEditorLosesFocus: true))
+                .withImePolicies(const SuperEditorImePolicies(openKeyboardOnSelectionChange: true))
+                .withCustomWidgetTreeBuilder(
+                  (superEditor) => MaterialApp(home: Scaffold(resizeToAvoidBottomInset: false, body: superEditor)),
+                )
+                .pump();
 
         // Place the caret in Super Editor.
         final nodeId = testContext.findEditContext().document.first.id;
@@ -543,30 +513,22 @@ void main() {
     group('in manual control mode', () {
       testWidgetsOnAndroid('leaves selection active when it closes', (tester) async {
         final keyboardController = SoftwareKeyboardController();
-        final testContext = await tester //
-            .createDocument()
-            .withSingleEmptyParagraph()
-            .withSoftwareKeyboardController(keyboardController)
-            .withSelectionPolicies(
-              const SuperEditorSelectionPolicies(
-                clearSelectionWhenEditorLosesFocus: false,
-                clearSelectionWhenImeConnectionCloses: false,
-              ),
-            )
-            .withImePolicies(
-              const SuperEditorImePolicies(
-                openKeyboardOnSelectionChange: false,
-              ),
-            )
-            .withCustomWidgetTreeBuilder(
-              (superEditor) => MaterialApp(
-                home: Scaffold(
-                  resizeToAvoidBottomInset: false,
-                  body: superEditor,
-                ),
-              ),
-            )
-            .pump();
+        final testContext =
+            await tester //
+                .createDocument()
+                .withSingleEmptyParagraph()
+                .withSoftwareKeyboardController(keyboardController)
+                .withSelectionPolicies(
+                  const SuperEditorSelectionPolicies(
+                    clearSelectionWhenEditorLosesFocus: false,
+                    clearSelectionWhenImeConnectionCloses: false,
+                  ),
+                )
+                .withImePolicies(const SuperEditorImePolicies(openKeyboardOnSelectionChange: false))
+                .withCustomWidgetTreeBuilder(
+                  (superEditor) => MaterialApp(home: Scaffold(resizeToAvoidBottomInset: false, body: superEditor)),
+                )
+                .pump();
 
         // Place the caret in Super Editor to open the IME.
         final nodeId = testContext.findEditContext().document.first.id;
@@ -598,30 +560,22 @@ void main() {
 
       testWidgetsOnAndroid('stays closed when changing selection', (tester) async {
         final keyboardController = SoftwareKeyboardController();
-        final testContext = await tester //
-            .createDocument()
-            .withSingleParagraph()
-            .withSoftwareKeyboardController(keyboardController)
-            .withSelectionPolicies(
-              const SuperEditorSelectionPolicies(
-                clearSelectionWhenEditorLosesFocus: false,
-                clearSelectionWhenImeConnectionCloses: false,
-              ),
-            )
-            .withImePolicies(
-              const SuperEditorImePolicies(
-                openKeyboardOnSelectionChange: false,
-              ),
-            )
-            .withCustomWidgetTreeBuilder(
-              (superEditor) => MaterialApp(
-                home: Scaffold(
-                  resizeToAvoidBottomInset: false,
-                  body: superEditor,
-                ),
-              ),
-            )
-            .pump();
+        final testContext =
+            await tester //
+                .createDocument()
+                .withSingleParagraph()
+                .withSoftwareKeyboardController(keyboardController)
+                .withSelectionPolicies(
+                  const SuperEditorSelectionPolicies(
+                    clearSelectionWhenEditorLosesFocus: false,
+                    clearSelectionWhenImeConnectionCloses: false,
+                  ),
+                )
+                .withImePolicies(const SuperEditorImePolicies(openKeyboardOnSelectionChange: false))
+                .withCustomWidgetTreeBuilder(
+                  (superEditor) => MaterialApp(home: Scaffold(resizeToAvoidBottomInset: false, body: superEditor)),
+                )
+                .pump();
 
         // Place the caret in Super Editor.
         final nodeId = testContext.findEditContext().document.first.id;
@@ -673,30 +627,22 @@ void main() {
 
       testWidgetsOnAndroid('opens when requested after previously closing', (tester) async {
         final keyboardController = SoftwareKeyboardController();
-        final testContext = await tester //
-            .createDocument()
-            .withSingleParagraph()
-            .withSoftwareKeyboardController(keyboardController)
-            .withSelectionPolicies(
-              const SuperEditorSelectionPolicies(
-                clearSelectionWhenEditorLosesFocus: false,
-                clearSelectionWhenImeConnectionCloses: false,
-              ),
-            )
-            .withImePolicies(
-              const SuperEditorImePolicies(
-                openKeyboardOnSelectionChange: false,
-              ),
-            )
-            .withCustomWidgetTreeBuilder(
-              (superEditor) => MaterialApp(
-                home: Scaffold(
-                  resizeToAvoidBottomInset: false,
-                  body: superEditor,
-                ),
-              ),
-            )
-            .pump();
+        final testContext =
+            await tester //
+                .createDocument()
+                .withSingleParagraph()
+                .withSoftwareKeyboardController(keyboardController)
+                .withSelectionPolicies(
+                  const SuperEditorSelectionPolicies(
+                    clearSelectionWhenEditorLosesFocus: false,
+                    clearSelectionWhenImeConnectionCloses: false,
+                  ),
+                )
+                .withImePolicies(const SuperEditorImePolicies(openKeyboardOnSelectionChange: false))
+                .withCustomWidgetTreeBuilder(
+                  (superEditor) => MaterialApp(home: Scaffold(resizeToAvoidBottomInset: false, body: superEditor)),
+                )
+                .pump();
 
         // Place the caret in Super Editor.
         final nodeId = testContext.findEditContext().document.first.id;
@@ -744,42 +690,34 @@ void main() {
             navigatorKey: navigationKey,
             home: Scaffold(
               key: firstPageKey,
-              body: const Center(
-                child: Text("Starting Page"),
-              ),
+              body: const Center(child: Text("Starting Page")),
             ),
           ),
         );
         expect(find.byKey(firstPageKey), findsOneWidget);
 
         // Push a page with SuperEditor.
-        final superEditorAndContext = tester //
-            .createDocument()
-            .withSingleParagraph()
-            .withSoftwareKeyboardController(keyboardController)
-            .withSelectionPolicies(
-              const SuperEditorSelectionPolicies(
-                clearSelectionWhenEditorLosesFocus: false,
-              ),
-            )
-            .withImePolicies(
-              const SuperEditorImePolicies(
-                openKeyboardOnSelectionChange: false,
-              ),
-            )
-            .withCustomWidgetTreeBuilder(
-              (superEditor) => _CloseKeyboardOnDispose(
-                keyboardController: keyboardController,
-                child: Scaffold(
-                  resizeToAvoidBottomInset: false,
-                  body: superEditor,
-                ),
-              ),
-            )
-            .build();
-        navigationKey.currentState!.push(MaterialPageRoute(builder: (context) {
-          return superEditorAndContext.widget;
-        }));
+        final superEditorAndContext =
+            tester //
+                .createDocument()
+                .withSingleParagraph()
+                .withSoftwareKeyboardController(keyboardController)
+                .withSelectionPolicies(const SuperEditorSelectionPolicies(clearSelectionWhenEditorLosesFocus: false))
+                .withImePolicies(const SuperEditorImePolicies(openKeyboardOnSelectionChange: false))
+                .withCustomWidgetTreeBuilder(
+                  (superEditor) => _CloseKeyboardOnDispose(
+                    keyboardController: keyboardController,
+                    child: Scaffold(resizeToAvoidBottomInset: false, body: superEditor),
+                  ),
+                )
+                .build();
+        navigationKey.currentState!.push(
+          MaterialPageRoute(
+            builder: (context) {
+              return superEditorAndContext.widget;
+            },
+          ),
+        );
         await tester.pumpAndSettle(); // navigation transition
 
         // Ensure the first page is no longer visible.
@@ -835,10 +773,7 @@ void main() {
       expect(
         SuperEditorInspector.findDocumentSelection(),
         DocumentSelection.collapsed(
-          position: DocumentPosition(
-            nodeId: document.first.id,
-            nodePosition: const TextNodePosition(offset: 0),
-          ),
+          position: DocumentPosition(nodeId: document.first.id, nodePosition: const TextNodePosition(offset: 0)),
         ),
       );
 
@@ -879,11 +814,12 @@ Future<String> _pumpSingleLineWithCaret(
   required int offset,
   required TextInputSource inputSource,
 }) async {
-  final testContext = await tester //
-      .createDocument()
-      .fromMarkdown("This is some testing text.") // Length is 26
-      .withInputSource(inputSource)
-      .pump();
+  final testContext =
+      await tester //
+          .createDocument()
+          .fromMarkdown("This is some testing text.") // Length is 26
+          .withInputSource(inputSource)
+          .pump();
 
   final nodeId = testContext.findEditContext().document.first.id;
 
@@ -892,16 +828,20 @@ Future<String> _pumpSingleLineWithCaret(
   return nodeId;
 }
 
-Future<String> _pumpDoubleLineWithCaret(WidgetTester tester,
-    {required int offset, required TextInputSource inputSource}) async {
-  final testContext = await tester //
-      .createDocument()
-      // Text indices:
-      // - first line: [0, 28]
-      // - newline: 29
-      // - second line: [30, 58]
-      .fromMarkdown("This is the first paragraph.\nThis is the second paragraph.")
-      .pump();
+Future<String> _pumpDoubleLineWithCaret(
+  WidgetTester tester, {
+  required int offset,
+  required TextInputSource inputSource,
+}) async {
+  final testContext =
+      await tester //
+          .createDocument()
+          // Text indices:
+          // - first line: [0, 28]
+          // - newline: 29
+          // - second line: [30, 58]
+          .fromMarkdown("This is the first paragraph.\nThis is the second paragraph.")
+          .pump();
 
   final nodeId = testContext.findEditContext().document.first.id;
 
@@ -920,18 +860,22 @@ Future<TestDocumentContext> _pumpUnorderedList(WidgetTester tester) async {
 
 ''';
 
-  final testContext = await tester //
-      .createDocument()
-      .fromMarkdown(markdown)
-      .withInputSource(TextInputSource.ime)
-      .pump();
+  final testContext =
+      await tester //
+          .createDocument()
+          .fromMarkdown(markdown)
+          .withInputSource(TextInputSource.ime)
+          .pump();
 
   return testContext;
 }
 
 DocumentSelection _caretInParagraph(String nodeId, int offset, [TextAffinity textAffinity = TextAffinity.downstream]) {
   return DocumentSelection.collapsed(
-    position: DocumentPosition(nodeId: nodeId, nodePosition: TextNodePosition(offset: offset, affinity: textAffinity)),
+    position: DocumentPosition(
+      nodeId: nodeId,
+      nodePosition: TextNodePosition(offset: offset, affinity: textAffinity),
+    ),
   );
 }
 
@@ -943,8 +887,14 @@ DocumentSelection _selectionInParagraph(
   TextAffinity toAffinity = TextAffinity.downstream,
 }) {
   return DocumentSelection(
-    base: DocumentPosition(nodeId: nodeId, nodePosition: TextNodePosition(offset: from, affinity: fromAffinity)),
-    extent: DocumentPosition(nodeId: nodeId, nodePosition: TextNodePosition(offset: to, affinity: toAffinity)),
+    base: DocumentPosition(
+      nodeId: nodeId,
+      nodePosition: TextNodePosition(offset: from, affinity: fromAffinity),
+    ),
+    extent: DocumentPosition(
+      nodeId: nodeId,
+      nodePosition: TextNodePosition(offset: to, affinity: toAffinity),
+    ),
   );
 }
 
@@ -953,11 +903,7 @@ DocumentSelection _selectionInParagraph(
 /// This behavior ensures that Super Editor users can close the keyboard as their
 /// Super Editor experience goes out of existence, such as navigation.
 class _CloseKeyboardOnDispose extends StatefulWidget {
-  const _CloseKeyboardOnDispose({
-    Key? key,
-    required this.keyboardController,
-    required this.child,
-  }) : super(key: key);
+  const _CloseKeyboardOnDispose({Key? key, required this.keyboardController, required this.child}) : super(key: key);
 
   final SoftwareKeyboardController keyboardController;
   final Widget child;

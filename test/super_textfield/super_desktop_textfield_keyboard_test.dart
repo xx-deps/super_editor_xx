@@ -23,12 +23,7 @@ void main() {
         });
 
         testWidgetsOnDesktop('in middle of text', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText('--><--'),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText('--><--')));
           await tester.placeCaretInSuperTextField(3);
 
           await tester.typeKeyboardText("f");
@@ -38,12 +33,7 @@ void main() {
         });
 
         testWidgetsOnDesktop('at end of text', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText('-->'),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText('-->')));
           await tester.placeCaretInSuperTextField(3);
 
           await tester.typeKeyboardText("f");
@@ -53,12 +43,7 @@ void main() {
         });
 
         testWidgetsOnDesktop('and replaces selected text', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText('-->REPLACE<--'),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText('-->REPLACE<--')));
           await tester.selectSuperTextFieldText(2, 10);
 
           await tester.typeKeyboardText("f");
@@ -70,12 +55,7 @@ void main() {
 
       group('inserts line', () {
         testWidgetsOnDesktop('when ENTER is pressed in middle of text', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText('this is some text'),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText('this is some text')));
           await tester.placeCaretInSuperTextField(8);
 
           await tester.pressEnter();
@@ -85,12 +65,7 @@ void main() {
         });
 
         testWidgetsOnDesktop('when ENTER is pressed at beginning of text', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText('this is some text'),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText('this is some text')));
           await tester.placeCaretInSuperTextField(0);
 
           await tester.pressEnter();
@@ -100,12 +75,7 @@ void main() {
         });
 
         testWidgetsOnDesktop('when ENTER is pressed at end of text', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText('this is some text'),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText('this is some text')));
           await tester.placeCaretInSuperTextField(17);
 
           await tester.pressEnter();
@@ -117,50 +87,28 @@ void main() {
 
       group('move caret upstream', () {
         testWidgetsOnDesktop('LEFT ARROW does nothing at beginning of text blob', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText('This is some text'),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText('This is some text')));
           await tester.placeCaretInSuperTextField(0);
 
           // Try moving left by character.
           await tester.pressLeftArrow();
-          expect(
-            SuperTextFieldInspector.findSelection(),
-            const TextSelection.collapsed(offset: 0),
-          );
+          expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: 0));
 
           // Try moving left by word.
           await tester.pressAltLeftArrow();
-          expect(
-            SuperTextFieldInspector.findSelection(),
-            const TextSelection.collapsed(offset: 0),
-          );
+          expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: 0));
 
           // Try moving left to beginning of line.
           await tester.pressCmdLeftArrow();
-          expect(
-            SuperTextFieldInspector.findSelection(),
-            const TextSelection.collapsed(offset: 0),
-          );
+          expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: 0));
         });
 
         testWidgetsOnDesktop('LEFT ARROW moves left by character', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText('This is some text'),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText('This is some text')));
           await tester.placeCaretInSuperTextField(2);
 
           await tester.pressLeftArrow();
-          expect(
-            SuperTextFieldInspector.findSelection(),
-            const TextSelection.collapsed(offset: 1),
-          );
+          expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: 1));
         });
 
         // TODO: This test is skipped because I think #549 is making this use-case
@@ -169,10 +117,9 @@ void main() {
         // it just moves the caret from DOWNSTREAM to UPSTREAM.
         testWidgetsOnDesktop('LEFT ARROW moves to previous line by character', (tester) async {
           await _pumpSuperTextField(
-              tester,
-              AttributedTextEditingController(
-                text: AttributedText(_multilineLayoutText),
-              ));
+            tester,
+            AttributedTextEditingController(text: AttributedText(_multilineLayoutText)),
+          );
           await tester.placeCaretInSuperTextField(18);
 
           final textLayout = SuperTextFieldInspector.findProseTextLayout();
@@ -188,7 +135,8 @@ void main() {
           print("Selection before left arrow: ${SuperTextFieldInspector.findSelection()}");
           // ignore: avoid_print
           print(
-              "Caret offset for 18 upstream: ${textLayout.getOffsetForCaret(const TextPosition(offset: 18, affinity: TextAffinity.upstream))}");
+            "Caret offset for 18 upstream: ${textLayout.getOffsetForCaret(const TextPosition(offset: 18, affinity: TextAffinity.upstream))}",
+          );
           // ignore: avoid_print
           print("Caret offset for 18 downstream: ${textLayout.getOffsetForCaret(const TextPosition(offset: 18))}");
 
@@ -222,31 +170,15 @@ void main() {
         }, skip: true);
 
         testWidgetsOnDesktop('SHIFT + LEFT ARROW expands left by character', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText('This is some text'),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText('This is some text')));
           await tester.placeCaretInSuperTextField(2);
 
           await tester.pressShiftLeftArrow();
-          expect(
-            SuperTextFieldInspector.findSelection(),
-            const TextSelection(
-              baseOffset: 2,
-              extentOffset: 1,
-            ),
-          );
+          expect(SuperTextFieldInspector.findSelection(), const TextSelection(baseOffset: 2, extentOffset: 1));
         });
 
         testWidgetsOnDesktop('LEFT ARROW collapses downstream selection on left side', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText('super text field'),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText('super text field')));
           // TODO: we begin 1 character ahead of where we should because
           // of #549 - update the start offset when that bug is fixed.
           await tester.selectSuperTextFieldText(5, 10);
@@ -257,12 +189,7 @@ void main() {
         });
 
         testWidgetsOnDesktop('LEFT ARROW collapses upstream selection on left side', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText('super text field'),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText('super text field')));
           // TODO: we begin 1 character behind where we should because
           // of #549 - update the start offset when that bug is fixed.
           await tester.selectSuperTextFieldText(11, 6);
@@ -275,12 +202,7 @@ void main() {
 
       group('move caret downstream', () {
         testWidgetsOnDesktop('RIGHT ARROW does nothing at end of text', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText('super text field'),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText('super text field')));
           await tester.placeCaretInSuperTextField(16);
 
           await tester.pressRightArrow();
@@ -289,12 +211,7 @@ void main() {
         });
 
         testWidgetsOnDesktop('RIGHT ARROW moves right by character', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText('super text field'),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText('super text field')));
           await tester.placeCaretInSuperTextField(2);
 
           await tester.pressRightArrow();
@@ -309,31 +226,28 @@ void main() {
         testWidgetsOnDesktop('RIGHT ARROW moves to next line by character', (tester) async {
           await _pumpSuperTextField(
             tester,
-            AttributedTextEditingController(
-              text: AttributedText(_multilineLayoutText),
-            ),
+            AttributedTextEditingController(text: AttributedText(_multilineLayoutText)),
           );
           await tester.placeCaretInSuperTextField(18, null, TextAffinity.upstream);
 
           await tester.pressRightArrow();
 
-          expect(SuperTextFieldInspector.findSelection(),
-              const TextSelection.collapsed(offset: 18, affinity: TextAffinity.downstream));
+          expect(
+            SuperTextFieldInspector.findSelection(),
+            const TextSelection.collapsed(offset: 18, affinity: TextAffinity.downstream),
+          );
 
           // We should have gone from line 1 to line 2. Make double sure by
           // checking that the bounding box for the character that's now selected
           // does not sit at the top of the text box.
-          expect(SuperTextFieldInspector.findProseTextLayout().getCharacterBox(const TextPosition(offset: 18))?.top,
-              isNonZero);
+          expect(
+            SuperTextFieldInspector.findProseTextLayout().getCharacterBox(const TextPosition(offset: 18))?.top,
+            isNonZero,
+          );
         });
 
         testWidgetsOnDesktop('SHIFT + RIGHT ARROW expands right by character', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText('super text field'),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText('super text field')));
           await tester.placeCaretInSuperTextField(2);
 
           await tester.pressShiftRightArrow();
@@ -342,12 +256,7 @@ void main() {
         });
 
         testWidgetsOnDesktop('RIGHT ARROW collapses downstream selection on right side', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText('super text field'),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText('super text field')));
           // TODO: we begin 1 character ahead of where we should because
           // of #549 - update the start offset when that bug is fixed.
           await tester.selectSuperTextFieldText(5, 10);
@@ -358,12 +267,7 @@ void main() {
         });
 
         testWidgetsOnDesktop('RIGHT ARROW collapses upstream selection on right side', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText('super text field'),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText('super text field')));
           // TODO: we begin 1 character after of where we should because
           // of #549 - update the start offset when that bug is fixed.
           await tester.selectSuperTextFieldText(11, 6);
@@ -378,9 +282,7 @@ void main() {
         testWidgetsOnDesktop('UP ARROW moves to start of text when in first line', (tester) async {
           await _pumpSuperTextField(
             tester,
-            AttributedTextEditingController(
-              text: AttributedText(_multilineLayoutText),
-            ),
+            AttributedTextEditingController(text: AttributedText(_multilineLayoutText)),
           );
           await tester.placeCaretInSuperTextField(5);
 
@@ -392,9 +294,7 @@ void main() {
         testWidgetsOnDesktop('UP ARROW moves to previous line', (tester) async {
           await _pumpSuperTextField(
             tester,
-            AttributedTextEditingController(
-              text: AttributedText(_multilineLayoutText),
-            ),
+            AttributedTextEditingController(text: AttributedText(_multilineLayoutText)),
           );
           await tester.placeCaretInSuperTextField(18);
 
@@ -406,9 +306,7 @@ void main() {
         testWidgetsOnDesktop('SHIFT + UP ARROW expands to previous line', (tester) async {
           await _pumpSuperTextField(
             tester,
-            AttributedTextEditingController(
-              text: AttributedText(_multilineLayoutText),
-            ),
+            AttributedTextEditingController(text: AttributedText(_multilineLayoutText)),
           );
           await tester.placeCaretInSuperTextField(18);
 
@@ -420,9 +318,7 @@ void main() {
         testWidgetsOnDesktop('UP ARROW preserves horizontal position in previous line', (tester) async {
           await _pumpSuperTextField(
             tester,
-            AttributedTextEditingController(
-              text: AttributedText(_multilineLayoutText),
-            ),
+            AttributedTextEditingController(text: AttributedText(_multilineLayoutText)),
           );
           await tester.placeCaretInSuperTextField(23);
 
@@ -436,24 +332,22 @@ void main() {
         testWidgetsOnDesktop('DOWN ARROW moves to end of text when in last line', (tester) async {
           await _pumpSuperTextField(
             tester,
-            AttributedTextEditingController(
-              text: AttributedText(_multilineLayoutText),
-            ),
+            AttributedTextEditingController(text: AttributedText(_multilineLayoutText)),
           );
           await tester.placeCaretInSuperTextField(50);
 
           await tester.pressDownArrow();
 
-          expect(SuperTextFieldInspector.findSelection(),
-              const TextSelection.collapsed(offset: _multilineLayoutText.length));
+          expect(
+            SuperTextFieldInspector.findSelection(),
+            const TextSelection.collapsed(offset: _multilineLayoutText.length),
+          );
         });
 
         testWidgetsOnDesktop('DOWN ARROW moves to next line', (tester) async {
           await _pumpSuperTextField(
             tester,
-            AttributedTextEditingController(
-              text: AttributedText(_multilineLayoutText),
-            ),
+            AttributedTextEditingController(text: AttributedText(_multilineLayoutText)),
           );
           await tester.placeCaretInSuperTextField(0);
 
@@ -465,9 +359,7 @@ void main() {
         testWidgetsOnDesktop('SHIFT + DOWN ARROW expands to next line', (tester) async {
           await _pumpSuperTextField(
             tester,
-            AttributedTextEditingController(
-              text: AttributedText(_multilineLayoutText),
-            ),
+            AttributedTextEditingController(text: AttributedText(_multilineLayoutText)),
           );
           await tester.placeCaretInSuperTextField(0);
 
@@ -479,9 +371,7 @@ void main() {
         testWidgetsOnDesktop('DOWN ARROW preserves horizontal position in next line', (tester) async {
           await _pumpSuperTextField(
             tester,
-            AttributedTextEditingController(
-              text: AttributedText(_multilineLayoutText),
-            ),
+            AttributedTextEditingController(text: AttributedText(_multilineLayoutText)),
           );
           await tester.placeCaretInSuperTextField(5);
 
@@ -493,12 +383,7 @@ void main() {
 
       group('delete text', () {
         testWidgetsOnDesktop('BACKSPACE does nothing when text is empty', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText(),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText()));
           await tester.placeCaretInSuperTextField(0);
 
           await tester.pressBackspace();
@@ -508,12 +393,7 @@ void main() {
         });
 
         testWidgetsOnDesktop('BACKSPACE deletes the previous character', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText("this is some text"),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText("this is some text")));
           await tester.placeCaretInSuperTextField(2);
 
           await tester.pressBackspace();
@@ -525,13 +405,8 @@ void main() {
         testWidgetsOnDesktop('BACKSPACE deletes selection when selection is expanded', (tester) async {
           // TODO: We create the controller outside the pump so that we can
           // explicitly set its selection because of bug #549.
-          final controller = AttributedTextEditingController(
-            text: AttributedText(_multilineLayoutText),
-          );
-          await _pumpSuperTextField(
-            tester,
-            controller,
-          );
+          final controller = AttributedTextEditingController(text: AttributedText(_multilineLayoutText));
+          await _pumpSuperTextField(tester, controller);
           // TODO: this select line should be all we need, but for #549
           await tester.selectSuperTextFieldText(0, 10);
           // TODO: get rid of this explicit selection when #549 is fixed
@@ -540,17 +415,14 @@ void main() {
           await tester.pressBackspace();
 
           expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: 0));
-          expect(SuperTextFieldInspector.findText().toPlainText(),
-              "is long enough to be multiline in the available space");
+          expect(
+            SuperTextFieldInspector.findText().toPlainText(),
+            "is long enough to be multiline in the available space",
+          );
         });
 
         testWidgetsOnDesktop('DELETE does nothing when text is empty', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText(),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText()));
           await tester.placeCaretInSuperTextField(0);
 
           await tester.pressDelete();
@@ -560,12 +432,7 @@ void main() {
         });
 
         testWidgetsOnDesktop('DELETE does nothing at end of text', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText("this is some text"),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText("this is some text")));
           await tester.placeCaretInSuperTextField(17);
 
           await tester.pressDelete();
@@ -575,12 +442,7 @@ void main() {
         });
 
         testWidgetsOnDesktop('DELETE deletes the next character', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText("this is some text"),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText("this is some text")));
           await tester.placeCaretInSuperTextField(2);
 
           await tester.pressDelete();
@@ -590,12 +452,7 @@ void main() {
         });
 
         testWidgetsOnDesktop('DELETE deletes selected text', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText("this is some text"),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText("this is some text")));
           // TODO: the starting offset is one index to the left because
           // of #549
           await tester.selectSuperTextFieldText(7, 13);
@@ -612,12 +469,7 @@ void main() {
       group('copy text', () {
         testWidgetsOnMac('CMD + C copies selected text', (tester) async {
           tester.simulateClipboard();
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText('This is some text'),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText('This is some text')));
 
           // TODO: we begin 1 character ahead of where we should because
           // of #549 - update the start offset when that bug is fixed.
@@ -631,12 +483,7 @@ void main() {
 
         testWidgetsOnMac('CTL + C does NOT copy selected text', (tester) async {
           tester.simulateClipboard();
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText('This is some text'),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText('This is some text')));
 
           // TODO: we begin 1 character ahead of where we should because
           // of #549 - update the start offset when that bug is fixed.
@@ -650,12 +497,7 @@ void main() {
 
         testWidgetsOnMac('C does NOT copy text without CMD', (tester) async {
           tester.simulateClipboard();
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText('This is some text'),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText('This is some text')));
 
           // TODO: we begin 1 character ahead of where we should because
           // of #549 - update the start offset when that bug is fixed.
@@ -669,12 +511,7 @@ void main() {
 
         testWidgetsOnMac('CMD does NOT copy text without C', (tester) async {
           tester.simulateClipboard();
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText('This is some text'),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText('This is some text')));
 
           // TODO: we begin 1 character ahead of where we should because
           // of #549 - update the start offset when that bug is fixed.
@@ -691,10 +528,7 @@ void main() {
         testWidgetsOnMac('CMD + V pastes clipboard text', (tester) async {
           tester.setSimulatedClipboardContent("this is clipboard text");
 
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(text: AttributedText("Pasted content: ")),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText("Pasted content: ")));
           await tester.placeCaretInSuperTextField(16);
 
           await tester.pressCmdV();
@@ -707,10 +541,7 @@ void main() {
         testWidgetsOnMac('CTL + V does NOT paste clipboard text', (tester) async {
           tester.setSimulatedClipboardContent("this is clipboard text");
 
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(text: AttributedText("Pasted content: ")),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText("Pasted content: ")));
           await tester.placeCaretInSuperTextField(16);
 
           await tester.pressCtlV();
@@ -723,10 +554,7 @@ void main() {
         testWidgetsOnMac('V does NOT paste text without CMD', (tester) async {
           tester.setSimulatedClipboardContent("this is clipboard text");
 
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(text: AttributedText("Pasted content: ")),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText("Pasted content: ")));
           await tester.placeCaretInSuperTextField(16);
 
           await tester.sendKeyEvent(LogicalKeyboardKey.keyV);
@@ -739,10 +567,7 @@ void main() {
         testWidgetsOnMac('V does NOT paste text without CMD', (tester) async {
           tester.setSimulatedClipboardContent("this is clipboard text");
 
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(text: AttributedText("Pasted content: ")),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText("Pasted content: ")));
           await tester.placeCaretInSuperTextField(16);
 
           await tester.sendKeyEvent(LogicalKeyboardKey.metaLeft);
@@ -755,156 +580,81 @@ void main() {
 
       group('select all', () {
         testWidgetsOnMac('CMD + A selects all text', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText('This is some text'),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText('This is some text')));
           await tester.placeCaretInSuperTextField(0);
 
           await tester.pressCmdA();
 
           // Ensure that all text in the SuperTextField is selected.
-          expect(
-            SuperTextFieldInspector.findSelection(),
-            const TextSelection(
-              baseOffset: 0,
-              extentOffset: 17,
-            ),
-          );
+          expect(SuperTextFieldInspector.findSelection(), const TextSelection(baseOffset: 0, extentOffset: 17));
         });
 
         testWidgetsOnMac('CTL + A does NOT select all', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText('This is some text'),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText('This is some text')));
           await tester.placeCaretInSuperTextField(0);
 
           await tester.pressCtlA();
 
           // Ensure that SuperTextField text wasn't selected.
-          expect(
-            SuperTextFieldInspector.findSelection(),
-            const TextSelection.collapsed(offset: 0),
-          );
+          expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: 0));
         });
 
         testWidgetsOnMac('A does NOT select all without CMD', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText('This is some text'),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText('This is some text')));
           await tester.placeCaretInSuperTextField(0);
 
           await tester.sendKeyEvent(LogicalKeyboardKey.keyA);
 
           // Ensure that SuperTextField text wasn't selected.
-          expect(
-            SuperTextFieldInspector.findSelection(),
-            const TextSelection.collapsed(offset: 1),
-          );
+          expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: 1));
         });
 
         testWidgetsOnMac('CMD does NOT select all without A', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText('This is some text'),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText('This is some text')));
           await tester.placeCaretInSuperTextField(0);
 
           await tester.pressCtlA();
 
           // Ensure that SuperTextField text wasn't selected.
-          expect(
-            SuperTextFieldInspector.findSelection(),
-            const TextSelection.collapsed(offset: 0),
-          );
+          expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: 0));
         });
       });
 
       group('move caret upstream', () {
         testWidgetsOnMac('ALT + LEFT ARROW moves left by word', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText('This is some text'),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText('This is some text')));
           await tester.placeCaretInSuperTextField(12);
 
           await tester.pressAltLeftArrow();
-          expect(
-            SuperTextFieldInspector.findSelection(),
-            const TextSelection.collapsed(offset: 8),
-          );
+          expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: 8));
         });
 
         testWidgetsOnMac('SHIFT + ALT + LEFT ARROW expands left by word', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText('This is some text'),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText('This is some text')));
           await tester.placeCaretInSuperTextField(12);
 
           await tester.pressShiftAltLeftArrow();
-          expect(
-            SuperTextFieldInspector.findSelection(),
-            const TextSelection(baseOffset: 12, extentOffset: 8),
-          );
+          expect(SuperTextFieldInspector.findSelection(), const TextSelection(baseOffset: 12, extentOffset: 8));
         });
 
         testWidgetsOnMac('CMD + LEFT ARROW moves left to beginning of line', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText('This is some text'),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText('This is some text')));
           await tester.placeCaretInSuperTextField(12);
 
           await tester.pressCmdLeftArrow();
-          expect(
-            SuperTextFieldInspector.findSelection(),
-            const TextSelection.collapsed(offset: 0),
-          );
+          expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: 0));
         });
 
         testWidgetsOnMac('CMD + SHIFT + LEFT ARROW expands left to beginning of line', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText('This is some text'),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText('This is some text')));
           await tester.placeCaretInSuperTextField(12);
 
           await tester.pressShiftCmdLeftArrow();
-          expect(
-            SuperTextFieldInspector.findSelection(),
-            const TextSelection(
-              baseOffset: 12,
-              extentOffset: 0,
-            ),
-          );
+          expect(SuperTextFieldInspector.findSelection(), const TextSelection(baseOffset: 12, extentOffset: 0));
         });
 
         testWidgetsOnMac('CTL + A moves caret to start of line', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText('this is some text'),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText('this is some text')));
           await tester.placeCaretInSuperTextField(5);
 
           await tester.pressCtlA();
@@ -913,12 +663,7 @@ void main() {
         });
 
         testWidgetsOnMac('CTL + A does nothing at start of line', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText('this is some text'),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText('this is some text')));
           await tester.placeCaretInSuperTextField(0);
 
           await tester.pressCtlA();
@@ -929,12 +674,7 @@ void main() {
 
       group('move caret downstream', () {
         testWidgetsOnMac('ALT + RIGHT ARROW moves right by word', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText('super text field'),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText('super text field')));
           await tester.placeCaretInSuperTextField(6);
 
           await tester.pressAltRightArrow();
@@ -943,12 +683,7 @@ void main() {
         });
 
         testWidgetsOnMac('ALT/CMD + RIGHT ARROW does nothing at end of text', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText('super text field'),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText('super text field')));
           await tester.placeCaretInSuperTextField(16);
 
           await tester.pressAltRightArrow();
@@ -959,12 +694,7 @@ void main() {
         });
 
         testWidgetsOnMac('SHIFT + ALT + RIGHT ARROW expands right by word', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText('super text field'),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText('super text field')));
           await tester.placeCaretInSuperTextField(6);
 
           await tester.pressShiftAltRightArrow();
@@ -973,12 +703,7 @@ void main() {
         });
 
         testWidgetsOnMac('CMD + RIGHT ARROW moves right to end of line', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText('super text field'),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText('super text field')));
           await tester.placeCaretInSuperTextField(6);
 
           await tester.pressCmdRightArrow();
@@ -987,12 +712,7 @@ void main() {
         });
 
         testWidgetsOnMac('SHIFT + CMD + RIGHT ARROW expands right to end of line', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText('super text field'),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText('super text field')));
           await tester.placeCaretInSuperTextField(6);
 
           await tester.pressShiftCmdRightArrow();
@@ -1001,12 +721,7 @@ void main() {
         });
 
         testWidgetsOnMac('CTL + E moves caret to end of line', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText('this is some text'),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText('this is some text')));
           await tester.placeCaretInSuperTextField(5);
 
           await tester.pressCtlE();
@@ -1015,12 +730,7 @@ void main() {
         });
 
         testWidgetsOnMac('CTL + E does nothing at end of line', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText('this is some text'),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText('this is some text')));
           await tester.placeCaretInSuperTextField(17);
 
           await tester.pressCtlE();
@@ -1031,12 +741,7 @@ void main() {
 
       group('delete text', () {
         testWidgetsOnMac('ALT + BACKSPACE deletes the upstream word', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText("this is some text"),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText("this is some text")));
           await tester.placeCaretInSuperTextField(4);
 
           await tester.pressAltBackspace();
@@ -1046,12 +751,7 @@ void main() {
         });
 
         testWidgetsOnMac('ALT + BACKSPACE deletes until beginning of word', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText("this is some text"),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText("this is some text")));
           await tester.placeCaretInSuperTextField(2);
 
           await tester.pressAltBackspace();
@@ -1061,12 +761,7 @@ void main() {
         });
 
         testWidgetsOnMac('ALT + BACKSPACE deletes previous word with caret after whitespace', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText("this is some text"),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText("this is some text")));
           await tester.placeCaretInSuperTextField(8);
 
           await tester.pressAltBackspace();
@@ -1078,9 +773,7 @@ void main() {
         testWidgetsOnMac('ALT + BACKSPACE deletes expanded selection', (tester) async {
           await _pumpSuperTextField(
             tester,
-            AttributedTextEditingController(
-              text: AttributedText(_multilineLayoutText),
-            ),
+            AttributedTextEditingController(text: AttributedText(_multilineLayoutText)),
           );
           await tester.selectSuperTextFieldText(0, 10);
 
@@ -1089,24 +782,26 @@ void main() {
           // TODO: When #549 is fixed, I expect this offset to change to 0, and the first
           // character of the expected text to be deleted.
           expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: 1));
-          expect(SuperTextFieldInspector.findText().toPlainText(),
-              "tis long enough to be multiline in the available space");
+          expect(
+            SuperTextFieldInspector.findText().toPlainText(),
+            "tis long enough to be multiline in the available space",
+          );
         });
 
         testWidgetsOnMac('CMD + BACKSPACE deletes partial line before caret (flowed multiline)', (tester) async {
           await _pumpSuperTextField(
             tester,
-            AttributedTextEditingController(
-              text: AttributedText(_multilineLayoutText),
-            ),
+            AttributedTextEditingController(text: AttributedText(_multilineLayoutText)),
           );
           await tester.placeCaretInSuperTextField(28);
 
           await tester.pressCmdBackspace();
 
           expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: 18));
-          expect(SuperTextFieldInspector.findText().toPlainText(),
-              "this text is long be multiline in the available space");
+          expect(
+            SuperTextFieldInspector.findText().toPlainText(),
+            "this text is long be multiline in the available space",
+          );
         });
 
         // TODO: When #549 is fixed, un-skip this test. The problem is that we need
@@ -1115,9 +810,7 @@ void main() {
         testWidgetsOnMac('CMD + BACKSPACE deletes entire line (flowed multiline)', (tester) async {
           await _pumpSuperTextField(
             tester,
-            AttributedTextEditingController(
-              text: AttributedText(_multilineLayoutText),
-            ),
+            AttributedTextEditingController(text: AttributedText(_multilineLayoutText)),
           );
           await tester.placeCaretInSuperTextField(31, null, TextAffinity.upstream);
 
@@ -1125,15 +818,15 @@ void main() {
 
           expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: 18));
           expect(
-              SuperTextFieldInspector.findText().toPlainText(), "this text is long multiline in the available space");
+            SuperTextFieldInspector.findText().toPlainText(),
+            "this text is long multiline in the available space",
+          );
         }, skip: true);
 
         testWidgetsOnMac('CMD + BACKSPACE deletes partial line before caret (explicit newlines)', (tester) async {
           await _pumpSuperTextField(
             tester,
-            AttributedTextEditingController(
-              text: AttributedText("This is line 1\nThis is line 2\nThis is line 3"),
-            ),
+            AttributedTextEditingController(text: AttributedText("This is line 1\nThis is line 2\nThis is line 3")),
           );
           await tester.placeCaretInSuperTextField(23);
 
@@ -1146,9 +839,7 @@ void main() {
         testWidgetsOnMac('CMD + BACKSPACE deletes entire line (explicit newlines)', (tester) async {
           await _pumpSuperTextField(
             tester,
-            AttributedTextEditingController(
-              text: AttributedText("This is line 1\nThis is line 2\nThis is line 3"),
-            ),
+            AttributedTextEditingController(text: AttributedText("This is line 1\nThis is line 2\nThis is line 3")),
           );
           await tester.placeCaretInSuperTextField(29, null, TextAffinity.upstream);
 
@@ -1161,13 +852,8 @@ void main() {
         testWidgetsOnMac('CMD + BACKSPACE deletes selection when selection is expanded', (tester) async {
           // TODO: We create the controller outside the pump so that we can
           // explicitly set its selection because of bug #549.
-          final controller = AttributedTextEditingController(
-            text: AttributedText(_multilineLayoutText),
-          );
-          await _pumpSuperTextField(
-            tester,
-            controller,
-          );
+          final controller = AttributedTextEditingController(text: AttributedText(_multilineLayoutText));
+          await _pumpSuperTextField(tester, controller);
           // TODO: this select line should be all we need, but for #549
           await tester.selectSuperTextFieldText(0, 10);
           // TODO: get rid of this explicit selection when #549 is fixed
@@ -1176,16 +862,16 @@ void main() {
           await tester.pressCmdBackspace();
 
           expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: 0));
-          expect(SuperTextFieldInspector.findText().toPlainText(),
-              "is long enough to be multiline in the available space");
+          expect(
+            SuperTextFieldInspector.findText().toPlainText(),
+            "is long enough to be multiline in the available space",
+          );
         });
 
         testWidgetsOnMac('CMD + BACKSPACE does nothing when selection is at start of line', (tester) async {
           await _pumpSuperTextField(
             tester,
-            AttributedTextEditingController(
-              text: AttributedText(_multilineLayoutText),
-            ),
+            AttributedTextEditingController(text: AttributedText(_multilineLayoutText)),
           );
           await tester.placeCaretInSuperTextField(18);
 
@@ -1198,12 +884,7 @@ void main() {
 
       group('shortcuts for Windows and Linux do nothing', () {
         testWidgetsOnMac("HOME", (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText("this is some text"),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText("this is some text")));
           await tester.placeCaretInSuperTextField(5);
 
           await tester.pressHome();
@@ -1212,12 +893,7 @@ void main() {
         });
 
         testWidgetsOnMac("END", (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText("this is some text"),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText("this is some text")));
           await tester.placeCaretInSuperTextField(5);
 
           await tester.pressEnd();
@@ -1226,12 +902,7 @@ void main() {
         });
 
         testWidgetsOnMac("CTRL + LEFT ARROW", (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText("this is some text"),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText("this is some text")));
           await tester.placeCaretInSuperTextField(5);
 
           await tester.pressCtlLeftArrow();
@@ -1240,12 +911,7 @@ void main() {
         });
 
         testWidgetsOnMac("CTRL + RIGHT ARROW", (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText("this is some text"),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText("this is some text")));
           await tester.placeCaretInSuperTextField(5);
 
           await tester.pressCtlRightArrow();
@@ -1258,12 +924,7 @@ void main() {
     group('on Windows', () {
       group('move caret upstream', () {
         testWidgetsOnWindows('LEFT ARROW does nothing when ALT is pressed', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText("super text field"),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText("super text field")));
           await tester.placeCaretInSuperTextField(10);
 
           await tester.pressAltLeftArrow();
@@ -1274,12 +935,7 @@ void main() {
 
       group('move caret downstream', () {
         testWidgetsOnWindows('RIGHT ARROW does nothing when ALT is pressed', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText("super text field"),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText("super text field")));
           await tester.placeCaretInSuperTextField(10);
 
           await tester.pressAltRightArrow();
@@ -1292,37 +948,21 @@ void main() {
     group('on Linux', () {
       group('move caret upstream', () {
         testWidgetsOnLinux('ALT + LEFT ARROW moves left by character', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText('This is some text'),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText('This is some text')));
           await tester.placeCaretInSuperTextField(12);
 
           await tester.pressAltLeftArrow();
-          expect(
-            SuperTextFieldInspector.findSelection(),
-            const TextSelection.collapsed(offset: 11),
-          );
+          expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: 11));
         });
       });
 
       group('move caret downstream', () {
         testWidgetsOnLinux('ALT + RIGHT ARROW moves right by character', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText('This is some text'),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText('This is some text')));
           await tester.placeCaretInSuperTextField(12);
 
           await tester.pressAltRightArrow();
-          expect(
-            SuperTextFieldInspector.findSelection(),
-            const TextSelection.collapsed(offset: 13),
-          );
+          expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: 13));
         });
       });
     });
@@ -1331,12 +971,7 @@ void main() {
       group('copy text', () {
         testWidgetsOnWindowsAndLinux('control+c copies selected text', (tester) async {
           tester.simulateClipboard();
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText('This is some text'),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText('This is some text')));
 
           // TODO: we begin 1 character ahead of where we should because
           // of #549 - update the start offset when that bug is fixed.
@@ -1350,12 +985,7 @@ void main() {
 
         testWidgetsOnWindowsAndLinux('CMD + C does NOT copy selected text', (tester) async {
           tester.simulateClipboard();
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText('This is some text'),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText('This is some text')));
 
           // TODO: we begin 1 character ahead of where we should because
           // of #549 - update the start offset when that bug is fixed.
@@ -1369,12 +999,7 @@ void main() {
 
         testWidgetsOnWindowsAndLinux('it ignores C without CTL', (tester) async {
           tester.simulateClipboard();
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText('This is some text'),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText('This is some text')));
 
           // TODO: we begin 1 character ahead of where we should because
           // of #549 - update the start offset when that bug is fixed.
@@ -1388,12 +1013,7 @@ void main() {
 
         testWidgetsOnWindowsAndLinux('it ignores control without C', (tester) async {
           tester.simulateClipboard();
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText('This is some text'),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText('This is some text')));
 
           // TODO: we begin 1 character ahead of where we should because
           // of #549 - update the start offset when that bug is fixed.
@@ -1410,10 +1030,7 @@ void main() {
         testWidgetsOnWindowsAndLinux('control+v pastes clipboard text', (tester) async {
           tester.setSimulatedClipboardContent("this is clipboard text");
 
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(text: AttributedText("Pasted content: ")),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText("Pasted content: ")));
           await tester.placeCaretInSuperTextField(16);
 
           await tester.pressCtlV();
@@ -1426,10 +1043,7 @@ void main() {
         testWidgetsOnWindowsAndLinux('cmd+v does NOT paste clipboard text', (tester) async {
           tester.setSimulatedClipboardContent("this is clipboard text");
 
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(text: AttributedText("Pasted content: ")),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText("Pasted content: ")));
           await tester.placeCaretInSuperTextField(16);
 
           await tester.pressCmdV();
@@ -1442,10 +1056,7 @@ void main() {
         testWidgetsOnWindowsAndLinux('it ignores v-key without control', (tester) async {
           tester.setSimulatedClipboardContent("this is clipboard text");
 
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(text: AttributedText("Pasted content: ")),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText("Pasted content: ")));
           await tester.placeCaretInSuperTextField(16);
 
           await tester.sendKeyEvent(LogicalKeyboardKey.keyV);
@@ -1458,10 +1069,7 @@ void main() {
         testWidgetsOnWindowsAndLinux('it ignores control without v-key', (tester) async {
           tester.setSimulatedClipboardContent("this is clipboard text");
 
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(text: AttributedText("Pasted content: ")),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText("Pasted content: ")));
           await tester.placeCaretInSuperTextField(16);
 
           await tester.sendKeyEvent(LogicalKeyboardKey.controlLeft);
@@ -1474,89 +1082,49 @@ void main() {
 
       group('select all', () {
         testWidgetsOnWindowsAndLinux('control+a selects all text', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText('This is some text'),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText('This is some text')));
           await tester.placeCaretInSuperTextField(0);
 
           await tester.pressCtlA();
 
           // Ensure that all text in the SuperTextField is selected.
-          expect(
-            SuperTextFieldInspector.findSelection(),
-            const TextSelection(
-              baseOffset: 0,
-              extentOffset: 17,
-            ),
-          );
+          expect(SuperTextFieldInspector.findSelection(), const TextSelection(baseOffset: 0, extentOffset: 17));
         });
 
         testWidgetsOnWindowsAndLinux('cmd+a does NOT select all', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText('This is some text'),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText('This is some text')));
           await tester.placeCaretInSuperTextField(0);
 
           await tester.pressCmdA();
 
           // Ensure that SuperTextField text wasn't selected.
-          expect(
-            SuperTextFieldInspector.findSelection(),
-            const TextSelection.collapsed(offset: 0),
-          );
+          expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: 0));
         });
 
         testWidgetsOnWindowsAndLinux('it ignores a-key without control', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText('This is some text'),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText('This is some text')));
           await tester.placeCaretInSuperTextField(0);
 
           await tester.sendKeyEvent(LogicalKeyboardKey.keyA);
 
           // Ensure that SuperTextField text wasn't selected.
-          expect(
-            SuperTextFieldInspector.findSelection(),
-            const TextSelection.collapsed(offset: 1),
-          );
+          expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: 1));
         });
 
         testWidgetsOnWindowsAndLinux('it ignores control without a-key', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText('This is some text'),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText('This is some text')));
           await tester.placeCaretInSuperTextField(0);
 
           await tester.sendKeyEvent(LogicalKeyboardKey.controlLeft);
 
           // Ensure that SuperTextField text wasn't selected.
-          expect(
-            SuperTextFieldInspector.findSelection(),
-            const TextSelection.collapsed(offset: 0),
-          );
+          expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: 0));
         });
       });
 
       group('move caret upstream', () {
         testWidgetsOnWindowsAndLinux('CTL + LEFT ARROW moves left by word', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText("super text field"),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText("super text field")));
           await tester.placeCaretInSuperTextField(10);
 
           await tester.pressCtlLeftArrow();
@@ -1565,12 +1133,7 @@ void main() {
         });
 
         testWidgetsOnWindowsAndLinux('SHIFT + CTL + LEFT ARROW expands left by word', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText("super text field"),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText("super text field")));
           await tester.placeCaretInSuperTextField(10);
 
           await tester.pressShiftCtlLeftArrow();
@@ -1599,9 +1162,7 @@ void main() {
         testWidgetsOnWindowsAndLinux('HOME moves left to beginning of line with explicit new lines', (tester) async {
           await _pumpSuperTextField(
             tester,
-            AttributedTextEditingController(
-              text: AttributedText("super text field\nthis is second line"),
-            ),
+            AttributedTextEditingController(text: AttributedText("super text field\nthis is second line")),
           );
 
           // Place caret at the second line at "|second"
@@ -1617,12 +1178,7 @@ void main() {
 
       group('move caret downstream', () {
         testWidgetsOnWindowsAndLinux('CTL + RIGHT ARROW moves right by word', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText("super text field"),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText("super text field")));
           await tester.placeCaretInSuperTextField(6);
 
           await tester.pressCtlRightArrow();
@@ -1631,12 +1187,7 @@ void main() {
         });
 
         testWidgetsOnWindowsAndLinux('SHIFT + CTL + RIGHT ARROW expands by word', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText("super text field"),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText("super text field")));
           await tester.placeCaretInSuperTextField(6);
 
           await tester.pressShiftCtlRightArrow();
@@ -1665,9 +1216,7 @@ void main() {
         testWidgetsOnWindowsAndLinux('END moves right to end of line with explicit new lines', (tester) async {
           await _pumpSuperTextField(
             tester,
-            AttributedTextEditingController(
-              text: AttributedText("super text field\nthis is second line"),
-            ),
+            AttributedTextEditingController(text: AttributedText("super text field\nthis is second line")),
           );
 
           // Place caret at the first line at "|super"
@@ -1683,12 +1232,7 @@ void main() {
 
       group('delete text', () {
         testWidgetsOnWindowsAndLinux('CTL + BACKSPACE deletes the upstream word', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText("this is some text"),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText("this is some text")));
           await tester.placeCaretInSuperTextField(4);
 
           await tester.pressCtlBackspace();
@@ -1698,12 +1242,7 @@ void main() {
         });
 
         testWidgetsOnWindowsAndLinux('CTL + BACKSPACE deletes until beginning of word', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText("this is some text"),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText("this is some text")));
           await tester.placeCaretInSuperTextField(2);
 
           await tester.pressCtlBackspace();
@@ -1712,14 +1251,10 @@ void main() {
           expect(SuperTextFieldInspector.findText().toPlainText(), "is is some text");
         });
 
-        testWidgetsOnWindowsAndLinux('CTL + BACKSPACE deletes previous word with caret after whitespace',
-            (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText("this is some text"),
-            ),
-          );
+        testWidgetsOnWindowsAndLinux('CTL + BACKSPACE deletes previous word with caret after whitespace', (
+          tester,
+        ) async {
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText("this is some text")));
           await tester.placeCaretInSuperTextField(8);
 
           await tester.pressCtlBackspace();
@@ -1731,9 +1266,7 @@ void main() {
         testWidgetsOnWindowsAndLinux('CTL + BACKSPACE deletes expanded selection', (tester) async {
           await _pumpSuperTextField(
             tester,
-            AttributedTextEditingController(
-              text: AttributedText(_multilineLayoutText),
-            ),
+            AttributedTextEditingController(text: AttributedText(_multilineLayoutText)),
           );
           await tester.selectSuperTextFieldText(0, 10);
 
@@ -1742,19 +1275,16 @@ void main() {
           // TODO: When #549 is fixed, I expect the selection offset to change to 0, and the
           // first letter of the final text to be deleted.
           expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: 1));
-          expect(SuperTextFieldInspector.findText().toPlainText(),
-              "tis long enough to be multiline in the available space");
+          expect(
+            SuperTextFieldInspector.findText().toPlainText(),
+            "tis long enough to be multiline in the available space",
+          );
         });
       });
 
       group('shortcuts for Mac do nothing', () {
         testWidgetsOnWindowsAndLinux('CTL + E', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText("this is some text"),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText("this is some text")));
           await tester.placeCaretInSuperTextField(5);
 
           await tester.pressCtlE();
@@ -1763,12 +1293,7 @@ void main() {
         });
 
         testWidgetsOnWindowsAndLinux('CMD + LEFT ARROW', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText("this is some text"),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText("this is some text")));
           await tester.placeCaretInSuperTextField(5);
 
           await tester.pressCmdLeftArrow();
@@ -1777,12 +1302,7 @@ void main() {
         });
 
         testWidgetsOnWindowsAndLinux('CMD + RIGHT ARROW', (tester) async {
-          await _pumpSuperTextField(
-            tester,
-            AttributedTextEditingController(
-              text: AttributedText("this is some text"),
-            ),
-          );
+          await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText("this is some text")));
           await tester.placeCaretInSuperTextField(5);
 
           await tester.pressCmdRightArrow();
@@ -1803,10 +1323,7 @@ void main() {
 const _multilineLayoutText = 'this text is long enough to be multiline in the available space';
 
 Future<void> _pumpEmptySuperTextField(WidgetTester tester) async {
-  await _pumpSuperTextField(
-    tester,
-    AttributedTextEditingController(text: AttributedText('')),
-  );
+  await _pumpSuperTextField(tester, AttributedTextEditingController(text: AttributedText('')));
 }
 
 Future<void> _pumpSuperTextField(

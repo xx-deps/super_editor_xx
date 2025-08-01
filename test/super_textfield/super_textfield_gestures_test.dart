@@ -20,10 +20,7 @@ void main() {
         await tester.pumpAndSettle();
 
         // Ensure selection is at the end of the text
-        expect(
-          SuperTextFieldInspector.findSelection(),
-          const TextSelection.collapsed(offset: 3),
-        );
+        expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: 3));
       });
 
       testWidgetsOnMobile("when the field already has focus", (tester) async {
@@ -39,19 +36,13 @@ void main() {
         await tester.pumpAndSettle();
 
         // Ensure selection is at the end of the text
-        expect(
-          SuperTextFieldInspector.findSelection(),
-          const TextSelection.collapsed(offset: 3),
-        );
+        expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: 3));
       });
     });
 
     group('tapping on padding places caret', () {
       testWidgetsOnAllPlatforms('on the left side', (tester) async {
-        await _pumpTestApp(
-          tester,
-          padding: const EdgeInsets.only(left: 20),
-        );
+        await _pumpTestApp(tester, padding: const EdgeInsets.only(left: 20));
 
         final finder = find.byType(SuperTextField);
         // Tap at the left side of the text field, at the vertical center.
@@ -59,19 +50,12 @@ void main() {
         await tester.pumpAndSettle();
 
         // Ensure caret was placed.
-        expect(
-          SuperTextFieldInspector.findSelection(),
-          const TextSelection.collapsed(offset: 0),
-        );
+        expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: 0));
       });
 
       testWidgetsOnAllPlatforms('on the top', (tester) async {
         /// Pump a center-aligned text field so we can tap at the middle of the text.
-        await _pumpTestApp(
-          tester,
-          padding: const EdgeInsets.only(top: 20),
-          textAlign: TextAlign.center,
-        );
+        await _pumpTestApp(tester, padding: const EdgeInsets.only(top: 20), textAlign: TextAlign.center);
 
         final finder = find.byType(SuperTextField);
         // Tap at the top of the text field, at the horizontal center.
@@ -80,19 +64,12 @@ void main() {
         await tester.pumpAndSettle();
 
         // Ensure caret was placed.
-        expect(
-          SuperTextFieldInspector.findSelection(),
-          const TextSelection.collapsed(offset: 2),
-        );
+        expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: 2));
       });
 
       testWidgetsOnAllPlatforms('on the bottom', (tester) async {
         /// Pump a center-aligned text field so we can tap at the middle of the text.
-        await _pumpTestApp(
-          tester,
-          padding: const EdgeInsets.only(bottom: 20),
-          textAlign: TextAlign.center,
-        );
+        await _pumpTestApp(tester, padding: const EdgeInsets.only(bottom: 20), textAlign: TextAlign.center);
 
         final finder = find.byType(SuperTextField);
         // Tap at the bottom of the text field, at the horizontal center.
@@ -101,17 +78,11 @@ void main() {
         await tester.pumpAndSettle();
 
         // Ensure caret was placed.
-        expect(
-          SuperTextFieldInspector.findSelection(),
-          const TextSelection.collapsed(offset: 2),
-        );
+        expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: 2));
       });
 
       testWidgetsOnAllPlatforms('on the right side', (tester) async {
-        await _pumpTestApp(
-          tester,
-          padding: const EdgeInsets.only(right: 20),
-        );
+        await _pumpTestApp(tester, padding: const EdgeInsets.only(right: 20));
 
         final finder = find.byType(SuperTextField);
         // Tap at the right side of the text field, at the vertical center.
@@ -119,10 +90,7 @@ void main() {
         await tester.pumpAndSettle();
 
         // Ensure caret was placed.
-        expect(
-          SuperTextFieldInspector.findSelection(),
-          const TextSelection.collapsed(offset: 3),
-        );
+        expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: 3));
       });
     });
 
@@ -135,10 +103,7 @@ void main() {
         await tester.pumpAndSettle();
 
         // Ensure selection is at the beginning of the text
-        expect(
-          SuperTextFieldInspector.findSelection(),
-          const TextSelection.collapsed(offset: 0),
-        );
+        expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: 0));
       });
 
       testWidgetsOnMobile("when the field already has focus", (tester) async {
@@ -154,10 +119,7 @@ void main() {
         await tester.pumpAndSettle();
 
         // Ensure selection is at the beginning of the text
-        expect(
-          SuperTextFieldInspector.findSelection(),
-          const TextSelection.collapsed(offset: 0),
-        );
+        expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: 0));
       });
 
       testWidgetsOnAllPlatforms("when a single-line text field contains scrollable text", (tester) async {
@@ -183,10 +145,7 @@ void main() {
         await tester.placeCaretInSuperTextField(10);
 
         // Ensure the caret was placed at the desired text position.
-        expect(
-          SuperTextFieldInspector.findSelection(),
-          const TextSelection.collapsed(offset: 10),
-        );
+        expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: 10));
 
         // Ensure that placing the caret didn't cause the scroll view to jump anywhere.
         expect(SuperTextFieldInspector.isScrolledToBeginning(), isTrue);
@@ -232,10 +191,7 @@ a trackpad
             home: Scaffold(
               body: ConstrainedBox(
                 constraints: const BoxConstraints(minWidth: 300),
-                child: SuperTextField(
-                  textController: controller,
-                  maxLines: 2,
-                ),
+                child: SuperTextField(textController: controller, maxLines: 2),
               ),
             ),
           ),
@@ -243,16 +199,12 @@ a trackpad
 
         // Double tap to select "SuperTextField".
         await tester.doubleTapAtSuperTextField(0);
-        expect(
-          SuperTextFieldInspector.findSelection(),
-          const TextSelection(baseOffset: 0, extentOffset: 14),
-        );
+        expect(SuperTextFieldInspector.findSelection(), const TextSelection(baseOffset: 0, extentOffset: 14));
 
         // Find text field scrollable.
-        final scrollState = tester.state<ScrollableState>(find.descendant(
-          of: find.byType(SuperTextField),
-          matching: find.byType(Scrollable),
-        ));
+        final scrollState = tester.state<ScrollableState>(
+          find.descendant(of: find.byType(SuperTextField), matching: find.byType(Scrollable)),
+        );
 
         // Ensure the textfield didn't start scrolled.
         expect(scrollState.position.pixels, 0.0);
@@ -277,10 +229,7 @@ a trackpad
         expect(scrollState.position.pixels, moreOrLessEquals(80.0));
 
         // Ensure that the selection didn't change.
-        expect(
-          SuperTextFieldInspector.findSelection(),
-          const TextSelection(baseOffset: 0, extentOffset: 14),
-        );
+        expect(SuperTextFieldInspector.findSelection(), const TextSelection(baseOffset: 0, extentOffset: 14));
       });
 
       testWidgetsOnDesktop("scrolls the content when dragging with trackpad up", (tester) async {
@@ -300,10 +249,7 @@ a trackpad
             home: Scaffold(
               body: ConstrainedBox(
                 constraints: const BoxConstraints(minWidth: 300),
-                child: SuperTextField(
-                  textController: controller,
-                  maxLines: 2,
-                ),
+                child: SuperTextField(textController: controller, maxLines: 2),
               ),
             ),
           ),
@@ -311,16 +257,12 @@ a trackpad
 
         // Double tap to select "SuperTextField".
         await tester.doubleTapAtSuperTextField(0);
-        expect(
-          SuperTextFieldInspector.findSelection(),
-          const TextSelection(baseOffset: 0, extentOffset: 14),
-        );
+        expect(SuperTextFieldInspector.findSelection(), const TextSelection(baseOffset: 0, extentOffset: 14));
 
         // Find text field scrollable.
-        final scrollState = tester.state<ScrollableState>(find.descendant(
-          of: find.byType(SuperTextField),
-          matching: find.byType(Scrollable),
-        ));
+        final scrollState = tester.state<ScrollableState>(
+          find.descendant(of: find.byType(SuperTextField), matching: find.byType(Scrollable)),
+        );
 
         // Jump to the end of the textfield.
         scrollState.position.jumpTo(scrollState.position.maxScrollExtent);
@@ -346,10 +288,7 @@ a trackpad
         expect(scrollState.position.pixels, 0.0);
 
         // Ensure that the selection didn't change.
-        expect(
-          SuperTextFieldInspector.findSelection(),
-          const TextSelection(baseOffset: 0, extentOffset: 14),
-        );
+        expect(SuperTextFieldInspector.findSelection(), const TextSelection(baseOffset: 0, extentOffset: 14));
       });
 
       testWidgetsOnDesktop("scrolls the content when dragging the scrollbar down", (tester) async {
@@ -369,10 +308,7 @@ a scrollbar
             home: Scaffold(
               body: ConstrainedBox(
                 constraints: const BoxConstraints(minWidth: 300),
-                child: SuperTextField(
-                  textController: controller,
-                  maxLines: 4,
-                ),
+                child: SuperTextField(textController: controller, maxLines: 4),
               ),
             ),
           ),
@@ -380,16 +316,12 @@ a scrollbar
 
         // Double tap to select "SuperTextField".
         await tester.doubleTapAtSuperTextField(0);
-        expect(
-          SuperTextFieldInspector.findSelection(),
-          const TextSelection(baseOffset: 0, extentOffset: 14),
-        );
+        expect(SuperTextFieldInspector.findSelection(), const TextSelection(baseOffset: 0, extentOffset: 14));
 
         // Find text field scrollable.
-        final scrollState = tester.state<ScrollableState>(find.descendant(
-          of: find.byType(SuperTextField),
-          matching: find.byType(Scrollable),
-        ));
+        final scrollState = tester.state<ScrollableState>(
+          find.descendant(of: find.byType(SuperTextField), matching: find.byType(Scrollable)),
+        );
 
         // Ensure the textfield didn't start scrolled.
         expect(scrollState.position.pixels, 0.0);
@@ -418,10 +350,7 @@ a scrollbar
         expect(scrollState.position.pixels, moreOrLessEquals(scrollState.position.maxScrollExtent));
 
         // Ensure that the selection didn't change.
-        expect(
-          SuperTextFieldInspector.findSelection(),
-          const TextSelection(baseOffset: 0, extentOffset: 14),
-        );
+        expect(SuperTextFieldInspector.findSelection(), const TextSelection(baseOffset: 0, extentOffset: 14));
       });
 
       testWidgetsOnDesktop("scrolls the content when dragging the scrollbar up", (tester) async {
@@ -441,10 +370,7 @@ a scrollbar
             home: Scaffold(
               body: ConstrainedBox(
                 constraints: const BoxConstraints(minWidth: 300),
-                child: SuperTextField(
-                  textController: controller,
-                  maxLines: 4,
-                ),
+                child: SuperTextField(textController: controller, maxLines: 4),
               ),
             ),
           ),
@@ -452,16 +378,12 @@ a scrollbar
 
         // Double tap to select "SuperTextField".
         await tester.doubleTapAtSuperTextField(0);
-        expect(
-          SuperTextFieldInspector.findSelection(),
-          const TextSelection(baseOffset: 0, extentOffset: 14),
-        );
+        expect(SuperTextFieldInspector.findSelection(), const TextSelection(baseOffset: 0, extentOffset: 14));
 
         // Find text field scrollable.
-        final scrollState = tester.state<ScrollableState>(find.descendant(
-          of: find.byType(SuperTextField),
-          matching: find.byType(Scrollable),
-        ));
+        final scrollState = tester.state<ScrollableState>(
+          find.descendant(of: find.byType(SuperTextField), matching: find.byType(Scrollable)),
+        );
 
         // Jump to the end of the textfield.
         scrollState.position.jumpTo(scrollState.position.maxScrollExtent);
@@ -491,10 +413,7 @@ a scrollbar
         expect(scrollState.position.pixels, 0.0);
 
         // Ensure that the selection didn't change.
-        expect(
-          SuperTextFieldInspector.findSelection(),
-          const TextSelection(baseOffset: 0, extentOffset: 14),
-        );
+        expect(SuperTextFieldInspector.findSelection(), const TextSelection(baseOffset: 0, extentOffset: 14));
       });
     });
 
@@ -578,9 +497,7 @@ a scrollbar
       // mobile only because precise input (mouse) doesn't use touch slop
       testWidgetsOnMobile("MediaQuery gesture settings are respected", (tester) async {
         bool horizontalDragStartCalled = false;
-        final controller = AttributedTextEditingController(
-          text: AttributedText('a b c'),
-        );
+        final controller = AttributedTextEditingController(text: AttributedText('a b c'));
 
         await tester.pumpWidget(
           MaterialApp(
@@ -589,22 +506,19 @@ a scrollbar
                 onHorizontalDragStart: (d) {
                   horizontalDragStartCalled = true;
                 },
-                child: Builder(builder: (context) {
-                  // Custom gesture settings that ensure same value for touchSlop
-                  // and panSlop
-                  final data = MediaQuery.of(context).copyWith(
-                    gestureSettings: const _GestureSettings(
-                      panSlop: 18,
-                      touchSlop: 18,
-                    ),
-                  );
-                  return MediaQuery(
-                    data: data,
-                    child: SuperTextField(
-                      textController: controller,
-                    ),
-                  );
-                }),
+                child: Builder(
+                  builder: (context) {
+                    // Custom gesture settings that ensure same value for touchSlop
+                    // and panSlop
+                    final data = MediaQuery.of(
+                      context,
+                    ).copyWith(gestureSettings: const _GestureSettings(panSlop: 18, touchSlop: 18));
+                    return MediaQuery(
+                      data: data,
+                      child: SuperTextField(textController: controller),
+                    );
+                  },
+                ),
               ),
             ),
           ),
@@ -613,10 +527,7 @@ a scrollbar
         // Tap down and up so the field is focused.
         await tester.placeCaretInSuperTextField(0);
 
-        expect(
-          SuperTextFieldInspector.findSelection(),
-          const TextSelection.collapsed(offset: 0),
-        );
+        expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: 0));
 
         // The following gesture should trigger the selection PanGestureRecognizer instead
         // of the HorizontalDragGestureRecognizer, thereby moving the caret.
@@ -631,10 +542,7 @@ a scrollbar
         await tester.pumpAndSettle();
 
         expect(horizontalDragStartCalled, isFalse);
-        expect(
-          SuperTextFieldInspector.findSelection(),
-          const TextSelection.collapsed(offset: 1),
-        );
+        expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: 1));
 
         // Pump an update with a larger pan slop.
         await tester.pumpWidget(
@@ -644,22 +552,19 @@ a scrollbar
                 onHorizontalDragStart: (d) {
                   horizontalDragStartCalled = true;
                 },
-                child: Builder(builder: (context) {
-                  // Gesture settings that mimic flutter default where
-                  // panSlop = 2x touchSlop
-                  final data = MediaQuery.of(context).copyWith(
-                    gestureSettings: const _GestureSettings(
-                      touchSlop: 18,
-                      panSlop: 36,
-                    ),
-                  );
-                  return MediaQuery(
-                    data: data,
-                    child: SuperTextField(
-                      textController: controller,
-                    ),
-                  );
-                }),
+                child: Builder(
+                  builder: (context) {
+                    // Gesture settings that mimic flutter default where
+                    // panSlop = 2x touchSlop
+                    final data = MediaQuery.of(
+                      context,
+                    ).copyWith(gestureSettings: const _GestureSettings(touchSlop: 18, panSlop: 36));
+                    return MediaQuery(
+                      data: data,
+                      child: SuperTextField(textController: controller),
+                    );
+                  },
+                ),
               ),
             ),
           ),
@@ -678,10 +583,7 @@ a scrollbar
         // the selection pan didn't take the gesture, the horizontal drag detector won
         // out, instead.
         expect(horizontalDragStartCalled, isTrue);
-        expect(
-          SuperTextFieldInspector.findSelection(),
-          const TextSelection.collapsed(offset: 1),
-        );
+        expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: 1));
       });
 
       testWidgetsOnMobile("tap up shows the keyboard if the field already has focus", (tester) async {
@@ -810,10 +712,7 @@ a scrollbar
       await tester.pump(kTapMinTime);
 
       // Ensure that we start with focus.
-      expect(
-        SuperTextFieldInspector.findSelection()!.extentOffset,
-        greaterThan(-1),
-      );
+      expect(SuperTextFieldInspector.findSelection()!.extentOffset, greaterThan(-1));
 
       // Tap outside the text field.
       await tester.tapAt(tester.getCenter(find.byType(Scaffold)));
@@ -821,10 +720,7 @@ a scrollbar
       await tester.pumpAndSettle();
 
       // Ensure that focus is gone.
-      expect(
-        SuperTextFieldInspector.findSelection(),
-        const TextSelection.collapsed(offset: -1),
-      );
+      expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: -1));
     });
   });
 }
@@ -855,18 +751,13 @@ Future<void> _pumpTestApp(
               child: Align(
                 alignment: Alignment.topCenter,
                 child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black),
-                  ),
+                  decoration: BoxDecoration(border: Border.all(color: Colors.black)),
                   child: SuperTextField(
                     focusNode: textFieldFocusNode,
                     tapRegionGroupId: tapRegionGroupdId,
                     padding: padding,
                     textAlign: textAlign ?? TextAlign.left,
-                    textController: controller ??
-                        AttributedTextEditingController(
-                          text: AttributedText('abc'),
-                        ),
+                    textController: controller ?? AttributedTextEditingController(text: AttributedText('abc')),
                   ),
                 ),
               ),
@@ -913,10 +804,7 @@ Future<void> _pumpSingleLineTextField(
 /// The textfield is bound to [_textFieldKey] and the toolbar is bound to [_popoverToolbarKey].
 ///
 /// This is used because we cannot configure the toolbar with [SuperTextField]'s public API.
-Future<void> _pumpTestAppWithFakeToolbar(
-  WidgetTester tester, {
-  ImeAttributedTextEditingController? controller,
-}) async {
+Future<void> _pumpTestAppWithFakeToolbar(WidgetTester tester, {ImeAttributedTextEditingController? controller}) async {
   await tester.pumpWidget(
     MaterialApp(
       home: Scaffold(
@@ -951,10 +839,7 @@ Future<void> _pumpTestAppWithFakeToolbar(
 
 // Custom gesture settings that ensure panSlop equal to touchSlop
 class _GestureSettings extends DeviceGestureSettings {
-  const _GestureSettings({
-    required double touchSlop,
-    required this.panSlop,
-  }) : super(touchSlop: touchSlop);
+  const _GestureSettings({required double touchSlop, required this.panSlop}) : super(touchSlop: touchSlop);
 
   @override
   final double panSlop;

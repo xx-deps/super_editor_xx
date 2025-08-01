@@ -27,11 +27,7 @@ void main() {
           .withCustomWidgetTreeBuilder(
             (superEditor) => MaterialApp(
               home: _AutoPushRoute(
-                route: MaterialPageRoute(
-                  builder: (context) => Scaffold(
-                    body: superEditor,
-                  ),
-                ),
+                route: MaterialPageRoute(builder: (context) => Scaffold(body: superEditor)),
               ),
             ),
           )
@@ -44,9 +40,7 @@ void main() {
       expect(SuperEditorInspector.findDocumentSelection(), isNull);
 
       // Start dragging approximately from the top left corner of the editor.
-      final gesture = await tester.startGesture(
-        tester.getTopLeft(find.byType(SuperEditor)) + const Offset(10, 10),
-      );
+      final gesture = await tester.startGesture(tester.getTopLeft(find.byType(SuperEditor)) + const Offset(10, 10));
 
       // Move a little bit to start the swipe to pop gesture.
       await gesture.moveBy(const Offset(20, 0));
@@ -77,9 +71,7 @@ void main() {
 /// Displays a placeholder and automatically pushes the given [route]
 /// after the first frame.
 class _AutoPushRoute extends StatefulWidget {
-  const _AutoPushRoute({
-    required this.route,
-  });
+  const _AutoPushRoute({required this.route});
 
   final Route route;
 

@@ -11,181 +11,100 @@ Future<void> main() async {
 
   group('SuperTextField > inline widgets >', () {
     group('single line >', () {
-      testGoldensOnMac(
-        'displays caret at upstream side of inline widget',
-        (tester) async {
-          await _pumpSingleLineTestApp(tester);
+      testGoldensOnMac('displays caret at upstream side of inline widget', (tester) async {
+        await _pumpSingleLineTestApp(tester);
 
-          // Place the caret at the upstream side of the inline widget.
-          await tester.placeCaretInSuperTextField(7);
+        // Place the caret at the upstream side of the inline widget.
+        await tester.placeCaretInSuperTextField(7);
 
-          await screenMatchesGolden(tester, 'super-text-field_inline_widgets_single_line_caret_upstream');
-        },
-        windowSize: goldenSizeSmall,
-      );
+        await screenMatchesGolden(tester, 'super-text-field_inline_widgets_single_line_caret_upstream');
+      }, windowSize: goldenSizeSmall);
 
-      testGoldensOnMac(
-        'displays caret at downstream side of inline widget',
-        (tester) async {
-          await _pumpSingleLineTestApp(tester);
+      testGoldensOnMac('displays caret at downstream side of inline widget', (tester) async {
+        await _pumpSingleLineTestApp(tester);
 
-          // Place the caret at the downstream side of the inline widget.
-          await tester.placeCaretInSuperTextField(8);
+        // Place the caret at the downstream side of the inline widget.
+        await tester.placeCaretInSuperTextField(8);
 
-          await screenMatchesGolden(tester, 'super-text-field_inline_widgets_single_line_caret_downstream');
-        },
-        windowSize: goldenSizeSmall,
-      );
+        await screenMatchesGolden(tester, 'super-text-field_inline_widgets_single_line_caret_downstream');
+      }, windowSize: goldenSizeSmall);
 
-      testGoldensOnMac(
-        'displays selection box when selecting inline widget',
-        (tester) async {
-          await _pumpSingleLineTestApp(
-            tester,
-            initialSelection: const TextSelection(baseOffset: 7, extentOffset: 8),
-          );
+      testGoldensOnMac('displays selection box when selecting inline widget', (tester) async {
+        await _pumpSingleLineTestApp(tester, initialSelection: const TextSelection(baseOffset: 7, extentOffset: 8));
 
-          await screenMatchesGolden(tester, 'super-text-field_inline_widgets_single_line_selection_box_single');
-        },
-        windowSize: goldenSizeSmall,
-      );
+        await screenMatchesGolden(tester, 'super-text-field_inline_widgets_single_line_selection_box_single');
+      }, windowSize: goldenSizeSmall);
 
-      testGoldensOnMac(
-        'displays selection box upstream near inline widget',
-        (tester) async {
-          await _pumpSingleLineTestApp(
-            tester,
-            initialSelection: const TextSelection(baseOffset: 0, extentOffset: 7),
-          );
+      testGoldensOnMac('displays selection box upstream near inline widget', (tester) async {
+        await _pumpSingleLineTestApp(tester, initialSelection: const TextSelection(baseOffset: 0, extentOffset: 7));
 
-          await screenMatchesGolden(tester, 'super-text-field_inline_widgets_single_line_selection_box_upstream');
-        },
-        windowSize: goldenSizeSmall,
-      );
+        await screenMatchesGolden(tester, 'super-text-field_inline_widgets_single_line_selection_box_upstream');
+      }, windowSize: goldenSizeSmall);
 
-      testGoldensOnMac(
-        'displays selection box downstream near inline widget',
-        (tester) async {
-          await _pumpSingleLineTestApp(
-            tester,
-            initialSelection: const TextSelection(baseOffset: 8, extentOffset: 14),
-          );
+      testGoldensOnMac('displays selection box downstream near inline widget', (tester) async {
+        await _pumpSingleLineTestApp(tester, initialSelection: const TextSelection(baseOffset: 8, extentOffset: 14));
 
-          await screenMatchesGolden(tester, 'super-text-field_inline_widgets_single_line_selection_box_downstream');
-        },
-        windowSize: goldenSizeSmall,
-      );
+        await screenMatchesGolden(tester, 'super-text-field_inline_widgets_single_line_selection_box_downstream');
+      }, windowSize: goldenSizeSmall);
 
-      testGoldensOnMac(
-        'displays selection box when selecting over inline widget',
-        (tester) async {
-          await _pumpSingleLineTestApp(
-            tester,
-            initialSelection: const TextSelection(baseOffset: 0, extentOffset: 14),
-          );
+      testGoldensOnMac('displays selection box when selecting over inline widget', (tester) async {
+        await _pumpSingleLineTestApp(tester, initialSelection: const TextSelection(baseOffset: 0, extentOffset: 14));
 
-          await screenMatchesGolden(tester, 'super-text-field_inline_widgets_single_line_selection_box_over');
-        },
-        windowSize: goldenSizeSmall,
-      );
+        await screenMatchesGolden(tester, 'super-text-field_inline_widgets_single_line_selection_box_over');
+      }, windowSize: goldenSizeSmall);
     });
 
     group('multi line >', () {
-      testGoldensOnMac(
-        'displays caret at upstream side of inline widget',
-        (tester) async {
-          await _pumpMultiLineTestApp(tester);
+      testGoldensOnMac('displays caret at upstream side of inline widget', (tester) async {
+        await _pumpMultiLineTestApp(tester);
 
-          // Place the caret at the upstream side of the inline widget.
-          await tester.placeCaretInSuperTextField(27);
+        // Place the caret at the upstream side of the inline widget.
+        await tester.placeCaretInSuperTextField(27);
 
-          await screenMatchesGolden(tester, 'super-text-field_inline_widgets_multi_line_caret_upstream');
-        },
-        windowSize: goldenSizeSmall,
-      );
+        await screenMatchesGolden(tester, 'super-text-field_inline_widgets_multi_line_caret_upstream');
+      }, windowSize: goldenSizeSmall);
 
-      testGoldensOnMac(
-        'displays caret at downstream side of inline widget',
-        (tester) async {
-          await _pumpMultiLineTestApp(tester);
+      testGoldensOnMac('displays caret at downstream side of inline widget', (tester) async {
+        await _pumpMultiLineTestApp(tester);
 
-          // Place the caret at the downstream side of the inline widget.
-          await tester.placeCaretInSuperTextField(28);
+        // Place the caret at the downstream side of the inline widget.
+        await tester.placeCaretInSuperTextField(28);
 
-          await screenMatchesGolden(tester, 'super-text-field_inline_widgets_multi_line_caret_downstream');
-        },
-        windowSize: goldenSizeSmall,
-      );
+        await screenMatchesGolden(tester, 'super-text-field_inline_widgets_multi_line_caret_downstream');
+      }, windowSize: goldenSizeSmall);
 
-      testGoldensOnMac(
-        'displays selection box when selecting inline widget',
-        (tester) async {
-          await _pumpMultiLineTestApp(
-            tester,
-            initialSelection: const TextSelection(baseOffset: 27, extentOffset: 28),
-          );
+      testGoldensOnMac('displays selection box when selecting inline widget', (tester) async {
+        await _pumpMultiLineTestApp(tester, initialSelection: const TextSelection(baseOffset: 27, extentOffset: 28));
 
-          await screenMatchesGolden(tester, 'super-text-field_inline_widgets_multi_line_selection_box_single');
-        },
-        windowSize: goldenSizeSmall,
-      );
+        await screenMatchesGolden(tester, 'super-text-field_inline_widgets_multi_line_selection_box_single');
+      }, windowSize: goldenSizeSmall);
 
-      testGoldensOnMac(
-        'displays selection box upstream near inline widget',
-        (tester) async {
-          await _pumpMultiLineTestApp(
-            tester,
-            initialSelection: const TextSelection(baseOffset: 0, extentOffset: 27),
-          );
+      testGoldensOnMac('displays selection box upstream near inline widget', (tester) async {
+        await _pumpMultiLineTestApp(tester, initialSelection: const TextSelection(baseOffset: 0, extentOffset: 27));
 
-          await screenMatchesGolden(tester, 'super-text-field_inline_widgets_multi_line_selection_box_upstream');
-        },
-        windowSize: goldenSizeSmall,
-      );
+        await screenMatchesGolden(tester, 'super-text-field_inline_widgets_multi_line_selection_box_upstream');
+      }, windowSize: goldenSizeSmall);
 
-      testGoldensOnMac(
-        'displays selection box downstream near inline widget',
-        (tester) async {
-          await _pumpMultiLineTestApp(
-            tester,
-            initialSelection: const TextSelection(baseOffset: 28, extentOffset: 53),
-          );
+      testGoldensOnMac('displays selection box downstream near inline widget', (tester) async {
+        await _pumpMultiLineTestApp(tester, initialSelection: const TextSelection(baseOffset: 28, extentOffset: 53));
 
-          await screenMatchesGolden(tester, 'super-text-field_inline_widgets_multi_line_selection_box_downstream');
-        },
-        windowSize: goldenSizeSmall,
-      );
+        await screenMatchesGolden(tester, 'super-text-field_inline_widgets_multi_line_selection_box_downstream');
+      }, windowSize: goldenSizeSmall);
 
-      testGoldensOnMac(
-        'displays selection box when selecting over inline widget',
-        (tester) async {
-          await _pumpMultiLineTestApp(
-            tester,
-            initialSelection: const TextSelection(baseOffset: 0, extentOffset: 53),
-          );
+      testGoldensOnMac('displays selection box when selecting over inline widget', (tester) async {
+        await _pumpMultiLineTestApp(tester, initialSelection: const TextSelection(baseOffset: 0, extentOffset: 53));
 
-          await screenMatchesGolden(tester, 'super-text-field_inline_widgets_multi_line_selection_box_over');
-        },
-        windowSize: goldenSizeSmall,
-      );
+        await screenMatchesGolden(tester, 'super-text-field_inline_widgets_multi_line_selection_box_over');
+      }, windowSize: goldenSizeSmall);
     });
   });
 }
 
 /// Pump a test app with a [SuperTextField] that renders a [ColoredBox] for each
 /// [_NamedPlaceHolder] in the text, with an inline widget at offset 7.
-Future<void> _pumpSingleLineTestApp(
-  WidgetTester tester, {
-  TextSelection? initialSelection,
-}) async {
+Future<void> _pumpSingleLineTestApp(WidgetTester tester, {TextSelection? initialSelection}) async {
   final controller = AttributedTextEditingController(
-    text: AttributedText(
-      'before  after',
-      null,
-      {
-        7: const _NamedPlaceHolder('1'),
-      },
-    ),
+    text: AttributedText('before  after', null, {7: const _NamedPlaceHolder('1')}),
     selection: initialSelection,
   );
   await _pumpTestApp(tester, controller: controller);
@@ -193,18 +112,11 @@ Future<void> _pumpSingleLineTestApp(
 
 /// Pump a test app with a [SuperTextField] that renders a [ColoredBox] for each
 /// [_NamedPlaceHolder] in the text, with an inline widget at offset 27.
-Future<void> _pumpMultiLineTestApp(
-  WidgetTester tester, {
-  TextSelection? initialSelection,
-}) async {
+Future<void> _pumpMultiLineTestApp(WidgetTester tester, {TextSelection? initialSelection}) async {
   final controller = AttributedTextEditingController(
-    text: AttributedText(
-      'first line of text \nbefore  after\nthird line of text',
-      null,
-      {
-        27: const _NamedPlaceHolder('1'),
-      },
-    ),
+    text: AttributedText('first line of text \nbefore  after\nthird line of text', null, {
+      27: const _NamedPlaceHolder('1'),
+    }),
     selection: initialSelection,
   );
   await _pumpTestApp(tester, controller: controller);
@@ -212,10 +124,7 @@ Future<void> _pumpMultiLineTestApp(
 
 /// Pump a test app with a [SuperTextField] that renders a [ColoredBox] for each
 /// [_NamedPlaceHolder] in the text.
-Future<void> _pumpTestApp(
-  WidgetTester tester, {
-  required AttributedTextEditingController controller,
-}) async {
+Future<void> _pumpTestApp(WidgetTester tester, {required AttributedTextEditingController controller}) async {
   await tester.pumpWidget(
     MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -233,9 +142,7 @@ Future<void> _pumpTestApp(
                   fontSize: 18,
                   color: Colors.black,
                 ),
-                inlineWidgetBuilders: const [
-                  _boxPlaceHolderBuilder,
-                ],
+                inlineWidgetBuilders: const [_boxPlaceHolderBuilder],
               ),
             ),
           ),
@@ -255,12 +162,7 @@ Widget? _boxPlaceHolderBuilder(BuildContext context, TextStyle textStyle, Object
     key: ValueKey('placeholder-${placeholder.name}'),
     child: LineHeight(
       style: textStyle,
-      child: const SizedBox(
-        width: 24,
-        child: ColoredBox(
-          color: Colors.yellow,
-        ),
-      ),
+      child: const SizedBox(width: 24, child: ColoredBox(color: Colors.yellow)),
     ),
   );
 }

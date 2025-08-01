@@ -61,10 +61,11 @@ void main() {
     });
 
     testWidgetsOnArbitraryDesktop("calculates downstream document selection within a single node", (tester) async {
-      final testContext = await tester //
-          .createDocument() //
-          .fromMarkdown("This is paragraph one.\nThis is paragraph two.") //
-          .pump();
+      final testContext =
+          await tester //
+              .createDocument() //
+              .fromMarkdown("This is paragraph one.\nThis is paragraph two.") //
+              .pump();
       final nodeId = testContext.documentContext.document.first.id;
 
       /// Triple tap on the first line in the paragraph node.
@@ -92,8 +93,9 @@ void main() {
       );
     });
 
-    testWidgetsOnArbitraryDesktop("doesn't select an unselectable component at base (dragging upstream)",
-        (tester) async {
+    testWidgetsOnArbitraryDesktop("doesn't select an unselectable component at base (dragging upstream)", (
+      tester,
+    ) async {
       final testContext = await _pumpUnselectableComponentTestApp(tester);
 
       final firstParagraphId = testContext.documentContext.document.first.id;
@@ -119,8 +121,9 @@ void main() {
       );
     });
 
-    testWidgetsOnArbitraryDesktop("doesn't select an unselectable component at extent (dragging upstream)",
-        (tester) async {
+    testWidgetsOnArbitraryDesktop("doesn't select an unselectable component at extent (dragging upstream)", (
+      tester,
+    ) async {
       final testContext = await _pumpUnselectableComponentTestApp(tester);
 
       final secondParagraphId = testContext.documentContext.document.last.id;
@@ -142,18 +145,16 @@ void main() {
         DocumentSelection(
           base: DocumentPosition(
             nodeId: secondParagraphId,
-            nodePosition: const TextNodePosition(
-              offset: 16,
-              affinity: TextAffinity.upstream,
-            ),
+            nodePosition: const TextNodePosition(offset: 16, affinity: TextAffinity.upstream),
           ),
           extent: DocumentPosition(nodeId: secondParagraphId, nodePosition: const TextNodePosition(offset: 0)),
         ),
       );
     });
 
-    testWidgetsOnArbitraryDesktop("doesn't select an unselectable component at base (dragging downstream)",
-        (tester) async {
+    testWidgetsOnArbitraryDesktop("doesn't select an unselectable component at base (dragging downstream)", (
+      tester,
+    ) async {
       final testContext = await _pumpUnselectableComponentTestApp(tester);
 
       final secondParagraphId = testContext.documentContext.document.last.id;
@@ -176,17 +177,15 @@ void main() {
           base: DocumentPosition(nodeId: secondParagraphId, nodePosition: const TextNodePosition(offset: 0)),
           extent: DocumentPosition(
             nodeId: secondParagraphId,
-            nodePosition: const TextNodePosition(
-              offset: 16,
-              affinity: TextAffinity.upstream,
-            ),
+            nodePosition: const TextNodePosition(offset: 16, affinity: TextAffinity.upstream),
           ),
         ),
       );
     });
 
-    testWidgetsOnArbitraryDesktop("doesn't select an unselectable component at extent (dragging downstream)",
-        (tester) async {
+    testWidgetsOnArbitraryDesktop("doesn't select an unselectable component at extent (dragging downstream)", (
+      tester,
+    ) async {
       final testContext = await _pumpUnselectableComponentTestApp(tester);
 
       final firstParagraphId = testContext.documentContext.document.first.id;
@@ -212,8 +211,9 @@ void main() {
       );
     });
 
-    testWidgetsOnArbitraryDesktop("selects paragraphs surrounding an unselectable component (dragging upstream)",
-        (tester) async {
+    testWidgetsOnArbitraryDesktop("selects paragraphs surrounding an unselectable component (dragging upstream)", (
+      tester,
+    ) async {
       final testContext = await _pumpUnselectableComponentTestApp(tester);
 
       final firstParagraphId = testContext.documentContext.document.first.id;
@@ -236,18 +236,16 @@ void main() {
         DocumentSelection(
           base: DocumentPosition(
             nodeId: secondParagraphId,
-            nodePosition: const TextNodePosition(
-              offset: 16,
-              affinity: TextAffinity.upstream,
-            ),
+            nodePosition: const TextNodePosition(offset: 16, affinity: TextAffinity.upstream),
           ),
           extent: DocumentPosition(nodeId: firstParagraphId, nodePosition: const TextNodePosition(offset: 0)),
         ),
       );
     });
 
-    testWidgetsOnArbitraryDesktop("selects paragraphs surrounding an unselectable component (dragging downstream)",
-        (tester) async {
+    testWidgetsOnArbitraryDesktop("selects paragraphs surrounding an unselectable component (dragging downstream)", (
+      tester,
+    ) async {
       final testContext = await _pumpUnselectableComponentTestApp(tester);
 
       final firstParagraphId = testContext.documentContext.document.first.id;
@@ -271,205 +269,163 @@ void main() {
           base: DocumentPosition(nodeId: firstParagraphId, nodePosition: const TextNodePosition(offset: 0)),
           extent: DocumentPosition(
             nodeId: secondParagraphId,
-            nodePosition: const TextNodePosition(
-              offset: 16,
-              affinity: TextAffinity.upstream,
-            ),
+            nodePosition: const TextNodePosition(offset: 16, affinity: TextAffinity.upstream),
           ),
         ),
       );
     });
 
     testWidgetsOnDesktop(
-        "dragging a single component selection above a component selects to the beginning of the component",
-        (tester) async {
-      // For example, a user drags to select text in a paragraph. The user
-      // is dragging the cursor up the center of the paragraph. When the cursor
-      // moves above the paragraph, the selection extent should move to the
-      // beginning of the paragraph, rather than get stuck in the middle of the
-      // top line of text.
+      "dragging a single component selection above a component selects to the beginning of the component",
+      (tester) async {
+        // For example, a user drags to select text in a paragraph. The user
+        // is dragging the cursor up the center of the paragraph. When the cursor
+        // moves above the paragraph, the selection extent should move to the
+        // beginning of the paragraph, rather than get stuck in the middle of the
+        // top line of text.
 
-      await tester
-          .createDocument()
-          .fromMarkdown(
-            '''
+        await tester
+            .createDocument()
+            .fromMarkdown('''
 This is a paragraph of text that
-spans multiple lines.''',
-          )
-          .forDesktop()
-          .pump();
+spans multiple lines.''')
+            .forDesktop()
+            .pump();
 
-      final document = SuperReaderInspector.findDocument()!;
-      final paragraphNode = document.first as ParagraphNode;
+        final document = SuperReaderInspector.findDocument()!;
+        final paragraphNode = document.first as ParagraphNode;
 
-      await tester.dragSelectDocumentFromPositionByOffset(
-        from: DocumentPosition(
-          nodeId: paragraphNode.id,
-          nodePosition: paragraphNode.endPosition,
-        ),
-        delta: const Offset(0, -300),
-      );
+        await tester.dragSelectDocumentFromPositionByOffset(
+          from: DocumentPosition(nodeId: paragraphNode.id, nodePosition: paragraphNode.endPosition),
+          delta: const Offset(0, -300),
+        );
 
-      // Ensure that the entire paragraph is selected, after dragging
-      // above it.
-      expect(
-        SuperReaderInspector.findDocumentSelection(),
-        DocumentSelection(
-          base: DocumentPosition(
-            nodeId: paragraphNode.id,
-            nodePosition: paragraphNode.endPosition,
+        // Ensure that the entire paragraph is selected, after dragging
+        // above it.
+        expect(
+          SuperReaderInspector.findDocumentSelection(),
+          DocumentSelection(
+            base: DocumentPosition(nodeId: paragraphNode.id, nodePosition: paragraphNode.endPosition),
+            extent: DocumentPosition(nodeId: paragraphNode.id, nodePosition: paragraphNode.beginningPosition),
           ),
-          extent: DocumentPosition(
-            nodeId: paragraphNode.id,
-            nodePosition: paragraphNode.beginningPosition,
-          ),
-        ),
-      );
-    });
-
-    testWidgetsOnDesktop("dragging a single component selection below a component selects to the end of the component",
-        (tester) async {
-      // For example, a user drags to select text in a paragraph. The user
-      // is dragging the cursor down the center of the paragraph. When the cursor
-      // moves below the paragraph, the selection extent should move to the
-      // end of the paragraph, rather than get stuck in the middle of the
-      // bottom line of text.
-
-      await tester
-          .createDocument()
-          .fromMarkdown(
-            '''
-This is a paragraph of text that
-spans multiple lines.''',
-          )
-          .forDesktop()
-          .pump();
-
-      final document = SuperReaderInspector.findDocument()!;
-      final paragraphNode = document.first as ParagraphNode;
-
-      await tester.dragSelectDocumentFromPositionByOffset(
-        from: DocumentPosition(
-          nodeId: paragraphNode.id,
-          nodePosition: paragraphNode.beginningPosition,
-        ),
-        delta: const Offset(0, 300),
-      );
-
-      // Ensure that the entire paragraph is selected, after dragging
-      // below it.
-      expect(
-        SuperReaderInspector.findDocumentSelection(),
-        DocumentSelection(
-          base: DocumentPosition(
-            nodeId: paragraphNode.id,
-            nodePosition: paragraphNode.beginningPosition,
-          ),
-          extent: DocumentPosition(
-            nodeId: paragraphNode.id,
-            nodePosition: paragraphNode.endPosition,
-          ),
-        ),
-      );
-    });
+        );
+      },
+    );
 
     testWidgetsOnDesktop(
-        "dragging a multi-component selection above a component selects to the beginning of the top component",
-        (tester) async {
-      // For example, a user drags to select text in a paragraph. The user
-      // is dragging the cursor up the center of the paragraph. When the cursor
-      // moves above the paragraph, the selection extent should move to the
-      // beginning of the paragraph, rather than get stuck in the middle of the
-      // top line of text.
+      "dragging a single component selection below a component selects to the end of the component",
+      (tester) async {
+        // For example, a user drags to select text in a paragraph. The user
+        // is dragging the cursor down the center of the paragraph. When the cursor
+        // moves below the paragraph, the selection extent should move to the
+        // end of the paragraph, rather than get stuck in the middle of the
+        // bottom line of text.
 
-      await tester
-          .createDocument()
-          .fromMarkdown(
-            '''
+        await tester
+            .createDocument()
+            .fromMarkdown('''
+This is a paragraph of text that
+spans multiple lines.''')
+            .forDesktop()
+            .pump();
+
+        final document = SuperReaderInspector.findDocument()!;
+        final paragraphNode = document.first as ParagraphNode;
+
+        await tester.dragSelectDocumentFromPositionByOffset(
+          from: DocumentPosition(nodeId: paragraphNode.id, nodePosition: paragraphNode.beginningPosition),
+          delta: const Offset(0, 300),
+        );
+
+        // Ensure that the entire paragraph is selected, after dragging
+        // below it.
+        expect(
+          SuperReaderInspector.findDocumentSelection(),
+          DocumentSelection(
+            base: DocumentPosition(nodeId: paragraphNode.id, nodePosition: paragraphNode.beginningPosition),
+            extent: DocumentPosition(nodeId: paragraphNode.id, nodePosition: paragraphNode.endPosition),
+          ),
+        );
+      },
+    );
+
+    testWidgetsOnDesktop(
+      "dragging a multi-component selection above a component selects to the beginning of the top component",
+      (tester) async {
+        // For example, a user drags to select text in a paragraph. The user
+        // is dragging the cursor up the center of the paragraph. When the cursor
+        // moves above the paragraph, the selection extent should move to the
+        // beginning of the paragraph, rather than get stuck in the middle of the
+        // top line of text.
+
+        await tester
+            .createDocument()
+            .fromMarkdown('''
 # This is a test
 This is a paragraph of text that
-spans multiple lines.''',
-          )
-          .forDesktop()
-          .pump();
+spans multiple lines.''')
+            .forDesktop()
+            .pump();
 
-      final document = SuperReaderInspector.findDocument()!;
-      final titleNode = document.first as ParagraphNode;
-      final paragraphNode = document.getNodeAt(1)! as ParagraphNode;
+        final document = SuperReaderInspector.findDocument()!;
+        final titleNode = document.first as ParagraphNode;
+        final paragraphNode = document.getNodeAt(1)! as ParagraphNode;
 
-      await tester.dragSelectDocumentFromPositionByOffset(
-        from: DocumentPosition(
-          nodeId: paragraphNode.id,
-          nodePosition: paragraphNode.endPosition,
-        ),
-        delta: const Offset(0, -300),
-      );
+        await tester.dragSelectDocumentFromPositionByOffset(
+          from: DocumentPosition(nodeId: paragraphNode.id, nodePosition: paragraphNode.endPosition),
+          delta: const Offset(0, -300),
+        );
 
-      // Ensure that the entire paragraph is selected, after dragging
-      // above it.
-      expect(
-        SuperReaderInspector.findDocumentSelection(),
-        DocumentSelection(
-          base: DocumentPosition(
-            nodeId: paragraphNode.id,
-            nodePosition: paragraphNode.endPosition,
+        // Ensure that the entire paragraph is selected, after dragging
+        // above it.
+        expect(
+          SuperReaderInspector.findDocumentSelection(),
+          DocumentSelection(
+            base: DocumentPosition(nodeId: paragraphNode.id, nodePosition: paragraphNode.endPosition),
+            extent: DocumentPosition(nodeId: titleNode.id, nodePosition: titleNode.beginningPosition),
           ),
-          extent: DocumentPosition(
-            nodeId: titleNode.id,
-            nodePosition: titleNode.beginningPosition,
-          ),
-        ),
-      );
-    });
+        );
+      },
+    );
 
     testWidgetsOnDesktop(
-        "dragging a multi-component selection below a component selects to the end of the bottom component",
-        (tester) async {
-      // For example, a user drags to select text in a paragraph. The user
-      // is dragging the cursor up the center of the paragraph. When the cursor
-      // moves above the paragraph, the selection extent should move to the
-      // beginning of the paragraph, rather than get stuck in the middle of the
-      // top line of text.
+      "dragging a multi-component selection below a component selects to the end of the bottom component",
+      (tester) async {
+        // For example, a user drags to select text in a paragraph. The user
+        // is dragging the cursor up the center of the paragraph. When the cursor
+        // moves above the paragraph, the selection extent should move to the
+        // beginning of the paragraph, rather than get stuck in the middle of the
+        // top line of text.
 
-      await tester
-          .createDocument()
-          .fromMarkdown(
-            '''
+        await tester
+            .createDocument()
+            .fromMarkdown('''
 # This is a test
 This is a paragraph of text that
-spans multiple lines.''',
-          )
-          .forDesktop()
-          .pump();
+spans multiple lines.''')
+            .forDesktop()
+            .pump();
 
-      final document = SuperReaderInspector.findDocument()!;
-      final titleNode = document.first as ParagraphNode;
-      final paragraphNode = document.getNodeAt(1)! as ParagraphNode;
+        final document = SuperReaderInspector.findDocument()!;
+        final titleNode = document.first as ParagraphNode;
+        final paragraphNode = document.getNodeAt(1)! as ParagraphNode;
 
-      await tester.dragSelectDocumentFromPositionByOffset(
-        from: DocumentPosition(
-          nodeId: titleNode.id,
-          nodePosition: titleNode.beginningPosition,
-        ),
-        delta: const Offset(0, 300),
-      );
+        await tester.dragSelectDocumentFromPositionByOffset(
+          from: DocumentPosition(nodeId: titleNode.id, nodePosition: titleNode.beginningPosition),
+          delta: const Offset(0, 300),
+        );
 
-      // Ensure that the entire paragraph is selected, after dragging
-      // above it.
-      expect(
-        SuperReaderInspector.findDocumentSelection(),
-        DocumentSelection(
-          base: DocumentPosition(
-            nodeId: titleNode.id,
-            nodePosition: titleNode.beginningPosition,
+        // Ensure that the entire paragraph is selected, after dragging
+        // above it.
+        expect(
+          SuperReaderInspector.findDocumentSelection(),
+          DocumentSelection(
+            base: DocumentPosition(nodeId: titleNode.id, nodePosition: titleNode.beginningPosition),
+            extent: DocumentPosition(nodeId: paragraphNode.id, nodePosition: paragraphNode.endPosition),
           ),
-          extent: DocumentPosition(
-            nodeId: paragraphNode.id,
-            nodePosition: paragraphNode.endPosition,
-          ),
-        ),
-      );
-    });
+        );
+      },
+    );
   });
 }
 
@@ -483,10 +439,7 @@ First Paragraph
 
 Second Paragraph
 """)
-      .withComponentBuilders([
-        const _UnselectableHrComponentBuilder(),
-        ...defaultComponentBuilders,
-      ])
+      .withComponentBuilders([const _UnselectableHrComponentBuilder(), ...defaultComponentBuilders])
       .withEditorSize(const Size(300, 300))
       .pump();
 }
@@ -505,22 +458,19 @@ class _UnselectableHrComponentBuilder implements ComponentBuilder {
 
   @override
   Widget? createComponent(
-      SingleColumnDocumentComponentContext componentContext, SingleColumnLayoutComponentViewModel componentViewModel) {
+    SingleColumnDocumentComponentContext componentContext,
+    SingleColumnLayoutComponentViewModel componentViewModel,
+  ) {
     if (componentViewModel is! HorizontalRuleComponentViewModel) {
       return null;
     }
 
-    return _UnselectableHorizontalRuleComponent(
-      componentKey: componentContext.componentKey,
-    );
+    return _UnselectableHorizontalRuleComponent(componentKey: componentContext.componentKey);
   }
 }
 
 class _UnselectableHorizontalRuleComponent extends StatelessWidget {
-  const _UnselectableHorizontalRuleComponent({
-    Key? key,
-    required this.componentKey,
-  }) : super(key: key);
+  const _UnselectableHorizontalRuleComponent({Key? key, required this.componentKey}) : super(key: key);
 
   final GlobalKey componentKey;
 
@@ -529,10 +479,7 @@ class _UnselectableHorizontalRuleComponent extends StatelessWidget {
     return BoxComponent(
       key: componentKey,
       isVisuallySelectable: false,
-      child: const Divider(
-        color: Color(0xFF000000),
-        thickness: 1.0,
-      ),
+      child: const Divider(color: Color(0xFF000000), thickness: 1.0),
     );
   }
 }

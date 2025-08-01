@@ -9,12 +9,13 @@ void main() {
   group("SuperEditor smoke test", () {
     testWidgets("writes a document with multiple types of content", (tester) async {
       // Configure and render an empty document.
-      final testDocContext = await tester //
-          .createDocument()
-          .withSingleEmptyParagraph()
-          .forDesktop()
-          .withInputSource(TextInputSource.keyboard)
-          .pump();
+      final testDocContext =
+          await tester //
+              .createDocument()
+              .withSingleEmptyParagraph()
+              .forDesktop()
+              .withInputSource(TextInputSource.keyboard)
+              .pump();
 
       await tester.placeCaretInParagraph("1", 0);
 
@@ -57,10 +58,7 @@ void main() {
       // Note: a blank paragraph is automatically inserted after the HR.
 
       // Ensure that we've created the document that we think we have.
-      expect(
-        testDocContext.findEditContext().document,
-        documentEquivalentTo(_expectedDocument),
-      );
+      expect(testDocContext.findEditContext().document, documentEquivalentTo(_expectedDocument));
     });
   });
 }
@@ -69,7 +67,10 @@ final _expectedDocument = MutableDocument(
   nodes: [
     ParagraphNode(id: "1", text: AttributedText("This is the first paragraph of the document.")),
     ParagraphNode(
-        id: "2", text: AttributedText("This is a blockquote."), metadata: {'blockType': blockquoteAttribution}),
+      id: "2",
+      text: AttributedText("This is a blockquote."),
+      metadata: {'blockType': blockquoteAttribution},
+    ),
     ParagraphNode(id: "3", text: AttributedText("This is an ordered list.")),
     ListItemNode.ordered(id: "4", text: AttributedText("item 1")),
     ListItemNode.ordered(id: "5", text: AttributedText("item 2")),

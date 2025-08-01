@@ -89,11 +89,7 @@ void main() {
             callbackCalled = true;
           };
 
-        await _pumpSingleFieldTestApp(
-          tester,
-          focusNode: focusNode,
-          textController: textController,
-        );
+        await _pumpSingleFieldTestApp(tester, focusNode: focusNode, textController: textController);
 
         // Focus SuperTextField.
         focusNode.requestFocus();
@@ -122,11 +118,7 @@ void main() {
             callbackCalled = true;
           };
 
-        await _pumpTripleFieldTestApp(
-          tester,
-          focusNodeFirstField: focusNode,
-          textControllerFirstField: textController,
-        );
+        await _pumpTripleFieldTestApp(tester, focusNodeFirstField: focusNode, textControllerFirstField: textController);
 
         // Focus first field.
         focusNode.requestFocus();
@@ -192,11 +184,7 @@ Future<void> _pumpSingleFieldTestApp(
       home: Scaffold(
         body: SizedBox(
           width: 300,
-          child: SuperTextField(
-            focusNode: focusNode,
-            textController: textController,
-            lineHeight: 16,
-          ),
+          child: SuperTextField(focusNode: focusNode, textController: textController, lineHeight: 16),
         ),
       ),
     ),

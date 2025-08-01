@@ -63,26 +63,18 @@ void main() {
 
       await _pumpScaffold(
         tester,
-        controller: AttributedTextEditingController(
-          text: AttributedText('Lorem ipsum dolor'),
-        ),
+        controller: AttributedTextEditingController(text: AttributedText('Lorem ipsum dolor')),
       );
 
       // Ensure there's no selection to begin with.
-      expect(
-        SuperTextFieldInspector.findSelection(),
-        const TextSelection.collapsed(offset: -1),
-      );
+      expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: -1));
 
       // Tap at "ipsum|" to place the caret.
       await tester.placeCaretInSuperTextField(11);
       await tester.pump(kDoubleTapTimeout);
 
       // Ensure the selection was placed at the end of the word.
-      expect(
-        SuperTextFieldInspector.findSelection(),
-        const TextSelection.collapsed(offset: 11),
-      );
+      expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: 11));
 
       // Press and drag the caret to "ips|um", because dragging is the only way
       // we can place the caret at the middle of a word when caret snapping is enabled.
@@ -90,10 +82,7 @@ void main() {
       await dragGesture.up();
 
       // Ensure the selection moved to "ips|um".
-      expect(
-        SuperTextFieldInspector.findSelection(),
-        const TextSelection.collapsed(offset: 9),
-      );
+      expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: 9));
 
       // Ensure that the text field toolbar is not visible.
       expect(find.byType(IOSTextEditingFloatingToolbar), findsNothing);
@@ -102,10 +91,7 @@ void main() {
       await tester.placeCaretInSuperTextField(9);
 
       // Ensure the selection was kept at "ips|um".
-      expect(
-        SuperTextFieldInspector.findSelection(),
-        const TextSelection.collapsed(offset: 9),
-      );
+      expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: 9));
 
       // Ensure that the text field toolbar is visible.
       expect(find.byType(IOSTextEditingFloatingToolbar), findsOneWidget);
@@ -174,18 +160,13 @@ Future<void> _pumpScaffold(
               child: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 250),
                 child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black),
-                  ),
+                  decoration: BoxDecoration(border: Border.all(color: Colors.black)),
                   child: SuperTextField(
                     focusNode: textFieldFocusNode,
                     tapRegionGroupId: tapRegionGroupId,
                     padding: padding,
                     textAlign: textAlign ?? TextAlign.left,
-                    textController: controller ??
-                        AttributedTextEditingController(
-                          text: AttributedText('abc'),
-                        ),
+                    textController: controller ?? AttributedTextEditingController(text: AttributedText('abc')),
                   ),
                 ),
               ),

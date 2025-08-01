@@ -28,10 +28,7 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection.collapsed(
-              position: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 39),
-              ),
+              position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 39)),
             ),
           );
 
@@ -43,10 +40,7 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection.collapsed(
-              position: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 50),
-              ),
+              position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 50)),
             ),
           );
 
@@ -58,10 +52,7 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection.collapsed(
-              position: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 39),
-              ),
+              position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 39)),
             ),
           );
         });
@@ -79,10 +70,7 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection.collapsed(
-              position: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 28),
-              ),
+              position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 28)),
             ),
           );
 
@@ -94,10 +82,7 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection.collapsed(
-              position: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 40),
-              ),
+              position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 40)),
             ),
           );
         });
@@ -200,14 +185,8 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection(
-              base: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 6),
-              ),
-              extent: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 17),
-              ),
+              base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 6)),
+              extent: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 17)),
             ),
           );
 
@@ -232,10 +211,7 @@ void main() {
                 // selection here.
                 nodePosition: TextNodePosition(offset: 11),
               ),
-              extent: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 17),
-              ),
+              extent: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 17)),
             ),
           );
 
@@ -273,14 +249,8 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection(
-              base: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 12),
-              ),
-              extent: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 21),
-              ),
+              base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 12)),
+              extent: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 21)),
             ),
           );
 
@@ -308,20 +278,12 @@ void main() {
                 MutableDocument(
                   nodes: [
                     ImageNode(id: '1', imageUrl: ''),
-                    ParagraphNode(
-                      id: '2',
-                      text: AttributedText('Lorem ipsum dolor'),
-                    )
+                    ParagraphNode(id: '2', text: AttributedText('Lorem ipsum dolor')),
                   ],
                 ),
               )
-              .withAddedComponents(
-            [
-              const FakeImageComponentBuilder(
-                size: Size(100, 100),
-              ),
-            ],
-          ).pump();
+              .withAddedComponents([const FakeImageComponentBuilder(size: Size(100, 100))])
+              .pump();
 
           // Long press near the top of the image.
           final tapDownOffset = tester.getTopLeft(find.byType(ImageComponent)) + const Offset(0, 10);
@@ -339,8 +301,10 @@ void main() {
 
           // Drag down from the image to the begining of the paragraph.
           const dragIncrementCount = 10;
-          final verticalDragDistance =
-              Offset(0, (tester.getTopLeft(find.byType(TextComponent)).dy - tapDownOffset.dy) / dragIncrementCount);
+          final verticalDragDistance = Offset(
+            0,
+            (tester.getTopLeft(find.byType(TextComponent)).dy - tapDownOffset.dy) / dragIncrementCount,
+          );
           for (int i = 0; i < dragIncrementCount; i += 1) {
             await gesture.moveBy(verticalDragDistance);
             await tester.pump();
@@ -351,10 +315,7 @@ void main() {
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection(
               base: DocumentPosition(nodeId: '1', nodePosition: UpstreamDownstreamNodePosition.upstream()),
-              extent: DocumentPosition(
-                nodeId: "2",
-                nodePosition: TextNodePosition(offset: 5),
-              ),
+              extent: DocumentPosition(nodeId: "2", nodePosition: TextNodePosition(offset: 5)),
             ),
           );
 
@@ -369,21 +330,13 @@ void main() {
               .withCustomContent(
                 MutableDocument(
                   nodes: [
-                    ParagraphNode(
-                      id: '1',
-                      text: AttributedText('Lorem ipsum dolor'),
-                    ),
+                    ParagraphNode(id: '1', text: AttributedText('Lorem ipsum dolor')),
                     ImageNode(id: '2', imageUrl: ''),
                   ],
                 ),
               )
-              .withAddedComponents(
-            [
-              const FakeImageComponentBuilder(
-                size: Size(100, 100),
-              ),
-            ],
-          ).pump();
+              .withAddedComponents([const FakeImageComponentBuilder(size: Size(100, 100))])
+              .pump();
 
           // Long press near the top of the image.
           final tapDownOffset = tester.getTopLeft(find.byType(ImageComponent)) + const Offset(0, 10);
@@ -401,8 +354,10 @@ void main() {
 
           // Drag up from the image to the begining of the paragraph.
           const dragIncrementCount = 10;
-          final verticalDragDistance =
-              Offset(0, (tester.getTopLeft(find.byType(TextComponent)).dy - tapDownOffset.dy) / dragIncrementCount);
+          final verticalDragDistance = Offset(
+            0,
+            (tester.getTopLeft(find.byType(TextComponent)).dy - tapDownOffset.dy) / dragIncrementCount,
+          );
           for (int i = 0; i < dragIncrementCount; i += 1) {
             await gesture.moveBy(verticalDragDistance);
             await tester.pump();
@@ -416,10 +371,7 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection(
-              base: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 0),
-              ),
+              base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 0)),
               extent: DocumentPosition(nodeId: '2', nodePosition: UpstreamDownstreamNodePosition.downstream()),
             ),
           );
@@ -441,9 +393,7 @@ void main() {
               .pump();
 
           // Start dragging horizontally.
-          final gesture = await tester.startGesture(
-            tester.getCenter(find.byType(SuperEditor)),
-          );
+          final gesture = await tester.startGesture(tester.getCenter(find.byType(SuperEditor)));
 
           // Drag horizontally.
           for (int i = 1; i < 10; i += 1) {
@@ -471,9 +421,7 @@ void main() {
               .pump();
 
           // Start dragging horizontally.
-          final gesture = await tester.startGesture(
-            tester.getCenter(find.byType(SuperEditor)),
-          );
+          final gesture = await tester.startGesture(tester.getCenter(find.byType(SuperEditor)));
 
           // Drag horizontally.
           for (int i = 1; i < 10; i += 1) {
@@ -509,18 +457,14 @@ void main() {
 
         await tester //
             .createDocument()
-            .withCustomContent(MutableDocument(
-              nodes: [
-                ParagraphNode(
-                  id: '1',
-                  text: AttributedText('First paragraph'),
-                ),
-                ParagraphNode(
-                  id: '2',
-                  text: AttributedText('Second paragraph'),
-                ),
-              ],
-            ))
+            .withCustomContent(
+              MutableDocument(
+                nodes: [
+                  ParagraphNode(id: '1', text: AttributedText('First paragraph')),
+                  ParagraphNode(id: '2', text: AttributedText('Second paragraph')),
+                ],
+              ),
+            )
             .pump();
 
         // Place the caret at the beginning of the document.
@@ -541,14 +485,8 @@ void main() {
         expect(
           SuperEditorInspector.findDocumentSelection(),
           const DocumentSelection(
-            base: DocumentPosition(
-              nodeId: '1',
-              nodePosition: TextNodePosition(offset: 0),
-            ),
-            extent: DocumentPosition(
-              nodeId: '2',
-              nodePosition: TextNodePosition(offset: 16),
-            ),
+            base: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 0)),
+            extent: DocumentPosition(nodeId: '2', nodePosition: TextNodePosition(offset: 16)),
           ),
         );
       });
@@ -558,12 +496,10 @@ void main() {
       testWidgetsOnIos("expands selection when dragging horizontally", (tester) async {
         final testContext = await tester
             .createDocument()
-            .fromMarkdown(
-              '''
+            .fromMarkdown('''
 SuperEditor containing a
 paragraph that spans 
-multiple lines.''',
-            )
+multiple lines.''')
             .insideCustomScrollView()
             .pump();
 
@@ -574,10 +510,7 @@ multiple lines.''',
 
         // Drag from "SuperEdito|r" a distance long enough to go through the entire first line.
         await tester.dragSelectDocumentFromPositionByOffset(
-          from: DocumentPosition(
-            nodeId: paragraphNode.id,
-            nodePosition: const TextNodePosition(offset: 10),
-          ),
+          from: DocumentPosition(nodeId: paragraphNode.id, nodePosition: const TextNodePosition(offset: 10)),
           delta: const Offset(300, 0),
         );
 
@@ -586,14 +519,8 @@ multiple lines.''',
           SuperEditorInspector.findDocumentSelection(),
           selectionEquivalentTo(
             DocumentSelection(
-              base: DocumentPosition(
-                nodeId: paragraphNode.id,
-                nodePosition: const TextNodePosition(offset: 0),
-              ),
-              extent: DocumentPosition(
-                nodeId: paragraphNode.id,
-                nodePosition: const TextNodePosition(offset: 24),
-              ),
+              base: DocumentPosition(nodeId: paragraphNode.id, nodePosition: const TextNodePosition(offset: 0)),
+              extent: DocumentPosition(nodeId: paragraphNode.id, nodePosition: const TextNodePosition(offset: 24)),
             ),
           ),
         );
@@ -602,12 +529,10 @@ multiple lines.''',
       testWidgetsOnIos("expands selection when dragging vertically", (tester) async {
         final testContext = await tester
             .createDocument()
-            .fromMarkdown(
-              '''
+            .fromMarkdown('''
 SuperEditor containing a
 paragraph that spans 
-multiple lines.''',
-            )
+multiple lines.''')
             .insideCustomScrollView()
             .pump();
 
@@ -618,10 +543,7 @@ multiple lines.''',
 
         // Drag from "SuperEdito|r" a distance long enough to go to the last line.
         await tester.dragSelectDocumentFromPositionByOffset(
-          from: DocumentPosition(
-            nodeId: paragraphNode.id,
-            nodePosition: const TextNodePosition(offset: 10),
-          ),
+          from: DocumentPosition(nodeId: paragraphNode.id, nodePosition: const TextNodePosition(offset: 10)),
           delta: const Offset(0, 40),
         );
 
@@ -630,14 +552,8 @@ multiple lines.''',
           SuperEditorInspector.findDocumentSelection(),
           selectionEquivalentTo(
             DocumentSelection(
-              base: DocumentPosition(
-                nodeId: paragraphNode.id,
-                nodePosition: const TextNodePosition(offset: 0),
-              ),
-              extent: DocumentPosition(
-                nodeId: paragraphNode.id,
-                nodePosition: const TextNodePosition(offset: 57),
-              ),
+              base: DocumentPosition(nodeId: paragraphNode.id, nodePosition: const TextNodePosition(offset: 0)),
+              extent: DocumentPosition(nodeId: paragraphNode.id, nodePosition: const TextNodePosition(offset: 57)),
             ),
           ),
         );
@@ -656,31 +572,21 @@ Future<void> _pumpAppWithLongText(WidgetTester tester) async {
       // "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod...",
       .withSingleParagraph()
       .useIosSelectionHeuristics(true)
-      .withiOSToolbarBuilder((context, mobileToolbarKey, focalPoint) =>
-          IOSTextEditingFloatingToolbar(key: mobileToolbarKey, focalPoint: focalPoint))
+      .withiOSToolbarBuilder(
+        (context, mobileToolbarKey, focalPoint) =>
+            IOSTextEditingFloatingToolbar(key: mobileToolbarKey, focalPoint: focalPoint),
+      )
       .pump();
 }
 
 const _wordConsecteturSelection = DocumentSelection(
-  base: DocumentPosition(
-    nodeId: "1",
-    nodePosition: TextNodePosition(offset: 28),
-  ),
-  extent: DocumentPosition(
-    nodeId: "1",
-    nodePosition: TextNodePosition(offset: 39),
-  ),
+  base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 28)),
+  extent: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 39)),
 );
 
 const _wordDolorSelection = DocumentSelection(
-  base: DocumentPosition(
-    nodeId: "1",
-    nodePosition: TextNodePosition(offset: 12),
-  ),
-  extent: DocumentPosition(
-    nodeId: "1",
-    nodePosition: TextNodePosition(offset: 17),
-  ),
+  base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 12)),
+  extent: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 17)),
 );
 
 void _expectNoControlsAreVisible() {

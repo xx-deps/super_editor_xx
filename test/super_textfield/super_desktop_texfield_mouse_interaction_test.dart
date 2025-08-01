@@ -99,9 +99,7 @@ Future<void> _pumpGestureTestApp(WidgetTester tester, {double padding = 0.0}) as
           padding: const EdgeInsets.all(20.0),
           child: SuperDesktopTextField(
             padding: EdgeInsets.all(padding),
-            textController: AttributedTextEditingController(
-              text: AttributedText("abc"),
-            ),
+            textController: AttributedTextEditingController(text: AttributedText("abc")),
             textStyleBuilder: (_) => const TextStyle(fontSize: 16),
           ),
         ),

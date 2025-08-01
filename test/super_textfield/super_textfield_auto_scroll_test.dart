@@ -14,11 +14,7 @@ void main() {
   group('SuperTextField', () {
     group('on mobile with an ancestor Scrollable', () {
       _testWidgetsOnMobileWithKeyboard('auto scrolls when focused in single-line', (tester, keyboardToggle) async {
-        await _pumpTestApp(
-          tester,
-          text: 'Single line SuperTextField',
-          lineCount: 1,
-        );
+        await _pumpTestApp(tester, text: 'Single line SuperTextField', lineCount: 1);
 
         // Tap to focus the text field
         await tester.tapAt(tester.getCenter(find.byType(SuperTextField)));
@@ -35,18 +31,16 @@ void main() {
 
         // Ensure we scroll only the necessary to reveal the selection, plus a small gap
         expect(
-            screenSizeWithKeyboard.height - selectionOffset.dy.floor(), lessThanOrEqualTo(gapBetweenCaretAndKeyboard));
+          screenSizeWithKeyboard.height - selectionOffset.dy.floor(),
+          lessThanOrEqualTo(gapBetweenCaretAndKeyboard),
+        );
 
         // Ensure selection doesn't scroll beyond the top
         expect(selectionOffset.dy.floor(), greaterThanOrEqualTo(0));
       });
 
       _testWidgetsOnMobileWithKeyboard('auto scrolls when focused in single-line', (tester, keyboardToggle) async {
-        await _pumpTestApp(
-          tester,
-          text: 'Single line SuperTextField',
-          lineCount: 1,
-        );
+        await _pumpTestApp(tester, text: 'Single line SuperTextField', lineCount: 1);
 
         // Tap to focus the text field
         await tester.tapAt(tester.getCenter(find.byType(SuperTextField)));
@@ -63,18 +57,16 @@ void main() {
 
         // Ensure we scroll only the necessary to reveal the selection, plus a small gap
         expect(
-            screenSizeWithKeyboard.height - selectionOffset.dy.floor(), lessThanOrEqualTo(gapBetweenCaretAndKeyboard));
+          screenSizeWithKeyboard.height - selectionOffset.dy.floor(),
+          lessThanOrEqualTo(gapBetweenCaretAndKeyboard),
+        );
 
         // Ensure selection doesn't scroll beyond the top
         expect(selectionOffset.dy.floor(), greaterThanOrEqualTo(0));
       });
 
       _testWidgetsOnMobileWithKeyboard('auto scrolls when focused in multi-line', (tester, keyboardToggle) async {
-        await _pumpTestApp(
-          tester,
-          text: 'This is\na multiline\nSuperTextField',
-          lineCount: 3,
-        );
+        await _pumpTestApp(tester, text: 'This is\na multiline\nSuperTextField', lineCount: 3);
 
         // Tap to focus to the text field
         await tester.tapAt(tester.getCenter(find.byType(SuperTextField)));
@@ -91,18 +83,16 @@ void main() {
 
         // Ensure we scroll only the necessary to reveal the selection, plus a small gap
         expect(
-            screenSizeWithKeyboard.height - selectionOffset.dy.floor(), lessThanOrEqualTo(gapBetweenCaretAndKeyboard));
+          screenSizeWithKeyboard.height - selectionOffset.dy.floor(),
+          lessThanOrEqualTo(gapBetweenCaretAndKeyboard),
+        );
 
         // Ensure selection doesn't scroll beyond the top
         expect(selectionOffset.dy.floor(), greaterThanOrEqualTo(0));
       });
 
       _testWidgetsOnMobileWithKeyboard('doest not auto scroll when not focused', (tester, keyboardToggle) async {
-        await _pumpTestApp(
-          tester,
-          text: 'Single line SuperTextField',
-          lineCount: 1,
-        );
+        await _pumpTestApp(tester, text: 'Single line SuperTextField', lineCount: 1);
 
         // Position of the text field before resizing
         final initialTopLeft = tester.getTopLeft(find.byType(SuperTextField));
@@ -119,25 +109,15 @@ void main() {
     });
 
     testWidgetsOnAllPlatforms('auto scroll doesn\'t crash when text is empty', (tester) async {
-      final controller = AttributedTextEditingController(
-        text: AttributedText('Text before'),
-      );
+      final controller = AttributedTextEditingController(text: AttributedText('Text before'));
 
-      await _pumpScaffold(
-        tester,
-        SuperTextField(
-          textController: controller,
-        ),
-      );
+      await _pumpScaffold(tester, SuperTextField(textController: controller));
 
       // Place caret at the end of the text field.
       await tester.placeCaretInSuperTextField(11);
 
       // Clear the text and changes the selection to the beginning of the text.
-      controller.updateTextAndSelection(
-        text: AttributedText(),
-        selection: const TextSelection.collapsed(offset: 0),
-      );
+      controller.updateTextAndSelection(text: AttributedText(), selection: const TextSelection.collapsed(offset: 0));
       await tester.pump();
 
       /// When text or selection changes, we auto scroll to ensure that the selecion is visible.
@@ -151,11 +131,7 @@ void main() {
   });
 }
 
-Future<void> _pumpTestApp(
-  WidgetTester tester, {
-  required String text,
-  required int lineCount,
-}) async {
+Future<void> _pumpTestApp(WidgetTester tester, {required String text, required int lineCount}) async {
   await tester.pumpWidget(
     MaterialApp(
       home: Scaffold(
@@ -166,9 +142,7 @@ Future<void> _pumpTestApp(
               minLines: lineCount,
               maxLines: lineCount,
               lineHeight: 24,
-              textController: AttributedTextEditingController(
-                text: AttributedText(text),
-              ),
+              textController: AttributedTextEditingController(text: AttributedText(text)),
             ),
           ],
         ),
@@ -186,12 +160,7 @@ Future<void> _pumpScaffold(WidgetTester tester, Widget child) async {
   await tester.pumpWidget(
     MaterialApp(
       home: Scaffold(
-        body: Center(
-          child: SizedBox(
-            width: 300,
-            child: child,
-          ),
-        ),
+        body: Center(child: SizedBox(width: 300, child: child)),
       ),
     ),
   );

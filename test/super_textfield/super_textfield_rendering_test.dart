@@ -7,20 +7,13 @@ import 'package:super_text_layout/super_text_layout.dart';
 void main() {
   group('SuperTextField', () {
     testWidgetsOnAllPlatforms('renders text on the first frame when given a line height', (tester) async {
-      final controller = AttributedTextEditingController(
-        text: AttributedText('Editing text'),
-      );
+      final controller = AttributedTextEditingController(text: AttributedText('Editing text'));
 
       // Indicates whether we should display the Text or the SuperTextField.
       final showTextField = ValueNotifier<bool>(false);
 
       // Pump the widget tree showing the Text widget.
-      await _pumpSwitchableTestApp(
-        tester,
-        controller: controller,
-        showTextField: showTextField,
-        lineHeight: 16,
-      );
+      await _pumpSwitchableTestApp(tester, controller: controller, showTextField: showTextField, lineHeight: 16);
 
       // Switch to display the SuperTextField.
       showTextField.value = true;
@@ -39,9 +32,7 @@ void main() {
       // Pump the widget tree showing the Text widget.
       await _pumpSwitchableTestApp(
         tester,
-        controller: AttributedTextEditingController(
-          text: AttributedText('1'),
-        ),
+        controller: AttributedTextEditingController(text: AttributedText('1')),
         showTextField: showTextField,
         minLines: 5,
       );
@@ -67,9 +58,7 @@ void main() {
       // Pump the widget tree showing the Text widget.
       await _pumpSwitchableTestApp(
         tester,
-        controller: AttributedTextEditingController(
-          text: AttributedText('1\n2\n3\n4\n5\n6'),
-        ),
+        controller: AttributedTextEditingController(text: AttributedText('1\n2\n3\n4\n5\n6')),
         showTextField: showTextField,
         maxLines: 3,
       );
@@ -99,10 +88,7 @@ void main() {
               hintBuilder: (context) => const Row(
                 crossAxisAlignment: CrossAxisAlignment.baseline,
                 textBaseline: TextBaseline.alphabetic,
-                children: [
-                  Text('Hint one'),
-                  Text('Hint two'),
-                ],
+                children: [Text('Hint one'), Text('Hint two')],
               ),
             ),
           ),

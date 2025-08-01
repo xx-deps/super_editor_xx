@@ -12,65 +12,77 @@ void main() {
       await expectLater(
         find.byType(MaterialApp),
         matchesGoldenFile(
-            "goldens/follower_static_initial-placement_in-bounds_center.png"),
+          "goldens/follower_static_initial-placement_in-bounds_center.png",
+        ),
       );
     });
 
-    testWidgets("restrict to boundary", (widgetTester) async {
-      // Variants tests four corners of alignment.
-      await _pumpBoundedFollowerScenario(
-        widgetTester,
-        leaderAlignment:
-            _CornerAlignmentBeyondBoundaryVariant.currentAlignment!,
-        constrainFollowerToBoundary: true,
-      );
-      await expectLater(
-        find.byType(MaterialApp),
-        matchesGoldenFile(
-            "goldens/follower_restricts-to-boundary_${_CornerAlignmentBeyondBoundaryVariant.currentDescription!}.png"),
-      );
-    }, variant: const _CornerAlignmentBeyondBoundaryVariant());
+    testWidgets(
+      "restrict to boundary",
+      (widgetTester) async {
+        // Variants tests four corners of alignment.
+        await _pumpBoundedFollowerScenario(
+          widgetTester,
+          leaderAlignment:
+              _CornerAlignmentBeyondBoundaryVariant.currentAlignment!,
+          constrainFollowerToBoundary: true,
+        );
+        await expectLater(
+          find.byType(MaterialApp),
+          matchesGoldenFile(
+            "goldens/follower_restricts-to-boundary_${_CornerAlignmentBeyondBoundaryVariant.currentDescription!}.png",
+          ),
+        );
+      },
+      variant: const _CornerAlignmentBeyondBoundaryVariant(),
+    );
 
     testWidgets(
-        "fade out when they are entirely outside of boundary with a fade policy",
-        (widgetTester) async {
-      // Variants tests four corners of alignment.
-      await _pumpBoundedFollowerScenario(
-        widgetTester,
-        leaderAlignment:
-            _CornerAlignmentBeyondBoundaryVariant.currentAlignment!,
-        fadeOutBeyondBoundary: true,
-      );
-      await expectLater(
-        find.byType(MaterialApp),
-        matchesGoldenFile(
-            "goldens/follower_fade-when-out-of-bounds_${_CornerAlignmentBeyondBoundaryVariant.currentDescription!}.png"),
-      );
-    }, variant: const _CornerAlignmentBeyondBoundaryVariant());
+      "fade out when they are entirely outside of boundary with a fade policy",
+      (widgetTester) async {
+        // Variants tests four corners of alignment.
+        await _pumpBoundedFollowerScenario(
+          widgetTester,
+          leaderAlignment:
+              _CornerAlignmentBeyondBoundaryVariant.currentAlignment!,
+          fadeOutBeyondBoundary: true,
+        );
+        await expectLater(
+          find.byType(MaterialApp),
+          matchesGoldenFile(
+            "goldens/follower_fade-when-out-of-bounds_${_CornerAlignmentBeyondBoundaryVariant.currentDescription!}.png",
+          ),
+        );
+      },
+      variant: const _CornerAlignmentBeyondBoundaryVariant(),
+    );
 
     testWidgets(
-        "don't fade when they partially overlap boundary with a fade policy",
-        (widgetTester) async {
-      // Variants tests four corners of alignment.
-      await _pumpBoundedFollowerScenario(
-        widgetTester,
-        leaderAlignment:
-            _CornerAlignmentPartialOverlapVariant.currentAlignment!,
-        fadeOutBeyondBoundary: true,
-      );
+      "don't fade when they partially overlap boundary with a fade policy",
+      (widgetTester) async {
+        // Variants tests four corners of alignment.
+        await _pumpBoundedFollowerScenario(
+          widgetTester,
+          leaderAlignment:
+              _CornerAlignmentPartialOverlapVariant.currentAlignment!,
+          fadeOutBeyondBoundary: true,
+        );
 
-      // Wait for the follower to animate to opaque. The very first frame probably didn't
-      // have the Leader connected yet. The second frame made the connection. Which means the
-      // Follower starts invisible, then decides to become visible, and this requires an
-      // animation to complete.
-      await widgetTester.pumpAndSettle();
+        // Wait for the follower to animate to opaque. The very first frame probably didn't
+        // have the Leader connected yet. The second frame made the connection. Which means the
+        // Follower starts invisible, then decides to become visible, and this requires an
+        // animation to complete.
+        await widgetTester.pumpAndSettle();
 
-      await expectLater(
-        find.byType(MaterialApp),
-        matchesGoldenFile(
-            "goldens/follower_static_no-fade-when-partial-overlap_${_CornerAlignmentPartialOverlapVariant.currentDescription!}.png"),
-      );
-    }, variant: const _CornerAlignmentPartialOverlapVariant());
+        await expectLater(
+          find.byType(MaterialApp),
+          matchesGoldenFile(
+            "goldens/follower_static_no-fade-when-partial-overlap_${_CornerAlignmentPartialOverlapVariant.currentDescription!}.png",
+          ),
+        );
+      },
+      variant: const _CornerAlignmentPartialOverlapVariant(),
+    );
   });
 }
 
@@ -106,11 +118,7 @@ Future<void> _pumpBoundedFollowerScenario(
           alignment: leaderAlignment,
           child: Leader(
             link: link,
-            child: Container(
-              width: 25,
-              height: 25,
-              color: Colors.red,
-            ),
+            child: Container(width: 25, height: 25, color: Colors.red),
           ),
         ),
         Center(
@@ -131,11 +139,7 @@ Future<void> _pumpBoundedFollowerScenario(
             link: link,
             offset: const Offset(0, -50),
             boundary: constrainFollowerToBoundary ? widgetBoundary : null,
-            child: Container(
-              width: 50,
-              height: 50,
-              color: Colors.blue,
-            ),
+            child: Container(width: 50, height: 50, color: Colors.blue),
           ),
         ),
       ],
@@ -157,11 +161,11 @@ class _CornerAlignmentBeyondBoundaryVariant extends TestVariant<Alignment> {
 
   @override
   Iterable<Alignment> get values => const [
-        Alignment(-0.9, -0.9),
-        Alignment(0.9, -0.9),
-        Alignment(0.9, 0.9),
-        Alignment(-0.9, 0.9),
-      ];
+    Alignment(-0.9, -0.9),
+    Alignment(0.9, -0.9),
+    Alignment(0.9, 0.9),
+    Alignment(-0.9, 0.9),
+  ];
 
   @override
   String describeValue(Alignment value) {
@@ -197,11 +201,11 @@ class _CornerAlignmentPartialOverlapVariant extends TestVariant<Alignment> {
 
   @override
   Iterable<Alignment> get values => const [
-        Alignment(-0.6, -0.6),
-        Alignment(0.6, -0.6),
-        Alignment(0.6, 0.6),
-        Alignment(-0.6, 0.6),
-      ];
+    Alignment(-0.6, -0.6),
+    Alignment(0.6, -0.6),
+    Alignment(0.6, 0.6),
+    Alignment(-0.6, 0.6),
+  ];
 
   @override
   String describeValue(Alignment value) {
@@ -229,11 +233,6 @@ Future<void> _pumpScaffold({
   required Widget child,
 }) async {
   await widgetTester.pumpWidget(
-    MaterialApp(
-      home: Scaffold(
-        body: child,
-      ),
-      debugShowCheckedModeBanner: false,
-    ),
+    MaterialApp(home: Scaffold(body: child), debugShowCheckedModeBanner: false),
   );
 }

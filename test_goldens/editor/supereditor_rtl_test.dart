@@ -11,29 +11,26 @@ import '../test_tools_goldens.dart';
 
 void main() {
   group('SuperEditor > RTL mode >', () {
-    testGoldensOnAllPlatforms(
-      'inserts text and paints caret on the left side of paragraph for downstream position',
-      (tester) async {
-        await tester //
-            .createDocument()
-            .withSingleEmptyParagraph()
-            .withInputSource(TextInputSource.ime)
-            .pump();
+    testGoldensOnAllPlatforms('inserts text and paints caret on the left side of paragraph for downstream position', (
+      tester,
+    ) async {
+      await tester //
+          .createDocument()
+          .withSingleEmptyParagraph()
+          .withInputSource(TextInputSource.ime)
+          .pump();
 
-        // Place the caret at the beginning of the paragraph.
-        await tester.placeCaretInParagraph('1', 0);
+      // Place the caret at the beginning of the paragraph.
+      await tester.placeCaretInParagraph('1', 0);
 
-        // Type the text "Example".
-        await tester.ime.typeText(
-          'مثال',
-          getter: imeClientGetter,
-        );
+      // Type the text "Example".
+      await tester.ime.typeText('مثال', getter: imeClientGetter);
 
-        await screenMatchesGolden(
-            tester, 'super-editor-rtl-caret-at-leftmost-character-paragraph-${defaultTargetPlatform.name}');
-      },
-      windowSize: goldenSizeSmall,
-    );
+      await screenMatchesGolden(
+        tester,
+        'super-editor-rtl-caret-at-leftmost-character-paragraph-${defaultTargetPlatform.name}',
+      );
+    }, windowSize: goldenSizeSmall);
 
     testGoldensOnAllPlatforms(
       'inserts text and paints caret on the left side of unordered list item for downstream position',
@@ -42,9 +39,7 @@ void main() {
             .createDocument()
             .withCustomContent(
               MutableDocument(
-                nodes: [
-                  ListItemNode.unordered(id: '1', text: AttributedText()),
-                ],
+                nodes: [ListItemNode.unordered(id: '1', text: AttributedText())],
               ),
             )
             .withInputSource(TextInputSource.ime)
@@ -54,13 +49,12 @@ void main() {
         await tester.placeCaretInParagraph('1', 0);
 
         // Type the text "Example".
-        await tester.ime.typeText(
-          'مثال',
-          getter: imeClientGetter,
-        );
+        await tester.ime.typeText('مثال', getter: imeClientGetter);
 
         await screenMatchesGolden(
-            tester, 'super-editor-rtl-caret-at-leftmost-character-unordered-list-item-${defaultTargetPlatform.name}');
+          tester,
+          'super-editor-rtl-caret-at-leftmost-character-unordered-list-item-${defaultTargetPlatform.name}',
+        );
       },
       windowSize: goldenSizeSmall,
     );
@@ -72,9 +66,7 @@ void main() {
             .createDocument()
             .withCustomContent(
               MutableDocument(
-                nodes: [
-                  ListItemNode.ordered(id: '1', text: AttributedText()),
-                ],
+                nodes: [ListItemNode.ordered(id: '1', text: AttributedText())],
               ),
             )
             .withInputSource(TextInputSource.ime)
@@ -84,45 +76,39 @@ void main() {
         await tester.placeCaretInParagraph('1', 0);
 
         // Type the text "Example".
-        await tester.ime.typeText(
-          'مثال',
-          getter: imeClientGetter,
-        );
+        await tester.ime.typeText('مثال', getter: imeClientGetter);
 
         await screenMatchesGolden(
-            tester, 'super-editor-rtl-caret-at-leftmost-character-ordered-list-item-${defaultTargetPlatform.name}');
+          tester,
+          'super-editor-rtl-caret-at-leftmost-character-ordered-list-item-${defaultTargetPlatform.name}',
+        );
       },
       windowSize: goldenSizeSmall,
     );
 
-    testGoldensOnAllPlatforms(
-      'inserts text and paints caret on the left side of task for downstream position',
-      (tester) async {
-        await tester //
-            .createDocument()
-            .withCustomContent(
-              MutableDocument(
-                nodes: [
-                  TaskNode(id: '1', text: AttributedText(), isComplete: false),
-                ],
-              ),
-            )
-            .withInputSource(TextInputSource.ime)
-            .pump();
+    testGoldensOnAllPlatforms('inserts text and paints caret on the left side of task for downstream position', (
+      tester,
+    ) async {
+      await tester //
+          .createDocument()
+          .withCustomContent(
+            MutableDocument(
+              nodes: [TaskNode(id: '1', text: AttributedText(), isComplete: false)],
+            ),
+          )
+          .withInputSource(TextInputSource.ime)
+          .pump();
 
-        // Place the caret at the beginning of the task.
-        await tester.placeCaretInParagraph('1', 0);
+      // Place the caret at the beginning of the task.
+      await tester.placeCaretInParagraph('1', 0);
 
-        // Type the text "Example".
-        await tester.ime.typeText(
-          'مثال',
-          getter: imeClientGetter,
-        );
+      // Type the text "Example".
+      await tester.ime.typeText('مثال', getter: imeClientGetter);
 
-        await screenMatchesGolden(
-            tester, 'super-editor-rtl-caret-at-leftmost-character-task-${defaultTargetPlatform.name}');
-      },
-      windowSize: goldenSizeSmall,
-    );
+      await screenMatchesGolden(
+        tester,
+        'super-editor-rtl-caret-at-leftmost-character-task-${defaultTargetPlatform.name}',
+      );
+    }, windowSize: goldenSizeSmall);
   });
 }

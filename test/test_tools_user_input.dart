@@ -5,21 +5,16 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:super_editor/src/infrastructure/platforms/platform.dart';
 import 'package:super_editor/super_editor.dart';
 
-final inputSourceVariant = ValueVariant({
-  TextInputSource.keyboard,
-  TextInputSource.ime,
-});
+final inputSourceVariant = ValueVariant({TextInputSource.keyboard, TextInputSource.ime});
 
-final inputAndGestureVariants = ValueVariant<InputAndGestureTuple>(
-  {
-    const InputAndGestureTuple(TextInputSource.keyboard, DocumentGestureMode.mouse),
-    const InputAndGestureTuple(TextInputSource.keyboard, DocumentGestureMode.iOS),
-    const InputAndGestureTuple(TextInputSource.keyboard, DocumentGestureMode.android),
-    const InputAndGestureTuple(TextInputSource.ime, DocumentGestureMode.mouse),
-    const InputAndGestureTuple(TextInputSource.ime, DocumentGestureMode.iOS),
-    const InputAndGestureTuple(TextInputSource.ime, DocumentGestureMode.android),
-  },
-);
+final inputAndGestureVariants = ValueVariant<InputAndGestureTuple>({
+  const InputAndGestureTuple(TextInputSource.keyboard, DocumentGestureMode.mouse),
+  const InputAndGestureTuple(TextInputSource.keyboard, DocumentGestureMode.iOS),
+  const InputAndGestureTuple(TextInputSource.keyboard, DocumentGestureMode.android),
+  const InputAndGestureTuple(TextInputSource.ime, DocumentGestureMode.mouse),
+  const InputAndGestureTuple(TextInputSource.ime, DocumentGestureMode.iOS),
+  const InputAndGestureTuple(TextInputSource.ime, DocumentGestureMode.android),
+});
 
 /// A combination of an [inputSource] and a [gestureMode].
 class InputAndGestureTuple {
@@ -127,10 +122,9 @@ class FakeHardwareKeyboard extends HardwareKeyboard {
       LogicalKeyboardKey.alt || LogicalKeyboardKey.altLeft || LogicalKeyboardKey.altRight => isAltPressed,
       LogicalKeyboardKey.control ||
       LogicalKeyboardKey.controlLeft ||
-      LogicalKeyboardKey.controlRight =>
-        isControlPressed,
+      LogicalKeyboardKey.controlRight => isControlPressed,
       LogicalKeyboardKey.meta || LogicalKeyboardKey.metaLeft || LogicalKeyboardKey.metaRight => isMetaPressed,
-      _ => super.isLogicalKeyPressed(key)
+      _ => super.isLogicalKeyPressed(key),
     };
   }
 }
@@ -187,8 +181,10 @@ const Map<ShortcutActivator, Intent> defaultNonAppleShortcuts = <ShortcutActivat
   SingleActivator(LogicalKeyboardKey.arrowLeft, control: true): ScrollIntent(direction: AxisDirection.left),
   SingleActivator(LogicalKeyboardKey.arrowRight, control: true): ScrollIntent(direction: AxisDirection.right),
   SingleActivator(LogicalKeyboardKey.pageUp): ScrollIntent(direction: AxisDirection.up, type: ScrollIncrementType.page),
-  SingleActivator(LogicalKeyboardKey.pageDown):
-      ScrollIntent(direction: AxisDirection.down, type: ScrollIncrementType.page),
+  SingleActivator(LogicalKeyboardKey.pageDown): ScrollIntent(
+    direction: AxisDirection.down,
+    type: ScrollIncrementType.page,
+  ),
 };
 
 /// Default shortcuts for the Apple platforms.
@@ -221,8 +217,10 @@ const Map<ShortcutActivator, Intent> defaultAppleShortcuts = <ShortcutActivator,
   SingleActivator(LogicalKeyboardKey.arrowLeft, meta: true): ScrollIntent(direction: AxisDirection.left),
   SingleActivator(LogicalKeyboardKey.arrowRight, meta: true): ScrollIntent(direction: AxisDirection.right),
   SingleActivator(LogicalKeyboardKey.pageUp): ScrollIntent(direction: AxisDirection.up, type: ScrollIncrementType.page),
-  SingleActivator(LogicalKeyboardKey.pageDown):
-      ScrollIntent(direction: AxisDirection.down, type: ScrollIncrementType.page),
+  SingleActivator(LogicalKeyboardKey.pageDown): ScrollIntent(
+    direction: AxisDirection.down,
+    type: ScrollIncrementType.page,
+  ),
 };
 
 /// Default shortcuts for web.
@@ -257,6 +255,8 @@ const Map<ShortcutActivator, Intent> defaultWebShortcuts = <ShortcutActivator, I
   SingleActivator(LogicalKeyboardKey.arrowLeft): ScrollIntent(direction: AxisDirection.left),
   SingleActivator(LogicalKeyboardKey.arrowRight): ScrollIntent(direction: AxisDirection.right),
   SingleActivator(LogicalKeyboardKey.pageUp): ScrollIntent(direction: AxisDirection.up, type: ScrollIncrementType.page),
-  SingleActivator(LogicalKeyboardKey.pageDown):
-      ScrollIntent(direction: AxisDirection.down, type: ScrollIncrementType.page),
+  SingleActivator(LogicalKeyboardKey.pageDown): ScrollIntent(
+    direction: AxisDirection.down,
+    type: ScrollIncrementType.page,
+  ),
 };

@@ -9,11 +9,7 @@ void main() {
     testWidgetsOnAllPlatforms('changes active item down with DOWN ARROW', (tester) async {
       String? activeItem;
 
-      await _pumpItemSelectionListTestApp(
-        tester,
-        onItemSelected: (s) => {},
-        onItemActivated: (s) => activeItem = s,
-      );
+      await _pumpItemSelectionListTestApp(tester, onItemSelected: (s) => {}, onItemActivated: (s) => activeItem = s);
 
       // Ensure the popover is displayed without any active item.
       expect(activeItem, isNull);
@@ -38,11 +34,7 @@ void main() {
     testWidgetsOnAllPlatforms('changes active item up with UP ARROW', (tester) async {
       String? activeItem;
 
-      await _pumpItemSelectionListTestApp(
-        tester,
-        onItemSelected: (s) => {},
-        onItemActivated: (s) => activeItem = s,
-      );
+      await _pumpItemSelectionListTestApp(tester, onItemSelected: (s) => {}, onItemActivated: (s) => activeItem = s);
 
       // Ensure the popover is displayed without any activate item.
       expect(activeItem, isNull);
@@ -67,10 +59,7 @@ void main() {
     testWidgetsOnAllPlatforms('selects the active item on ENTER', (tester) async {
       String? selectedValue;
 
-      await _pumpItemSelectionListTestApp(
-        tester,
-        onItemSelected: (s) => selectedValue = s,
-      );
+      await _pumpItemSelectionListTestApp(tester, onItemSelected: (s) => selectedValue = s);
 
       // Press ARROW DOWN to activate the first item.
       await tester.pressDownArrow();
@@ -86,10 +75,7 @@ void main() {
     testWidgetsOnAllPlatforms('clears selected item on ENTER without an active item', (tester) async {
       String? selectedValue = '';
 
-      await _pumpItemSelectionListTestApp(
-        tester,
-        onItemSelected: (s) => selectedValue = s,
-      );
+      await _pumpItemSelectionListTestApp(tester, onItemSelected: (s) => selectedValue = s);
 
       // Press ENTER without an active item.
       await tester.pressEnter();
@@ -122,10 +108,7 @@ void main() {
     });
 
     testWidgetsOnAllPlatforms('isn\'t scrollable if all items fit on screen', (tester) async {
-      await _pumpItemSelectionListTestApp(
-        tester,
-        onItemSelected: (s) {},
-      );
+      await _pumpItemSelectionListTestApp(tester, onItemSelected: (s) {});
 
       // Ensure the list isn't scrollable.
       final dropdownButonState = tester.state<ItemSelectionListState<String>>(find.byType(ItemSelectionList<String>));
@@ -169,10 +152,7 @@ Future<void> _pumpItemSelectionListTestApp(
             onItemSelected: onItemSelected,
             onItemActivated: onItemActivated,
             onCancel: onCancel,
-            itemBuilder: (context, item, isActive, onTap) => TextButton(
-              onPressed: onTap,
-              child: Text(item),
-            ),
+            itemBuilder: (context, item, isActive, onTap) => TextButton(onPressed: onTap, child: Text(item)),
           ),
         ),
       ),

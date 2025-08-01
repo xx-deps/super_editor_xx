@@ -17,17 +17,17 @@ void main() {
         // at a space after the document ends.
         await tester //
             .createDocument()
-            .withCustomContent(MutableDocument(
-              nodes: [
-                ParagraphNode(
-                  id: '1',
-                  text: AttributedText('First paragraph'),
-                ),
-                HorizontalRuleNode(id: 'hr')
-              ],
-            ))
+            .withCustomContent(
+              MutableDocument(
+                nodes: [
+                  ParagraphNode(id: '1', text: AttributedText('First paragraph')),
+                  HorizontalRuleNode(id: 'hr'),
+                ],
+              ),
+            )
             .withEditorSize(const Size(500, 1000))
-            .withTapDelegateFactories([superEditorAddEmptyParagraphTapHandlerFactory]).pump();
+            .withTapDelegateFactories([superEditorAddEmptyParagraphTapHandlerFactory])
+            .pump();
 
         // Tap below the end of the document and wait for the double tap
         // timeout to expire.
@@ -46,10 +46,7 @@ void main() {
           SuperEditorInspector.findDocumentSelection(),
           selectionEquivalentTo(
             DocumentSelection.collapsed(
-              position: DocumentPosition(
-                nodeId: document.last.id,
-                nodePosition: const TextNodePosition(offset: 0),
-              ),
+              position: DocumentPosition(nodeId: document.last.id, nodePosition: const TextNodePosition(offset: 0)),
             ),
           ),
         );
@@ -60,15 +57,14 @@ void main() {
         // at a space after the document ends.
         await tester //
             .createDocument()
-            .withCustomContent(MutableDocument(
-              nodes: [
-                HorizontalRuleNode(id: 'hr'),
-                ParagraphNode(
-                  id: '1',
-                  text: AttributedText('First paragraph'),
-                ),
-              ],
-            ))
+            .withCustomContent(
+              MutableDocument(
+                nodes: [
+                  HorizontalRuleNode(id: 'hr'),
+                  ParagraphNode(id: '1', text: AttributedText('First paragraph')),
+                ],
+              ),
+            )
             .withEditorSize(const Size(500, 1000))
             .withTapDelegateFactories([superEditorAddEmptyParagraphTapHandlerFactory]) //
             .pump();
@@ -90,10 +86,7 @@ void main() {
           SuperEditorInspector.findDocumentSelection(),
           selectionEquivalentTo(
             const DocumentSelection.collapsed(
-              position: DocumentPosition(
-                nodeId: '1',
-                nodePosition: TextNodePosition(offset: 15),
-              ),
+              position: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 15)),
             ),
           ),
         );

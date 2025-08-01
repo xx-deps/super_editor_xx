@@ -39,18 +39,12 @@ void main() {
 Finder _findTextWithAlignment(TextAlign textAlign) =>
     find.byWidgetPredicate((widget) => (widget is SuperText) && widget.textAlign == textAlign);
 
-Future<void> _pumpReader(
-  WidgetTester tester, {
-  required Stylesheet stylesheet,
-}) async {
+Future<void> _pumpReader(WidgetTester tester, {required Stylesheet stylesheet}) async {
   await tester.pumpWidget(
     MaterialApp(
       home: Scaffold(
         body: SuperReader(
-          editor: createDefaultDocumentEditor(
-            document: singleParagraphDoc(),
-            composer: MutableDocumentComposer(),
-          ),
+          editor: createDefaultDocumentEditor(document: singleParagraphDoc(), composer: MutableDocumentComposer()),
           stylesheet: stylesheet,
         ),
       ),
@@ -62,14 +56,9 @@ Stylesheet _stylesheetWithTextAlignment(TextAlign textAlign) {
   return Stylesheet(
     inlineTextStyler: defaultInlineTextStyler,
     rules: [
-      StyleRule(
-        BlockSelector.all,
-        (doc, docNode) {
-          return {
-            "textAlign": textAlign,
-          };
-        },
-      ),
+      StyleRule(BlockSelector.all, (doc, docNode) {
+        return {"textAlign": textAlign};
+      }),
     ],
   );
 }

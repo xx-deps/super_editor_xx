@@ -7,23 +7,15 @@ void main() {
   group('SuperEditor', () {
     testWidgetsOnAllPlatforms('can layout with shrinkwrap in a column', (tester) async {
       final composer = MutableDocumentComposer();
-      final docEditor = createDefaultDocumentEditor(
-        document: MutableDocument.empty(),
-        composer: composer,
-      );
+      final docEditor = createDefaultDocumentEditor(document: MutableDocument.empty(), composer: composer);
       // This must not fail with infinite height constraints.
-      await tester.pumpWidget(MaterialApp(
-        home: Scaffold(
-          body: Column(
-            children: [
-              SuperEditor(
-                editor: docEditor,
-                shrinkWrap: true,
-              ),
-            ],
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Column(children: [SuperEditor(editor: docEditor, shrinkWrap: true)]),
           ),
         ),
-      ));
+      );
     });
   });
 }

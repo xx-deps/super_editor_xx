@@ -19,10 +19,12 @@ void main() {
       await tester //
           .createDocument()
           .withSingleParagraph()
-          .useStylesheet(Stylesheet(
-            rules: defaultStylesheet.rules,
-            inlineTextStyler: (attributions, style) => _textStyleBuilder(attributions),
-          ))
+          .useStylesheet(
+            Stylesheet(
+              rules: defaultStylesheet.rules,
+              inlineTextStyler: (attributions, style) => _textStyleBuilder(attributions),
+            ),
+          )
           .pump();
 
       // Place the caret at "Duis aute|" (line 6).
@@ -48,10 +50,5 @@ void main() {
 }
 
 TextStyle _textStyleBuilder(Set<Attribution> attributions) {
-  return const TextStyle(
-    color: Colors.black,
-    fontFamily: 'Roboto',
-    fontSize: 16,
-    height: 1.4,
-  );
+  return const TextStyle(color: Colors.black, fontFamily: 'Roboto', fontSize: 16, height: 1.4);
 }

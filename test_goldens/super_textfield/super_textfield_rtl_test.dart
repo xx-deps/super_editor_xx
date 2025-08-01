@@ -11,26 +11,21 @@ import '../test_tools_goldens.dart';
 
 void main() {
   group('SuperTextfield > RTL mode >', () {
-    testGoldensOnAllPlatforms(
-      'inserts text and paints caret on the left side for downstream position',
-      (tester) async {
-        await _pumpTestApp(tester);
+    testGoldensOnAllPlatforms('inserts text and paints caret on the left side for downstream position', (tester) async {
+      await _pumpTestApp(tester);
 
-        // Place the caret at the beginning of the text field.
-        await tester.placeCaretInSuperTextField(0);
+      // Place the caret at the beginning of the text field.
+      await tester.placeCaretInSuperTextField(0);
 
-        // Type the text "Example".
-        await tester.ime.typeText(
-          'مثال',
-          getter: imeClientGetter,
-        );
-        await tester.pumpAndSettle();
+      // Type the text "Example".
+      await tester.ime.typeText('مثال', getter: imeClientGetter);
+      await tester.pumpAndSettle();
 
-        await screenMatchesGolden(
-            tester, 'super-text-field_rtl-caret-at-leftmost-character-${defaultTargetPlatform.name}');
-      },
-      windowSize: const Size(600, 600),
-    );
+      await screenMatchesGolden(
+        tester,
+        'super-text-field_rtl-caret-at-leftmost-character-${defaultTargetPlatform.name}',
+      );
+    }, windowSize: const Size(600, 600));
   });
 }
 
@@ -48,11 +43,7 @@ Future<void> _pumpTestApp(WidgetTester tester) async {
             width: 300,
             child: ColoredBox(
               color: Colors.yellow,
-              child: SuperTextField(
-                textController: controller,
-                maxLines: 10,
-                lineHeight: 16,
-              ),
+              child: SuperTextField(textController: controller, maxLines: 10, lineHeight: 16),
             ),
           ),
         ),

@@ -61,8 +61,11 @@ void main() {
       for (int i = 0; i < 10; i += 1) {
         await tester.pump(const Duration(milliseconds: 50));
         final newCaretPosition = controller.selection.extentOffset;
-        expect(newCaretPosition, greaterThan(previousCaretPosition),
-            reason: "Caret position didn't move on drag frame $i");
+        expect(
+          newCaretPosition,
+          greaterThan(previousCaretPosition),
+          reason: "Caret position didn't move on drag frame $i",
+        );
         previousCaretPosition = newCaretPosition;
       }
 
@@ -121,8 +124,11 @@ void main() {
       for (int i = 0; i < 10; i += 1) {
         await tester.pump(const Duration(milliseconds: 50));
         final newCaretPosition = controller.selection.extentOffset;
-        expect(newCaretPosition, greaterThan(previousCaretPosition),
-            reason: "Caret position didn't move on drag frame $i");
+        expect(
+          newCaretPosition,
+          greaterThan(previousCaretPosition),
+          reason: "Caret position didn't move on drag frame $i",
+        );
         previousCaretPosition = newCaretPosition;
       }
 
@@ -191,8 +197,11 @@ void main() {
       for (int i = 0; i < 10; i += 1) {
         await tester.pump(const Duration(milliseconds: 50));
         final newCaretPosition = controller.selection.extentOffset;
-        expect(newCaretPosition, lessThan(previousCaretPosition),
-            reason: "Caret position didn't move on drag frame $i");
+        expect(
+          newCaretPosition,
+          lessThan(previousCaretPosition),
+          reason: "Caret position didn't move on drag frame $i",
+        );
         previousCaretPosition = newCaretPosition;
       }
 
@@ -316,10 +325,7 @@ Future<void> _pumpTestApp(
       home: Scaffold(
         body: Center(
           child: ConstrainedBox(
-            constraints: BoxConstraints(
-              maxWidth: maxWidth ?? double.infinity,
-              maxHeight: maxHeight ?? double.infinity,
-            ),
+            constraints: BoxConstraints(maxWidth: maxWidth ?? double.infinity, maxHeight: maxHeight ?? double.infinity),
             child: SuperTextField(
               focusNode: focusNode,
               textController: textController,

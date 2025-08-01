@@ -37,12 +37,8 @@ void main() {
       await _pumpScaffold(
         tester,
         child: ContentLayers(
-          content: (_) => SliverToBoxAdapter(
-            child: SizedBox.fromSize(size: _windowSize),
-          ),
-          underlays: [
-            _buildSizeValidatingLayer(),
-          ],
+          content: (_) => SliverToBoxAdapter(child: SizedBox.fromSize(size: _windowSize)),
+          underlays: [_buildSizeValidatingLayer()],
         ),
       );
 
@@ -53,12 +49,8 @@ void main() {
       await _pumpScaffold(
         tester,
         child: ContentLayers(
-          content: (_) => SliverToBoxAdapter(
-            child: SizedBox.fromSize(size: _windowSize),
-          ),
-          overlays: [
-            _buildSizeValidatingLayer(),
-          ],
+          content: (_) => SliverToBoxAdapter(child: SizedBox.fromSize(size: _windowSize)),
+          overlays: [_buildSizeValidatingLayer()],
         ),
       );
 
@@ -69,15 +61,9 @@ void main() {
       await _pumpScaffold(
         tester,
         child: ContentLayers(
-          content: (_) => SliverToBoxAdapter(
-            child: SizedBox.fromSize(size: _windowSize),
-          ),
-          underlays: [
-            _buildSizeValidatingLayer(),
-          ],
-          overlays: [
-            _buildSizeValidatingLayer(),
-          ],
+          content: (_) => SliverToBoxAdapter(child: SizedBox.fromSize(size: _windowSize)),
+          underlays: [_buildSizeValidatingLayer()],
+          overlays: [_buildSizeValidatingLayer()],
         ),
       );
 
@@ -88,19 +74,9 @@ void main() {
       await _pumpScaffold(
         tester,
         child: ContentLayers(
-          content: (_) => SliverToBoxAdapter(
-            child: SizedBox.fromSize(size: _windowSize),
-          ),
-          underlays: [
-            _buildSizeValidatingLayer(),
-            _buildSizeValidatingLayer(),
-            _buildSizeValidatingLayer(),
-          ],
-          overlays: [
-            _buildSizeValidatingLayer(),
-            _buildSizeValidatingLayer(),
-            _buildSizeValidatingLayer(),
-          ],
+          content: (_) => SliverToBoxAdapter(child: SizedBox.fromSize(size: _windowSize)),
+          underlays: [_buildSizeValidatingLayer(), _buildSizeValidatingLayer(), _buildSizeValidatingLayer()],
+          overlays: [_buildSizeValidatingLayer(), _buildSizeValidatingLayer(), _buildSizeValidatingLayer()],
         ),
       );
 
@@ -124,23 +100,21 @@ void main() {
             rebuildSignal: contentRebuildSignal,
             buildTracker: contentBuildTracker,
             onBuildScheduled: onBuildScheduled,
-            child: SliverToBoxAdapter(
-              child: SizedBox.fromSize(size: _windowSize),
-            ),
+            child: SliverToBoxAdapter(child: SizedBox.fromSize(size: _windowSize)),
           ),
           underlays: [
             (context) => _RebuildableContentLayerWidget(
-                  rebuildSignal: underlayRebuildSignal,
-                  buildTracker: underlayBuildTracker,
-                  child: const SizedBox(),
-                ),
+              rebuildSignal: underlayRebuildSignal,
+              buildTracker: underlayBuildTracker,
+              child: const SizedBox(),
+            ),
           ],
           overlays: [
             (context) => _RebuildableContentLayerWidget(
-                  rebuildSignal: overlayRebuildSignal,
-                  buildTracker: overlayBuildTracker,
-                  child: const SizedBox(),
-                ),
+              rebuildSignal: overlayRebuildSignal,
+              buildTracker: overlayBuildTracker,
+              child: const SizedBox(),
+            ),
           ],
         ),
       );
@@ -172,26 +146,20 @@ void main() {
             onLayout: () {
               didContentLayout.value = true;
             },
-            child: SliverToBoxAdapter(
-              child: SizedBox.fromSize(size: _windowSize),
-            ),
+            child: SliverToBoxAdapter(child: SizedBox.fromSize(size: _windowSize)),
           ),
           underlays: [
             (context) {
               expect(didContentLayout.value, isTrue);
               didUnderlayLayout = true;
-              return const ContentLayerProxyWidget(
-                child: SizedBox(),
-              );
+              return const ContentLayerProxyWidget(child: SizedBox());
             },
           ],
           overlays: [
             (context) {
               expect(didContentLayout.value, isTrue);
               expect(didUnderlayLayout, isTrue);
-              return const ContentLayerProxyWidget(
-                child: SizedBox(),
-              );
+              return const ContentLayerProxyWidget(child: SizedBox());
             },
           ],
         ),
@@ -217,26 +185,20 @@ void main() {
               onLayout: () {
                 contentLayoutCount.value += 1;
               },
-              child: SliverToBoxAdapter(
-                child: SizedBox.fromSize(size: _windowSize),
-              ),
+              child: SliverToBoxAdapter(child: SizedBox.fromSize(size: _windowSize)),
             ),
           ),
           underlays: [
             (context) {
               expect(contentLayoutCount.value, layerLayoutCount.value + 1);
-              return const ContentLayerProxyWidget(
-                child: SizedBox(),
-              );
+              return const ContentLayerProxyWidget(child: SizedBox());
             },
           ],
           overlays: [
             (context) {
               expect(contentLayoutCount.value, layerLayoutCount.value + 1);
               layerLayoutCount.value += 1;
-              return const ContentLayerProxyWidget(
-                child: SizedBox(),
-              );
+              return const ContentLayerProxyWidget(child: SizedBox());
             },
           ],
         ),
@@ -276,9 +238,7 @@ void main() {
                   onLayout: () {
                     contentLayoutCount.value += 1;
                   },
-                  child: SliverToBoxAdapter(
-                    child: SizedBox.fromSize(size: _windowSize),
-                  ),
+                  child: SliverToBoxAdapter(child: SizedBox.fromSize(size: _windowSize)),
                 ),
               ),
             ),
@@ -286,18 +246,14 @@ void main() {
           underlays: [
             (context) {
               expect(contentLayoutCount.value, layerLayoutCount.value + 1);
-              return const ContentLayerProxyWidget(
-                child: SizedBox(),
-              );
+              return const ContentLayerProxyWidget(child: SizedBox());
             },
           ],
           overlays: [
             (context) {
               expect(contentLayoutCount.value, layerLayoutCount.value + 1);
               layerLayoutCount.value += 1;
-              return const ContentLayerProxyWidget(
-                child: SizedBox(),
-              );
+              return const ContentLayerProxyWidget(child: SizedBox());
             },
           ],
         ),
@@ -340,42 +296,40 @@ void main() {
               onLayout: () {
                 contentLayoutCount.value += 1;
               },
-              child: SliverToBoxAdapter(
-                child: SizedBox.fromSize(size: _windowSize),
-              ),
+              child: SliverToBoxAdapter(child: SizedBox.fromSize(size: _windowSize)),
             ),
           ),
           underlays: [
             (context) => _RebuildableContentLayerWidget(
-                  elementTracker: underlayElementTracker,
-                  onBuild: () {
-                    // Ensure that this layer can access the render object of the content.
-                    final contentSliver = contentKey.currentContext!.findRenderObject() as RenderSliver?;
-                    expect(contentSliver, isNotNull);
-                    expect(contentSliver!.geometry, isNotNull);
-                    final viewport = context.findAncestorRenderObjectOfType<RenderViewport>();
-                    // Build happens during viewport layout, which is not finished at this point. So transform to viewport
-                    // coordinate space is as far as we can go.
-                    expect(contentSliver.localToGlobal(Offset.zero, ancestor: viewport), isNotNull);
-                  },
-                  child: const SizedBox.expand(),
-                ),
+              elementTracker: underlayElementTracker,
+              onBuild: () {
+                // Ensure that this layer can access the render object of the content.
+                final contentSliver = contentKey.currentContext!.findRenderObject() as RenderSliver?;
+                expect(contentSliver, isNotNull);
+                expect(contentSliver!.geometry, isNotNull);
+                final viewport = context.findAncestorRenderObjectOfType<RenderViewport>();
+                // Build happens during viewport layout, which is not finished at this point. So transform to viewport
+                // coordinate space is as far as we can go.
+                expect(contentSliver.localToGlobal(Offset.zero, ancestor: viewport), isNotNull);
+              },
+              child: const SizedBox.expand(),
+            ),
           ],
           overlays: [
             (context) => _RebuildableContentLayerWidget(
-                  elementTracker: overlayElementTracker,
-                  onBuild: () {
-                    // Ensure that this layer can access the render object of the content.
-                    final contentSliver = contentKey.currentContext!.findRenderObject() as RenderSliver?;
-                    expect(contentSliver, isNotNull);
-                    expect(contentSliver!.geometry, isNotNull);
-                    final viewport = context.findAncestorRenderObjectOfType<RenderViewport>();
-                    // Build happens during viewport layout, which is not finished at this point. So transform to viewport
-                    // coordinate space is as far as we can go.
-                    expect(contentSliver.localToGlobal(Offset.zero, ancestor: viewport), isNotNull);
-                  },
-                  child: const SizedBox.expand(),
-                ),
+              elementTracker: overlayElementTracker,
+              onBuild: () {
+                // Ensure that this layer can access the render object of the content.
+                final contentSliver = contentKey.currentContext!.findRenderObject() as RenderSliver?;
+                expect(contentSliver, isNotNull);
+                expect(contentSliver!.geometry, isNotNull);
+                final viewport = context.findAncestorRenderObjectOfType<RenderViewport>();
+                // Build happens during viewport layout, which is not finished at this point. So transform to viewport
+                // coordinate space is as far as we can go.
+                expect(contentSliver.localToGlobal(Offset.zero, ancestor: viewport), isNotNull);
+              },
+              child: const SizedBox.expand(),
+            ),
           ],
         ),
       );
@@ -403,18 +357,14 @@ void main() {
       await _pumpScaffold(
         tester,
         child: ContentLayers(
-          content: (_) => SliverToBoxAdapter(
-            child: SizedBox.fromSize(size: _windowSize),
-          ),
+          content: (_) => SliverToBoxAdapter(child: SizedBox.fromSize(size: _windowSize)),
           underlays: [
             (context) {
               // Ensure that this layer can access ancestors.
               final directionality = Directionality.of(context);
               expect(directionality, isNotNull);
 
-              return const ContentLayerProxyWidget(
-                child: SizedBox(),
-              );
+              return const ContentLayerProxyWidget(child: SizedBox());
             },
           ],
           overlays: [
@@ -423,9 +373,7 @@ void main() {
               final directionality = Directionality.of(context);
               expect(directionality, isNotNull);
 
-              return const ContentLayerProxyWidget(
-                child: SizedBox(),
-              );
+              return const ContentLayerProxyWidget(child: SizedBox());
             },
           ],
         ),
@@ -442,20 +390,19 @@ void main() {
 
       final rebuildSignal = ValueNotifier<int>(0);
 
-      final editorContext = tester //
-          .createDocument()
-          .withSingleEmptyParagraph()
-          .build();
+      final editorContext =
+          tester //
+              .createDocument()
+              .withSingleEmptyParagraph()
+              .build();
 
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
             body: _RebuildableContentLayerWidget(
               rebuildSignal: rebuildSignal,
-              builder: (context) => SuperEditor(
-                editor: editorContext.context.editor,
-                inputSource: TextInputSource.keyboard,
-              ),
+              builder: (context) =>
+                  SuperEditor(editor: editorContext.context.editor, inputSource: TextInputSource.keyboard),
             ),
           ),
         ),
@@ -483,10 +430,7 @@ void main() {
   });
 }
 
-Future<void> _pumpScaffold(
-  WidgetTester tester, {
-  required Widget child,
-}) async {
+Future<void> _pumpScaffold(WidgetTester tester, {required Widget child}) async {
   addTearDown(() => tester.platformDispatcher.clearAllTestValues());
 
   tester.view
@@ -495,13 +439,7 @@ Future<void> _pumpScaffold(
 
   await tester.pumpWidget(
     MaterialApp(
-      home: Scaffold(
-        body: CustomScrollView(
-          slivers: [
-            child,
-          ],
-        ),
-      ),
+      home: Scaffold(body: CustomScrollView(slivers: [child])),
     ),
   );
 }
@@ -550,10 +488,7 @@ void _expectLayerConstraintsThatMatchContent(BoxConstraints constraints) {
 /// Used to inject an `Element` above another widget to test what happens when a descendant
 /// rebuilds, and that descendant isn't the top-level widget in a subtree.
 class _NoRebuildWidget extends StatefulWidget {
-  const _NoRebuildWidget({
-    Key? key,
-    required this.child,
-  }) : super(key: key);
+  const _NoRebuildWidget({Key? key, required this.child}) : super(key: key);
 
   final Widget child;
 
@@ -581,9 +516,9 @@ class _RebuildableWidget extends StatefulWidget {
     this.onBuild,
     this.builder,
     this.child,
-  })  : assert(child != null || builder != null, "Must provide either a child OR a builder."),
-        assert(child == null || builder == null, "Can't provide a child AND a builder. Choose one."),
-        super(key: key);
+  }) : assert(child != null || builder != null, "Must provide either a child OR a builder."),
+       assert(child == null || builder == null, "Can't provide a child AND a builder. Choose one."),
+       super(key: key);
 
   /// Signal that instructs this widget to call `setState()`.
   final Listenable? rebuildSignal;
@@ -676,9 +611,9 @@ class _RebuildableContentLayerWidget extends ContentLayerStatefulWidget {
     this.onBuild,
     this.builder,
     this.child,
-  })  : assert(child != null || builder != null, "Must provide either a child OR a builder."),
-        assert(child == null || builder == null, "Can't provide a child AND a builder. Choose one."),
-        super(key: key);
+  }) : assert(child != null || builder != null, "Must provide either a child OR a builder."),
+       assert(child == null || builder == null, "Can't provide a child AND a builder. Choose one."),
+       super(key: key);
 
   /// Signal that instructs this widget to call `setState()`.
   final Listenable? rebuildSignal;
@@ -765,10 +700,7 @@ class _RebuildableContentLayerWidgetState extends ContentLayerState<_Rebuildable
 
 /// Widget that reports every time it runs layout.
 class _LayoutTrackingWidget extends SingleChildRenderObjectWidget {
-  const _LayoutTrackingWidget({
-    required this.onLayout,
-    required Widget child,
-  }) : super(child: child);
+  const _LayoutTrackingWidget({required this.onLayout, required Widget child}) : super(child: child);
 
   final VoidCallback onLayout;
 

@@ -41,20 +41,13 @@ Future<void> _pumpScaffold(WidgetTester tester, {required AttributedTextEditingC
           hintBuilder: (context) {
             return const Text(
               'Leave a message',
-              style: TextStyle(
-                color: Colors.grey,
-                fontSize: 16,
-                fontFamily: 'Roboto',
-              ),
+              style: TextStyle(color: Colors.grey, fontSize: 16, fontFamily: 'Roboto'),
             );
           },
           hintBehavior: HintBehavior.displayHintUntilTextEntered,
           minLines: 1,
           maxLines: null,
-          textStyleBuilder: (_) => const TextStyle(
-            fontSize: 16,
-            fontFamily: 'Roboto',
-          ),
+          textStyleBuilder: (_) => const TextStyle(fontSize: 16, fontFamily: 'Roboto'),
         ),
       ),
     ),

@@ -14,14 +14,15 @@ void main() {
   group('SuperEditor', () {
     group("mobile drag handles", () {
       testGoldensOnAndroid("with caret change colors", (tester) async {
-        final testContext = await tester //
-            .createDocument() //
-            .fromMarkdown("This is some text to select.") //
-            .useAppTheme(ThemeData(primaryColor: Colors.red)) //
-            // Don't build a floating toolbar. It's a distraction for the details we care to verify.
-            .withiOSToolbarBuilder((context, mobileToolbarKey, focalPoint) => const SizedBox())
-            .withAndroidToolbarBuilder((context, mobileToolbarKey, focalPoint) => const SizedBox())
-            .pump();
+        final testContext =
+            await tester //
+                .createDocument() //
+                .fromMarkdown("This is some text to select.") //
+                .useAppTheme(ThemeData(primaryColor: Colors.red)) //
+                // Don't build a floating toolbar. It's a distraction for the details we care to verify.
+                .withiOSToolbarBuilder((context, mobileToolbarKey, focalPoint) => const SizedBox())
+                .withAndroidToolbarBuilder((context, mobileToolbarKey, focalPoint) => const SizedBox())
+                .pump();
         final nodeId = testContext.findEditContext().document.first.id;
 
         await tester.placeCaretInParagraph(nodeId, 15);
@@ -33,14 +34,15 @@ void main() {
       });
 
       testGoldensOnAndroid("with selection change colors", (tester) async {
-        final testContext = await tester //
-            .createDocument() //
-            .fromMarkdown("This is some text to select.") //
-            .useAppTheme(ThemeData(primaryColor: Colors.red)) //
-            // Don't build a floating toolbar. It's a distraction for the details we care to verify.
-            .withiOSToolbarBuilder((context, mobileToolbarKey, focalPoint) => const SizedBox())
-            .withAndroidToolbarBuilder((context, mobileToolbarKey, focalPoint) => const SizedBox())
-            .pump();
+        final testContext =
+            await tester //
+                .createDocument() //
+                .fromMarkdown("This is some text to select.") //
+                .useAppTheme(ThemeData(primaryColor: Colors.red)) //
+                // Don't build a floating toolbar. It's a distraction for the details we care to verify.
+                .withiOSToolbarBuilder((context, mobileToolbarKey, focalPoint) => const SizedBox())
+                .withAndroidToolbarBuilder((context, mobileToolbarKey, focalPoint) => const SizedBox())
+                .pump();
         final nodeId = testContext.findEditContext().document.first.id;
 
         await tester.doubleTapInParagraph(nodeId, 15);
@@ -52,14 +54,15 @@ void main() {
       });
 
       testGoldensOniOS("with caret change colors", (tester) async {
-        final testContext = await tester //
-            .createDocument() //
-            .fromMarkdown("This is some text to select.") //
-            .useAppTheme(ThemeData(primaryColor: Colors.red)) //
-            // Don't build a floating toolbar. It's a distraction for the details we care to verify.
-            .withiOSToolbarBuilder((context, mobileToolbarKey, focalPoint) => const SizedBox())
-            .withAndroidToolbarBuilder((context, mobileToolbarKey, focalPoint) => const SizedBox())
-            .pump();
+        final testContext =
+            await tester //
+                .createDocument() //
+                .fromMarkdown("This is some text to select.") //
+                .useAppTheme(ThemeData(primaryColor: Colors.red)) //
+                // Don't build a floating toolbar. It's a distraction for the details we care to verify.
+                .withiOSToolbarBuilder((context, mobileToolbarKey, focalPoint) => const SizedBox())
+                .withAndroidToolbarBuilder((context, mobileToolbarKey, focalPoint) => const SizedBox())
+                .pump();
         final nodeId = testContext.findEditContext().document.first.id;
 
         await tester.placeCaretInParagraph(nodeId, 15);
@@ -71,14 +74,15 @@ void main() {
       });
 
       testGoldensOniOS("with selection change colors", (tester) async {
-        final testContext = await tester //
-            .createDocument() //
-            .fromMarkdown("This is some text to select.") //
-            .useAppTheme(ThemeData(primaryColor: Colors.red)) //
-            // Don't build a floating toolbar. It's a distraction for the details we care to verify.
-            .withiOSToolbarBuilder((context, mobileToolbarKey, focalPoint) => const SizedBox())
-            .withAndroidToolbarBuilder((context, mobileToolbarKey, focalPoint) => const SizedBox())
-            .pump();
+        final testContext =
+            await tester //
+                .createDocument() //
+                .fromMarkdown("This is some text to select.") //
+                .useAppTheme(ThemeData(primaryColor: Colors.red)) //
+                // Don't build a floating toolbar. It's a distraction for the details we care to verify.
+                .withiOSToolbarBuilder((context, mobileToolbarKey, focalPoint) => const SizedBox())
+                .withAndroidToolbarBuilder((context, mobileToolbarKey, focalPoint) => const SizedBox())
+                .pump();
         final nodeId = testContext.findEditContext().document.first.id;
 
         await tester.doubleTapInParagraph(nodeId, 15);
@@ -124,8 +128,10 @@ void main() {
             // too far down. The invisible height below the handle is about the same height as
             // the handle, so we'll use the 25% y-value of the whole widget, which is roughly
             // at the 50% y-value of the visible handle.
-            final centerOfVisualHandle =
-                Offset(handleRectGlobal.center.dx, handleRectGlobal.top + handleRectGlobal.height / 4);
+            final centerOfVisualHandle = Offset(
+              handleRectGlobal.center.dx,
+              handleRectGlobal.top + handleRectGlobal.height / 4,
+            );
 
             await tester.dragFrom(centerOfVisualHandle, dragDelta);
 
@@ -137,10 +143,7 @@ void main() {
             expect(
               SuperEditorInspector.findDocumentSelection(),
               const DocumentSelection.collapsed(
-                position: DocumentPosition(
-                  nodeId: "1",
-                  nodePosition: TextNodePosition(offset: 28),
-                ),
+                position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 28)),
               ),
             );
           },
@@ -169,10 +172,7 @@ void main() {
             expect(
               SuperEditorInspector.findDocumentSelection(),
               const DocumentSelection.collapsed(
-                position: DocumentPosition(
-                  nodeId: "1",
-                  nodePosition: TextNodePosition(offset: 39),
-                ),
+                position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 39)),
               ),
             );
           },
@@ -194,14 +194,8 @@ void main() {
             expect(
               SuperEditorInspector.findDocumentSelection(),
               const DocumentSelection(
-                base: DocumentPosition(
-                  nodeId: "1",
-                  nodePosition: TextNodePosition(offset: 28),
-                ),
-                extent: DocumentPosition(
-                  nodeId: "1",
-                  nodePosition: TextNodePosition(offset: 39),
-                ),
+                base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 28)),
+                extent: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 39)),
               ),
             );
           },
@@ -222,14 +216,8 @@ void main() {
             expect(
               SuperEditorInspector.findDocumentSelection(),
               const DocumentSelection(
-                base: DocumentPosition(
-                  nodeId: "1",
-                  nodePosition: TextNodePosition(offset: 0),
-                ),
-                extent: DocumentPosition(
-                  nodeId: "1",
-                  nodePosition: TextNodePosition(offset: 231),
-                ),
+                base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 0)),
+                extent: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 231)),
               ),
             );
           },
@@ -257,14 +245,8 @@ void main() {
             expect(
               SuperEditorInspector.findDocumentSelection(),
               const DocumentSelection(
-                base: DocumentPosition(
-                  nodeId: "1",
-                  nodePosition: TextNodePosition(offset: 22),
-                ),
-                extent: DocumentPosition(
-                  nodeId: "1",
-                  nodePosition: TextNodePosition(offset: 39),
-                ),
+                base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 22)),
+                extent: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 39)),
               ),
             );
           },
@@ -292,10 +274,7 @@ void main() {
             expect(
               SuperEditorInspector.findDocumentSelection(),
               const DocumentSelection(
-                base: DocumentPosition(
-                  nodeId: "1",
-                  nodePosition: TextNodePosition(offset: 28),
-                ),
+                base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 28)),
                 extent: DocumentPosition(
                   nodeId: "1",
                   nodePosition: TextNodePosition(offset: 31, affinity: TextAffinity.upstream),
@@ -327,10 +306,7 @@ void main() {
             expect(
               SuperEditorInspector.findDocumentSelection(),
               const DocumentSelection(
-                base: DocumentPosition(
-                  nodeId: "1",
-                  nodePosition: TextNodePosition(offset: 28),
-                ),
+                base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 28)),
                 extent: DocumentPosition(
                   nodeId: "1",
                   // We are dragging until the middle of a word, but since Android
@@ -346,29 +322,25 @@ void main() {
       });
 
       group('iOS', () {
-        _testParagraphSelection(
-          'single tap text',
-          DocumentGestureMode.iOS,
-          "mobile-selection_ios_single-tap-text",
-          (tester, docKey, _) async {
-            await tester.tapAtDocumentPosition(
-              const DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 34)),
-            );
-            await tester.pumpAndSettle();
+        _testParagraphSelection('single tap text', DocumentGestureMode.iOS, "mobile-selection_ios_single-tap-text", (
+          tester,
+          docKey,
+          _,
+        ) async {
+          await tester.tapAtDocumentPosition(
+            const DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 34)),
+          );
+          await tester.pumpAndSettle();
 
-            // Even though this is a golden test, we verify the final selection
-            // to make it easier to spot rendering problems vs selection problems.
-            expect(
-              SuperEditorInspector.findDocumentSelection(),
-              const DocumentSelection.collapsed(
-                position: DocumentPosition(
-                  nodeId: "1",
-                  nodePosition: TextNodePosition(offset: 34),
-                ),
-              ),
-            );
-          },
-        );
+          // Even though this is a golden test, we verify the final selection
+          // to make it easier to spot rendering problems vs selection problems.
+          expect(
+            SuperEditorInspector.findDocumentSelection(),
+            const DocumentSelection.collapsed(
+              position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 34)),
+            ),
+          );
+        });
 
         _testParagraphSelection(
           'drag collapsed handle upstream',
@@ -395,10 +367,7 @@ void main() {
             expect(
               SuperEditorInspector.findDocumentSelection(),
               const DocumentSelection.collapsed(
-                position: DocumentPosition(
-                  nodeId: "1",
-                  nodePosition: TextNodePosition(offset: 28),
-                ),
+                position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 28)),
               ),
             );
           },
@@ -429,70 +398,53 @@ void main() {
             expect(
               SuperEditorInspector.findDocumentSelection(),
               const DocumentSelection.collapsed(
-                position: DocumentPosition(
-                  nodeId: "1",
-                  nodePosition: TextNodePosition(offset: 39),
-                ),
+                position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 39)),
               ),
             );
           },
         );
 
-        _testParagraphSelection(
-          'double tap text',
-          DocumentGestureMode.iOS,
-          "mobile-selection_ios_double-tap-text",
-          (tester, docKey, rootWidget) async {
-            await tester.doubleTapAtDocumentPosition(
-              const DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 34)),
-            );
-            await tester.pumpAndSettle();
+        _testParagraphSelection('double tap text', DocumentGestureMode.iOS, "mobile-selection_ios_double-tap-text", (
+          tester,
+          docKey,
+          rootWidget,
+        ) async {
+          await tester.doubleTapAtDocumentPosition(
+            const DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 34)),
+          );
+          await tester.pumpAndSettle();
 
-            // Even though this is a golden test, we verify the final selection
-            // to make it easier to spot rendering problems vs selection problems.
-            expect(
-              SuperEditorInspector.findDocumentSelection(),
-              const DocumentSelection(
-                base: DocumentPosition(
-                  nodeId: "1",
-                  nodePosition: TextNodePosition(offset: 28),
-                ),
-                extent: DocumentPosition(
-                  nodeId: "1",
-                  nodePosition: TextNodePosition(offset: 39),
-                ),
-              ),
-            );
-          },
-        );
+          // Even though this is a golden test, we verify the final selection
+          // to make it easier to spot rendering problems vs selection problems.
+          expect(
+            SuperEditorInspector.findDocumentSelection(),
+            const DocumentSelection(
+              base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 28)),
+              extent: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 39)),
+            ),
+          );
+        });
 
-        _testParagraphSelection(
-          'triple tap text',
-          DocumentGestureMode.iOS,
-          "mobile-selection_ios_trip-tap-text",
-          (tester, docKey, _) async {
-            await tester.tripleTapAtDocumentPosition(
-              const DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 34)),
-            );
-            await tester.pumpAndSettle();
+        _testParagraphSelection('triple tap text', DocumentGestureMode.iOS, "mobile-selection_ios_trip-tap-text", (
+          tester,
+          docKey,
+          _,
+        ) async {
+          await tester.tripleTapAtDocumentPosition(
+            const DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 34)),
+          );
+          await tester.pumpAndSettle();
 
-            // Even though this is a golden test, we verify the final selection
-            // to make it easier to spot rendering problems vs selection problems.
-            expect(
-              SuperEditorInspector.findDocumentSelection(),
-              const DocumentSelection(
-                base: DocumentPosition(
-                  nodeId: "1",
-                  nodePosition: TextNodePosition(offset: 0),
-                ),
-                extent: DocumentPosition(
-                  nodeId: "1",
-                  nodePosition: TextNodePosition(offset: 231),
-                ),
-              ),
-            );
-          },
-        );
+          // Even though this is a golden test, we verify the final selection
+          // to make it easier to spot rendering problems vs selection problems.
+          expect(
+            SuperEditorInspector.findDocumentSelection(),
+            const DocumentSelection(
+              base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 0)),
+              extent: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 231)),
+            ),
+          );
+        });
 
         _testParagraphSelection(
           'drag base handle upstream',
@@ -517,14 +469,8 @@ void main() {
             expect(
               SuperEditorInspector.findDocumentSelection(),
               const DocumentSelection(
-                base: DocumentPosition(
-                  nodeId: "1",
-                  nodePosition: TextNodePosition(offset: 22),
-                ),
-                extent: DocumentPosition(
-                  nodeId: "1",
-                  nodePosition: TextNodePosition(offset: 39),
-                ),
+                base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 22)),
+                extent: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 39)),
               ),
             );
           },
@@ -552,10 +498,7 @@ void main() {
             expect(
               SuperEditorInspector.findDocumentSelection(),
               const DocumentSelection(
-                base: DocumentPosition(
-                  nodeId: "1",
-                  nodePosition: TextNodePosition(offset: 28),
-                ),
+                base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 28)),
                 extent: DocumentPosition(
                   nodeId: "1",
                   nodePosition: TextNodePosition(offset: 31, affinity: TextAffinity.upstream),
@@ -587,14 +530,8 @@ void main() {
             expect(
               SuperEditorInspector.findDocumentSelection(),
               const DocumentSelection(
-                base: DocumentPosition(
-                  nodeId: "1",
-                  nodePosition: TextNodePosition(offset: 28),
-                ),
-                extent: DocumentPosition(
-                  nodeId: "1",
-                  nodePosition: TextNodePosition(offset: 45),
-                ),
+                base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 28)),
+                extent: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 45)),
               ),
             );
           },
@@ -671,22 +608,19 @@ Future<void> _runParagraphSelectionTest(
       .withCustomContent(_createSingleParagraphDoc())
       .withLayoutKey(docKey)
       .withGestureMode(platform)
-      .useStylesheet(Stylesheet(
-        documentPadding: const EdgeInsets.all(16),
-        rules: defaultStylesheet.rules,
-        inlineTextStyler: (attributions, style) => _textStyleBuilder(attributions),
-      ))
+      .useStylesheet(
+        Stylesheet(
+          documentPadding: const EdgeInsets.all(16),
+          rules: defaultStylesheet.rules,
+          inlineTextStyler: (attributions, style) => _textStyleBuilder(attributions),
+        ),
+      )
       // Don't build a floating toolbar. It's a distraction for the details we care to verify.
       .withiOSToolbarBuilder((context, mobileToolbarKey, focalPoint) => const SizedBox())
       .withAndroidToolbarBuilder((context, mobileToolbarKey, focalPoint) => const SizedBox())
-      .withCustomWidgetTreeBuilder(
-    (superEditor) {
-      return _buildScaffold(
-        dragLine: dragLine,
-        child: superEditor,
-      );
-    },
-  ) //
+      .withCustomWidgetTreeBuilder((superEditor) {
+        return _buildScaffold(dragLine: dragLine, child: superEditor);
+      }) //
       .pump();
 
   // Run the test
@@ -702,30 +636,18 @@ Future<void> _runParagraphSelectionTest(
   tester.view.resetPhysicalSize();
 }
 
-Widget _buildScaffold({
-  required ValueNotifier<_Line?> dragLine,
-  required Widget child,
-}) {
+Widget _buildScaffold({required ValueNotifier<_Line?> dragLine, required Widget child}) {
   return _DragLinePaint(
     line: dragLine,
     child: MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: child,
-        ),
-      ),
+      home: Scaffold(body: Center(child: child)),
       debugShowCheckedModeBanner: false,
     ),
   );
 }
 
 TextStyle _textStyleBuilder(attributions) {
-  return const TextStyle(
-    color: Colors.black,
-    fontFamily: 'Roboto',
-    fontSize: 16,
-    height: 1.4,
-  );
+  return const TextStyle(color: Colors.black, fontFamily: 'Roboto', fontSize: 16, height: 1.4);
 }
 
 MutableDocument _createSingleParagraphDoc() {
@@ -742,11 +664,7 @@ MutableDocument _createSingleParagraphDoc() {
 }
 
 class _DragLinePaint extends StatelessWidget {
-  const _DragLinePaint({
-    Key? key,
-    required this.line,
-    required this.child,
-  }) : super(key: key);
+  const _DragLinePaint({Key? key, required this.line, required this.child}) : super(key: key);
 
   final ValueNotifier<_Line?> line;
   final Widget child;
@@ -767,10 +685,7 @@ class _DragLinePaint extends StatelessWidget {
 }
 
 class _DragLinePainter extends CustomPainter {
-  _DragLinePainter({
-    required _Line line,
-  })  : _line = line,
-        _paint = Paint();
+  _DragLinePainter({required _Line line}) : _line = line, _paint = Paint();
 
   final _Line _line;
   final Paint _paint;
@@ -780,18 +695,9 @@ class _DragLinePainter extends CustomPainter {
     _paint.color = Colors.red;
     canvas.drawCircle(_line.from, 5, _paint);
 
-    _paint.shader = ui.Gradient.linear(
-      _line.from,
-      _line.to,
-      [const Color(0x00FF0000), const Color(0xFFFF0000)],
-    );
+    _paint.shader = ui.Gradient.linear(_line.from, _line.to, [const Color(0x00FF0000), const Color(0xFFFF0000)]);
 
-    canvas.drawRect(
-        Rect.fromPoints(
-          _line.from - const Offset(0, 2),
-          _line.to + const Offset(0, 2),
-        ),
-        _paint);
+    canvas.drawRect(Rect.fromPoints(_line.from - const Offset(0, 2), _line.to + const Offset(0, 2)), _paint);
   }
 
   @override

@@ -46,11 +46,7 @@ extension DragExtensions on WidgetTester {
   ///
   /// This is useful, for example, when simulating multiple drags without the user
   /// lifting his finger.
-  Future<void> dragContinuation(
-    TestGesture dragGesture,
-    Offset delta, {
-    int frameCount = 10,
-  }) async {
+  Future<void> dragContinuation(TestGesture dragGesture, Offset delta, {int frameCount = 10}) async {
     final dragPerFrame = Offset(delta.dx / frameCount, delta.dy / frameCount);
 
     for (int i = 0; i < frameCount; i += 1) {
@@ -71,9 +67,7 @@ Matcher selectionEquivalentTo(DocumentSelection expectedSelection) => Equivalent
 /// Some node positions, like [TextNodePosition], have a concept of affinity (upstream/downstream),
 /// which is used when making particular selection decisions, but doesn't impact equivalency.
 class EquivalentSelectionMatcher extends Matcher {
-  EquivalentSelectionMatcher(
-    this.expectedSelection,
-  );
+  EquivalentSelectionMatcher(this.expectedSelection);
 
   final DocumentSelection expectedSelection;
 
@@ -88,12 +82,7 @@ class EquivalentSelectionMatcher extends Matcher {
   }
 
   @override
-  Description describeMismatch(
-    covariant Object target,
-    Description mismatchDescription,
-    Map matchState,
-    bool verbose,
-  ) {
+  Description describeMismatch(covariant Object target, Description mismatchDescription, Map matchState, bool verbose) {
     final mismatchReason = _calculateMismatchReason(target, matchState);
     if (mismatchReason != null) {
       mismatchDescription.add(mismatchReason);
@@ -101,10 +90,7 @@ class EquivalentSelectionMatcher extends Matcher {
     return mismatchDescription;
   }
 
-  String? _calculateMismatchReason(
-    Object target,
-    Map<dynamic, dynamic> matchState,
-  ) {
+  String? _calculateMismatchReason(Object target, Map<dynamic, dynamic> matchState) {
     if (target is! DocumentSelection) {
       return "the given target isn't a DocumentSelection";
     }

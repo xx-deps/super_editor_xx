@@ -78,13 +78,8 @@ Future<void> _pumpShortcutsAndSuperEditor(
             const SingleActivator(LogicalKeyboardKey.arrowRight, shift: true): _VoidCallbackIntent(onShortcut),
           },
           child: Actions(
-            actions: {
-              _VoidCallbackIntent: _VoidCallbackAction(),
-            },
-            child: SuperEditor(
-              editor: editor,
-              keyboardActions: keyboardActions,
-            ),
+            actions: {_VoidCallbackIntent: _VoidCallbackAction()},
+            child: SuperEditor(editor: editor, keyboardActions: keyboardActions),
           ),
         ),
       ),

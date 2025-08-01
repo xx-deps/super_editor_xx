@@ -31,12 +31,7 @@ void main() {
       });
 
       testWidgets("in middle of existing text", (tester) async {
-        await _pumpDesktopScaffold(
-          tester,
-          AttributedTextEditingController(
-            text: AttributedText("hello world"),
-          ),
-        );
+        await _pumpDesktopScaffold(tester, AttributedTextEditingController(text: AttributedText("hello world")));
         await tester.placeCaretInSuperTextField(6);
         await tester.pumpAndSettle();
         await tester.typeKeyboardText("new ");
@@ -72,11 +67,7 @@ Future<void> _pumpDesktopScaffold(WidgetTester tester, [AttributedTextEditingCon
 
   await _pumpScaffold(
     tester,
-    SuperTextField(
-      textController: controller,
-      controlsColor: Colors.blue,
-      selectionColor: Colors.lightBlueAccent,
-    ),
+    SuperTextField(textController: controller, controlsColor: Colors.blue, selectionColor: Colors.lightBlueAccent),
   );
 
   debugDefaultTargetPlatformOverride = null;
@@ -118,12 +109,7 @@ Future<void> _pumpScaffold(WidgetTester tester, Widget textField) async {
   await tester.pumpWidget(
     MaterialApp(
       home: Scaffold(
-        body: Center(
-          child: SizedBox(
-            width: 300,
-            child: textField,
-          ),
-        ),
+        body: Center(child: SizedBox(width: 300, child: textField)),
       ),
     ),
   );

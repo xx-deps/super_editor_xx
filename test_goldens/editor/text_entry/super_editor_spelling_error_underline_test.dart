@@ -261,10 +261,7 @@ Future<void> Function(WidgetTester) _createWidgetTest({
   };
 }
 
-enum _ErrorType {
-  spelling,
-  grammar;
-}
+enum _ErrorType { spelling, grammar }
 
 Future<(Editor, Document)> _pumpScaffold(
   WidgetTester tester,
@@ -279,29 +276,23 @@ Future<(Editor, Document)> _pumpScaffold(
   final editor = createDefaultDocumentEditor(document: document, composer: composer);
 
   final spellingAndGrammarStyler = SpellingAndGrammarStyler()
-    ..addErrors(document.first.id, {
-      if (spellingError != null) spellingError,
-      if (grammarError != null) grammarError,
-    });
+    ..addErrors(document.first.id, {if (spellingError != null) spellingError, if (grammarError != null) grammarError});
 
-  await tester.pumpWidget(MaterialApp(
-    home: Scaffold(
-      body: Center(
-        child: SuperEditor(
-          editor: editor,
-          componentBuilders: [
-            TaskComponentBuilder(editor),
-            ...defaultComponentBuilders,
-          ],
-          stylesheet: stylesheet,
-          customStylePhases: [
-            spellingAndGrammarStyler,
-          ],
+  await tester.pumpWidget(
+    MaterialApp(
+      home: Scaffold(
+        body: Center(
+          child: SuperEditor(
+            editor: editor,
+            componentBuilders: [TaskComponentBuilder(editor), ...defaultComponentBuilders],
+            stylesheet: stylesheet,
+            customStylePhases: [spellingAndGrammarStyler],
+          ),
         ),
       ),
+      debugShowCheckedModeBanner: false,
     ),
-    debugShowCheckedModeBanner: false,
-  ));
+  );
 
   return (editor, document);
 }
@@ -317,12 +308,8 @@ const _taskMarkdown = "- [ ] Typing with composing a";
 final _stylesheetWithNoSpellingErrorStyles = defaultStylesheet.copyWith(
   addRulesAfter: [
     StyleRule(BlockSelector.all, (doc, node) {
-      return {
-        Styles.textStyle: const TextStyle(
-          fontFamily: 'Roboto',
-        ),
-      };
-    })
+      return {Styles.textStyle: const TextStyle(fontFamily: 'Roboto')};
+    }),
   ],
 );
 
@@ -332,16 +319,10 @@ final _stylesheetWithSpellingErrorStyles = defaultStylesheet.copyWith(
   addRulesAfter: [
     StyleRule(BlockSelector.all, (doc, node) {
       return {
-        Styles.textStyle: const TextStyle(
-          fontFamily: 'Roboto',
-        ),
-        Styles.spellingErrorUnderlineStyle: const SquiggleUnderlineStyle(
-          color: Colors.orange,
-        ),
-        Styles.grammarErrorUnderlineStyle: const SquiggleUnderlineStyle(
-          color: Colors.green,
-        ),
+        Styles.textStyle: const TextStyle(fontFamily: 'Roboto'),
+        Styles.spellingErrorUnderlineStyle: const SquiggleUnderlineStyle(color: Colors.orange),
+        Styles.grammarErrorUnderlineStyle: const SquiggleUnderlineStyle(color: Colors.green),
       };
-    })
+    }),
   ],
 );

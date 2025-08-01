@@ -20,9 +20,7 @@ void main() {
 }
 
 Future<void> _composingRegionIsUnderlined(WidgetTester tester) async {
-  final textController = AttributedTextEditingController(
-    text: AttributedText("Typing with composing a"),
-  );
+  final textController = AttributedTextEditingController(text: AttributedText("Typing with composing a"));
   await _pumpScaffold(tester, textController);
 
   textController
@@ -35,22 +33,25 @@ Future<void> _composingRegionIsUnderlined(WidgetTester tester) async {
   // await screenMatchesGolden(
   //     tester, "super-text-field_composing-region-shows-underline_${defaultTargetPlatform.name}_1");
   await expectLater(
-      find.byType(MaterialApp),
-      matchesGoldenFileWithPixelAllowance(
-          "goldens/super-text-field_composing-region-shows-underline_${defaultTargetPlatform.name}_1.png", 1));
+    find.byType(MaterialApp),
+    matchesGoldenFileWithPixelAllowance(
+      "goldens/super-text-field_composing-region-shows-underline_${defaultTargetPlatform.name}_1.png",
+      1,
+    ),
+  );
 
   textController.composingRegion = const TextRange.collapsed(-1);
   await tester.pump();
 
   // Ensure the underline disappeared now that the composing region is null.
   await screenMatchesGolden(
-      tester, "super-text-field_composing-region-shows-underline_${defaultTargetPlatform.name}_2");
+    tester,
+    "super-text-field_composing-region-shows-underline_${defaultTargetPlatform.name}_2",
+  );
 }
 
 Future<void> _composingRegionShowsNothing(WidgetTester tester) async {
-  final textController = AttributedTextEditingController(
-    text: AttributedText("Typing with composing a"),
-  );
+  final textController = AttributedTextEditingController(text: AttributedText("Typing with composing a"));
   await _pumpScaffold(tester, textController);
 
   textController
@@ -60,13 +61,12 @@ Future<void> _composingRegionShowsNothing(WidgetTester tester) async {
 
   // Ensure that no underline is shown.
   await screenMatchesGolden(
-      tester, "super-text-field_composing-region-underline-shows-nothing_${defaultTargetPlatform.name}");
+    tester,
+    "super-text-field_composing-region-underline-shows-nothing_${defaultTargetPlatform.name}",
+  );
 }
 
-Future<void> _pumpScaffold(
-  WidgetTester tester,
-  AttributedTextEditingController textController,
-) async {
+Future<void> _pumpScaffold(WidgetTester tester, AttributedTextEditingController textController) async {
   await tester.pumpWidget(
     MaterialApp(
       home: Scaffold(

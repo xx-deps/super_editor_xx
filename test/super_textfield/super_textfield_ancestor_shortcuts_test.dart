@@ -75,15 +75,11 @@ Future<void> _pumpShortcutsAndSuperTextField(
             const SingleActivator(LogicalKeyboardKey.arrowRight, shift: true): _VoidCallbackIntent(onShortcut),
           },
           child: Actions(
-            actions: {
-              _VoidCallbackIntent: _VoidCallbackAction(),
-            },
+            actions: {_VoidCallbackIntent: _VoidCallbackAction()},
             child: SizedBox(
               width: 300,
               child: SuperTextField(
-                textController: AttributedTextEditingController(
-                  text: AttributedText(),
-                ),
+                textController: AttributedTextEditingController(text: AttributedText()),
                 keyboardHandlers: keyboardActions,
               ),
             ),

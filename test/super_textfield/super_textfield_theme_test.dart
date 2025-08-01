@@ -15,9 +15,7 @@ void main() {
   group('SuperTextField', () {
     testWidgetsOnIos('applies app theme to the popover toolbar', (tester) async {
       final controller = ImeAttributedTextEditingController(
-        controller: AttributedTextEditingController(
-          text: AttributedText('A single line textfield'),
-        ),
+        controller: AttributedTextEditingController(text: AttributedText('A single line textfield')),
       );
 
       // Used to switch between dark/light mode.
@@ -57,9 +55,7 @@ void main() {
 
     testWidgetsOnAndroid('applies app theme to the popover toolbar', (tester) async {
       final controller = ImeAttributedTextEditingController(
-        controller: AttributedTextEditingController(
-          text: AttributedText('A single line textfield'),
-        ),
+        controller: AttributedTextEditingController(text: AttributedText('A single line textfield')),
       );
 
       // Used to switch between dark/light mode.
@@ -117,10 +113,7 @@ Future<void> _pumpTestAppScaffold(
             // so it isn't applied to the app's Overlay.
             return Theme(
               data: theme.value,
-              child: SizedBox(
-                width: 300,
-                child: child,
-              ),
+              child: SizedBox(width: 300, child: child),
             );
           },
         ),

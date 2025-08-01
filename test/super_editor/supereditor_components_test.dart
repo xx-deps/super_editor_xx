@@ -27,10 +27,7 @@ void main() {
       expect(
         SuperEditorInspector.findDocumentSelection(),
         const DocumentSelection.collapsed(
-          position: DocumentPosition(
-            nodeId: "1",
-            nodePosition: TextNodePosition(offset: 0),
-          ),
+          position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 0)),
         ),
       );
     });
@@ -83,11 +80,7 @@ void main() {
       // Pump an editor with a node that has no corresponding component builder.
       await tester //
           .createDocument()
-          .withCustomContent(
-            MutableDocument(
-              nodes: [_UnknownNode(id: '1')],
-            ),
-          )
+          .withCustomContent(MutableDocument(nodes: [_UnknownNode(id: '1')]))
           .pump();
 
       // Reaching this point means the editor did not crash because of the
@@ -108,7 +101,9 @@ class HintTextComponentBuilder implements ComponentBuilder {
 
   @override
   Widget? createComponent(
-      SingleColumnDocumentComponentContext componentContext, SingleColumnLayoutComponentViewModel componentViewModel) {
+    SingleColumnDocumentComponentContext componentContext,
+    SingleColumnLayoutComponentViewModel componentViewModel,
+  ) {
     if (componentViewModel is! ParagraphComponentViewModel) {
       return null;
     }
@@ -119,11 +114,7 @@ class HintTextComponentBuilder implements ComponentBuilder {
       key: componentContext.componentKey,
       text: componentViewModel.text,
       textStyleBuilder: defaultStyleBuilder,
-      metadata: componentViewModel.blockType != null
-          ? {
-              'blockType': componentViewModel.blockType,
-            }
-          : {},
+      metadata: componentViewModel.blockType != null ? {'blockType': componentViewModel.blockType} : {},
       // This is the text displayed as a hint.
       hintText: AttributedText(
         'this is hint text...',
@@ -135,9 +126,8 @@ class HintTextComponentBuilder implements ComponentBuilder {
         ),
       ),
       // This is the function that selects styles for the hint text.
-      hintStyleBuilder: (Set<Attribution> attributions) => defaultStyleBuilder(attributions).copyWith(
-        color: const Color(0xFFDDDDDD),
-      ),
+      hintStyleBuilder: (Set<Attribution> attributions) =>
+          defaultStyleBuilder(attributions).copyWith(color: const Color(0xFFDDDDDD)),
       textSelection: textSelection,
       selectionColor: componentViewModel.selectionColor,
       underlines: componentViewModel.createUnderlines(),
@@ -147,10 +137,7 @@ class HintTextComponentBuilder implements ComponentBuilder {
 
 /// Pump a SuperEditor containing an image which will render as an 100x100 box
 /// and content big enough to cause the document to be scrollable.
-Future<void> _pumpImageTestApp(
-  WidgetTester tester, {
-  ScrollController? scrollController,
-}) async {
+Future<void> _pumpImageTestApp(WidgetTester tester, {ScrollController? scrollController}) async {
   await tester
       .createDocument()
       .withCustomContent(
@@ -159,9 +146,7 @@ Future<void> _pumpImageTestApp(
             ImageNode(
               id: "img-node",
               imageUrl: 'https://this.is.a.fake.image',
-              metadata: const SingleColumnLayoutComponentStyles(
-                width: double.infinity,
-              ).toMetadata(),
+              metadata: const SingleColumnLayoutComponentStyles(width: double.infinity).toMetadata(),
             ),
             ...longTextDoc(),
           ],
@@ -185,7 +170,9 @@ class _FakeImageComponentBuilder implements ComponentBuilder {
 
   @override
   Widget? createComponent(
-      SingleColumnDocumentComponentContext componentContext, SingleColumnLayoutComponentViewModel componentViewModel) {
+    SingleColumnDocumentComponentContext componentContext,
+    SingleColumnLayoutComponentViewModel componentViewModel,
+  ) {
     if (componentViewModel is! ImageComponentViewModel) {
       return null;
     }

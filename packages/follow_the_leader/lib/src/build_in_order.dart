@@ -10,10 +10,8 @@ import 'package:flutter/rendering.dart';
 /// this widget tells the reader that there's no intended layout behavior. Instead,
 /// the only detail that matters is the build order of the children.
 class BuildInOrder extends MultiChildRenderObjectWidget {
-  const BuildInOrder({
-    Key? key,
-    required List<Widget> children,
-  }) : super(key: key, children: children);
+  const BuildInOrder({Key? key, required List<Widget> children})
+    : super(key: key, children: children);
 
   @override
   RenderObject createRenderObject(BuildContext context) {
@@ -24,8 +22,10 @@ class BuildInOrder extends MultiChildRenderObjectWidget {
 /// [RenderBox] for a [BuildInOrder] widget.
 class RenderBuildInOrder extends RenderBox
     with
-        ContainerRenderObjectMixin<RenderBox,
-            ContainerBoxParentData<RenderBox>>,
+        ContainerRenderObjectMixin<
+          RenderBox,
+          ContainerBoxParentData<RenderBox>
+        >,
         RenderBoxContainerDefaultsMixin {
   @override
   ContainerBoxParentData<RenderBox> setupParentData(RenderBox child) {

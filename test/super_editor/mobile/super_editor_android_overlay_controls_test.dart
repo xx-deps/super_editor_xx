@@ -227,13 +227,17 @@ void main() {
       expect(SuperEditorInspector.findAllMobileDragHandles(), findsExactly(2));
       expect(
         tester.getTopLeft(SuperEditorInspector.findMobileDownstreamDragHandle()),
-        offsetMoreOrLessEquals(documentLayout.getGlobalOffsetFromDocumentOffset(selectedPositionRect.bottomRight) -
-            Offset(AndroidSelectionHandle.defaultTouchRegionExpansion.left, 0)),
+        offsetMoreOrLessEquals(
+          documentLayout.getGlobalOffsetFromDocumentOffset(selectedPositionRect.bottomRight) -
+              Offset(AndroidSelectionHandle.defaultTouchRegionExpansion.left, 0),
+        ),
       );
       expect(
         tester.getTopRight(SuperEditorInspector.findMobileUpstreamDragHandle()),
-        offsetMoreOrLessEquals(documentLayout.getGlobalOffsetFromDocumentOffset(selectedPositionRect.bottomRight) +
-            Offset(AndroidSelectionHandle.defaultTouchRegionExpansion.right, 0)),
+        offsetMoreOrLessEquals(
+          documentLayout.getGlobalOffsetFromDocumentOffset(selectedPositionRect.bottomRight) +
+              Offset(AndroidSelectionHandle.defaultTouchRegionExpansion.right, 0),
+        ),
       );
 
       // Release the drag handle.
@@ -319,24 +323,21 @@ void main() {
       await tester //
           .createDocument()
           .withSingleParagraph()
-          .withAndroidCollapsedHandleBuilder(
-        (
-          BuildContext context, {
-          required Key handleKey,
-          required LeaderLink focalPoint,
-          required DocumentHandleGestureDelegate gestureDelegate,
-          required bool shouldShow,
-        }) {
-          return SizedBox(
-            key: collapsedFinderKey,
-            width: 20,
-            height: 20,
-            child: Container(
-              key: handleKey,
-            ),
-          );
-        },
-      ).pump();
+          .withAndroidCollapsedHandleBuilder((
+            BuildContext context, {
+            required Key handleKey,
+            required LeaderLink focalPoint,
+            required DocumentHandleGestureDelegate gestureDelegate,
+            required bool shouldShow,
+          }) {
+            return SizedBox(
+              key: collapsedFinderKey,
+              width: 20,
+              height: 20,
+              child: Container(key: handleKey),
+            );
+          })
+          .pump();
 
       // Place the caret at the beginning of the document to show the collapsed handle.
       await tester.placeCaretInParagraph('1', 0);
@@ -354,39 +355,34 @@ void main() {
       await tester //
           .createDocument()
           .withSingleParagraph()
-          .withAndroidExpandedHandlesBuilder(
-        (
-          BuildContext context, {
-          required Key upstreamHandleKey,
-          required LeaderLink upstreamFocalPoint,
-          required DocumentHandleGestureDelegate upstreamGestureDelegate,
-          required Key downstreamHandleKey,
-          required LeaderLink downstreamFocalPoint,
-          required DocumentHandleGestureDelegate downstreamGestureDelegate,
-          required bool shouldShow,
-        }) {
-          return Stack(
-            children: [
-              SizedBox(
-                key: upstreamFinderKey,
-                width: 20,
-                height: 20,
-                child: Container(
-                  key: upstreamHandleKey,
+          .withAndroidExpandedHandlesBuilder((
+            BuildContext context, {
+            required Key upstreamHandleKey,
+            required LeaderLink upstreamFocalPoint,
+            required DocumentHandleGestureDelegate upstreamGestureDelegate,
+            required Key downstreamHandleKey,
+            required LeaderLink downstreamFocalPoint,
+            required DocumentHandleGestureDelegate downstreamGestureDelegate,
+            required bool shouldShow,
+          }) {
+            return Stack(
+              children: [
+                SizedBox(
+                  key: upstreamFinderKey,
+                  width: 20,
+                  height: 20,
+                  child: Container(key: upstreamHandleKey),
                 ),
-              ),
-              SizedBox(
-                key: downstreamFinderKey,
-                width: 20,
-                height: 20,
-                child: Container(
-                  key: downstreamHandleKey,
+                SizedBox(
+                  key: downstreamFinderKey,
+                  width: 20,
+                  height: 20,
+                  child: Container(key: downstreamHandleKey),
                 ),
-              ),
-            ],
-          );
-        },
-      ).pump();
+              ],
+            );
+          })
+          .pump();
 
       // Double tap to select the first word and show the expanded handles.
       await tester.doubleTapInParagraph('1', 0);

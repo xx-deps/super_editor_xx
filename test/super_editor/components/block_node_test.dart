@@ -279,31 +279,25 @@ void main() {
         expect(composer.selection!.extent.nodePosition, const UpstreamDownstreamNodePosition.upstream());
       });
 
-      testWidgets("right arrow collapses the expanded selection around block node to a caret on the downstream edge",
-          (tester) async {
+      testWidgets("right arrow collapses the expanded selection around block node to a caret on the downstream edge", (
+        tester,
+      ) async {
         await tester
             .createDocument()
             .withCustomContent(paragraphThenHrThenParagraphDoc())
             .withEditorSize(const Size(300, 300))
             .pump();
 
-        await tester.doubleTapAtDocumentPosition(const DocumentPosition(
-          nodeId: "2",
-          nodePosition: UpstreamDownstreamNodePosition.upstream(),
-        ));
+        await tester.doubleTapAtDocumentPosition(
+          const DocumentPosition(nodeId: "2", nodePosition: UpstreamDownstreamNodePosition.upstream()),
+        );
         await tester.pump(kTapMinTime + const Duration(milliseconds: 1));
 
         expect(
           SuperEditorInspector.findDocumentSelection(),
           const DocumentSelection(
-            base: DocumentPosition(
-              nodeId: "2",
-              nodePosition: UpstreamDownstreamNodePosition.upstream(),
-            ),
-            extent: DocumentPosition(
-              nodeId: "2",
-              nodePosition: UpstreamDownstreamNodePosition.downstream(),
-            ),
+            base: DocumentPosition(nodeId: "2", nodePosition: UpstreamDownstreamNodePosition.upstream()),
+            extent: DocumentPosition(nodeId: "2", nodePosition: UpstreamDownstreamNodePosition.downstream()),
           ),
         );
 
@@ -633,12 +627,8 @@ Widget _buildHardwareKeyboardEditor(MutableDocument document, MutableDocumentCom
         stylesheet: defaultStylesheet.copyWith(
           addRulesAfter: [
             StyleRule(BlockSelector.all, (doc, node) {
-              return {
-                Styles.textStyle: const TextStyle(
-                  fontSize: 12,
-                ),
-              };
-            })
+              return {Styles.textStyle: const TextStyle(fontSize: 12)};
+            }),
           ],
         ),
         gestureMode: DocumentGestureMode.mouse,

@@ -31,10 +31,12 @@ void main() {
       await tester.doubleTapInParagraph('1', 0);
       expect(
         SuperReaderInspector.findDocumentSelection(),
-        selectionEquivalentTo(const DocumentSelection(
-          base: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 0)),
-          extent: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 5)),
-        )),
+        selectionEquivalentTo(
+          const DocumentSelection(
+            base: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 0)),
+            extent: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 5)),
+          ),
+        ),
       );
 
       // Find the approximate position of the scrollbar thumb.
@@ -64,10 +66,12 @@ void main() {
       // Ensure the selection didn't change.
       expect(
         SuperReaderInspector.findDocumentSelection(),
-        selectionEquivalentTo(const DocumentSelection(
-          base: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 0)),
-          extent: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 5)),
-        )),
+        selectionEquivalentTo(
+          const DocumentSelection(
+            base: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 0)),
+            extent: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 5)),
+          ),
+        ),
       );
     });
 
@@ -84,10 +88,12 @@ void main() {
       await tester.doubleTapInParagraph('1', 0);
       expect(
         SuperReaderInspector.findDocumentSelection(),
-        selectionEquivalentTo(const DocumentSelection(
-          base: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 0)),
-          extent: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 5)),
-        )),
+        selectionEquivalentTo(
+          const DocumentSelection(
+            base: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 0)),
+            extent: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 5)),
+          ),
+        ),
       );
 
       // Jump to the end of the document.

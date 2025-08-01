@@ -43,24 +43,22 @@ void main() {
         text = SuperEditorInspector.findTextInComponent("1");
 
         expect(text.toPlainText(), "https://www.google.com ");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
-              start: 0,
-              end: text.length - 2,
-            ),
-          },
-        );
+        expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
+          AttributionSpan(
+            attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
+            start: 0,
+            end: text.length - 2,
+          ),
+        });
       });
 
       testWidgetsOnAllPlatforms('when pressing ENTER at the end of a paragraph', (tester) async {
-        final textContext = await tester //
-            .createDocument()
-            .withSingleEmptyParagraph()
-            .withInputSource(TextInputSource.ime)
-            .pump();
+        final textContext =
+            await tester //
+                .createDocument()
+                .withSingleEmptyParagraph()
+                .withInputSource(TextInputSource.ime)
+                .pump();
 
         // Place the caret at the beginning of the empty document.
         await tester.placeCaretInParagraph("1", 0);
@@ -87,16 +85,13 @@ void main() {
         text = SuperEditorInspector.findTextInComponent("1");
 
         expect(text.toPlainText(), "https://www.google.com");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
-              start: 0,
-              end: text.length - 1,
-            ),
-          },
-        );
+        expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
+          AttributionSpan(
+            attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
+            start: 0,
+            end: text.length - 1,
+          ),
+        });
 
         // Ensure we added a new empty paragraph.
         expect(textContext.document.nodeCount, 2);
@@ -105,11 +100,12 @@ void main() {
       });
 
       testWidgetsOnAllPlatforms('when pressing ENTER at the middle of a paragraph', (tester) async {
-        final textContext = await tester //
-            .createDocument()
-            .fromMarkdown('Before link after link')
-            .withInputSource(TextInputSource.ime)
-            .pump();
+        final textContext =
+            await tester //
+                .createDocument()
+                .fromMarkdown('Before link after link')
+                .withInputSource(TextInputSource.ime)
+                .pump();
 
         final nodeId = textContext.document.first.id;
 
@@ -124,10 +120,7 @@ void main() {
 
         expect(text.toPlainText(), "Before link https://www.google.comafter link");
         expect(
-          text.getAttributionSpansInRange(
-            attributionFilter: (attribution) => true,
-            range: const SpanRange(12, 34),
-          ),
+          text.getAttributionSpansInRange(attributionFilter: (attribution) => true, range: const SpanRange(12, 34)),
           isEmpty,
         );
 
@@ -138,16 +131,13 @@ void main() {
         text = SuperEditorInspector.findTextInComponent(nodeId);
 
         expect(text.toPlainText(), "Before link https://www.google.com");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
-              start: 12,
-              end: text.length - 1,
-            ),
-          },
-        );
+        expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
+          AttributionSpan(
+            attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
+            start: 12,
+            end: text.length - 1,
+          ),
+        });
 
         // Ensure we split the paragraph.
         expect(textContext.document.nodeCount, 2);
@@ -155,13 +145,15 @@ void main() {
         expect((textContext.document.getNodeAt(1)! as ParagraphNode).text.toPlainText(), "after link");
       });
 
-      testWidgetsOnAndroid('when pressing the newline button on the software keyboard at the end of a paragraph',
-          (tester) async {
-        final textContext = await tester //
-            .createDocument()
-            .withSingleEmptyParagraph()
-            .withInputSource(TextInputSource.ime)
-            .pump();
+      testWidgetsOnAndroid('when pressing the newline button on the software keyboard at the end of a paragraph', (
+        tester,
+      ) async {
+        final textContext =
+            await tester //
+                .createDocument()
+                .withSingleEmptyParagraph()
+                .withInputSource(TextInputSource.ime)
+                .pump();
 
         // Place the caret at the beginning of the empty document.
         await tester.placeCaretInParagraph("1", 0);
@@ -189,16 +181,13 @@ void main() {
         text = SuperEditorInspector.findTextInComponent("1");
 
         expect(text.toPlainText(), "https://www.google.com");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
-              start: 0,
-              end: text.length - 1,
-            ),
-          },
-        );
+        expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
+          AttributionSpan(
+            attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
+            start: 0,
+            end: text.length - 1,
+          ),
+        });
 
         // Ensure we added a new empty paragraph.
         expect(textContext.document.nodeCount, 2);
@@ -206,13 +195,15 @@ void main() {
         expect((textContext.document.getNodeAt(1)! as ParagraphNode).text.toPlainText(), "");
       });
 
-      testWidgetsOnAndroid('when pressing the newline button on the software keyboard at the middle of a paragraph',
-          (tester) async {
-        final textContext = await tester //
-            .createDocument()
-            .fromMarkdown('Before link after link')
-            .withInputSource(TextInputSource.ime)
-            .pump();
+      testWidgetsOnAndroid('when pressing the newline button on the software keyboard at the middle of a paragraph', (
+        tester,
+      ) async {
+        final textContext =
+            await tester //
+                .createDocument()
+                .fromMarkdown('Before link after link')
+                .withInputSource(TextInputSource.ime)
+                .pump();
 
         final nodeId = textContext.document.first.id;
 
@@ -227,10 +218,7 @@ void main() {
 
         expect(text.toPlainText(), "Before link https://www.google.comafter link");
         expect(
-          text.getAttributionSpansInRange(
-            attributionFilter: (attribution) => true,
-            range: const SpanRange(12, 34),
-          ),
+          text.getAttributionSpansInRange(attributionFilter: (attribution) => true, range: const SpanRange(12, 34)),
           isEmpty,
         );
 
@@ -242,16 +230,13 @@ void main() {
         text = SuperEditorInspector.findTextInComponent(nodeId);
 
         expect(text.toPlainText(), "Before link https://www.google.com");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
-              start: 12,
-              end: text.length - 1,
-            ),
-          },
-        );
+        expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
+          AttributionSpan(
+            attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
+            start: 12,
+            end: text.length - 1,
+          ),
+        });
 
         // Ensure we split the paragraph.
         expect(textContext.document.nodeCount, 2);
@@ -259,13 +244,15 @@ void main() {
         expect((textContext.document.getNodeAt(1)! as ParagraphNode).text.toPlainText(), "after link");
       });
 
-      testWidgetsOnIos('when pressing the newline button on the software keyboard at the end of a paragraph',
-          (tester) async {
-        final textContext = await tester //
-            .createDocument()
-            .withSingleEmptyParagraph()
-            .withInputSource(TextInputSource.ime)
-            .pump();
+      testWidgetsOnIos('when pressing the newline button on the software keyboard at the end of a paragraph', (
+        tester,
+      ) async {
+        final textContext =
+            await tester //
+                .createDocument()
+                .withSingleEmptyParagraph()
+                .withInputSource(TextInputSource.ime)
+                .pump();
 
         // Place the caret at the beginning of the empty document.
         await tester.placeCaretInParagraph("1", 0);
@@ -294,16 +281,13 @@ void main() {
         text = SuperEditorInspector.findTextInComponent("1");
 
         expect(text.toPlainText(), "https://www.google.com");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
-              start: 0,
-              end: text.length - 1,
-            ),
-          },
-        );
+        expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
+          AttributionSpan(
+            attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
+            start: 0,
+            end: text.length - 1,
+          ),
+        });
 
         // Ensure we added a new empty line.
         expect(textContext.document.nodeCount, 2);
@@ -311,13 +295,15 @@ void main() {
         expect((textContext.document.getNodeAt(1)! as ParagraphNode).text.toPlainText(), "");
       });
 
-      testWidgetsOnIos('when pressing the newline button on the software keyboard at the middle of a paragraph',
-          (tester) async {
-        final textContext = await tester //
-            .createDocument()
-            .fromMarkdown('Before link after link')
-            .withInputSource(TextInputSource.ime)
-            .pump();
+      testWidgetsOnIos('when pressing the newline button on the software keyboard at the middle of a paragraph', (
+        tester,
+      ) async {
+        final textContext =
+            await tester //
+                .createDocument()
+                .fromMarkdown('Before link after link')
+                .withInputSource(TextInputSource.ime)
+                .pump();
 
         final nodeId = textContext.document.first.id;
 
@@ -332,10 +318,7 @@ void main() {
 
         expect(text.toPlainText(), "Before link https://www.google.comafter link");
         expect(
-          text.getAttributionSpansInRange(
-            attributionFilter: (attribution) => true,
-            range: const SpanRange(12, 34),
-          ),
+          text.getAttributionSpansInRange(attributionFilter: (attribution) => true, range: const SpanRange(12, 34)),
           isEmpty,
         );
 
@@ -348,16 +331,13 @@ void main() {
         text = SuperEditorInspector.findTextInComponent(nodeId);
 
         expect(text.toPlainText(), "Before link https://www.google.com");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
-              start: 12,
-              end: text.length - 1,
-            ),
-          },
-        );
+        expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
+          AttributionSpan(
+            attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
+            start: 12,
+            end: text.length - 1,
+          ),
+        });
 
         // Ensure we split the paragraph.
         expect(textContext.document.nodeCount, 2);
@@ -366,11 +346,12 @@ void main() {
       });
 
       testWidgetsOnAllPlatforms('when pressing ENTER at the end of a list item', (tester) async {
-        final textContext = await tester //
-            .createDocument()
-            .fromMarkdown('* Item')
-            .withInputSource(TextInputSource.ime)
-            .pump();
+        final textContext =
+            await tester //
+                .createDocument()
+                .fromMarkdown('* Item')
+                .withInputSource(TextInputSource.ime)
+                .pump();
 
         final nodeId = textContext.document.first.id;
 
@@ -399,16 +380,13 @@ void main() {
         text = SuperEditorInspector.findTextInComponent(nodeId);
 
         expect(text.toPlainText(), "Item https://www.google.com");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
-              start: 5,
-              end: text.length - 1,
-            ),
-          },
-        );
+        expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
+          AttributionSpan(
+            attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
+            start: 5,
+            end: text.length - 1,
+          ),
+        });
 
         // Ensure we added a new empty list item.
         expect(textContext.document.nodeCount, 2);
@@ -417,11 +395,12 @@ void main() {
       });
 
       testWidgetsOnAllPlatforms('when pressing ENTER at the middle of a list item', (tester) async {
-        final textContext = await tester //
-            .createDocument()
-            .fromMarkdown('* Before link after link')
-            .withInputSource(TextInputSource.ime)
-            .pump();
+        final textContext =
+            await tester //
+                .createDocument()
+                .fromMarkdown('* Before link after link')
+                .withInputSource(TextInputSource.ime)
+                .pump();
 
         final nodeId = textContext.document.first.id;
 
@@ -436,10 +415,7 @@ void main() {
 
         expect(text.toPlainText(), "Before link https://www.google.comafter link");
         expect(
-          text.getAttributionSpansInRange(
-            attributionFilter: (attribution) => true,
-            range: const SpanRange(12, 34),
-          ),
+          text.getAttributionSpansInRange(attributionFilter: (attribution) => true, range: const SpanRange(12, 34)),
           isEmpty,
         );
 
@@ -450,16 +426,13 @@ void main() {
         text = SuperEditorInspector.findTextInComponent(nodeId);
 
         expect(text.toPlainText(), "Before link https://www.google.com");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
-              start: 12,
-              end: text.length - 1,
-            ),
-          },
-        );
+        expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
+          AttributionSpan(
+            attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
+            start: 12,
+            end: text.length - 1,
+          ),
+        });
 
         // Ensure we split the list item.
         expect(textContext.document.nodeCount, 2);
@@ -467,13 +440,15 @@ void main() {
         expect((textContext.document.getNodeAt(1)! as ListItemNode).text.toPlainText(), "after link");
       });
 
-      testWidgetsOnAndroid('when pressing the newline button on the software keyboard at the end of a list item',
-          (tester) async {
-        final textContext = await tester //
-            .createDocument()
-            .fromMarkdown('* Item')
-            .withInputSource(TextInputSource.ime)
-            .pump();
+      testWidgetsOnAndroid('when pressing the newline button on the software keyboard at the end of a list item', (
+        tester,
+      ) async {
+        final textContext =
+            await tester //
+                .createDocument()
+                .fromMarkdown('* Item')
+                .withInputSource(TextInputSource.ime)
+                .pump();
 
         final nodeId = textContext.document.first.id;
 
@@ -503,16 +478,13 @@ void main() {
         text = SuperEditorInspector.findTextInComponent(nodeId);
 
         expect(text.toPlainText(), "Item https://www.google.com");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
-              start: 5,
-              end: text.length - 1,
-            ),
-          },
-        );
+        expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
+          AttributionSpan(
+            attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
+            start: 5,
+            end: text.length - 1,
+          ),
+        });
 
         // Ensure we added a new empty list item.
         expect(textContext.document.nodeCount, 2);
@@ -520,13 +492,15 @@ void main() {
         expect((textContext.document.getNodeAt(1)! as ListItemNode).text.toPlainText(), "");
       });
 
-      testWidgetsOnAndroid('when pressing the newline button on the software keyboard at the middle of a list item',
-          (tester) async {
-        final textContext = await tester //
-            .createDocument()
-            .fromMarkdown('* Before link after link')
-            .withInputSource(TextInputSource.ime)
-            .pump();
+      testWidgetsOnAndroid('when pressing the newline button on the software keyboard at the middle of a list item', (
+        tester,
+      ) async {
+        final textContext =
+            await tester //
+                .createDocument()
+                .fromMarkdown('* Before link after link')
+                .withInputSource(TextInputSource.ime)
+                .pump();
 
         final nodeId = textContext.document.first.id;
 
@@ -541,10 +515,7 @@ void main() {
 
         expect(text.toPlainText(), "Before link https://www.google.comafter link");
         expect(
-          text.getAttributionSpansInRange(
-            attributionFilter: (attribution) => true,
-            range: const SpanRange(12, 34),
-          ),
+          text.getAttributionSpansInRange(attributionFilter: (attribution) => true, range: const SpanRange(12, 34)),
           isEmpty,
         );
 
@@ -556,16 +527,13 @@ void main() {
         text = SuperEditorInspector.findTextInComponent(nodeId);
 
         expect(text.toPlainText(), "Before link https://www.google.com");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
-              start: 12,
-              end: text.length - 1,
-            ),
-          },
-        );
+        expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
+          AttributionSpan(
+            attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
+            start: 12,
+            end: text.length - 1,
+          ),
+        });
 
         // Ensure we split the list item.
         expect(textContext.document.nodeCount, 2);
@@ -573,13 +541,15 @@ void main() {
         expect((textContext.document.getNodeAt(1)! as ListItemNode).text.toPlainText(), "after link");
       });
 
-      testWidgetsOnIos('when pressing the newline button on the software keyboard at the end of a list item',
-          (tester) async {
-        final textContext = await tester //
-            .createDocument()
-            .fromMarkdown('* Item')
-            .withInputSource(TextInputSource.ime)
-            .pump();
+      testWidgetsOnIos('when pressing the newline button on the software keyboard at the end of a list item', (
+        tester,
+      ) async {
+        final textContext =
+            await tester //
+                .createDocument()
+                .fromMarkdown('* Item')
+                .withInputSource(TextInputSource.ime)
+                .pump();
 
         final nodeId = textContext.document.first.id;
 
@@ -610,16 +580,13 @@ void main() {
         text = SuperEditorInspector.findTextInComponent(nodeId);
 
         expect(text.toPlainText(), "Item https://www.google.com");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
-              start: 5,
-              end: text.length - 1,
-            ),
-          },
-        );
+        expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
+          AttributionSpan(
+            attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
+            start: 5,
+            end: text.length - 1,
+          ),
+        });
 
         // Ensure we added a new empty list item.
         expect(textContext.document.nodeCount, 2);
@@ -627,13 +594,15 @@ void main() {
         expect((textContext.document.getNodeAt(1)! as ListItemNode).text.toPlainText(), "");
       });
 
-      testWidgetsOnIos('when pressing the newline button on the software keyboard at the middle of a list item',
-          (tester) async {
-        final textContext = await tester //
-            .createDocument()
-            .fromMarkdown('* Before link after link')
-            .withInputSource(TextInputSource.ime)
-            .pump();
+      testWidgetsOnIos('when pressing the newline button on the software keyboard at the middle of a list item', (
+        tester,
+      ) async {
+        final textContext =
+            await tester //
+                .createDocument()
+                .fromMarkdown('* Before link after link')
+                .withInputSource(TextInputSource.ime)
+                .pump();
 
         final nodeId = textContext.document.first.id;
 
@@ -648,10 +617,7 @@ void main() {
 
         expect(text.toPlainText(), "Before link https://www.google.comafter link");
         expect(
-          text.getAttributionSpansInRange(
-            attributionFilter: (attribution) => true,
-            range: const SpanRange(12, 34),
-          ),
+          text.getAttributionSpansInRange(attributionFilter: (attribution) => true, range: const SpanRange(12, 34)),
           isEmpty,
         );
 
@@ -664,16 +630,13 @@ void main() {
         text = SuperEditorInspector.findTextInComponent(nodeId);
 
         expect(text.toPlainText(), "Before link https://www.google.com");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
-              start: 12,
-              end: text.length - 1,
-            ),
-          },
-        );
+        expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
+          AttributionSpan(
+            attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
+            start: 12,
+            end: text.length - 1,
+          ),
+        });
 
         // Ensure we split the list item.
         expect(textContext.document.nodeCount, 2);
@@ -683,9 +646,7 @@ void main() {
 
       testWidgetsOnAllPlatforms('when pressing ENTER at the end of a task', (tester) async {
         final document = MutableDocument(
-          nodes: [
-            TaskNode(id: "1", text: AttributedText("This is a task "), isComplete: false),
-          ],
+          nodes: [TaskNode(id: "1", text: AttributedText("This is a task "), isComplete: false)],
         );
         final composer = MutableDocumentComposer();
         final editor = createDefaultDocumentEditor(document: document, composer: composer);
@@ -694,10 +655,7 @@ void main() {
             home: Scaffold(
               body: SuperEditor(
                 editor: editor,
-                componentBuilders: [
-                  TaskComponentBuilder(editor),
-                  ...defaultComponentBuilders,
-                ],
+                componentBuilders: [TaskComponentBuilder(editor), ...defaultComponentBuilders],
               ),
             ),
           ),
@@ -728,16 +686,13 @@ void main() {
         text = document.first.asTask.text;
 
         expect(text.toPlainText(), "This is a task https://www.google.com");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
-              start: 15,
-              end: text.length - 1,
-            ),
-          },
-        );
+        expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
+          AttributionSpan(
+            attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
+            start: 15,
+            end: text.length - 1,
+          ),
+        });
 
         // Ensure we added a new empty task.
         expect(document.nodeCount, 2);
@@ -747,9 +702,7 @@ void main() {
 
       testWidgetsOnAllPlatforms('when pressing ENTER at the middle of a task', (tester) async {
         final document = MutableDocument(
-          nodes: [
-            TaskNode(id: "1", text: AttributedText("Before link after link"), isComplete: false),
-          ],
+          nodes: [TaskNode(id: "1", text: AttributedText("Before link after link"), isComplete: false)],
         );
         final composer = MutableDocumentComposer();
         final editor = createDefaultDocumentEditor(document: document, composer: composer);
@@ -758,10 +711,7 @@ void main() {
             home: Scaffold(
               body: SuperEditor(
                 editor: editor,
-                componentBuilders: [
-                  TaskComponentBuilder(editor),
-                  ...defaultComponentBuilders,
-                ],
+                componentBuilders: [TaskComponentBuilder(editor), ...defaultComponentBuilders],
               ),
             ),
           ),
@@ -778,10 +728,7 @@ void main() {
 
         expect(text.toPlainText(), "Before link https://www.google.comafter link");
         expect(
-          text.getAttributionSpansInRange(
-            attributionFilter: (attribution) => true,
-            range: const SpanRange(12, 34),
-          ),
+          text.getAttributionSpansInRange(attributionFilter: (attribution) => true, range: const SpanRange(12, 34)),
           isEmpty,
         );
 
@@ -792,16 +739,13 @@ void main() {
         text = document.first.asTask.text;
 
         expect(text.toPlainText(), "Before link https://www.google.com");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
-              start: 12,
-              end: text.length - 1,
-            ),
-          },
-        );
+        expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
+          AttributionSpan(
+            attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
+            start: 12,
+            end: text.length - 1,
+          ),
+        });
 
         // Ensure we split the task
         expect(document.nodeCount, 2);
@@ -809,12 +753,11 @@ void main() {
         expect((document.getNodeAt(1)! as TaskNode).text.toPlainText(), "after link");
       });
 
-      testWidgetsOnAndroid('when pressing the newline button on the software keyboard at the end of a task',
-          (tester) async {
+      testWidgetsOnAndroid('when pressing the newline button on the software keyboard at the end of a task', (
+        tester,
+      ) async {
         final document = MutableDocument(
-          nodes: [
-            TaskNode(id: "1", text: AttributedText("This is a task "), isComplete: false),
-          ],
+          nodes: [TaskNode(id: "1", text: AttributedText("This is a task "), isComplete: false)],
         );
         final composer = MutableDocumentComposer();
         final editor = createDefaultDocumentEditor(document: document, composer: composer);
@@ -823,10 +766,7 @@ void main() {
             home: Scaffold(
               body: SuperEditor(
                 editor: editor,
-                componentBuilders: [
-                  TaskComponentBuilder(editor),
-                  ...defaultComponentBuilders,
-                ],
+                componentBuilders: [TaskComponentBuilder(editor), ...defaultComponentBuilders],
               ),
             ),
           ),
@@ -858,16 +798,13 @@ void main() {
         text = document.first.asTask.text;
 
         expect(text.toPlainText(), "This is a task https://www.google.com");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
-              start: 15,
-              end: text.length - 1,
-            ),
-          },
-        );
+        expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
+          AttributionSpan(
+            attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
+            start: 15,
+            end: text.length - 1,
+          ),
+        });
 
         // Ensure we added a new empty task.
         expect(document.nodeCount, 2);
@@ -875,12 +812,11 @@ void main() {
         expect((document.getNodeAt(1)! as TaskNode).text.toPlainText(), "");
       });
 
-      testWidgetsOnAndroid('when pressing the newline button on the software keyboard at the middle of a task',
-          (tester) async {
+      testWidgetsOnAndroid('when pressing the newline button on the software keyboard at the middle of a task', (
+        tester,
+      ) async {
         final document = MutableDocument(
-          nodes: [
-            TaskNode(id: "1", text: AttributedText("Before link after link"), isComplete: false),
-          ],
+          nodes: [TaskNode(id: "1", text: AttributedText("Before link after link"), isComplete: false)],
         );
         final composer = MutableDocumentComposer();
         final editor = createDefaultDocumentEditor(document: document, composer: composer);
@@ -889,10 +825,7 @@ void main() {
             home: Scaffold(
               body: SuperEditor(
                 editor: editor,
-                componentBuilders: [
-                  TaskComponentBuilder(editor),
-                  ...defaultComponentBuilders,
-                ],
+                componentBuilders: [TaskComponentBuilder(editor), ...defaultComponentBuilders],
               ),
             ),
           ),
@@ -909,10 +842,7 @@ void main() {
 
         expect(text.toPlainText(), "Before link https://www.google.comafter link");
         expect(
-          text.getAttributionSpansInRange(
-            attributionFilter: (attribution) => true,
-            range: const SpanRange(12, 34),
-          ),
+          text.getAttributionSpansInRange(attributionFilter: (attribution) => true, range: const SpanRange(12, 34)),
           isEmpty,
         );
 
@@ -924,16 +854,13 @@ void main() {
         text = document.first.asTask.text;
 
         expect(text.toPlainText(), "Before link https://www.google.com");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
-              start: 12,
-              end: text.length - 1,
-            ),
-          },
-        );
+        expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
+          AttributionSpan(
+            attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
+            start: 12,
+            end: text.length - 1,
+          ),
+        });
 
         // Ensure we split the task.
         expect(document.nodeCount, 2);
@@ -941,12 +868,11 @@ void main() {
         expect((document.getNodeAt(1)! as TaskNode).text.toPlainText(), "after link");
       });
 
-      testWidgetsOnIos('when pressing the newline button on the software keyboard at the end of a task',
-          (tester) async {
+      testWidgetsOnIos('when pressing the newline button on the software keyboard at the end of a task', (
+        tester,
+      ) async {
         final document = MutableDocument(
-          nodes: [
-            TaskNode(id: "1", text: AttributedText("This is a task "), isComplete: false),
-          ],
+          nodes: [TaskNode(id: "1", text: AttributedText("This is a task "), isComplete: false)],
         );
         final composer = MutableDocumentComposer();
         final editor = createDefaultDocumentEditor(document: document, composer: composer);
@@ -955,10 +881,7 @@ void main() {
             home: Scaffold(
               body: SuperEditor(
                 editor: editor,
-                componentBuilders: [
-                  TaskComponentBuilder(editor),
-                  ...defaultComponentBuilders,
-                ],
+                componentBuilders: [TaskComponentBuilder(editor), ...defaultComponentBuilders],
               ),
             ),
           ),
@@ -991,16 +914,13 @@ void main() {
         text = document.first.asTask.text;
 
         expect(text.toPlainText(), "This is a task https://www.google.com");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
-              start: 15,
-              end: text.length - 1,
-            ),
-          },
-        );
+        expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
+          AttributionSpan(
+            attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
+            start: 15,
+            end: text.length - 1,
+          ),
+        });
 
         // Ensure we added a new empty task.
         expect(document.nodeCount, 2);
@@ -1008,12 +928,11 @@ void main() {
         expect((document.getNodeAt(1)! as TaskNode).text.toPlainText(), "");
       });
 
-      testWidgetsOnIos('when pressing the newline button on the software keyboard at the middle of a task',
-          (tester) async {
+      testWidgetsOnIos('when pressing the newline button on the software keyboard at the middle of a task', (
+        tester,
+      ) async {
         final document = MutableDocument(
-          nodes: [
-            TaskNode(id: "1", text: AttributedText("Before link after link"), isComplete: false),
-          ],
+          nodes: [TaskNode(id: "1", text: AttributedText("Before link after link"), isComplete: false)],
         );
         final composer = MutableDocumentComposer();
         final editor = createDefaultDocumentEditor(document: document, composer: composer);
@@ -1022,10 +941,7 @@ void main() {
             home: Scaffold(
               body: SuperEditor(
                 editor: editor,
-                componentBuilders: [
-                  TaskComponentBuilder(editor),
-                  ...defaultComponentBuilders,
-                ],
+                componentBuilders: [TaskComponentBuilder(editor), ...defaultComponentBuilders],
               ),
             ),
           ),
@@ -1042,10 +958,7 @@ void main() {
 
         expect(text.toPlainText(), "Before link https://www.google.comafter link");
         expect(
-          text.getAttributionSpansInRange(
-            attributionFilter: (attribution) => true,
-            range: const SpanRange(12, 34),
-          ),
+          text.getAttributionSpansInRange(attributionFilter: (attribution) => true, range: const SpanRange(12, 34)),
           isEmpty,
         );
 
@@ -1058,16 +971,13 @@ void main() {
         text = document.first.asTask.text;
 
         expect(text.toPlainText(), "Before link https://www.google.com");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
-              start: 12,
-              end: text.length - 1,
-            ),
-          },
-        );
+        expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
+          AttributionSpan(
+            attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
+            start: 12,
+            end: text.length - 1,
+          ),
+        });
 
         // Ensure we split the task.
         expect(document.nodeCount, 2);
@@ -1097,16 +1007,9 @@ void main() {
         var text = SuperEditorInspector.findTextInComponent("1");
 
         expect(text.toPlainText(), "www.google.com ");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
-              start: 0,
-              end: 13,
-            ),
-          },
-        );
+        expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
+          AttributionSpan(attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")), start: 0, end: 13),
+        });
       });
 
       testWidgetsOnAllPlatforms('recognizes an app URL', (tester) async {
@@ -1129,16 +1032,13 @@ void main() {
         var text = SuperEditorInspector.findTextInComponent("1");
 
         expect(text.toPlainText(), "obsidian://open?vault=MyVault ");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("obsidian://open?vault=MyVault")),
-              start: 0,
-              end: 28,
-            ),
-          },
-        );
+        expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
+          AttributionSpan(
+            attribution: LinkAttribution.fromUri(Uri.parse("obsidian://open?vault=MyVault")),
+            start: 0,
+            end: 28,
+          ),
+        });
       });
 
       testWidgetsOnAllPlatforms('recognizes a URL without https and www and converts it to a link', (tester) async {
@@ -1173,16 +1073,9 @@ void main() {
         text = SuperEditorInspector.findTextInComponent("1");
 
         expect(text.toPlainText(), "google.com ");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("https://google.com")),
-              start: 0,
-              end: 9,
-            ),
-          },
-        );
+        expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
+          AttributionSpan(attribution: LinkAttribution.fromUri(Uri.parse("https://google.com")), start: 0, end: 9),
+        });
       });
 
       testWidgetsOnDesktop('recognizes a pasted URL with www and converts it to a link', (tester) async {
@@ -1208,16 +1101,9 @@ void main() {
         // Ensure the URL is linkified.
         final text = SuperEditorInspector.findTextInComponent("1");
         expect(text.toPlainText(), "Hello https://www.google.com world");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
-              start: 6,
-              end: 27,
-            ),
-          },
-        );
+        expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
+          AttributionSpan(attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")), start: 6, end: 27),
+        });
       });
 
       testWidgetsOnDesktop('recognizes a pasted URL and inserts https scheme if it is missing', (tester) async {
@@ -1244,16 +1130,9 @@ void main() {
         var text = SuperEditorInspector.findTextInComponent("1");
 
         expect(text.toPlainText(), "Hello www.google.com world");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
-              start: 6,
-              end: 19,
-            ),
-          },
-        );
+        expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
+          AttributionSpan(attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")), start: 6, end: 19),
+        });
       });
 
       testWidgetsOnDesktop('recognizes a pasted URL without https or www and converts it to a link', (tester) async {
@@ -1279,16 +1158,9 @@ void main() {
         // Ensure the URL is linkified.
         final text = SuperEditorInspector.findTextInComponent("1");
         expect(text.toPlainText(), "Hello google.com world");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("https://google.com")),
-              start: 6,
-              end: 15,
-            ),
-          },
-        );
+        expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
+          AttributionSpan(attribution: LinkAttribution.fromUri(Uri.parse("https://google.com")), start: 6, end: 15),
+        });
       });
 
       testWidgetsOnDesktop('recognizes multiple pasted URLs', (tester) async {
@@ -1320,36 +1192,25 @@ void main() {
           "Some URLS: google.com https://google.com somebody@gmail.com mailto:somebody@gmail.com obsidian://open?vault=my-vault",
         );
 
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("https://google.com")),
-              start: 11,
-              end: 20,
-            ),
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("https://google.com")),
-              start: 22,
-              end: 39,
-            ),
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("mailto:somebody@gmail.com")),
-              start: 41,
-              end: 58,
-            ),
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("mailto:somebody@gmail.com")),
-              start: 60,
-              end: 84,
-            ),
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("obsidian://open?vault=my-vault")),
-              start: 86,
-              end: 115,
-            ),
-          },
-        );
+        expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
+          AttributionSpan(attribution: LinkAttribution.fromUri(Uri.parse("https://google.com")), start: 11, end: 20),
+          AttributionSpan(attribution: LinkAttribution.fromUri(Uri.parse("https://google.com")), start: 22, end: 39),
+          AttributionSpan(
+            attribution: LinkAttribution.fromUri(Uri.parse("mailto:somebody@gmail.com")),
+            start: 41,
+            end: 58,
+          ),
+          AttributionSpan(
+            attribution: LinkAttribution.fromUri(Uri.parse("mailto:somebody@gmail.com")),
+            start: 60,
+            end: 84,
+          ),
+          AttributionSpan(
+            attribution: LinkAttribution.fromUri(Uri.parse("obsidian://open?vault=my-vault")),
+            start: 86,
+            end: 115,
+          ),
+        });
       });
     });
 
@@ -1374,16 +1235,9 @@ void main() {
         var text = SuperEditorInspector.findTextInComponent("1");
 
         expect(text.toPlainText(), "me@gmail.com ");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromEmail("me@gmail.com"),
-              start: 0,
-              end: 11,
-            ),
-          },
-        );
+        expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
+          AttributionSpan(attribution: LinkAttribution.fromEmail("me@gmail.com"), start: 0, end: 11),
+        });
       });
     });
 
@@ -1404,21 +1258,10 @@ void main() {
       final text = SuperEditorInspector.findTextInComponent("1");
 
       expect(text.toPlainText(), "https://www.google.com and https://flutter.dev ");
-      expect(
-        text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-        {
-          AttributionSpan(
-            attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")),
-            start: 0,
-            end: 21,
-          ),
-          AttributionSpan(
-            attribution: LinkAttribution.fromUri(Uri.parse("https://flutter.dev")),
-            start: 27,
-            end: 45,
-          ),
-        },
-      );
+      expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
+        AttributionSpan(attribution: LinkAttribution.fromUri(Uri.parse("https://www.google.com")), start: 0, end: 21),
+        AttributionSpan(attribution: LinkAttribution.fromUri(Uri.parse("https://flutter.dev")), start: 27, end: 45),
+      });
     });
 
     group('does not expand the link when inserting before the link', () {
@@ -1438,10 +1281,7 @@ void main() {
         await tester.typeKeyboardText('Go to ');
 
         // Ensure that the link is unchanged.
-        expect(
-          SuperEditorInspector.findDocument(),
-          equalsMarkdown("Go to [www.google.com](www.google.com)"),
-        );
+        expect(SuperEditorInspector.findDocument(), equalsMarkdown("Go to [www.google.com](www.google.com)"));
       });
 
       testWidgetsOnAllPlatforms('when configured to update links on change', (tester) async {
@@ -1461,10 +1301,7 @@ void main() {
         await tester.typeKeyboardText('Go to ');
 
         // Ensure that the link is unchanged.
-        expect(
-          SuperEditorInspector.findDocument(),
-          equalsMarkdown("Go to [www.google.com](www.google.com)"),
-        );
+        expect(SuperEditorInspector.findDocument(), equalsMarkdown("Go to [www.google.com](www.google.com)"));
       });
 
       testWidgetsOnAllPlatforms('when configured to remove links on change', (tester) async {
@@ -1484,10 +1321,7 @@ void main() {
         await tester.typeKeyboardText('Go to ');
 
         // Ensure that the link is unchanged.
-        expect(
-          SuperEditorInspector.findDocument(),
-          equalsMarkdown("Go to [www.google.com](www.google.com)"),
-        );
+        expect(SuperEditorInspector.findDocument(), equalsMarkdown("Go to [www.google.com](www.google.com)"));
       });
     });
 
@@ -1582,16 +1416,13 @@ void main() {
         var text = SuperEditorInspector.findTextInComponent(nodeId);
 
         expect(text.toPlainText(), "www.googoooole.com");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("www.google.com")),
-              start: 0,
-              end: text.length - 1,
-            ),
-          },
-        );
+        expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
+          AttributionSpan(
+            attribution: LinkAttribution.fromUri(Uri.parse("www.google.com")),
+            start: 0,
+            end: text.length - 1,
+          ),
+        });
       });
 
       testWidgetsOnAllPlatforms('updating the attribution', (tester) async {
@@ -1614,16 +1445,9 @@ void main() {
         // Ensure the characters were inserted and the link was updated.
         final text = SuperEditorInspector.findTextInComponent(doc.first.id);
         expect(text.toPlainText(), "www.googoooole.com");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution("${scheme}www.googoooole.com"),
-              start: 0,
-              end: text.length - 1,
-            ),
-          },
-        );
+        expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
+          AttributionSpan(attribution: LinkAttribution("${scheme}www.googoooole.com"), start: 0, end: text.length - 1),
+        });
       }, variant: _urlSchemeVariant);
 
       testWidgetsOnAllPlatforms('removing the attribution', (tester) async {
@@ -1674,16 +1498,13 @@ void main() {
         var text = SuperEditorInspector.findTextInComponent(nodeId);
 
         expect(text.toPlainText(), "google.com");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("${scheme}www.google.com")),
-              start: 0,
-              end: text.length - 1,
-            ),
-          },
-        );
+        expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
+          AttributionSpan(
+            attribution: LinkAttribution.fromUri(Uri.parse("${scheme}www.google.com")),
+            start: 0,
+            end: text.length - 1,
+          ),
+        });
       }, variant: _urlSchemeVariant);
 
       testWidgetsOnAllPlatforms('updating the attribution', (tester) async {
@@ -1712,16 +1533,9 @@ void main() {
         // scheme.
         final text = SuperEditorInspector.findTextInComponent(doc.first.id);
         expect(text.toPlainText(), "google.com");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution("${scheme}google.com"),
-              start: 0,
-              end: text.length - 1,
-            ),
-          },
-        );
+        expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
+          AttributionSpan(attribution: LinkAttribution("${scheme}google.com"), start: 0, end: text.length - 1),
+        });
 
         // Delete 9 more characters, leaving only the last "m".
         await tester.pressDelete();
@@ -1737,10 +1551,7 @@ void main() {
         // Ensure the attribution was updated.
         final textAfter = SuperEditorInspector.findTextInComponent(doc.first.id);
         expect(textAfter.toPlainText(), "m");
-        expect(
-          (textAfter.getAllAttributionsAt(0).first as LinkAttribution).plainTextUri.toString(),
-          "${scheme}m",
-        );
+        expect((textAfter.getAllAttributionsAt(0).first as LinkAttribution).plainTextUri.toString(), "${scheme}m");
 
         // Press delete to remove the last character.
         await tester.pressDelete();
@@ -1799,16 +1610,13 @@ void main() {
         // Ensure the characters were deleted and the whole link is still attributed.
         final text = SuperEditorInspector.findTextInComponent(doc.first.id);
         expect(text.toPlainText(), "www.g.com");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("${scheme}www.google.com")),
-              start: 0,
-              end: text.length - 1,
-            ),
-          },
-        );
+        expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
+          AttributionSpan(
+            attribution: LinkAttribution.fromUri(Uri.parse("${scheme}www.google.com")),
+            start: 0,
+            end: text.length - 1,
+          ),
+        });
       }, variant: _urlSchemeVariant);
 
       testWidgetsOnAllPlatforms('updating the attribution', (tester) async {
@@ -1839,16 +1647,13 @@ void main() {
         // Ensure the text and the link were updated.
         var text = SuperEditorInspector.findTextInComponent(doc.first.id);
         expect(text.toPlainText(), "www.duckduckgo.com");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("${scheme}www.duckduckgo.com")),
-              start: 0,
-              end: text.length - 1,
-            ),
-          },
-        );
+        expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
+          AttributionSpan(
+            attribution: LinkAttribution.fromUri(Uri.parse("${scheme}www.duckduckgo.com")),
+            start: 0,
+            end: text.length - 1,
+          ),
+        });
       }, variant: _urlSchemeVariant);
 
       testWidgetsOnAllPlatforms('removing the attribution', (tester) async {
@@ -1899,16 +1704,13 @@ void main() {
         var text = SuperEditorInspector.findTextInComponent(nodeId);
 
         expect(text.toPlainText(), "www.google");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("${scheme}www.google.com")),
-              start: 0,
-              end: text.length - 1,
-            ),
-          },
-        );
+        expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
+          AttributionSpan(
+            attribution: LinkAttribution.fromUri(Uri.parse("${scheme}www.google.com")),
+            start: 0,
+            end: text.length - 1,
+          ),
+        });
       }, variant: _urlSchemeVariant);
 
       testWidgetsOnAllPlatforms('updating the attribution', (tester) async {
@@ -1932,16 +1734,13 @@ void main() {
         // Ensure the characters were deleted and the link was updated.
         final text = SuperEditorInspector.findTextInComponent(doc.first.id);
         expect(text.toPlainText(), "www.google.c");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("${scheme}www.google.c")),
-              start: 0,
-              end: text.length - 1,
-            ),
-          },
-        );
+        expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
+          AttributionSpan(
+            attribution: LinkAttribution.fromUri(Uri.parse("${scheme}www.google.c")),
+            start: 0,
+            end: text.length - 1,
+          ),
+        });
       }, variant: _urlSchemeVariant);
 
       testWidgetsOnAllPlatforms('removing the attribution', (tester) async {
@@ -1987,16 +1786,13 @@ void main() {
         // Ensure the text and the link were updated.
         final text = SuperEditorInspector.findTextInComponent(doc.first.id);
         expect(text.toPlainText(), "www.duckduckgo.com");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("${scheme}www.google.com")),
-              start: 0,
-              end: text.length - 1,
-            ),
-          },
-        );
+        expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
+          AttributionSpan(
+            attribution: LinkAttribution.fromUri(Uri.parse("${scheme}www.google.com")),
+            start: 0,
+            end: text.length - 1,
+          ),
+        });
       }, variant: _urlSchemeVariant);
 
       testWidgetsOnAllPlatforms('updating the attribution', (tester) async {
@@ -2019,16 +1815,13 @@ void main() {
         // Ensure the text and the link were updated.
         final text = SuperEditorInspector.findTextInComponent(doc.first.id);
         expect(text.toPlainText(), "www.duckduckgo.com");
-        expect(
-          text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            AttributionSpan(
-              attribution: LinkAttribution.fromUri(Uri.parse("${scheme}www.duckduckgo.com")),
-              start: 0,
-              end: text.length - 1,
-            ),
-          },
-        );
+        expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
+          AttributionSpan(
+            attribution: LinkAttribution.fromUri(Uri.parse("${scheme}www.duckduckgo.com")),
+            start: 0,
+            end: text.length - 1,
+          ),
+        });
       }, variant: _urlSchemeVariant);
 
       testWidgetsOnAllPlatforms('removing the attribution', (tester) async {
@@ -2078,21 +1871,12 @@ void main() {
       var text = SuperEditorInspector.findTextInComponent(nodeId);
 
       expect(text.toPlainText(), "www.google.co hello");
-      expect(
-        text.getAttributionSpansByFilter((a) => a is LinkAttribution),
-        {
-          AttributionSpan(
-            attribution: LinkAttribution.fromUri(Uri.parse("${scheme}www.google.com")),
-            start: 0,
-            end: 12,
-          ),
-        },
-      );
+      expect(text.getAttributionSpansByFilter((a) => a is LinkAttribution), {
+        AttributionSpan(attribution: LinkAttribution.fromUri(Uri.parse("${scheme}www.google.com")), start: 0, end: 12),
+      });
       expect(
         text.hasAttributionsThroughout(
-          attributions: {
-            LinkAttribution.fromUri(Uri.parse("${scheme}www.google.com")),
-          },
+          attributions: {LinkAttribution.fromUri(Uri.parse("${scheme}www.google.com"))},
           range: SpanRange(13, text.length - 1),
         ),
         isFalse,
@@ -2221,10 +2005,7 @@ void main() {
       expect(
         SuperEditorInspector.findDocumentSelection(),
         const DocumentSelection.collapsed(
-          position: DocumentPosition(
-            nodeId: "1",
-            nodePosition: TextNodePosition(offset: 31),
-          ),
+          position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 31)),
         ),
       );
     });

@@ -78,18 +78,11 @@ void main() {
 }
 
 /// Pumps a [SuperTextField] with the given attributed [text].
-Future<void> _pumpTestApp(
-  WidgetTester tester, {
-  required AttributedText text,
-}) async {
+Future<void> _pumpTestApp(WidgetTester tester, {required AttributedText text}) async {
   await tester.pumpWidget(
     MaterialApp(
       home: Scaffold(
-        body: SuperTextField(
-          textController: AttributedTextEditingController(
-            text: text,
-          ),
-        ),
+        body: SuperTextField(textController: AttributedTextEditingController(text: text)),
       ),
     ),
   );

@@ -32,10 +32,7 @@ void main() {
       expect(
         SuperEditorInspector.findDocumentSelection(),
         const DocumentSelection.collapsed(
-          position: DocumentPosition(
-            nodeId: "2",
-            nodePosition: UpstreamDownstreamNodePosition.downstream(),
-          ),
+          position: DocumentPosition(nodeId: "2", nodePosition: UpstreamDownstreamNodePosition.downstream()),
         ),
       );
     });
@@ -56,10 +53,7 @@ void main() {
             nodeId: "1",
             nodePosition: TextNodePosition(offset: 37, affinity: TextAffinity.upstream),
           ),
-          extent: DocumentPosition(
-            nodeId: "2",
-            nodePosition: UpstreamDownstreamNodePosition.downstream(),
-          ),
+          extent: DocumentPosition(nodeId: "2", nodePosition: UpstreamDownstreamNodePosition.downstream()),
         ),
       );
     });
@@ -74,10 +68,7 @@ void main() {
       expect(
         SuperEditorInspector.findDocumentSelection(),
         const DocumentSelection.collapsed(
-          position: DocumentPosition(
-            nodeId: "2",
-            nodePosition: UpstreamDownstreamNodePosition.upstream(),
-          ),
+          position: DocumentPosition(nodeId: "2", nodePosition: UpstreamDownstreamNodePosition.upstream()),
         ),
       );
     });
@@ -94,14 +85,8 @@ void main() {
       expect(
         SuperEditorInspector.findDocumentSelection(),
         const DocumentSelection(
-          base: DocumentPosition(
-            nodeId: "3",
-            nodePosition: TextNodePosition(offset: 0),
-          ),
-          extent: DocumentPosition(
-            nodeId: "2",
-            nodePosition: UpstreamDownstreamNodePosition.upstream(),
-          ),
+          base: DocumentPosition(nodeId: "3", nodePosition: TextNodePosition(offset: 0)),
+          extent: DocumentPosition(nodeId: "2", nodePosition: UpstreamDownstreamNodePosition.upstream()),
         ),
       );
     });
@@ -110,20 +95,14 @@ void main() {
       await _pumpEditorWithSelectableHrs(tester);
 
       await tester.tapAtDocumentPosition(
-        const DocumentPosition(
-          nodeId: "2",
-          nodePosition: UpstreamDownstreamNodePosition.upstream(),
-        ),
+        const DocumentPosition(nodeId: "2", nodePosition: UpstreamDownstreamNodePosition.upstream()),
       );
       await tester.pumpAndSettle();
 
       expect(
         SuperEditorInspector.findDocumentSelection(),
         const DocumentSelection.collapsed(
-          position: DocumentPosition(
-            nodeId: "2",
-            nodePosition: UpstreamDownstreamNodePosition.upstream(),
-          ),
+          position: DocumentPosition(nodeId: "2", nodePosition: UpstreamDownstreamNodePosition.upstream()),
         ),
       );
     });
@@ -138,10 +117,7 @@ void main() {
       expect(
         SuperEditorInspector.findDocumentSelection(),
         const DocumentSelection.collapsed(
-          position: DocumentPosition(
-            nodeId: "2",
-            nodePosition: UpstreamDownstreamNodePosition.upstream(),
-          ),
+          position: DocumentPosition(nodeId: "2", nodePosition: UpstreamDownstreamNodePosition.upstream()),
         ),
       );
     });
@@ -156,10 +132,7 @@ void main() {
       expect(
         SuperEditorInspector.findDocumentSelection(),
         const DocumentSelection.collapsed(
-          position: DocumentPosition(
-            nodeId: "2",
-            nodePosition: UpstreamDownstreamNodePosition.downstream(),
-          ),
+          position: DocumentPosition(nodeId: "2", nodePosition: UpstreamDownstreamNodePosition.downstream()),
         ),
       );
     });
@@ -168,18 +141,16 @@ void main() {
       await tester //
           .createDocument()
           .withCustomContent(
-            MutableDocument(nodes: [
-              ParagraphNode(id: '1', text: AttributedText('Paragraph 1')),
-              _ButtonNode(id: '2'),
-              ParagraphNode(id: '3', text: AttributedText('Paragraph 3')),
-            ]),
+            MutableDocument(
+              nodes: [
+                ParagraphNode(id: '1', text: AttributedText('Paragraph 1')),
+                _ButtonNode(id: '2'),
+                ParagraphNode(id: '3', text: AttributedText('Paragraph 3')),
+              ],
+            ),
           )
-          .withAddedComponents(
-            [const _ButtonComponentBuilder()],
-          )
-          .withSelectionStyles(
-            const SelectionStyles(selectionColor: Colors.red),
-          )
+          .withAddedComponents([const _ButtonComponentBuilder()])
+          .withSelectionStyles(const SelectionStyles(selectionColor: Colors.red))
           .pump();
 
       // Drag to select all content.
@@ -189,10 +160,7 @@ void main() {
       );
 
       // Ensure the selection color from the selection style was applied.
-      expect(
-        tester.widget<SelectableBox>(find.byType(SelectableBox)).selectionColor,
-        Colors.red,
-      );
+      expect(tester.widget<SelectableBox>(find.byType(SelectableBox)).selectionColor, Colors.red);
     });
   });
 
@@ -361,10 +329,7 @@ void main() {
       expect(
         SuperEditorInspector.findDocumentSelection(),
         const DocumentSelection.collapsed(
-          position: DocumentPosition(
-            nodeId: "3",
-            nodePosition: TextNodePosition(offset: 0),
-          ),
+          position: DocumentPosition(nodeId: "3", nodePosition: TextNodePosition(offset: 0)),
         ),
       );
       expect(
@@ -376,17 +341,14 @@ void main() {
       );
     });
 
-    testWidgetsOnAllPlatforms("rejects selection when user taps on it and it's the only node in document",
-        (tester) async {
-      await _pumpEditorWithUnselectableHrs(
-        tester,
-        customDocument: singleBlockDoc(),
-      );
+    testWidgetsOnAllPlatforms("rejects selection when user taps on it and it's the only node in document", (
+      tester,
+    ) async {
+      await _pumpEditorWithUnselectableHrs(tester, customDocument: singleBlockDoc());
 
-      await tester.tapAtDocumentPosition(const DocumentPosition(
-        nodeId: "1",
-        nodePosition: UpstreamDownstreamNodePosition.upstream(),
-      ));
+      await tester.tapAtDocumentPosition(
+        const DocumentPosition(nodeId: "1", nodePosition: UpstreamDownstreamNodePosition.upstream()),
+      );
       await tester.pumpAndSettle();
 
       expect(SuperEditorInspector.findDocumentSelection(), isNull);
@@ -395,19 +357,15 @@ void main() {
     testWidgetsOnAllPlatforms("selects nearest selectable node when user taps on it", (tester) async {
       await _pumpEditorWithUnselectableHrs(tester);
 
-      await tester.tapAtDocumentPosition(const DocumentPosition(
-        nodeId: "2",
-        nodePosition: UpstreamDownstreamNodePosition.upstream(),
-      ));
+      await tester.tapAtDocumentPosition(
+        const DocumentPosition(nodeId: "2", nodePosition: UpstreamDownstreamNodePosition.upstream()),
+      );
       await tester.pumpAndSettle();
 
       expect(
         SuperEditorInspector.findDocumentSelection(),
         const DocumentSelection.collapsed(
-          position: DocumentPosition(
-            nodeId: "3",
-            nodePosition: TextNodePosition(offset: 0),
-          ),
+          position: DocumentPosition(nodeId: "3", nodePosition: TextNodePosition(offset: 0)),
         ),
       );
     });
@@ -416,10 +374,7 @@ void main() {
       await _pumpEditorWithUnselectableHrs(tester);
 
       // Double tap the hr.
-      const position = DocumentPosition(
-        nodeId: "2",
-        nodePosition: UpstreamDownstreamNodePosition.upstream(),
-      );
+      const position = DocumentPosition(nodeId: "2", nodePosition: UpstreamDownstreamNodePosition.upstream());
       await tester.tapAtDocumentPosition(position);
       await tester.pump(kTapMinTime + const Duration(milliseconds: 1));
       await tester.tapAtDocumentPosition(position);
@@ -429,10 +384,7 @@ void main() {
       expect(
         SuperEditorInspector.findDocumentSelection(),
         const DocumentSelection.collapsed(
-          position: DocumentPosition(
-            nodeId: "3",
-            nodePosition: TextNodePosition(offset: 0),
-          ),
+          position: DocumentPosition(nodeId: "3", nodePosition: TextNodePosition(offset: 0)),
         ),
       );
     });
@@ -441,10 +393,7 @@ void main() {
       await _pumpEditorWithUnselectableHrs(tester);
 
       // Triple tap the hr.
-      const position = DocumentPosition(
-        nodeId: "2",
-        nodePosition: UpstreamDownstreamNodePosition.upstream(),
-      );
+      const position = DocumentPosition(nodeId: "2", nodePosition: UpstreamDownstreamNodePosition.upstream());
       await tester.tapAtDocumentPosition(position);
       await tester.pump(kTapMinTime + const Duration(milliseconds: 1));
       await tester.tapAtDocumentPosition(position);
@@ -456,10 +405,7 @@ void main() {
       expect(
         SuperEditorInspector.findDocumentSelection(),
         const DocumentSelection.collapsed(
-          position: DocumentPosition(
-            nodeId: "3",
-            nodePosition: TextNodePosition(offset: 0),
-          ),
+          position: DocumentPosition(nodeId: "3", nodePosition: TextNodePosition(offset: 0)),
         ),
       );
     });
@@ -467,10 +413,7 @@ void main() {
     testWidgetsOnMobile("closes toolbar when user taps on it", (tester) async {
       final toolbarKey = GlobalKey();
 
-      await _pumpEditorWithUnselectableHrsAndFakeToolbar(
-        tester,
-        toolbarKey: toolbarKey,
-      );
+      await _pumpEditorWithUnselectableHrsAndFakeToolbar(tester, toolbarKey: toolbarKey);
 
       // Place the selection in the first paragraph.
       await tester.doubleTapInParagraph("1", 0);
@@ -482,10 +425,9 @@ void main() {
       expect(find.byKey(toolbarKey), findsOneWidget);
 
       // Tap the hr.
-      await tester.tapAtDocumentPosition(const DocumentPosition(
-        nodeId: "2",
-        nodePosition: UpstreamDownstreamNodePosition.upstream(),
-      ));
+      await tester.tapAtDocumentPosition(
+        const DocumentPosition(nodeId: "2", nodePosition: UpstreamDownstreamNodePosition.upstream()),
+      );
 
       await tester.pumpAndSettle();
 
@@ -496,10 +438,7 @@ void main() {
     testWidgetsOnMobile("closes toolbar when user double taps on it", (tester) async {
       final toolbarKey = GlobalKey();
 
-      await _pumpEditorWithUnselectableHrsAndFakeToolbar(
-        tester,
-        toolbarKey: toolbarKey,
-      );
+      await _pumpEditorWithUnselectableHrsAndFakeToolbar(tester, toolbarKey: toolbarKey);
 
       // Place the selection in the first paragraph.
       await tester.doubleTapInParagraph("1", 0);
@@ -509,10 +448,7 @@ void main() {
       expect(find.byKey(toolbarKey), findsOneWidget);
 
       // Double tap the hr.
-      const position = DocumentPosition(
-        nodeId: "2",
-        nodePosition: UpstreamDownstreamNodePosition.upstream(),
-      );
+      const position = DocumentPosition(nodeId: "2", nodePosition: UpstreamDownstreamNodePosition.upstream());
       await tester.tapAtDocumentPosition(position);
       await tester.pump(kTapMinTime + const Duration(milliseconds: 1));
       await tester.tapAtDocumentPosition(position);
@@ -526,10 +462,7 @@ void main() {
     testWidgetsOnMobile("closes toolbar when user triple taps on it", (tester) async {
       final toolbarKey = GlobalKey();
 
-      await _pumpEditorWithUnselectableHrsAndFakeToolbar(
-        tester,
-        toolbarKey: toolbarKey,
-      );
+      await _pumpEditorWithUnselectableHrsAndFakeToolbar(tester, toolbarKey: toolbarKey);
 
       // Place the selection in the first paragraph.
       await tester.doubleTapInParagraph("1", 0);
@@ -539,10 +472,7 @@ void main() {
       expect(find.byKey(toolbarKey), findsOneWidget);
 
       // Triple tap the hr.
-      const position = DocumentPosition(
-        nodeId: "2",
-        nodePosition: UpstreamDownstreamNodePosition.upstream(),
-      );
+      const position = DocumentPosition(nodeId: "2", nodePosition: UpstreamDownstreamNodePosition.upstream());
       await tester.tapAtDocumentPosition(position);
       await tester.pump(kTapMinTime + const Duration(milliseconds: 1));
       await tester.tapAtDocumentPosition(position);
@@ -557,17 +487,15 @@ void main() {
   });
 }
 
-Future<TestDocumentContext> _pumpEditorWithSelectableHrs(WidgetTester tester) => tester //
-    .createDocument() //
-    .withCustomContent(paragraphThenHrThenParagraphDoc()) //
-    .forDesktop() //
-    .useStylesheet(_testStylesheet)
-    .pump();
+Future<TestDocumentContext> _pumpEditorWithSelectableHrs(WidgetTester tester) =>
+    tester //
+        .createDocument() //
+        .withCustomContent(paragraphThenHrThenParagraphDoc()) //
+        .forDesktop() //
+        .useStylesheet(_testStylesheet)
+        .pump();
 
-Future<TestDocumentContext> _pumpEditorWithUnselectableHrs(
-  WidgetTester tester, {
-  MutableDocument? customDocument,
-}) =>
+Future<TestDocumentContext> _pumpEditorWithUnselectableHrs(WidgetTester tester, {MutableDocument? customDocument}) =>
     tester //
         .createDocument() //
         .withCustomContent(customDocument ?? paragraphThenHrThenParagraphDoc()) //
@@ -575,17 +503,11 @@ Future<TestDocumentContext> _pumpEditorWithUnselectableHrs(
         .withAddedComponents([const _UnselectableHrComponentBuilder()]) //
         .pump();
 
-Future<void> _pumpEditorWithUnselectableHrsAndFakeToolbar(
-  WidgetTester tester, {
-  required GlobalKey toolbarKey,
-}) async {
+Future<void> _pumpEditorWithUnselectableHrsAndFakeToolbar(WidgetTester tester, {required GlobalKey toolbarKey}) async {
   await tester //
       .createDocument()
       .withCustomContent(paragraphThenHrThenParagraphDoc())
-      .withComponentBuilders(const [
-        _UnselectableHrComponentBuilder(),
-        ...defaultComponentBuilders,
-      ])
+      .withComponentBuilders(const [_UnselectableHrComponentBuilder(), ...defaultComponentBuilders])
       .withAndroidToolbarBuilder((context, mobileToolbarKey, focalPoint) => SizedBox(key: toolbarKey))
       .withiOSToolbarBuilder((context, mobileToolbarKey, focalPoint) => SizedBox(key: toolbarKey))
       .pump();
@@ -605,22 +527,19 @@ class _UnselectableHrComponentBuilder implements ComponentBuilder {
 
   @override
   Widget? createComponent(
-      SingleColumnDocumentComponentContext componentContext, SingleColumnLayoutComponentViewModel componentViewModel) {
+    SingleColumnDocumentComponentContext componentContext,
+    SingleColumnLayoutComponentViewModel componentViewModel,
+  ) {
     if (componentViewModel is! HorizontalRuleComponentViewModel) {
       return null;
     }
 
-    return _UnselectableHorizontalRuleComponent(
-      componentKey: componentContext.componentKey,
-    );
+    return _UnselectableHorizontalRuleComponent(componentKey: componentContext.componentKey);
   }
 }
 
 class _UnselectableHorizontalRuleComponent extends StatelessWidget {
-  const _UnselectableHorizontalRuleComponent({
-    Key? key,
-    required this.componentKey,
-  }) : super(key: key);
+  const _UnselectableHorizontalRuleComponent({Key? key, required this.componentKey}) : super(key: key);
 
   final GlobalKey componentKey;
 
@@ -630,10 +549,7 @@ class _UnselectableHorizontalRuleComponent extends StatelessWidget {
       child: BoxComponent(
         key: componentKey,
         isVisuallySelectable: false,
-        child: const Divider(
-          color: Color(0xFF000000),
-          thickness: 1.0,
-        ),
+        child: const Divider(color: Color(0xFF000000), thickness: 1.0),
       ),
     );
   }
@@ -642,9 +558,7 @@ class _UnselectableHorizontalRuleComponent extends StatelessWidget {
 /// A [DocumentNode] used to display a button.
 @immutable
 class _ButtonNode extends BlockNode {
-  _ButtonNode({
-    required this.id,
-  });
+  _ButtonNode({required this.id});
 
   @override
   final String id;
@@ -721,12 +635,8 @@ class _ButtonViewModel extends SingleColumnLayoutComponentViewModel with Selecti
 }
 
 class _ButtonComponent extends StatelessWidget {
-  const _ButtonComponent({
-    Key? key,
-    required this.componentKey,
-    this.selectionColor = Colors.blue,
-    this.selection,
-  }) : super(key: key);
+  const _ButtonComponent({Key? key, required this.componentKey, this.selectionColor = Colors.blue, this.selection})
+    : super(key: key);
 
   final GlobalKey componentKey;
   final Color selectionColor;
@@ -740,17 +650,11 @@ class _ButtonComponent extends StatelessWidget {
           child: SelectableBox(
             selection: selection?.nodeSelection as UpstreamDownstreamNodeSelection?,
             selectionColor: selectionColor,
-            child: BoxComponent(
-              key: componentKey,
-              child: const SizedBox(),
-            ),
+            child: BoxComponent(key: componentKey, child: const SizedBox()),
           ),
         ),
         Center(
-          child: ElevatedButton(
-            onPressed: () {},
-            child: const Text('My Button'),
-          ),
+          child: ElevatedButton(onPressed: () {}, child: const Text('My Button')),
         ),
       ],
     );
@@ -771,7 +675,9 @@ class _ButtonComponentBuilder implements ComponentBuilder {
 
   @override
   Widget? createComponent(
-      SingleColumnDocumentComponentContext componentContext, SingleColumnLayoutComponentViewModel componentViewModel) {
+    SingleColumnDocumentComponentContext componentContext,
+    SingleColumnLayoutComponentViewModel componentViewModel,
+  ) {
     if (componentViewModel is! _ButtonViewModel) {
       return null;
     }
@@ -787,11 +693,7 @@ class _ButtonComponentBuilder implements ComponentBuilder {
 final _testStylesheet = defaultStylesheet.copyWith(
   addRulesAfter: [
     StyleRule(BlockSelector.all, (doc, node) {
-      return {
-        Styles.textStyle: const TextStyle(
-          fontSize: 12,
-        ),
-      };
-    })
+      return {Styles.textStyle: const TextStyle(fontSize: 12)};
+    }),
   ],
 );

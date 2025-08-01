@@ -23,14 +23,8 @@ void main() {
       expect(
         SuperEditorInspector.findDocumentSelection(),
         const DocumentSelection(
-          base: DocumentPosition(
-            nodeId: "1",
-            nodePosition: TextNodePosition(offset: 12),
-          ),
-          extent: DocumentPosition(
-            nodeId: "1",
-            nodePosition: TextNodePosition(offset: 21),
-          ),
+          base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 12)),
+          extent: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 21)),
         ),
       );
 
@@ -53,14 +47,8 @@ void main() {
       expect(
         SuperEditorInspector.findDocumentSelection(),
         const DocumentSelection(
-          base: DocumentPosition(
-            nodeId: "1",
-            nodePosition: TextNodePosition(offset: 17),
-          ),
-          extent: DocumentPosition(
-            nodeId: "1",
-            nodePosition: TextNodePosition(offset: 6),
-          ),
+          base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 17)),
+          extent: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 6)),
         ),
       );
 

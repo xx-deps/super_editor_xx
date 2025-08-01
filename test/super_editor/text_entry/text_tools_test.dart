@@ -32,8 +32,10 @@ void main() {
         const text = 'SuperEditor is awesome ';
 
         // Pretend that the caret is at the end of the text and expand by word
-        final expandedSelection =
-            expandPositionToWord(text: text, textPosition: const TextPosition(offset: text.length));
+        final expandedSelection = expandPositionToWord(
+          text: text,
+          textPosition: const TextPosition(offset: text.length),
+        );
 
         // Ensure that the selection didn't change, because it wasn't in a word
         expect(expandedSelection, const TextSelection.collapsed(offset: text.length));
@@ -44,10 +46,7 @@ void main() {
 
         // Pretend that the caret is at the start of the first word and expand by word
         final expandedSelection = expandPositionToWord(text: text, textPosition: const TextPosition(offset: 0));
-        expect(
-          expandedSelection,
-          const TextSelection(baseOffset: 0, extentOffset: 11),
-        );
+        expect(expandedSelection, const TextSelection(baseOffset: 0, extentOffset: 11));
       });
 
       test('expand when the caret is in the middle of a word', () {
@@ -55,22 +54,18 @@ void main() {
 
         // Pretend that the caret is in the middle of the first word and expand by word
         final expandedSelection = expandPositionToWord(text: text, textPosition: const TextPosition(offset: 6));
-        expect(
-          expandedSelection,
-          const TextSelection(baseOffset: 0, extentOffset: 11),
-        );
+        expect(expandedSelection, const TextSelection(baseOffset: 0, extentOffset: 11));
       });
 
       test('expand when the caret is at the end of a word', () {
         const text = 'SuperEditor is awesome';
 
         // Pretend that the caret is at the end of the text and expand by word
-        final expandedSelection =
-            expandPositionToWord(text: text, textPosition: const TextPosition(offset: text.length));
-        expect(
-          expandedSelection,
-          const TextSelection(baseOffset: 15, extentOffset: 22),
+        final expandedSelection = expandPositionToWord(
+          text: text,
+          textPosition: const TextPosition(offset: text.length),
         );
+        expect(expandedSelection, const TextSelection(baseOffset: 15, extentOffset: 22));
       });
 
       test('expand when the caret is just before an emoji', () {
@@ -78,10 +73,7 @@ void main() {
 
         // Pretend that the caret is at the start of the emojis and expand by word
         final expandedSelection = expandPositionToWord(text: text, textPosition: const TextPosition(offset: 0));
-        expect(
-          expandedSelection,
-          const TextSelection(baseOffset: 0, extentOffset: 4),
-        );
+        expect(expandedSelection, const TextSelection(baseOffset: 0, extentOffset: 4));
       });
 
       test('expand when the caret is in the middle of emojis', () {
@@ -89,10 +81,7 @@ void main() {
 
         // Pretend that the caret is in the middle of the emojis and expand by word
         final expandedSelection = expandPositionToWord(text: text, textPosition: const TextPosition(offset: 7));
-        expect(
-          expandedSelection,
-          const TextSelection(baseOffset: 5, extentOffset: 9),
-        );
+        expect(expandedSelection, const TextSelection(baseOffset: 5, extentOffset: 9));
       });
 
       test('expand when the caret is just after an emoji', () {
@@ -100,10 +89,7 @@ void main() {
 
         // Pretend that the caret is at the end of the emojis and expand by word
         final expandedSelection = expandPositionToWord(text: text, textPosition: const TextPosition(offset: 18));
-        expect(
-          expandedSelection,
-          const TextSelection(baseOffset: 14, extentOffset: 18),
-        );
+        expect(expandedSelection, const TextSelection(baseOffset: 14, extentOffset: 18));
       });
     });
   });

@@ -160,8 +160,9 @@ void main() {
       );
     });
 
-    testWidgetsOnAllPlatforms('places the caret at the end when tapping beyond the end of the document',
-        (tester) async {
+    testWidgetsOnAllPlatforms('places the caret at the end when tapping beyond the end of the document', (
+      tester,
+    ) async {
       final testContext = await tester
           .createDocument() //
           .fromMarkdown("This is a text")
@@ -185,8 +186,9 @@ void main() {
       );
     });
 
-    testWidgetsOnAllPlatforms('places the caret at the beginning when tapping above the start of the content',
-        (tester) async {
+    testWidgetsOnAllPlatforms('places the caret at the beginning when tapping above the start of the content', (
+      tester,
+    ) async {
       final testContext = await tester
           .createDocument() //
           .withSingleParagraph()
@@ -210,195 +212,156 @@ void main() {
     });
 
     testWidgetsOnDesktop(
-        "dragging a single component selection above a component selects to the beginning of the component",
-        (tester) async {
-      // For example, a user drags to select text in a paragraph. The user
-      // is dragging the cursor up the center of the paragraph. When the cursor
-      // moves above the paragraph, the selection extent should move to the
-      // beginning of the paragraph, rather than get stuck in the middle of the
-      // top line of text.
+      "dragging a single component selection above a component selects to the beginning of the component",
+      (tester) async {
+        // For example, a user drags to select text in a paragraph. The user
+        // is dragging the cursor up the center of the paragraph. When the cursor
+        // moves above the paragraph, the selection extent should move to the
+        // beginning of the paragraph, rather than get stuck in the middle of the
+        // top line of text.
 
-      await tester
-          .createDocument()
-          .fromMarkdown(
-            '''
+        await tester
+            .createDocument()
+            .fromMarkdown('''
 This is a paragraph of text that
-spans multiple lines.''',
-          )
-          .forDesktop()
-          .pump();
+spans multiple lines.''')
+            .forDesktop()
+            .pump();
 
-      final document = SuperEditorInspector.findDocument()!;
-      final paragraphNode = document.first as ParagraphNode;
+        final document = SuperEditorInspector.findDocument()!;
+        final paragraphNode = document.first as ParagraphNode;
 
-      await tester.dragSelectDocumentFromPositionByOffset(
-        from: DocumentPosition(
-          nodeId: paragraphNode.id,
-          nodePosition: paragraphNode.endPosition,
-        ),
-        delta: const Offset(0, -300),
-      );
+        await tester.dragSelectDocumentFromPositionByOffset(
+          from: DocumentPosition(nodeId: paragraphNode.id, nodePosition: paragraphNode.endPosition),
+          delta: const Offset(0, -300),
+        );
 
-      // Ensure that the entire paragraph is selected, after dragging
-      // above it.
-      expect(
-        SuperEditorInspector.findDocumentSelection(),
-        DocumentSelection(
-          base: DocumentPosition(
-            nodeId: paragraphNode.id,
-            nodePosition: paragraphNode.endPosition,
+        // Ensure that the entire paragraph is selected, after dragging
+        // above it.
+        expect(
+          SuperEditorInspector.findDocumentSelection(),
+          DocumentSelection(
+            base: DocumentPosition(nodeId: paragraphNode.id, nodePosition: paragraphNode.endPosition),
+            extent: DocumentPosition(nodeId: paragraphNode.id, nodePosition: paragraphNode.beginningPosition),
           ),
-          extent: DocumentPosition(
-            nodeId: paragraphNode.id,
-            nodePosition: paragraphNode.beginningPosition,
-          ),
-        ),
-      );
-    });
-
-    testWidgetsOnDesktop("dragging a single component selection below a component selects to the end of the component",
-        (tester) async {
-      // For example, a user drags to select text in a paragraph. The user
-      // is dragging the cursor down the center of the paragraph. When the cursor
-      // moves below the paragraph, the selection extent should move to the
-      // end of the paragraph, rather than get stuck in the middle of the
-      // bottom line of text.
-
-      await tester
-          .createDocument()
-          .fromMarkdown(
-            '''
-This is a paragraph of text that
-spans multiple lines.''',
-          )
-          .forDesktop()
-          .pump();
-
-      final document = SuperEditorInspector.findDocument()!;
-      final paragraphNode = document.first as ParagraphNode;
-
-      await tester.dragSelectDocumentFromPositionByOffset(
-        from: DocumentPosition(
-          nodeId: paragraphNode.id,
-          nodePosition: paragraphNode.beginningPosition,
-        ),
-        delta: const Offset(0, 300),
-      );
-
-      // Ensure that the entire paragraph is selected, after dragging
-      // below it.
-      expect(
-        SuperEditorInspector.findDocumentSelection(),
-        DocumentSelection(
-          base: DocumentPosition(
-            nodeId: paragraphNode.id,
-            nodePosition: paragraphNode.beginningPosition,
-          ),
-          extent: DocumentPosition(
-            nodeId: paragraphNode.id,
-            nodePosition: paragraphNode.endPosition,
-          ),
-        ),
-      );
-    });
+        );
+      },
+    );
 
     testWidgetsOnDesktop(
-        "dragging a multi-component selection above a component selects to the beginning of the top component",
-        (tester) async {
-      // For example, a user drags to select text in a paragraph. The user
-      // is dragging the cursor up the center of the paragraph. When the cursor
-      // moves above the paragraph, the selection extent should move to the
-      // beginning of the paragraph, rather than get stuck in the middle of the
-      // top line of text.
+      "dragging a single component selection below a component selects to the end of the component",
+      (tester) async {
+        // For example, a user drags to select text in a paragraph. The user
+        // is dragging the cursor down the center of the paragraph. When the cursor
+        // moves below the paragraph, the selection extent should move to the
+        // end of the paragraph, rather than get stuck in the middle of the
+        // bottom line of text.
 
-      await tester
-          .createDocument()
-          .fromMarkdown(
-            '''
-# This is a test
+        await tester
+            .createDocument()
+            .fromMarkdown('''
 This is a paragraph of text that
-spans multiple lines.''',
-          )
-          .forDesktop()
-          .pump();
+spans multiple lines.''')
+            .forDesktop()
+            .pump();
 
-      final document = SuperEditorInspector.findDocument()!;
-      final titleNode = document.first as ParagraphNode;
-      final paragraphNode = document.getNodeAt(1)! as ParagraphNode;
+        final document = SuperEditorInspector.findDocument()!;
+        final paragraphNode = document.first as ParagraphNode;
 
-      await tester.dragSelectDocumentFromPositionByOffset(
-        from: DocumentPosition(
-          nodeId: paragraphNode.id,
-          nodePosition: paragraphNode.endPosition,
-        ),
-        delta: const Offset(0, -300),
-      );
+        await tester.dragSelectDocumentFromPositionByOffset(
+          from: DocumentPosition(nodeId: paragraphNode.id, nodePosition: paragraphNode.beginningPosition),
+          delta: const Offset(0, 300),
+        );
 
-      // Ensure that the entire paragraph is selected, after dragging
-      // above it.
-      expect(
-        SuperEditorInspector.findDocumentSelection(),
-        DocumentSelection(
-          base: DocumentPosition(
-            nodeId: paragraphNode.id,
-            nodePosition: paragraphNode.endPosition,
+        // Ensure that the entire paragraph is selected, after dragging
+        // below it.
+        expect(
+          SuperEditorInspector.findDocumentSelection(),
+          DocumentSelection(
+            base: DocumentPosition(nodeId: paragraphNode.id, nodePosition: paragraphNode.beginningPosition),
+            extent: DocumentPosition(nodeId: paragraphNode.id, nodePosition: paragraphNode.endPosition),
           ),
-          extent: DocumentPosition(
-            nodeId: titleNode.id,
-            nodePosition: titleNode.beginningPosition,
-          ),
-        ),
-      );
-    });
+        );
+      },
+    );
 
     testWidgetsOnDesktop(
-        "dragging a multi-component selection below a component selects to the end of the bottom component",
-        (tester) async {
-      // For example, a user drags to select text in a paragraph. The user
-      // is dragging the cursor up the center of the paragraph. When the cursor
-      // moves above the paragraph, the selection extent should move to the
-      // beginning of the paragraph, rather than get stuck in the middle of the
-      // top line of text.
+      "dragging a multi-component selection above a component selects to the beginning of the top component",
+      (tester) async {
+        // For example, a user drags to select text in a paragraph. The user
+        // is dragging the cursor up the center of the paragraph. When the cursor
+        // moves above the paragraph, the selection extent should move to the
+        // beginning of the paragraph, rather than get stuck in the middle of the
+        // top line of text.
 
-      await tester
-          .createDocument()
-          .fromMarkdown(
-            '''
+        await tester
+            .createDocument()
+            .fromMarkdown('''
 # This is a test
 This is a paragraph of text that
-spans multiple lines.''',
-          )
-          .forDesktop()
-          .pump();
+spans multiple lines.''')
+            .forDesktop()
+            .pump();
 
-      final document = SuperEditorInspector.findDocument()!;
-      final titleNode = document.first as ParagraphNode;
-      final paragraphNode = document.getNodeAt(1)! as ParagraphNode;
+        final document = SuperEditorInspector.findDocument()!;
+        final titleNode = document.first as ParagraphNode;
+        final paragraphNode = document.getNodeAt(1)! as ParagraphNode;
 
-      await tester.dragSelectDocumentFromPositionByOffset(
-        from: DocumentPosition(
-          nodeId: titleNode.id,
-          nodePosition: titleNode.beginningPosition,
-        ),
-        delta: const Offset(0, 300),
-      );
+        await tester.dragSelectDocumentFromPositionByOffset(
+          from: DocumentPosition(nodeId: paragraphNode.id, nodePosition: paragraphNode.endPosition),
+          delta: const Offset(0, -300),
+        );
 
-      // Ensure that the entire paragraph is selected, after dragging
-      // above it.
-      expect(
-        SuperEditorInspector.findDocumentSelection(),
-        DocumentSelection(
-          base: DocumentPosition(
-            nodeId: titleNode.id,
-            nodePosition: titleNode.beginningPosition,
+        // Ensure that the entire paragraph is selected, after dragging
+        // above it.
+        expect(
+          SuperEditorInspector.findDocumentSelection(),
+          DocumentSelection(
+            base: DocumentPosition(nodeId: paragraphNode.id, nodePosition: paragraphNode.endPosition),
+            extent: DocumentPosition(nodeId: titleNode.id, nodePosition: titleNode.beginningPosition),
           ),
-          extent: DocumentPosition(
-            nodeId: paragraphNode.id,
-            nodePosition: paragraphNode.endPosition,
+        );
+      },
+    );
+
+    testWidgetsOnDesktop(
+      "dragging a multi-component selection below a component selects to the end of the bottom component",
+      (tester) async {
+        // For example, a user drags to select text in a paragraph. The user
+        // is dragging the cursor up the center of the paragraph. When the cursor
+        // moves above the paragraph, the selection extent should move to the
+        // beginning of the paragraph, rather than get stuck in the middle of the
+        // top line of text.
+
+        await tester
+            .createDocument()
+            .fromMarkdown('''
+# This is a test
+This is a paragraph of text that
+spans multiple lines.''')
+            .forDesktop()
+            .pump();
+
+        final document = SuperEditorInspector.findDocument()!;
+        final titleNode = document.first as ParagraphNode;
+        final paragraphNode = document.getNodeAt(1)! as ParagraphNode;
+
+        await tester.dragSelectDocumentFromPositionByOffset(
+          from: DocumentPosition(nodeId: titleNode.id, nodePosition: titleNode.beginningPosition),
+          delta: const Offset(0, 300),
+        );
+
+        // Ensure that the entire paragraph is selected, after dragging
+        // above it.
+        expect(
+          SuperEditorInspector.findDocumentSelection(),
+          DocumentSelection(
+            base: DocumentPosition(nodeId: titleNode.id, nodePosition: titleNode.beginningPosition),
+            extent: DocumentPosition(nodeId: paragraphNode.id, nodePosition: paragraphNode.endPosition),
           ),
-        ),
-      );
-    });
+        );
+      },
+    );
 
     testWidgetsOnAllPlatforms("places the caret at the end of a wrapped line when tapping there", (tester) async {
       // Configure and render a document.
@@ -409,7 +372,8 @@ spans multiple lines.''',
           .withEditorSize(const Size(300, 700))
           .withSelection(
             const DocumentSelection.collapsed(
-                position: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 0))),
+              position: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 0)),
+            ),
           )
           .pump();
       final offset = SuperEditorInspector.findOffsetOfLineBreak('1');
@@ -437,7 +401,8 @@ spans multiple lines.''',
           .withEditorSize(const Size(300, 700))
           .withSelection(
             const DocumentSelection.collapsed(
-                position: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 0))),
+              position: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 0)),
+            ),
           )
           .pump();
 
@@ -514,10 +479,12 @@ spans multiple lines.''',
       await tester.doubleTapInParagraph('1', 0);
       expect(
         SuperEditorInspector.findDocumentSelection(),
-        selectionEquivalentTo(const DocumentSelection(
-          base: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 0)),
-          extent: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 5)),
-        )),
+        selectionEquivalentTo(
+          const DocumentSelection(
+            base: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 0)),
+            extent: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 5)),
+          ),
+        ),
       );
 
       // Find the approximate position of the scrollbar thumb.
@@ -547,10 +514,12 @@ spans multiple lines.''',
       // Ensure the selection didn't change.
       expect(
         SuperEditorInspector.findDocumentSelection(),
-        selectionEquivalentTo(const DocumentSelection(
-          base: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 0)),
-          extent: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 5)),
-        )),
+        selectionEquivalentTo(
+          const DocumentSelection(
+            base: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 0)),
+            extent: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 5)),
+          ),
+        ),
       );
     });
 
@@ -568,10 +537,12 @@ spans multiple lines.''',
       await tester.doubleTapInParagraph('1', 0);
       expect(
         SuperEditorInspector.findDocumentSelection(),
-        selectionEquivalentTo(const DocumentSelection(
-          base: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 0)),
-          extent: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 5)),
-        )),
+        selectionEquivalentTo(
+          const DocumentSelection(
+            base: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 0)),
+            extent: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 5)),
+          ),
+        ),
       );
 
       // Jump to the end of the document.
@@ -623,11 +594,12 @@ spans multiple lines.''',
           addTearDown(() => UrlLauncher.instance = null);
 
           // Pump the UI.
-          final context = await tester //
-              .createDocument()
-              .withSingleParagraphAndLink()
-              .autoFocus(true)
-              .pump();
+          final context =
+              await tester //
+                  .createDocument()
+                  .withSingleParagraphAndLink()
+                  .autoFocus(true)
+                  .pump();
 
           // Activate interaction mode.
           if (defaultTargetPlatform == TargetPlatform.android || defaultTargetPlatform == TargetPlatform.iOS) {
@@ -665,11 +637,12 @@ spans multiple lines.''',
           addTearDown(() => UrlLauncher.instance = null);
 
           // Pump the UI.
-          final context = await tester //
-              .createDocument()
-              .fromMarkdown("[Google](https://google.com) and [Flutter](https://flutter.dev)")
-              .autoFocus(true)
-              .pump();
+          final context =
+              await tester //
+                  .createDocument()
+                  .fromMarkdown("[Google](https://google.com) and [Flutter](https://flutter.dev)")
+                  .autoFocus(true)
+                  .pump();
 
           // Activate interaction mode.
           if (defaultTargetPlatform == TargetPlatform.android || defaultTargetPlatform == TargetPlatform.iOS) {
@@ -717,11 +690,12 @@ spans multiple lines.''',
           addTearDown(() => UrlLauncher.instance = null);
 
           // Pump the UI.
-          final context = await tester //
-              .createDocument()
-              .withSingleParagraphAndLink()
-              .autoFocus(true)
-              .pump();
+          final context =
+              await tester //
+                  .createDocument()
+                  .withSingleParagraphAndLink()
+                  .autoFocus(true)
+                  .pump();
 
           // Ensure that interaction mode is "off".
           expect(context.findEditContext().composer.isInInteractionMode.value, isFalse);

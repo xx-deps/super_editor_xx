@@ -11,10 +11,7 @@ void main() {
         final document = MutableDocument.empty("1");
         final composer = MutableDocumentComposer(
           initialSelection: const DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 0),
-            ),
+            position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 0)),
           ),
         );
         final editor = createDefaultDocumentEditor(document: document, composer: composer);
@@ -70,10 +67,7 @@ void main() {
         expect(composer.selection!.isCollapsed, true);
         expect(
           composer.selection!.extent,
-          DocumentPosition(
-            nodeId: document.last.id,
-            nodePosition: const TextNodePosition(offset: 0),
-          ),
+          DocumentPosition(nodeId: document.last.id, nodePosition: const TextNodePosition(offset: 0)),
         );
       });
 
@@ -81,10 +75,7 @@ void main() {
         final document = MutableDocument.empty("1");
         final composer = MutableDocumentComposer(
           initialSelection: const DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 0),
-            ),
+            position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 0)),
           ),
         );
         final editor = createDefaultDocumentEditor(document: document, composer: composer);
@@ -138,10 +129,7 @@ void main() {
         expect(composer.selection!.isCollapsed, true);
         expect(
           composer.selection!.extent,
-          DocumentPosition(
-            nodeId: document.last.id,
-            nodePosition: const TextNodePosition(offset: 0),
-          ),
+          DocumentPosition(nodeId: document.last.id, nodePosition: const TextNodePosition(offset: 0)),
         );
       });
     });

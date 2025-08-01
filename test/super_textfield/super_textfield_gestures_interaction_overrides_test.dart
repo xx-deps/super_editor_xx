@@ -29,10 +29,7 @@ void main() {
           expect(handler.wasTripleTapDownHandled, isFalse);
 
           // Ensure the default behavior of placing the caret was not called.
-          expect(
-            SuperTextFieldInspector.findSelection(),
-            const TextSelection.collapsed(offset: -1),
-          );
+          expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: -1));
         });
       });
 
@@ -53,10 +50,7 @@ void main() {
           expect(handler.wasTripleTapDownHandled, isFalse);
 
           // Ensure the default behavior of placing the caret was not called.
-          expect(
-            SuperTextFieldInspector.findSelection(),
-            const TextSelection.collapsed(offset: -1),
-          );
+          expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: -1));
         });
 
         testWidgetsOnAllPlatforms('stops when a handler handles the gesture', (tester) async {
@@ -81,10 +75,7 @@ void main() {
           expect(handler2.wasTripleTapDownHandled, isFalse);
 
           // Ensure the default behavior of placing the caret was not called.
-          expect(
-            SuperTextFieldInspector.findSelection(),
-            const TextSelection.collapsed(offset: -1),
-          );
+          expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: -1));
         });
       });
     });
@@ -104,10 +95,7 @@ void main() {
           expect(handler.wasTripleTapDownHandled, isFalse);
 
           // Ensure the default behavior of placing the caret was not called.
-          expect(
-            SuperTextFieldInspector.findSelection(),
-            const TextSelection.collapsed(offset: -1),
-          );
+          expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: -1));
         });
       });
 
@@ -127,10 +115,7 @@ void main() {
 
           // Ensure the default behavior of placing an expanded selection
           // was not called.
-          expect(
-            SuperTextFieldInspector.findSelection(),
-            const TextSelection.collapsed(offset: -1),
-          );
+          expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: -1));
         });
 
         testWidgetsOnAllPlatforms('stops when a handler handles the gesture', (tester) async {
@@ -153,10 +138,7 @@ void main() {
 
           // Ensure the default behavior of placing an expanded selection
           // was not called.
-          expect(
-            SuperTextFieldInspector.findSelection(),
-            const TextSelection.collapsed(offset: -1),
-          );
+          expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: -1));
         });
       });
     });
@@ -177,10 +159,7 @@ void main() {
 
           // Ensure the default behavior of placing an expanded selection
           // was not called.
-          expect(
-            SuperTextFieldInspector.findSelection(),
-            const TextSelection.collapsed(offset: -1),
-          );
+          expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: -1));
         });
       });
 
@@ -199,10 +178,7 @@ void main() {
 
           // Ensure the default behavior of placing an expanded selection
           // was not called.
-          expect(
-            SuperTextFieldInspector.findSelection(),
-            const TextSelection.collapsed(offset: -1),
-          );
+          expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: -1));
         });
 
         testWidgetsOnAllPlatforms('stops when a handler handles the gesture', (tester) async {
@@ -223,10 +199,7 @@ void main() {
 
           // Ensure the default behavior of placing an expanded selection
           // was not called.
-          expect(
-            SuperTextFieldInspector.findSelection(),
-            const TextSelection.collapsed(offset: -1),
-          );
+          expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: -1));
         });
       });
     });
@@ -319,13 +292,8 @@ void main() {
 }
 
 /// Pump a test app with a single [SuperTextField] that has the given [tapHandlers].
-Future<void> _pumpSingleFieldTestApp(
-  WidgetTester tester, {
-  required List<SuperTextFieldTapHandler> tapHandlers,
-}) async {
-  final textController = AttributedTextEditingController(
-    text: AttributedText('This is a text field'),
-  );
+Future<void> _pumpSingleFieldTestApp(WidgetTester tester, {required List<SuperTextFieldTapHandler> tapHandlers}) async {
+  final textController = AttributedTextEditingController(text: AttributedText('This is a text field'));
 
   await tester.pumpWidget(
     MaterialApp(
@@ -334,11 +302,7 @@ Future<void> _pumpSingleFieldTestApp(
           padding: const EdgeInsets.all(20.0),
           child: SizedBox(
             width: 300,
-            child: SuperTextField(
-              textController: textController,
-              lineHeight: 16,
-              tapHandlers: tapHandlers,
-            ),
+            child: SuperTextField(textController: textController, lineHeight: 16, tapHandlers: tapHandlers),
           ),
         ),
       ),

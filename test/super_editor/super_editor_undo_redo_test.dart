@@ -43,22 +43,16 @@ void main() {
         editor.execute([
           ChangeSelectionRequest(
             DocumentSelection.collapsed(
-              position: DocumentPosition(
-                nodeId: paragraphId,
-                nodePosition: const TextNodePosition(offset: 6),
-              ),
+              position: DocumentPosition(nodeId: paragraphId, nodePosition: const TextNodePosition(offset: 6)),
             ),
             SelectionChangeType.placeCaret,
             SelectionReason.userInteraction,
-          )
+          ),
         ]);
 
         editor.execute([
           InsertTextRequest(
-            documentPosition: DocumentPosition(
-              nodeId: paragraphId,
-              nodePosition: const TextNodePosition(offset: 6),
-            ),
+            documentPosition: DocumentPosition(nodeId: paragraphId, nodePosition: const TextNodePosition(offset: 6)),
             textToInsert: "another",
             attributions: {},
           ),
@@ -68,10 +62,7 @@ void main() {
         expect(
           composer.selection,
           DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: paragraphId,
-              nodePosition: const TextNodePosition(offset: 13),
-            ),
+            position: DocumentPosition(nodeId: paragraphId, nodePosition: const TextNodePosition(offset: 13)),
           ),
         );
 
@@ -82,10 +73,7 @@ void main() {
         expect(
           composer.selection,
           DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: paragraphId,
-              nodePosition: const TextNodePosition(offset: 6),
-            ),
+            position: DocumentPosition(nodeId: paragraphId, nodePosition: const TextNodePosition(offset: 6)),
           ),
         );
 
@@ -96,10 +84,7 @@ void main() {
         expect(
           composer.selection,
           DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: paragraphId,
-              nodePosition: const TextNodePosition(offset: 13),
-            ),
+            position: DocumentPosition(nodeId: paragraphId, nodePosition: const TextNodePosition(offset: 13)),
           ),
         );
       });
@@ -120,10 +105,7 @@ void main() {
         expect(
           SuperEditorInspector.findDocumentSelection(),
           const DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 5),
-            ),
+            position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 5)),
           ),
         );
 
@@ -167,11 +149,11 @@ void main() {
         // TODO: The root cause of this problem was mutability of DocumentNode's. Delete this test after completing: https://github.com/superlistapp/super_editor/issues/2166
         final testContext = await tester
             .createDocument() //
-            .withCustomContent(MutableDocument(
-              nodes: [
-                ImageNode(id: "1", imageUrl: "https://fakeimage.com/myimage.png"),
-              ],
-            ))
+            .withCustomContent(
+              MutableDocument(
+                nodes: [ImageNode(id: "1", imageUrl: "https://fakeimage.com/myimage.png")],
+              ),
+            )
             .withComponentBuilders([
               const FakeImageComponentBuilder(size: Size(1000, 400)),
               ...defaultComponentBuilders,
@@ -215,11 +197,12 @@ void main() {
 
     group("content conversions >", () {
       testWidgetsOnMac("paragraph to header", (tester) async {
-        final editContext = await tester //
-            .createDocument()
-            .withSingleEmptyParagraph()
-            .enableHistory(true)
-            .pump();
+        final editContext =
+            await tester //
+                .createDocument()
+                .withSingleEmptyParagraph()
+                .enableHistory(true)
+                .pump();
 
         await tester.placeCaretInParagraph("1", 0);
 
@@ -270,11 +253,12 @@ void main() {
       });
 
       testWidgetsOnMac("paragraph to list item", (tester) async {
-        final editContext = await tester //
-            .createDocument()
-            .withSingleEmptyParagraph()
-            .enableHistory(true)
-            .pump();
+        final editContext =
+            await tester //
+                .createDocument()
+                .withSingleEmptyParagraph()
+                .enableHistory(true)
+                .pump();
 
         await tester.placeCaretInParagraph("1", 0);
 
@@ -309,16 +293,9 @@ void main() {
         await tester.typeImeText("google.com ");
 
         // Ensure that the URL is now linkified.
-        expect(
-          SuperEditorInspector.findTextInComponent("1").getAttributionSpansByFilter((a) => a is LinkAttribution),
-          {
-            const AttributionSpan(
-              attribution: LinkAttribution("https://google.com"),
-              start: 0,
-              end: 9,
-            ),
-          },
-        );
+        expect(SuperEditorInspector.findTextInComponent("1").getAttributionSpansByFilter((a) => a is LinkAttribution), {
+          const AttributionSpan(attribution: LinkAttribution("https://google.com"), start: 0, end: 9),
+        });
 
         await tester.pressCmdZ(tester);
         await tester.pump();
@@ -331,11 +308,12 @@ void main() {
       });
 
       testWidgetsOnMac("paragraph to horizontal rule", (tester) async {
-        final editContext = await tester //
-            .createDocument()
-            .withSingleEmptyParagraph()
-            .enableHistory(true)
-            .pump();
+        final editContext =
+            await tester //
+                .createDocument()
+                .withSingleEmptyParagraph()
+                .enableHistory(true)
+                .pump();
 
         await tester.placeCaretInParagraph("1", 0);
 
@@ -351,11 +329,12 @@ void main() {
     });
 
     testWidgetsOnMac("pasted content", (tester) async {
-      final editContext = await tester //
-          .createDocument()
-          .withSingleEmptyParagraph()
-          .enableHistory(true)
-          .pump();
+      final editContext =
+          await tester //
+              .createDocument()
+              .withSingleEmptyParagraph()
+              .enableHistory(true)
+              .pump();
 
       await tester.placeCaretInParagraph("1", 0);
 
@@ -462,12 +441,13 @@ This is paragraph 3''');
 
       group("selection and composing >", () {
         testWidgetsOnMac("merges transactions with only selection and composing changes", (tester) async {
-          final testContext = await tester //
-              .createDocument()
-              .withLongDoc()
-              .enableHistory(true)
-              .withHistoryGroupingPolicy(defaultMergePolicy)
-              .pump();
+          final testContext =
+              await tester //
+                  .createDocument()
+                  .withLongDoc()
+                  .enableHistory(true)
+                  .withHistoryGroupingPolicy(defaultMergePolicy)
+                  .pump();
 
           await tester.placeCaretInParagraph("1", 0);
 
@@ -487,12 +467,13 @@ This is paragraph 3''');
         });
 
         testWidgetsOnMac("does not merge transactions when non-selection changes are present", (tester) async {
-          final testContext = await tester //
-              .createDocument()
-              .withLongDoc()
-              .enableHistory(true)
-              .withHistoryGroupingPolicy(defaultMergePolicy)
-              .pump();
+          final testContext =
+              await tester //
+                  .createDocument()
+                  .withLongDoc()
+                  .enableHistory(true)
+                  .withHistoryGroupingPolicy(defaultMergePolicy)
+                  .pump();
 
           await tester.placeCaretInParagraph("1", 0);
 

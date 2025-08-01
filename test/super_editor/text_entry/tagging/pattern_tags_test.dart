@@ -11,10 +11,7 @@ void main() {
   group("SuperEditor pattern tags >", () {
     group("composing >", () {
       testWidgetsOnAllPlatforms("doesn't attribute a single #", (tester) async {
-        await _pumpTestEditor(
-          tester,
-          singleParagraphEmptyDoc(),
-        );
+        await _pumpTestEditor(tester, singleParagraphEmptyDoc());
         await tester.placeCaretInParagraph("1", 0);
 
         // Insert a single "#".
@@ -23,17 +20,11 @@ void main() {
         // Ensure that no hash tag was created.
         final text = SuperEditorInspector.findTextInComponent("1");
         expect(text.toPlainText(), "#");
-        expect(
-          text.hasAttributionAt(0, attribution: const PatternTagAttribution()),
-          isFalse,
-        );
+        expect(text.hasAttributionAt(0, attribution: const PatternTagAttribution()), isFalse);
       });
 
       testWidgetsOnAllPlatforms("can start at the beginning of a paragraph", (tester) async {
-        await _pumpTestEditor(
-          tester,
-          singleParagraphEmptyDoc(),
-        );
+        await _pumpTestEditor(tester, singleParagraphEmptyDoc());
         await tester.placeCaretInParagraph("1", 0);
 
         // Compose a pattern tag.
@@ -42,22 +33,14 @@ void main() {
         // Ensure that the tag has a composing attribution.
         final text = SuperEditorInspector.findTextInComponent("1");
         expect(text.toPlainText(), "#flutter");
-        expect(
-          text.getAttributedRange({const PatternTagAttribution()}, 0),
-          const SpanRange(0, 7),
-        );
+        expect(text.getAttributedRange({const PatternTagAttribution()}, 0), const SpanRange(0, 7));
       });
 
       testWidgetsOnAllPlatforms("can start between words", (tester) async {
         await _pumpTestEditor(
           tester,
           MutableDocument(
-            nodes: [
-              ParagraphNode(
-                id: "1",
-                text: AttributedText("before  after"),
-              ),
-            ],
+            nodes: [ParagraphNode(id: "1", text: AttributedText("before  after"))],
           ),
         );
 
@@ -70,22 +53,14 @@ void main() {
         // Ensure that the tag has a composing attribution.
         final text = SuperEditorInspector.findTextInComponent("1");
         expect(text.toPlainText(), "before #flutter after");
-        expect(
-          text.getAttributedRange({const PatternTagAttribution()}, 7),
-          const SpanRange(7, 14),
-        );
+        expect(text.getAttributedRange({const PatternTagAttribution()}, 7), const SpanRange(7, 14));
       });
 
       testWidgetsOnAllPlatforms("can start at the beginning of an existing word", (tester) async {
         await _pumpTestEditor(
           tester,
           MutableDocument(
-            nodes: [
-              ParagraphNode(
-                id: "1",
-                text: AttributedText("before flutter after"),
-              ),
-            ],
+            nodes: [ParagraphNode(id: "1", text: AttributedText("before flutter after"))],
           ),
         );
 
@@ -98,17 +73,11 @@ void main() {
         // Ensure that the tag has a composing attribution.
         final text = SuperEditorInspector.findTextInComponent("1");
         expect(text.text, "before #flutter after");
-        expect(
-          text.getAttributedRange({const PatternTagAttribution()}, 7),
-          const SpanRange(7, 14),
-        );
+        expect(text.getAttributedRange({const PatternTagAttribution()}, 7), const SpanRange(7, 14));
       });
 
       testWidgetsOnAllPlatforms("removes tag when deleting back to the #", (tester) async {
-        await _pumpTestEditor(
-          tester,
-          singleParagraphEmptyDoc(),
-        );
+        await _pumpTestEditor(tester, singleParagraphEmptyDoc());
         await tester.placeCaretInParagraph("1", 0);
 
         // Compose a pattern tag.
@@ -126,22 +95,14 @@ void main() {
         // Ensure that the tag doesn't have a composing attribution.
         final text = SuperEditorInspector.findTextInComponent("1");
         expect(text.toPlainText(), "#");
-        expect(
-          text.hasAttributionAt(0, attribution: const PatternTagAttribution()),
-          isFalse,
-        );
+        expect(text.hasAttributionAt(0, attribution: const PatternTagAttribution()), isFalse);
       });
 
       testWidgetsOnAllPlatforms("does not continue after a space", (tester) async {
         await _pumpTestEditor(
           tester,
           MutableDocument(
-            nodes: [
-              ParagraphNode(
-                id: "1",
-                text: AttributedText("before "),
-              ),
-            ],
+            nodes: [ParagraphNode(id: "1", text: AttributedText("before "))],
           ),
         );
 
@@ -160,13 +121,7 @@ void main() {
             attributionFilter: (attribution) => attribution is PatternTagAttribution,
             range: const SpanRange(0, 18),
           ),
-          {
-            const AttributionSpan(
-              attribution: PatternTagAttribution(),
-              start: 7,
-              end: 14,
-            ),
-          },
+          {const AttributionSpan(attribution: PatternTagAttribution(), start: 7, end: 14)},
         );
       });
 
@@ -174,12 +129,7 @@ void main() {
         await _pumpTestEditor(
           tester,
           MutableDocument(
-            nodes: [
-              ParagraphNode(
-                id: "1",
-                text: AttributedText("before "),
-              ),
-            ],
+            nodes: [ParagraphNode(id: "1", text: AttributedText("before "))],
           ),
         );
 
@@ -197,13 +147,7 @@ void main() {
             attributionFilter: (attribution) => attribution is PatternTagAttribution,
             range: const SpanRange(0, 19),
           ),
-          {
-            const AttributionSpan(
-              attribution: PatternTagAttribution(),
-              start: 7,
-              end: 14,
-            ),
-          },
+          {const AttributionSpan(attribution: PatternTagAttribution(), start: 7, end: 14)},
         );
       });
 
@@ -211,12 +155,7 @@ void main() {
         await _pumpTestEditor(
           tester,
           MutableDocument(
-            nodes: [
-              ParagraphNode(
-                id: "1",
-                text: AttributedText("before "),
-              ),
-            ],
+            nodes: [ParagraphNode(id: "1", text: AttributedText("before "))],
           ),
         );
 
@@ -238,21 +177,12 @@ void main() {
             attributionFilter: (attribution) => attribution is PatternTagAttribution,
             range: const SpanRange(0, 19),
           ),
-          {
-            const AttributionSpan(
-              attribution: PatternTagAttribution(),
-              start: 7,
-              end: 14,
-            ),
-          },
+          {const AttributionSpan(attribution: PatternTagAttribution(), start: 7, end: 14)},
         );
       });
 
       testWidgetsOnAllPlatforms("can create pattern tags back to back (no space)", (tester) async {
-        await _pumpTestEditor(
-          tester,
-          singleParagraphEmptyDoc(),
-        );
+        await _pumpTestEditor(tester, singleParagraphEmptyDoc());
         await tester.placeCaretInParagraph("1", 0);
 
         // Compose a hash tag.
@@ -260,14 +190,8 @@ void main() {
 
         var text = SuperEditorInspector.findTextInComponent("1");
         expect(text.toPlainText(), "hello #flutter#d");
-        expect(
-          text.getAttributedRange({const PatternTagAttribution()}, 6),
-          const SpanRange(6, 13),
-        );
-        expect(
-          text.getAttributedRange({const PatternTagAttribution()}, 14),
-          const SpanRange(14, 15),
-        );
+        expect(text.getAttributedRange({const PatternTagAttribution()}, 6), const SpanRange(6, 13));
+        expect(text.getAttributedRange({const PatternTagAttribution()}, 14), const SpanRange(14, 15));
 
         // Finish the second hash tag.
         await tester.typeImeText("art");
@@ -275,21 +199,12 @@ void main() {
         // Ensure that the tag has a composing attribution.
         text = SuperEditorInspector.findTextInComponent("1");
         expect(text.toPlainText(), "hello #flutter#dart");
-        expect(
-          text.getAttributedRange({const PatternTagAttribution()}, 6),
-          const SpanRange(6, 13),
-        );
-        expect(
-          text.getAttributedRange({const PatternTagAttribution()}, 14),
-          const SpanRange(14, 18),
-        );
+        expect(text.getAttributedRange({const PatternTagAttribution()}, 6), const SpanRange(6, 13));
+        expect(text.getAttributedRange({const PatternTagAttribution()}, 14), const SpanRange(14, 18));
       });
 
       testWidgetsOnAllPlatforms("can create pattern tags back to back (with a space)", (tester) async {
-        await _pumpTestEditor(
-          tester,
-          singleParagraphEmptyDoc(),
-        );
+        await _pumpTestEditor(tester, singleParagraphEmptyDoc());
         await tester.placeCaretInParagraph("1", 0);
 
         // Compose a pattern tag.
@@ -298,21 +213,12 @@ void main() {
         // Ensure that the tag has a composing attribution.
         final text = SuperEditorInspector.findTextInComponent("1");
         expect(text.toPlainText(), "hello #flutter #dart");
-        expect(
-          text.getAttributedRange({const PatternTagAttribution()}, 6),
-          const SpanRange(6, 13),
-        );
-        expect(
-          text.getAttributedRange({const PatternTagAttribution()}, 15),
-          const SpanRange(15, 19),
-        );
+        expect(text.getAttributedRange({const PatternTagAttribution()}, 6), const SpanRange(6, 13));
+        expect(text.getAttributedRange({const PatternTagAttribution()}, 15), const SpanRange(15, 19));
       });
 
       testWidgetsOnAllPlatforms("only notifies tag index listeners when tags change", (tester) async {
-        final testContext = await _pumpTestEditor(
-          tester,
-          singleParagraphEmptyDoc(),
-        );
+        final testContext = await _pumpTestEditor(tester, singleParagraphEmptyDoc());
         await tester.placeCaretInParagraph("1", 0);
 
         // Listen for tag notifications.
@@ -348,12 +254,7 @@ void main() {
         await _pumpTestEditor(
           tester,
           MutableDocument(
-            nodes: [
-              ParagraphNode(
-                id: "1",
-                text: AttributedText("before "),
-              ),
-            ],
+            nodes: [ParagraphNode(id: "1", text: AttributedText("before "))],
           ),
         );
 
@@ -370,10 +271,7 @@ void main() {
         expect(
           SuperEditorInspector.findDocumentSelection(),
           const DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 10),
-            ),
+            position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 10)),
           ),
         );
 
@@ -384,10 +282,7 @@ void main() {
         expect(
           SuperEditorInspector.findDocumentSelection(),
           const DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 8),
-            ),
+            position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 8)),
           ),
         );
       });
@@ -396,12 +291,7 @@ void main() {
         await _pumpTestEditor(
           tester,
           MutableDocument(
-            nodes: [
-              ParagraphNode(
-                id: "1",
-                text: AttributedText("before "),
-              ),
-            ],
+            nodes: [ParagraphNode(id: "1", text: AttributedText("before "))],
           ),
         );
 
@@ -423,14 +313,8 @@ void main() {
         expect(
           SuperEditorInspector.findDocumentSelection(),
           const DocumentSelection(
-            base: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 5),
-            ),
-            extent: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 8),
-            ),
+            base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 5)),
+            extent: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 8)),
           ),
         );
       });
@@ -439,12 +323,7 @@ void main() {
         await _pumpTestEditor(
           tester,
           MutableDocument(
-            nodes: [
-              ParagraphNode(
-                id: "1",
-                text: AttributedText("before "),
-              ),
-            ],
+            nodes: [ParagraphNode(id: "1", text: AttributedText("before "))],
           ),
         );
 
@@ -466,14 +345,8 @@ void main() {
         expect(
           SuperEditorInspector.findDocumentSelection(),
           const DocumentSelection(
-            base: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 14),
-            ),
-            extent: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 11),
-            ),
+            base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 14)),
+            extent: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 11)),
           ),
         );
       });
@@ -481,10 +354,7 @@ void main() {
 
     group("editing >", () {
       testWidgetsOnAllPlatforms("user can delete pieces of tags", (tester) async {
-        await _pumpTestEditor(
-          tester,
-          singleParagraphEmptyDoc(),
-        );
+        await _pumpTestEditor(tester, singleParagraphEmptyDoc());
         await tester.placeCaretInParagraph("1", 0);
 
         // Compose a pattern tag.
@@ -505,10 +375,7 @@ void main() {
         // Ensure that the tag is still marked as a hash tag.
         final text = SuperEditorInspector.findTextInComponent("1");
         expect(text.toPlainText(), "#bcdfghi ");
-        expect(
-          text.getAttributedRange({const PatternTagAttribution()}, 0),
-          const SpanRange(0, 7),
-        );
+        expect(text.getAttributedRange({const PatternTagAttribution()}, 0), const SpanRange(0, 7));
       });
     });
   });
@@ -518,8 +385,6 @@ Future<TestDocumentContext> _pumpTestEditor(WidgetTester tester, MutableDocument
   return await tester //
       .createDocument()
       .withCustomContent(document)
-      .withPlugin(PatternTagPlugin(
-        tagRule: hashTagRule,
-      ))
+      .withPlugin(PatternTagPlugin(tagRule: hashTagRule))
       .pump();
 }

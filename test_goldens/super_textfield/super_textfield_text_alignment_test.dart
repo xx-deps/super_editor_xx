@@ -190,13 +190,7 @@ void main() {
       testWidgetsOnAllPlatforms('makes scrollview fill all the field width', (tester) async {
         await _pumpScaffold(
           tester,
-          children: [
-            _buildSuperTextField(
-              text: multilineText,
-              textAlign: TextAlign.center,
-              maxLines: 4,
-            ),
-          ],
+          children: [_buildSuperTextField(text: multilineText, textAlign: TextAlign.center, maxLines: 4)],
         );
         await tester.pump();
 
@@ -217,9 +211,7 @@ Widget _buildSuperTextField({
   SuperTextFieldPlatformConfiguration? configuration,
   int? maxLines,
 }) {
-  final controller = AttributedTextEditingController(
-    text: AttributedText(text),
-  );
+  final controller = AttributedTextEditingController(text: AttributedText(text));
 
   return SizedBox(
     width: double.infinity,
@@ -231,25 +223,17 @@ Widget _buildSuperTextField({
       minLines: 1,
       lineHeight: 20,
       textStyleBuilder: (_) {
-        return const TextStyle(
-          color: Colors.black,
-          fontSize: 20,
-        );
+        return const TextStyle(color: Colors.black, fontSize: 20);
       },
     ),
   );
 }
 
-Future<void> _pumpScaffold(
-  WidgetTester tester, {
-  required List<Widget> children,
-}) async {
+Future<void> _pumpScaffold(WidgetTester tester, {required List<Widget> children}) async {
   await tester.pumpWidget(
     MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: Column(children: children),
-      ),
+      home: Scaffold(body: Column(children: children)),
     ),
   );
 }

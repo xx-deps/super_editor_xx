@@ -18,11 +18,7 @@ void main() {
       addTearDown(() => BlinkController.indeterminateAnimationsEnabled = false);
 
       await tester.pumpWidget(
-        _buildScaffold(
-          child: SuperTextField(
-            textStyleBuilder: (_) => const TextStyle(fontSize: 16),
-          ),
-        ),
+        _buildScaffold(child: SuperTextField(textStyleBuilder: (_) => const TextStyle(fontSize: 16))),
       );
 
       // Press tab to focus SuperTextField
@@ -55,11 +51,7 @@ void main() {
       final typingInterval = (flashPeriod ~/ 2);
 
       await tester.pumpWidget(
-        _buildScaffold(
-          child: SuperTextField(
-            textStyleBuilder: (_) => const TextStyle(fontSize: 16),
-          ),
-        ),
+        _buildScaffold(child: SuperTextField(textStyleBuilder: (_) => const TextStyle(fontSize: 16))),
       );
 
       // Press tab to focus SuperTextField
@@ -92,27 +84,18 @@ void main() {
     });
 
     testWidgetsOnAllPlatforms("is NOT displayed without a text selection", (tester) async {
-      await tester.pumpWidget(
-        _buildScaffold(
-          child: const SuperTextField(),
-        ),
-      );
+      await tester.pumpWidget(_buildScaffold(child: const SuperTextField()));
       await tester.pump();
 
       expect(_isCaretPresent(tester), isFalse);
     });
 
     testWidgetsOnAllPlatforms("is displayed with focus and a collapsed text selection", (tester) async {
-      final controller = AttributedTextEditingController(
-        selection: const TextSelection.collapsed(offset: 0),
-      );
+      final controller = AttributedTextEditingController(selection: const TextSelection.collapsed(offset: 0));
 
       await tester.pumpWidget(
         _buildScaffold(
-          child: SuperTextField(
-            focusNode: FocusNode()..requestFocus(),
-            textController: controller,
-          ),
+          child: SuperTextField(focusNode: FocusNode()..requestFocus(), textController: controller),
         ),
       );
       await tester.pump();
@@ -128,10 +111,7 @@ void main() {
 
       await tester.pumpWidget(
         _buildScaffold(
-          child: SuperTextField(
-            focusNode: FocusNode()..requestFocus(),
-            textController: controller,
-          ),
+          child: SuperTextField(focusNode: FocusNode()..requestFocus(), textController: controller),
         ),
       );
       await tester.pump();
@@ -140,15 +120,9 @@ void main() {
     });
 
     testWidgetsOnAllPlatforms("uses the given caretStyle", (tester) async {
-      final controller = AttributedTextEditingController(
-        selection: const TextSelection.collapsed(offset: 0),
-      );
+      final controller = AttributedTextEditingController(selection: const TextSelection.collapsed(offset: 0));
 
-      const caretStyle = CaretStyle(
-        color: Colors.red,
-        width: 5,
-        borderRadius: BorderRadius.all(Radius.circular(2.0)),
-      );
+      const caretStyle = CaretStyle(color: Colors.red, width: 5, borderRadius: BorderRadius.all(Radius.circular(2.0)));
 
       await tester.pumpWidget(
         _buildScaffold(
@@ -177,13 +151,7 @@ void main() {
         ),
       );
 
-      await tester.pumpWidget(
-        _buildScaffold(
-          child: SuperTextField(
-            textController: controller,
-          ),
-        ),
-      );
+      await tester.pumpWidget(_buildScaffold(child: SuperTextField(textController: controller)));
 
       await tester.placeCaretInSuperTextField(0);
 
@@ -229,13 +197,7 @@ void main() {
         ),
       );
 
-      await tester.pumpWidget(
-        _buildScaffold(
-          child: SuperTextField(
-            textController: controller,
-          ),
-        ),
-      );
+      await tester.pumpWidget(_buildScaffold(child: SuperTextField(textController: controller)));
 
       await tester.doubleTapAtSuperTextField(0);
 
@@ -245,8 +207,9 @@ void main() {
       // Drag the upstream selection handle by a small distance so that we trigger a
       // user drag event. This drag event is continued down below so that we can check
       // for caret blinking during a user drag.
-      final TestGesture upstreamHandleGesture =
-          await tester.dragUpstreamMobileHandleByDistanceInSuperTextField(const Offset(100, 100));
+      final TestGesture upstreamHandleGesture = await tester.dragUpstreamMobileHandleByDistanceInSuperTextField(
+        const Offset(100, 100),
+      );
       addTearDown(() => upstreamHandleGesture.removePointer());
 
       // Check for the caret visibility across 3-4 frames and ensure it doesn't blink.
@@ -280,8 +243,9 @@ void main() {
       // Drag the downstream selection handle by a small distance so that we trigger a
       // user drag event. This drag event is continued down below so that we can check
       // for caret blinking during a user drag.
-      final TestGesture downstreamHandleGesture =
-          await tester.dragDownstreamMobileHandleByDistanceInSuperTextField(const Offset(100, 100));
+      final TestGesture downstreamHandleGesture = await tester.dragDownstreamMobileHandleByDistanceInSuperTextField(
+        const Offset(100, 100),
+      );
       addTearDown(() => downstreamHandleGesture.removePointer());
 
       // Check for the caret visibility across 3-4 frames and ensure it doesn't blink.
@@ -317,13 +281,7 @@ void main() {
         ),
       );
 
-      await tester.pumpWidget(
-        _buildScaffold(
-          child: SuperTextField(
-            textController: controller,
-          ),
-        ),
-      );
+      await tester.pumpWidget(_buildScaffold(child: SuperTextField(textController: controller)));
 
       await tester.placeCaretInSuperTextField(0);
 
@@ -333,8 +291,9 @@ void main() {
       // Drag the collapsed handle by a small distance so that we trigger a
       // user drag event. This drag event is continued down below so that we
       // can check for caret blinking during a user drag.
-      final TestGesture gesture =
-          await tester.dragAndroidCollapsedHandleByDistanceInSuperTextField(const Offset(100, 100));
+      final TestGesture gesture = await tester.dragAndroidCollapsedHandleByDistanceInSuperTextField(
+        const Offset(100, 100),
+      );
       addTearDown(() => gesture.removePointer());
 
       // Check for the caret visibility across 3-4 frames and ensure it doesn't blink.
@@ -363,16 +322,9 @@ void main() {
   });
 }
 
-Widget _buildScaffold({
-  required Widget child,
-}) {
+Widget _buildScaffold({required Widget child}) {
   return MaterialApp(
-    home: Scaffold(
-      body: SizedBox(
-        width: 300,
-        child: child,
-      ),
-    ),
+    home: Scaffold(body: SizedBox(width: 300, child: child)),
   );
 }
 

@@ -227,12 +227,11 @@ void main() {
       // Ensure that the selection was placed at the end of the word.
       expect(
         SuperEditorInspector.findDocumentSelection(),
-        selectionEquivalentTo(const DocumentSelection.collapsed(
-          position: DocumentPosition(
-            nodeId: "1",
-            nodePosition: TextNodePosition(offset: 39),
+        selectionEquivalentTo(
+          const DocumentSelection.collapsed(
+            position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 39)),
           ),
-        )),
+        ),
       );
 
       // Press and drag the caret to "con|sectetur" because dragging is the only way
@@ -250,12 +249,11 @@ void main() {
       // Ensure that the selection moved to "con|sectetur".
       expect(
         SuperEditorInspector.findDocumentSelection(),
-        selectionEquivalentTo(const DocumentSelection.collapsed(
-          position: DocumentPosition(
-            nodeId: "1",
-            nodePosition: TextNodePosition(offset: 32),
+        selectionEquivalentTo(
+          const DocumentSelection.collapsed(
+            position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 32)),
           ),
-        )),
+        ),
       );
 
       // Ensure the toolbar is not visible.
@@ -267,12 +265,11 @@ void main() {
       // Ensure the selection was kept at "con|sectetur".
       expect(
         SuperEditorInspector.findDocumentSelection(),
-        selectionEquivalentTo(const DocumentSelection.collapsed(
-          position: DocumentPosition(
-            nodeId: "1",
-            nodePosition: TextNodePosition(offset: 32),
+        selectionEquivalentTo(
+          const DocumentSelection.collapsed(
+            position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 32)),
           ),
-        )),
+        ),
       );
 
       // Ensure the toolbar is visible.

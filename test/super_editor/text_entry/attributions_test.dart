@@ -9,18 +9,12 @@ void main() {
         final text = AttributedText('one two three');
 
         // Add link across "one two"
-        text.addAttribution(
-          const LinkAttribution('https://flutter.dev'),
-          const SpanRange(0, 6),
-        );
+        text.addAttribution(const LinkAttribution('https://flutter.dev'), const SpanRange(0, 6));
 
         // Try to add a different link across "two three" and expect
         // an exception
         expect(() {
-          text.addAttribution(
-            const LinkAttribution('https://pub.dev'),
-            const SpanRange(4, 12),
-          );
+          text.addAttribution(const LinkAttribution('https://pub.dev'), const SpanRange(4, 12));
         }, throwsA(isA<IncompatibleOverlappingAttributionsException>()));
       });
 
@@ -30,15 +24,9 @@ void main() {
         const linkAttribution = LinkAttribution('https://flutter.dev');
 
         // Add link across "one two"
-        text.addAttribution(
-          linkAttribution,
-          const SpanRange(0, 6),
-        );
+        text.addAttribution(linkAttribution, const SpanRange(0, 6));
 
-        text.addAttribution(
-          const LinkAttribution('https://flutter.dev'),
-          const SpanRange(4, 12),
-        );
+        text.addAttribution(const LinkAttribution('https://flutter.dev'), const SpanRange(4, 12));
 
         expect(text.spans.hasAttributionsWithin(attributions: {linkAttribution}, start: 0, end: 12), true);
       });

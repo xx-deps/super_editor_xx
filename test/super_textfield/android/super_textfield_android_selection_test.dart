@@ -41,8 +41,9 @@ void main() {
       expect(find.byType(AndroidTextEditingFloatingToolbar), findsNothing);
     });
 
-    testWidgetsOnAndroid("long-pressing in empty space when there is NO selection does NOT show the toolbar",
-        (tester) async {
+    testWidgetsOnAndroid("long-pressing in empty space when there is NO selection does NOT show the toolbar", (
+      tester,
+    ) async {
       await _pumpTestApp(tester);
 
       // Ensure there's no selection to begin with, and no toolbar is displayed.
@@ -101,20 +102,14 @@ void main() {
 
       // Ensure that the toolbar is visible and the selection didn't change.
       expect(find.byType(AndroidTextEditingFloatingToolbar), findsOneWidget);
-      expect(
-        SuperTextFieldInspector.findSelection(),
-        const TextSelection.collapsed(offset: 2),
-      );
+      expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: 2));
 
       // Tap again on the same position to hide the toolbar.
       await tester.placeCaretInSuperTextField(2);
 
       // Ensure the toolbar disappeared and the selection didn't change.
       expect(find.byType(AndroidTextEditingFloatingToolbar), findsNothing);
-      expect(
-        SuperTextFieldInspector.findSelection(),
-        const TextSelection.collapsed(offset: 2),
-      );
+      expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: 2));
     });
 
     testWidgetsOnAndroid("tapping at existing expanded selection places the caret", (tester) async {
@@ -135,10 +130,7 @@ void main() {
 
       // Ensure that the toolbar disappeared and the selection changed.
       expect(find.byType(AndroidTextEditingFloatingToolbar), findsNothing);
-      expect(
-        SuperTextFieldInspector.findSelection(),
-        const TextSelection.collapsed(offset: 2),
-      );
+      expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: 2));
     });
 
     testWidgetsOnAndroid("hides toolbar when the user taps to move the caret", (tester) async {
@@ -177,12 +169,7 @@ void main() {
         await tester.pumpWidget(
           MaterialApp(
             home: Scaffold(
-              body: SizedBox(
-                width: 1000,
-                child: SuperTextField(
-                  textController: controller,
-                ),
-              ),
+              body: SizedBox(width: 1000, child: SuperTextField(textController: controller)),
             ),
           ),
         );
@@ -192,10 +179,7 @@ void main() {
         await tester.pumpAndSettle();
 
         // Ensure the word was selected.
-        expect(
-          SuperTextFieldInspector.findSelection(),
-          const TextSelection(baseOffset: 12, extentOffset: 17),
-        );
+        expect(SuperTextFieldInspector.findSelection(), const TextSelection(baseOffset: 12, extentOffset: 17));
 
         // Drag the downstream handle to the beginning of the downstream word.
         // "Lorem ipsum [dolor sit a]met"
@@ -212,13 +196,7 @@ void main() {
         //
         // "Lorem ipsum [dolor sit amet]"
         //                             ^ position 26
-        expect(
-          SuperTextFieldInspector.findSelection(),
-          const TextSelection(
-            baseOffset: 12,
-            extentOffset: 26,
-          ),
-        );
+        expect(SuperTextFieldInspector.findSelection(), const TextSelection(baseOffset: 12, extentOffset: 26));
 
         // Release the gesture so the test system doesn't complain.
         await gesture.up();
@@ -234,12 +212,7 @@ void main() {
         await tester.pumpWidget(
           MaterialApp(
             home: Scaffold(
-              body: SizedBox(
-                width: 1000,
-                child: SuperTextField(
-                  textController: controller,
-                ),
-              ),
+              body: SizedBox(width: 1000, child: SuperTextField(textController: controller)),
             ),
           ),
         );
@@ -249,10 +222,7 @@ void main() {
         await tester.pumpAndSettle();
 
         // Ensure the word was selected.
-        expect(
-          SuperTextFieldInspector.findSelection(),
-          const TextSelection(baseOffset: 27, extentOffset: 38),
-        );
+        expect(SuperTextFieldInspector.findSelection(), const TextSelection(baseOffset: 27, extentOffset: 38));
 
         // Drag the downstream handle towards the beginning of the selected word.
         // "Lorem ipsum dolor sit amet [con]sectetur"
@@ -270,13 +240,7 @@ void main() {
         // "Lorem ipsum dolor sit amet [con]sectetur"
         //                             ^ position 27
         //                                 ^ position 30
-        expect(
-          SuperTextFieldInspector.findSelection(),
-          const TextSelection(
-            baseOffset: 27,
-            extentOffset: 30,
-          ),
-        );
+        expect(SuperTextFieldInspector.findSelection(), const TextSelection(baseOffset: 27, extentOffset: 30));
 
         // Release the gesture so the test system doesn't complain.
         await gesture.up();
@@ -292,12 +256,7 @@ void main() {
         await tester.pumpWidget(
           MaterialApp(
             home: Scaffold(
-              body: SizedBox(
-                width: 1000,
-                child: SuperTextField(
-                  textController: controller,
-                ),
-              ),
+              body: SizedBox(width: 1000, child: SuperTextField(textController: controller)),
             ),
           ),
         );
@@ -308,10 +267,7 @@ void main() {
 
         // Ensure the word was selected.
         // Ensure the word was selected.
-        expect(
-          SuperTextFieldInspector.findSelection(),
-          const TextSelection(baseOffset: 12, extentOffset: 17),
-        );
+        expect(SuperTextFieldInspector.findSelection(), const TextSelection(baseOffset: 12, extentOffset: 17));
 
         // Drag the upstream handle to the end of the upstream word.
         // "Lorem ipsu[m dolor] sit amet"
@@ -328,13 +284,7 @@ void main() {
         //
         // "Lorem [ipsum dolor] sit amet"
         //        ^ position 6
-        expect(
-          SuperTextFieldInspector.findSelection(),
-          const TextSelection(
-            baseOffset: 6,
-            extentOffset: 17,
-          ),
-        );
+        expect(SuperTextFieldInspector.findSelection(), const TextSelection(baseOffset: 6, extentOffset: 17));
 
         // Release the gesture so the test system doesn't complain.
         await gesture.up();
@@ -350,12 +300,7 @@ void main() {
         await tester.pumpWidget(
           MaterialApp(
             home: Scaffold(
-              body: SizedBox(
-                width: 1000,
-                child: SuperTextField(
-                  textController: controller,
-                ),
-              ),
+              body: SizedBox(width: 1000, child: SuperTextField(textController: controller)),
             ),
           ),
         );
@@ -365,10 +310,7 @@ void main() {
         await tester.pumpAndSettle();
 
         // Ensure the word was selected.
-        expect(
-          SuperTextFieldInspector.findSelection(),
-          const TextSelection(baseOffset: 27, extentOffset: 38),
-        );
+        expect(SuperTextFieldInspector.findSelection(), const TextSelection(baseOffset: 27, extentOffset: 38));
 
         // Drag the upstream handle towards the end of the selected word.
         // "Lorem ipsum dolor sit amet consect[etur]"
@@ -386,13 +328,7 @@ void main() {
         // "Lorem ipsum dolor sit amet consect[etur]"
         //                                    ^ position 34
         //                                         ^ position 38
-        expect(
-          SuperTextFieldInspector.findSelection(),
-          const TextSelection(
-            baseOffset: 34,
-            extentOffset: 38,
-          ),
-        );
+        expect(SuperTextFieldInspector.findSelection(), const TextSelection(baseOffset: 34, extentOffset: 38));
 
         // Release the gesture so the test system doesn't complain.
         await gesture.up();
@@ -428,18 +364,13 @@ Future<void> _pumpTestApp(
               child: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 250),
                 child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black),
-                  ),
+                  decoration: BoxDecoration(border: Border.all(color: Colors.black)),
                   child: SuperTextField(
                     focusNode: textFieldFocusNode,
                     tapRegionGroupId: tapRegionGroupdId,
                     padding: padding,
                     textAlign: textAlign ?? TextAlign.left,
-                    textController: controller ??
-                        AttributedTextEditingController(
-                          text: AttributedText('abc'),
-                        ),
+                    textController: controller ?? AttributedTextEditingController(text: AttributedText('abc')),
                   ),
                 ),
               ),

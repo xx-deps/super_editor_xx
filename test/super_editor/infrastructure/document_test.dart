@@ -7,82 +7,30 @@ void main() {
       group("equality", () {
         test("equivalent TextNodes are equal", () {
           expect(
-            TextNode(
-              id: '1',
-              text: AttributedText(
-                'a',
-                AttributedSpans(),
-              ),
-            ),
-            equals(
-              TextNode(
-                id: '1',
-                text: AttributedText(
-                  'a',
-                  AttributedSpans(),
-                ),
-              ),
-            ),
+            TextNode(id: '1', text: AttributedText('a', AttributedSpans())),
+            equals(TextNode(id: '1', text: AttributedText('a', AttributedSpans()))),
           );
         });
 
         test("different TextNodes are not equal", () {
           expect(
-            TextNode(
-                  id: '1',
-                  text: AttributedText(
-                    'a',
-                    AttributedSpans(),
-                  ),
-                ) ==
-                TextNode(
-                  id: '1',
-                  text: AttributedText(
-                    'b',
-                    AttributedSpans(),
-                  ),
-                ),
+            TextNode(id: '1', text: AttributedText('a', AttributedSpans())) ==
+                TextNode(id: '1', text: AttributedText('b', AttributedSpans())),
             isFalse,
           );
         });
 
         test("equivalent ParagraphNodes are equal", () {
           expect(
-            ParagraphNode(
-              id: '1',
-              text: AttributedText(
-                'a',
-                AttributedSpans(),
-              ),
-            ),
-            equals(
-              ParagraphNode(
-                id: '1',
-                text: AttributedText(
-                  'a',
-                  AttributedSpans(),
-                ),
-              ),
-            ),
+            ParagraphNode(id: '1', text: AttributedText('a', AttributedSpans())),
+            equals(ParagraphNode(id: '1', text: AttributedText('a', AttributedSpans()))),
           );
         });
 
         test("different ParagraphNodes are not equal", () {
           expect(
-            ParagraphNode(
-                  id: '1',
-                  text: AttributedText(
-                    'a',
-                    AttributedSpans(),
-                  ),
-                ) ==
-                ParagraphNode(
-                  id: '1',
-                  text: AttributedText(
-                    'b',
-                    AttributedSpans(),
-                  ),
-                ),
+            ParagraphNode(id: '1', text: AttributedText('a', AttributedSpans())) ==
+                ParagraphNode(id: '1', text: AttributedText('b', AttributedSpans())),
             isFalse,
           );
         });
@@ -90,16 +38,12 @@ void main() {
         test("equivalent ListItemNodes are equal", () {
           expect(
             ListItemNode(id: '1', itemType: ListItemType.ordered, text: AttributedText('abcdefghij')),
-            equals(
-              ListItemNode(id: '1', itemType: ListItemType.ordered, text: AttributedText('abcdefghij')),
-            ),
+            equals(ListItemNode(id: '1', itemType: ListItemType.ordered, text: AttributedText('abcdefghij'))),
           );
 
           expect(
             ListItemNode(id: '1', itemType: ListItemType.unordered, text: AttributedText('abcdefghij')),
-            equals(
-              ListItemNode(id: '1', itemType: ListItemType.unordered, text: AttributedText('abcdefghij')),
-            ),
+            equals(ListItemNode(id: '1', itemType: ListItemType.unordered, text: AttributedText('abcdefghij'))),
           );
         });
 
@@ -118,27 +62,17 @@ void main() {
         });
 
         test("equivalent HorizontalRuleNodes are equal", () {
-          expect(
-            HorizontalRuleNode(id: '1'),
-            equals(
-              HorizontalRuleNode(id: '1'),
-            ),
-          );
+          expect(HorizontalRuleNode(id: '1'), equals(HorizontalRuleNode(id: '1')));
         });
 
         test("different HorizontalRuleNodes are not equal", () {
-          expect(
-            HorizontalRuleNode(id: '1') == HorizontalRuleNode(id: '2'),
-            isFalse,
-          );
+          expect(HorizontalRuleNode(id: '1') == HorizontalRuleNode(id: '2'), isFalse);
         });
 
         test("equivalent ImageNodes are equal", () {
           expect(
             ImageNode(id: '1', imageUrl: 'https://thisisnotreal.com'),
-            equals(
-              ImageNode(id: '1', imageUrl: 'https://thisisnotreal.com'),
-            ),
+            equals(ImageNode(id: '1', imageUrl: 'https://thisisnotreal.com')),
           );
         });
 

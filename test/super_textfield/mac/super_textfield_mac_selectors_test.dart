@@ -13,9 +13,7 @@ void main() {
     testWidgetsOnMac('allows apps to handle selectors in their own way', (tester) async {
       bool customHandlerCalled = false;
 
-      final controller = AttributedTextEditingController(
-        text: AttributedText('Selectors test'),
-      );
+      final controller = AttributedTextEditingController(text: AttributedText('Selectors test'));
 
       await tester.pumpWidget(
         _buildScaffold(
@@ -23,11 +21,9 @@ void main() {
             textController: controller,
             inputSource: TextInputSource.ime,
             selectorHandlers: {
-              MacOsSelectors.moveRight: ({
-                required SuperTextFieldContext textFieldContext,
-              }) {
+              MacOsSelectors.moveRight: ({required SuperTextFieldContext textFieldContext}) {
                 customHandlerCalled = true;
-              }
+              },
             },
           ),
         ),
@@ -43,15 +39,13 @@ void main() {
       expect(customHandlerCalled, isTrue);
 
       // Ensure that the textfield didn't execute the default handler for the MacOsSelectors.moveRight selector.
-      expect(
-        SuperTextFieldInspector.findSelection(),
-        const TextSelection.collapsed(offset: 0),
-      );
+      expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: 0));
     });
   });
 
-  testWidgetsOnMac('prevents surrounding widgets from consuming control keys that trigger OS selectors',
-      (tester) async {
+  testWidgetsOnMac('prevents surrounding widgets from consuming control keys that trigger OS selectors', (
+    tester,
+  ) async {
     // Explanation: Mac OS selectors are only generated for a given key event, if that key event
     // isn't handled by anything within Flutter code. Some key events are almost always tied to
     // Shortcuts higher up in the tree, e.g., ESC to generate a DismissIntent. Therefore, SuperTextField
@@ -62,23 +56,21 @@ void main() {
     await tester.pumpWidget(
       _buildScaffold(
         child: Shortcuts(
-          shortcuts: const {
-            SingleActivator(LogicalKeyboardKey.escape): DismissIntent(),
-          },
+          shortcuts: const {SingleActivator(LogicalKeyboardKey.escape): DismissIntent()},
           child: Actions(
             actions: {
-              DismissIntent: CallbackAction<DismissIntent>(onInvoke: (DismissIntent intent) {
-                fail("Received a DismissIntent from Shortcuts but that shortcut should never have been activated.");
-              }),
+              DismissIntent: CallbackAction<DismissIntent>(
+                onInvoke: (DismissIntent intent) {
+                  fail("Received a DismissIntent from Shortcuts but that shortcut should never have been activated.");
+                },
+              ),
             },
             child: SuperTextField(
               inputSource: TextInputSource.ime,
               selectorHandlers: {
-                MacOsSelectors.cancelOperation: ({
-                  required SuperTextFieldContext textFieldContext,
-                }) {
+                MacOsSelectors.cancelOperation: ({required SuperTextFieldContext textFieldContext}) {
                   receivedOsSelector = true;
-                }
+                },
               },
             ),
           ),
@@ -98,15 +90,8 @@ void main() {
   });
 }
 
-Widget _buildScaffold({
-  required Widget child,
-}) {
+Widget _buildScaffold({required Widget child}) {
   return MaterialApp(
-    home: Scaffold(
-      body: SizedBox(
-        width: 300,
-        child: child,
-      ),
-    ),
+    home: Scaffold(body: SizedBox(width: 300, child: child)),
   );
 }

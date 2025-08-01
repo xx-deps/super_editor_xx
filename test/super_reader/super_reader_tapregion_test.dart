@@ -17,28 +17,29 @@ void main() {
       const tapRegionId = 'super_editor_group_id';
       final focusNode = FocusNode();
 
-      final context = await tester //
-          .createDocument()
-          .fromMarkdown('Single line document.')
-          .withFocusNode(focusNode)
-          .withTapRegionGroupId(tapRegionId)
-          .withCustomWidgetTreeBuilder(
-            (superEditor) => MaterialApp(
-              home: Scaffold(
-                body: TapRegion(
-                  groupId: tapRegionId,
-                  onTapOutside: (e) {
-                    // Fail on tap outside so that we're sure that the test
-                    // pass when using TapRegion's for focus, because apps should be able
-                    // to do that.
-                    fail('Tapped outside of SuperReader');
-                  },
-                  child: superEditor,
+      final context =
+          await tester //
+              .createDocument()
+              .fromMarkdown('Single line document.')
+              .withFocusNode(focusNode)
+              .withTapRegionGroupId(tapRegionId)
+              .withCustomWidgetTreeBuilder(
+                (superEditor) => MaterialApp(
+                  home: Scaffold(
+                    body: TapRegion(
+                      groupId: tapRegionId,
+                      onTapOutside: (e) {
+                        // Fail on tap outside so that we're sure that the test
+                        // pass when using TapRegion's for focus, because apps should be able
+                        // to do that.
+                        fail('Tapped outside of SuperReader');
+                      },
+                      child: superEditor,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          )
-          .pump();
+              )
+              .pump();
 
       final nodeId = context.document.first.id;
 
@@ -55,14 +56,8 @@ void main() {
         SuperReaderInspector.findDocumentSelection(),
         selectionEquivalentTo(
           DocumentSelection(
-            base: DocumentPosition(
-              nodeId: nodeId,
-              nodePosition: const TextNodePosition(offset: 0),
-            ),
-            extent: DocumentPosition(
-              nodeId: nodeId,
-              nodePosition: const TextNodePosition(offset: 21),
-            ),
+            base: DocumentPosition(nodeId: nodeId, nodePosition: const TextNodePosition(offset: 0)),
+            extent: DocumentPosition(nodeId: nodeId, nodePosition: const TextNodePosition(offset: 21)),
           ),
         ),
       );

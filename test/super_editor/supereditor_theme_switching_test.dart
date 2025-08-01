@@ -60,10 +60,7 @@ Future<void> _pumpThemeSwitchingTestApp(
   required ValueNotifier<Brightness> brightnessNotifier,
 }) async {
   final composer = MutableDocumentComposer();
-  final editor = createDefaultDocumentEditor(
-    document: singleParagraphDoc(),
-    composer: composer,
-  );
+  final editor = createDefaultDocumentEditor(document: singleParagraphDoc(), composer: composer);
 
   await tester.pumpWidget(
     MaterialApp(
@@ -72,9 +69,7 @@ Future<void> _pumpThemeSwitchingTestApp(
           valueListenable: brightnessNotifier,
           builder: (context, brightness, child) {
             return Theme(
-              data: ThemeData(
-                brightness: brightness,
-              ),
+              data: ThemeData(brightness: brightness),
               child: SuperEditor(
                 editor: editor,
                 documentOverlayBuilders: [
@@ -83,10 +78,8 @@ Future<void> _pumpThemeSwitchingTestApp(
                     (builder) => builder is! DefaultCaretOverlayBuilder,
                   ),
                   DefaultCaretOverlayBuilder(
-                    caretStyle: CaretStyle(
-                      color: brightness == Brightness.light ? Colors.green : Colors.red,
-                    ),
-                  )
+                    caretStyle: CaretStyle(color: brightness == Brightness.light ? Colors.green : Colors.red),
+                  ),
                 ],
               ),
             );

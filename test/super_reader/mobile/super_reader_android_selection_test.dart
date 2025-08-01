@@ -60,14 +60,8 @@ void main() {
           expect(
             SuperReaderInspector.findDocumentSelection(),
             const DocumentSelection(
-              base: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 17),
-              ),
-              extent: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 6),
-              ),
+              base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 17)),
+              extent: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 6)),
             ),
           );
 
@@ -112,14 +106,8 @@ void main() {
           expect(
             SuperReaderInspector.findDocumentSelection(),
             const DocumentSelection(
-              base: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 17),
-              ),
-              extent: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 6),
-              ),
+              base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 17)),
+              extent: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 6)),
             ),
           );
 
@@ -141,14 +129,8 @@ void main() {
           expect(
             SuperReaderInspector.findDocumentSelection(),
             const DocumentSelection(
-              base: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 17),
-              ),
-              extent: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 10),
-              ),
+              base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 17)),
+              extent: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 10)),
             ),
           );
 
@@ -253,14 +235,8 @@ void main() {
           expect(
             SuperReaderInspector.findDocumentSelection(),
             const DocumentSelection(
-              base: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 12),
-              ),
-              extent: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 21),
-              ),
+              base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 12)),
+              extent: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 21)),
             ),
           );
 
@@ -304,14 +280,8 @@ void main() {
           expect(
             SuperReaderInspector.findDocumentSelection(),
             const DocumentSelection(
-              base: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 12),
-              ),
-              extent: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 21),
-              ),
+              base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 12)),
+              extent: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 21)),
             ),
           );
 
@@ -333,14 +303,8 @@ void main() {
           expect(
             SuperReaderInspector.findDocumentSelection(),
             const DocumentSelection(
-              base: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 12),
-              ),
-              extent: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 19),
-              ),
+              base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 12)),
+              extent: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 19)),
             ),
           );
 
@@ -443,14 +407,8 @@ Future<void> _pumpAppWithLongText(WidgetTester tester) async {
 }
 
 const _wordConsecteturSelection = DocumentSelection(
-  base: DocumentPosition(
-    nodeId: "1",
-    nodePosition: TextNodePosition(offset: 28),
-  ),
-  extent: DocumentPosition(
-    nodeId: "1",
-    nodePosition: TextNodePosition(offset: 39),
-  ),
+  base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 28)),
+  extent: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 39)),
 );
 
 const _wordIpsumStart = 6;

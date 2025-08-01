@@ -13,40 +13,22 @@ void main() {
   group('SuperTextField > inline widgets >', () {
     testWidgetsOnAllPlatforms('renders single inline widget at beginning of the text', (tester) async {
       final controller = AttributedTextEditingController(
-        text: AttributedText(
-          'Hello',
-          null,
-          {
-            0: const _NamedPlaceHolder('1'),
-          },
-        ),
+        text: AttributedText('Hello', null, {0: const _NamedPlaceHolder('1')}),
       );
 
       await _pumpTestApp(tester, controller: controller);
 
       // Ensure the widget was rendered.
-      expect(
-        find.byPlaceholderName('1'),
-        findsOneWidget,
-      );
+      expect(find.byPlaceholderName('1'), findsOneWidget);
 
       // Ensure the inline widget was rendered at the beginning of the textfield.
       final inlineWidgetRect = tester.getRect(find.byPlaceholderName('1'));
-      expect(
-        inlineWidgetRect.left,
-        tester.getTopLeft(find.byType(SuperTextField)).dx,
-      );
+      expect(inlineWidgetRect.left, tester.getTopLeft(find.byType(SuperTextField)).dx);
     });
 
     testWidgetsOnAllPlatforms('renders single inline widget at middle of the text', (tester) async {
       final controller = AttributedTextEditingController(
-        text: AttributedText(
-          'inline',
-          null,
-          {
-            3: const _NamedPlaceHolder('1'),
-          },
-        ),
+        text: AttributedText('inline', null, {3: const _NamedPlaceHolder('1')}),
       );
 
       await _pumpTestApp(tester, controller: controller);
@@ -54,91 +36,51 @@ void main() {
       // Ensure the inline widget was rendered between characters at offsets
       // 2 and 3 of the original string.
       final inlineWidgetRect = tester.getRect(find.byPlaceholderName('1'));
-      final (beforeInlineWidget, afterInlineWidget) = _getOffsetsAroundPosition(
-        tester,
-        const TextPosition(offset: 3),
-      );
+      final (beforeInlineWidget, afterInlineWidget) = _getOffsetsAroundPosition(tester, const TextPosition(offset: 3));
       expect(inlineWidgetRect.left, greaterThan(beforeInlineWidget.dx));
       expect(inlineWidgetRect.left, lessThan(afterInlineWidget.dx));
     });
 
     testWidgetsOnAllPlatforms('renders single inline widget at end of the text', (tester) async {
       final controller = AttributedTextEditingController(
-        text: AttributedText(
-          'Hello',
-          null,
-          {
-            5: const _NamedPlaceHolder('1'),
-          },
-        ),
+        text: AttributedText('Hello', null, {5: const _NamedPlaceHolder('1')}),
       );
 
       await _pumpTestApp(tester, controller: controller);
 
       // Ensure the widget was rendered.
-      expect(
-        find.byPlaceholderName('1'),
-        findsOneWidget,
-      );
+      expect(find.byPlaceholderName('1'), findsOneWidget);
 
       // Ensure the inline widget was rendered after the last character.
       final inlineWidgetRect = tester.getRect(find.byPlaceholderName('1'));
-      expect(
-        inlineWidgetRect.left,
-        greaterThan(_getOffsetAtPosition(tester, const TextPosition(offset: 4)).dx),
-      );
+      expect(inlineWidgetRect.left, greaterThan(_getOffsetAtPosition(tester, const TextPosition(offset: 4)).dx));
     });
 
     testWidgetsOnAllPlatforms('renders multiple inline widgets', (tester) async {
       final controller = AttributedTextEditingController(
-        text: AttributedText(
-          'Hello',
-          null,
-          {
-            0: const _NamedPlaceHolder('1'),
-            6: const _NamedPlaceHolder('2'),
-          },
-        ),
+        text: AttributedText('Hello', null, {0: const _NamedPlaceHolder('1'), 6: const _NamedPlaceHolder('2')}),
       );
 
       await _pumpTestApp(tester, controller: controller);
 
       // Ensure the first widget was rendered.
-      expect(
-        find.byPlaceholderName('1'),
-        findsOneWidget,
-      );
+      expect(find.byPlaceholderName('1'), findsOneWidget);
 
       // Ensure the first inline widget was rendered at the beginning of the textfield.
       final firstInlineWidgetRect = tester.getRect(find.byPlaceholderName('1'));
-      expect(
-        firstInlineWidgetRect.left,
-        tester.getTopLeft(find.byType(SuperTextField)).dx,
-      );
+      expect(firstInlineWidgetRect.left, tester.getTopLeft(find.byType(SuperTextField)).dx);
 
       // Ensure the second widget was rendered.
-      expect(
-        find.byPlaceholderName('2'),
-        findsOneWidget,
-      );
+      expect(find.byPlaceholderName('2'), findsOneWidget);
 
       // Ensure the second inline widget was rendered at the end of the textfield.
       final secondInlineWidgetRect = tester.getRect(find.byPlaceholderName('2'));
-      expect(
-        secondInlineWidgetRect.left,
-        _getOffsetAtPosition(tester, const TextPosition(offset: 6)).dx,
-      );
+      expect(secondInlineWidgetRect.left, _getOffsetAtPosition(tester, const TextPosition(offset: 6)).dx);
     });
 
     testWidgetsOnAllPlatforms('places caret when tapping on inline widget', (tester) async {
       final controller = AttributedTextEditingController(
-        text: AttributedText(
-          'inline',
-          null,
-          {
-            3: const _NamedPlaceHolder('1'),
-          },
-        ),
+        text: AttributedText('inline', null, {3: const _NamedPlaceHolder('1')}),
       );
 
       await _pumpTestApp(tester, controller: controller);
@@ -148,31 +90,19 @@ void main() {
       await tester.pump(kDoubleTapTimeout);
 
       // Ensure the caret is placed just before the inline widget.
-      expect(
-        SuperTextFieldInspector.findSelection(),
-        const TextSelection.collapsed(offset: 3),
-      );
+      expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: 3));
     });
 
     testWidgetsOnDesktop('navigates using arrow keys', (tester) async {
       final controller = AttributedTextEditingController(
-        text: AttributedText(
-          'inline',
-          null,
-          {
-            3: const _NamedPlaceHolder('1'),
-          },
-        ),
+        text: AttributedText('inline', null, {3: const _NamedPlaceHolder('1')}),
       );
 
       await _pumpTestApp(tester, controller: controller);
 
       // Place caret at "in|line".
       await tester.placeCaretInSuperTextField(2);
-      expect(
-        SuperTextFieldInspector.findSelection(),
-        const TextSelection.collapsed(offset: 2),
-      );
+      expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: 2));
 
       // Place RIGHT ARROW twice to move the caret to the position
       // immediately after the inline widget.
@@ -180,40 +110,25 @@ void main() {
       await tester.pressRightArrow();
 
       // Ensure that the caret moved.
-      expect(
-        SuperTextFieldInspector.findSelection(),
-        const TextSelection.collapsed(offset: 4),
-      );
+      expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: 4));
 
       // Place LEFT ARROW to move the caret back to the position
       // immediately before the inline widget.
       await tester.pressLeftArrow();
 
       // Ensure that the caret moved.
-      expect(
-        SuperTextFieldInspector.findSelection(),
-        const TextSelection.collapsed(offset: 3),
-      );
+      expect(SuperTextFieldInspector.findSelection(), const TextSelection.collapsed(offset: 3));
     });
 
     testWidgetsOnDesktop('deletes inline widget with backspace', (tester) async {
       final controller = AttributedTextEditingController(
-        text: AttributedText(
-          'inline',
-          null,
-          {
-            3: const _NamedPlaceHolder('1'),
-          },
-        ),
+        text: AttributedText('inline', null, {3: const _NamedPlaceHolder('1')}),
       );
 
       await _pumpTestApp(tester, controller: controller);
 
       // Ensure the widget is present.
-      expect(
-        find.byPlaceholderName('1'),
-        findsOneWidget,
-      );
+      expect(find.byPlaceholderName('1'), findsOneWidget);
 
       // Place the caret at the position immediately after the inline widget.
       await tester.placeCaretInSuperTextField(4);
@@ -222,36 +137,21 @@ void main() {
       await tester.pressBackspace();
 
       // Ensure the widget was not rendered.
-      expect(
-        find.byPlaceholderName('1'),
-        findsNothing,
-      );
+      expect(find.byPlaceholderName('1'), findsNothing);
 
       // Ensure the original text remains unmodified.
-      expect(
-        SuperTextFieldInspector.findText().toPlainText(),
-        'inline',
-      );
+      expect(SuperTextFieldInspector.findText().toPlainText(), 'inline');
     });
 
     testWidgetsOnDesktop('deletes inline widget with delete', (tester) async {
       final controller = AttributedTextEditingController(
-        text: AttributedText(
-          'inline',
-          null,
-          {
-            3: const _NamedPlaceHolder('1'),
-          },
-        ),
+        text: AttributedText('inline', null, {3: const _NamedPlaceHolder('1')}),
       );
 
       await _pumpTestApp(tester, controller: controller);
 
       // Ensure the widget is present.
-      expect(
-        find.byPlaceholderName('1'),
-        findsOneWidget,
-      );
+      expect(find.byPlaceholderName('1'), findsOneWidget);
 
       // Place the caret before the inline widget.
       await tester.placeCaretInSuperTextField(3);
@@ -260,36 +160,21 @@ void main() {
       await tester.pressDelete();
 
       // Ensure the widget was not rendered.
-      expect(
-        find.byPlaceholderName('1'),
-        findsNothing,
-      );
+      expect(find.byPlaceholderName('1'), findsNothing);
 
       // Ensure the original text remains unmodified.
-      expect(
-        SuperTextFieldInspector.findText().toPlainText(),
-        'inline',
-      );
+      expect(SuperTextFieldInspector.findText().toPlainText(), 'inline');
     });
 
     testWidgetsOnDesktop('deletes inline widget inside expanded selection', (tester) async {
       final controller = AttributedTextEditingController(
-        text: AttributedText(
-          'before inline after',
-          null,
-          {
-            10: const _NamedPlaceHolder('1'),
-          },
-        ),
+        text: AttributedText('before inline after', null, {10: const _NamedPlaceHolder('1')}),
       );
 
       await _pumpTestApp(tester, controller: controller);
 
       // Ensure the widget is present.
-      expect(
-        find.byPlaceholderName('1'),
-        findsOneWidget,
-      );
+      expect(find.byPlaceholderName('1'), findsOneWidget);
 
       // Place caret at "|inline".
       await tester.placeCaretInSuperTextField(7);
@@ -308,16 +193,10 @@ void main() {
       await tester.pressBackspace();
 
       // Ensure the widget was not rendered.
-      expect(
-        find.byPlaceholderName('1'),
-        findsNothing,
-      );
+      expect(find.byPlaceholderName('1'), findsNothing);
 
       // Ensure the text was updated.
-      expect(
-        SuperTextFieldInspector.findText().toPlainText(),
-        'before  after',
-      );
+      expect(SuperTextFieldInspector.findText().toPlainText(), 'before  after');
     });
 
     testWidgetsOnAllPlatforms('selects inline widget upon double tap', (tester) async {
@@ -326,13 +205,7 @@ void main() {
       // See https://github.com/superlistapp/super_editor/issues/2611 for more details.
 
       final controller = AttributedTextEditingController(
-        text: AttributedText(
-          '< inline',
-          null,
-          {
-            0: const _NamedPlaceHolder('1'),
-          },
-        ),
+        text: AttributedText('< inline', null, {0: const _NamedPlaceHolder('1')}),
       );
 
       await _pumpTestApp(tester, controller: controller);
@@ -346,21 +219,12 @@ void main() {
       await tester.pump(kTapMinTime);
 
       // Ensure the inline widget was selected.
-      expect(
-        SuperTextFieldInspector.findSelection(),
-        const TextSelection(baseOffset: 0, extentOffset: 1),
-      );
+      expect(SuperTextFieldInspector.findSelection(), const TextSelection(baseOffset: 0, extentOffset: 1));
     });
 
     testWidgetsOnAllPlatforms('does not invalidate layout when selection changes', (tester) async {
       final controller = AttributedTextEditingController(
-        text: AttributedText(
-          'Hello',
-          null,
-          {
-            5: const _NamedPlaceHolder('1'),
-          },
-        ),
+        text: AttributedText('Hello', null, {5: const _NamedPlaceHolder('1')}),
       );
 
       await _pumpTestApp(tester, controller: controller);
@@ -371,11 +235,13 @@ void main() {
       // Keep track of whether of not the layout was invalidated.
       bool wasLayoutInvalidated = false;
 
-      final renderParagraph = find
-          .byType(LayoutAwareRichText) //
-          .evaluate()
-          .first
-          .findRenderObject() as RenderLayoutAwareParagraph;
+      final renderParagraph =
+          find
+                  .byType(LayoutAwareRichText) //
+                  .evaluate()
+                  .first
+                  .findRenderObject()
+              as RenderLayoutAwareParagraph;
       renderParagraph.onMarkNeedsLayout = () {
         wasLayoutInvalidated = true;
       };
@@ -391,21 +257,13 @@ void main() {
 
 /// Pump a test app with a [SuperTextField] that renders a [ColoredBox] for each
 /// [_NamedPlaceHolder] in the text.
-Future<void> _pumpTestApp(
-  WidgetTester tester, {
-  required AttributedTextEditingController controller,
-}) {
+Future<void> _pumpTestApp(WidgetTester tester, {required AttributedTextEditingController controller}) {
   return tester.pumpWidget(
     MaterialApp(
       home: Scaffold(
         body: SizedBox(
           width: 300,
-          child: SuperTextField(
-            textController: controller,
-            inlineWidgetBuilders: const [
-              _boxPlaceHolderBuilder,
-            ],
-          ),
+          child: SuperTextField(textController: controller, inlineWidgetBuilders: const [_boxPlaceHolderBuilder]),
         ),
       ),
     ),
@@ -422,12 +280,7 @@ Widget? _boxPlaceHolderBuilder(BuildContext context, TextStyle textStyle, Object
     key: ValueKey('placeholder-${placeholder.name}'),
     child: LineHeight(
       style: textStyle,
-      child: const SizedBox(
-        width: 24,
-        child: ColoredBox(
-          color: Colors.yellow,
-        ),
-      ),
+      child: const SizedBox(width: 24, child: ColoredBox(color: Colors.yellow)),
     ),
   );
 }

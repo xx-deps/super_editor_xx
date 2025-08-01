@@ -28,10 +28,7 @@ void main() {
       expect(
         SuperEditorInspector.findDocumentSelection(),
         const DocumentSelection.collapsed(
-          position: DocumentPosition(
-            nodeId: "1",
-            nodePosition: TextNodePosition(offset: 0),
-          ),
+          position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 0)),
         ),
       );
     });
@@ -54,10 +51,7 @@ void main() {
       expect(
         SuperEditorInspector.findDocumentSelection(),
         const DocumentSelection.collapsed(
-          position: DocumentPosition(
-            nodeId: "1",
-            nodePosition: TextNodePosition(offset: 0),
-          ),
+          position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 0)),
         ),
       );
     });
@@ -80,16 +74,14 @@ void main() {
       expect(
         SuperEditorInspector.findDocumentSelection(),
         const DocumentSelection.collapsed(
-          position: DocumentPosition(
-            nodeId: "1",
-            nodePosition: TextNodePosition(offset: 10),
-          ),
+          position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 10)),
         ),
       );
     });
 
-    testWidgetsOnAllPlatforms("taps to place caret at a non-linebreak offset with different affinities",
-        (tester) async {
+    testWidgetsOnAllPlatforms("taps to place caret at a non-linebreak offset with different affinities", (
+      tester,
+    ) async {
       // Configure and render a document.
       await tester //
           .createDocument()
@@ -108,10 +100,7 @@ void main() {
         const DocumentSelection.collapsed(
           position: DocumentPosition(
             nodeId: '1',
-            nodePosition: TextNodePosition(
-              offset: 1,
-              affinity: TextAffinity.downstream,
-            ),
+            nodePosition: TextNodePosition(offset: 1, affinity: TextAffinity.downstream),
           ),
         ),
       );
@@ -128,10 +117,7 @@ void main() {
         const DocumentSelection.collapsed(
           position: DocumentPosition(
             nodeId: '1',
-            nodePosition: TextNodePosition(
-              offset: 1,
-              affinity: TextAffinity.upstream,
-            ),
+            nodePosition: TextNodePosition(offset: 1, affinity: TextAffinity.upstream),
           ),
         ),
       );
@@ -251,11 +237,12 @@ void main() {
     });
 
     testWidgetsOnAllPlatforms("performs back to back taps with hardware keyboard", (tester) async {
-      final testContext = await tester //
-          .createDocument()
-          .fromMarkdown('Hello, world!')
-          .withInputSource(TextInputSource.keyboard)
-          .pump();
+      final testContext =
+          await tester //
+              .createDocument()
+              .fromMarkdown('Hello, world!')
+              .withInputSource(TextInputSource.keyboard)
+              .pump();
 
       final nodeId = testContext.document.first.id;
 
@@ -273,11 +260,12 @@ void main() {
     });
 
     testWidgetsOnAllPlatforms("performs back to back taps with software keyboard", (tester) async {
-      final testContext = await tester //
-          .createDocument()
-          .fromMarkdown('Hello, world!')
-          .withInputSource(TextInputSource.ime)
-          .pump();
+      final testContext =
+          await tester //
+              .createDocument()
+              .fromMarkdown('Hello, world!')
+              .withInputSource(TextInputSource.ime)
+              .pump();
 
       final nodeId = testContext.document.first.id;
 

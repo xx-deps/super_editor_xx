@@ -28,10 +28,7 @@ void main() {
             expect(
               SuperEditorInspector.findDocumentSelection(),
               const DocumentSelection.collapsed(
-                position: DocumentPosition(
-                  nodeId: "1",
-                  nodePosition: TextNodePosition(offset: 0),
-                ),
+                position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 0)),
               ),
             );
           });
@@ -49,10 +46,7 @@ void main() {
             expect(
               SuperEditorInspector.findDocumentSelection(),
               const DocumentSelection.collapsed(
-                position: DocumentPosition(
-                  nodeId: "1",
-                  nodePosition: TextNodePosition(offset: 27),
-                ),
+                position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 27)),
               ),
             );
           });
@@ -67,10 +61,7 @@ void main() {
             expect(
               SuperEditorInspector.findDocumentSelection(),
               const DocumentSelection.collapsed(
-                position: DocumentPosition(
-                  nodeId: "1",
-                  nodePosition: TextNodePosition(offset: 6),
-                ),
+                position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 6)),
               ),
             );
           });
@@ -85,19 +76,13 @@ void main() {
             expect(
               SuperEditorInspector.findDocumentSelection(),
               const DocumentSelection.collapsed(
-                position: DocumentPosition(
-                  nodeId: "1",
-                  nodePosition: TextNodePosition(offset: 11),
-                ),
+                position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 11)),
               ),
             );
           });
 
           testWidgetsOnApple('beginning of paragraph with OPTION + UP ARROW', (tester) async {
-            await _pumpTwoParagraphsTestApp(
-              tester,
-              inputSource: inputSourceVariant.currentValue!,
-            );
+            await _pumpTwoParagraphsTestApp(tester, inputSource: inputSourceVariant.currentValue!);
 
             // Place caret at the end of the second paragraph.
             await tester.placeCaretInParagraph('2', 36);
@@ -109,19 +94,13 @@ void main() {
             expect(
               SuperEditorInspector.findDocumentSelection(),
               const DocumentSelection.collapsed(
-                position: DocumentPosition(
-                  nodeId: "2",
-                  nodePosition: TextNodePosition(offset: 0),
-                ),
+                position: DocumentPosition(nodeId: "2", nodePosition: TextNodePosition(offset: 0)),
               ),
             );
           }, variant: inputSourceVariant);
 
           testWidgetsOnApple('end of paragraph with OPTION + DOWN ARROW', (tester) async {
-            await _pumpTwoParagraphsTestApp(
-              tester,
-              inputSource: inputSourceVariant.currentValue!,
-            );
+            await _pumpTwoParagraphsTestApp(tester, inputSource: inputSourceVariant.currentValue!);
 
             // Place caret at the beginning of the first paragraph.
             await tester.placeCaretInParagraph('1', 0);
@@ -133,19 +112,13 @@ void main() {
             expect(
               SuperEditorInspector.findDocumentSelection(),
               const DocumentSelection.collapsed(
-                position: DocumentPosition(
-                  nodeId: "1",
-                  nodePosition: TextNodePosition(offset: 35),
-                ),
+                position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 35)),
               ),
             );
           }, variant: inputSourceVariant);
 
           testWidgetsOnApple('beginning of document with CMD + UP ARROW', (tester) async {
-            await _pumpTwoParagraphsTestApp(
-              tester,
-              inputSource: inputSourceVariant.currentValue!,
-            );
+            await _pumpTwoParagraphsTestApp(tester, inputSource: inputSourceVariant.currentValue!);
 
             // Place caret at the end of the second paragraph.
             await tester.placeCaretInParagraph('2', 36);
@@ -156,19 +129,13 @@ void main() {
             expect(
               SuperEditorInspector.findDocumentSelection(),
               const DocumentSelection.collapsed(
-                position: DocumentPosition(
-                  nodeId: "1",
-                  nodePosition: TextNodePosition(offset: 0),
-                ),
+                position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 0)),
               ),
             );
           }, variant: inputSourceVariant);
 
           testWidgetsOnApple('end of document with CMD + DOWN ARROW', (tester) async {
-            await _pumpTwoParagraphsTestApp(
-              tester,
-              inputSource: inputSourceVariant.currentValue!,
-            );
+            await _pumpTwoParagraphsTestApp(tester, inputSource: inputSourceVariant.currentValue!);
 
             // Place caret at the beginning of the first paragraph.
             await tester.placeCaretInParagraph('1', 0);
@@ -179,10 +146,7 @@ void main() {
             expect(
               SuperEditorInspector.findDocumentSelection(),
               const DocumentSelection.collapsed(
-                position: DocumentPosition(
-                  nodeId: "2",
-                  nodePosition: TextNodePosition(offset: 36),
-                ),
+                position: DocumentPosition(nodeId: "2", nodePosition: TextNodePosition(offset: 36)),
               ),
             );
           }, variant: inputSourceVariant);
@@ -190,10 +154,7 @@ void main() {
 
         group("expands to", () {
           testWidgetsOnApple('beginning of paragraph with SHIFT + OPTION + UP ARROW', (tester) async {
-            await _pumpTwoParagraphsTestApp(
-              tester,
-              inputSource: inputSourceVariant.currentValue!,
-            );
+            await _pumpTwoParagraphsTestApp(tester, inputSource: inputSourceVariant.currentValue!);
 
             // Place caret at the end of the second paragraph.
             await tester.placeCaretInParagraph('2', 36);
@@ -209,19 +170,13 @@ void main() {
                   nodeId: "2",
                   nodePosition: TextNodePosition(offset: 36, affinity: TextAffinity.upstream),
                 ),
-                extent: DocumentPosition(
-                  nodeId: "2",
-                  nodePosition: TextNodePosition(offset: 0),
-                ),
+                extent: DocumentPosition(nodeId: "2", nodePosition: TextNodePosition(offset: 0)),
               ),
             );
           }, variant: inputSourceVariant);
 
           testWidgetsOnApple('end of paragraph with SHIFT + OPTION + DOWN ARROW', (tester) async {
-            await _pumpTwoParagraphsTestApp(
-              tester,
-              inputSource: inputSourceVariant.currentValue!,
-            );
+            await _pumpTwoParagraphsTestApp(tester, inputSource: inputSourceVariant.currentValue!);
 
             // Place caret at the beginning of the first paragraph.
             await tester.placeCaretInParagraph('1', 0);
@@ -233,23 +188,14 @@ void main() {
             expect(
               SuperEditorInspector.findDocumentSelection(),
               const DocumentSelection(
-                base: DocumentPosition(
-                  nodeId: "1",
-                  nodePosition: TextNodePosition(offset: 0),
-                ),
-                extent: DocumentPosition(
-                  nodeId: "1",
-                  nodePosition: TextNodePosition(offset: 35),
-                ),
+                base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 0)),
+                extent: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 35)),
               ),
             );
           }, variant: inputSourceVariant);
 
           testWidgetsOnApple('beginning of document with SHIFT + CMD + UP ARROW', (tester) async {
-            await _pumpTwoParagraphsTestApp(
-              tester,
-              inputSource: inputSourceVariant.currentValue!,
-            );
+            await _pumpTwoParagraphsTestApp(tester, inputSource: inputSourceVariant.currentValue!);
 
             // Place caret at the end of the second paragraph.
             await tester.placeCaretInParagraph('2', 36);
@@ -264,19 +210,13 @@ void main() {
                   nodeId: "2",
                   nodePosition: TextNodePosition(offset: 36, affinity: TextAffinity.upstream),
                 ),
-                extent: DocumentPosition(
-                  nodeId: "1",
-                  nodePosition: TextNodePosition(offset: 0),
-                ),
+                extent: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 0)),
               ),
             );
           }, variant: inputSourceVariant);
 
           testWidgetsOnApple('end of document with SHIFT + CMD + DOWN ARROW', (tester) async {
-            await _pumpTwoParagraphsTestApp(
-              tester,
-              inputSource: inputSourceVariant.currentValue!,
-            );
+            await _pumpTwoParagraphsTestApp(tester, inputSource: inputSourceVariant.currentValue!);
 
             // Place caret at the beginning of the first paragraph.
             await tester.placeCaretInParagraph('1', 0);
@@ -287,14 +227,8 @@ void main() {
             expect(
               SuperEditorInspector.findDocumentSelection(),
               const DocumentSelection(
-                base: DocumentPosition(
-                  nodeId: "1",
-                  nodePosition: TextNodePosition(offset: 0),
-                ),
-                extent: DocumentPosition(
-                  nodeId: "2",
-                  nodePosition: TextNodePosition(offset: 36),
-                ),
+                base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 0)),
+                extent: DocumentPosition(nodeId: "2", nodePosition: TextNodePosition(offset: 36)),
               ),
             );
           }, variant: inputSourceVariant);
@@ -321,10 +255,7 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection.collapsed(
-              position: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 6),
-              ),
+              position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 6)),
             ),
           );
         }, variant: inputSourceVariant);
@@ -350,10 +281,7 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection.collapsed(
-              position: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 6),
-              ),
+              position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 6)),
             ),
           );
         }, variant: inputSourceVariant);
@@ -379,10 +307,7 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection.collapsed(
-              position: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 12),
-              ),
+              position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 12)),
             ),
           );
         }, variant: inputSourceVariant);
@@ -408,10 +333,7 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection.collapsed(
-              position: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 11),
-              ),
+              position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 11)),
             ),
           );
         }, variant: inputSourceVariant);
@@ -435,10 +357,7 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection.collapsed(
-              position: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 10),
-              ),
+              position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 10)),
             ),
           );
         }, variant: inputSourceVariant);
@@ -464,10 +383,7 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection.collapsed(
-              position: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 11),
-              ),
+              position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 11)),
             ),
           );
         }, variant: inputSourceVariant);
@@ -489,10 +405,7 @@ void main() {
             SuperEditorInspector.findDocumentSelection(),
             selectionEquivalentTo(
               const DocumentSelection.collapsed(
-                position: DocumentPosition(
-                  nodeId: "2",
-                  nodePosition: TextNodePosition(offset: 0),
-                ),
+                position: DocumentPosition(nodeId: "2", nodePosition: TextNodePosition(offset: 0)),
               ),
             ),
           );
@@ -515,136 +428,101 @@ void main() {
             SuperEditorInspector.findDocumentSelection(),
             selectionEquivalentTo(
               const DocumentSelection.collapsed(
-                position: DocumentPosition(
-                  nodeId: "1",
-                  nodePosition: TextNodePosition(offset: 439),
-                ),
+                position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 439)),
               ),
             ),
           );
         });
 
         testWidgetsOnMacDesktopAndWeb(
-            'SHIFT + OPTION + LEFT ARROW: deselects word at end of line after selecting the whole line from start to end',
-            (tester) async {
-          await tester //
-              .createDocument()
-              .withCustomContent(
-                MutableDocument(
-                  nodes: [
-                    ParagraphNode(
-                      id: '1',
-                      text: AttributedText('This is a paragraph'),
-                    ),
-                  ],
-                ),
-              )
-              .pump();
+          'SHIFT + OPTION + LEFT ARROW: deselects word at end of line after selecting the whole line from start to end',
+          (tester) async {
+            await tester //
+                .createDocument()
+                .withCustomContent(
+                  MutableDocument(
+                    nodes: [ParagraphNode(id: '1', text: AttributedText('This is a paragraph'))],
+                  ),
+                )
+                .pump();
 
-          // Place caret at the beginning of the paragraph.
-          await tester.placeCaretInParagraph('1', 0);
+            // Place caret at the beginning of the paragraph.
+            await tester.placeCaretInParagraph('1', 0);
 
-          // Press CMD + SHIFT + RIGHT ARROW to expand the selection to the end of the line.
-          await tester.pressShiftCmdRightArrow();
+            // Press CMD + SHIFT + RIGHT ARROW to expand the selection to the end of the line.
+            await tester.pressShiftCmdRightArrow();
 
-          // Ensure that the whole line is selected.
-          expect(
-            SuperEditorInspector.findDocumentSelection(),
-            selectionEquivalentTo(
-              const DocumentSelection(
-                base: DocumentPosition(
-                  nodeId: "1",
-                  nodePosition: TextNodePosition(offset: 0),
-                ),
-                extent: DocumentPosition(
-                  nodeId: "1",
-                  nodePosition: TextNodePosition(offset: 19),
+            // Ensure that the whole line is selected.
+            expect(
+              SuperEditorInspector.findDocumentSelection(),
+              selectionEquivalentTo(
+                const DocumentSelection(
+                  base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 0)),
+                  extent: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 19)),
                 ),
               ),
-            ),
-          );
+            );
 
-          // Press SHIFT + OPTION + LEFT ARROW to remove the last word from the selection.
-          await tester.pressShiftAltLeftArrow();
+            // Press SHIFT + OPTION + LEFT ARROW to remove the last word from the selection.
+            await tester.pressShiftAltLeftArrow();
 
-          // Ensure that the last word was removed from the selection.
-          expect(
-            SuperEditorInspector.findDocumentSelection(),
-            selectionEquivalentTo(
-              const DocumentSelection(
-                base: DocumentPosition(
-                  nodeId: "1",
-                  nodePosition: TextNodePosition(offset: 0),
-                ),
-                extent: DocumentPosition(
-                  nodeId: "1",
-                  nodePosition: TextNodePosition(offset: 10),
+            // Ensure that the last word was removed from the selection.
+            expect(
+              SuperEditorInspector.findDocumentSelection(),
+              selectionEquivalentTo(
+                const DocumentSelection(
+                  base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 0)),
+                  extent: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 10)),
                 ),
               ),
-            ),
-          );
-        });
+            );
+          },
+        );
 
         testWidgetsOnMacDesktopAndWeb(
-            'SHIFT + OPTION + RIGHT ARROW: deselects word at start of line after selecting the whole line from end to start',
-            (tester) async {
-          await tester //
-              .createDocument()
-              .withCustomContent(
-                MutableDocument(
-                  nodes: [
-                    ParagraphNode(
-                      id: '1',
-                      text: AttributedText('This is a paragraph'),
-                    ),
-                  ],
-                ),
-              )
-              .pump();
+          'SHIFT + OPTION + RIGHT ARROW: deselects word at start of line after selecting the whole line from end to start',
+          (tester) async {
+            await tester //
+                .createDocument()
+                .withCustomContent(
+                  MutableDocument(
+                    nodes: [ParagraphNode(id: '1', text: AttributedText('This is a paragraph'))],
+                  ),
+                )
+                .pump();
 
-          // Place caret at the end of the paragraph.
-          await tester.placeCaretInParagraph('1', 19);
+            // Place caret at the end of the paragraph.
+            await tester.placeCaretInParagraph('1', 19);
 
-          // Press CMD + SHIFT + LEFT ARROW to expand the selection to the beginning of the line.
-          await tester.pressShiftCmdLeftArrow();
+            // Press CMD + SHIFT + LEFT ARROW to expand the selection to the beginning of the line.
+            await tester.pressShiftCmdLeftArrow();
 
-          // Ensure that the whole line is selected.
-          expect(
-            SuperEditorInspector.findDocumentSelection(),
-            selectionEquivalentTo(
-              const DocumentSelection(
-                base: DocumentPosition(
-                  nodeId: "1",
-                  nodePosition: TextNodePosition(offset: 19),
-                ),
-                extent: DocumentPosition(
-                  nodeId: "1",
-                  nodePosition: TextNodePosition(offset: 0),
+            // Ensure that the whole line is selected.
+            expect(
+              SuperEditorInspector.findDocumentSelection(),
+              selectionEquivalentTo(
+                const DocumentSelection(
+                  base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 19)),
+                  extent: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 0)),
                 ),
               ),
-            ),
-          );
+            );
 
-          // Press SHIFT + OPTION + RIGHT ARROW to remove the first word from the selection.
-          await tester.pressShiftAltRightArrow();
+            // Press SHIFT + OPTION + RIGHT ARROW to remove the first word from the selection.
+            await tester.pressShiftAltRightArrow();
 
-          // Ensure that the first word was removed from the selection.
-          expect(
-            SuperEditorInspector.findDocumentSelection(),
-            selectionEquivalentTo(
-              const DocumentSelection(
-                base: DocumentPosition(
-                  nodeId: "1",
-                  nodePosition: TextNodePosition(offset: 19),
-                ),
-                extent: DocumentPosition(
-                  nodeId: "1",
-                  nodePosition: TextNodePosition(offset: 4),
+            // Ensure that the first word was removed from the selection.
+            expect(
+              SuperEditorInspector.findDocumentSelection(),
+              selectionEquivalentTo(
+                const DocumentSelection(
+                  base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 19)),
+                  extent: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 4)),
                 ),
               ),
-            ),
-          );
-        });
+            );
+          },
+        );
       });
 
       group("Windows and Linux >", () {
@@ -663,16 +541,14 @@ void main() {
             expect(
               SuperEditorInspector.findDocumentSelection(),
               const DocumentSelection.collapsed(
-                position: DocumentPosition(
-                  nodeId: "1",
-                  nodePosition: TextNodePosition(offset: 40),
-                ),
+                position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 40)),
               ),
             );
           });
 
-          testWidgetsOnWindowsAndLinux('beginning of line with HOME in a paragraph with explicit new lines',
-              (tester) async {
+          testWidgetsOnWindowsAndLinux('beginning of line with HOME in a paragraph with explicit new lines', (
+            tester,
+          ) async {
             await _pumpExplicitLineBreakTestSetup(tester);
 
             // Place caret at the second line at "consectetur adipiscing |elit"
@@ -686,10 +562,7 @@ void main() {
             expect(
               SuperEditorInspector.findDocumentSelection(),
               const DocumentSelection.collapsed(
-                position: DocumentPosition(
-                  nodeId: "1",
-                  nodePosition: TextNodePosition(offset: 27),
-                ),
+                position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 27)),
               ),
             );
           });
@@ -710,10 +583,7 @@ void main() {
             expect(
               SuperEditorInspector.findDocumentSelection(),
               const DocumentSelection.collapsed(
-                position: DocumentPosition(
-                  nodeId: "1",
-                  nodePosition: TextNodePosition(offset: 17),
-                ),
+                position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 17)),
               ),
             );
           });
@@ -751,10 +621,7 @@ void main() {
             expect(
               SuperEditorInspector.findDocumentSelection(),
               const DocumentSelection.collapsed(
-                position: DocumentPosition(
-                  nodeId: "1",
-                  nodePosition: TextNodePosition(offset: 6),
-                ),
+                position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 6)),
               ),
             );
           });
@@ -769,10 +636,7 @@ void main() {
             expect(
               SuperEditorInspector.findDocumentSelection(),
               const DocumentSelection.collapsed(
-                position: DocumentPosition(
-                  nodeId: "1",
-                  nodePosition: TextNodePosition(offset: 11),
-                ),
+                position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 11)),
               ),
             );
           });
@@ -797,10 +661,7 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection.collapsed(
-              position: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 6),
-              ),
+              position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 6)),
             ),
           );
         }, variant: inputSourceVariant);
@@ -824,10 +685,7 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection.collapsed(
-              position: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 6),
-              ),
+              position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 6)),
             ),
           );
         }, variant: inputSourceVariant);
@@ -853,10 +711,7 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection.collapsed(
-              position: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 12),
-              ),
+              position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 12)),
             ),
           );
         }, variant: inputSourceVariant);
@@ -882,10 +737,7 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection.collapsed(
-              position: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 11),
-              ),
+              position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 11)),
             ),
           );
         }, variant: inputSourceVariant);
@@ -909,10 +761,7 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection.collapsed(
-              position: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 10),
-              ),
+              position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 10)),
             ),
           );
         }, variant: inputSourceVariant);
@@ -938,76 +787,66 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection.collapsed(
-              position: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 11),
-              ),
+              position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 11)),
             ),
           );
         }, variant: inputSourceVariant);
       });
 
-      testWidgetsOnDesktop(
-        "Backspace deletes upstream character and keeps paragraph metadata",
-        (tester) async {
-          final testContext = await tester
-              .createDocument() //
-              .fromMarkdown('# A header')
-              .withInputSource(inputSourceVariant.currentValue!)
-              .pump();
+      testWidgetsOnDesktop("Backspace deletes upstream character and keeps paragraph metadata", (tester) async {
+        final testContext = await tester
+            .createDocument() //
+            .fromMarkdown('# A header')
+            .withInputSource(inputSourceVariant.currentValue!)
+            .pump();
 
-          final document = testContext.document;
+        final document = testContext.document;
 
-          // Place caret at "A| header"
-          await tester.placeCaretInParagraph(document.first.id, 1);
+        // Place caret at "A| header"
+        await tester.placeCaretInParagraph(document.first.id, 1);
 
-          // Delete "A".
-          await tester.pressBackspace();
+        // Delete "A".
+        await tester.pressBackspace();
 
-          // Ensure the first character was deleted.
-          expect(document.first.asTextNode.text.toPlainText(), ' header');
+        // Ensure the first character was deleted.
+        expect(document.first.asTextNode.text.toPlainText(), ' header');
 
-          // Ensure the node is still a header.
-          expect(document.first.getMetadataValue("blockType"), header1Attribution);
-        },
-        variant: inputSourceVariant,
-      );
+        // Ensure the node is still a header.
+        expect(document.first.getMetadataValue("blockType"), header1Attribution);
+      }, variant: inputSourceVariant);
 
-      testWidgetsOnDesktop(
-        "Backspace clears metadata at start of a paragraph",
-        (tester) async {
-          final testContext = await tester
-              .createDocument() //
-              .fromMarkdown('# A header')
-              .withInputSource(inputSourceVariant.currentValue!)
-              .pump();
+      testWidgetsOnDesktop("Backspace clears metadata at start of a paragraph", (tester) async {
+        final testContext = await tester
+            .createDocument() //
+            .fromMarkdown('# A header')
+            .withInputSource(inputSourceVariant.currentValue!)
+            .pump();
 
-          final document = testContext.document;
+        final document = testContext.document;
 
-          // Place caret at the start of the header.
-          await tester.placeCaretInParagraph(document.first.id, 0);
+        // Place caret at the start of the header.
+        await tester.placeCaretInParagraph(document.first.id, 0);
 
-          // Press backspace to clear the metadata.
-          await tester.pressBackspace();
+        // Press backspace to clear the metadata.
+        await tester.pressBackspace();
 
-          // Ensure the text remains the same.
-          expect(document.first.asTextNode.text.toPlainText(), 'A header');
+        // Ensure the text remains the same.
+        expect(document.first.asTextNode.text.toPlainText(), 'A header');
 
-          // Ensure the header was converted to a paragraph.
-          expect(document.first.getMetadataValue("blockType"), paragraphAttribution);
-        },
-        variant: inputSourceVariant,
-      );
+        // Ensure the header was converted to a paragraph.
+        expect(document.first.getMetadataValue("blockType"), paragraphAttribution);
+      }, variant: inputSourceVariant);
 
       group("jumps to downstream node preserving approximate x-position with DOWN ARROW", () {
         testWidgetsOnDesktop('from paragraph to paragraph', (tester) async {
-          final context = await tester //
-              .createDocument()
-              .fromMarkdown('''
+          final context =
+              await tester //
+                  .createDocument()
+                  .fromMarkdown('''
 First paragraph
 
 Second paragraph''') //
-              .pump();
+                  .pump();
 
           // Place caret at "First para|graph".
           await tester.placeCaretInParagraph(context.document.first.id, 10);
@@ -1059,23 +898,21 @@ Second paragraph''') //
             SuperEditorInspector.findDocumentSelection(),
             selectionEquivalentTo(
               const DocumentSelection.collapsed(
-                position: DocumentPosition(
-                  nodeId: '2',
-                  nodePosition: TextNodePosition(offset: 7),
-                ),
+                position: DocumentPosition(nodeId: '2', nodePosition: TextNodePosition(offset: 7)),
               ),
             ),
           );
         });
 
         testWidgetsOnDesktop('from paragraph to list item', (tester) async {
-          final context = await tester //
-              .createDocument()
-              .fromMarkdown('''
+          final context =
+              await tester //
+                  .createDocument()
+                  .fromMarkdown('''
 This is a paragraph
 
 * This is a list item''') //
-              .pump();
+                  .pump();
 
           // Place the caret at "This is a |paragraph".
           await tester.placeCaretInParagraph(context.document.first.id, 10);
@@ -1135,10 +972,7 @@ This is a paragraph
             SuperEditorInspector.findDocumentSelection(),
             selectionEquivalentTo(
               const DocumentSelection.collapsed(
-                position: DocumentPosition(
-                  nodeId: '2',
-                  nodePosition: TextNodePosition(offset: 7),
-                ),
+                position: DocumentPosition(nodeId: '2', nodePosition: TextNodePosition(offset: 7)),
               ),
             ),
           );
@@ -1174,10 +1008,7 @@ This is a paragraph
             SuperEditorInspector.findDocumentSelection(),
             selectionEquivalentTo(
               const DocumentSelection.collapsed(
-                position: DocumentPosition(
-                  nodeId: '2',
-                  nodePosition: TextNodePosition(offset: 9),
-                ),
+                position: DocumentPosition(nodeId: '2', nodePosition: TextNodePosition(offset: 9)),
               ),
             ),
           );
@@ -1213,23 +1044,21 @@ This is a paragraph
             SuperEditorInspector.findDocumentSelection(),
             selectionEquivalentTo(
               const DocumentSelection.collapsed(
-                position: DocumentPosition(
-                  nodeId: '2',
-                  nodePosition: TextNodePosition(offset: 4),
-                ),
+                position: DocumentPosition(nodeId: '2', nodePosition: TextNodePosition(offset: 4)),
               ),
             ),
           );
         });
 
         testWidgetsOnDesktop('from list item to paragraph', (tester) async {
-          final context = await tester //
-              .createDocument()
-              .fromMarkdown('''
+          final context =
+              await tester //
+                  .createDocument()
+                  .fromMarkdown('''
 * This is a list item
 
 This is a paragraph''') //
-              .pump();
+                  .pump();
 
           // Place caret at "This is |a list item".
           await tester.placeCaretInParagraph(context.document.first.id, 8);
@@ -1289,23 +1118,21 @@ This is a paragraph''') //
             SuperEditorInspector.findDocumentSelection(),
             selectionEquivalentTo(
               const DocumentSelection.collapsed(
-                position: DocumentPosition(
-                  nodeId: '2',
-                  nodePosition: TextNodePosition(offset: 4),
-                ),
+                position: DocumentPosition(nodeId: '2', nodePosition: TextNodePosition(offset: 4)),
               ),
             ),
           );
         });
 
         testWidgetsOnDesktop('from list item to list item', (tester) async {
-          final context = await tester //
-              .createDocument()
-              .fromMarkdown('''
+          final context =
+              await tester //
+                  .createDocument()
+                  .fromMarkdown('''
 * This is another list item
 
 * This is a list item''') //
-              .pump();
+                  .pump();
 
           // Place the caret at "This is a|nother list item".
           await tester.placeCaretInParagraph(context.document.first.id, 9);
@@ -1338,13 +1165,14 @@ This is a paragraph''') //
 
       group("jumps to upstream node preserving approximate x-position with UP ARROW", () {
         testWidgetsOnDesktop('from paragraph to paragraph', (tester) async {
-          final context = await tester //
-              .createDocument()
-              .fromMarkdown(''''
+          final context =
+              await tester //
+                  .createDocument()
+                  .fromMarkdown(''''
 First paragraph
 
 Second paragraph''') //
-              .pump();
+                  .pump();
 
           // Place caret at "Second p|aragraph".
           await tester.placeCaretInParagraph(context.document.last.id, 8);
@@ -1396,23 +1224,21 @@ Second paragraph''') //
             SuperEditorInspector.findDocumentSelection(),
             selectionEquivalentTo(
               const DocumentSelection.collapsed(
-                position: DocumentPosition(
-                  nodeId: '1',
-                  nodePosition: TextNodePosition(offset: 7),
-                ),
+                position: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 7)),
               ),
             ),
           );
         });
 
         testWidgetsOnDesktop('from paragraph to list item', (tester) async {
-          final context = await tester //
-              .createDocument()
-              .fromMarkdown('''
+          final context =
+              await tester //
+                  .createDocument()
+                  .fromMarkdown('''
 * This is a list item
 
 This is a paragraph''') //
-              .pump();
+                  .pump();
 
           // Place the caret at "This is a |paragraph".
           await tester.placeCaretInParagraph(context.document.last.id, 10);
@@ -1472,10 +1298,7 @@ This is a paragraph''') //
             SuperEditorInspector.findDocumentSelection(),
             selectionEquivalentTo(
               const DocumentSelection.collapsed(
-                position: DocumentPosition(
-                  nodeId: '1',
-                  nodePosition: TextNodePosition(offset: 7),
-                ),
+                position: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 7)),
               ),
             ),
           );
@@ -1511,10 +1334,7 @@ This is a paragraph''') //
             SuperEditorInspector.findDocumentSelection(),
             selectionEquivalentTo(
               const DocumentSelection.collapsed(
-                position: DocumentPosition(
-                  nodeId: '1',
-                  nodePosition: TextNodePosition(offset: 9),
-                ),
+                position: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 9)),
               ),
             ),
           );
@@ -1550,23 +1370,21 @@ This is a paragraph''') //
             SuperEditorInspector.findDocumentSelection(),
             selectionEquivalentTo(
               const DocumentSelection.collapsed(
-                position: DocumentPosition(
-                  nodeId: '1',
-                  nodePosition: TextNodePosition(offset: 4),
-                ),
+                position: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 4)),
               ),
             ),
           );
         });
 
         testWidgetsOnDesktop('from list item to paragraph', (tester) async {
-          final context = await tester //
-              .createDocument()
-              .fromMarkdown('''
+          final context =
+              await tester //
+                  .createDocument()
+                  .fromMarkdown('''
 This is a paragraph
 
 * This is a list item''') //
-              .pump();
+                  .pump();
 
           // Place caret at "This is |a list item".
           await tester.placeCaretInParagraph(context.document.last.id, 8);
@@ -1626,23 +1444,21 @@ This is a paragraph
             SuperEditorInspector.findDocumentSelection(),
             selectionEquivalentTo(
               const DocumentSelection.collapsed(
-                position: DocumentPosition(
-                  nodeId: '1',
-                  nodePosition: TextNodePosition(offset: 4),
-                ),
+                position: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 4)),
               ),
             ),
           );
         });
 
         testWidgetsOnDesktop('from list item to list item', (tester) async {
-          final context = await tester //
-              .createDocument()
-              .fromMarkdown('''
+          final context =
+              await tester //
+                  .createDocument()
+                  .fromMarkdown('''
 * This is a list item
 
 * This is another list item''') //
-              .pump();
+                  .pump();
 
           // Place the caret at "This is a|nother list item".
           await tester.placeCaretInParagraph(context.document.last.id, 9);
@@ -1686,10 +1502,7 @@ This is a paragraph
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection.collapsed(
-              position: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 7),
-              ),
+              position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 7)),
             ),
           );
         });
@@ -1704,10 +1517,7 @@ This is a paragraph
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection.collapsed(
-              position: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 9),
-              ),
+              position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 9)),
             ),
           );
         });
@@ -1725,10 +1535,7 @@ This is a paragraph
         expect(
           SuperEditorInspector.findDocumentSelection(),
           const DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 8),
-            ),
+            position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 8)),
           ),
         );
       });
@@ -1743,10 +1550,7 @@ This is a paragraph
         expect(
           SuperEditorInspector.findDocumentSelection(),
           const DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 8),
-            ),
+            position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 8)),
           ),
         );
       });
@@ -1763,10 +1567,7 @@ This is a paragraph
         expect(
           SuperEditorInspector.findDocumentSelection(),
           const DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 51),
-            ),
+            position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 51)),
           ),
         );
       });
@@ -1783,10 +1584,7 @@ This is a paragraph
         expect(
           SuperEditorInspector.findDocumentSelection(),
           const DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 6),
-            ),
+            position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 6)),
           ),
         );
       });
@@ -1804,10 +1602,7 @@ This is a paragraph
         expect(
           SuperEditorInspector.findDocumentSelection(),
           const DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 8),
-            ),
+            position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 8)),
           ),
         );
       });
@@ -1823,10 +1618,7 @@ This is a paragraph
         expect(
           SuperEditorInspector.findDocumentSelection(),
           const DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 2),
-            ),
+            position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 2)),
           ),
         );
       });
@@ -1841,10 +1633,7 @@ This is a paragraph
         expect(
           SuperEditorInspector.findDocumentSelection(),
           const DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 7),
-            ),
+            position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 7)),
           ),
         );
       });
@@ -1859,10 +1648,7 @@ This is a paragraph
         expect(
           SuperEditorInspector.findDocumentSelection(),
           const DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 9),
-            ),
+            position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 9)),
           ),
         );
       });
@@ -1880,10 +1666,7 @@ This is a paragraph
         expect(
           SuperEditorInspector.findDocumentSelection(),
           const DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 7),
-            ),
+            position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 7)),
           ),
         );
       });
@@ -1899,10 +1682,7 @@ This is a paragraph
         expect(
           SuperEditorInspector.findDocumentSelection(),
           const DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 3),
-            ),
+            position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 3)),
           ),
         );
       });
@@ -1924,10 +1704,7 @@ This is a paragraph
         expect(
           SuperEditorInspector.findDocumentSelection(),
           const DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 0),
-            ),
+            position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 0)),
           ),
         );
       });
@@ -1947,10 +1724,7 @@ This is a paragraph
         expect(
           SuperEditorInspector.findDocumentSelection(),
           const DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 1),
-            ),
+            position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 1)),
           ),
         );
       });
@@ -1969,10 +1743,7 @@ This is a paragraph
         expect(
           SuperEditorInspector.findDocumentSelection(),
           const DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 0),
-            ),
+            position: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 0)),
           ),
         );
       });
@@ -1980,14 +1751,11 @@ This is a paragraph
       testWidgetsOnApple('selects all when CMD+A is pressed with a single-node document', (tester) async {
         await tester //
             .createDocument()
-            .withCustomContent(MutableDocument(
-              nodes: [
-                ParagraphNode(
-                  id: '1',
-                  text: AttributedText('This is some text'),
-                ),
-              ],
-            ))
+            .withCustomContent(
+              MutableDocument(
+                nodes: [ParagraphNode(id: '1', text: AttributedText('This is some text'))],
+              ),
+            )
             .pump();
 
         await tester.placeCaretInParagraph("1", 0);
@@ -1998,14 +1766,8 @@ This is a paragraph
         expect(
           SuperEditorInspector.findDocumentSelection(),
           const DocumentSelection(
-            base: DocumentPosition(
-              nodeId: '1',
-              nodePosition: TextNodePosition(offset: 0),
-            ),
-            extent: DocumentPosition(
-              nodeId: '1',
-              nodePosition: TextNodePosition(offset: 17),
-            ),
+            base: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 0)),
+            extent: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 17)),
           ),
         );
       });
@@ -2016,14 +1778,8 @@ This is a paragraph
             .withCustomContent(
               MutableDocument(
                 nodes: [
-                  ParagraphNode(
-                    id: '1',
-                    text: AttributedText('This is some text'),
-                  ),
-                  ParagraphNode(
-                    id: '2',
-                    text: AttributedText('This is some text'),
-                  ),
+                  ParagraphNode(id: '1', text: AttributedText('This is some text')),
+                  ParagraphNode(id: '2', text: AttributedText('This is some text')),
                 ],
               ),
             )
@@ -2037,14 +1793,8 @@ This is a paragraph
         expect(
           SuperEditorInspector.findDocumentSelection(),
           const DocumentSelection(
-            base: DocumentPosition(
-              nodeId: '1',
-              nodePosition: TextNodePosition(offset: 0),
-            ),
-            extent: DocumentPosition(
-              nodeId: '2',
-              nodePosition: TextNodePosition(offset: 17),
-            ),
+            base: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 0)),
+            extent: DocumentPosition(nodeId: '2', nodePosition: TextNodePosition(offset: 17)),
           ),
         );
       });
@@ -2055,18 +1805,9 @@ This is a paragraph
             .withCustomContent(
               MutableDocument(
                 nodes: [
-                  ImageNode(
-                    id: '1',
-                    imageUrl: 'https://fake.com/image/url.png',
-                  ),
-                  ParagraphNode(
-                    id: '2',
-                    text: AttributedText('This is some text'),
-                  ),
-                  ImageNode(
-                    id: '3',
-                    imageUrl: 'https://fake.com/image/url.png',
-                  ),
+                  ImageNode(id: '1', imageUrl: 'https://fake.com/image/url.png'),
+                  ParagraphNode(id: '2', text: AttributedText('This is some text')),
+                  ImageNode(id: '3', imageUrl: 'https://fake.com/image/url.png'),
                 ],
               ),
             )
@@ -2081,14 +1822,8 @@ This is a paragraph
         expect(
           SuperEditorInspector.findDocumentSelection(),
           const DocumentSelection(
-            base: DocumentPosition(
-              nodeId: '1',
-              nodePosition: UpstreamDownstreamNodePosition.upstream(),
-            ),
-            extent: DocumentPosition(
-              nodeId: '3',
-              nodePosition: UpstreamDownstreamNodePosition.downstream(),
-            ),
+            base: DocumentPosition(nodeId: '1', nodePosition: UpstreamDownstreamNodePosition.upstream()),
+            extent: DocumentPosition(nodeId: '3', nodePosition: UpstreamDownstreamNodePosition.downstream()),
           ),
         );
       });
@@ -2100,12 +1835,7 @@ This is a paragraph
             .createDocument()
             .withCustomContent(
               MutableDocument(
-                nodes: [
-                  ParagraphNode(
-                    id: '1',
-                    text: AttributedText('Text with [DELETEME] selection'),
-                  ),
-                ],
+                nodes: [ParagraphNode(id: '1', text: AttributedText('Text with [DELETEME] selection'))],
               ),
             )
             .pump();
@@ -2117,14 +1847,8 @@ This is a paragraph
         expect(
           SuperEditorInspector.findDocumentSelection(),
           const DocumentSelection(
-            base: DocumentPosition(
-              nodeId: '1',
-              nodePosition: TextNodePosition(offset: 11),
-            ),
-            extent: DocumentPosition(
-              nodeId: '1',
-              nodePosition: TextNodePosition(offset: 19),
-            ),
+            base: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 11)),
+            extent: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 19)),
           ),
         );
 
@@ -2135,10 +1859,7 @@ This is a paragraph
         expect(
           SuperEditorInspector.findDocumentSelection(),
           const DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: '1',
-              nodePosition: TextNodePosition(offset: 11),
-            ),
+            position: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 11)),
           ),
         );
       });
@@ -2148,12 +1869,7 @@ This is a paragraph
             .createDocument()
             .withCustomContent(
               MutableDocument(
-                nodes: [
-                  ParagraphNode(
-                    id: '1',
-                    text: AttributedText('Text with [DELETEME] selection'),
-                  ),
-                ],
+                nodes: [ParagraphNode(id: '1', text: AttributedText('Text with [DELETEME] selection'))],
               ),
             )
             .pump();
@@ -2165,14 +1881,8 @@ This is a paragraph
         expect(
           SuperEditorInspector.findDocumentSelection(),
           const DocumentSelection(
-            base: DocumentPosition(
-              nodeId: '1',
-              nodePosition: TextNodePosition(offset: 11),
-            ),
-            extent: DocumentPosition(
-              nodeId: '1',
-              nodePosition: TextNodePosition(offset: 19),
-            ),
+            base: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 11)),
+            extent: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 19)),
           ),
         );
 
@@ -2183,10 +1893,7 @@ This is a paragraph
         expect(
           SuperEditorInspector.findDocumentSelection(),
           const DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: '1',
-              nodePosition: TextNodePosition(offset: 11),
-            ),
+            position: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 11)),
           ),
         );
       });
@@ -2196,12 +1903,7 @@ This is a paragraph
             .createDocument()
             .withCustomContent(
               MutableDocument(
-                nodes: [
-                  ParagraphNode(
-                    id: '1',
-                    text: AttributedText('Text with [DELETEME] selection'),
-                  ),
-                ],
+                nodes: [ParagraphNode(id: '1', text: AttributedText('Text with [DELETEME] selection'))],
               ),
             )
             .withInputSource(TextInputSource.keyboard)
@@ -2214,14 +1916,8 @@ This is a paragraph
         expect(
           SuperEditorInspector.findDocumentSelection(),
           const DocumentSelection(
-            base: DocumentPosition(
-              nodeId: '1',
-              nodePosition: TextNodePosition(offset: 11),
-            ),
-            extent: DocumentPosition(
-              nodeId: '1',
-              nodePosition: TextNodePosition(offset: 19),
-            ),
+            base: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 11)),
+            extent: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 19)),
           ),
         );
 
@@ -2232,10 +1928,7 @@ This is a paragraph
         expect(
           SuperEditorInspector.findDocumentSelection(),
           const DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: '1',
-              nodePosition: TextNodePosition(offset: 12),
-            ),
+            position: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 12)),
           ),
         );
       });
@@ -2245,12 +1938,7 @@ This is a paragraph
             .createDocument()
             .withCustomContent(
               MutableDocument(
-                nodes: [
-                  ParagraphNode(
-                    id: '1',
-                    text: AttributedText('Text with [SELECTME] selection'),
-                  ),
-                ],
+                nodes: [ParagraphNode(id: '1', text: AttributedText('Text with [SELECTME] selection'))],
               ),
             )
             .pump();
@@ -2262,14 +1950,8 @@ This is a paragraph
         expect(
           SuperEditorInspector.findDocumentSelection(),
           const DocumentSelection(
-            base: DocumentPosition(
-              nodeId: '1',
-              nodePosition: TextNodePosition(offset: 11),
-            ),
-            extent: DocumentPosition(
-              nodeId: '1',
-              nodePosition: TextNodePosition(offset: 19),
-            ),
+            base: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 11)),
+            extent: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 19)),
           ),
         );
 
@@ -2280,10 +1962,7 @@ This is a paragraph
         expect(
           SuperEditorInspector.findDocumentSelection(),
           const DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: '1',
-              nodePosition: TextNodePosition(offset: 19),
-            ),
+            position: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 19)),
           ),
         );
       });
@@ -2294,12 +1973,7 @@ This is a paragraph
           .createDocument()
           .withCustomContent(
             MutableDocument(
-              nodes: [
-                ParagraphNode(
-                  id: '1',
-                  text: AttributedText('This is some text'),
-                ),
-              ],
+              nodes: [ParagraphNode(id: '1', text: AttributedText('This is some text'))],
             ),
           )
           .pump();
@@ -2314,163 +1988,118 @@ This is a paragraph
       expect(
         SuperEditorInspector.findDocumentSelection(),
         const DocumentSelection.collapsed(
-          position: DocumentPosition(
-            nodeId: '1',
-            nodePosition: TextNodePosition(offset: 8),
-          ),
+          position: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 8)),
         ),
       );
     });
 
     group("page scrolling", () {
-      testWidgetsOnAllPlatforms(
-        'PAGE DOWN scrolls down by the viewport height',
-        (tester) async {
-          await _scrollingVariant.currentValue!.pumpEditor(
-            tester,
-            _scrollingVariant.currentValue!.textInputSource,
-          );
+      testWidgetsOnAllPlatforms('PAGE DOWN scrolls down by the viewport height', (tester) async {
+        await _scrollingVariant.currentValue!.pumpEditor(tester, _scrollingVariant.currentValue!.textInputSource);
 
-          await tester.placeCaretInParagraph('1', 0);
+        await tester.placeCaretInParagraph('1', 0);
 
-          final scrollState = tester.state<ScrollableState>(find.byType(Scrollable));
+        final scrollState = tester.state<ScrollableState>(find.byType(Scrollable));
 
-          await tester.sendKeyEvent(LogicalKeyboardKey.pageDown);
+        await tester.sendKeyEvent(LogicalKeyboardKey.pageDown);
 
-          // Let the scrolling system auto-scroll, as desired.
-          await tester.pumpAndSettle();
+        // Let the scrolling system auto-scroll, as desired.
+        await tester.pumpAndSettle();
 
-          // Ensure we scrolled down by the viewport height.
-          expect(
-            scrollState.position.pixels,
-            equals(scrollState.position.viewportDimension),
-          );
-        },
-        variant: _scrollingVariant,
-      );
+        // Ensure we scrolled down by the viewport height.
+        expect(scrollState.position.pixels, equals(scrollState.position.viewportDimension));
+      }, variant: _scrollingVariant);
 
-      testWidgetsOnAllPlatforms(
-        'PAGE DOWN does not scroll past bottom of the viewport',
-        (tester) async {
-          await _scrollingVariant.currentValue!.pumpEditor(
-            tester,
-            _scrollingVariant.currentValue!.textInputSource,
-          );
+      testWidgetsOnAllPlatforms('PAGE DOWN does not scroll past bottom of the viewport', (tester) async {
+        await _scrollingVariant.currentValue!.pumpEditor(tester, _scrollingVariant.currentValue!.textInputSource);
 
-          await tester.placeCaretInParagraph('1', 0);
+        await tester.placeCaretInParagraph('1', 0);
 
-          final scrollState = tester.state<ScrollableState>(find.byType(Scrollable));
+        final scrollState = tester.state<ScrollableState>(find.byType(Scrollable));
 
-          // Scroll very close to the bottom but not all the way to avoid explicit
-          // checks comparing scroll offset directly against `maxScrollExtent`
-          // and test scrolling behaviour in more realistic manner.
-          scrollState.position.jumpTo(scrollState.position.maxScrollExtent - 10);
+        // Scroll very close to the bottom but not all the way to avoid explicit
+        // checks comparing scroll offset directly against `maxScrollExtent`
+        // and test scrolling behaviour in more realistic manner.
+        scrollState.position.jumpTo(scrollState.position.maxScrollExtent - 10);
 
-          await tester.sendKeyEvent(LogicalKeyboardKey.pageDown);
+        await tester.sendKeyEvent(LogicalKeyboardKey.pageDown);
 
-          // Let the scrolling system auto-scroll, as desired.
-          await tester.pumpAndSettle();
+        // Let the scrolling system auto-scroll, as desired.
+        await tester.pumpAndSettle();
 
-          // Ensure we didn't scroll past the bottom of the viewport.
-          expect(scrollState.position.pixels, equals(scrollState.position.maxScrollExtent));
-        },
-        variant: _scrollingVariant,
-      );
+        // Ensure we didn't scroll past the bottom of the viewport.
+        expect(scrollState.position.pixels, equals(scrollState.position.maxScrollExtent));
+      }, variant: _scrollingVariant);
 
-      testWidgetsOnAllPlatforms(
-        'PAGE UP scrolls up by the viewport height',
-        (tester) async {
-          await _scrollingVariant.currentValue!.pumpEditor(
-            tester,
-            _scrollingVariant.currentValue!.textInputSource,
-          );
+      testWidgetsOnAllPlatforms('PAGE UP scrolls up by the viewport height', (tester) async {
+        await _scrollingVariant.currentValue!.pumpEditor(tester, _scrollingVariant.currentValue!.textInputSource);
 
-          await tester.placeCaretInParagraph('1', 0);
+        await tester.placeCaretInParagraph('1', 0);
 
-          final scrollState = tester.state<ScrollableState>(find.byType(Scrollable));
+        final scrollState = tester.state<ScrollableState>(find.byType(Scrollable));
 
-          // Scroll to the bottom of the viewport.
-          scrollState.position.jumpTo(scrollState.position.maxScrollExtent);
+        // Scroll to the bottom of the viewport.
+        scrollState.position.jumpTo(scrollState.position.maxScrollExtent);
 
-          await tester.sendKeyEvent(LogicalKeyboardKey.pageUp);
+        await tester.sendKeyEvent(LogicalKeyboardKey.pageUp);
 
-          // Let the scrolling system auto-scroll, as desired.
-          await tester.pumpAndSettle();
+        // Let the scrolling system auto-scroll, as desired.
+        await tester.pumpAndSettle();
 
-          // Ensure we scrolled up by the viewport height.
-          expect(
-            scrollState.position.pixels,
-            equals(scrollState.position.maxScrollExtent - scrollState.position.viewportDimension),
-          );
-        },
-        variant: _scrollingVariant,
-      );
+        // Ensure we scrolled up by the viewport height.
+        expect(
+          scrollState.position.pixels,
+          equals(scrollState.position.maxScrollExtent - scrollState.position.viewportDimension),
+        );
+      }, variant: _scrollingVariant);
 
-      testWidgetsOnAllPlatforms(
-        'PAGE UP does not scroll past top of the viewport',
-        (tester) async {
-          await _scrollingVariant.currentValue!.pumpEditor(
-            tester,
-            _scrollingVariant.currentValue!.textInputSource,
-          );
+      testWidgetsOnAllPlatforms('PAGE UP does not scroll past top of the viewport', (tester) async {
+        await _scrollingVariant.currentValue!.pumpEditor(tester, _scrollingVariant.currentValue!.textInputSource);
 
-          await tester.placeCaretInParagraph('1', 0);
+        await tester.placeCaretInParagraph('1', 0);
 
-          final scrollState = tester.state<ScrollableState>(find.byType(Scrollable));
+        final scrollState = tester.state<ScrollableState>(find.byType(Scrollable));
 
-          // Scroll very close to the top but not all the way to avoid explicit
-          // checks comparing scroll offset directly against `minScrollExtent`
-          // and test scrolling behaviour in more realistic manner.
-          scrollState.position.jumpTo(scrollState.position.minScrollExtent + 10);
+        // Scroll very close to the top but not all the way to avoid explicit
+        // checks comparing scroll offset directly against `minScrollExtent`
+        // and test scrolling behaviour in more realistic manner.
+        scrollState.position.jumpTo(scrollState.position.minScrollExtent + 10);
 
-          await tester.sendKeyEvent(LogicalKeyboardKey.pageUp);
+        await tester.sendKeyEvent(LogicalKeyboardKey.pageUp);
 
-          // Let the scrolling system auto-scroll, as desired.
-          await tester.pumpAndSettle();
+        // Let the scrolling system auto-scroll, as desired.
+        await tester.pumpAndSettle();
 
-          // Ensure we didn't scroll past the top of the viewport.
-          expect(scrollState.position.pixels, equals(scrollState.position.minScrollExtent));
-        },
-        variant: _scrollingVariant,
-      );
+        // Ensure we didn't scroll past the top of the viewport.
+        expect(scrollState.position.pixels, equals(scrollState.position.minScrollExtent));
+      }, variant: _scrollingVariant);
 
-      testWidgetsOnAllPlatforms(
-        'CMD + HOME on mac/ios and CTRL + HOME on other platforms scrolls to top of viewport',
-        (tester) async {
-          await _scrollingVariant.currentValue!.pumpEditor(
-            tester,
-            _scrollingVariant.currentValue!.textInputSource,
-          );
+      testWidgetsOnAllPlatforms('CMD + HOME on mac/ios and CTRL + HOME on other platforms scrolls to top of viewport', (
+        tester,
+      ) async {
+        await _scrollingVariant.currentValue!.pumpEditor(tester, _scrollingVariant.currentValue!.textInputSource);
 
-          await tester.placeCaretInParagraph('1', 0);
+        await tester.placeCaretInParagraph('1', 0);
 
-          final scrollState = tester.state<ScrollableState>(find.byType(Scrollable));
+        final scrollState = tester.state<ScrollableState>(find.byType(Scrollable));
 
-          // Scroll to the bottom of the viewport.
-          scrollState.position.jumpTo(scrollState.position.maxScrollExtent);
+        // Scroll to the bottom of the viewport.
+        scrollState.position.jumpTo(scrollState.position.maxScrollExtent);
 
-          if (defaultTargetPlatform == TargetPlatform.macOS || defaultTargetPlatform == TargetPlatform.iOS) {
-            await tester.pressCmdHome(tester);
-          } else {
-            await tester.pressCtrlHome(tester);
-          }
+        if (defaultTargetPlatform == TargetPlatform.macOS || defaultTargetPlatform == TargetPlatform.iOS) {
+          await tester.pressCmdHome(tester);
+        } else {
+          await tester.pressCtrlHome(tester);
+        }
 
-          // Ensure we scrolled to the top of the viewport.
-          expect(
-            scrollState.position.pixels,
-            equals(scrollState.position.minScrollExtent),
-          );
-        },
-        variant: _scrollingVariant,
-      );
+        // Ensure we scrolled to the top of the viewport.
+        expect(scrollState.position.pixels, equals(scrollState.position.minScrollExtent));
+      }, variant: _scrollingVariant);
 
       testWidgetsOnAllPlatforms(
         "CMD + HOME on mac/ios and CTRL + HOME on other platforms does not scroll past top of the viewport",
         (tester) async {
-          await _scrollingVariant.currentValue!.pumpEditor(
-            tester,
-            _scrollingVariant.currentValue!.textInputSource,
-          );
+          await _scrollingVariant.currentValue!.pumpEditor(tester, _scrollingVariant.currentValue!.textInputSource);
 
           await tester.placeCaretInParagraph('1', 0);
 
@@ -2496,10 +2125,7 @@ This is a paragraph
       testWidgetsOnAllPlatforms(
         "CMD + END on mac/ios and CTRL + END on other platforms scrolls to bottom of viewport",
         (tester) async {
-          await _scrollingVariant.currentValue!.pumpEditor(
-            tester,
-            _scrollingVariant.currentValue!.textInputSource,
-          );
+          await _scrollingVariant.currentValue!.pumpEditor(tester, _scrollingVariant.currentValue!.textInputSource);
 
           await tester.placeCaretInParagraph('1', 0);
 
@@ -2520,10 +2146,7 @@ This is a paragraph
       testWidgetsOnAllPlatforms(
         "CMD + END on mac/ios and CTRL + END on other platforms does not scroll past bottom of the viewport",
         (tester) async {
-          await _scrollingVariant.currentValue!.pumpEditor(
-            tester,
-            _scrollingVariant.currentValue!.textInputSource,
-          );
+          await _scrollingVariant.currentValue!.pumpEditor(tester, _scrollingVariant.currentValue!.textInputSource);
 
           await tester.placeCaretInParagraph('1', 0);
 
@@ -2559,11 +2182,12 @@ Future<TestDocumentContext> _pumpCaretMovementTestSetup(
   required int textOffsetInFirstNode,
 }) async {
   final focusNode = FocusNode()..requestFocus();
-  final context = await tester //
-      .createDocument()
-      .withSingleParagraph()
-      .withFocusNode(focusNode)
-      .pump();
+  final context =
+      await tester //
+          .createDocument()
+          .withSingleParagraph()
+          .withFocusNode(focusNode)
+          .pump();
 
   await tester.placeCaretInParagraph("1", textOffsetInFirstNode);
 
@@ -2579,22 +2203,16 @@ Future<TestDocumentContext> _pumpAutoWrappingTestSetup(WidgetTester tester) asyn
       .pump();
 }
 
-Future<TestDocumentContext> _pumpExplicitLineBreakTestSetup(
-  WidgetTester tester, {
-  Size? size,
-}) async {
+Future<TestDocumentContext> _pumpExplicitLineBreakTestSetup(WidgetTester tester, {Size? size}) async {
   return await tester
       .createDocument()
-      .withCustomContent(MutableDocument(
-        nodes: [
-          ParagraphNode(
-            id: '1',
-            text: AttributedText(
-              'Lorem ipsum dolor sit amet\nconsectetur adipiscing elit',
-            ),
-          ),
-        ],
-      ))
+      .withCustomContent(
+        MutableDocument(
+          nodes: [
+            ParagraphNode(id: '1', text: AttributedText('Lorem ipsum dolor sit amet\nconsectetur adipiscing elit')),
+          ],
+        ),
+      )
       .forDesktop()
       .withEditorSize(size)
       .pump();
@@ -2605,26 +2223,19 @@ Future<TestDocumentContext> _pumpTwoParagraphsTestApp(
   WidgetTester tester, {
   required TextInputSource inputSource,
 }) async {
-  final context = await tester //
-      .createDocument()
-      .withCustomContent(MutableDocument(
-        nodes: [
-          ParagraphNode(
-            id: '1',
-            text: AttributedText(
-              'First paragraph\nwith multiple lines',
+  final context =
+      await tester //
+          .createDocument()
+          .withCustomContent(
+            MutableDocument(
+              nodes: [
+                ParagraphNode(id: '1', text: AttributedText('First paragraph\nwith multiple lines')),
+                ParagraphNode(id: '2', text: AttributedText('Second paragraph\nwith multiple lines')),
+              ],
             ),
-          ),
-          ParagraphNode(
-            id: '2',
-            text: AttributedText(
-              'Second paragraph\nwith multiple lines',
-            ),
-          ),
-        ],
-      ))
-      .withInputSource(inputSource)
-      .pump();
+          )
+          .withInputSource(inputSource)
+          .pump();
 
   return context;
 }
@@ -2655,10 +2266,7 @@ final _scrollingVariant = ValueVariant<_PageScrollSetup>({
 });
 
 /// Pumps a [SuperEditor] experience with the default [Scrollable].
-Future<TestDocumentContext> _pumpPageScrollTestSetup(
-  WidgetTester tester,
-  TextInputSource textInputSource,
-) async {
+Future<TestDocumentContext> _pumpPageScrollTestSetup(WidgetTester tester, TextInputSource textInputSource) async {
   return await tester //
       .createDocument()
       .withLongDoc()
@@ -2677,50 +2285,37 @@ Future<TestDocumentContext> _pumpPageScrollTestSetup(
 ///
 /// This setup is intended for testing page scrolling actions behaviour in presense
 /// of an ancestor [Scrollable].
-Future<TestDocumentContext> _pumpPageScrollSliverTestSetup(
-  WidgetTester tester,
-  TextInputSource textInputSource,
-) async {
+Future<TestDocumentContext> _pumpPageScrollSliverTestSetup(WidgetTester tester, TextInputSource textInputSource) async {
   return tester //
       .createDocument()
       .withLongDoc()
       .withInputSource(textInputSource)
       .withCustomWidgetTreeBuilder((superEditor) {
-    return MaterialApp(
-      home: Scaffold(
-        body: Padding(
-          padding: const EdgeInsets.only(top: 300),
-          child: CustomScrollView(
-            slivers: [
-              const SliverAppBar(
-                title: Text(
-                  'Rich Text Editor Sliver Example',
-                ),
-                expandedHeight: 200.0,
+        return MaterialApp(
+          home: Scaffold(
+            body: Padding(
+              padding: const EdgeInsets.only(top: 300),
+              child: CustomScrollView(
+                slivers: [
+                  const SliverAppBar(title: Text('Rich Text Editor Sliver Example'), expandedHeight: 200.0),
+                  superEditor,
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
+                      return ListTile(title: Text('$index'));
+                    }, childCount: 100),
+                  ),
+                ],
               ),
-              superEditor,
-              SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    return ListTile(title: Text('$index'));
-                  },
-                  childCount: 100,
-                ),
-              ),
-            ],
+            ),
           ),
-        ),
-      ),
-      debugShowCheckedModeBanner: false,
-    );
-  }).pump();
+          debugShowCheckedModeBanner: false,
+        );
+      })
+      .pump();
 }
 
 /// Pumps a [SuperEditor] configured with the [TaskComponentBuilder].
-Future<void> _pumpEditorWithTaskComponent(
-  WidgetTester tester, {
-  required MutableDocument document,
-}) async {
+Future<void> _pumpEditorWithTaskComponent(WidgetTester tester, {required MutableDocument document}) async {
   final composer = MutableDocumentComposer();
   final editor = createDefaultDocumentEditor(document: document, composer: composer);
 
@@ -2729,10 +2324,7 @@ Future<void> _pumpEditorWithTaskComponent(
       home: Scaffold(
         body: SuperEditor(
           editor: editor,
-          componentBuilders: [
-            TaskComponentBuilder(editor),
-            ...defaultComponentBuilders,
-          ],
+          componentBuilders: [TaskComponentBuilder(editor), ...defaultComponentBuilders],
         ),
       ),
     ),
@@ -2761,11 +2353,7 @@ Future<void> _pressShiftAltDownArrow(WidgetTester tester) async {
 
 /// Holds the setup for a page scroll test.
 class _PageScrollSetup {
-  const _PageScrollSetup({
-    required this.description,
-    required this.pumpEditor,
-    required this.textInputSource,
-  });
+  const _PageScrollSetup({required this.description, required this.pumpEditor, required this.textInputSource});
   final String description;
   final _PumpEditorWidget pumpEditor;
   final TextInputSource textInputSource;
@@ -2776,7 +2364,4 @@ class _PageScrollSetup {
   }
 }
 
-typedef _PumpEditorWidget = Future<TestDocumentContext> Function(
-  WidgetTester tester,
-  TextInputSource textInputSource,
-);
+typedef _PumpEditorWidget = Future<TestDocumentContext> Function(WidgetTester tester, TextInputSource textInputSource);

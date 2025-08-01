@@ -17,36 +17,19 @@ void main() {
         },
       );
 
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: messagePageScaffold,
-          ),
-        ),
-      );
+      await tester.pumpWidget(MaterialApp(home: Scaffold(body: messagePageScaffold)));
       expect(mostRecentTextSize, 14);
 
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: DefaultTextStyle(
-              style: const TextStyle(
-                fontSize: 28,
-              ),
-              child: messagePageScaffold,
-            ),
+            body: DefaultTextStyle(style: const TextStyle(fontSize: 28), child: messagePageScaffold),
           ),
         ),
       );
       expect(mostRecentTextSize, 28);
 
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: messagePageScaffold,
-          ),
-        ),
-      );
+      await tester.pumpWidget(MaterialApp(home: Scaffold(body: messagePageScaffold)));
       expect(mostRecentTextSize, 14);
     });
 
@@ -137,11 +120,7 @@ void main() {
           navigatorKey: navigatorKey,
           routes: {
             '/': (context) {
-              return const Scaffold(
-                body: Center(
-                  child: Text('Home'),
-                ),
-              );
+              return const Scaffold(body: Center(child: Text('Home')));
             },
             'message-scaffold': (context) {
               return Scaffold(
@@ -168,10 +147,7 @@ void main() {
 }
 
 class _TextDirectionChanger extends StatefulWidget {
-  const _TextDirectionChanger({
-    required this.textDirection,
-    required this.child,
-  });
+  const _TextDirectionChanger({required this.textDirection, required this.child});
 
   final ValueNotifier<TextDirection> textDirection;
   final Widget child;
@@ -186,10 +162,7 @@ class _TextDirectionChangerState extends State<_TextDirectionChanger> {
     return ValueListenableBuilder(
       valueListenable: widget.textDirection,
       builder: (context, value, child) {
-        return Directionality(
-          textDirection: widget.textDirection.value,
-          child: child!,
-        );
+        return Directionality(textDirection: widget.textDirection.value, child: child!);
       },
       child: widget.child,
     );
@@ -197,10 +170,7 @@ class _TextDirectionChangerState extends State<_TextDirectionChanger> {
 }
 
 class _StatefulWidgetThatUsesInheritedWidget extends StatefulWidget {
-  const _StatefulWidgetThatUsesInheritedWidget({
-    required this.onBuildWithTextDirection,
-    required this.child,
-  });
+  const _StatefulWidgetThatUsesInheritedWidget({required this.onBuildWithTextDirection, required this.child});
 
   final void Function(TextDirection) onBuildWithTextDirection;
   final Widget child;

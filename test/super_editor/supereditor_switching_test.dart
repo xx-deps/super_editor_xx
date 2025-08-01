@@ -21,11 +21,7 @@ void main() {
 
       await tester.pumpWidget(
         MaterialApp(
-          home: _EditorReaderSwitchDemo(
-            document: document,
-            isEditable: isEditable,
-            scrollController: scrollController,
-          ),
+          home: _EditorReaderSwitchDemo(document: document, isEditable: isEditable, scrollController: scrollController),
         ),
       );
 
@@ -86,10 +82,7 @@ class _EditorReaderSwitchDemoState extends State<_EditorReaderSwitchDemo> {
   @override
   void initState() {
     _composer = MutableDocumentComposer();
-    _docEditor = createDefaultDocumentEditor(
-      document: widget.document,
-      composer: _composer,
-    );
+    _docEditor = createDefaultDocumentEditor(document: widget.document, composer: _composer);
 
     super.initState();
   }
@@ -106,7 +99,7 @@ class _EditorReaderSwitchDemoState extends State<_EditorReaderSwitchDemo> {
             builder: (context, _) {
               return _buildEditorOrReader();
             },
-          )
+          ),
         ],
       ),
     );
@@ -114,13 +107,9 @@ class _EditorReaderSwitchDemoState extends State<_EditorReaderSwitchDemo> {
 
   Widget _buildEditorOrReader() {
     if (widget.isEditable.value) {
-      return SuperEditor(
-        editor: _docEditor,
-      );
+      return SuperEditor(editor: _docEditor);
     } else {
-      return SuperReader(
-        editor: _docEditor,
-      );
+      return SuperReader(editor: _docEditor);
     }
   }
 }

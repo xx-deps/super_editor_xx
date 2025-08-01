@@ -17,28 +17,29 @@ void main() {
       const tapRegionGroupId = 'super_editor_group_id';
       final focusNode = FocusNode();
 
-      final context = await tester //
-          .createDocument()
-          .fromMarkdown('Single line document.')
-          .withFocusNode(focusNode)
-          .withTapRegionGroupId(tapRegionGroupId)
-          .withCustomWidgetTreeBuilder(
-            (superEditor) => MaterialApp(
-              home: Scaffold(
-                body: TapRegion(
-                  groupId: tapRegionGroupId,
-                  onTapOutside: (e) {
-                    // Unfocus on tap outside so that we're sure that the test
-                    // pass when using TapRegion's for focus, because apps should be able
-                    // to do that.
-                    focusNode.unfocus();
-                  },
-                  child: superEditor,
+      final context =
+          await tester //
+              .createDocument()
+              .fromMarkdown('Single line document.')
+              .withFocusNode(focusNode)
+              .withTapRegionGroupId(tapRegionGroupId)
+              .withCustomWidgetTreeBuilder(
+                (superEditor) => MaterialApp(
+                  home: Scaffold(
+                    body: TapRegion(
+                      groupId: tapRegionGroupId,
+                      onTapOutside: (e) {
+                        // Unfocus on tap outside so that we're sure that the test
+                        // pass when using TapRegion's for focus, because apps should be able
+                        // to do that.
+                        focusNode.unfocus();
+                      },
+                      child: superEditor,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          )
-          .pump();
+              )
+              .pump();
 
       final nodeId = context.document.first.id;
 
@@ -56,10 +57,7 @@ void main() {
         SuperEditorInspector.findDocumentSelection(),
         selectionEquivalentTo(
           DocumentSelection.collapsed(
-            position: DocumentPosition(
-              nodeId: nodeId,
-              nodePosition: const TextNodePosition(offset: 21),
-            ),
+            position: DocumentPosition(nodeId: nodeId, nodePosition: const TextNodePosition(offset: 21)),
           ),
         ),
       );
@@ -69,28 +67,29 @@ void main() {
       const tapRegionGroupId = 'super_editor_group_id';
       final focusNode = FocusNode();
 
-      final context = await tester //
-          .createDocument()
-          .fromMarkdown('Single line document.')
-          .withFocusNode(focusNode)
-          .withTapRegionGroupId(tapRegionGroupId)
-          .withCustomWidgetTreeBuilder(
-            (superEditor) => MaterialApp(
-              home: Scaffold(
-                body: TapRegion(
-                  groupId: tapRegionGroupId,
-                  onTapOutside: (e) {
-                    // Unfocus on tap outside so that we're sure that the test
-                    // pass when using TapRegion's for focus, because apps should be able
-                    // to do that.
-                    focusNode.unfocus();
-                  },
-                  child: superEditor,
+      final context =
+          await tester //
+              .createDocument()
+              .fromMarkdown('Single line document.')
+              .withFocusNode(focusNode)
+              .withTapRegionGroupId(tapRegionGroupId)
+              .withCustomWidgetTreeBuilder(
+                (superEditor) => MaterialApp(
+                  home: Scaffold(
+                    body: TapRegion(
+                      groupId: tapRegionGroupId,
+                      onTapOutside: (e) {
+                        // Unfocus on tap outside so that we're sure that the test
+                        // pass when using TapRegion's for focus, because apps should be able
+                        // to do that.
+                        focusNode.unfocus();
+                      },
+                      child: superEditor,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          )
-          .pump();
+              )
+              .pump();
 
       final nodeId = context.document.first.id;
 
@@ -107,14 +106,8 @@ void main() {
         SuperEditorInspector.findDocumentSelection(),
         selectionEquivalentTo(
           DocumentSelection(
-            base: DocumentPosition(
-              nodeId: nodeId,
-              nodePosition: const TextNodePosition(offset: 0),
-            ),
-            extent: DocumentPosition(
-              nodeId: nodeId,
-              nodePosition: const TextNodePosition(offset: 21),
-            ),
+            base: DocumentPosition(nodeId: nodeId, nodePosition: const TextNodePosition(offset: 0)),
+            extent: DocumentPosition(nodeId: nodeId, nodePosition: const TextNodePosition(offset: 21)),
           ),
         ),
       );

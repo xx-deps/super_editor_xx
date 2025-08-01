@@ -12,11 +12,7 @@ void testComponentGolden(String description, Widget componentBuilder, String fil
 
     await tester.pumpWidget(
       MaterialApp(
-        home: Scaffold(
-          body: Center(
-            child: componentBuilder,
-          ),
-        ),
+        home: Scaffold(body: Center(child: componentBuilder)),
         debugShowCheckedModeBanner: false,
       ),
     );

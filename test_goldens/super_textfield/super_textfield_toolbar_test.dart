@@ -34,12 +34,7 @@ void main() {
       // Pumps a widget tree with a SuperTextField at the bottom of the screen.
       await _pumpSuperTextfieldToolbarTestApp(
         tester,
-        child: Positioned(
-          bottom: 50,
-          child: _buildSuperTextField(
-            text: 'Arrow pointing down',
-          ),
-        ),
+        child: Positioned(bottom: 50, child: _buildSuperTextField(text: 'Arrow pointing down')),
       );
 
       // Place the caret at "|pointing".
@@ -61,10 +56,7 @@ void main() {
       // Pumps a widget tree with a SuperTextField at the top of the screen.
       await _pumpSuperTextfieldToolbarTestApp(
         tester,
-        child: _buildSuperTextField(
-          text: 'Arrow pointing up',
-          configuration: SuperTextFieldPlatformConfiguration.iOS,
-        ),
+        child: _buildSuperTextField(text: 'Arrow pointing up', configuration: SuperTextFieldPlatformConfiguration.iOS),
       );
 
       // Select a word so that the popover toolbar appears.
@@ -78,12 +70,7 @@ void main() {
 
     testGoldensOniOS('displays toolbar pointing up for collapsed selection', (tester) async {
       // Pumps a widget tree with a SuperTextField at the top of the screen.
-      await _pumpSuperTextfieldToolbarTestApp(
-        tester,
-        child: _buildSuperTextField(
-          text: 'Arrow pointing up',
-        ),
-      );
+      await _pumpSuperTextfieldToolbarTestApp(tester, child: _buildSuperTextField(text: 'Arrow pointing up'));
 
       // Place the caret at "|pointing".
       await tester.placeCaretInSuperTextField(6);
@@ -103,35 +90,21 @@ void main() {
 }
 
 /// Pumps a widget tree which displays the [child] inside a [Stack].
-Future<void> _pumpSuperTextfieldToolbarTestApp(
-  WidgetTester tester, {
-  required Widget child,
-}) async {
+Future<void> _pumpSuperTextfieldToolbarTestApp(WidgetTester tester, {required Widget child}) async {
   await tester.pumpWidget(
     MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: Stack(
-          children: [child],
-        ),
-      ),
+      home: Scaffold(body: Stack(children: [child])),
     ),
   );
 }
 
-Widget _buildSuperTextField({
-  required String text,
-  SuperTextFieldPlatformConfiguration? configuration,
-}) {
-  final controller = AttributedTextEditingController(
-    text: AttributedText(text),
-  );
+Widget _buildSuperTextField({required String text, SuperTextFieldPlatformConfiguration? configuration}) {
+  final controller = AttributedTextEditingController(text: AttributedText(text));
 
   return Container(
     width: 300,
-    decoration: BoxDecoration(
-      border: Border.all(color: Colors.green),
-    ),
+    decoration: BoxDecoration(border: Border.all(color: Colors.green)),
     child: SuperTextField(
       configuration: configuration,
       textController: controller,
@@ -139,10 +112,7 @@ Widget _buildSuperTextField({
       minLines: 1,
       lineHeight: 20,
       textStyleBuilder: (_) {
-        return const TextStyle(
-          color: Colors.black,
-          fontSize: 20,
-        );
+        return const TextStyle(color: Colors.black, fontSize: 20);
       },
     ),
   );

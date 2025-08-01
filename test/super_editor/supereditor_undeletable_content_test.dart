@@ -31,9 +31,7 @@ void main() {
           // Ensure the selection is at the downstream edge of the horizontal rule.
           expect(
             SuperEditorInspector.findDocumentSelection(),
-            const DocumentSelection.collapsed(
-              position: hrDownstreamEdgePosition,
-            ),
+            const DocumentSelection.collapsed(position: hrDownstreamEdgePosition),
           );
 
           // Press backspace a few times trying to delete the node.
@@ -49,9 +47,7 @@ void main() {
           // Ensure the selection didn't change.
           expect(
             SuperEditorInspector.findDocumentSelection(),
-            const DocumentSelection.collapsed(
-              position: hrDownstreamEdgePosition,
-            ),
+            const DocumentSelection.collapsed(position: hrDownstreamEdgePosition),
           );
         });
 
@@ -70,20 +66,14 @@ void main() {
           expect(document.getNodeById('hr'), isA<HorizontalRuleNode>());
 
           // Ensure the two paragraphs were merged.
-          expect(
-            SuperEditorInspector.findTextInComponent('1').toPlainText(),
-            'Paragraph 1Paragraph 2',
-          );
+          expect(SuperEditorInspector.findTextInComponent('1').toPlainText(), 'Paragraph 1Paragraph 2');
 
           // Ensure the caret moved to the end of existing test of the first paragraph.
           expect(
             SuperEditorInspector.findDocumentSelection(),
             selectionEquivalentTo(
               const DocumentSelection.collapsed(
-                position: DocumentPosition(
-                  nodeId: '1',
-                  nodePosition: TextNodePosition(offset: 11),
-                ),
+                position: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 11)),
               ),
             ),
           );
@@ -105,9 +95,7 @@ void main() {
           // Ensure the selection is at the beginning of the horizontal rule.
           expect(
             SuperEditorInspector.findDocumentSelection(),
-            const DocumentSelection.collapsed(
-              position: hrUpstreamEdgePosition,
-            ),
+            const DocumentSelection.collapsed(position: hrUpstreamEdgePosition),
           );
 
           // Press delete a few times trying to delete the node.
@@ -123,9 +111,7 @@ void main() {
           // Ensure the selection didn't change.
           expect(
             SuperEditorInspector.findDocumentSelection(),
-            const DocumentSelection.collapsed(
-              position: hrUpstreamEdgePosition,
-            ),
+            const DocumentSelection.collapsed(position: hrUpstreamEdgePosition),
           );
         });
 
@@ -144,20 +130,14 @@ void main() {
           expect(document.getNodeById('hr'), isA<HorizontalRuleNode>());
 
           // Ensure the two paragraphs were merged.
-          expect(
-            SuperEditorInspector.findTextInComponent('1').toPlainText(),
-            'Paragraph 1Paragraph 2',
-          );
+          expect(SuperEditorInspector.findTextInComponent('1').toPlainText(), 'Paragraph 1Paragraph 2');
 
           // Ensure the caret stayed where it was.
           expect(
             SuperEditorInspector.findDocumentSelection(),
             selectionEquivalentTo(
               const DocumentSelection.collapsed(
-                position: DocumentPosition(
-                  nodeId: '1',
-                  nodePosition: TextNodePosition(offset: 11),
-                ),
+                position: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 11)),
               ),
             ),
           );
@@ -180,9 +160,7 @@ void main() {
           // Ensure the caret is at the downstream edge of the horizontal rule.
           expect(
             SuperEditorInspector.findDocumentSelection(),
-            const DocumentSelection.collapsed(
-              position: hrDownstreamPosition,
-            ),
+            const DocumentSelection.collapsed(position: hrDownstreamPosition),
           );
 
           // Simulate the user pressing backspace. The IME first generates a
@@ -210,9 +188,7 @@ void main() {
           // Ensure the selection was kept where it was.
           expect(
             SuperEditorInspector.findDocumentSelection(),
-            const DocumentSelection.collapsed(
-              position: hrDownstreamPosition,
-            ),
+            const DocumentSelection.collapsed(position: hrDownstreamPosition),
           );
         });
       });
@@ -228,18 +204,12 @@ void main() {
           testContext.editor.execute([
             const ChangeSelectionRequest(
               DocumentSelection(
-                base: DocumentPosition(
-                  nodeId: 'hr',
-                  nodePosition: UpstreamDownstreamNodePosition.upstream(),
-                ),
-                extent: DocumentPosition(
-                  nodeId: 'hr',
-                  nodePosition: UpstreamDownstreamNodePosition.downstream(),
-                ),
+                base: DocumentPosition(nodeId: 'hr', nodePosition: UpstreamDownstreamNodePosition.upstream()),
+                extent: DocumentPosition(nodeId: 'hr', nodePosition: UpstreamDownstreamNodePosition.downstream()),
               ),
               SelectionChangeType.expandSelection,
               SelectionReason.userInteraction,
-            )
+            ),
           ]);
           await tester.pump();
 
@@ -256,10 +226,7 @@ void main() {
             SuperEditorInspector.findDocumentSelection(),
             selectionEquivalentTo(
               const DocumentSelection.collapsed(
-                position: DocumentPosition(
-                  nodeId: 'hr',
-                  nodePosition: UpstreamDownstreamNodePosition.downstream(),
-                ),
+                position: DocumentPosition(nodeId: 'hr', nodePosition: UpstreamDownstreamNodePosition.downstream()),
               ),
             ),
           );
@@ -273,18 +240,12 @@ void main() {
           testContext.editor.execute([
             const ChangeSelectionRequest(
               DocumentSelection(
-                base: DocumentPosition(
-                  nodeId: 'hr',
-                  nodePosition: UpstreamDownstreamNodePosition.downstream(),
-                ),
-                extent: DocumentPosition(
-                  nodeId: 'hr',
-                  nodePosition: UpstreamDownstreamNodePosition.upstream(),
-                ),
+                base: DocumentPosition(nodeId: 'hr', nodePosition: UpstreamDownstreamNodePosition.downstream()),
+                extent: DocumentPosition(nodeId: 'hr', nodePosition: UpstreamDownstreamNodePosition.upstream()),
               ),
               SelectionChangeType.expandSelection,
               SelectionReason.userInteraction,
-            )
+            ),
           ]);
           await tester.pump();
 
@@ -306,18 +267,12 @@ void main() {
           testContext.editor.execute([
             const ChangeSelectionRequest(
               DocumentSelection(
-                base: DocumentPosition(
-                  nodeId: '1',
-                  nodePosition: TextNodePosition(offset: 4),
-                ),
-                extent: DocumentPosition(
-                  nodeId: '3',
-                  nodePosition: TextNodePosition(offset: 10),
-                ),
+                base: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 4)),
+                extent: DocumentPosition(nodeId: '3', nodePosition: TextNodePosition(offset: 10)),
               ),
               SelectionChangeType.expandSelection,
               SelectionReason.userInteraction,
-            )
+            ),
           ]);
           await tester.pump();
 
@@ -349,26 +304,21 @@ void main() {
           expect(document.getNodeById('hr3'), isA<HorizontalRuleNode>());
         });
 
-        testWidgetsOnDesktop('when selection starts at upstream edge and ends at a downstream deletable node',
-            (tester) async {
+        testWidgetsOnDesktop('when selection starts at upstream edge and ends at a downstream deletable node', (
+          tester,
+        ) async {
           final testContext = await _pumpHrThenParagraphTestApp(tester);
 
           // Select from the upstream edge of the horizontal rule to "Para|graph 1".
           testContext.editor.execute([
             const ChangeSelectionRequest(
               DocumentSelection(
-                base: DocumentPosition(
-                  nodeId: 'hr',
-                  nodePosition: UpstreamDownstreamNodePosition.upstream(),
-                ),
-                extent: DocumentPosition(
-                  nodeId: '1',
-                  nodePosition: TextNodePosition(offset: 4),
-                ),
+                base: DocumentPosition(nodeId: 'hr', nodePosition: UpstreamDownstreamNodePosition.upstream()),
+                extent: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 4)),
               ),
               SelectionChangeType.expandSelection,
               SelectionReason.userInteraction,
-            )
+            ),
           ]);
           await tester.pump();
 
@@ -377,10 +327,7 @@ void main() {
 
           // Ensure that the deletable content was deleted and selection moved to the beginning
           // of the selected paragraph.
-          expect(
-            SuperEditorInspector.findTextInComponent('1').toPlainText(),
-            'graph 1',
-          );
+          expect(SuperEditorInspector.findTextInComponent('1').toPlainText(), 'graph 1');
           expect(
             SuperEditorInspector.findDocumentSelection(),
             selectionEquivalentTo(
@@ -396,26 +343,21 @@ void main() {
           expect(document.getNodeById('hr'), isA<HorizontalRuleNode>());
         });
 
-        testWidgetsOnDesktop('when selection starts at downstream edge and ends at an upstream deletable node',
-            (tester) async {
+        testWidgetsOnDesktop('when selection starts at downstream edge and ends at an upstream deletable node', (
+          tester,
+        ) async {
           final testContext = await _pumpParagraphThenHrTestApp(tester);
 
           // Select from the downstream edge of the horizontal rule to "Para|graph 1".
           testContext.editor.execute([
             const ChangeSelectionRequest(
               DocumentSelection(
-                base: DocumentPosition(
-                  nodeId: 'hr',
-                  nodePosition: UpstreamDownstreamNodePosition.downstream(),
-                ),
-                extent: DocumentPosition(
-                  nodeId: '1',
-                  nodePosition: TextNodePosition(offset: 4),
-                ),
+                base: DocumentPosition(nodeId: 'hr', nodePosition: UpstreamDownstreamNodePosition.downstream()),
+                extent: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 4)),
               ),
               SelectionChangeType.expandSelection,
               SelectionReason.userInteraction,
-            )
+            ),
           ]);
           await tester.pump();
 
@@ -424,10 +366,7 @@ void main() {
 
           // Ensure that the deletable content was deleted and selection moved to the upstream edge
           // of the selection
-          expect(
-            SuperEditorInspector.findTextInComponent('1').toPlainText(),
-            'Para',
-          );
+          expect(SuperEditorInspector.findTextInComponent('1').toPlainText(), 'Para');
           expect(
             SuperEditorInspector.findDocumentSelection(),
             selectionEquivalentTo(
@@ -443,26 +382,21 @@ void main() {
           expect(document.getNodeById('hr'), isA<HorizontalRuleNode>());
         });
 
-        testWidgetsOnDesktop('when selection starts at an upstream deletable node and ends at the downstream edge',
-            (tester) async {
+        testWidgetsOnDesktop('when selection starts at an upstream deletable node and ends at the downstream edge', (
+          tester,
+        ) async {
           final testContext = await _pumpParagraphThenHrTestApp(tester);
 
           // Select from the "Para|graph 1" to the downstream edge of the horizontal rule.
           testContext.editor.execute([
             const ChangeSelectionRequest(
               DocumentSelection(
-                base: DocumentPosition(
-                  nodeId: '1',
-                  nodePosition: TextNodePosition(offset: 4),
-                ),
-                extent: DocumentPosition(
-                  nodeId: 'hr',
-                  nodePosition: UpstreamDownstreamNodePosition.downstream(),
-                ),
+                base: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 4)),
+                extent: DocumentPosition(nodeId: 'hr', nodePosition: UpstreamDownstreamNodePosition.downstream()),
               ),
               SelectionChangeType.expandSelection,
               SelectionReason.userInteraction,
-            )
+            ),
           ]);
           await tester.pump();
 
@@ -487,26 +421,21 @@ void main() {
           expect(document.getNodeById('hr'), isA<HorizontalRuleNode>());
         });
 
-        testWidgetsOnDesktop('when selection starts at a downstream deletable node and ends at the upstream edge',
-            (tester) async {
+        testWidgetsOnDesktop('when selection starts at a downstream deletable node and ends at the upstream edge', (
+          tester,
+        ) async {
           final testContext = await _pumpHrThenParagraphTestApp(tester);
 
           // Select from the "Para|graph 2" to the upstream edge of the second horizontal rule.
           testContext.editor.execute([
             const ChangeSelectionRequest(
               DocumentSelection(
-                base: DocumentPosition(
-                  nodeId: '1',
-                  nodePosition: TextNodePosition(offset: 4),
-                ),
-                extent: DocumentPosition(
-                  nodeId: 'hr',
-                  nodePosition: UpstreamDownstreamNodePosition.upstream(),
-                ),
+                base: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 4)),
+                extent: DocumentPosition(nodeId: 'hr', nodePosition: UpstreamDownstreamNodePosition.upstream()),
               ),
               SelectionChangeType.expandSelection,
               SelectionReason.userInteraction,
-            )
+            ),
           ]);
           await tester.pump();
 
@@ -532,101 +461,86 @@ void main() {
         });
 
         testWidgetsOnDesktop(
-            'when selection starts at the dowstream edge and ends at the beginning of the downstream node',
-            (tester) async {
-          final testContext = await _pumpHrThenParagraphTestApp(tester);
+          'when selection starts at the dowstream edge and ends at the beginning of the downstream node',
+          (tester) async {
+            final testContext = await _pumpHrThenParagraphTestApp(tester);
 
-          const selection = DocumentSelection(
-            base: DocumentPosition(
-              nodeId: 'hr',
-              nodePosition: UpstreamDownstreamNodePosition.downstream(),
-            ),
-            extent: DocumentPosition(
-              nodeId: '1',
-              nodePosition: TextNodePosition(offset: 0),
-            ),
-          );
+            const selection = DocumentSelection(
+              base: DocumentPosition(nodeId: 'hr', nodePosition: UpstreamDownstreamNodePosition.downstream()),
+              extent: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 0)),
+            );
 
-          // Select from the end of the horizontal rule to the beginning of the downstream node.
-          testContext.editor.execute([
-            const ChangeSelectionRequest(
-              selection,
-              SelectionChangeType.expandSelection,
-              SelectionReason.userInteraction,
-            )
-          ]);
-          await tester.pump();
+            // Select from the end of the horizontal rule to the beginning of the downstream node.
+            testContext.editor.execute([
+              const ChangeSelectionRequest(
+                selection,
+                SelectionChangeType.expandSelection,
+                SelectionReason.userInteraction,
+              ),
+            ]);
+            await tester.pump();
 
-          // Press backspace to delete the selected content.
-          await tester.pressBackspace();
+            // Press backspace to delete the selected content.
+            await tester.pressBackspace();
 
-          // Ensure that the horizontal rule was not deleted.
-          final document = SuperEditorInspector.findDocument()!;
-          expect(document.getNodeById('hr'), isNotNull);
-          expect(document.getNodeById('hr'), isA<HorizontalRuleNode>());
+            // Ensure that the horizontal rule was not deleted.
+            final document = SuperEditorInspector.findDocument()!;
+            expect(document.getNodeById('hr'), isNotNull);
+            expect(document.getNodeById('hr'), isA<HorizontalRuleNode>());
 
-          // Ensure the selection didn't change.
-          expect(SuperEditorInspector.findDocumentSelection(), selection);
-        });
+            // Ensure the selection didn't change.
+            expect(SuperEditorInspector.findDocumentSelection(), selection);
+          },
+        );
 
         testWidgetsOnDesktop(
-            'when selection starts at the upstream edge and ends at the beginning of the downstream node',
-            (tester) async {
-          final testContext = await _pumpHrThenParagraphTestApp(tester);
+          'when selection starts at the upstream edge and ends at the beginning of the downstream node',
+          (tester) async {
+            final testContext = await _pumpHrThenParagraphTestApp(tester);
 
-          const selection = DocumentSelection(
-            base: DocumentPosition(
-              nodeId: 'hr',
-              nodePosition: UpstreamDownstreamNodePosition.upstream(),
-            ),
-            extent: DocumentPosition(
-              nodeId: '1',
-              nodePosition: TextNodePosition(offset: 0),
-            ),
-          );
+            const selection = DocumentSelection(
+              base: DocumentPosition(nodeId: 'hr', nodePosition: UpstreamDownstreamNodePosition.upstream()),
+              extent: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 0)),
+            );
 
-          // Select from the beginning of the horizontal rule to the beginning of the downstream node.
-          testContext.editor.execute([
-            const ChangeSelectionRequest(
-              selection,
-              SelectionChangeType.expandSelection,
-              SelectionReason.userInteraction,
-            )
-          ]);
-          await tester.pump();
+            // Select from the beginning of the horizontal rule to the beginning of the downstream node.
+            testContext.editor.execute([
+              const ChangeSelectionRequest(
+                selection,
+                SelectionChangeType.expandSelection,
+                SelectionReason.userInteraction,
+              ),
+            ]);
+            await tester.pump();
 
-          // Press backspace to delete the selected content.
-          await tester.pressBackspace();
+            // Press backspace to delete the selected content.
+            await tester.pressBackspace();
 
-          // Ensure that the horizontal rule was not deleted.
-          final document = SuperEditorInspector.findDocument()!;
-          expect(document.getNodeById('hr'), isNotNull);
-          expect(document.getNodeById('hr'), isA<HorizontalRuleNode>());
+            // Ensure that the horizontal rule was not deleted.
+            final document = SuperEditorInspector.findDocument()!;
+            expect(document.getNodeById('hr'), isNotNull);
+            expect(document.getNodeById('hr'), isA<HorizontalRuleNode>());
 
-          // Ensure the selection didn't change.
-          expect(SuperEditorInspector.findDocumentSelection(), selection);
-        });
+            // Ensure the selection didn't change.
+            expect(SuperEditorInspector.findDocumentSelection(), selection);
+          },
+        );
 
-        testWidgetsOnDesktop('when selection starts at upstream edge and ends at the end of the upstream node',
-            (tester) async {
+        testWidgetsOnDesktop('when selection starts at upstream edge and ends at the end of the upstream node', (
+          tester,
+        ) async {
           final testContext = await _pumpParagraphThenHrTestApp(tester);
 
           // Select from the beginning of the horizontal rule to the end of the upstream node.
           testContext.editor.execute([
             const ChangeSelectionRequest(
               DocumentSelection(
-                base: DocumentPosition(
-                  nodeId: 'hr',
-                  nodePosition: UpstreamDownstreamNodePosition.upstream(),
-                ),
-                extent: DocumentPosition(
-                  nodeId: '1',
-                  nodePosition: TextNodePosition(offset: 11),
-                ),
+                base: DocumentPosition(nodeId: 'hr', nodePosition: UpstreamDownstreamNodePosition.upstream()),
+                extent: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 11)),
               ),
               SelectionChangeType.expandSelection,
               SelectionReason.userInteraction,
-            )
+            ),
           ]);
           await tester.pump();
 
@@ -643,35 +557,27 @@ void main() {
             SuperEditorInspector.findDocumentSelection(),
             selectionEquivalentTo(
               const DocumentSelection.collapsed(
-                position: DocumentPosition(
-                  nodeId: '1',
-                  nodePosition: TextNodePosition(offset: 11),
-                ),
+                position: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 11)),
               ),
             ),
           );
         });
 
-        testWidgetsOnDesktop('when selection starts at downstream edge and ends at the end of the upstream node',
-            (tester) async {
+        testWidgetsOnDesktop('when selection starts at downstream edge and ends at the end of the upstream node', (
+          tester,
+        ) async {
           final testContext = await _pumpParagraphThenHrTestApp(tester);
 
           // Select from the end of the horizontal rule to the end of the downstream node.
           testContext.editor.execute([
             const ChangeSelectionRequest(
               DocumentSelection(
-                base: DocumentPosition(
-                  nodeId: 'hr',
-                  nodePosition: UpstreamDownstreamNodePosition.downstream(),
-                ),
-                extent: DocumentPosition(
-                  nodeId: '1',
-                  nodePosition: TextNodePosition(offset: 11),
-                ),
+                base: DocumentPosition(nodeId: 'hr', nodePosition: UpstreamDownstreamNodePosition.downstream()),
+                extent: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 11)),
               ),
               SelectionChangeType.expandSelection,
               SelectionReason.userInteraction,
-            )
+            ),
           ]);
           await tester.pump();
 
@@ -688,29 +594,22 @@ void main() {
             SuperEditorInspector.findDocumentSelection(),
             selectionEquivalentTo(
               const DocumentSelection.collapsed(
-                position: DocumentPosition(
-                  nodeId: '1',
-                  nodePosition: TextNodePosition(offset: 11),
-                ),
+                position: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 11)),
               ),
             ),
           );
         });
 
-        testWidgetsOnDesktop('when the whole document is selected and starts with a non-deletable node',
-            (tester) async {
+        testWidgetsOnDesktop('when the whole document is selected and starts with a non-deletable node', (
+          tester,
+        ) async {
           await tester //
               .createDocument()
               .withCustomContent(
                 MutableDocument(
                   nodes: [
-                    HorizontalRuleNode(id: '1', metadata: {
-                      NodeMetadata.isDeletable: false,
-                    }),
-                    ParagraphNode(
-                      id: '2',
-                      text: AttributedText('This is some text'),
-                    ),
+                    HorizontalRuleNode(id: '1', metadata: {NodeMetadata.isDeletable: false}),
+                    ParagraphNode(id: '2', text: AttributedText('This is some text')),
                   ],
                 ),
               )
@@ -730,14 +629,8 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection(
-              base: DocumentPosition(
-                nodeId: '1',
-                nodePosition: UpstreamDownstreamNodePosition.upstream(),
-              ),
-              extent: DocumentPosition(
-                nodeId: '2',
-                nodePosition: TextNodePosition(offset: 17),
-              ),
+              base: DocumentPosition(nodeId: '1', nodePosition: UpstreamDownstreamNodePosition.upstream()),
+              extent: DocumentPosition(nodeId: '2', nodePosition: TextNodePosition(offset: 17)),
             ),
           );
 
@@ -757,10 +650,7 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             DocumentSelection.collapsed(
-              position: DocumentPosition(
-                nodeId: document.last.id,
-                nodePosition: const TextNodePosition(offset: 0),
-              ),
+              position: DocumentPosition(nodeId: document.last.id, nodePosition: const TextNodePosition(offset: 0)),
             ),
           );
         });
@@ -771,13 +661,8 @@ void main() {
               .withCustomContent(
                 MutableDocument(
                   nodes: [
-                    ParagraphNode(
-                      id: '1',
-                      text: AttributedText('This is some text'),
-                    ),
-                    HorizontalRuleNode(id: '2', metadata: {
-                      NodeMetadata.isDeletable: false,
-                    }),
+                    ParagraphNode(id: '1', text: AttributedText('This is some text')),
+                    HorizontalRuleNode(id: '2', metadata: {NodeMetadata.isDeletable: false}),
                   ],
                 ),
               )
@@ -796,14 +681,8 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection(
-              base: DocumentPosition(
-                nodeId: '1',
-                nodePosition: TextNodePosition(offset: 0),
-              ),
-              extent: DocumentPosition(
-                nodeId: '2',
-                nodePosition: UpstreamDownstreamNodePosition.downstream(),
-              ),
+              base: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 0)),
+              extent: DocumentPosition(nodeId: '2', nodePosition: UpstreamDownstreamNodePosition.downstream()),
             ),
           );
 
@@ -823,31 +702,22 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             DocumentSelection.collapsed(
-              position: DocumentPosition(
-                nodeId: document.last.id,
-                nodePosition: const TextNodePosition(offset: 0),
-              ),
+              position: DocumentPosition(nodeId: document.last.id, nodePosition: const TextNodePosition(offset: 0)),
             ),
           );
         });
 
-        testWidgetsOnDesktop('when the whole document is selected and starts and ends with non-deletable nodes',
-            (tester) async {
+        testWidgetsOnDesktop('when the whole document is selected and starts and ends with non-deletable nodes', (
+          tester,
+        ) async {
           await tester //
               .createDocument()
               .withCustomContent(
                 MutableDocument(
                   nodes: [
-                    HorizontalRuleNode(id: '1', metadata: {
-                      NodeMetadata.isDeletable: false,
-                    }),
-                    ParagraphNode(
-                      id: '2',
-                      text: AttributedText('This is some text'),
-                    ),
-                    HorizontalRuleNode(id: '3', metadata: {
-                      NodeMetadata.isDeletable: false,
-                    }),
+                    HorizontalRuleNode(id: '1', metadata: {NodeMetadata.isDeletable: false}),
+                    ParagraphNode(id: '2', text: AttributedText('This is some text')),
+                    HorizontalRuleNode(id: '3', metadata: {NodeMetadata.isDeletable: false}),
                   ],
                 ),
               )
@@ -866,14 +736,8 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection(
-              base: DocumentPosition(
-                nodeId: '1',
-                nodePosition: UpstreamDownstreamNodePosition.upstream(),
-              ),
-              extent: DocumentPosition(
-                nodeId: '3',
-                nodePosition: UpstreamDownstreamNodePosition.downstream(),
-              ),
+              base: DocumentPosition(nodeId: '1', nodePosition: UpstreamDownstreamNodePosition.upstream()),
+              extent: DocumentPosition(nodeId: '3', nodePosition: UpstreamDownstreamNodePosition.downstream()),
             ),
           );
 
@@ -894,10 +758,7 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             DocumentSelection.collapsed(
-              position: DocumentPosition(
-                nodeId: document.last.id,
-                nodePosition: const TextNodePosition(offset: 0),
-              ),
+              position: DocumentPosition(nodeId: document.last.id, nodePosition: const TextNodePosition(offset: 0)),
             ),
           );
         });
@@ -908,15 +769,9 @@ void main() {
               .withCustomContent(
                 MutableDocument(
                   nodes: [
-                    HorizontalRuleNode(id: '1', metadata: {
-                      NodeMetadata.isDeletable: false,
-                    }),
-                    HorizontalRuleNode(id: '2', metadata: {
-                      NodeMetadata.isDeletable: false,
-                    }),
-                    HorizontalRuleNode(id: '3', metadata: {
-                      NodeMetadata.isDeletable: false,
-                    }),
+                    HorizontalRuleNode(id: '1', metadata: {NodeMetadata.isDeletable: false}),
+                    HorizontalRuleNode(id: '2', metadata: {NodeMetadata.isDeletable: false}),
+                    HorizontalRuleNode(id: '3', metadata: {NodeMetadata.isDeletable: false}),
                   ],
                 ),
               )
@@ -924,10 +779,7 @@ void main() {
 
           // Select the first horizontal rule.
           await tester.tapAtDocumentPosition(
-            const DocumentPosition(
-              nodeId: "1",
-              nodePosition: UpstreamDownstreamNodePosition.upstream(),
-            ),
+            const DocumentPosition(nodeId: "1", nodePosition: UpstreamDownstreamNodePosition.upstream()),
           );
 
           // Select all content.
@@ -941,14 +793,8 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection(
-              base: DocumentPosition(
-                nodeId: '1',
-                nodePosition: UpstreamDownstreamNodePosition.upstream(),
-              ),
-              extent: DocumentPosition(
-                nodeId: '3',
-                nodePosition: UpstreamDownstreamNodePosition.downstream(),
-              ),
+              base: DocumentPosition(nodeId: '1', nodePosition: UpstreamDownstreamNodePosition.upstream()),
+              extent: DocumentPosition(nodeId: '3', nodePosition: UpstreamDownstreamNodePosition.downstream()),
             ),
           );
 
@@ -967,65 +813,46 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection(
-              base: DocumentPosition(
-                nodeId: '1',
-                nodePosition: UpstreamDownstreamNodePosition.upstream(),
-              ),
-              extent: DocumentPosition(
-                nodeId: '3',
-                nodePosition: UpstreamDownstreamNodePosition.downstream(),
-              ),
+              base: DocumentPosition(nodeId: '1', nodePosition: UpstreamDownstreamNodePosition.upstream()),
+              extent: DocumentPosition(nodeId: '3', nodePosition: UpstreamDownstreamNodePosition.downstream()),
             ),
           );
         });
 
-        testWidgetsOnDesktop('when all nodes in selection are non-deletable and document contains deletable nodes',
-            (tester) async {
-          final testContext = await tester //
-              .createDocument()
-              .withCustomContent(
-                MutableDocument(
-                  nodes: [
-                    ParagraphNode(id: '1', text: AttributedText()),
-                    HorizontalRuleNode(id: '2', metadata: {
-                      NodeMetadata.isDeletable: false,
-                    }),
-                    HorizontalRuleNode(id: '3', metadata: {
-                      NodeMetadata.isDeletable: false,
-                    }),
-                    HorizontalRuleNode(id: '4', metadata: {
-                      NodeMetadata.isDeletable: false,
-                    }),
-                    ParagraphNode(id: '5', text: AttributedText()),
-                  ],
-                ),
-              )
-              .pump();
+        testWidgetsOnDesktop('when all nodes in selection are non-deletable and document contains deletable nodes', (
+          tester,
+        ) async {
+          final testContext =
+              await tester //
+                  .createDocument()
+                  .withCustomContent(
+                    MutableDocument(
+                      nodes: [
+                        ParagraphNode(id: '1', text: AttributedText()),
+                        HorizontalRuleNode(id: '2', metadata: {NodeMetadata.isDeletable: false}),
+                        HorizontalRuleNode(id: '3', metadata: {NodeMetadata.isDeletable: false}),
+                        HorizontalRuleNode(id: '4', metadata: {NodeMetadata.isDeletable: false}),
+                        ParagraphNode(id: '5', text: AttributedText()),
+                      ],
+                    ),
+                  )
+                  .pump();
 
           // Select the first horizontal rule.
           await tester.tapAtDocumentPosition(
-            const DocumentPosition(
-              nodeId: "2",
-              nodePosition: UpstreamDownstreamNodePosition.upstream(),
-            ),
+            const DocumentPosition(nodeId: "2", nodePosition: UpstreamDownstreamNodePosition.upstream()),
           );
 
           // Select all non-deletable nodes.
           testContext.editor.execute([
             const ChangeSelectionRequest(
               DocumentSelection(
-                base: DocumentPosition(
-                  nodeId: '2',
-                  nodePosition: UpstreamDownstreamNodePosition.upstream(),
-                ),
-                extent: DocumentPosition(
-                  nodeId: '4',
-                  nodePosition: UpstreamDownstreamNodePosition.downstream(),
-                ),
+                base: DocumentPosition(nodeId: '2', nodePosition: UpstreamDownstreamNodePosition.upstream()),
+                extent: DocumentPosition(nodeId: '4', nodePosition: UpstreamDownstreamNodePosition.downstream()),
               ),
               SelectionChangeType.expandSelection,
               SelectionReason.userInteraction,
-            )
+            ),
           ]);
           await tester.pump();
 
@@ -1046,14 +873,8 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection(
-              base: DocumentPosition(
-                nodeId: '2',
-                nodePosition: UpstreamDownstreamNodePosition.upstream(),
-              ),
-              extent: DocumentPosition(
-                nodeId: '4',
-                nodePosition: UpstreamDownstreamNodePosition.downstream(),
-              ),
+              base: DocumentPosition(nodeId: '2', nodePosition: UpstreamDownstreamNodePosition.upstream()),
+              extent: DocumentPosition(nodeId: '4', nodePosition: UpstreamDownstreamNodePosition.downstream()),
             ),
           );
         });
@@ -1068,18 +889,12 @@ void main() {
           testContext.editor.execute([
             const ChangeSelectionRequest(
               DocumentSelection(
-                base: DocumentPosition(
-                  nodeId: 'hr',
-                  nodePosition: UpstreamDownstreamNodePosition.upstream(),
-                ),
-                extent: DocumentPosition(
-                  nodeId: 'hr',
-                  nodePosition: UpstreamDownstreamNodePosition.downstream(),
-                ),
+                base: DocumentPosition(nodeId: 'hr', nodePosition: UpstreamDownstreamNodePosition.upstream()),
+                extent: DocumentPosition(nodeId: 'hr', nodePosition: UpstreamDownstreamNodePosition.downstream()),
               ),
               SelectionChangeType.expandSelection,
               SelectionReason.userInteraction,
-            )
+            ),
           ]);
           await tester.pump();
 
@@ -1102,18 +917,12 @@ void main() {
           testContext.editor.execute([
             const ChangeSelectionRequest(
               DocumentSelection(
-                base: DocumentPosition(
-                  nodeId: 'hr',
-                  nodePosition: UpstreamDownstreamNodePosition.downstream(),
-                ),
-                extent: DocumentPosition(
-                  nodeId: 'hr',
-                  nodePosition: UpstreamDownstreamNodePosition.upstream(),
-                ),
+                base: DocumentPosition(nodeId: 'hr', nodePosition: UpstreamDownstreamNodePosition.downstream()),
+                extent: DocumentPosition(nodeId: 'hr', nodePosition: UpstreamDownstreamNodePosition.upstream()),
               ),
               SelectionChangeType.expandSelection,
               SelectionReason.userInteraction,
-            )
+            ),
           ]);
           await tester.pump();
 
@@ -1135,18 +944,12 @@ void main() {
           testContext.editor.execute([
             const ChangeSelectionRequest(
               DocumentSelection(
-                base: DocumentPosition(
-                  nodeId: '1',
-                  nodePosition: TextNodePosition(offset: 4),
-                ),
-                extent: DocumentPosition(
-                  nodeId: '3',
-                  nodePosition: TextNodePosition(offset: 10),
-                ),
+                base: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 4)),
+                extent: DocumentPosition(nodeId: '3', nodePosition: TextNodePosition(offset: 10)),
               ),
               SelectionChangeType.expandSelection,
               SelectionReason.userInteraction,
-            )
+            ),
           ]);
           await tester.pump();
 
@@ -1178,26 +981,21 @@ void main() {
           expect(document.getNodeById('hr3'), isA<HorizontalRuleNode>());
         });
 
-        testWidgetsOnDesktop('when selection starts at upstream edge and ends at a downstream deletable node',
-            (tester) async {
+        testWidgetsOnDesktop('when selection starts at upstream edge and ends at a downstream deletable node', (
+          tester,
+        ) async {
           final testContext = await _pumpHrThenParagraphTestApp(tester);
 
           // Select from the upstream edge of the horizontal rule to "Para|graph 1".
           testContext.editor.execute([
             const ChangeSelectionRequest(
               DocumentSelection(
-                base: DocumentPosition(
-                  nodeId: 'hr',
-                  nodePosition: UpstreamDownstreamNodePosition.upstream(),
-                ),
-                extent: DocumentPosition(
-                  nodeId: '1',
-                  nodePosition: TextNodePosition(offset: 4),
-                ),
+                base: DocumentPosition(nodeId: 'hr', nodePosition: UpstreamDownstreamNodePosition.upstream()),
+                extent: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 4)),
               ),
               SelectionChangeType.expandSelection,
               SelectionReason.userInteraction,
-            )
+            ),
           ]);
           await tester.pump();
 
@@ -1206,10 +1004,7 @@ void main() {
 
           // Ensure that the deletable content was deleted and selection moved to the beginning
           // of the selected paragraph.
-          expect(
-            SuperEditorInspector.findTextInComponent('1').toPlainText(),
-            'graph 1',
-          );
+          expect(SuperEditorInspector.findTextInComponent('1').toPlainText(), 'graph 1');
           expect(
             SuperEditorInspector.findDocumentSelection(),
             selectionEquivalentTo(
@@ -1225,26 +1020,21 @@ void main() {
           expect(document.getNodeById('hr'), isA<HorizontalRuleNode>());
         });
 
-        testWidgetsOnDesktop('when selection starts at downstream edge and ends at an upstream deletable node',
-            (tester) async {
+        testWidgetsOnDesktop('when selection starts at downstream edge and ends at an upstream deletable node', (
+          tester,
+        ) async {
           final testContext = await _pumpParagraphThenHrTestApp(tester);
 
           // Select from the downstream edge of the horizontal rule to "Para|graph 1".
           testContext.editor.execute([
             const ChangeSelectionRequest(
               DocumentSelection(
-                base: DocumentPosition(
-                  nodeId: 'hr',
-                  nodePosition: UpstreamDownstreamNodePosition.downstream(),
-                ),
-                extent: DocumentPosition(
-                  nodeId: '1',
-                  nodePosition: TextNodePosition(offset: 4),
-                ),
+                base: DocumentPosition(nodeId: 'hr', nodePosition: UpstreamDownstreamNodePosition.downstream()),
+                extent: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 4)),
               ),
               SelectionChangeType.expandSelection,
               SelectionReason.userInteraction,
-            )
+            ),
           ]);
           await tester.pump();
 
@@ -1253,10 +1043,7 @@ void main() {
 
           // Ensure that the deletable content was deleted and selection moved to the upstream edge
           // of the selection
-          expect(
-            SuperEditorInspector.findTextInComponent('1').toPlainText(),
-            'Para',
-          );
+          expect(SuperEditorInspector.findTextInComponent('1').toPlainText(), 'Para');
           expect(
             SuperEditorInspector.findDocumentSelection(),
             selectionEquivalentTo(
@@ -1272,26 +1059,21 @@ void main() {
           expect(document.getNodeById('hr'), isA<HorizontalRuleNode>());
         });
 
-        testWidgetsOnDesktop('when selection starts at an upstream deletable node and ends at the downstream edge',
-            (tester) async {
+        testWidgetsOnDesktop('when selection starts at an upstream deletable node and ends at the downstream edge', (
+          tester,
+        ) async {
           final testContext = await _pumpParagraphThenHrTestApp(tester);
 
           // Select from the "Para|graph 1" to the downstream edge of the horizontal rule.
           testContext.editor.execute([
             const ChangeSelectionRequest(
               DocumentSelection(
-                base: DocumentPosition(
-                  nodeId: '1',
-                  nodePosition: TextNodePosition(offset: 4),
-                ),
-                extent: DocumentPosition(
-                  nodeId: 'hr',
-                  nodePosition: UpstreamDownstreamNodePosition.downstream(),
-                ),
+                base: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 4)),
+                extent: DocumentPosition(nodeId: 'hr', nodePosition: UpstreamDownstreamNodePosition.downstream()),
               ),
               SelectionChangeType.expandSelection,
               SelectionReason.userInteraction,
-            )
+            ),
           ]);
           await tester.pump();
 
@@ -1316,26 +1098,21 @@ void main() {
           expect(document.getNodeById('hr'), isA<HorizontalRuleNode>());
         });
 
-        testWidgetsOnDesktop('when selection starts at a downstream deletable node and ends at the upstream edge',
-            (tester) async {
+        testWidgetsOnDesktop('when selection starts at a downstream deletable node and ends at the upstream edge', (
+          tester,
+        ) async {
           final testContext = await _pumpHrThenParagraphTestApp(tester);
 
           // Select from the "Para|graph 2" to the upstream edge of the second horizontal rule.
           testContext.editor.execute([
             const ChangeSelectionRequest(
               DocumentSelection(
-                base: DocumentPosition(
-                  nodeId: '1',
-                  nodePosition: TextNodePosition(offset: 4),
-                ),
-                extent: DocumentPosition(
-                  nodeId: 'hr',
-                  nodePosition: UpstreamDownstreamNodePosition.upstream(),
-                ),
+                base: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 4)),
+                extent: DocumentPosition(nodeId: 'hr', nodePosition: UpstreamDownstreamNodePosition.upstream()),
               ),
               SelectionChangeType.expandSelection,
               SelectionReason.userInteraction,
-            )
+            ),
           ]);
           await tester.pump();
 
@@ -1361,109 +1138,89 @@ void main() {
         });
 
         testWidgetsOnDesktop(
-            'when selection starts at downstream edge and ends at the beginning of the downstream node',
-            (tester) async {
-          final testContext = await _pumpHrThenParagraphTestApp(tester);
+          'when selection starts at downstream edge and ends at the beginning of the downstream node',
+          (tester) async {
+            final testContext = await _pumpHrThenParagraphTestApp(tester);
 
-          // Select from the end of horizontal rule to the beginning of the downstream node.
-          testContext.editor.execute([
-            const ChangeSelectionRequest(
-              DocumentSelection(
-                base: DocumentPosition(
-                  nodeId: 'hr',
-                  nodePosition: UpstreamDownstreamNodePosition.downstream(),
+            // Select from the end of horizontal rule to the beginning of the downstream node.
+            testContext.editor.execute([
+              const ChangeSelectionRequest(
+                DocumentSelection(
+                  base: DocumentPosition(nodeId: 'hr', nodePosition: UpstreamDownstreamNodePosition.downstream()),
+                  extent: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 0)),
                 ),
-                extent: DocumentPosition(
-                  nodeId: '1',
-                  nodePosition: TextNodePosition(offset: 0),
+                SelectionChangeType.expandSelection,
+                SelectionReason.userInteraction,
+              ),
+            ]);
+            await tester.pump();
+
+            // Press backspace to delete the selected content.
+            await tester.pressDelete();
+
+            // Ensure that the horizontal rule was not deleted.
+            final document = SuperEditorInspector.findDocument()!;
+            expect(document.getNodeById('hr'), isNotNull);
+            expect(document.getNodeById('hr'), isA<HorizontalRuleNode>());
+
+            // Ensure the selection moved to the beginning of the downstream node.
+            expect(
+              SuperEditorInspector.findDocumentSelection(),
+              selectionEquivalentTo(
+                const DocumentSelection.collapsed(
+                  position: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 0)),
                 ),
               ),
-              SelectionChangeType.expandSelection,
-              SelectionReason.userInteraction,
-            )
-          ]);
-          await tester.pump();
+            );
+          },
+        );
 
-          // Press backspace to delete the selected content.
-          await tester.pressDelete();
+        testWidgetsOnDesktop(
+          'when selection starts at upstream edge and ends at the beginning of the downstream node',
+          (tester) async {
+            final testContext = await _pumpHrThenParagraphTestApp(tester);
 
-          // Ensure that the horizontal rule was not deleted.
-          final document = SuperEditorInspector.findDocument()!;
-          expect(document.getNodeById('hr'), isNotNull);
-          expect(document.getNodeById('hr'), isA<HorizontalRuleNode>());
+            // Select from the beginning of horizontal rule to the beginning of the downstream node.
+            testContext.editor.execute([
+              const ChangeSelectionRequest(
+                DocumentSelection(
+                  base: DocumentPosition(nodeId: 'hr', nodePosition: UpstreamDownstreamNodePosition.upstream()),
+                  extent: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 0)),
+                ),
+                SelectionChangeType.expandSelection,
+                SelectionReason.userInteraction,
+              ),
+            ]);
+            await tester.pump();
 
-          // Ensure the selection moved to the beginning of the downstream node.
-          expect(
-            SuperEditorInspector.findDocumentSelection(),
-            selectionEquivalentTo(
-              const DocumentSelection.collapsed(
-                position: DocumentPosition(
-                  nodeId: '1',
-                  nodePosition: TextNodePosition(offset: 0),
+            // Press backspace to delete the selected content.
+            await tester.pressDelete();
+
+            // Ensure that the horizontal rule was not deleted.
+            final document = SuperEditorInspector.findDocument()!;
+            expect(document.getNodeById('hr'), isNotNull);
+            expect(document.getNodeById('hr'), isA<HorizontalRuleNode>());
+
+            // Ensure the selection moved to the beginning of the downstream node.
+            expect(
+              SuperEditorInspector.findDocumentSelection(),
+              selectionEquivalentTo(
+                const DocumentSelection.collapsed(
+                  position: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 0)),
                 ),
               ),
-            ),
-          );
-        });
+            );
+          },
+        );
 
-        testWidgetsOnDesktop('when selection starts at upstream edge and ends at the beginning of the downstream node',
-            (tester) async {
-          final testContext = await _pumpHrThenParagraphTestApp(tester);
-
-          // Select from the beginning of horizontal rule to the beginning of the downstream node.
-          testContext.editor.execute([
-            const ChangeSelectionRequest(
-              DocumentSelection(
-                base: DocumentPosition(
-                  nodeId: 'hr',
-                  nodePosition: UpstreamDownstreamNodePosition.upstream(),
-                ),
-                extent: DocumentPosition(
-                  nodeId: '1',
-                  nodePosition: TextNodePosition(offset: 0),
-                ),
-              ),
-              SelectionChangeType.expandSelection,
-              SelectionReason.userInteraction,
-            )
-          ]);
-          await tester.pump();
-
-          // Press backspace to delete the selected content.
-          await tester.pressDelete();
-
-          // Ensure that the horizontal rule was not deleted.
-          final document = SuperEditorInspector.findDocument()!;
-          expect(document.getNodeById('hr'), isNotNull);
-          expect(document.getNodeById('hr'), isA<HorizontalRuleNode>());
-
-          // Ensure the selection moved to the beginning of the downstream node.
-          expect(
-            SuperEditorInspector.findDocumentSelection(),
-            selectionEquivalentTo(
-              const DocumentSelection.collapsed(
-                position: DocumentPosition(
-                  nodeId: '1',
-                  nodePosition: TextNodePosition(offset: 0),
-                ),
-              ),
-            ),
-          );
-        });
-
-        testWidgetsOnDesktop('when selection starts at upstream edge and ends at the end of the upstream node',
-            (tester) async {
+        testWidgetsOnDesktop('when selection starts at upstream edge and ends at the end of the upstream node', (
+          tester,
+        ) async {
           final testContext = await _pumpParagraphThenHrTestApp(tester);
 
           const selection = DocumentSelection(
-            base: DocumentPosition(
-              nodeId: 'hr',
-              nodePosition: UpstreamDownstreamNodePosition.upstream(),
-            ),
-            extent: DocumentPosition(
-              nodeId: '1',
-              nodePosition: TextNodePosition(offset: 11),
-            ),
+            base: DocumentPosition(nodeId: 'hr', nodePosition: UpstreamDownstreamNodePosition.upstream()),
+            extent: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 11)),
           );
 
           // Select from the beginning of the horizontal rule to the end of the upstream node.
@@ -1472,7 +1229,7 @@ void main() {
               selection,
               SelectionChangeType.expandSelection,
               SelectionReason.userInteraction,
-            )
+            ),
           ]);
           await tester.pump();
 
@@ -1488,19 +1245,14 @@ void main() {
           expect(SuperEditorInspector.findDocumentSelection(), selection);
         });
 
-        testWidgetsOnDesktop('when selection starts at downstream edge and ends at the end of the upstream node',
-            (tester) async {
+        testWidgetsOnDesktop('when selection starts at downstream edge and ends at the end of the upstream node', (
+          tester,
+        ) async {
           final testContext = await _pumpParagraphThenHrTestApp(tester);
 
           const selection = DocumentSelection(
-            base: DocumentPosition(
-              nodeId: 'hr',
-              nodePosition: UpstreamDownstreamNodePosition.downstream(),
-            ),
-            extent: DocumentPosition(
-              nodeId: '1',
-              nodePosition: TextNodePosition(offset: 11),
-            ),
+            base: DocumentPosition(nodeId: 'hr', nodePosition: UpstreamDownstreamNodePosition.downstream()),
+            extent: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 11)),
           );
 
           // Select from the end of the horizontal rule to the end of the downstream node.
@@ -1509,7 +1261,7 @@ void main() {
               selection,
               SelectionChangeType.expandSelection,
               SelectionReason.userInteraction,
-            )
+            ),
           ]);
           await tester.pump();
 
@@ -1525,20 +1277,16 @@ void main() {
           expect(SuperEditorInspector.findDocumentSelection(), selection);
         });
 
-        testWidgetsOnDesktop('when the whole document is selected and starts with a non-deletable node',
-            (tester) async {
+        testWidgetsOnDesktop('when the whole document is selected and starts with a non-deletable node', (
+          tester,
+        ) async {
           await tester //
               .createDocument()
               .withCustomContent(
                 MutableDocument(
                   nodes: [
-                    HorizontalRuleNode(id: '1', metadata: {
-                      NodeMetadata.isDeletable: false,
-                    }),
-                    ParagraphNode(
-                      id: '2',
-                      text: AttributedText('This is some text'),
-                    ),
+                    HorizontalRuleNode(id: '1', metadata: {NodeMetadata.isDeletable: false}),
+                    ParagraphNode(id: '2', text: AttributedText('This is some text')),
                   ],
                 ),
               )
@@ -1558,14 +1306,8 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection(
-              base: DocumentPosition(
-                nodeId: '1',
-                nodePosition: UpstreamDownstreamNodePosition.upstream(),
-              ),
-              extent: DocumentPosition(
-                nodeId: '2',
-                nodePosition: TextNodePosition(offset: 17),
-              ),
+              base: DocumentPosition(nodeId: '1', nodePosition: UpstreamDownstreamNodePosition.upstream()),
+              extent: DocumentPosition(nodeId: '2', nodePosition: TextNodePosition(offset: 17)),
             ),
           );
 
@@ -1585,10 +1327,7 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             DocumentSelection.collapsed(
-              position: DocumentPosition(
-                nodeId: document.last.id,
-                nodePosition: const TextNodePosition(offset: 0),
-              ),
+              position: DocumentPosition(nodeId: document.last.id, nodePosition: const TextNodePosition(offset: 0)),
             ),
           );
         });
@@ -1599,13 +1338,8 @@ void main() {
               .withCustomContent(
                 MutableDocument(
                   nodes: [
-                    ParagraphNode(
-                      id: '1',
-                      text: AttributedText('This is some text'),
-                    ),
-                    HorizontalRuleNode(id: '2', metadata: {
-                      NodeMetadata.isDeletable: false,
-                    }),
+                    ParagraphNode(id: '1', text: AttributedText('This is some text')),
+                    HorizontalRuleNode(id: '2', metadata: {NodeMetadata.isDeletable: false}),
                   ],
                 ),
               )
@@ -1624,14 +1358,8 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection(
-              base: DocumentPosition(
-                nodeId: '1',
-                nodePosition: TextNodePosition(offset: 0),
-              ),
-              extent: DocumentPosition(
-                nodeId: '2',
-                nodePosition: UpstreamDownstreamNodePosition.downstream(),
-              ),
+              base: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 0)),
+              extent: DocumentPosition(nodeId: '2', nodePosition: UpstreamDownstreamNodePosition.downstream()),
             ),
           );
 
@@ -1651,31 +1379,22 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             DocumentSelection.collapsed(
-              position: DocumentPosition(
-                nodeId: document.last.id,
-                nodePosition: const TextNodePosition(offset: 0),
-              ),
+              position: DocumentPosition(nodeId: document.last.id, nodePosition: const TextNodePosition(offset: 0)),
             ),
           );
         });
 
-        testWidgetsOnDesktop('when the whole document is selected and starts and ends with non-deletable nodes',
-            (tester) async {
+        testWidgetsOnDesktop('when the whole document is selected and starts and ends with non-deletable nodes', (
+          tester,
+        ) async {
           await tester //
               .createDocument()
               .withCustomContent(
                 MutableDocument(
                   nodes: [
-                    HorizontalRuleNode(id: '1', metadata: {
-                      NodeMetadata.isDeletable: false,
-                    }),
-                    ParagraphNode(
-                      id: '2',
-                      text: AttributedText('This is some text'),
-                    ),
-                    HorizontalRuleNode(id: '3', metadata: {
-                      NodeMetadata.isDeletable: false,
-                    }),
+                    HorizontalRuleNode(id: '1', metadata: {NodeMetadata.isDeletable: false}),
+                    ParagraphNode(id: '2', text: AttributedText('This is some text')),
+                    HorizontalRuleNode(id: '3', metadata: {NodeMetadata.isDeletable: false}),
                   ],
                 ),
               )
@@ -1694,14 +1413,8 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection(
-              base: DocumentPosition(
-                nodeId: '1',
-                nodePosition: UpstreamDownstreamNodePosition.upstream(),
-              ),
-              extent: DocumentPosition(
-                nodeId: '3',
-                nodePosition: UpstreamDownstreamNodePosition.downstream(),
-              ),
+              base: DocumentPosition(nodeId: '1', nodePosition: UpstreamDownstreamNodePosition.upstream()),
+              extent: DocumentPosition(nodeId: '3', nodePosition: UpstreamDownstreamNodePosition.downstream()),
             ),
           );
 
@@ -1722,10 +1435,7 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             DocumentSelection.collapsed(
-              position: DocumentPosition(
-                nodeId: document.last.id,
-                nodePosition: const TextNodePosition(offset: 0),
-              ),
+              position: DocumentPosition(nodeId: document.last.id, nodePosition: const TextNodePosition(offset: 0)),
             ),
           );
         });
@@ -1736,15 +1446,9 @@ void main() {
               .withCustomContent(
                 MutableDocument(
                   nodes: [
-                    HorizontalRuleNode(id: '1', metadata: {
-                      NodeMetadata.isDeletable: false,
-                    }),
-                    HorizontalRuleNode(id: '2', metadata: {
-                      NodeMetadata.isDeletable: false,
-                    }),
-                    HorizontalRuleNode(id: '3', metadata: {
-                      NodeMetadata.isDeletable: false,
-                    }),
+                    HorizontalRuleNode(id: '1', metadata: {NodeMetadata.isDeletable: false}),
+                    HorizontalRuleNode(id: '2', metadata: {NodeMetadata.isDeletable: false}),
+                    HorizontalRuleNode(id: '3', metadata: {NodeMetadata.isDeletable: false}),
                   ],
                 ),
               )
@@ -1752,10 +1456,7 @@ void main() {
 
           // Select the first horizontal rule.
           await tester.tapAtDocumentPosition(
-            const DocumentPosition(
-              nodeId: "1",
-              nodePosition: UpstreamDownstreamNodePosition.upstream(),
-            ),
+            const DocumentPosition(nodeId: "1", nodePosition: UpstreamDownstreamNodePosition.upstream()),
           );
 
           // Select all content.
@@ -1769,14 +1470,8 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection(
-              base: DocumentPosition(
-                nodeId: '1',
-                nodePosition: UpstreamDownstreamNodePosition.upstream(),
-              ),
-              extent: DocumentPosition(
-                nodeId: '3',
-                nodePosition: UpstreamDownstreamNodePosition.downstream(),
-              ),
+              base: DocumentPosition(nodeId: '1', nodePosition: UpstreamDownstreamNodePosition.upstream()),
+              extent: DocumentPosition(nodeId: '3', nodePosition: UpstreamDownstreamNodePosition.downstream()),
             ),
           );
 
@@ -1795,65 +1490,46 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection(
-              base: DocumentPosition(
-                nodeId: '1',
-                nodePosition: UpstreamDownstreamNodePosition.upstream(),
-              ),
-              extent: DocumentPosition(
-                nodeId: '3',
-                nodePosition: UpstreamDownstreamNodePosition.downstream(),
-              ),
+              base: DocumentPosition(nodeId: '1', nodePosition: UpstreamDownstreamNodePosition.upstream()),
+              extent: DocumentPosition(nodeId: '3', nodePosition: UpstreamDownstreamNodePosition.downstream()),
             ),
           );
         });
 
-        testWidgetsOnDesktop('when all nodes in selection are non-deletable and document contains deletable nodes',
-            (tester) async {
-          final testContext = await tester //
-              .createDocument()
-              .withCustomContent(
-                MutableDocument(
-                  nodes: [
-                    ParagraphNode(id: '1', text: AttributedText()),
-                    HorizontalRuleNode(id: '2', metadata: {
-                      NodeMetadata.isDeletable: false,
-                    }),
-                    HorizontalRuleNode(id: '3', metadata: {
-                      NodeMetadata.isDeletable: false,
-                    }),
-                    HorizontalRuleNode(id: '4', metadata: {
-                      NodeMetadata.isDeletable: false,
-                    }),
-                    ParagraphNode(id: '5', text: AttributedText()),
-                  ],
-                ),
-              )
-              .pump();
+        testWidgetsOnDesktop('when all nodes in selection are non-deletable and document contains deletable nodes', (
+          tester,
+        ) async {
+          final testContext =
+              await tester //
+                  .createDocument()
+                  .withCustomContent(
+                    MutableDocument(
+                      nodes: [
+                        ParagraphNode(id: '1', text: AttributedText()),
+                        HorizontalRuleNode(id: '2', metadata: {NodeMetadata.isDeletable: false}),
+                        HorizontalRuleNode(id: '3', metadata: {NodeMetadata.isDeletable: false}),
+                        HorizontalRuleNode(id: '4', metadata: {NodeMetadata.isDeletable: false}),
+                        ParagraphNode(id: '5', text: AttributedText()),
+                      ],
+                    ),
+                  )
+                  .pump();
 
           // Select the first horizontal rule.
           await tester.tapAtDocumentPosition(
-            const DocumentPosition(
-              nodeId: "2",
-              nodePosition: UpstreamDownstreamNodePosition.upstream(),
-            ),
+            const DocumentPosition(nodeId: "2", nodePosition: UpstreamDownstreamNodePosition.upstream()),
           );
 
           // Select all non-deletable nodes.
           testContext.editor.execute([
             const ChangeSelectionRequest(
               DocumentSelection(
-                base: DocumentPosition(
-                  nodeId: '2',
-                  nodePosition: UpstreamDownstreamNodePosition.upstream(),
-                ),
-                extent: DocumentPosition(
-                  nodeId: '4',
-                  nodePosition: UpstreamDownstreamNodePosition.downstream(),
-                ),
+                base: DocumentPosition(nodeId: '2', nodePosition: UpstreamDownstreamNodePosition.upstream()),
+                extent: DocumentPosition(nodeId: '4', nodePosition: UpstreamDownstreamNodePosition.downstream()),
               ),
               SelectionChangeType.expandSelection,
               SelectionReason.userInteraction,
-            )
+            ),
           ]);
           await tester.pump();
 
@@ -1874,14 +1550,8 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection(
-              base: DocumentPosition(
-                nodeId: '2',
-                nodePosition: UpstreamDownstreamNodePosition.upstream(),
-              ),
-              extent: DocumentPosition(
-                nodeId: '4',
-                nodePosition: UpstreamDownstreamNodePosition.downstream(),
-              ),
+              base: DocumentPosition(nodeId: '2', nodePosition: UpstreamDownstreamNodePosition.upstream()),
+              extent: DocumentPosition(nodeId: '4', nodePosition: UpstreamDownstreamNodePosition.downstream()),
             ),
           );
         });
@@ -1895,18 +1565,12 @@ void main() {
           testContext.editor.execute([
             const ChangeSelectionRequest(
               DocumentSelection(
-                base: DocumentPosition(
-                  nodeId: '1',
-                  nodePosition: TextNodePosition(offset: 4),
-                ),
-                extent: DocumentPosition(
-                  nodeId: '3',
-                  nodePosition: TextNodePosition(offset: 10),
-                ),
+                base: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 4)),
+                extent: DocumentPosition(nodeId: '3', nodePosition: TextNodePosition(offset: 10)),
               ),
               SelectionChangeType.expandSelection,
               SelectionReason.userInteraction,
-            )
+            ),
           ]);
           await tester.pump();
 
@@ -1948,18 +1612,12 @@ void main() {
           testContext.editor.execute([
             const ChangeSelectionRequest(
               DocumentSelection(
-                base: DocumentPosition(
-                  nodeId: 'hr',
-                  nodePosition: UpstreamDownstreamNodePosition.upstream(),
-                ),
-                extent: DocumentPosition(
-                  nodeId: 'hr',
-                  nodePosition: UpstreamDownstreamNodePosition.downstream(),
-                ),
+                base: DocumentPosition(nodeId: 'hr', nodePosition: UpstreamDownstreamNodePosition.upstream()),
+                extent: DocumentPosition(nodeId: 'hr', nodePosition: UpstreamDownstreamNodePosition.downstream()),
               ),
               SelectionChangeType.expandSelection,
               SelectionReason.userInteraction,
-            )
+            ),
           ]);
           await tester.pump();
 
@@ -1994,18 +1652,12 @@ void main() {
           testContext.editor.execute([
             const ChangeSelectionRequest(
               DocumentSelection(
-                base: DocumentPosition(
-                  nodeId: 'hr',
-                  nodePosition: UpstreamDownstreamNodePosition.downstream(),
-                ),
-                extent: DocumentPosition(
-                  nodeId: 'hr',
-                  nodePosition: UpstreamDownstreamNodePosition.upstream(),
-                ),
+                base: DocumentPosition(nodeId: 'hr', nodePosition: UpstreamDownstreamNodePosition.downstream()),
+                extent: DocumentPosition(nodeId: 'hr', nodePosition: UpstreamDownstreamNodePosition.upstream()),
               ),
               SelectionChangeType.expandSelection,
               SelectionReason.userInteraction,
-            )
+            ),
           ]);
           await tester.pump();
 
@@ -2039,18 +1691,12 @@ void main() {
           testContext.editor.execute([
             const ChangeSelectionRequest(
               DocumentSelection(
-                base: DocumentPosition(
-                  nodeId: '1',
-                  nodePosition: TextNodePosition(offset: 4),
-                ),
-                extent: DocumentPosition(
-                  nodeId: '3',
-                  nodePosition: TextNodePosition(offset: 10),
-                ),
+                base: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 4)),
+                extent: DocumentPosition(nodeId: '3', nodePosition: TextNodePosition(offset: 10)),
               ),
               SelectionChangeType.expandSelection,
               SelectionReason.userInteraction,
-            )
+            ),
           ]);
           await tester.pump();
 
@@ -2096,26 +1742,21 @@ void main() {
           expect(document.getNodeById('hr3'), isA<HorizontalRuleNode>());
         });
 
-        testWidgetsOnMobile('when selection starts at upstream edge and ends at a downstream deletable node',
-            (tester) async {
+        testWidgetsOnMobile('when selection starts at upstream edge and ends at a downstream deletable node', (
+          tester,
+        ) async {
           final testContext = await _pumpHrThenParagraphTestApp(tester);
 
           // Select from the upstream edge of the horizontal rule to "Para|graph 1".
           testContext.editor.execute([
             const ChangeSelectionRequest(
               DocumentSelection(
-                base: DocumentPosition(
-                  nodeId: 'hr',
-                  nodePosition: UpstreamDownstreamNodePosition.upstream(),
-                ),
-                extent: DocumentPosition(
-                  nodeId: '1',
-                  nodePosition: TextNodePosition(offset: 4),
-                ),
+                base: DocumentPosition(nodeId: 'hr', nodePosition: UpstreamDownstreamNodePosition.upstream()),
+                extent: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 4)),
               ),
               SelectionChangeType.expandSelection,
               SelectionReason.userInteraction,
-            )
+            ),
           ]);
           await tester.pump();
 
@@ -2138,10 +1779,7 @@ void main() {
 
           // Ensure that the deletable content was deleted and selection moved to the beginning
           // of the selected paragraph.
-          expect(
-            SuperEditorInspector.findTextInComponent('1').toPlainText(),
-            'graph 1',
-          );
+          expect(SuperEditorInspector.findTextInComponent('1').toPlainText(), 'graph 1');
           expect(
             SuperEditorInspector.findDocumentSelection(),
             selectionEquivalentTo(
@@ -2157,26 +1795,21 @@ void main() {
           expect(document.getNodeById('hr'), isA<HorizontalRuleNode>());
         });
 
-        testWidgetsOnMobile('when selection starts at downstream edge and ends at an upstream deletable node',
-            (tester) async {
+        testWidgetsOnMobile('when selection starts at downstream edge and ends at an upstream deletable node', (
+          tester,
+        ) async {
           final testContext = await _pumpParagraphThenHrTestApp(tester);
 
           // Select from the downstream edge of the horizontal rule to "Para|graph 1".
           testContext.editor.execute([
             const ChangeSelectionRequest(
               DocumentSelection(
-                base: DocumentPosition(
-                  nodeId: 'hr',
-                  nodePosition: UpstreamDownstreamNodePosition.downstream(),
-                ),
-                extent: DocumentPosition(
-                  nodeId: '1',
-                  nodePosition: TextNodePosition(offset: 4),
-                ),
+                base: DocumentPosition(nodeId: 'hr', nodePosition: UpstreamDownstreamNodePosition.downstream()),
+                extent: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 4)),
               ),
               SelectionChangeType.expandSelection,
               SelectionReason.userInteraction,
-            )
+            ),
           ]);
           await tester.pump();
 
@@ -2199,10 +1832,7 @@ void main() {
 
           // Ensure that the deletable content was deleted and selection moved to the upstream edge
           // of the selection
-          expect(
-            SuperEditorInspector.findTextInComponent('1').toPlainText(),
-            'Para',
-          );
+          expect(SuperEditorInspector.findTextInComponent('1').toPlainText(), 'Para');
           expect(
             SuperEditorInspector.findDocumentSelection(),
             selectionEquivalentTo(
@@ -2218,26 +1848,21 @@ void main() {
           expect(document.getNodeById('hr'), isA<HorizontalRuleNode>());
         });
 
-        testWidgetsOnMobile('when selection starts at an upstream deletable node and ends at the downstream edge',
-            (tester) async {
+        testWidgetsOnMobile('when selection starts at an upstream deletable node and ends at the downstream edge', (
+          tester,
+        ) async {
           final testContext = await _pumpParagraphThenHrTestApp(tester);
 
           // Select from the "Para|graph 1" to the downstream edge of the horizontal rule.
           testContext.editor.execute([
             const ChangeSelectionRequest(
               DocumentSelection(
-                base: DocumentPosition(
-                  nodeId: '1',
-                  nodePosition: TextNodePosition(offset: 4),
-                ),
-                extent: DocumentPosition(
-                  nodeId: 'hr',
-                  nodePosition: UpstreamDownstreamNodePosition.downstream(),
-                ),
+                base: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 4)),
+                extent: DocumentPosition(nodeId: 'hr', nodePosition: UpstreamDownstreamNodePosition.downstream()),
               ),
               SelectionChangeType.expandSelection,
               SelectionReason.userInteraction,
-            )
+            ),
           ]);
           await tester.pump();
 
@@ -2276,26 +1901,21 @@ void main() {
           expect(document.getNodeById('hr'), isA<HorizontalRuleNode>());
         });
 
-        testWidgetsOnMobile('when selection starts at a downstream deletable node and ends at the upstream edge',
-            (tester) async {
+        testWidgetsOnMobile('when selection starts at a downstream deletable node and ends at the upstream edge', (
+          tester,
+        ) async {
           final testContext = await _pumpHrThenParagraphTestApp(tester);
 
           // Select from the "Para|graph 1" to the upstream edge of the second horizontal rule.
           testContext.editor.execute([
             const ChangeSelectionRequest(
               DocumentSelection(
-                base: DocumentPosition(
-                  nodeId: '1',
-                  nodePosition: TextNodePosition(offset: 4),
-                ),
-                extent: DocumentPosition(
-                  nodeId: 'hr',
-                  nodePosition: UpstreamDownstreamNodePosition.upstream(),
-                ),
+                base: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 4)),
+                extent: DocumentPosition(nodeId: 'hr', nodePosition: UpstreamDownstreamNodePosition.upstream()),
               ),
               SelectionChangeType.expandSelection,
               SelectionReason.userInteraction,
-            )
+            ),
           ]);
           await tester.pump();
 
@@ -2340,13 +1960,8 @@ void main() {
               .withCustomContent(
                 MutableDocument(
                   nodes: [
-                    HorizontalRuleNode(id: '1', metadata: {
-                      NodeMetadata.isDeletable: false,
-                    }),
-                    ParagraphNode(
-                      id: '2',
-                      text: AttributedText('This is some text'),
-                    ),
+                    HorizontalRuleNode(id: '1', metadata: {NodeMetadata.isDeletable: false}),
+                    ParagraphNode(id: '2', text: AttributedText('This is some text')),
                   ],
                 ),
               )
@@ -2392,10 +2007,7 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             DocumentSelection.collapsed(
-              position: DocumentPosition(
-                nodeId: document.last.id,
-                nodePosition: const TextNodePosition(offset: 0),
-              ),
+              position: DocumentPosition(nodeId: document.last.id, nodePosition: const TextNodePosition(offset: 0)),
             ),
           );
         });
@@ -2406,13 +2018,8 @@ void main() {
               .withCustomContent(
                 MutableDocument(
                   nodes: [
-                    ParagraphNode(
-                      id: '1',
-                      text: AttributedText('This is some text'),
-                    ),
-                    HorizontalRuleNode(id: '2', metadata: {
-                      NodeMetadata.isDeletable: false,
-                    }),
+                    ParagraphNode(id: '1', text: AttributedText('This is some text')),
+                    HorizontalRuleNode(id: '2', metadata: {NodeMetadata.isDeletable: false}),
                   ],
                 ),
               )
@@ -2459,31 +2066,22 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             DocumentSelection.collapsed(
-              position: DocumentPosition(
-                nodeId: document.last.id,
-                nodePosition: const TextNodePosition(offset: 0),
-              ),
+              position: DocumentPosition(nodeId: document.last.id, nodePosition: const TextNodePosition(offset: 0)),
             ),
           );
         });
 
-        testWidgetsOnDesktop('when the whole document is selected and starts and ends with non-deletable nodes',
-            (tester) async {
+        testWidgetsOnDesktop('when the whole document is selected and starts and ends with non-deletable nodes', (
+          tester,
+        ) async {
           await tester //
               .createDocument()
               .withCustomContent(
                 MutableDocument(
                   nodes: [
-                    HorizontalRuleNode(id: '1', metadata: {
-                      NodeMetadata.isDeletable: false,
-                    }),
-                    ParagraphNode(
-                      id: '2',
-                      text: AttributedText('This is some text'),
-                    ),
-                    HorizontalRuleNode(id: '3', metadata: {
-                      NodeMetadata.isDeletable: false,
-                    }),
+                    HorizontalRuleNode(id: '1', metadata: {NodeMetadata.isDeletable: false}),
+                    ParagraphNode(id: '2', text: AttributedText('This is some text')),
+                    HorizontalRuleNode(id: '3', metadata: {NodeMetadata.isDeletable: false}),
                   ],
                 ),
               )
@@ -2502,14 +2100,8 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection(
-              base: DocumentPosition(
-                nodeId: '1',
-                nodePosition: UpstreamDownstreamNodePosition.upstream(),
-              ),
-              extent: DocumentPosition(
-                nodeId: '3',
-                nodePosition: UpstreamDownstreamNodePosition.downstream(),
-              ),
+              base: DocumentPosition(nodeId: '1', nodePosition: UpstreamDownstreamNodePosition.upstream()),
+              extent: DocumentPosition(nodeId: '3', nodePosition: UpstreamDownstreamNodePosition.downstream()),
             ),
           );
 
@@ -2544,10 +2136,7 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             DocumentSelection.collapsed(
-              position: DocumentPosition(
-                nodeId: document.last.id,
-                nodePosition: const TextNodePosition(offset: 0),
-              ),
+              position: DocumentPosition(nodeId: document.last.id, nodePosition: const TextNodePosition(offset: 0)),
             ),
           );
         });
@@ -2558,15 +2147,9 @@ void main() {
               .withCustomContent(
                 MutableDocument(
                   nodes: [
-                    HorizontalRuleNode(id: '1', metadata: {
-                      NodeMetadata.isDeletable: false,
-                    }),
-                    HorizontalRuleNode(id: '2', metadata: {
-                      NodeMetadata.isDeletable: false,
-                    }),
-                    HorizontalRuleNode(id: '3', metadata: {
-                      NodeMetadata.isDeletable: false,
-                    }),
+                    HorizontalRuleNode(id: '1', metadata: {NodeMetadata.isDeletable: false}),
+                    HorizontalRuleNode(id: '2', metadata: {NodeMetadata.isDeletable: false}),
+                    HorizontalRuleNode(id: '3', metadata: {NodeMetadata.isDeletable: false}),
                   ],
                 ),
               )
@@ -2574,10 +2157,7 @@ void main() {
 
           // Select the first horizontal rule.
           await tester.tapAtDocumentPosition(
-            const DocumentPosition(
-              nodeId: "1",
-              nodePosition: UpstreamDownstreamNodePosition.upstream(),
-            ),
+            const DocumentPosition(nodeId: "1", nodePosition: UpstreamDownstreamNodePosition.upstream()),
           );
 
           // Select all content.
@@ -2616,65 +2196,46 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection(
-              base: DocumentPosition(
-                nodeId: '1',
-                nodePosition: UpstreamDownstreamNodePosition.upstream(),
-              ),
-              extent: DocumentPosition(
-                nodeId: '3',
-                nodePosition: UpstreamDownstreamNodePosition.downstream(),
-              ),
+              base: DocumentPosition(nodeId: '1', nodePosition: UpstreamDownstreamNodePosition.upstream()),
+              extent: DocumentPosition(nodeId: '3', nodePosition: UpstreamDownstreamNodePosition.downstream()),
             ),
           );
         });
 
-        testWidgetsOnDesktop('when all nodes in selection are non-deletable and document contains deletable nodes',
-            (tester) async {
-          final testContext = await tester //
-              .createDocument()
-              .withCustomContent(
-                MutableDocument(
-                  nodes: [
-                    ParagraphNode(id: '1', text: AttributedText()),
-                    HorizontalRuleNode(id: '2', metadata: {
-                      NodeMetadata.isDeletable: false,
-                    }),
-                    HorizontalRuleNode(id: '3', metadata: {
-                      NodeMetadata.isDeletable: false,
-                    }),
-                    HorizontalRuleNode(id: '4', metadata: {
-                      NodeMetadata.isDeletable: false,
-                    }),
-                    ParagraphNode(id: '5', text: AttributedText()),
-                  ],
-                ),
-              )
-              .pump();
+        testWidgetsOnDesktop('when all nodes in selection are non-deletable and document contains deletable nodes', (
+          tester,
+        ) async {
+          final testContext =
+              await tester //
+                  .createDocument()
+                  .withCustomContent(
+                    MutableDocument(
+                      nodes: [
+                        ParagraphNode(id: '1', text: AttributedText()),
+                        HorizontalRuleNode(id: '2', metadata: {NodeMetadata.isDeletable: false}),
+                        HorizontalRuleNode(id: '3', metadata: {NodeMetadata.isDeletable: false}),
+                        HorizontalRuleNode(id: '4', metadata: {NodeMetadata.isDeletable: false}),
+                        ParagraphNode(id: '5', text: AttributedText()),
+                      ],
+                    ),
+                  )
+                  .pump();
 
           // Select the first horizontal rule.
           await tester.tapAtDocumentPosition(
-            const DocumentPosition(
-              nodeId: "2",
-              nodePosition: UpstreamDownstreamNodePosition.upstream(),
-            ),
+            const DocumentPosition(nodeId: "2", nodePosition: UpstreamDownstreamNodePosition.upstream()),
           );
 
           // Select all non-deletable nodes.
           testContext.editor.execute([
             const ChangeSelectionRequest(
               DocumentSelection(
-                base: DocumentPosition(
-                  nodeId: '2',
-                  nodePosition: UpstreamDownstreamNodePosition.upstream(),
-                ),
-                extent: DocumentPosition(
-                  nodeId: '4',
-                  nodePosition: UpstreamDownstreamNodePosition.downstream(),
-                ),
+                base: DocumentPosition(nodeId: '2', nodePosition: UpstreamDownstreamNodePosition.upstream()),
+                extent: DocumentPosition(nodeId: '4', nodePosition: UpstreamDownstreamNodePosition.downstream()),
               ),
               SelectionChangeType.expandSelection,
               SelectionReason.userInteraction,
-            )
+            ),
           ]);
           await tester.pump();
 
@@ -2709,14 +2270,8 @@ void main() {
           expect(
             SuperEditorInspector.findDocumentSelection(),
             const DocumentSelection(
-              base: DocumentPosition(
-                nodeId: '2',
-                nodePosition: UpstreamDownstreamNodePosition.upstream(),
-              ),
-              extent: DocumentPosition(
-                nodeId: '4',
-                nodePosition: UpstreamDownstreamNodePosition.downstream(),
-              ),
+              base: DocumentPosition(nodeId: '2', nodePosition: UpstreamDownstreamNodePosition.upstream()),
+              extent: DocumentPosition(nodeId: '4', nodePosition: UpstreamDownstreamNodePosition.downstream()),
             ),
           );
         });
@@ -2732,13 +2287,8 @@ Future<TestDocumentContext> _pumpParagraphThenHrTestApp(WidgetTester tester) asy
       .withCustomContent(
         MutableDocument(
           nodes: [
-            ParagraphNode(
-              id: '1',
-              text: AttributedText('Paragraph 1'),
-            ),
-            HorizontalRuleNode(id: 'hr', metadata: {
-              NodeMetadata.isDeletable: false,
-            }),
+            ParagraphNode(id: '1', text: AttributedText('Paragraph 1')),
+            HorizontalRuleNode(id: 'hr', metadata: {NodeMetadata.isDeletable: false}),
           ],
         ),
       )
@@ -2754,13 +2304,8 @@ Future<TestDocumentContext> _pumpHrThenParagraphTestApp(WidgetTester tester) asy
       .withCustomContent(
         MutableDocument(
           nodes: [
-            HorizontalRuleNode(id: 'hr', metadata: {
-              NodeMetadata.isDeletable: false,
-            }),
-            ParagraphNode(
-              id: '1',
-              text: AttributedText('Paragraph 1'),
-            ),
+            HorizontalRuleNode(id: 'hr', metadata: {NodeMetadata.isDeletable: false}),
+            ParagraphNode(id: '1', text: AttributedText('Paragraph 1')),
           ],
         ),
       )
@@ -2779,17 +2324,9 @@ Future<TestDocumentContext> _pumpParagraphThenHrThenParagraphTestApp(WidgetTeste
       .withCustomContent(
         MutableDocument(
           nodes: [
-            ParagraphNode(
-              id: '1',
-              text: AttributedText('Paragraph 1'),
-            ),
-            HorizontalRuleNode(id: 'hr', metadata: {
-              NodeMetadata.isDeletable: false,
-            }),
-            ParagraphNode(
-              id: '2',
-              text: AttributedText('Paragraph 2'),
-            ),
+            ParagraphNode(id: '1', text: AttributedText('Paragraph 1')),
+            HorizontalRuleNode(id: 'hr', metadata: {NodeMetadata.isDeletable: false}),
+            ParagraphNode(id: '2', text: AttributedText('Paragraph 2')),
           ],
         ),
       )
@@ -2813,27 +2350,12 @@ Future<TestDocumentContext> _pumpMultipleDeletableAndUndeletableNodesTestApp(Wid
       .withCustomContent(
         MutableDocument(
           nodes: [
-            ParagraphNode(
-              id: '1',
-              text: AttributedText('Paragraph 1'),
-            ),
-            HorizontalRuleNode(id: 'hr1', metadata: {
-              NodeMetadata.isDeletable: false,
-            }),
-            HorizontalRuleNode(id: 'hr2', metadata: {
-              NodeMetadata.isDeletable: false,
-            }),
-            ParagraphNode(
-              id: '2',
-              text: AttributedText('Paragraph 2'),
-            ),
-            HorizontalRuleNode(id: 'hr3', metadata: {
-              NodeMetadata.isDeletable: false,
-            }),
-            ParagraphNode(
-              id: '3',
-              text: AttributedText('Paragraph 3'),
-            ),
+            ParagraphNode(id: '1', text: AttributedText('Paragraph 1')),
+            HorizontalRuleNode(id: 'hr1', metadata: {NodeMetadata.isDeletable: false}),
+            HorizontalRuleNode(id: 'hr2', metadata: {NodeMetadata.isDeletable: false}),
+            ParagraphNode(id: '2', text: AttributedText('Paragraph 2')),
+            HorizontalRuleNode(id: 'hr3', metadata: {NodeMetadata.isDeletable: false}),
+            ParagraphNode(id: '3', text: AttributedText('Paragraph 3')),
           ],
         ),
       )
@@ -2856,22 +2378,19 @@ class _UnselectableHrComponentBuilder implements ComponentBuilder {
 
   @override
   Widget? createComponent(
-      SingleColumnDocumentComponentContext componentContext, SingleColumnLayoutComponentViewModel componentViewModel) {
+    SingleColumnDocumentComponentContext componentContext,
+    SingleColumnLayoutComponentViewModel componentViewModel,
+  ) {
     if (componentViewModel is! HorizontalRuleComponentViewModel) {
       return null;
     }
 
-    return _UnselectableHorizontalRuleComponent(
-      componentKey: componentContext.componentKey,
-    );
+    return _UnselectableHorizontalRuleComponent(componentKey: componentContext.componentKey);
   }
 }
 
 class _UnselectableHorizontalRuleComponent extends StatelessWidget {
-  const _UnselectableHorizontalRuleComponent({
-    Key? key,
-    required this.componentKey,
-  }) : super(key: key);
+  const _UnselectableHorizontalRuleComponent({Key? key, required this.componentKey}) : super(key: key);
 
   final GlobalKey componentKey;
 
@@ -2880,10 +2399,7 @@ class _UnselectableHorizontalRuleComponent extends StatelessWidget {
     return BoxComponent(
       key: componentKey,
       isVisuallySelectable: false,
-      child: const Divider(
-        color: Color(0xFF000000),
-        thickness: 1.0,
-      ),
+      child: const Divider(color: Color(0xFF000000), thickness: 1.0),
     );
   }
 }

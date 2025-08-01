@@ -42,11 +42,7 @@ void main() {
         const textFieldWidth = 400.0;
 
         final controller = AttributedTextEditingController();
-        await _pumpSingleLineTextField(
-          tester,
-          controller: controller,
-          width: textFieldWidth,
-        );
+        await _pumpSingleLineTextField(tester, controller: controller, width: textFieldWidth);
 
         // Place the caret at the beginning of the text.
         await tester.placeCaretInSuperTextField(0);
@@ -63,8 +59,11 @@ void main() {
 
           // Ensure that the caret is still visible.
           // TODO: Change lessThanOrEqualTo() to strictly lessThan() after #1770
-          expect(SuperTextFieldInspector.findCaretRectInViewport()!.left, lessThanOrEqualTo(textFieldWidth),
-              reason: "Failed to auto-scroll on character $i - '${textToType[i]}'");
+          expect(
+            SuperTextFieldInspector.findCaretRectInViewport()!.left,
+            lessThanOrEqualTo(textFieldWidth),
+            reason: "Failed to auto-scroll on character $i - '${textToType[i]}'",
+          );
         }
       });
 
@@ -75,7 +74,8 @@ void main() {
           tester,
           controller: AttributedTextEditingController(
             text: AttributedText(
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus sed sagittis urna. Aenean mattis ante justo, quis sollicitudin metus interdum id. Aenean ornare urna ac enim consequat mollis. In aliquet convallis efficitur. Phasellus convallis purus in fringilla scelerisque. Ut ac orci a turpis egestas lobortis. Morbi aliquam dapibus sem, vitae sodales arcu ultrices eu. Duis vulputate mauris quam, eleifend pulvinar quam blandit eget."),
+              "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus sed sagittis urna. Aenean mattis ante justo, quis sollicitudin metus interdum id. Aenean ornare urna ac enim consequat mollis. In aliquet convallis efficitur. Phasellus convallis purus in fringilla scelerisque. Ut ac orci a turpis egestas lobortis. Morbi aliquam dapibus sem, vitae sodales arcu ultrices eu. Duis vulputate mauris quam, eleifend pulvinar quam blandit eget.",
+            ),
           ),
           width: textFieldWidth,
         );
@@ -106,7 +106,8 @@ void main() {
           tester,
           controller: AttributedTextEditingController(
             text: AttributedText(
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus sed sagittis urna. Aenean mattis ante justo, quis sollicitudin metus interdum id."),
+              "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus sed sagittis urna. Aenean mattis ante justo, quis sollicitudin metus interdum id.",
+            ),
           ),
           width: textFieldWidth,
         );
@@ -218,10 +219,7 @@ Future<void> _pumpSingleLineTextField(
                       ),
                     ),
                     if (showClearIcon) //
-                      const Padding(
-                        padding: EdgeInsets.only(right: 8),
-                        child: Icon(Icons.clear, size: 16),
-                      ),
+                      const Padding(padding: EdgeInsets.only(right: 8), child: Icon(Icons.clear, size: 16)),
                   ],
                 ),
               ],
@@ -235,9 +233,6 @@ Future<void> _pumpSingleLineTextField(
 
 WidgetBuilder _createHintBuilder(String hintText) {
   return (BuildContext context) {
-    return Text(
-      hintText,
-      style: const TextStyle(color: Colors.grey),
-    );
+    return Text(hintText, style: const TextStyle(color: Colors.grey));
   };
 }

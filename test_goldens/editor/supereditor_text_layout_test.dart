@@ -14,14 +14,8 @@ void main() {
       testGoldensOnAndroid('for paragraph', (tester) async {
         await _buildTextScaleScaffold(
           tester,
-          regularEditor: _buildSuperEditorFromMarkdown(
-            tester,
-            markdown: 'This is a paragraph',
-          ),
-          scaledEditor: _buildSuperEditorFromMarkdown(
-            tester,
-            markdown: 'This is a paragraph',
-          ),
+          regularEditor: _buildSuperEditorFromMarkdown(tester, markdown: 'This is a paragraph'),
+          scaledEditor: _buildSuperEditorFromMarkdown(tester, markdown: 'This is a paragraph'),
         );
 
         await screenMatchesGolden(tester, 'text-scaling-paragraph');
@@ -33,31 +27,15 @@ void main() {
 
         await _buildTextScaleScaffold(
           tester,
-          regularEditor: _buildSuperEditorFromMarkdown(
-            tester,
-            markdown: 'This is a paragraph',
-            key: regularEditorKey,
-          ),
-          scaledEditor: _buildSuperEditorFromMarkdown(
-            tester,
-            markdown: 'This is a paragraph',
-            key: scaledEditorKey,
-          ),
+          regularEditor: _buildSuperEditorFromMarkdown(tester, markdown: 'This is a paragraph', key: regularEditorKey),
+          scaledEditor: _buildSuperEditorFromMarkdown(tester, markdown: 'This is a paragraph', key: scaledEditorKey),
         );
 
         // Place caret at "This is| a paragraph" in the regular edditor.
-        await _placeCaretAtFirstNode(
-          tester,
-          offset: 7,
-          editorKey: regularEditorKey,
-        );
+        await _placeCaretAtFirstNode(tester, offset: 7, editorKey: regularEditorKey);
 
         // Place caret at "This is| a paragraph" in the regular edditor.
-        await _placeCaretAtFirstNode(
-          tester,
-          offset: 7,
-          editorKey: scaledEditorKey,
-        );
+        await _placeCaretAtFirstNode(tester, offset: 7, editorKey: scaledEditorKey);
 
         await screenMatchesGolden(tester, 'text-scaling-paragraph-collapsed-selection');
       });
@@ -68,52 +46,27 @@ void main() {
 
         await _buildTextScaleScaffold(
           tester,
-          regularEditor: _buildSuperEditorFromMarkdown(
-            tester,
-            markdown: 'This is a paragraph',
-            key: regularEditorKey,
-          ),
-          scaledEditor: _buildSuperEditorFromMarkdown(
-            tester,
-            markdown: 'This is a paragraph',
-            key: scaledEditorKey,
-          ),
+          regularEditor: _buildSuperEditorFromMarkdown(tester, markdown: 'This is a paragraph', key: regularEditorKey),
+          scaledEditor: _buildSuperEditorFromMarkdown(tester, markdown: 'This is a paragraph', key: scaledEditorKey),
         );
 
         // Double tap at "This is a p|aragraph" to select the word "paragraph" in the regular editor.
-        await _doubleTapAtFirstNode(
-          tester,
-          offset: 11,
-          editorKey: regularEditorKey,
-        );
+        await _doubleTapAtFirstNode(tester, offset: 11, editorKey: regularEditorKey);
 
         // Double tap at "This is a p|aragraph" to select the word "paragraph" in the scaled editor.
-        await _doubleTapAtFirstNode(
-          tester,
-          offset: 11,
-          editorKey: scaledEditorKey,
-        );
+        await _doubleTapAtFirstNode(tester, offset: 11, editorKey: scaledEditorKey);
 
         await expectLater(
           find.byType(MaterialApp).first,
-          matchesGoldenFileWithPixelAllowance(
-            'goldens/text-scaling-paragraph-expanded-selection.png',
-            21,
-          ),
+          matchesGoldenFileWithPixelAllowance('goldens/text-scaling-paragraph-expanded-selection.png', 21),
         );
       });
 
       testGoldensOnAndroid('for unordered list item', (tester) async {
         await _buildTextScaleScaffold(
           tester,
-          regularEditor: _buildSuperEditorFromMarkdown(
-            tester,
-            markdown: '- List item 1\n- List item 2',
-          ),
-          scaledEditor: _buildSuperEditorFromMarkdown(
-            tester,
-            markdown: '- List item 1\n- List item 2',
-          ),
+          regularEditor: _buildSuperEditorFromMarkdown(tester, markdown: '- List item 1\n- List item 2'),
+          scaledEditor: _buildSuperEditorFromMarkdown(tester, markdown: '- List item 1\n- List item 2'),
         );
 
         await screenMatchesGolden(tester, 'text-scaling-unordered-list');
@@ -122,14 +75,8 @@ void main() {
       testGoldensOnAndroid('for ordered list item', (tester) async {
         await _buildTextScaleScaffold(
           tester,
-          regularEditor: _buildSuperEditorFromMarkdown(
-            tester,
-            markdown: '1. List item 1\n2. List item 2',
-          ),
-          scaledEditor: _buildSuperEditorFromMarkdown(
-            tester,
-            markdown: '1. List item 1\n2. List item 2',
-          ),
+          regularEditor: _buildSuperEditorFromMarkdown(tester, markdown: '1. List item 1\n2. List item 2'),
+          scaledEditor: _buildSuperEditorFromMarkdown(tester, markdown: '1. List item 1\n2. List item 2'),
         );
 
         await screenMatchesGolden(tester, 'text-scaling-ordered-list');
@@ -138,14 +85,8 @@ void main() {
       testGoldensOnAndroid('for header', (tester) async {
         await _buildTextScaleScaffold(
           tester,
-          regularEditor: _buildSuperEditorFromMarkdown(
-            tester,
-            markdown: '# This is a header',
-          ),
-          scaledEditor: _buildSuperEditorFromMarkdown(
-            tester,
-            markdown: '# This is a header',
-          ),
+          regularEditor: _buildSuperEditorFromMarkdown(tester, markdown: '# This is a header'),
+          scaledEditor: _buildSuperEditorFromMarkdown(tester, markdown: '# This is a header'),
         );
 
         await expectLater(
@@ -157,14 +98,8 @@ void main() {
       testGoldensOnAndroid('for blockquote', (tester) async {
         await _buildTextScaleScaffold(
           tester,
-          regularEditor: _buildSuperEditorFromMarkdown(
-            tester,
-            markdown: '> This is a blockquote',
-          ),
-          scaledEditor: _buildSuperEditorFromMarkdown(
-            tester,
-            markdown: '> This is a blockquote',
-          ),
+          regularEditor: _buildSuperEditorFromMarkdown(tester, markdown: '> This is a blockquote'),
+          scaledEditor: _buildSuperEditorFromMarkdown(tester, markdown: '> This is a blockquote'),
         );
 
         await expectLater(
@@ -177,43 +112,23 @@ void main() {
 }
 
 /// Places the caret at [offset] in the editor with the given [editorKey].
-Future<void> _placeCaretAtFirstNode(
-  WidgetTester tester, {
-  required int offset,
-  required Key editorKey,
-}) async {
+Future<void> _placeCaretAtFirstNode(WidgetTester tester, {required int offset, required Key editorKey}) async {
   final regularEditorFinder = find.byKey(editorKey);
   final regularDoc = SuperEditorInspector.findDocument(regularEditorFinder)!;
-  await tester.placeCaretInParagraph(
-    regularDoc.first.id,
-    offset,
-    superEditorFinder: regularEditorFinder,
-  );
+  await tester.placeCaretInParagraph(regularDoc.first.id, offset, superEditorFinder: regularEditorFinder);
 }
 
 /// Double taps at [offset] in the editor with the given [editorKey].
-Future<void> _doubleTapAtFirstNode(
-  WidgetTester tester, {
-  required int offset,
-  required Key editorKey,
-}) async {
+Future<void> _doubleTapAtFirstNode(WidgetTester tester, {required int offset, required Key editorKey}) async {
   final regularEditorFinder = find.byKey(editorKey);
   final regularDoc = SuperEditorInspector.findDocument(regularEditorFinder)!;
-  await tester.doubleTapInParagraph(
-    regularDoc.first.id,
-    offset,
-    superEditorFinder: regularEditorFinder,
-  );
+  await tester.doubleTapInParagraph(regularDoc.first.id, offset, superEditorFinder: regularEditorFinder);
 }
 
 /// Builds a [SuperEditor] for desktop from the given [markdown].
 ///
 /// This editor uses [_stylesheet] and doesn't clear selection when loses focus.
-Widget _buildSuperEditorFromMarkdown(
-  WidgetTester tester, {
-  required String markdown,
-  Key? key,
-}) {
+Widget _buildSuperEditorFromMarkdown(WidgetTester tester, {required String markdown, Key? key}) {
   return tester //
       .createDocument()
       .fromMarkdown(markdown)
@@ -236,12 +151,8 @@ Widget _buildSuperEditorFromMarkdown(
 final _stylesheet = defaultStylesheet.copyWith(
   addRulesAfter: [
     StyleRule(BlockSelector.all, (doc, node) {
-      return {
-        Styles.textStyle: const TextStyle(
-          fontFamily: 'Roboto',
-        ),
-      };
-    })
+      return {Styles.textStyle: const TextStyle(fontFamily: 'Roboto')};
+    }),
   ],
 );
 
@@ -264,9 +175,7 @@ Future<void> _buildTextScaleScaffold(
       home: Scaffold(
         body: Row(
           children: [
-            Expanded(
-              child: regularEditor,
-            ),
+            Expanded(child: regularEditor),
             Expanded(
               child: MediaQuery(
                 data: const MediaQueryData(textScaler: TextScaler.linear(2.0)),

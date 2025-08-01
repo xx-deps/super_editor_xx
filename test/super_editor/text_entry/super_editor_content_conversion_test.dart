@@ -48,11 +48,11 @@ void main() {
           // Configure and render a document.
           await tester
               .createDocument()
-              .withCustomContent(MutableDocument(
-                nodes: [
-                  ParagraphNode(id: "1", text: AttributedText("Some text")),
-                ],
-              ))
+              .withCustomContent(
+                MutableDocument(
+                  nodes: [ParagraphNode(id: "1", text: AttributedText("Some text"))],
+                ),
+              )
               .forDesktop()
               .pump();
 
@@ -78,11 +78,11 @@ void main() {
           // Configure and render a document.
           await tester
               .createDocument()
-              .withCustomContent(MutableDocument(
-                nodes: [
-                  ParagraphNode(id: "1", text: AttributedText("Some text")),
-                ],
-              ))
+              .withCustomContent(
+                MutableDocument(
+                  nodes: [ParagraphNode(id: "1", text: AttributedText("Some text"))],
+                ),
+              )
               .forDesktop()
               .pump();
 
@@ -108,11 +108,11 @@ void main() {
           // Configure and render a document.
           await tester
               .createDocument()
-              .withCustomContent(MutableDocument(
-                nodes: [
-                  ParagraphNode(id: "1", text: AttributedText("Some text")),
-                ],
-              ))
+              .withCustomContent(
+                MutableDocument(
+                  nodes: [ParagraphNode(id: "1", text: AttributedText("Some text"))],
+                ),
+              )
               .forDesktop()
               .pump();
 
@@ -201,7 +201,8 @@ void main() {
             // Notice that the pasted text splits the existing link. Each
             // piece of the existing link continues to link to the full URL.
             equalsMarkdown(
-                "[https://g](https://google.com)Link: [https://flutter.dev](https://flutter.dev)[oogle.com](https://google.com)"),
+              "[https://g](https://google.com)Link: [https://flutter.dev](https://flutter.dev)[oogle.com](https://google.com)",
+            ),
           );
         });
       });
@@ -231,7 +232,7 @@ MutableDocument _singleParagraphWithLinkDoc() {
             ],
           ),
         ),
-      )
+      ),
     ],
   );
 }

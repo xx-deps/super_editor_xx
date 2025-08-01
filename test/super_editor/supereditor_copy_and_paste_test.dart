@@ -60,15 +60,13 @@ void main() {
       expect(SuperEditorInspector.findTextInComponent(nodeId).toPlainText(), "Pasted text: This was pasted here");
     });
 
-    testAllInputsOnDesktop('pastes multiple paragraphs', (
-      tester, {
-      required TextInputSource inputSource,
-    }) async {
-      final testContext = await tester //
-          .createDocument()
-          .withSingleEmptyParagraph()
-          .withInputSource(inputSource)
-          .pump();
+    testAllInputsOnDesktop('pastes multiple paragraphs', (tester, {required TextInputSource inputSource}) async {
+      final testContext =
+          await tester //
+              .createDocument()
+              .withSingleEmptyParagraph()
+              .withInputSource(inputSource)
+              .pump();
 
       // Place the caret at the empty paragraph.
       await tester.placeCaretInParagraph('1', 0);
@@ -97,11 +95,12 @@ This is the third paragraph''');
       tester, {
       required TextInputSource inputSource,
     }) async {
-      final testContext = await tester //
-          .createDocument()
-          .withSingleEmptyParagraph()
-          .withInputSource(inputSource)
-          .pump();
+      final testContext =
+          await tester //
+              .createDocument()
+              .withSingleEmptyParagraph()
+              .withInputSource(inputSource)
+              .pump();
 
       // Place the caret at the empty paragraph.
       await tester.placeCaretInParagraph('1', 0);
@@ -142,11 +141,12 @@ This is the third paragraph''');
     });
 
     testWidgetsOnMac("paste command content does not mutate when document changes", (tester) async {
-      final testContext = await tester //
-          .createDocument()
-          .withSingleEmptyParagraph()
-          .enableHistory(true)
-          .pump();
+      final testContext =
+          await tester //
+              .createDocument()
+              .withSingleEmptyParagraph()
+              .enableHistory(true)
+              .pump();
 
       // Place the caret at the empty paragraph.
       await tester.placeCaretInParagraph('1', 0);
@@ -168,10 +168,7 @@ This is the third paragraph''');
       await tester.typeImeText("a");
 
       // Ensure that the "a" was inserted at the end of the final pasted paragraph.
-      expect(
-        (testContext.document.last as TextNode).text.toPlainText(),
-        "This is the third paragrapha",
-      );
+      expect((testContext.document.last as TextNode).text.toPlainText(), "This is the third paragrapha");
 
       // Run undo.
       testContext.editor.undo();
@@ -182,10 +179,7 @@ This is the third paragraph''');
       // The paste command internally stores the content that it inserted. This test ensures
       // that the paste command's internal content wasn't mutated when we inserted the "a"
       // into the document. Such mutation was part of bug https://github.com/superlistapp/super_editor/issues/2173
-      expect(
-        (testContext.document.last as TextNode).text.toPlainText(),
-        "This is the third paragraph",
-      );
+      expect((testContext.document.last as TextNode).text.toPlainText(), "This is the third paragraph");
     });
   });
 }

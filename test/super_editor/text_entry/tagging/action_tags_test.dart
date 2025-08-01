@@ -12,10 +12,7 @@ void main() {
   group("SuperEditor action tags >", () {
     group("composing >", () {
       testWidgetsOnAllPlatforms("can start at the beginning of a paragraph", (tester) async {
-        await _pumpTestEditor(
-          tester,
-          singleParagraphEmptyDoc(),
-        );
+        await _pumpTestEditor(tester, singleParagraphEmptyDoc());
         await tester.placeCaretInParagraph("1", 0);
 
         // Compose an action tag.
@@ -24,22 +21,14 @@ void main() {
         // Ensure that the tag has a composing attribution.
         final text = SuperEditorInspector.findTextInComponent("1");
         expect(text.toPlainText(), "/header");
-        expect(
-          text.getAttributedRange({actionTagComposingAttribution}, 0),
-          const SpanRange(0, 6),
-        );
+        expect(text.getAttributedRange({actionTagComposingAttribution}, 0), const SpanRange(0, 6));
       });
 
       testWidgetsOnAllPlatforms("can start between words", (tester) async {
         await _pumpTestEditor(
           tester,
           MutableDocument(
-            nodes: [
-              ParagraphNode(
-                id: "1",
-                text: AttributedText("before  after"),
-              ),
-            ],
+            nodes: [ParagraphNode(id: "1", text: AttributedText("before  after"))],
           ),
         );
 
@@ -52,22 +41,14 @@ void main() {
         // Ensure that the tag has a composing attribution.
         final text = SuperEditorInspector.findTextInComponent("1");
         expect(text.toPlainText(), "before /header after");
-        expect(
-          text.getAttributedRange({actionTagComposingAttribution}, 7),
-          const SpanRange(7, 13),
-        );
+        expect(text.getAttributedRange({actionTagComposingAttribution}, 7), const SpanRange(7, 13));
       });
 
       testWidgetsOnAllPlatforms("can start at the beginning of a word", (tester) async {
         await _pumpTestEditor(
           tester,
           MutableDocument(
-            nodes: [
-              ParagraphNode(
-                id: "1",
-                text: AttributedText("before after"),
-              ),
-            ],
+            nodes: [ParagraphNode(id: "1", text: AttributedText("before after"))],
           ),
         );
 
@@ -83,26 +64,14 @@ void main() {
           range: const SpanRange(0, 19),
         );
         expect(spans.length, 1);
-        expect(
-          spans.first,
-          const AttributionSpan(
-            attribution: actionTagComposingAttribution,
-            start: 7,
-            end: 13,
-          ),
-        );
+        expect(spans.first, const AttributionSpan(attribution: actionTagComposingAttribution, start: 7, end: 13));
       });
 
       testWidgetsOnAllPlatforms("by default does not continue after a space", (tester) async {
         await _pumpTestEditor(
           tester,
           MutableDocument(
-            nodes: [
-              ParagraphNode(
-                id: "1",
-                text: AttributedText("before "),
-              ),
-            ],
+            nodes: [ParagraphNode(id: "1", text: AttributedText("before "))],
           ),
         );
 
@@ -123,22 +92,14 @@ void main() {
           ),
           isEmpty,
         );
-        expect(
-          text.getAttributedRange({actionTagCancelledAttribution}, 7),
-          const SpanRange(7, 7),
-        );
+        expect(text.getAttributedRange({actionTagCancelledAttribution}, 7), const SpanRange(7, 7));
       });
 
       testWidgetsOnAllPlatforms("can be configured to continue after a space", (tester) async {
         await _pumpTestEditor(
           tester,
           MutableDocument(
-            nodes: [
-              ParagraphNode(
-                id: "1",
-                text: AttributedText("before "),
-              ),
-            ],
+            nodes: [ParagraphNode(id: "1", text: AttributedText("before "))],
           ),
           tagRule: const TagRule(trigger: "/"),
         );
@@ -152,32 +113,21 @@ void main() {
         // Ensure that we started a composing tag before adding a space.
         var text = SuperEditorInspector.findTextInComponent("1");
         expect(text.toPlainText(), "before /header");
-        expect(
-          text.getAttributedRange({actionTagComposingAttribution}, 7),
-          const SpanRange(7, 13),
-        );
+        expect(text.getAttributedRange({actionTagComposingAttribution}, 7), const SpanRange(7, 13));
 
         await tester.typeImeText(" after");
 
         // Ensure that the composing attribution continues after the space.
         text = SuperEditorInspector.findTextInComponent("1");
         expect(text.toPlainText(), "before /header after");
-        expect(
-          text.getAttributedRange({actionTagComposingAttribution}, 7),
-          const SpanRange(7, 19),
-        );
+        expect(text.getAttributedRange({actionTagComposingAttribution}, 7), const SpanRange(7, 19));
       });
 
       testWidgetsOnAllPlatforms("can be configured to use a different trigger", (tester) async {
         await _pumpTestEditor(
           tester,
           MutableDocument(
-            nodes: [
-              ParagraphNode(
-                id: "1",
-                text: AttributedText("before "),
-              ),
-            ],
+            nodes: [ParagraphNode(id: "1", text: AttributedText("before "))],
           ),
           tagRule: const TagRule(trigger: "@", excludedCharacters: {" "}),
         );
@@ -191,10 +141,7 @@ void main() {
         // Ensure that we're composing an action tag.
         var text = SuperEditorInspector.findTextInComponent("1");
         expect(text.toPlainText(), "before @john");
-        expect(
-          text.getAttributedRange({actionTagComposingAttribution}, 7),
-          const SpanRange(7, 11),
-        );
+        expect(text.getAttributedRange({actionTagComposingAttribution}, 7), const SpanRange(7, 11));
       });
 
       testWidgetsOnAllPlatforms("does not continue when user expands the selection upstream", (tester) async {
@@ -202,14 +149,8 @@ void main() {
           tester,
           MutableDocument(
             nodes: [
-              ParagraphNode(
-                id: "1",
-                text: AttributedText("before "),
-              ),
-              ParagraphNode(
-                id: "2",
-                text: AttributedText(""),
-              ),
+              ParagraphNode(id: "1", text: AttributedText("before ")),
+              ParagraphNode(id: "2", text: AttributedText("")),
             ],
           ),
         );
@@ -222,24 +163,15 @@ void main() {
 
         // Ensure we're composing a tag.
         AttributedText text = SuperEditorInspector.findTextInComponent("1");
-        expect(
-          text.getAttributedRange({actionTagComposingAttribution}, 7),
-          const SpanRange(7, 13),
-        );
+        expect(text.getAttributedRange({actionTagComposingAttribution}, 7), const SpanRange(7, 13));
 
         // Expand the selection to "before /heade|r|"
         await tester.pressShiftLeftArrow();
         expect(
           SuperEditorInspector.findDocumentSelection(),
           const DocumentSelection(
-            base: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 14),
-            ),
-            extent: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 13),
-            ),
+            base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 14)),
+            extent: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 13)),
           ),
         );
 
@@ -291,14 +223,8 @@ void main() {
           tester,
           MutableDocument(
             nodes: [
-              ParagraphNode(
-                id: "1",
-                text: AttributedText("before  after"),
-              ),
-              ParagraphNode(
-                id: "2",
-                text: AttributedText(),
-              ),
+              ParagraphNode(id: "1", text: AttributedText("before  after")),
+              ParagraphNode(id: "2", text: AttributedText()),
             ],
           ),
         );
@@ -311,10 +237,7 @@ void main() {
 
         // Ensure we're composing a tag.
         AttributedText text = SuperEditorInspector.findTextInComponent("1");
-        expect(
-          text.getAttributedRange({actionTagComposingAttribution}, 7),
-          const SpanRange(7, 13),
-        );
+        expect(text.getAttributedRange({actionTagComposingAttribution}, 7), const SpanRange(7, 13));
 
         // Move the caret to "before /|header".
         await tester.pressLeftArrow();
@@ -336,14 +259,8 @@ void main() {
         expect(
           SuperEditorInspector.findDocumentSelection(),
           const DocumentSelection(
-            base: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 8),
-            ),
-            extent: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 16),
-            ),
+            base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 8)),
+            extent: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 16)),
           ),
         );
 
@@ -363,14 +280,8 @@ void main() {
           tester,
           MutableDocument(
             nodes: [
-              ParagraphNode(
-                id: "1",
-                text: AttributedText("before "),
-              ),
-              ParagraphNode(
-                id: "2",
-                text: AttributedText(),
-              ),
+              ParagraphNode(id: "1", text: AttributedText("before ")),
+              ParagraphNode(id: "2", text: AttributedText()),
             ],
           ),
         );
@@ -385,19 +296,13 @@ void main() {
         await tester.placeCaretInParagraph("2", 0);
         expect(
           SuperEditorInspector.findDocumentSelection()!.extent,
-          const DocumentPosition(
-            nodeId: "2",
-            nodePosition: TextNodePosition(offset: 0),
-          ),
+          const DocumentPosition(nodeId: "2", nodePosition: TextNodePosition(offset: 0)),
         );
 
         // Ensure that the tag was submitted.
         final text = SuperEditorInspector.findTextInComponent("1");
         expect(text.toPlainText(), "before /header");
-        expect(
-          text.getAttributedRange({actionTagCancelledAttribution}, 7),
-          const SpanRange(7, 7),
-        );
+        expect(text.getAttributedRange({actionTagCancelledAttribution}, 7), const SpanRange(7, 7));
       });
 
       testWidgetsOnAllPlatforms("cancels when upstream selection collapses outside of tag", (tester) async {
@@ -405,14 +310,8 @@ void main() {
           tester,
           MutableDocument(
             nodes: [
-              ParagraphNode(
-                id: "1",
-                text: AttributedText("before "),
-              ),
-              ParagraphNode(
-                id: "2",
-                text: AttributedText(),
-              ),
+              ParagraphNode(id: "1", text: AttributedText("before ")),
+              ParagraphNode(id: "2", text: AttributedText()),
             ],
           ),
         );
@@ -440,10 +339,7 @@ void main() {
         // Ensure that the action tag was cancelled.
         final text = SuperEditorInspector.findTextInComponent("1");
         expect(text.toPlainText(), "before /header");
-        expect(
-          text.getAttributedRange({actionTagCancelledAttribution}, 7),
-          const SpanRange(7, 7),
-        );
+        expect(text.getAttributedRange({actionTagCancelledAttribution}, 7), const SpanRange(7, 7));
       });
 
       testWidgetsOnAllPlatforms("cancels when downstream selection collapses outside of tag", (tester) async {
@@ -451,14 +347,8 @@ void main() {
           tester,
           MutableDocument(
             nodes: [
-              ParagraphNode(
-                id: "1",
-                text: AttributedText("before  after"),
-              ),
-              ParagraphNode(
-                id: "2",
-                text: AttributedText(),
-              ),
+              ParagraphNode(id: "1", text: AttributedText("before  after")),
+              ParagraphNode(id: "2", text: AttributedText()),
             ],
           ),
         );
@@ -493,22 +383,14 @@ void main() {
         // Ensure that the action tag was cancelled.
         final text = SuperEditorInspector.findTextInComponent("1");
         expect(text.toPlainText(), "before /header after");
-        expect(
-          text.getAttributedRange({actionTagCancelledAttribution}, 7),
-          const SpanRange(7, 7),
-        );
+        expect(text.getAttributedRange({actionTagCancelledAttribution}, 7), const SpanRange(7, 7));
       });
 
       testWidgetsOnAllPlatforms("cancels composing when the user presses ESC", (tester) async {
         await _pumpTestEditor(
           tester,
           MutableDocument(
-            nodes: [
-              ParagraphNode(
-                id: "1",
-                text: AttributedText("before "),
-              ),
-            ],
+            nodes: [ParagraphNode(id: "1", text: AttributedText("before "))],
           ),
         );
 
@@ -520,10 +402,7 @@ void main() {
 
         // Ensure that we're composing.
         var text = SuperEditorInspector.findTextInComponent("1");
-        expect(
-          text.getAttributedRange({actionTagComposingAttribution}, 7),
-          const SpanRange(7, 12),
-        );
+        expect(text.getAttributedRange({actionTagComposingAttribution}, 7), const SpanRange(7, 12));
 
         // Cancel composing.
         await tester.pressEscape();
@@ -537,10 +416,7 @@ void main() {
           ),
           isEmpty,
         );
-        expect(
-          text.getAttributedRange({actionTagCancelledAttribution}, 7),
-          const SpanRange(7, 7),
-        );
+        expect(text.getAttributedRange({actionTagCancelledAttribution}, 7), const SpanRange(7, 7));
 
         // Start typing again.
         await tester.typeImeText(" ");
@@ -555,22 +431,14 @@ void main() {
           ),
           isEmpty,
         );
-        expect(
-          text.getAttributedRange({actionTagCancelledAttribution}, 7),
-          const SpanRange(7, 7),
-        );
+        expect(text.getAttributedRange({actionTagCancelledAttribution}, 7), const SpanRange(7, 7));
       });
 
       testWidgetsOnDesktop("cancels composing when deleting the trigger character", (tester) async {
         await _pumpTestEditor(
           tester,
           MutableDocument(
-            nodes: [
-              ParagraphNode(
-                id: "1",
-                text: AttributedText("before after"),
-              ),
-            ],
+            nodes: [ParagraphNode(id: "1", text: AttributedText("before after"))],
           ),
         );
 
@@ -602,27 +470,16 @@ void main() {
           range: const SpanRange(0, 19),
         );
         expect(spans.length, 1);
-        expect(
-          spans.first,
-          const AttributionSpan(
-            attribution: actionTagComposingAttribution,
-            start: 7,
-            end: 13,
-          ),
-        );
+        expect(spans.first, const AttributionSpan(attribution: actionTagComposingAttribution, start: 7, end: 13));
       });
 
-      testWidgetsOnMobile("cancels composing when deleting the trigger character with software keyboard",
-          (tester) async {
+      testWidgetsOnMobile("cancels composing when deleting the trigger character with software keyboard", (
+        tester,
+      ) async {
         await _pumpTestEditor(
           tester,
           MutableDocument(
-            nodes: [
-              ParagraphNode(
-                id: "1",
-                text: AttributedText("before after"),
-              ),
-            ],
+            nodes: [ParagraphNode(id: "1", text: AttributedText("before after"))],
           ),
         );
 
@@ -666,26 +523,14 @@ void main() {
           range: const SpanRange(0, 19),
         );
         expect(spans.length, 1);
-        expect(
-          spans.first,
-          const AttributionSpan(
-            attribution: actionTagComposingAttribution,
-            start: 7,
-            end: 13,
-          ),
-        );
+        expect(spans.first, const AttributionSpan(attribution: actionTagComposingAttribution, start: 7, end: 13));
       });
 
       testWidgetsOnAllPlatforms("does not re-apply a canceled tag", (tester) async {
         await _pumpTestEditor(
           tester,
           MutableDocument(
-            nodes: [
-              ParagraphNode(
-                id: "1",
-                text: AttributedText("before  after"),
-              ),
-            ],
+            nodes: [ParagraphNode(id: "1", text: AttributedText("before  after"))],
           ),
         );
 
@@ -697,10 +542,7 @@ void main() {
 
         // Ensure that we're composing.
         var text = SuperEditorInspector.findTextInComponent("1");
-        expect(
-          text.getAttributedRange({actionTagComposingAttribution}, 7),
-          const SpanRange(7, 7),
-        );
+        expect(text.getAttributedRange({actionTagComposingAttribution}, 7), const SpanRange(7, 7));
 
         // Move the caret to "before |/ after"
         await tester.pressLeftArrow();
@@ -730,11 +572,7 @@ void main() {
       testWidgetsOnAllPlatforms("only notifies tag index listeners when tags change", (tester) async {
         final actionTagPlugin = ActionTagsPlugin();
 
-        await _pumpTestEditor(
-          tester,
-          singleParagraphEmptyDoc(),
-          plugin: actionTagPlugin,
-        );
+        await _pumpTestEditor(tester, singleParagraphEmptyDoc(), plugin: actionTagPlugin);
         await tester.placeCaretInParagraph("1", 0);
 
         // Listen for tag notifications.
@@ -772,10 +610,7 @@ void main() {
 
     group("submissions >", () {
       testWidgetsOnAllPlatforms("at the beginning of a paragraph", (tester) async {
-        await _pumpTestEditor(
-          tester,
-          singleParagraphEmptyDoc(),
-        );
+        await _pumpTestEditor(tester, singleParagraphEmptyDoc());
 
         // Place the caret in the empty paragraph.
         await tester.placeCaretInParagraph("1", 0);
@@ -795,12 +630,7 @@ void main() {
         await _pumpTestEditor(
           tester,
           MutableDocument(
-            nodes: [
-              ParagraphNode(
-                id: "1",
-                text: AttributedText("before "),
-              ),
-            ],
+            nodes: [ParagraphNode(id: "1", text: AttributedText("before "))],
           ),
         );
 
@@ -829,12 +659,7 @@ void main() {
         await _pumpTestEditor(
           tester,
           MutableDocument(
-            nodes: [
-              ParagraphNode(
-                id: "1",
-                text: AttributedText("before  after"),
-              ),
-            ],
+            nodes: [ParagraphNode(id: "1", text: AttributedText("before  after"))],
           ),
         );
 
@@ -863,12 +688,7 @@ void main() {
         await _pumpTestEditor(
           tester,
           MutableDocument(
-            nodes: [
-              ParagraphNode(
-                id: "1",
-                text: AttributedText("before after"),
-              ),
-            ],
+            nodes: [ParagraphNode(id: "1", text: AttributedText("before after"))],
           ),
         );
 
@@ -885,14 +705,7 @@ void main() {
           range: const SpanRange(0, 19),
         );
         expect(spans.length, 1);
-        expect(
-          spans.first,
-          const AttributionSpan(
-            attribution: actionTagComposingAttribution,
-            start: 7,
-            end: 13,
-          ),
-        );
+        expect(spans.first, const AttributionSpan(attribution: actionTagComposingAttribution, start: 7, end: 13));
 
         // Submit the tag.
         await tester.pressEnter();
@@ -915,13 +728,15 @@ void main() {
     testWidgetsOnArbitraryDesktop('does not extract a tag when the selection is expanded', (tester) async {
       await _pumpTestEditor(
         tester,
-        MutableDocument(nodes: [
-          ParagraphNode(id: '1', text: AttributedText('A paragraph')),
-          // It's important that the second paragraph is longer than the first to ensure
-          // that we don't try to access a character in the first paragraph using an index
-          // from the second paragraph.
-          ParagraphNode(id: '2', text: AttributedText('Another paragraph with longer text')),
-        ]),
+        MutableDocument(
+          nodes: [
+            ParagraphNode(id: '1', text: AttributedText('A paragraph')),
+            // It's important that the second paragraph is longer than the first to ensure
+            // that we don't try to access a character in the first paragraph using an index
+            // from the second paragraph.
+            ParagraphNode(id: '2', text: AttributedText('Another paragraph with longer text')),
+          ],
+        ),
       );
 
       // Place the caret at the end of the second paragraph.
@@ -952,12 +767,10 @@ void main() {
       );
     });
 
-    testWidgetsOnAllPlatforms("does not extract a tag when expanding the selection from a non-text node",
-        (tester) async {
-      await _pumpTestEditor(
-        tester,
-        paragraphThenHrDoc(),
-      );
+    testWidgetsOnAllPlatforms("does not extract a tag when expanding the selection from a non-text node", (
+      tester,
+    ) async {
+      await _pumpTestEditor(tester, paragraphThenHrDoc());
 
       // Create cancelled action tag
       await tester.placeCaretInParagraph("1", 0);
@@ -990,27 +803,28 @@ Future<TestDocumentContext> _pumpTestEditor(
   TagRule? tagRule,
   ActionTagsPlugin? plugin,
 }) async {
-  assert(tagRule == null || plugin == null,
-      "You can provide a custom tagRule, or a custom ActionsTagPlugin, but not both");
+  assert(
+    tagRule == null || plugin == null,
+    "You can provide a custom tagRule, or a custom ActionsTagPlugin, but not both",
+  );
 
   final actionTagPlugin = plugin ?? ActionTagsPlugin(tagRule: tagRule ?? defaultActionTagRule);
 
   return await tester //
       .createDocument()
       .withCustomContent(document)
-      .withAddedKeyboardActions(prepend: [
-        // In real apps, the app needs to decide when to submit an action tag.
-        // For the purpose of tests, we'll arbitrarily choose to submit on enter.
-        _submitOnEnter,
-      ])
+      .withAddedKeyboardActions(
+        prepend: [
+          // In real apps, the app needs to decide when to submit an action tag.
+          // For the purpose of tests, we'll arbitrarily choose to submit on enter.
+          _submitOnEnter,
+        ],
+      )
       .withPlugin(actionTagPlugin)
       .pump();
 }
 
-ExecutionInstruction _submitOnEnter({
-  required SuperEditorContext editContext,
-  required KeyEvent keyEvent,
-}) {
+ExecutionInstruction _submitOnEnter({required SuperEditorContext editContext, required KeyEvent keyEvent}) {
   if (keyEvent is! KeyDownEvent && keyEvent is! KeyRepeatEvent) {
     return ExecutionInstruction.continueExecution;
   }
@@ -1018,9 +832,7 @@ ExecutionInstruction _submitOnEnter({
     return ExecutionInstruction.continueExecution;
   }
 
-  editContext.editor.execute([
-    const SubmitComposingActionTagRequest(),
-  ]);
+  editContext.editor.execute([const SubmitComposingActionTagRequest()]);
 
   return ExecutionInstruction.haltExecution;
 }

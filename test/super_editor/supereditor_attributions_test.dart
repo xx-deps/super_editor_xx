@@ -38,35 +38,36 @@ void main() {
           // Text color is a stand-in for any type-based attribution, e.g.,
           // background color.
           testWidgetsOnAllPlatforms("text color", (tester) async {
-            final testContext = await tester //
-                .createDocument()
-                .withCustomContent(
-                  MutableDocument(
-                    nodes: [
-                      ParagraphNode(
-                        id: '1',
-                        text: AttributedText(
-                          'Color text',
-                          AttributedSpans(
-                            attributions: [
-                              const SpanMarker(
-                                attribution: ColorAttribution(Colors.orange),
-                                offset: 0,
-                                markerType: SpanMarkerType.start,
+            final testContext =
+                await tester //
+                    .createDocument()
+                    .withCustomContent(
+                      MutableDocument(
+                        nodes: [
+                          ParagraphNode(
+                            id: '1',
+                            text: AttributedText(
+                              'Color text',
+                              AttributedSpans(
+                                attributions: [
+                                  const SpanMarker(
+                                    attribution: ColorAttribution(Colors.orange),
+                                    offset: 0,
+                                    markerType: SpanMarkerType.start,
+                                  ),
+                                  const SpanMarker(
+                                    attribution: ColorAttribution(Colors.orange),
+                                    offset: 4,
+                                    markerType: SpanMarkerType.end,
+                                  ),
+                                ],
                               ),
-                              const SpanMarker(
-                                attribution: ColorAttribution(Colors.orange),
-                                offset: 4,
-                                markerType: SpanMarkerType.end,
-                              ),
-                            ],
+                            ),
                           ),
-                        ),
+                        ],
                       ),
-                    ],
-                  ),
-                )
-                .pump();
+                    )
+                    .pump();
 
             final document = testContext.document;
 
@@ -81,18 +82,20 @@ void main() {
             expect(text.toPlainText(), "Colors text");
             expect(
               text.spans,
-              AttributedSpans(attributions: [
-                const SpanMarker(
-                  attribution: ColorAttribution(Colors.orange),
-                  offset: 0,
-                  markerType: SpanMarkerType.start,
-                ),
-                const SpanMarker(
-                  attribution: ColorAttribution(Colors.orange),
-                  offset: 5,
-                  markerType: SpanMarkerType.end,
-                ),
-              ]),
+              AttributedSpans(
+                attributions: [
+                  const SpanMarker(
+                    attribution: ColorAttribution(Colors.orange),
+                    offset: 0,
+                    markerType: SpanMarkerType.start,
+                  ),
+                  const SpanMarker(
+                    attribution: ColorAttribution(Colors.orange),
+                    offset: 5,
+                    markerType: SpanMarkerType.end,
+                  ),
+                ],
+              ),
             );
           });
         });
@@ -129,35 +132,36 @@ void main() {
           // Text color is a stand-in for any type-based attribution, e.g.,
           // background color.
           testWidgetsOnAllPlatforms("text color", (tester) async {
-            final testContext = await tester //
-                .createDocument()
-                .withCustomContent(
-                  MutableDocument(
-                    nodes: [
-                      ParagraphNode(
-                        id: '1',
-                        text: AttributedText(
-                          'Color text',
-                          AttributedSpans(
-                            attributions: [
-                              const SpanMarker(
-                                attribution: ColorAttribution(Colors.orange),
-                                offset: 0,
-                                markerType: SpanMarkerType.start,
+            final testContext =
+                await tester //
+                    .createDocument()
+                    .withCustomContent(
+                      MutableDocument(
+                        nodes: [
+                          ParagraphNode(
+                            id: '1',
+                            text: AttributedText(
+                              'Color text',
+                              AttributedSpans(
+                                attributions: [
+                                  const SpanMarker(
+                                    attribution: ColorAttribution(Colors.orange),
+                                    offset: 0,
+                                    markerType: SpanMarkerType.start,
+                                  ),
+                                  const SpanMarker(
+                                    attribution: ColorAttribution(Colors.orange),
+                                    offset: 4,
+                                    markerType: SpanMarkerType.end,
+                                  ),
+                                ],
                               ),
-                              const SpanMarker(
-                                attribution: ColorAttribution(Colors.orange),
-                                offset: 4,
-                                markerType: SpanMarkerType.end,
-                              ),
-                            ],
+                            ),
                           ),
-                        ),
+                        ],
                       ),
-                    ],
-                  ),
-                )
-                .pump();
+                    )
+                    .pump();
 
             final document = testContext.document;
 
@@ -179,18 +183,20 @@ void main() {
             expect(text.toPlainText(), "Colors");
             expect(
               text.spans,
-              AttributedSpans(attributions: [
-                const SpanMarker(
-                  attribution: ColorAttribution(Colors.orange),
-                  offset: 0,
-                  markerType: SpanMarkerType.start,
-                ),
-                const SpanMarker(
-                  attribution: ColorAttribution(Colors.orange),
-                  offset: 5,
-                  markerType: SpanMarkerType.end,
-                ),
-              ]),
+              AttributedSpans(
+                attributions: [
+                  const SpanMarker(
+                    attribution: ColorAttribution(Colors.orange),
+                    offset: 0,
+                    markerType: SpanMarkerType.start,
+                  ),
+                  const SpanMarker(
+                    attribution: ColorAttribution(Colors.orange),
+                    offset: 5,
+                    markerType: SpanMarkerType.end,
+                  ),
+                ],
+              ),
             );
           });
         });
@@ -416,56 +422,41 @@ void main() {
 
       group("when a single node is selected", () {
         testWidgetsOnAllPlatforms("toggles attribution throughout a node", (tester) async {
-          final context = await tester //
-              .createDocument()
-              .withCustomContent(
-                singleParagraphDocShortText(),
-              )
-              .pump();
+          final context =
+              await tester //
+                  .createDocument()
+                  .withCustomContent(singleParagraphDocShortText())
+                  .pump();
 
           final editor = context.editor;
           final document = SuperEditorInspector.findDocument()!;
 
           // Ensure markers are empty.
-          expect(
-            SuperEditorInspector.findTextInComponent("1").spans.markers,
-            isEmpty,
-          );
+          expect(SuperEditorInspector.findTextInComponent("1").spans.markers, isEmpty);
 
           var firstNode = document.getNodeById("1")!.asTextNode;
-          editor.toggleAttributionsForDocumentSelection(
-            firstNode.selectionBetween(0, firstNode.text.length),
-            {boldAttribution},
-          );
+          editor.toggleAttributionsForDocumentSelection(firstNode.selectionBetween(0, firstNode.text.length), {
+            boldAttribution,
+          });
 
           // Ensure attribution was applied throughout the selection.
-          expect(
-            document,
-            equalsMarkdown(
-              "**This is the first node in a document.**",
-            ),
-          );
+          expect(document, equalsMarkdown("**This is the first node in a document.**"));
 
           firstNode = document.getNodeById("1")!.asTextNode;
-          editor.toggleAttributionsForDocumentSelection(
-            firstNode.selectionBetween(0, firstNode.text.length),
-            {boldAttribution},
-          );
+          editor.toggleAttributionsForDocumentSelection(firstNode.selectionBetween(0, firstNode.text.length), {
+            boldAttribution,
+          });
 
           // Ensure bold attribution was removed from the selection.
-          expect(
-            SuperEditorInspector.findTextInComponent("1").spans.markers,
-            isEmpty,
-          );
+          expect(SuperEditorInspector.findTextInComponent("1").spans.markers, isEmpty);
         });
 
         testWidgetsOnAllPlatforms("toggles attribution on a partial node selection", (tester) async {
-          final context = await tester //
-              .createDocument()
-              .withCustomContent(
-                singleParagraphDocShortText(),
-              )
-              .pump();
+          final context =
+              await tester //
+                  .createDocument()
+                  .withCustomContent(singleParagraphDocShortText())
+                  .pump();
 
           final editor = context.editor;
           final document = SuperEditorInspector.findDocument()!;
@@ -473,143 +464,84 @@ void main() {
           var firstNode = document.getNodeById("1")! as TextNode;
 
           // Ensure markers are empty.
-          expect(
-            firstNode.text.spans.markers,
-            isEmpty,
-          );
+          expect(firstNode.text.spans.markers, isEmpty);
 
-          editor.toggleAttributionsForDocumentSelection(
-            firstNode.selectionBetween(0, 17),
-            {boldAttribution},
-          );
+          editor.toggleAttributionsForDocumentSelection(firstNode.selectionBetween(0, 17), {boldAttribution});
 
           // Ensure attribution was applied to the selection.
-          expect(
-            document,
-            equalsMarkdown(
-              "**This is the first** node in a document.",
-            ),
-          );
+          expect(document, equalsMarkdown("**This is the first** node in a document."));
 
-          editor.toggleAttributionsForDocumentSelection(
-            firstNode.selectionBetween(0, 17),
-            {boldAttribution},
-          );
+          editor.toggleAttributionsForDocumentSelection(firstNode.selectionBetween(0, 17), {boldAttribution});
 
           // Ensure bold attribution was removed from the selection.
-          expect(
-            document.getNodeById("1")!.asTextNode.text.spans.markers,
-            isEmpty,
-          );
+          expect(document.getNodeById("1")!.asTextNode.text.spans.markers, isEmpty);
         });
 
-        testWidgetsOnAllPlatforms("toggles an attribution within a sub-range of an existing same attribution",
-            (tester) async {
-          final context = await tester //
-              .createDocument()
-              .withCustomContent(
-                singleParagraphDocAllBold(),
-              )
-              .pump();
+        testWidgetsOnAllPlatforms("toggles an attribution within a sub-range of an existing same attribution", (
+          tester,
+        ) async {
+          final context =
+              await tester //
+                  .createDocument()
+                  .withCustomContent(singleParagraphDocAllBold())
+                  .pump();
 
           final editor = context.editor;
           final document = SuperEditorInspector.findDocument()!;
 
           // Ensure bold attribution is present.
-          expect(
-            document,
-            equalsMarkdown(
-              "**This is the first node in a document.**",
-            ),
-          );
+          expect(document, equalsMarkdown("**This is the first node in a document.**"));
 
           var firstNode = document.getNodeById("1")!.asTextNode;
 
-          editor.toggleAttributionsForDocumentSelection(
-            firstNode.selectionBetween(0, 17),
-            {boldAttribution},
-          );
+          editor.toggleAttributionsForDocumentSelection(firstNode.selectionBetween(0, 17), {boldAttribution});
 
           // Ensure bold attribution is removed from the selection.
-          expect(
-            document,
-            equalsMarkdown(
-              "This is the first** node in a document.**",
-            ),
-          );
+          expect(document, equalsMarkdown("This is the first** node in a document.**"));
 
           firstNode = document.getNodeById("1")!.asTextNode;
-          editor.toggleAttributionsForDocumentSelection(
-            firstNode.selectionBetween(0, 17),
-            {boldAttribution},
-          );
+          editor.toggleAttributionsForDocumentSelection(firstNode.selectionBetween(0, 17), {boldAttribution});
 
           // Ensure bold attribution is applied throughout the node.
-          expect(
-            document,
-            equalsMarkdown(
-              "**This is the first**** node in a document.**",
-            ),
-          );
+          expect(document, equalsMarkdown("**This is the first**** node in a document.**"));
         });
 
-        testWidgetsOnAllPlatforms("toggles a different attribution within a sub-range of another existing attribution",
-            (tester) async {
-          final context = await tester //
-              .createDocument()
-              .withCustomContent(
-                singleParagraphDocAllBold(),
-              )
-              .pump();
+        testWidgetsOnAllPlatforms(
+          "toggles a different attribution within a sub-range of another existing attribution",
+          (tester) async {
+            final context =
+                await tester //
+                    .createDocument()
+                    .withCustomContent(singleParagraphDocAllBold())
+                    .pump();
 
-          final editor = context.editor;
-          final document = SuperEditorInspector.findDocument()!;
+            final editor = context.editor;
+            final document = SuperEditorInspector.findDocument()!;
 
-          // Ensure bold attribution is present.
-          expect(
-            document,
-            equalsMarkdown(
-              "**This is the first node in a document.**",
-            ),
-          );
+            // Ensure bold attribution is present.
+            expect(document, equalsMarkdown("**This is the first node in a document.**"));
 
-          var firstNode = document.getNodeById("1")!.asTextNode;
+            var firstNode = document.getNodeById("1")!.asTextNode;
 
-          editor.toggleAttributionsForDocumentSelection(
-            firstNode.selectionBetween(0, 17),
-            {italicsAttribution},
-          );
+            editor.toggleAttributionsForDocumentSelection(firstNode.selectionBetween(0, 17), {italicsAttribution});
 
-          // Ensure italic attribution is applied to the selection.
-          expect(
-            document,
-            equalsMarkdown(
-              "***This is the first* node in a document.**",
-            ),
-          );
+            // Ensure italic attribution is applied to the selection.
+            expect(document, equalsMarkdown("***This is the first* node in a document.**"));
 
-          firstNode = document.getNodeById("1")!.asTextNode;
-          editor.toggleAttributionsForDocumentSelection(
-            firstNode.selectionBetween(0, 17),
-            {italicsAttribution},
-          );
+            firstNode = document.getNodeById("1")!.asTextNode;
+            editor.toggleAttributionsForDocumentSelection(firstNode.selectionBetween(0, 17), {italicsAttribution});
 
-          // Ensure bold attribution is applied throughout the node.
-          expect(
-            document,
-            equalsMarkdown(
-              "**This is the first node in a document.**",
-            ),
-          );
-        });
+            // Ensure bold attribution is applied throughout the node.
+            expect(document, equalsMarkdown("**This is the first node in a document.**"));
+          },
+        );
 
         testWidgetsOnAllPlatforms("toggles multiple attributions throughout a node", (tester) async {
-          final context = await tester //
-              .createDocument()
-              .withCustomContent(
-                singleParagraphDocShortText(),
-              )
-              .pump();
+          final context =
+              await tester //
+                  .createDocument()
+                  .withCustomContent(singleParagraphDocShortText())
+                  .pump();
 
           final editor = context.editor;
           final document = SuperEditorInspector.findDocument()!;
@@ -617,45 +549,33 @@ void main() {
           var firstNode = document.getNodeById("1")!.asTextNode;
 
           // Ensure markers are empty.
-          expect(
-            document.getNodeById("1")!.asTextNode.text.spans.markers,
-            isEmpty,
-          );
+          expect(document.getNodeById("1")!.asTextNode.text.spans.markers, isEmpty);
 
-          editor.toggleAttributionsForDocumentSelection(
-            firstNode.selectionBetween(0, firstNode.text.length),
-            {italicsAttribution, boldAttribution},
-          );
+          editor.toggleAttributionsForDocumentSelection(firstNode.selectionBetween(0, firstNode.text.length), {
+            italicsAttribution,
+            boldAttribution,
+          });
 
           // Ensure both bold and italic attributions were applied throughout the node.
-          expect(
-            document,
-            equalsMarkdown(
-              "***This is the first node in a document.***",
-            ),
-          );
+          expect(document, equalsMarkdown("***This is the first node in a document.***"));
 
-          editor.toggleAttributionsForDocumentSelection(
-            firstNode.selectionBetween(0, firstNode.text.length),
-            {boldAttribution, italicsAttribution},
-          );
+          editor.toggleAttributionsForDocumentSelection(firstNode.selectionBetween(0, firstNode.text.length), {
+            boldAttribution,
+            italicsAttribution,
+          });
 
           // Ensure both bold and italic attributions are removed from the node.
-          expect(
-            document.getNodeById("1")!.asTextNode.text.spans.markers,
-            isEmpty,
-          );
+          expect(document.getNodeById("1")!.asTextNode.text.spans.markers, isEmpty);
         });
       });
 
       group("when multiple nodes are selected", () {
         testWidgetsOnAllPlatforms("toggles attribution throughout multiple nodes", (tester) async {
-          final context = await tester //
-              .createDocument()
-              .withCustomContent(
-                twoParagraphDoc(),
-              )
-              .pump();
+          final context =
+              await tester //
+                  .createDocument()
+                  .withCustomContent(twoParagraphDoc())
+                  .pump();
 
           final editor = context.editor;
           final document = SuperEditorInspector.findDocument()!;
@@ -678,9 +598,7 @@ void main() {
           // Ensure bold attribution is applied throughout both nodes.
           expect(
             document,
-            equalsMarkdown(
-              "**This is the first node in a document.**\n\n**This is the second node in a document.**",
-            ),
+            equalsMarkdown("**This is the first node in a document.**\n\n**This is the second node in a document.**"),
           );
 
           editor.toggleAttributionsForDocumentSelection(
@@ -700,451 +618,409 @@ void main() {
         });
 
         testWidgetsOnAllPlatforms(
-            "toggles an attribution across nodes with the attribution applied throughout first node", (tester) async {
-          final context = await tester //
-              .createDocument()
-              .withCustomContent(
-                _paragraphFullBoldThenParagraph(),
-              )
-              .pump();
+          "toggles an attribution across nodes with the attribution applied throughout first node",
+          (tester) async {
+            final context =
+                await tester //
+                    .createDocument()
+                    .withCustomContent(_paragraphFullBoldThenParagraph())
+                    .pump();
 
-          final editor = context.editor;
-          final document = SuperEditorInspector.findDocument()!;
+            final editor = context.editor;
+            final document = SuperEditorInspector.findDocument()!;
 
-          // Ensure bold attribution is applied throughout the first node.
-          expect(
-            document,
-            equalsMarkdown(
-              "**This is the first node in a document.**\n\nThis is the second node in a document.",
-            ),
-          );
+            // Ensure bold attribution is applied throughout the first node.
+            expect(
+              document,
+              equalsMarkdown("**This is the first node in a document.**\n\nThis is the second node in a document."),
+            );
 
-          editor.execute([
-            ToggleTextAttributionsRequest(
-              documentRange: DocumentSelection(
+            editor.execute([
+              ToggleTextAttributionsRequest(
+                documentRange: DocumentSelection(
+                  base: document.getNodeById("1")!.beginningDocumentPosition,
+                  extent: document.getNodeById("2")!.endDocumentPosition,
+                ),
+                attributions: {boldAttribution},
+              ),
+            ]);
+
+            // Ensure bold attribution is applied throughout both nodes.
+            //
+            // The toggled attribution already existed across the selection. In
+            // such cases, the attribution is applied throughout the selection without removing it from
+            // any of the node selections that already have it.
+            expect(
+              document,
+              equalsMarkdown("**This is the first node in a document.**\n\n**This is the second node in a document.**"),
+            );
+
+            editor.toggleAttributionsForDocumentSelection(
+              DocumentSelection(
                 base: document.getNodeById("1")!.beginningDocumentPosition,
                 extent: document.getNodeById("2")!.endDocumentPosition,
               ),
-              attributions: {boldAttribution},
-            )
-          ]);
+              {boldAttribution},
+            );
 
-          // Ensure bold attribution is applied throughout both nodes.
-          //
-          // The toggled attribution already existed across the selection. In
-          // such cases, the attribution is applied throughout the selection without removing it from
-          // any of the node selections that already have it.
-          expect(
-            document,
-            equalsMarkdown(
-              "**This is the first node in a document.**\n\n**This is the second node in a document.**",
-            ),
-          );
-
-          editor.toggleAttributionsForDocumentSelection(
-            DocumentSelection(
-              base: document.getNodeById("1")!.beginningDocumentPosition,
-              extent: document.getNodeById("2")!.endDocumentPosition,
-            ),
-            {boldAttribution},
-          );
-
-          // Ensure bold attribution was removed from both nodes.
-          expect(
-            document.getNodeById("1")!.asTextNode.text.spans.markers.isEmpty,
-            true,
-          );
-          expect(
-            document.getNodeById("2")!.asTextNode.text.spans.markers.isEmpty,
-            true,
-          );
-        });
+            // Ensure bold attribution was removed from both nodes.
+            expect(document.getNodeById("1")!.asTextNode.text.spans.markers.isEmpty, true);
+            expect(document.getNodeById("2")!.asTextNode.text.spans.markers.isEmpty, true);
+          },
+        );
 
         testWidgetsOnAllPlatforms(
-            "toggles an attribution across nodes with the attribution applied partially within first node",
-            (tester) async {
-          final context = await tester //
-              .createDocument()
-              .withCustomContent(
-                _paragraphPartiallyBoldThenParagraph(),
-              )
-              .pump();
+          "toggles an attribution across nodes with the attribution applied partially within first node",
+          (tester) async {
+            final context =
+                await tester //
+                    .createDocument()
+                    .withCustomContent(_paragraphPartiallyBoldThenParagraph())
+                    .pump();
 
-          final editor = context.editor;
-          final document = SuperEditorInspector.findDocument()!;
+            final editor = context.editor;
+            final document = SuperEditorInspector.findDocument()!;
 
-          // Ensure bold attribution is applied partially to the first node.
-          expect(
-            document,
-            equalsMarkdown(
-              "**This is the first** node in a document.\n\nThis is the second node in a document.",
-            ),
-          );
+            // Ensure bold attribution is applied partially to the first node.
+            expect(
+              document,
+              equalsMarkdown("**This is the first** node in a document.\n\nThis is the second node in a document."),
+            );
 
-          editor.toggleAttributionsForDocumentSelection(
-            DocumentSelection(
-              base: document.getNodeById("1")!.beginningDocumentPosition,
-              extent: document.getNodeById("2")!.endDocumentPosition,
-            ),
-            {boldAttribution},
-          );
+            editor.toggleAttributionsForDocumentSelection(
+              DocumentSelection(
+                base: document.getNodeById("1")!.beginningDocumentPosition,
+                extent: document.getNodeById("2")!.endDocumentPosition,
+              ),
+              {boldAttribution},
+            );
 
-          // Ensure bold attribution is applied throughout the both nodes.
-          //
-          // The toggled attribution already existed across the selection.In
-          // such cases, the attribution is applied throughout the selection without removing it from
-          // any of the node selections that already have it.
-          expect(
-            document,
-            equalsMarkdown(
-              "**This is the first node in a document.**\n\n**This is the second node in a document.**",
-            ),
-          );
+            // Ensure bold attribution is applied throughout the both nodes.
+            //
+            // The toggled attribution already existed across the selection.In
+            // such cases, the attribution is applied throughout the selection without removing it from
+            // any of the node selections that already have it.
+            expect(
+              document,
+              equalsMarkdown("**This is the first node in a document.**\n\n**This is the second node in a document.**"),
+            );
 
-          editor.toggleAttributionsForDocumentSelection(
-            DocumentSelection(
-              base: document.getNodeById("1")!.beginningDocumentPosition,
-              extent: document.getNodeById("2")!.endDocumentPosition,
-            ),
-            {boldAttribution},
-          );
+            editor.toggleAttributionsForDocumentSelection(
+              DocumentSelection(
+                base: document.getNodeById("1")!.beginningDocumentPosition,
+                extent: document.getNodeById("2")!.endDocumentPosition,
+              ),
+              {boldAttribution},
+            );
 
-          // Ensure bold attribution was removed from both nodes.
-          expect(
-            document.getNodeById("1")!.asTextNode.text.spans.markers.isEmpty,
-            true,
-          );
-          expect(
-            document.getNodeById("2")!.asTextNode.text.spans.markers.isEmpty,
-            true,
-          );
-        });
+            // Ensure bold attribution was removed from both nodes.
+            expect(document.getNodeById("1")!.asTextNode.text.spans.markers.isEmpty, true);
+            expect(document.getNodeById("2")!.asTextNode.text.spans.markers.isEmpty, true);
+          },
+        );
 
         testWidgetsOnAllPlatforms(
-            "toggles an attribution when selection spans multiple nodes and starts at the end of the first selected node",
-            (tester) async {
-          // Test situations where the selection starts after the last character of the first selected node. See #1948
-          // for more information.
+          "toggles an attribution when selection spans multiple nodes and starts at the end of the first selected node",
+          (tester) async {
+            // Test situations where the selection starts after the last character of the first selected node. See #1948
+            // for more information.
 
-          final context = await tester //
-              .createDocument()
-              .fromMarkdown("First node\n\nSecond node")
-              .pump();
+            final context =
+                await tester //
+                    .createDocument()
+                    .fromMarkdown("First node\n\nSecond node")
+                    .pump();
 
-          final editor = context.editor;
-          final document = context.document;
+            final editor = context.editor;
+            final document = context.document;
 
-          // Apply the bold attribution, starting after the last character of the first node.
-          editor.toggleAttributionsForDocumentSelection(
-            DocumentSelection(
-              base: document.getNodeAt(0)!.endDocumentPosition,
-              extent: document.getNodeAt(1)!.endDocumentPosition,
-            ),
-            {boldAttribution},
-          );
+            // Apply the bold attribution, starting after the last character of the first node.
+            editor.toggleAttributionsForDocumentSelection(
+              DocumentSelection(
+                base: document.getNodeAt(0)!.endDocumentPosition,
+                extent: document.getNodeAt(1)!.endDocumentPosition,
+              ),
+              {boldAttribution},
+            );
 
-          // Ensure bold attribution is applied only to the second node. Since the selection starts at the
-          // end of the first node, there's no text there to apply the attribution to.
-          expect(
-            document,
-            equalsMarkdown(
-              "First node\n\n**Second node**",
-            ),
-          );
+            // Ensure bold attribution is applied only to the second node. Since the selection starts at the
+            // end of the first node, there's no text there to apply the attribution to.
+            expect(document, equalsMarkdown("First node\n\n**Second node**"));
 
-          // Remove the bold attribution, starting after the last character of the first node.
-          editor.toggleAttributionsForDocumentSelection(
-            DocumentSelection(
-              base: document.getNodeAt(0)!.endDocumentPosition,
-              extent: document.getNodeAt(1)!.endDocumentPosition,
-            ),
-            {boldAttribution},
-          );
+            // Remove the bold attribution, starting after the last character of the first node.
+            editor.toggleAttributionsForDocumentSelection(
+              DocumentSelection(
+                base: document.getNodeAt(0)!.endDocumentPosition,
+                extent: document.getNodeAt(1)!.endDocumentPosition,
+              ),
+              {boldAttribution},
+            );
 
-          // Ensure bold attribution was removed.
-          expect(document.getNodeAt(1)!.asTextNode.text.spans.markers.isEmpty, true);
-        });
+            // Ensure bold attribution was removed.
+            expect(document.getNodeAt(1)!.asTextNode.text.spans.markers.isEmpty, true);
+          },
+        );
 
         testWidgetsOnAllPlatforms(
-            "toggles an attribution when selection spans multiple nodes and ends at the beginning of the last selected node",
-            (tester) async {
-          // Test situations where the selection ends before the first character of the last selected node. See #1948
-          // for more information.
+          "toggles an attribution when selection spans multiple nodes and ends at the beginning of the last selected node",
+          (tester) async {
+            // Test situations where the selection ends before the first character of the last selected node. See #1948
+            // for more information.
 
-          final context = await tester //
-              .createDocument()
-              .fromMarkdown("First node\n\nSecond node")
-              .pump();
+            final context =
+                await tester //
+                    .createDocument()
+                    .fromMarkdown("First node\n\nSecond node")
+                    .pump();
 
-          final editor = context.editor;
-          final document = context.document;
+            final editor = context.editor;
+            final document = context.document;
 
-          // Apply the bold attribution, with a selection that start at the beginning of the first node and ends
-          // before the first character of the second node.
-          editor.toggleAttributionsForDocumentSelection(
-            DocumentSelection(
-              base: document.getNodeAt(0)!.beginningDocumentPosition,
-              extent: document.getNodeAt(1)!.beginningDocumentPosition,
-            ),
-            {boldAttribution},
-          );
+            // Apply the bold attribution, with a selection that start at the beginning of the first node and ends
+            // before the first character of the second node.
+            editor.toggleAttributionsForDocumentSelection(
+              DocumentSelection(
+                base: document.getNodeAt(0)!.beginningDocumentPosition,
+                extent: document.getNodeAt(1)!.beginningDocumentPosition,
+              ),
+              {boldAttribution},
+            );
 
-          // Ensure bold attribution is applied only to the first node. Since the selection ends before the first
-          // character of the second node, there's no text there to apply the attribution to.
-          expect(
-            document,
-            equalsMarkdown(
-              "**First node**\n\nSecond node",
-            ),
-          );
+            // Ensure bold attribution is applied only to the first node. Since the selection ends before the first
+            // character of the second node, there's no text there to apply the attribution to.
+            expect(document, equalsMarkdown("**First node**\n\nSecond node"));
 
-          // Remove the bold attribution, with a selection that start at the beginning of the first node and ends
-          // before the first character of the second node.
-          editor.toggleAttributionsForDocumentSelection(
-            DocumentSelection(
-              base: document.getNodeAt(0)!.beginningDocumentPosition,
-              extent: document.getNodeAt(1)!.beginningDocumentPosition,
-            ),
-            {boldAttribution},
-          );
+            // Remove the bold attribution, with a selection that start at the beginning of the first node and ends
+            // before the first character of the second node.
+            editor.toggleAttributionsForDocumentSelection(
+              DocumentSelection(
+                base: document.getNodeAt(0)!.beginningDocumentPosition,
+                extent: document.getNodeAt(1)!.beginningDocumentPosition,
+              ),
+              {boldAttribution},
+            );
 
-          // Ensure bold attribution was removed.
-          final secondNode = document.getNodeAt(1)!.asTextNode;
-          expect(secondNode.text.spans.markers.isEmpty, true);
-        });
+            // Ensure bold attribution was removed.
+            final secondNode = document.getNodeAt(1)!.asTextNode;
+            expect(secondNode.text.spans.markers.isEmpty, true);
+          },
+        );
 
         testWidgetsOnAllPlatforms(
-            "toggles an attribution across nodes with the attribution applied throughout and partially within first and second node respectively",
-            (tester) async {
-          final TestDocumentContext context = await tester //
-              .createDocument()
-              .withCustomContent(
-                _paragraphFullyBoldThenParagraphPartiallyBold(),
-              )
-              .pump();
+          "toggles an attribution across nodes with the attribution applied throughout and partially within first and second node respectively",
+          (tester) async {
+            final TestDocumentContext context =
+                await tester //
+                    .createDocument()
+                    .withCustomContent(_paragraphFullyBoldThenParagraphPartiallyBold())
+                    .pump();
 
-          final Editor editor = context.editor;
-          final document = SuperEditorInspector.findDocument()!;
+            final Editor editor = context.editor;
+            final document = SuperEditorInspector.findDocument()!;
 
-          // Ensure bold attribution is applied partially to first node and
-          // throughout the second node.
-          expect(
-            document,
-            equalsMarkdown(
-              "**This is the first** node in a document.\n\n**This is the second node in a document.**",
-            ),
-          );
+            // Ensure bold attribution is applied partially to first node and
+            // throughout the second node.
+            expect(
+              document,
+              equalsMarkdown("**This is the first** node in a document.\n\n**This is the second node in a document.**"),
+            );
 
-          editor.toggleAttributionsForDocumentSelection(
-            DocumentSelection(
-              base: document.getNodeById("1")!.beginningDocumentPosition,
-              extent: document.getNodeById("2")!.asTextNode.endDocumentPosition,
-            ),
-            {boldAttribution},
-          );
+            editor.toggleAttributionsForDocumentSelection(
+              DocumentSelection(
+                base: document.getNodeById("1")!.beginningDocumentPosition,
+                extent: document.getNodeById("2")!.asTextNode.endDocumentPosition,
+              ),
+              {boldAttribution},
+            );
 
-          // Ensure bold attribution is applied throughout the both nodes.
-          //
-          // The toggled attribution already existed across the selection. In
-          // such cases, the attribution is applied throughout the selection without removing it from
-          // any of the node selections that already have it.
-          expect(
-            document,
-            equalsMarkdown(
-              "**This is the first node in a document.**\n\n**This is the second node in a document.**",
-            ),
-          );
+            // Ensure bold attribution is applied throughout the both nodes.
+            //
+            // The toggled attribution already existed across the selection. In
+            // such cases, the attribution is applied throughout the selection without removing it from
+            // any of the node selections that already have it.
+            expect(
+              document,
+              equalsMarkdown("**This is the first node in a document.**\n\n**This is the second node in a document.**"),
+            );
 
-          editor.toggleAttributionsForDocumentSelection(
-            DocumentSelection(
-              base: document.getNodeById("1")!.asTextNode.beginningDocumentPosition,
-              extent: document.getNodeById("2")!.asTextNode.endDocumentPosition,
-            ),
-            {boldAttribution},
-          );
+            editor.toggleAttributionsForDocumentSelection(
+              DocumentSelection(
+                base: document.getNodeById("1")!.asTextNode.beginningDocumentPosition,
+                extent: document.getNodeById("2")!.asTextNode.endDocumentPosition,
+              ),
+              {boldAttribution},
+            );
 
-          // Ensure bold attribution was removed from both nodes.
-          expect(
-            document.getNodeById("1")!.asTextNode.text.spans.markers.isEmpty &&
-                document.getNodeById("2")!.asTextNode.text.spans.markers.isEmpty,
-            true,
-          );
-        });
+            // Ensure bold attribution was removed from both nodes.
+            expect(
+              document.getNodeById("1")!.asTextNode.text.spans.markers.isEmpty &&
+                  document.getNodeById("2")!.asTextNode.text.spans.markers.isEmpty,
+              true,
+            );
+          },
+        );
 
         testWidgetsOnAllPlatforms(
-            "toggles an attribution across nodes with the attribution applied partially within all nodes",
-            (tester) async {
-          final TestDocumentContext context = await tester //
-              .createDocument()
-              .withCustomContent(
-                _paragraphPartiallyBoldThenParagraphPartiallyBold(),
-              )
-              .pump();
+          "toggles an attribution across nodes with the attribution applied partially within all nodes",
+          (tester) async {
+            final TestDocumentContext context =
+                await tester //
+                    .createDocument()
+                    .withCustomContent(_paragraphPartiallyBoldThenParagraphPartiallyBold())
+                    .pump();
 
-          final Editor editor = context.editor;
-          final document = SuperEditorInspector.findDocument()!;
+            final Editor editor = context.editor;
+            final document = SuperEditorInspector.findDocument()!;
 
-          // Ensure bold attribution is applied partially across both nodes.
-          expect(
-            document,
-            equalsMarkdown(
-              "**This is the first** node in a document.\n\n**This is the second** node in a document.",
-            ),
-          );
+            // Ensure bold attribution is applied partially across both nodes.
+            expect(
+              document,
+              equalsMarkdown("**This is the first** node in a document.\n\n**This is the second** node in a document."),
+            );
 
-          editor.toggleAttributionsForDocumentSelection(
-            DocumentSelection(
-              base: document.getNodeById("1")!.beginningDocumentPosition,
-              extent: document.getNodeById("2")!.endDocumentPosition,
-            ),
-            {boldAttribution},
-          );
+            editor.toggleAttributionsForDocumentSelection(
+              DocumentSelection(
+                base: document.getNodeById("1")!.beginningDocumentPosition,
+                extent: document.getNodeById("2")!.endDocumentPosition,
+              ),
+              {boldAttribution},
+            );
 
-          // Ensure bold attribution is applied throughout the both nodes.
-          //
-          // The toggled attribution already existed across the selection. In
-          // such cases, the attribution is applied throughout the selection without removing it from
-          // any of the node selections that already have it.
-          expect(
-            document,
-            equalsMarkdown(
-              "**This is the first node in a document.**\n\n**This is the second node in a document.**",
-            ),
-          );
+            // Ensure bold attribution is applied throughout the both nodes.
+            //
+            // The toggled attribution already existed across the selection. In
+            // such cases, the attribution is applied throughout the selection without removing it from
+            // any of the node selections that already have it.
+            expect(
+              document,
+              equalsMarkdown("**This is the first node in a document.**\n\n**This is the second node in a document.**"),
+            );
 
-          editor.toggleAttributionsForDocumentSelection(
-            DocumentSelection(
-              base: document.getNodeById("1")!.beginningDocumentPosition,
-              extent: document.getNodeById("2")!.endDocumentPosition,
-            ),
-            {boldAttribution},
-          );
+            editor.toggleAttributionsForDocumentSelection(
+              DocumentSelection(
+                base: document.getNodeById("1")!.beginningDocumentPosition,
+                extent: document.getNodeById("2")!.endDocumentPosition,
+              ),
+              {boldAttribution},
+            );
 
-          // Ensure bold attribution was removed from both nodes.
-          expect(
-            document.getNodeById("1")!.asTextNode.text.spans.markers.isEmpty &&
-                document.getNodeById("2")!.asTextNode.text.spans.markers.isEmpty,
-            true,
-          );
-        });
+            // Ensure bold attribution was removed from both nodes.
+            expect(
+              document.getNodeById("1")!.asTextNode.text.spans.markers.isEmpty &&
+                  document.getNodeById("2")!.asTextNode.text.spans.markers.isEmpty,
+              true,
+            );
+          },
+        );
 
         testWidgetsOnAllPlatforms(
-            "toggles a different attribution across nodes with an existing attribution applied throughout them",
-            (tester) async {
-          final TestDocumentContext context = await tester //
-              .createDocument()
-              .withCustomContent(
-                twoParagraphDocAllBold(),
-              )
-              .pump();
+          "toggles a different attribution across nodes with an existing attribution applied throughout them",
+          (tester) async {
+            final TestDocumentContext context =
+                await tester //
+                    .createDocument()
+                    .withCustomContent(twoParagraphDocAllBold())
+                    .pump();
 
-          final Editor editor = context.editor;
-          final document = SuperEditorInspector.findDocument()!;
+            final Editor editor = context.editor;
+            final document = SuperEditorInspector.findDocument()!;
 
-          // Ensure bold attribution is applied throughout both nodes.
-          expect(
-            document,
-            equalsMarkdown(
-              "**This is the first node in a document.**\n\n**This is the second node in a document.**",
-            ),
-          );
+            // Ensure bold attribution is applied throughout both nodes.
+            expect(
+              document,
+              equalsMarkdown("**This is the first node in a document.**\n\n**This is the second node in a document.**"),
+            );
 
-          editor.toggleAttributionsForDocumentSelection(
-            DocumentSelection(
-              base: document.getNodeById("1")!.beginningDocumentPosition,
-              extent: document.getNodeById("2")!.endDocumentPosition,
-            ),
-            {italicsAttribution},
-          );
+            editor.toggleAttributionsForDocumentSelection(
+              DocumentSelection(
+                base: document.getNodeById("1")!.beginningDocumentPosition,
+                extent: document.getNodeById("2")!.endDocumentPosition,
+              ),
+              {italicsAttribution},
+            );
 
-          // Ensure both bold and italic attributions were applied throughout the selection.
-          expect(
-            document,
-            equalsMarkdown(
-              "***This is the first node in a document.***\n\n***This is the second node in a document.***",
-            ),
-          );
+            // Ensure both bold and italic attributions were applied throughout the selection.
+            expect(
+              document,
+              equalsMarkdown(
+                "***This is the first node in a document.***\n\n***This is the second node in a document.***",
+              ),
+            );
 
-          editor.toggleAttributionsForDocumentSelection(
-            DocumentSelection(
-              base: document.getNodeById("1")!.beginningDocumentPosition,
-              extent: document.getNodeById("2")!.endDocumentPosition,
-            ),
-            {italicsAttribution},
-          );
+            editor.toggleAttributionsForDocumentSelection(
+              DocumentSelection(
+                base: document.getNodeById("1")!.beginningDocumentPosition,
+                extent: document.getNodeById("2")!.endDocumentPosition,
+              ),
+              {italicsAttribution},
+            );
 
-          // Ensure italic attribution was removed from both nodes.
-          expect(
-            document,
-            equalsMarkdown(
-              "**This is the first node in a document.**\n\n**This is the second node in a document.**",
-            ),
-          );
-        });
+            // Ensure italic attribution was removed from both nodes.
+            expect(
+              document,
+              equalsMarkdown("**This is the first node in a document.**\n\n**This is the second node in a document.**"),
+            );
+          },
+        );
 
         testWidgetsOnAllPlatforms(
-            "toggles a different attribution partially across nodes with an existing attribution applied throughout them",
-            (tester) async {
-          final TestDocumentContext context = await tester //
-              .createDocument()
-              .withCustomContent(
-                twoParagraphDocAllBold(),
-              )
-              .pump();
+          "toggles a different attribution partially across nodes with an existing attribution applied throughout them",
+          (tester) async {
+            final TestDocumentContext context =
+                await tester //
+                    .createDocument()
+                    .withCustomContent(twoParagraphDocAllBold())
+                    .pump();
 
-          final editor = context.editor;
-          final document = SuperEditorInspector.findDocument()!;
+            final editor = context.editor;
+            final document = SuperEditorInspector.findDocument()!;
 
-          // Ensure bold attribution is applied throughout the selection.
-          expect(
-            document,
-            equalsMarkdown(
-              "**This is the first node in a document.**\n\n**This is the second node in a document.**",
-            ),
-          );
+            // Ensure bold attribution is applied throughout the selection.
+            expect(
+              document,
+              equalsMarkdown("**This is the first node in a document.**\n\n**This is the second node in a document.**"),
+            );
 
-          editor.toggleAttributionsForDocumentSelection(
-            DocumentSelection(
-              base: document.getNodeById("1")!.beginningDocumentPosition,
-              extent: document.getNodeById("2")!.asTextNode.positionAt(18),
-            ),
-            {italicsAttribution},
-          );
+            editor.toggleAttributionsForDocumentSelection(
+              DocumentSelection(
+                base: document.getNodeById("1")!.beginningDocumentPosition,
+                extent: document.getNodeById("2")!.asTextNode.positionAt(18),
+              ),
+              {italicsAttribution},
+            );
 
-          // Ensure both bold and italic attributions were applied throughout
-          // the selection.
-          expect(
-            document,
-            equalsMarkdown(
-              "***This is the first node in a document.***\n\n***This is the second* node in a document.**",
-            ),
-          );
+            // Ensure both bold and italic attributions were applied throughout
+            // the selection.
+            expect(
+              document,
+              equalsMarkdown(
+                "***This is the first node in a document.***\n\n***This is the second* node in a document.**",
+              ),
+            );
 
-          editor.toggleAttributionsForDocumentSelection(
-            DocumentSelection(
-              base: document.getNodeById("1")!.beginningDocumentPosition,
-              extent: document.getNodeById("2")!.asTextNode.positionAt(18),
-            ),
-            {italicsAttribution},
-          );
+            editor.toggleAttributionsForDocumentSelection(
+              DocumentSelection(
+                base: document.getNodeById("1")!.beginningDocumentPosition,
+                extent: document.getNodeById("2")!.asTextNode.positionAt(18),
+              ),
+              {italicsAttribution},
+            );
 
-          // Ensure italic attribution was removed from the selection while keeping the bold
-          // attribution.
-          expect(
-            document,
-            equalsMarkdown(
-              "**This is the first node in a document.**\n\n**This is the second node in a document.**",
-            ),
-          );
-        });
+            // Ensure italic attribution was removed from the selection while keeping the bold
+            // attribution.
+            expect(
+              document,
+              equalsMarkdown("**This is the first node in a document.**\n\n**This is the second node in a document.**"),
+            );
+          },
+        );
 
         testWidgetsOnAllPlatforms("toggles multiple attributions throughout multiple nodes", (tester) async {
-          final TestDocumentContext context = await tester //
-              .createDocument()
-              .withCustomContent(
-                twoParagraphDoc(),
-              )
-              .pump();
+          final TestDocumentContext context =
+              await tester //
+                  .createDocument()
+                  .withCustomContent(twoParagraphDoc())
+                  .pump();
 
           final editor = context.editor;
           final document = SuperEditorInspector.findDocument()!;
@@ -1161,10 +1037,7 @@ void main() {
               base: document.getNodeById("1")!.beginningDocumentPosition,
               extent: document.getNodeById("2")!.endDocumentPosition,
             ),
-            {
-              italicsAttribution,
-              boldAttribution,
-            },
+            {italicsAttribution, boldAttribution},
           );
 
           // Ensure both bold and italic attributions were applied throughout the selection.
@@ -1193,136 +1066,127 @@ void main() {
         });
 
         testWidgetsOnAllPlatforms(
-            "toggles attribution for a selection going halfway from first node and halfway within second node",
-            (tester) async {
-          final TestDocumentContext context = await tester //
-              .createDocument()
-              .withCustomContent(
-                twoParagraphDoc(),
-              )
-              .pump();
+          "toggles attribution for a selection going halfway from first node and halfway within second node",
+          (tester) async {
+            final TestDocumentContext context =
+                await tester //
+                    .createDocument()
+                    .withCustomContent(twoParagraphDoc())
+                    .pump();
 
-          final editor = context.editor;
-          final document = SuperEditorInspector.findDocument()!;
+            final editor = context.editor;
+            final document = SuperEditorInspector.findDocument()!;
 
-          // Ensure markers are empty for both nodes.
-          expect(
-            document.getNodeById("1")!.asTextNode.text.spans.markers.isEmpty &&
-                document.getNodeById("2")!.asTextNode.text.spans.markers.isEmpty,
-            true,
-          );
+            // Ensure markers are empty for both nodes.
+            expect(
+              document.getNodeById("1")!.asTextNode.text.spans.markers.isEmpty &&
+                  document.getNodeById("2")!.asTextNode.text.spans.markers.isEmpty,
+              true,
+            );
 
-          editor.toggleAttributionsForDocumentSelection(
-            DocumentSelection(
-              base: document.getNodeById("1")!.asTextNode.positionAt(18),
-              extent: document.getNodeById("2")!.asTextNode.positionAt(18),
-            ),
-            {boldAttribution},
-          );
+            editor.toggleAttributionsForDocumentSelection(
+              DocumentSelection(
+                base: document.getNodeById("1")!.asTextNode.positionAt(18),
+                extent: document.getNodeById("2")!.asTextNode.positionAt(18),
+              ),
+              {boldAttribution},
+            );
 
-          // Ensure bold attribution was applied.
-          expect(
-            document,
-            equalsMarkdown(
-              "This is the first **node in a document.**\n\n**This is the second** node in a document.",
-            ),
-          );
+            // Ensure bold attribution was applied.
+            expect(
+              document,
+              equalsMarkdown("This is the first **node in a document.**\n\n**This is the second** node in a document."),
+            );
 
-          editor.toggleAttributionsForDocumentSelection(
-            DocumentSelection(
-              base: document.getNodeById("1")!.asTextNode.positionAt(18),
-              extent: document.getNodeById("2")!.asTextNode.positionAt(18),
-            ),
-            {boldAttribution},
-          );
+            editor.toggleAttributionsForDocumentSelection(
+              DocumentSelection(
+                base: document.getNodeById("1")!.asTextNode.positionAt(18),
+                extent: document.getNodeById("2")!.asTextNode.positionAt(18),
+              ),
+              {boldAttribution},
+            );
 
-          // Ensure markers are empty for both nodes.
-          expect(
-            document.getNodeById("1")!.asTextNode.text.spans.markers.isEmpty &&
-                document.getNodeById("2")!.asTextNode.text.spans.markers.isEmpty,
-            true,
-          );
-        });
+            // Ensure markers are empty for both nodes.
+            expect(
+              document.getNodeById("1")!.asTextNode.text.spans.markers.isEmpty &&
+                  document.getNodeById("2")!.asTextNode.text.spans.markers.isEmpty,
+              true,
+            );
+          },
+        );
 
         testWidgetsOnAllPlatforms(
-            "toggles attribution for a selection going halfway in first node till the halfway into the third node",
-            (tester) async {
-          final TestDocumentContext context = await tester //
-              .createDocument()
-              .withCustomContent(
-                threeParagraphDoc(),
-              )
-              .pump();
+          "toggles attribution for a selection going halfway in first node till the halfway into the third node",
+          (tester) async {
+            final TestDocumentContext context =
+                await tester //
+                    .createDocument()
+                    .withCustomContent(threeParagraphDoc())
+                    .pump();
 
-          final editor = context.editor;
-          final document = SuperEditorInspector.findDocument()!;
+            final editor = context.editor;
+            final document = SuperEditorInspector.findDocument()!;
 
-          // Ensure no attributions are present.
-          expect(
-            document,
-            equalsMarkdown(
-              "This is the first node in a document.\n\nThis is the second node in a document.\n\nThis is the third node in a document.",
-            ),
-          );
+            // Ensure no attributions are present.
+            expect(
+              document,
+              equalsMarkdown(
+                "This is the first node in a document.\n\nThis is the second node in a document.\n\nThis is the third node in a document.",
+              ),
+            );
 
-          editor.toggleAttributionsForDocumentSelection(
-            DocumentSelection(
-              base: document.getNodeById("1")!.asTextNode.positionAt(18),
-              extent: document.getNodeById("3")!.asTextNode.positionAt(18),
-            ),
-            {boldAttribution},
-          );
+            editor.toggleAttributionsForDocumentSelection(
+              DocumentSelection(
+                base: document.getNodeById("1")!.asTextNode.positionAt(18),
+                extent: document.getNodeById("3")!.asTextNode.positionAt(18),
+              ),
+              {boldAttribution},
+            );
 
-          // Ensure bold attributions were applied.
-          expect(
-            document,
-            equalsMarkdown(
-              "This is the first **node in a document.**\n\n**This is the second node in a document.**\n\n**This is the third **node in a document.",
-            ),
-          );
+            // Ensure bold attributions were applied.
+            expect(
+              document,
+              equalsMarkdown(
+                "This is the first **node in a document.**\n\n**This is the second node in a document.**\n\n**This is the third **node in a document.",
+              ),
+            );
 
-          editor.toggleAttributionsForDocumentSelection(
-            DocumentSelection(
-              base: document.getNodeById("1")!.asTextNode.positionAt(18),
-              extent: document.getNodeById("3")!.asTextNode.positionAt(18),
-            ),
-            {boldAttribution},
-          );
+            editor.toggleAttributionsForDocumentSelection(
+              DocumentSelection(
+                base: document.getNodeById("1")!.asTextNode.positionAt(18),
+                extent: document.getNodeById("3")!.asTextNode.positionAt(18),
+              ),
+              {boldAttribution},
+            );
 
-          // Ensure no attributions are present.
-          expect(
-            document,
-            equalsMarkdown(
-              "This is the first node in a document.\n\nThis is the second node in a document.\n\nThis is the third node in a document.",
-            ),
-          );
-        });
+            // Ensure no attributions are present.
+            expect(
+              document,
+              equalsMarkdown(
+                "This is the first node in a document.\n\nThis is the second node in a document.\n\nThis is the third node in a document.",
+              ),
+            );
+          },
+        );
       });
 
       group("applies color attributions", () {
         testWidgetsOnAllPlatforms("to full text", (tester) async {
           await tester //
               .createDocument()
-              .withCustomContent(
-                singleParagraphFullColor(),
-              )
+              .withCustomContent(singleParagraphFullColor())
               .pump();
 
           // Ensure the text is colored orange.
           expect(
-            SuperEditorInspector.findRichTextInParagraph("1")
-                .getSpanForPosition(
-                  const TextPosition(offset: 0),
-                )
-                ?.style
-                ?.color,
+            SuperEditorInspector.findRichTextInParagraph(
+              "1",
+            ).getSpanForPosition(const TextPosition(offset: 0))?.style?.color,
             Colors.orange,
           );
           expect(
             SuperEditorInspector.findRichTextInParagraph("1")
-                .getSpanForPosition(
-                  TextPosition(offset: SuperEditorInspector.findTextInComponent("1").length - 1),
-                )
+                .getSpanForPosition(TextPosition(offset: SuperEditorInspector.findTextInComponent("1").length - 1))
                 ?.style
                 ?.color,
             Colors.orange,
@@ -1332,26 +1196,22 @@ void main() {
         testWidgetsOnAllPlatforms("to partial text", (tester) async {
           await tester //
               .createDocument()
-              .withCustomContent(
-                singleParagraphWithPartialColor(),
-              )
+              .withCustomContent(singleParagraphWithPartialColor())
               .pump();
 
           // Ensure the first span is colored black.
           expect(
-            SuperEditorInspector.findRichTextInParagraph("1")
-                .getSpanForPosition(const TextPosition(offset: 0))!
-                .style!
-                .color,
+            SuperEditorInspector.findRichTextInParagraph(
+              "1",
+            ).getSpanForPosition(const TextPosition(offset: 0))!.style!.color,
             Colors.black,
           );
 
           // Ensure the second span is colored orange.
           expect(
-            SuperEditorInspector.findRichTextInParagraph("1")
-                .getSpanForPosition(const TextPosition(offset: 5))!
-                .style!
-                .color,
+            SuperEditorInspector.findRichTextInParagraph(
+              "1",
+            ).getSpanForPosition(const TextPosition(offset: 5))!.style!.color,
             Colors.orange,
           );
         });
@@ -1380,11 +1240,12 @@ void main() {
 
       group("doesn't clear attributions", () {
         testWidgetsOnAllPlatforms("when changing the selection affinity", (tester) async {
-          final context = await tester //
-              .createDocument()
-              .fromMarkdown("This text should be")
-              .withInputSource(TextInputSource.ime)
-              .pump();
+          final context =
+              await tester //
+                  .createDocument()
+                  .fromMarkdown("This text should be")
+                  .withInputSource(TextInputSource.ime)
+                  .pump();
 
           final document = context.findEditContext().document;
           final composer = context.findEditContext().composer;
@@ -1401,16 +1262,13 @@ void main() {
 
           // Simulate the IME sending us a selection at the same offset
           // but with a different affinity.
-          await tester.ime.sendDeltas(
-            [
-              const TextEditingDeltaNonTextUpdate(
-                oldText: ". This text should be",
-                selection: TextSelection.collapsed(offset: 21, affinity: TextAffinity.downstream),
-                composing: TextRange.empty,
-              ),
-            ],
-            getter: imeClientGetter,
-          );
+          await tester.ime.sendDeltas([
+            const TextEditingDeltaNonTextUpdate(
+              oldText: ". This text should be",
+              selection: TextSelection.collapsed(offset: 21, affinity: TextAffinity.downstream),
+              composing: TextRange.empty,
+            ),
+          ], getter: imeClientGetter);
 
           // Type text at the end of the paragraph.
           await tester.typeImeText(" bold");
@@ -1421,30 +1279,32 @@ void main() {
       });
 
       testWidgetsOnArbitraryDesktop(
-          "and reports attribution change events when an attribution is added, removed, and toggled", (tester) async {
-        final context = await tester //
-            .createDocument()
-            .withSingleParagraph()
-            .pump();
+        "and reports attribution change events when an attribution is added, removed, and toggled",
+        (tester) async {
+          final context =
+              await tester //
+                  .createDocument()
+                  .withSingleParagraph()
+                  .pump();
 
-        // Select the first word.
-        await tester.doubleTapInParagraph("1", 1);
+          // Select the first word.
+          await tester.doubleTapInParagraph("1", 1);
 
-        // Listen for change events.
-        final editor = context.editor;
-        List<EditEvent>? changes;
-        editor.addListener(FunctionalEditListener((List<EditEvent> changeList) {
-          changes = changeList;
-        }));
+          // Listen for change events.
+          final editor = context.editor;
+          List<EditEvent>? changes;
+          editor.addListener(
+            FunctionalEditListener((List<EditEvent> changeList) {
+              changes = changeList;
+            }),
+          );
 
-        // Apply bold attribution.
-        await tester.pressCmdB();
+          // Apply bold attribution.
+          await tester.pressCmdB();
 
-        // Ensure that the change event includes the added attribution.
-        expect(changes, isNotNull);
-        expect(
-          changes,
-          [
+          // Ensure that the change event includes the added attribution.
+          expect(changes, isNotNull);
+          expect(changes, [
             DocumentEdit(
               AttributionChangeEvent(
                 nodeId: "1",
@@ -1453,28 +1313,25 @@ void main() {
                 range: const SpanRange(0, 4),
               ),
             ),
-          ],
-        );
+          ]);
 
-        // Expand the selection to include the second word.
-        await tester.pressShiftAltRightArrow();
+          // Expand the selection to include the second word.
+          await tester.pressShiftAltRightArrow();
 
-        // Toggle bold, which should add bold only to the second word.
-        await tester.pressCmdB();
+          // Toggle bold, which should add bold only to the second word.
+          await tester.pressCmdB();
 
-        // Ensure that the bold change is reported across the entire selected range.
-        //
-        // NOTE: There's an argument to be made that this change event should only
-        //       include the range of text that was previously not bold, and now is
-        //       bold. E.g., given the text "Lorem ipsum", because "Lorem" is already
-        //       bold, the event should report " ipsum" as adding bold. I chose not to
-        //       worry about that distinction because at the moment it doesn't seem that
-        //       we need the distinction, and it would require more rework to achieve that
-        //       distinction. If it's eventually needed, it would be reasonable to
-        //       implement that approach, instead.
-        expect(
-          changes,
-          [
+          // Ensure that the bold change is reported across the entire selected range.
+          //
+          // NOTE: There's an argument to be made that this change event should only
+          //       include the range of text that was previously not bold, and now is
+          //       bold. E.g., given the text "Lorem ipsum", because "Lorem" is already
+          //       bold, the event should report " ipsum" as adding bold. I chose not to
+          //       worry about that distinction because at the moment it doesn't seem that
+          //       we need the distinction, and it would require more rework to achieve that
+          //       distinction. If it's eventually needed, it would be reasonable to
+          //       implement that approach, instead.
+          expect(changes, [
             DocumentEdit(
               AttributionChangeEvent(
                 nodeId: "1",
@@ -1483,16 +1340,13 @@ void main() {
                 range: const SpanRange(0, 10),
               ),
             ),
-          ],
-        );
+          ]);
 
-        // Remove the bold attribution by toggling bold again.
-        await tester.pressCmdB();
+          // Remove the bold attribution by toggling bold again.
+          await tester.pressCmdB();
 
-        // Ensure that we received a removal change event.
-        expect(
-          changes,
-          [
+          // Ensure that we received a removal change event.
+          expect(changes, [
             DocumentEdit(
               AttributionChangeEvent(
                 nodeId: "1",
@@ -1501,33 +1355,34 @@ void main() {
                 range: const SpanRange(0, 10),
               ),
             ),
-          ],
-        );
-      });
+          ]);
+        },
+      );
     });
 
     testWidgetsOnArbitraryDesktop('overwrites spans with different colors', (tester) async {
       // Pump an editor with a single paragraph with blue color across the entire paragraph.
-      final testContext = await tester //
-          .createDocument()
-          .withCustomContent(
-            MutableDocument(
-              nodes: [
-                ParagraphNode(
-                  id: '1',
-                  text: AttributedText(
-                    'blue orange pink',
-                    _createAttributedSpansForAttribution(
-                      attribution: const ColorAttribution(Colors.blue),
-                      startOffset: 0,
-                      endOffset: 15,
+      final testContext =
+          await tester //
+              .createDocument()
+              .withCustomContent(
+                MutableDocument(
+                  nodes: [
+                    ParagraphNode(
+                      id: '1',
+                      text: AttributedText(
+                        'blue orange pink',
+                        _createAttributedSpansForAttribution(
+                          attribution: const ColorAttribution(Colors.blue),
+                          startOffset: 0,
+                          endOffset: 15,
+                        ),
+                      ),
                     ),
-                  ),
-                )
-              ],
-            ),
-          )
-          .pump();
+                  ],
+                ),
+              )
+              .pump();
 
       // Apply orange color to the word "orange".
       testContext.editor.execute([
@@ -1574,26 +1429,27 @@ void main() {
 
     testWidgetsOnArbitraryDesktop('overwrites spans with different background colors', (tester) async {
       // Pump an editor with a single paragraph with blue background color across the entire paragraph.
-      final testContext = await tester //
-          .createDocument()
-          .withCustomContent(
-            MutableDocument(
-              nodes: [
-                ParagraphNode(
-                  id: '1',
-                  text: AttributedText(
-                    'blue orange pink',
-                    _createAttributedSpansForAttribution(
-                      attribution: const BackgroundColorAttribution(Colors.blue),
-                      startOffset: 0,
-                      endOffset: 15,
+      final testContext =
+          await tester //
+              .createDocument()
+              .withCustomContent(
+                MutableDocument(
+                  nodes: [
+                    ParagraphNode(
+                      id: '1',
+                      text: AttributedText(
+                        'blue orange pink',
+                        _createAttributedSpansForAttribution(
+                          attribution: const BackgroundColorAttribution(Colors.blue),
+                          startOffset: 0,
+                          endOffset: 15,
+                        ),
+                      ),
                     ),
-                  ),
-                )
-              ],
-            ),
-          )
-          .pump();
+                  ],
+                ),
+              )
+              .pump();
 
       // Apply orange color to the word "orange".
       testContext.editor.execute([
@@ -1640,26 +1496,27 @@ void main() {
 
     testWidgetsOnArbitraryDesktop('overwrites spans with different font sizes', (tester) async {
       // Pump an editor with a single paragraph with 16px font size across the entire paragraph.
-      final testContext = await tester //
-          .createDocument()
-          .withCustomContent(
-            MutableDocument(
-              nodes: [
-                ParagraphNode(
-                  id: '1',
-                  text: AttributedText(
-                    '16px 18px 14px',
-                    _createAttributedSpansForAttribution(
-                      attribution: const FontSizeAttribution(16),
-                      startOffset: 0,
-                      endOffset: 13,
+      final testContext =
+          await tester //
+              .createDocument()
+              .withCustomContent(
+                MutableDocument(
+                  nodes: [
+                    ParagraphNode(
+                      id: '1',
+                      text: AttributedText(
+                        '16px 18px 14px',
+                        _createAttributedSpansForAttribution(
+                          attribution: const FontSizeAttribution(16),
+                          startOffset: 0,
+                          endOffset: 13,
+                        ),
+                      ),
                     ),
-                  ),
-                )
-              ],
-            ),
-          )
-          .pump();
+                  ],
+                ),
+              )
+              .pump();
 
       // Apply 18px font size to the text "18px".
       testContext.editor.execute([
@@ -1707,131 +1564,83 @@ void main() {
 }
 
 MutableDocument _paragraphFullBoldThenParagraph() => MutableDocument(
-      nodes: [
-        ParagraphNode(
-          id: "1",
-          text: AttributedText(
-            "This is the first node in a document.",
-            _createAttributedSpansForAttribution(
-              attribution: boldAttribution,
-              startOffset: 0,
-              endOffset: 36,
-            ),
-          ),
-        ),
-        ParagraphNode(
-          id: "2",
-          text: AttributedText(
-            "This is the second node in a document.",
-          ),
-        ),
-      ],
-    );
+  nodes: [
+    ParagraphNode(
+      id: "1",
+      text: AttributedText(
+        "This is the first node in a document.",
+        _createAttributedSpansForAttribution(attribution: boldAttribution, startOffset: 0, endOffset: 36),
+      ),
+    ),
+    ParagraphNode(id: "2", text: AttributedText("This is the second node in a document.")),
+  ],
+);
 
 MutableDocument _paragraphPartiallyBoldThenParagraph() => MutableDocument(
-      nodes: [
-        ParagraphNode(
-          id: "1",
-          text: AttributedText(
-            "This is the first node in a document.",
-            _createAttributedSpansForAttribution(
-              attribution: boldAttribution,
-              startOffset: 0,
-              endOffset: 16,
-            ),
-          ),
-        ),
-        ParagraphNode(
-          id: "2",
-          text: AttributedText(
-            "This is the second node in a document.",
-          ),
-        ),
-      ],
-    );
+  nodes: [
+    ParagraphNode(
+      id: "1",
+      text: AttributedText(
+        "This is the first node in a document.",
+        _createAttributedSpansForAttribution(attribution: boldAttribution, startOffset: 0, endOffset: 16),
+      ),
+    ),
+    ParagraphNode(id: "2", text: AttributedText("This is the second node in a document.")),
+  ],
+);
 
 MutableDocument _paragraphFullyBoldThenParagraphPartiallyBold() => MutableDocument(
-      nodes: [
-        ParagraphNode(
-          id: "1",
-          text: AttributedText(
-            "This is the first node in a document.",
-            _createAttributedSpansForAttribution(
-              attribution: boldAttribution,
-              startOffset: 0,
-              endOffset: 16,
-            ),
-          ),
-        ),
-        ParagraphNode(
-          id: "2",
-          text: AttributedText(
-            "This is the second node in a document.",
-            _createAttributedSpansForAttribution(
-              attribution: boldAttribution,
-              startOffset: 0,
-              endOffset: 37,
-            ),
-          ),
-        ),
-      ],
-    );
+  nodes: [
+    ParagraphNode(
+      id: "1",
+      text: AttributedText(
+        "This is the first node in a document.",
+        _createAttributedSpansForAttribution(attribution: boldAttribution, startOffset: 0, endOffset: 16),
+      ),
+    ),
+    ParagraphNode(
+      id: "2",
+      text: AttributedText(
+        "This is the second node in a document.",
+        _createAttributedSpansForAttribution(attribution: boldAttribution, startOffset: 0, endOffset: 37),
+      ),
+    ),
+  ],
+);
 
 MutableDocument _paragraphPartiallyBoldThenParagraphPartiallyBold() => MutableDocument(
-      nodes: [
-        ParagraphNode(
-          id: "1",
-          text: AttributedText(
-            "This is the first node in a document.",
-            _createAttributedSpansForAttribution(
-              attribution: boldAttribution,
-              startOffset: 0,
-              endOffset: 16,
-            ),
-          ),
-        ),
-        ParagraphNode(
-          id: "2",
-          text: AttributedText(
-            "This is the second node in a document.",
-            _createAttributedSpansForAttribution(
-              attribution: boldAttribution,
-              startOffset: 0,
-              endOffset: 17,
-            ),
-          ),
-        ),
-      ],
-    );
+  nodes: [
+    ParagraphNode(
+      id: "1",
+      text: AttributedText(
+        "This is the first node in a document.",
+        _createAttributedSpansForAttribution(attribution: boldAttribution, startOffset: 0, endOffset: 16),
+      ),
+    ),
+    ParagraphNode(
+      id: "2",
+      text: AttributedText(
+        "This is the second node in a document.",
+        _createAttributedSpansForAttribution(attribution: boldAttribution, startOffset: 0, endOffset: 17),
+      ),
+    ),
+  ],
+);
 
 extension _GetDocumentPosition on DocumentNode {
   DocumentPosition get beginningDocumentPosition {
-    return DocumentPosition(
-      nodeId: id,
-      nodePosition: beginningPosition,
-    );
+    return DocumentPosition(nodeId: id, nodePosition: beginningPosition);
   }
 
   DocumentPosition get endDocumentPosition {
-    return DocumentPosition(
-      nodeId: id,
-      nodePosition: endPosition,
-    );
+    return DocumentPosition(nodeId: id, nodePosition: endPosition);
   }
 }
 
 extension _ToggleAttributions on Editor {
   /// Toggles given [attributions] for the [documentSelection].
-  void toggleAttributionsForDocumentSelection(
-    DocumentSelection documentSelection,
-    Set<Attribution> attributions,
-  ) {
-    return execute([
-      ToggleTextAttributionsRequest(
-        documentRange: documentSelection,
-        attributions: attributions,
-      )
-    ]);
+  void toggleAttributionsForDocumentSelection(DocumentSelection documentSelection, Set<Attribution> attributions) {
+    return execute([ToggleTextAttributionsRequest(documentRange: documentSelection, attributions: attributions)]);
   }
 }
 
@@ -1844,16 +1653,8 @@ AttributedSpans _createAttributedSpansForAttribution({
 }) {
   return AttributedSpans(
     attributions: [
-      SpanMarker(
-        attribution: attribution,
-        offset: startOffset,
-        markerType: SpanMarkerType.start,
-      ),
-      SpanMarker(
-        attribution: attribution,
-        offset: endOffset,
-        markerType: SpanMarkerType.end,
-      ),
+      SpanMarker(attribution: attribution, offset: startOffset, markerType: SpanMarkerType.start),
+      SpanMarker(attribution: attribution, offset: endOffset, markerType: SpanMarkerType.end),
     ],
   );
 }
@@ -1866,16 +1667,8 @@ List<SpanMarker> _createSpanMarkersForAttribution({
   required int endOffset,
 }) {
   return [
-    SpanMarker(
-      attribution: attribution,
-      offset: startOffset,
-      markerType: SpanMarkerType.start,
-    ),
-    SpanMarker(
-      attribution: attribution,
-      offset: endOffset,
-      markerType: SpanMarkerType.end,
-    ),
+    SpanMarker(attribution: attribution, offset: startOffset, markerType: SpanMarkerType.start),
+    SpanMarker(attribution: attribution, offset: endOffset, markerType: SpanMarkerType.end),
   ];
 }
 

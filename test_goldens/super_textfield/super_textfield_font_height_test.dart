@@ -11,9 +11,7 @@ import '../test_tools_goldens.dart';
 void main() {
   group('SuperTextField > single line > with custom font height', () {
     testGoldensOnMac('vertically centers text in viewport', (tester) async {
-      final textFieldController = AttributedTextEditingController(
-        text: AttributedText('Text with custom font height'),
-      );
+      final textFieldController = AttributedTextEditingController(text: AttributedText('Text with custom font height'));
 
       await tester.pumpWidget(
         MaterialApp(
@@ -28,10 +26,7 @@ void main() {
                     return Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(4),
-                        border: Border.all(
-                          color: Colors.blue,
-                          width: 1,
-                        ),
+                        border: Border.all(color: Colors.blue, width: 1),
                       ),
                       child: child,
                     );

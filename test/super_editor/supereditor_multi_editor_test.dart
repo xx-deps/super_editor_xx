@@ -59,56 +59,31 @@ void main() {
 
     testWidgetsOnAllPlatforms("restores selection when switching back to a previously selected editor", (tester) async {
       const docSelection1 = DocumentSelection(
-        base: DocumentPosition(
-          nodeId: "Editor1_Header",
-          nodePosition: TextNodePosition(offset: 0),
-        ),
-        extent: DocumentPosition(
-          nodeId: "Editor1_Para",
-          nodePosition: TextNodePosition(offset: 10),
-        ),
+        base: DocumentPosition(nodeId: "Editor1_Header", nodePosition: TextNodePosition(offset: 0)),
+        extent: DocumentPosition(nodeId: "Editor1_Para", nodePosition: TextNodePosition(offset: 10)),
       );
-      final composer1 = MutableDocumentComposer(
-        initialSelection: docSelection1,
-      );
+      final composer1 = MutableDocumentComposer(initialSelection: docSelection1);
 
       const docSelection2 = DocumentSelection(
-        base: DocumentPosition(
-          nodeId: "Editor2_Header",
-          nodePosition: TextNodePosition(offset: 0),
-        ),
-        extent: DocumentPosition(
-          nodeId: "Editor2_Para",
-          nodePosition: TextNodePosition(offset: 5),
-        ),
+        base: DocumentPosition(nodeId: "Editor2_Header", nodePosition: TextNodePosition(offset: 0)),
+        extent: DocumentPosition(nodeId: "Editor2_Para", nodePosition: TextNodePosition(offset: 5)),
       );
-      final composer2 = MutableDocumentComposer(
-        initialSelection: docSelection2,
-      );
+      final composer2 = MutableDocumentComposer(initialSelection: docSelection2);
 
-      await tester.pumpWidget(_SwitchEditorsDemo(
-        composer1: composer1,
-        composer2: composer2,
-      ));
+      await tester.pumpWidget(_SwitchEditorsDemo(composer1: composer1, composer2: composer2));
 
       // Switch to the second editor.
       await tester.tap(find.byKey(const ValueKey("Editor2")));
       await tester.pump();
 
       // Ensure that the original selection is maintained for the second editor.
-      expect(
-        SuperEditorInspector.findDocumentSelection(),
-        docSelection2,
-      );
+      expect(SuperEditorInspector.findDocumentSelection(), docSelection2);
 
       await tester.tap(find.byKey(const ValueKey("Editor1")));
       await tester.pump();
 
       // Ensure that the original selection is maintained for the first editor.
-      expect(
-        SuperEditorInspector.findDocumentSelection(),
-        docSelection1,
-      );
+      expect(SuperEditorInspector.findDocumentSelection(), docSelection1);
     });
 
     testWidgetsOnDesktop("the user can select content after switching to a different editor", (tester) async {
@@ -124,10 +99,7 @@ void main() {
 
       // Change the selection on the second editor.
       await tester.dragSelectDocumentFromPositionByOffset(
-        from: DocumentPosition(
-          nodeId: header.id,
-          nodePosition: header.beginningPosition,
-        ),
+        from: DocumentPosition(nodeId: header.id, nodePosition: header.beginningPosition),
         delta: const Offset(0, 400),
       );
 
@@ -135,14 +107,8 @@ void main() {
       expect(
         SuperEditorInspector.findDocumentSelection(),
         DocumentSelection(
-          base: DocumentPosition(
-            nodeId: header.id,
-            nodePosition: header.beginningPosition,
-          ),
-          extent: DocumentPosition(
-            nodeId: paragraph.id,
-            nodePosition: paragraph.endPosition,
-          ),
+          base: DocumentPosition(nodeId: header.id, nodePosition: header.beginningPosition),
+          extent: DocumentPosition(nodeId: paragraph.id, nodePosition: paragraph.endPosition),
         ),
       );
     });
@@ -171,26 +137,17 @@ void main() {
       await tester.pressBackspace();
 
       // Ensure that the text was edited upon pressing backspace.
-      expect(
-        SuperEditorInspector.findTextInComponent("Editor2_Header").toPlainText(),
-        "Document #",
-      );
+      expect(SuperEditorInspector.findTextInComponent("Editor2_Header").toPlainText(), "Document #");
 
       await tester.typeImeText("Edit");
 
       // Ensure that the text was inserted into the paragraph.
-      expect(
-        SuperEditorInspector.findTextInComponent("Editor2_Header").toPlainText(),
-        "Document #Edit",
-      );
+      expect(SuperEditorInspector.findTextInComponent("Editor2_Header").toPlainText(), "Document #Edit");
     });
   });
 }
 
-Widget _buildSuperEditor(
-  WidgetTester tester, {
-  Key? key,
-}) {
+Widget _buildSuperEditor(WidgetTester tester, {Key? key}) {
   return tester //
       .createDocument()
       .withSingleParagraph()
@@ -209,22 +166,14 @@ Widget _buildSuperEditor(
 }
 
 /// Pumps a widget tree containing two editors side by side.
-Future<void> _buildTextScaleScaffold(
-  WidgetTester tester, {
-  required Widget editor1,
-  required Widget editor2,
-}) async {
+Future<void> _buildTextScaleScaffold(WidgetTester tester, {required Widget editor1, required Widget editor2}) async {
   await tester.pumpWidget(
     MaterialApp(
       home: Scaffold(
         body: Row(
           children: [
-            Expanded(
-              child: editor1,
-            ),
-            Expanded(
-              child: editor2,
-            ),
+            Expanded(child: editor1),
+            Expanded(child: editor2),
           ],
         ),
       ),
@@ -237,11 +186,7 @@ Future<void> _buildTextScaleScaffold(
 /// This demo ensures that [SuperEditor] state resets where appropriate
 /// when its content is replaced.
 class _SwitchEditorsDemo extends StatefulWidget {
-  const _SwitchEditorsDemo({
-    Key? key,
-    this.composer1,
-    this.composer2,
-  }) : super(key: key);
+  const _SwitchEditorsDemo({Key? key, this.composer1, this.composer2}) : super(key: key);
 
   final MutableDocumentComposer? composer1;
   final MutableDocumentComposer? composer2;
@@ -343,9 +288,7 @@ MutableDocument _createDocument1() {
       ParagraphNode(
         id: "Editor1_Header",
         text: AttributedText('Document #1'),
-        metadata: {
-          'blockType': header1Attribution,
-        },
+        metadata: {'blockType': header1Attribution},
       ),
       ParagraphNode(
         id: "Editor1_Para",
@@ -363,9 +306,7 @@ MutableDocument _createDocument2() {
       ParagraphNode(
         id: "Editor2_Header",
         text: AttributedText('Document #2'),
-        metadata: {
-          'blockType': header1Attribution,
-        },
+        metadata: {'blockType': header1Attribution},
       ),
       ParagraphNode(
         id: "Editor2_Para",

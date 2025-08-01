@@ -21,14 +21,8 @@ void main() {
       // Select some content in the document.
       // TODO: use robot selection when it becomes available (#672)
       const documentSelection = DocumentSelection(
-        base: DocumentPosition(
-          nodeId: "1",
-          nodePosition: TextNodePosition(offset: 0),
-        ),
-        extent: DocumentPosition(
-          nodeId: "1",
-          nodePosition: TextNodePosition(offset: 20),
-        ),
+        base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 0)),
+        extent: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 20)),
       );
       editContext.findEditContext().editor.execute([
         const ChangeSelectionRequest(
@@ -63,14 +57,8 @@ void main() {
       // Select some content in the document.
       // TODO: use robot selection when it becomes available (#672)
       const documentSelection = DocumentSelection(
-        base: DocumentPosition(
-          nodeId: "1",
-          nodePosition: TextNodePosition(offset: 0),
-        ),
-        extent: DocumentPosition(
-          nodeId: "1",
-          nodePosition: TextNodePosition(offset: 20),
-        ),
+        base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 0)),
+        extent: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 20)),
       );
       editContext.findEditContext().editor.execute([
         const ChangeSelectionRequest(
@@ -104,17 +92,12 @@ void main() {
 
 OverlayEntry? _overlayEntry;
 
-Future<void> _showPopover(
-  WidgetTester tester,
-  BuildContext context, {
-  required FocusNode editorFocusNode,
-}) async {
-  _overlayEntry = OverlayEntry(builder: (innerContext) {
-    return _Popover(
-      editorFocusNode: editorFocusNode,
-      textFieldFocusNode: FocusNode(),
-    );
-  });
+Future<void> _showPopover(WidgetTester tester, BuildContext context, {required FocusNode editorFocusNode}) async {
+  _overlayEntry = OverlayEntry(
+    builder: (innerContext) {
+      return _Popover(editorFocusNode: editorFocusNode, textFieldFocusNode: FocusNode());
+    },
+  );
 
   Overlay.of(context).insert(_overlayEntry!);
 
@@ -128,11 +111,7 @@ Future<void> _hidePopover(WidgetTester tester) async {
 }
 
 class _Popover extends StatefulWidget {
-  const _Popover({
-    Key? key,
-    required this.editorFocusNode,
-    required this.textFieldFocusNode,
-  }) : super(key: key);
+  const _Popover({Key? key, required this.editorFocusNode, required this.textFieldFocusNode}) : super(key: key);
 
   final FocusNode editorFocusNode;
   final FocusNode textFieldFocusNode;
@@ -158,10 +137,7 @@ class _PopoverState extends State<_Popover> {
         child: Focus(
           focusNode: _popoverFocusNode,
           parentNode: widget.editorFocusNode,
-          child: SuperTextField(
-            focusNode: widget.textFieldFocusNode,
-            lineHeight: 20,
-          ),
+          child: SuperTextField(focusNode: widget.textFieldFocusNode, lineHeight: 20),
         ),
       ),
     );

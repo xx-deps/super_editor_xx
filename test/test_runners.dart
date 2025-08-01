@@ -74,21 +74,26 @@ void testWidgetsOnMacWeb(
   bool skip = false,
   TestVariant<Object?> variant = const DefaultTestVariant(),
 }) {
-  testWidgets("$description (on MAC Web)", (tester) async {
-    debugDefaultTargetPlatformOverride = TargetPlatform.macOS;
-    debugIsWebOverride = WebPlatformOverride.web;
+  testWidgets(
+    "$description (on MAC Web)",
+    (tester) async {
+      debugDefaultTargetPlatformOverride = TargetPlatform.macOS;
+      debugIsWebOverride = WebPlatformOverride.web;
 
-    tester.view
-      ..devicePixelRatio = 1.0
-      ..platformDispatcher.textScaleFactorTestValue = 1.0;
+      tester.view
+        ..devicePixelRatio = 1.0
+        ..platformDispatcher.textScaleFactorTestValue = 1.0;
 
-    try {
-      await test(tester);
-    } finally {
-      debugDefaultTargetPlatformOverride = null;
-      debugIsWebOverride = null;
-    }
-  }, variant: variant, skip: skip);
+      try {
+        await test(tester);
+      } finally {
+        debugDefaultTargetPlatformOverride = null;
+        debugIsWebOverride = null;
+      }
+    },
+    variant: variant,
+    skip: skip,
+  );
 }
 
 /// A widget test that runs a variant for Mac and iOS.
@@ -121,17 +126,22 @@ void testWidgetsOnWebIos(
   bool skip = false,
   TestVariant<Object?> variant = const DefaultTestVariant(),
 }) {
-  testWidgets("$description (on iOS Web)", (tester) async {
-    debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
-    debugIsWebOverride = WebPlatformOverride.web;
+  testWidgets(
+    "$description (on iOS Web)",
+    (tester) async {
+      debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+      debugIsWebOverride = WebPlatformOverride.web;
 
-    try {
-      await test(tester);
-    } finally {
-      debugDefaultTargetPlatformOverride = null;
-      debugIsWebOverride = null;
-    }
-  }, variant: variant, skip: skip);
+      try {
+        await test(tester);
+      } finally {
+        debugDefaultTargetPlatformOverride = null;
+        debugIsWebOverride = null;
+      }
+    },
+    variant: variant,
+    skip: skip,
+  );
 }
 
 @isTestGroup
@@ -152,17 +162,22 @@ void testWidgetsOnWebAndroid(
   bool skip = false,
   TestVariant<Object?> variant = const DefaultTestVariant(),
 }) {
-  testWidgets("$description (on Android Web)", (tester) async {
-    debugDefaultTargetPlatformOverride = TargetPlatform.android;
-    debugIsWebOverride = WebPlatformOverride.web;
+  testWidgets(
+    "$description (on Android Web)",
+    (tester) async {
+      debugDefaultTargetPlatformOverride = TargetPlatform.android;
+      debugIsWebOverride = WebPlatformOverride.web;
 
-    try {
-      await test(tester);
-    } finally {
-      debugDefaultTargetPlatformOverride = null;
-      debugIsWebOverride = null;
-    }
-  }, variant: variant, skip: skip);
+      try {
+        await test(tester);
+      } finally {
+        debugDefaultTargetPlatformOverride = null;
+        debugIsWebOverride = null;
+      }
+    },
+    variant: variant,
+    skip: skip,
+  );
 }
 
 @isTestGroup
@@ -172,21 +187,26 @@ void testWidgetsOnWindowsWeb(
   bool skip = false,
   TestVariant<Object?> variant = const DefaultTestVariant(),
 }) {
-  testWidgets("$description (on Windows Web)", (tester) async {
-    debugDefaultTargetPlatformOverride = TargetPlatform.windows;
-    debugIsWebOverride = WebPlatformOverride.web;
+  testWidgets(
+    "$description (on Windows Web)",
+    (tester) async {
+      debugDefaultTargetPlatformOverride = TargetPlatform.windows;
+      debugIsWebOverride = WebPlatformOverride.web;
 
-    tester.view
-      ..devicePixelRatio = 1.0
-      ..platformDispatcher.textScaleFactorTestValue = 1.0;
+      tester.view
+        ..devicePixelRatio = 1.0
+        ..platformDispatcher.textScaleFactorTestValue = 1.0;
 
-    try {
-      await test(tester);
-    } finally {
-      debugDefaultTargetPlatformOverride = null;
-      debugIsWebOverride = null;
-    }
-  }, variant: variant, skip: skip);
+      try {
+        await test(tester);
+      } finally {
+        debugDefaultTargetPlatformOverride = null;
+        debugIsWebOverride = null;
+      }
+    },
+    variant: variant,
+    skip: skip,
+  );
 }
 
 @isTestGroup
@@ -196,31 +216,32 @@ void testWidgetsOnLinuxWeb(
   bool skip = false,
   TestVariant<Object?> variant = const DefaultTestVariant(),
 }) {
-  testWidgets("$description (on Linux Web)", (tester) async {
-    debugDefaultTargetPlatformOverride = TargetPlatform.linux;
-    debugIsWebOverride = WebPlatformOverride.web;
+  testWidgets(
+    "$description (on Linux Web)",
+    (tester) async {
+      debugDefaultTargetPlatformOverride = TargetPlatform.linux;
+      debugIsWebOverride = WebPlatformOverride.web;
 
-    tester.view
-      ..devicePixelRatio = 1.0
-      ..platformDispatcher.textScaleFactorTestValue = 1.0;
+      tester.view
+        ..devicePixelRatio = 1.0
+        ..platformDispatcher.textScaleFactorTestValue = 1.0;
 
-    try {
-      await test(tester);
-    } finally {
-      debugDefaultTargetPlatformOverride = null;
-      debugIsWebOverride = null;
-    }
-  }, variant: variant, skip: skip);
+      try {
+        await test(tester);
+      } finally {
+        debugDefaultTargetPlatformOverride = null;
+        debugIsWebOverride = null;
+      }
+    },
+    variant: variant,
+    skip: skip,
+  );
 }
 
 /// A widget test that runs a variant for every desktop platform, e.g.,
 /// Mac, Windows, Linux, and for all [TextInputSource]s.
 @isTestGroup
-void testAllInputsOnDesktop(
-  String description,
-  InputModeTesterCallback test, {
-  bool skip = false,
-}) {
+void testAllInputsOnDesktop(String description, InputModeTesterCallback test, {bool skip = false}) {
   testWidgetsOnDesktop("$description (keyboard)", (WidgetTester tester) async {
     await test(tester, inputSource: TextInputSource.keyboard);
   }, skip: skip);
@@ -233,11 +254,7 @@ void testAllInputsOnDesktop(
 /// A widget test that runs a variant for every platform
 /// and for all [TextInputSource]s.
 @isTestGroup
-void testAllInputsOnAllPlatforms(
-  String description,
-  InputModeTesterCallback test, {
-  bool skip = false,
-}) {
+void testAllInputsOnAllPlatforms(String description, InputModeTesterCallback test, {bool skip = false}) {
   testWidgetsOnAllPlatforms("$description (keyboard)", (WidgetTester tester) async {
     await test(tester, inputSource: TextInputSource.keyboard);
   }, skip: skip);
@@ -249,11 +266,7 @@ void testAllInputsOnAllPlatforms(
 
 /// A widget test that runs as a Mac, and for all [TextInputSource]s.
 @isTestGroup
-void testAllInputsOnMac(
-  String description,
-  InputModeTesterCallback test, {
-  bool skip = false,
-}) {
+void testAllInputsOnMac(String description, InputModeTesterCallback test, {bool skip = false}) {
   testWidgetsOnMac("$description (keyboard)", (WidgetTester tester) async {
     await test(tester, inputSource: TextInputSource.keyboard);
   }, skip: skip);
@@ -265,11 +278,7 @@ void testAllInputsOnMac(
 
 /// A widget test that runs as a Mac and iOS, and for all [TextInputSource]s.
 @isTestGroup
-void testAllInputsOnApple(
-  String description,
-  InputModeTesterCallback test, {
-  bool skip = false,
-}) {
+void testAllInputsOnApple(String description, InputModeTesterCallback test, {bool skip = false}) {
   testWidgetsOnMac("$description (keyboard)", (WidgetTester tester) async {
     await test(tester, inputSource: TextInputSource.keyboard);
   }, skip: skip);
@@ -289,11 +298,7 @@ void testAllInputsOnApple(
 
 /// A widget test that runs a variant for Windows and Linux, and for all [TextInputSource]s.
 @isTestGroup
-void testAllInputsOnWindowsAndLinux(
-  String description,
-  InputModeTesterCallback test, {
-  bool skip = false,
-}) {
+void testAllInputsOnWindowsAndLinux(String description, InputModeTesterCallback test, {bool skip = false}) {
   testWidgetsOnWindowsAndLinux("$description (keyboard)", (WidgetTester tester) async {
     await test(tester, inputSource: TextInputSource.keyboard);
   }, skip: skip);
@@ -303,7 +308,5 @@ void testAllInputsOnWindowsAndLinux(
   }, skip: skip);
 }
 
-typedef InputModeTesterCallback = Future<void> Function(
-  WidgetTester widgetTester, {
-  required TextInputSource inputSource,
-});
+typedef InputModeTesterCallback =
+    Future<void> Function(WidgetTester widgetTester, {required TextInputSource inputSource});

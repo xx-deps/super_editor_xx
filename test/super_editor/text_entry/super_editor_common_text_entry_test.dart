@@ -66,22 +66,21 @@ Future<void> _pumpApp(WidgetTester tester, TextInputSource inputSource) async {
       .withSingleParagraph()
       .withInputSource(inputSource)
       .withCustomWidgetTreeBuilder((superEditor) {
-    return MaterialApp(
-      home: Scaffold(
-        body: Column(
-          children: [
-            // Add focusable widgets before and after SuperEditor so that we
-            // catch any keys that try to move focus forward or backward.
-            const Focus(child: SizedBox(width: double.infinity, height: 54)),
-            Expanded(
-              child: superEditor,
+        return MaterialApp(
+          home: Scaffold(
+            body: Column(
+              children: [
+                // Add focusable widgets before and after SuperEditor so that we
+                // catch any keys that try to move focus forward or backward.
+                const Focus(child: SizedBox(width: double.infinity, height: 54)),
+                Expanded(child: superEditor),
+                const Focus(child: SizedBox(width: double.infinity, height: 54)),
+              ],
             ),
-            const Focus(child: SizedBox(width: double.infinity, height: 54)),
-          ],
-        ),
-      ),
-    );
-  }).pump();
+          ),
+        );
+      })
+      .pump();
 }
 
 final _mobileInputSourceAndControlKeyVariant = ValueVariant({
@@ -106,10 +105,7 @@ final _platformNames = {
 };
 
 class _InputSourceAndControlKey {
-  _InputSourceAndControlKey(
-    this.inputSource,
-    this.controlKey,
-  );
+  _InputSourceAndControlKey(this.inputSource, this.controlKey);
 
   final TextInputSource inputSource;
   final LogicalKeyboardKey controlKey;

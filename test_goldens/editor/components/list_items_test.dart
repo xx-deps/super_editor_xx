@@ -55,7 +55,9 @@ Future<void> main() async {
             .pump();
 
         await screenMatchesGolden(
-            tester, 'super_editor_list_item_unordered_aligns_dot_with_text_with_font_sizes_and_line_multiplier');
+          tester,
+          'super_editor_list_item_unordered_aligns_dot_with_text_with_font_sizes_and_line_multiplier',
+        );
       });
 
       testGoldensOnMac('allows customizing the dot size with stylesheet', (tester) async {
@@ -63,16 +65,13 @@ Future<void> main() async {
             .createDocument()
             .fromMarkdown('- Item 1')
             .useStylesheet(
-              _createStylesheet().copyWith(addRulesAfter: [
-                StyleRule(
-                  const BlockSelector('listItem'),
-                  (doc, docNode) {
-                    return {
-                      Styles.dotSize: const Size(14, 14),
-                    };
-                  },
-                ),
-              ]),
+              _createStylesheet().copyWith(
+                addRulesAfter: [
+                  StyleRule(const BlockSelector('listItem'), (doc, docNode) {
+                    return {Styles.dotSize: const Size(14, 14)};
+                  }),
+                ],
+              ),
             )
             .pump();
 
@@ -84,15 +83,10 @@ Future<void> main() async {
             .createDocument()
             .fromMarkdown('- Item 1')
             .useStylesheet(_createStylesheet())
-            .withAddedComponents(
-          [
-            const _ListItemWithCustomStyleBuilder(
-              dotStyle: ListItemDotStyle(
-                size: Size(14, 14),
-              ),
-            ),
-          ],
-        ).pump();
+            .withAddedComponents([
+              const _ListItemWithCustomStyleBuilder(dotStyle: ListItemDotStyle(size: Size(14, 14))),
+            ])
+            .pump();
 
         await screenMatchesGolden(tester, 'super_editor_list_item_unordered_custom_dot_size_component_builder');
       });
@@ -102,16 +96,13 @@ Future<void> main() async {
             .createDocument()
             .fromMarkdown('- Item 1')
             .useStylesheet(
-              _createStylesheet().copyWith(addRulesAfter: [
-                StyleRule(
-                  const BlockSelector('listItem'),
-                  (doc, docNode) {
-                    return {
-                      Styles.dotShape: BoxShape.rectangle,
-                    };
-                  },
-                ),
-              ]),
+              _createStylesheet().copyWith(
+                addRulesAfter: [
+                  StyleRule(const BlockSelector('listItem'), (doc, docNode) {
+                    return {Styles.dotShape: BoxShape.rectangle};
+                  }),
+                ],
+              ),
             )
             .pump();
 
@@ -123,15 +114,10 @@ Future<void> main() async {
             .createDocument()
             .fromMarkdown('- Item 1')
             .useStylesheet(_createStylesheet())
-            .withAddedComponents(
-          [
-            const _ListItemWithCustomStyleBuilder(
-              dotStyle: ListItemDotStyle(
-                shape: BoxShape.rectangle,
-              ),
-            ),
-          ],
-        ).pump();
+            .withAddedComponents([
+              const _ListItemWithCustomStyleBuilder(dotStyle: ListItemDotStyle(shape: BoxShape.rectangle)),
+            ])
+            .pump();
 
         await screenMatchesGolden(tester, 'super_editor_list_item_unordered_custom_dot_shape_component_builder');
       });
@@ -141,16 +127,13 @@ Future<void> main() async {
             .createDocument()
             .fromMarkdown('- Item 1')
             .useStylesheet(
-              _createStylesheet().copyWith(addRulesAfter: [
-                StyleRule(
-                  const BlockSelector('listItem'),
-                  (doc, docNode) {
-                    return {
-                      Styles.dotColor: Colors.red,
-                    };
-                  },
-                ),
-              ]),
+              _createStylesheet().copyWith(
+                addRulesAfter: [
+                  StyleRule(const BlockSelector('listItem'), (doc, docNode) {
+                    return {Styles.dotColor: Colors.red};
+                  }),
+                ],
+              ),
             )
             .pump();
 
@@ -162,15 +145,8 @@ Future<void> main() async {
             .createDocument()
             .fromMarkdown('- Item 1')
             .useStylesheet(_createStylesheet())
-            .withAddedComponents(
-          [
-            const _ListItemWithCustomStyleBuilder(
-              dotStyle: ListItemDotStyle(
-                color: Colors.red,
-              ),
-            ),
-          ],
-        ).pump();
+            .withAddedComponents([const _ListItemWithCustomStyleBuilder(dotStyle: ListItemDotStyle(color: Colors.red))])
+            .pump();
 
         await screenMatchesGolden(tester, 'super_editor_list_item_unordered_custom_dot_color_component_builder');
       });
@@ -221,7 +197,9 @@ Future<void> main() async {
             .pump();
 
         await screenMatchesGolden(
-            tester, 'super_editor_list_item_ordered_aligns_dot_with_text_with_font_sizes_and_line_multiplier');
+          tester,
+          'super_editor_list_item_ordered_aligns_dot_with_text_with_font_sizes_and_line_multiplier',
+        );
       });
 
       testGoldensOnMac('allows customizing the numeral as lower roman with stylesheet', (tester) async {
@@ -303,34 +281,26 @@ Future<void> _pumpOrderedListItemStyleTestApp(
 }) async {
   await tester //
       .createDocument()
-      .withCustomContent(MutableDocument(nodes: [
-        for (int i = 1; i <= 10; i++)
-          ListItemNode.ordered(
-            id: Editor.createNodeId(),
-            text: AttributedText('Item $i.'),
-          )
-      ]))
-      .useStylesheet(_createStylesheet().copyWith(
-        addRulesAfter: [
-          if (fromStylesheet)
-            StyleRule(
-              const BlockSelector('listItem'),
-              (doc, docNode) {
-                return {
-                  Styles.listNumeralStyle: style,
-                };
-              },
-            ),
-        ],
-      ))
-      .withAddedComponents(
-    [
-      if (!fromStylesheet)
-        _ListItemWithCustomStyleBuilder(
-          numeralStyle: style,
+      .withCustomContent(
+        MutableDocument(
+          nodes: [
+            for (int i = 1; i <= 10; i++)
+              ListItemNode.ordered(id: Editor.createNodeId(), text: AttributedText('Item $i.')),
+          ],
         ),
-    ],
-  ).pump();
+      )
+      .useStylesheet(
+        _createStylesheet().copyWith(
+          addRulesAfter: [
+            if (fromStylesheet)
+              StyleRule(const BlockSelector('listItem'), (doc, docNode) {
+                return {Styles.listNumeralStyle: style};
+              }),
+          ],
+        ),
+      )
+      .withAddedComponents([if (!fromStylesheet) _ListItemWithCustomStyleBuilder(numeralStyle: style)])
+      .pump();
 }
 
 ListItemNode _createListItemNode({
@@ -343,39 +313,32 @@ ListItemNode _createListItemNode({
     itemType: listItemType,
     text: AttributedText(
       text,
-      AttributedSpans(attributions: [
-        SpanMarker(
-          attribution: FontSizeAttribution(fontSize),
-          offset: 0,
-          markerType: SpanMarkerType.start,
-        ),
-        SpanMarker(
-          attribution: FontSizeAttribution(fontSize),
-          offset: text.length - 1,
-          markerType: SpanMarkerType.end,
-        ),
-      ]),
+      AttributedSpans(
+        attributions: [
+          SpanMarker(attribution: FontSizeAttribution(fontSize), offset: 0, markerType: SpanMarkerType.start),
+          SpanMarker(
+            attribution: FontSizeAttribution(fontSize),
+            offset: text.length - 1,
+            markerType: SpanMarkerType.end,
+          ),
+        ],
+      ),
     ),
   );
 }
 
-Stylesheet _createStylesheet({
-  double lineHeightMultiplier = 1.0,
-}) {
+Stylesheet _createStylesheet({double lineHeightMultiplier = 1.0}) {
   return defaultStylesheet.copyWith(
     addRulesAfter: [
-      StyleRule(
-        BlockSelector.all,
-        (doc, docNode) {
-          return {
-            Styles.textStyle: TextStyle(
-              fontFamily: 'Roboto',
-              height: lineHeightMultiplier,
-              leadingDistribution: TextLeadingDistribution.even,
-            ),
-          };
-        },
-      ),
+      StyleRule(BlockSelector.all, (doc, docNode) {
+        return {
+          Styles.textStyle: TextStyle(
+            fontFamily: 'Roboto',
+            height: lineHeightMultiplier,
+            leadingDistribution: TextLeadingDistribution.even,
+          ),
+        };
+      }),
     ],
   );
 }
@@ -388,10 +351,7 @@ Stylesheet _createStylesheet({
 /// If [numeralStyle] is non-`null`, ordered list items are styled with the given [numeralStyle]. Otherwise,
 /// the default style is applied for ordered list items.
 class _ListItemWithCustomStyleBuilder implements ComponentBuilder {
-  const _ListItemWithCustomStyleBuilder({
-    this.dotStyle,
-    this.numeralStyle,
-  });
+  const _ListItemWithCustomStyleBuilder({this.dotStyle, this.numeralStyle});
 
   final ListItemDotStyle? dotStyle;
   final OrderedListNumeralStyle? numeralStyle;
@@ -417,7 +377,9 @@ class _ListItemWithCustomStyleBuilder implements ComponentBuilder {
 
   @override
   Widget? createComponent(
-      SingleColumnDocumentComponentContext componentContext, SingleColumnLayoutComponentViewModel componentViewModel) {
+    SingleColumnDocumentComponentContext componentContext,
+    SingleColumnLayoutComponentViewModel componentViewModel,
+  ) {
     // We can use the default component for list items.
     return null;
   }

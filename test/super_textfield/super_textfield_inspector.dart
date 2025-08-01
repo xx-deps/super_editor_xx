@@ -49,8 +49,10 @@ class SuperTextFieldInspector {
 
     // We didn't find a SuperTextField with a SuperText. Now we'll search for a
     // SuperTextField with a selection.
-    final superTextWithSelectionFinder =
-        find.descendant(of: resolvedSuperTextFieldFinder, matching: find.byType(SuperTextWithSelection));
+    final superTextWithSelectionFinder = find.descendant(
+      of: resolvedSuperTextFieldFinder,
+      matching: find.byType(SuperTextWithSelection),
+    );
     final superTextWithSelectionElements = superTextWithSelectionFinder.evaluate();
 
     if (superTextWithSelectionElements.length > 1) {
@@ -147,10 +149,13 @@ class SuperTextFieldInspector {
   ///
   /// {@macro supertextfield_finder}
   static bool isScrolledToEnd([Finder? superTextFieldFinder]) {
-    final maxScrollOffset = findDesktopScrollController(superTextFieldFinder)?.position.maxScrollExtent ??
+    final maxScrollOffset =
+        findDesktopScrollController(superTextFieldFinder)?.position.maxScrollExtent ??
         findMobileScrollController(superTextFieldFinder)?.endScrollOffset;
-    assert(maxScrollOffset != null,
-        "Couldn't check if SuperTextField is scrolled to the end because no SuperTextField was found.");
+    assert(
+      maxScrollOffset != null,
+      "Couldn't check if SuperTextField is scrolled to the end because no SuperTextField was found.",
+    );
     return findScrollOffset(superTextFieldFinder) == maxScrollOffset;
   }
 
@@ -165,26 +170,17 @@ class SuperTextFieldInspector {
     final match = fieldFinder.evaluate().single.widget;
 
     if (match is SuperDesktopTextField) {
-      final textScrollViewElement = find
-          .descendant(
-            of: finder,
-            matching: find.byType(SuperTextFieldScrollview),
-          )
-          .evaluate()
-          .single as StatefulElement;
+      final textScrollViewElement =
+          find.descendant(of: finder, matching: find.byType(SuperTextFieldScrollview)).evaluate().single
+              as StatefulElement;
       final textScrollView = textScrollViewElement.widget as SuperTextFieldScrollview;
 
       return textScrollView.scrollController.offset;
     }
 
     // Both mobile textfields use TextScrollView.
-    final textScrollViewElement = find
-        .descendant(
-          of: finder,
-          matching: find.byType(TextScrollView),
-        )
-        .evaluate()
-        .single as StatefulElement;
+    final textScrollViewElement =
+        find.descendant(of: finder, matching: find.byType(TextScrollView)).evaluate().single as StatefulElement;
     final textScrollView = textScrollViewElement.widget as TextScrollView;
 
     return textScrollView.textScrollController.scrollOffset;
@@ -197,26 +193,17 @@ class SuperTextFieldInspector {
     final match = fieldFinder.evaluate().single.widget;
 
     if (match is SuperDesktopTextField) {
-      final textScrollViewElement = find
-          .descendant(
-            of: finder,
-            matching: find.byType(SuperTextFieldScrollview),
-          )
-          .evaluate()
-          .single as StatefulElement;
+      final textScrollViewElement =
+          find.descendant(of: finder, matching: find.byType(SuperTextFieldScrollview)).evaluate().single
+              as StatefulElement;
       final textScrollView = textScrollViewElement.widget as SuperTextFieldScrollview;
 
       return textScrollView.scrollController.position.maxScrollExtent;
     }
 
     // Both mobile textfields use TextScrollView.
-    final textScrollViewElement = find
-        .descendant(
-          of: finder,
-          matching: find.byType(TextScrollView),
-        )
-        .evaluate()
-        .single as StatefulElement;
+    final textScrollViewElement =
+        find.descendant(of: finder, matching: find.byType(TextScrollView)).evaluate().single as StatefulElement;
     final textScrollView = textScrollViewElement.widget as TextScrollView;
 
     return textScrollView.textScrollController.endScrollOffset;
@@ -231,13 +218,9 @@ class SuperTextFieldInspector {
       return null;
     }
 
-    final textScrollViewElement = find
-        .descendant(
-          of: finder,
-          matching: find.byType(SuperTextFieldScrollview),
-        )
-        .evaluate()
-        .single as StatefulElement;
+    final textScrollViewElement =
+        find.descendant(of: finder, matching: find.byType(SuperTextFieldScrollview)).evaluate().single
+            as StatefulElement;
     final textScrollView = textScrollViewElement.widget as SuperTextFieldScrollview;
 
     return textScrollView.scrollController;
@@ -253,13 +236,8 @@ class SuperTextFieldInspector {
     }
 
     // Both mobile textfields use TextScrollView.
-    final textScrollViewElement = find
-        .descendant(
-          of: finder,
-          matching: find.byType(TextScrollView),
-        )
-        .evaluate()
-        .single as StatefulElement;
+    final textScrollViewElement =
+        find.descendant(of: finder, matching: find.byType(TextScrollView)).evaluate().single as StatefulElement;
     final textScrollView = textScrollViewElement.widget as TextScrollView;
 
     return textScrollView.textScrollController;
@@ -290,20 +268,22 @@ class SuperTextFieldInspector {
     }
 
     throw Exception(
-        "Couldn't find the caret rectangle because we couldn't find a SuperTextField. Finder: $superTextFieldFinder");
+      "Couldn't find the caret rectangle because we couldn't find a SuperTextField. Finder: $superTextFieldFinder",
+    );
   }
 
   static Rect? _findCaretRectInViewportOnDesktop(Finder desktopTextField) {
-    final viewport = find
-        .descendant(of: desktopTextField, matching: find.byType(SuperTextFieldScrollview))
-        .evaluate()
-        .single
-        .renderObject as RenderBox;
+    final viewport =
+        find
+                .descendant(of: desktopTextField, matching: find.byType(SuperTextFieldScrollview))
+                .evaluate()
+                .single
+                .renderObject
+            as RenderBox;
 
-    final caretDisplayElement = find
-        .descendant(of: desktopTextField, matching: find.byType(TextLayoutCaret))
-        .evaluate()
-        .single as StatefulElement;
+    final caretDisplayElement =
+        find.descendant(of: desktopTextField, matching: find.byType(TextLayoutCaret)).evaluate().single
+            as StatefulElement;
     final caretDisplay = caretDisplayElement.state as TextLayoutCaretState;
     final caretGlobalRect = caretDisplay.globalCaretGeometry!;
 
@@ -312,16 +292,13 @@ class SuperTextFieldInspector {
   }
 
   static Rect? _findCaretRectInViewportOnMobile(Finder mobileFieldFinder) {
-    final viewport = find
-        .descendant(of: mobileFieldFinder, matching: find.byType(TextScrollView))
-        .evaluate()
-        .single
-        .renderObject as RenderBox;
+    final viewport =
+        find.descendant(of: mobileFieldFinder, matching: find.byType(TextScrollView)).evaluate().single.renderObject
+            as RenderBox;
 
-    final caretDisplayElement = find
-        .descendant(of: mobileFieldFinder, matching: find.byType(TextLayoutCaret))
-        .evaluate()
-        .single as StatefulElement;
+    final caretDisplayElement =
+        find.descendant(of: mobileFieldFinder, matching: find.byType(TextLayoutCaret)).evaluate().single
+            as StatefulElement;
     final caretDisplay = caretDisplayElement.state as TextLayoutCaretState;
     final caretGlobalRect = caretDisplay.globalCaretGeometry!;
 
@@ -330,8 +307,9 @@ class SuperTextFieldInspector {
   }
 
   static bool isAndroidCollapsedHandleVisible([Finder? superTextFieldFinder]) {
-    final fieldFinder =
-        SuperTextFieldInspector.findInnerPlatformTextField(superTextFieldFinder ?? find.byType(SuperTextField));
+    final fieldFinder = SuperTextFieldInspector.findInnerPlatformTextField(
+      superTextFieldFinder ?? find.byType(SuperTextField),
+    );
     final match = (fieldFinder.evaluate().single as StatefulElement).state as SuperAndroidTextFieldState;
 
     return match.isCollapsedHandleVisible;
@@ -358,26 +336,30 @@ class SuperTextFieldInspector {
       return rootFieldFinder;
     }
 
-    final desktopFieldCandidates =
-        find.descendant(of: rootFieldFinder, matching: find.byType(SuperDesktopTextField)).evaluate();
+    final desktopFieldCandidates = find
+        .descendant(of: rootFieldFinder, matching: find.byType(SuperDesktopTextField))
+        .evaluate();
     if (desktopFieldCandidates.isNotEmpty) {
       return find.descendant(of: rootFieldFinder, matching: find.byType(SuperDesktopTextField));
     }
 
-    final androidFieldCandidates =
-        find.descendant(of: rootFieldFinder, matching: find.byType(SuperAndroidTextField)).evaluate();
+    final androidFieldCandidates = find
+        .descendant(of: rootFieldFinder, matching: find.byType(SuperAndroidTextField))
+        .evaluate();
     if (androidFieldCandidates.isNotEmpty) {
       return find.descendant(of: rootFieldFinder, matching: find.byType(SuperAndroidTextField));
     }
 
-    final iosFieldCandidates =
-        find.descendant(of: rootFieldFinder, matching: find.byType(SuperIOSTextField)).evaluate();
+    final iosFieldCandidates = find
+        .descendant(of: rootFieldFinder, matching: find.byType(SuperIOSTextField))
+        .evaluate();
     if (iosFieldCandidates.isNotEmpty) {
       return find.descendant(of: rootFieldFinder, matching: find.byType(SuperIOSTextField));
     }
 
     throw Exception(
-        "Couldn't find the platform-specific super text field within the root SuperTextField. Root finder: $rootFieldFinder");
+      "Couldn't find the platform-specific super text field within the root SuperTextField. Root finder: $rootFieldFinder",
+    );
   }
 
   SuperTextFieldInspector._();

@@ -12,12 +12,7 @@ import 'package:path/path.dart' as path;
 /// It's the job of the test implementation to include the platform name in the golden
 /// file name - if this is not done, all tests will overwrite the same golden file(s).
 @isTest
-void testGoldensOnAllPlatforms(
-  String description,
-  WidgetTesterCallback test, {
-  bool skip = false,
-  Size? windowSize,
-}) {
+void testGoldensOnAllPlatforms(String description, WidgetTesterCallback test, {bool skip = false, Size? windowSize}) {
   testGoldensOnAndroid(description, test, windowSize: windowSize, skip: skip);
   testGoldensOniOS(description, test, windowSize: windowSize, skip: skip);
   testGoldensOnMac(description, test, windowSize: windowSize, skip: skip);
@@ -30,12 +25,7 @@ void testGoldensOnAllPlatforms(
 /// It's the job of the test implementation to include the platform name in the golden
 /// file name - if this is not done, all tests will overwrite the same golden file(s).
 @isTest
-void testGoldensOnMobile(
-  String description,
-  WidgetTesterCallback test, {
-  bool skip = false,
-  Size? windowSize,
-}) {
+void testGoldensOnMobile(String description, WidgetTesterCallback test, {bool skip = false, Size? windowSize}) {
   testGoldensOnAndroid(description, test, windowSize: windowSize, skip: skip);
   testGoldensOniOS(description, test, windowSize: windowSize, skip: skip);
 }
@@ -43,12 +33,7 @@ void testGoldensOnMobile(
 /// A golden test that configures itself as a Android platform before executing the
 /// given [test], and nullifies the Android configuration when the test is done.
 @isTest
-void testGoldensOnAndroid(
-  String description,
-  WidgetTesterCallback test, {
-  bool skip = false,
-  Size? windowSize,
-}) {
+void testGoldensOnAndroid(String description, WidgetTesterCallback test, {bool skip = false, Size? windowSize}) {
   testGoldens('$description (on Android)', (tester) async {
     debugDefaultTargetPlatformOverride = TargetPlatform.android;
 
@@ -66,12 +51,7 @@ void testGoldensOnAndroid(
 /// A golden test that configures itself as a iOS platform before executing the
 /// given [test], and nullifies the iOS configuration when the test is done.
 @isTest
-void testGoldensOniOS(
-  String description,
-  WidgetTesterCallback test, {
-  bool skip = false,
-  Size? windowSize,
-}) {
+void testGoldensOniOS(String description, WidgetTesterCallback test, {bool skip = false, Size? windowSize}) {
   testGoldens('$description (on iOS)', (tester) async {
     debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
 
@@ -89,12 +69,7 @@ void testGoldensOniOS(
 /// A golden test that configures itself as a Mac platform before executing the
 /// given [test], and nullifies the Mac configuration when the test is done.
 @isTest
-void testGoldensOnMac(
-  String description,
-  WidgetTesterCallback test, {
-  bool skip = false,
-  Size? windowSize,
-}) {
+void testGoldensOnMac(String description, WidgetTesterCallback test, {bool skip = false, Size? windowSize}) {
   testGoldens(description, (tester) async {
     debugDefaultTargetPlatformOverride = TargetPlatform.macOS;
 
@@ -112,12 +87,7 @@ void testGoldensOnMac(
 /// A golden test that configures itself as a Windows platform before executing the
 /// given [test], and nullifies the Windows configuration when the test is done.
 @isTest
-void testGoldensOnWindows(
-  String description,
-  WidgetTesterCallback test, {
-  bool skip = false,
-  Size? windowSize,
-}) {
+void testGoldensOnWindows(String description, WidgetTesterCallback test, {bool skip = false, Size? windowSize}) {
   testGoldens(description, (tester) async {
     debugDefaultTargetPlatformOverride = TargetPlatform.windows;
 
@@ -135,12 +105,7 @@ void testGoldensOnWindows(
 /// A golden test that configures itself as a Linux platform before executing the
 /// given [test], and nullifies the Linux configuration when the test is done.
 @isTest
-void testGoldensOnLinux(
-  String description,
-  WidgetTesterCallback test, {
-  bool skip = false,
-  Size? windowSize,
-}) {
+void testGoldensOnLinux(String description, WidgetTesterCallback test, {bool skip = false, Size? windowSize}) {
   testGoldens(description, (tester) async {
     debugDefaultTargetPlatformOverride = TargetPlatform.linux;
 
@@ -221,7 +186,7 @@ class MatchesGoldenFileWithPixelAllowance extends MatchesGoldenFile {
   /// The [path] should be relative to the executing test's directory, e.g.,
   /// "goldens/my-golden-name.png".
   MatchesGoldenFileWithPixelAllowance.forStringPath(String path, this._maxPixelMismatchCount, [int? version])
-      : super.forStringPath(path, version);
+    : super.forStringPath(path, version);
 
   final int _maxPixelMismatchCount;
 
@@ -248,12 +213,10 @@ class MatchesGoldenFileWithPixelAllowance extends MatchesGoldenFile {
 /// to be different between the golden image file and the test image file, and
 /// still pass.
 class PixelDiffGoldenComparator extends LocalFileComparator {
-  PixelDiffGoldenComparator(
-    String testBaseDirectory, {
-    required int pixelCount,
-  })  : _testBaseDirectory = testBaseDirectory,
-        _maxPixelMismatchCount = pixelCount,
-        super(Uri.parse(testBaseDirectory));
+  PixelDiffGoldenComparator(String testBaseDirectory, {required int pixelCount})
+    : _testBaseDirectory = testBaseDirectory,
+      _maxPixelMismatchCount = pixelCount,
+      super(Uri.parse(testBaseDirectory));
 
   @override
   Uri get basedir => Uri.parse(_testBaseDirectory);
@@ -270,10 +233,7 @@ class PixelDiffGoldenComparator extends LocalFileComparator {
   Future<bool> compare(Uint8List imageBytes, Uri golden) async {
     // Note: the incoming `golden` Uri is a partial path from the currently
     // executing test directory to the golden file, e.g., "goldens/my-test.png".
-    final result = await GoldenFileComparator.compareLists(
-      imageBytes,
-      await getGoldenBytes(golden),
-    );
+    final result = await GoldenFileComparator.compareLists(imageBytes, await getGoldenBytes(golden));
 
     if (result.passed) {
       return true;
@@ -290,7 +250,8 @@ class PixelDiffGoldenComparator extends LocalFileComparator {
     // Paint the golden diffs and images to failure files.
     await generateFailureOutput(result, golden, basedir);
     throw FlutterError(
-        "Pixel test failed. ${result.diffPercent.toStringAsFixed(2)}% diff, $pixelMismatchCount pixel count diff (max allowed pixel mismatch count is $_maxPixelMismatchCount)");
+      "Pixel test failed. ${result.diffPercent.toStringAsFixed(2)}% diff, $pixelMismatchCount pixel count diff (max allowed pixel mismatch count is $_maxPixelMismatchCount)",
+    );
   }
 
   @override

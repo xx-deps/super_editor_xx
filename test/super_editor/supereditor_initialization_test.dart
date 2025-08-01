@@ -21,10 +21,7 @@ void main() {
           .autoFocus(true)
           .withSelection(
             const DocumentSelection.collapsed(
-              position: DocumentPosition(
-                nodeId: '1',
-                nodePosition: TextNodePosition(offset: 0),
-              ),
+              position: DocumentPosition(nodeId: '1', nodePosition: TextNodePosition(offset: 0)),
             ),
           )
           .pump();

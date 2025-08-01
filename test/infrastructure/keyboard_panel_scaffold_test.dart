@@ -85,8 +85,9 @@ void main() {
         );
       });
 
-      testWidgetsOnMobilePhone('shows content above the toolbar and keyboard when above bottom of screen',
-          (tester) async {
+      testWidgetsOnMobilePhone('shows content above the toolbar and keyboard when above bottom of screen', (
+        tester,
+      ) async {
         final softwareKeyboardController = SoftwareKeyboardController();
         final controller = KeyboardPanelController(softwareKeyboardController);
 
@@ -95,11 +96,7 @@ void main() {
           controller: controller,
           softwareKeyboardController: softwareKeyboardController,
           // Push the editor up a bit.
-          widgetBelowEditor: Container(
-            width: double.infinity,
-            height: 100,
-            color: Colors.red,
-          ),
+          widgetBelowEditor: Container(width: double.infinity, height: 100, color: Colors.red),
         );
 
         // Request to show the above-keyboard panel.
@@ -208,10 +205,7 @@ void main() {
         await tester.pumpAndSettle();
 
         // Ensure the keyboard panel has the same size as the software keyboard.
-        expect(
-          tester.getSize(find.byKey(_keyboardPanelKey)).height,
-          equals(_expandedPhoneKeyboardHeight),
-        );
+        expect(tester.getSize(find.byKey(_keyboardPanelKey)).height, equals(_expandedPhoneKeyboardHeight));
 
         // Ensure the above-keyboard panel sits immediately above the keyboard panel.
         expect(
@@ -423,16 +417,10 @@ void main() {
         final panelSize = tester.getSize(find.byKey(_keyboardPanelKey));
         expect(panelSize.height, _keyboardPanelHeight);
 
-        expect(
-          tester.getBottomLeft(find.byKey(_keyboardPanelKey)).dy,
-          screenHeight,
-        );
+        expect(tester.getBottomLeft(find.byKey(_keyboardPanelKey)).dy, screenHeight);
 
         // Ensure the toolbar is above the panel.
-        expect(
-          tester.getBottomLeft(find.byKey(_aboveKeyboardToolbarKey)).dy,
-          screenHeight - _keyboardPanelHeight,
-        );
+        expect(tester.getBottomLeft(find.byKey(_aboveKeyboardToolbarKey)).dy, screenHeight - _keyboardPanelHeight);
 
         // Request to hide the keyboard panel.
         controller.hideKeyboardPanel();
@@ -506,16 +494,10 @@ void main() {
         final panelSize = tester.getSize(find.byKey(_keyboardPanelKey));
         expect(panelSize.height, _keyboardPanelHeight);
 
-        expect(
-          tester.getBottomLeft(find.byKey(_keyboardPanelKey)).dy,
-          screenHeight,
-        );
+        expect(tester.getBottomLeft(find.byKey(_keyboardPanelKey)).dy, screenHeight);
 
         // Ensure the toolbar is above the panel.
-        expect(
-          tester.getBottomLeft(find.byKey(_aboveKeyboardToolbarKey)).dy,
-          screenHeight - _keyboardPanelHeight,
-        );
+        expect(tester.getBottomLeft(find.byKey(_aboveKeyboardToolbarKey)).dy, screenHeight - _keyboardPanelHeight);
 
         // Request to hide the keyboard panel.
         controller.hideKeyboardPanel();
@@ -701,10 +683,7 @@ Future<void> _pumpTestAppWithTabsAndMultipleSafeAreaScopes(
       .withLongDoc()
       .withSoftwareKeyboardController(keyboardController)
       .withImeConnectionNotifier(imeConnectionNotifier)
-      .simulateSoftwareKeyboardInsets(
-        true,
-        simulatedKeyboardHeight: simulatedKeyboardHeight,
-      )
+      .simulateSoftwareKeyboardInsets(true, simulatedKeyboardHeight: simulatedKeyboardHeight)
       .withCustomWidgetTreeBuilder(
         (superEditor) => _TestAppWithTabsAndMultipleSafeAreaScopes(
           superEditor: superEditor,
@@ -745,30 +724,26 @@ class _TestAppWithTabsAndMultipleSafeAreaScopes extends StatelessWidget {
           appBar: AppBar(
             bottom: const TabBar(
               tabs: [
-                Tab(
-                  key: _chatTabKey,
-                  icon: Icon(Icons.chat),
-                ),
-                Tab(
-                  key: _accountTabKey,
-                  icon: Icon(Icons.account_circle),
-                ),
+                Tab(key: _chatTabKey, icon: Icon(Icons.chat)),
+                Tab(key: _accountTabKey, icon: Icon(Icons.account_circle)),
               ],
             ),
           ),
           resizeToAvoidBottomInset: false,
-          body: TabBarView(children: [
-            // ^ We build a tab view so that we can test what happens when the editor
-            //   has focus and a keyboard panel is up, and then the user navigates to
-            //   another tab, which should remove the bottom safe area when it happens.
-            _ChatPage(
-              keyboardPanelController: keyboardPanelController,
-              imeConnectionNotifier: imeConnectionNotifier,
-              superEditor: superEditor,
-              widgetBelowEditor: widgetBelowEditor,
-            ),
-            const _AccountPage(),
-          ]),
+          body: TabBarView(
+            children: [
+              // ^ We build a tab view so that we can test what happens when the editor
+              //   has focus and a keyboard panel is up, and then the user navigates to
+              //   another tab, which should remove the bottom safe area when it happens.
+              _ChatPage(
+                keyboardPanelController: keyboardPanelController,
+                imeConnectionNotifier: imeConnectionNotifier,
+                superEditor: superEditor,
+                widgetBelowEditor: widgetBelowEditor,
+              ),
+              const _AccountPage(),
+            ],
+          ),
         ),
       ),
     );
@@ -794,14 +769,7 @@ class _ChatPage extends StatelessWidget {
       debugLabel: "Root",
       child: Column(
         children: [
-          Expanded(
-            child: Stack(
-              children: [
-                _buildPageContent(),
-                _buildChatEditor(),
-              ],
-            ),
-          ),
+          Expanded(child: Stack(children: [_buildPageContent(), _buildChatEditor()])),
           // Arbitrary widget below the page and editor content. Simulates, e.g.,
           // persistent bottom tabs, chat status, etc.
           if (widgetBelowEditor != null) //
@@ -817,10 +785,7 @@ class _ChatPage extends StatelessWidget {
     return Positioned.fill(
       child: KeyboardScaffoldSafeArea(
         debugLabel: "content",
-        child: Container(
-          key: _chatPageKey,
-          color: Colors.blue,
-        ),
+        child: Container(key: _chatPageKey, color: Colors.blue),
       ),
     );
   }
@@ -833,31 +798,24 @@ class _ChatPage extends StatelessWidget {
       bottom: 0,
       child: KeyboardScaffoldSafeArea(
         debugLabel: "editor",
-        child: Builder(builder: (context) {
-          return KeyboardPanelScaffold(
-            controller: keyboardPanelController,
-            isImeConnected: imeConnectionNotifier,
-            contentBuilder: (context, isKeyboardPanelVisible) => ConstrainedBox(
-              constraints: const BoxConstraints(maxHeight: 250),
-              child: ColoredBox(
-                color: Colors.yellow,
-                child: superEditor,
+        child: Builder(
+          builder: (context) {
+            return KeyboardPanelScaffold(
+              controller: keyboardPanelController,
+              isImeConnected: imeConnectionNotifier,
+              contentBuilder: (context, isKeyboardPanelVisible) => ConstrainedBox(
+                constraints: const BoxConstraints(maxHeight: 250),
+                child: ColoredBox(color: Colors.yellow, child: superEditor),
               ),
-            ),
-            toolbarBuilder: (context, isKeyboardPanelVisible) => Container(
-              key: _aboveKeyboardToolbarKey,
-              height: 54,
-              color: Colors.green,
-            ),
-            fallbackPanelHeight: _keyboardPanelHeight,
-            keyboardPanelBuilder: (context, panel) => const SizedBox.expand(
-              child: ColoredBox(
-                key: _keyboardPanelKey,
-                color: Colors.red,
+              toolbarBuilder: (context, isKeyboardPanelVisible) =>
+                  Container(key: _aboveKeyboardToolbarKey, height: 54, color: Colors.green),
+              fallbackPanelHeight: _keyboardPanelHeight,
+              keyboardPanelBuilder: (context, panel) => const SizedBox.expand(
+                child: ColoredBox(key: _keyboardPanelKey, color: Colors.red),
               ),
-            ),
-          );
-        }),
+            );
+          },
+        ),
       ),
     );
   }
@@ -871,9 +829,7 @@ class _AccountPage extends StatelessWidget {
     return ColoredBox(
       key: _accountPageKey,
       color: Colors.grey.shade100,
-      child: const Center(
-        child: Icon(Icons.account_circle),
-      ),
+      child: const Center(child: Icon(Icons.account_circle)),
     );
   }
 }
@@ -906,10 +862,7 @@ Future<void> _pumpTestAppWithSingleSafeAreaScope(
       .withLongDoc()
       .withSoftwareKeyboardController(keyboardController)
       .withImeConnectionNotifier(imeConnectionNotifier)
-      .simulateSoftwareKeyboardInsets(
-        true,
-        simulatedKeyboardHeight: simulatedKeyboardHeight,
-      )
+      .simulateSoftwareKeyboardInsets(true, simulatedKeyboardHeight: simulatedKeyboardHeight)
       .withCustomWidgetTreeBuilder(
         (superEditor) => _TestAppWithSingleSafeAreaScope(
           superEditor: superEditor,
@@ -949,40 +902,30 @@ class _TestAppWithSingleSafeAreaScope extends StatelessWidget {
                 child: Stack(
                   children: [
                     Positioned.fill(
-                      child: Container(
-                        key: _chatPageKey,
-                        color: Colors.blue,
-                      ),
+                      child: Container(key: _chatPageKey, color: Colors.blue),
                     ),
                     Positioned(
                       left: 0,
                       right: 0,
                       bottom: 0,
-                      child: Builder(builder: (context) {
-                        return KeyboardPanelScaffold(
-                          controller: keyboardPanelController,
-                          isImeConnected: imeConnectionNotifier,
-                          contentBuilder: (context, isKeyboardPanelVisible) => ConstrainedBox(
-                            constraints: const BoxConstraints(maxHeight: 250),
-                            child: ColoredBox(
-                              color: Colors.yellow,
-                              child: superEditor,
+                      child: Builder(
+                        builder: (context) {
+                          return KeyboardPanelScaffold(
+                            controller: keyboardPanelController,
+                            isImeConnected: imeConnectionNotifier,
+                            contentBuilder: (context, isKeyboardPanelVisible) => ConstrainedBox(
+                              constraints: const BoxConstraints(maxHeight: 250),
+                              child: ColoredBox(color: Colors.yellow, child: superEditor),
                             ),
-                          ),
-                          toolbarBuilder: (context, isKeyboardPanelVisible) => Container(
-                            key: _aboveKeyboardToolbarKey,
-                            height: 54,
-                            color: Colors.green,
-                          ),
-                          fallbackPanelHeight: _keyboardPanelHeight,
-                          keyboardPanelBuilder: (context, panel) => const SizedBox.expand(
-                            child: ColoredBox(
-                              key: _keyboardPanelKey,
-                              color: Colors.red,
+                            toolbarBuilder: (context, isKeyboardPanelVisible) =>
+                                Container(key: _aboveKeyboardToolbarKey, height: 54, color: Colors.green),
+                            fallbackPanelHeight: _keyboardPanelHeight,
+                            keyboardPanelBuilder: (context, panel) => const SizedBox.expand(
+                              child: ColoredBox(key: _keyboardPanelKey, color: Colors.red),
                             ),
-                          ),
-                        );
-                      }),
+                          );
+                        },
+                      ),
                     ),
                   ],
                 ),
@@ -1030,10 +973,7 @@ Future<void> _pumpTestAppWithNavigationScreens(
       .withLongDoc()
       .withSoftwareKeyboardController(keyboardController)
       .withImeConnectionNotifier(imeConnectionNotifier)
-      .simulateSoftwareKeyboardInsets(
-        true,
-        simulatedKeyboardHeight: simulatedKeyboardHeight,
-      )
+      .simulateSoftwareKeyboardInsets(true, simulatedKeyboardHeight: simulatedKeyboardHeight)
       .withCustomWidgetTreeBuilder(
         (superEditor) => MaterialApp(
           navigatorKey: navigatorKey,
@@ -1097,16 +1037,16 @@ class _Screen2 extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       body: KeyboardScaffoldSafeArea(
         debugLabel: "_Screen2",
-        child: Builder(builder: (context) {
-          return ListView.builder(
-            key: _screen2BodyKey,
-            itemBuilder: (context, index) {
-              return ListTile(
-                title: Text("Item $index"),
-              );
-            },
-          );
-        }),
+        child: Builder(
+          builder: (context) {
+            return ListView.builder(
+              key: _screen2BodyKey,
+              itemBuilder: (context, index) {
+                return ListTile(title: Text("Item $index"));
+              },
+            );
+          },
+        ),
       ),
     );
   }
@@ -1220,7 +1160,4 @@ const _minimizedAndroidTabletKeyboardHeight = 62.0;
 const _aboveKeyboardToolbarKey = ValueKey('toolbar');
 const _keyboardPanelKey = ValueKey('keyboardPanel');
 
-enum _Panel {
-  panel1,
-  panel2;
-}
+enum _Panel { panel1, panel2 }

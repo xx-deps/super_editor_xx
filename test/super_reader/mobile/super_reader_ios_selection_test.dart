@@ -18,8 +18,10 @@ void main() {
               .createDocument()
               // "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod...",
               .withSingleParagraph()
-              .withiOSToolbarBuilder((context, mobileToolbarKey, focalPoint) =>
-                  IOSTextEditingFloatingToolbar(key: mobileToolbarKey, focalPoint: focalPoint))
+              .withiOSToolbarBuilder(
+                (context, mobileToolbarKey, focalPoint) =>
+                    IOSTextEditingFloatingToolbar(key: mobileToolbarKey, focalPoint: focalPoint),
+              )
               .pump();
 
           // Ensure that no overlay controls are visible.
@@ -36,14 +38,8 @@ void main() {
           expect(
             SuperReaderInspector.findDocumentSelection(),
             const DocumentSelection(
-              base: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 28),
-              ),
-              extent: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 39),
-              ),
+              base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 28)),
+              extent: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 39)),
             ),
           );
 
@@ -58,8 +54,10 @@ void main() {
               .createDocument()
               // "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod...",
               .withSingleParagraph()
-              .withiOSToolbarBuilder((context, mobileToolbarKey, focalPoint) =>
-                  IOSTextEditingFloatingToolbar(key: mobileToolbarKey, focalPoint: focalPoint))
+              .withiOSToolbarBuilder(
+                (context, mobileToolbarKey, focalPoint) =>
+                    IOSTextEditingFloatingToolbar(key: mobileToolbarKey, focalPoint: focalPoint),
+              )
               .pump();
 
           // Long press on the middle of "do|lor".
@@ -68,14 +66,8 @@ void main() {
 
           // Ensure the word was selected.
           const wordSelection = DocumentSelection(
-            base: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 12),
-            ),
-            extent: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 17),
-            ),
+            base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 12)),
+            extent: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 17)),
           );
 
           expect(SuperReaderInspector.findDocumentSelection(), isNotNull);
@@ -101,8 +93,10 @@ void main() {
               .createDocument()
               // "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod...",
               .withSingleParagraph()
-              .withiOSToolbarBuilder((context, mobileToolbarKey, focalPoint) =>
-                  IOSTextEditingFloatingToolbar(key: mobileToolbarKey, focalPoint: focalPoint))
+              .withiOSToolbarBuilder(
+                (context, mobileToolbarKey, focalPoint) =>
+                    IOSTextEditingFloatingToolbar(key: mobileToolbarKey, focalPoint: focalPoint),
+              )
               .pump();
 
           // Long press on the middle of "do|lor".
@@ -111,14 +105,8 @@ void main() {
 
           // Ensure the word was selected.
           const wordSelection = DocumentSelection(
-            base: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 12),
-            ),
-            extent: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 17),
-            ),
+            base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 12)),
+            extent: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 17)),
           );
           expect(SuperReaderInspector.findDocumentSelection(), wordSelection);
 
@@ -144,14 +132,8 @@ void main() {
           expect(
             SuperReaderInspector.findDocumentSelection(),
             const DocumentSelection(
-              base: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 6),
-              ),
-              extent: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 17),
-              ),
+              base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 6)),
+              extent: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 17)),
             ),
           );
 
@@ -177,8 +159,10 @@ void main() {
               .createDocument()
               // "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod...",
               .withSingleParagraph()
-              .withiOSToolbarBuilder((context, mobileToolbarKey, focalPoint) =>
-                  IOSTextEditingFloatingToolbar(key: mobileToolbarKey, focalPoint: focalPoint))
+              .withiOSToolbarBuilder(
+                (context, mobileToolbarKey, focalPoint) =>
+                    IOSTextEditingFloatingToolbar(key: mobileToolbarKey, focalPoint: focalPoint),
+              )
               .pump();
 
           // Long press on the middle of "do|lor".
@@ -187,14 +171,8 @@ void main() {
 
           // Ensure the word was selected.
           const wordSelection = DocumentSelection(
-            base: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 12),
-            ),
-            extent: DocumentPosition(
-              nodeId: "1",
-              nodePosition: TextNodePosition(offset: 17),
-            ),
+            base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 12)),
+            extent: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 17)),
           );
           expect(SuperReaderInspector.findDocumentSelection(), wordSelection);
 
@@ -220,14 +198,8 @@ void main() {
           expect(
             SuperReaderInspector.findDocumentSelection(),
             const DocumentSelection(
-              base: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 12),
-              ),
-              extent: DocumentPosition(
-                nodeId: "1",
-                nodePosition: TextNodePosition(offset: 21),
-              ),
+              base: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 12)),
+              extent: DocumentPosition(nodeId: "1", nodePosition: TextNodePosition(offset: 21)),
             ),
           );
 
@@ -260,9 +232,7 @@ void main() {
               .pump();
 
           // Start dragging horizontally.
-          final gesture = await tester.startGesture(
-            tester.getCenter(find.byType(SuperReader)),
-          );
+          final gesture = await tester.startGesture(tester.getCenter(find.byType(SuperReader)));
 
           // Drag horizontally.
           for (int i = 1; i < 10; i += 1) {
@@ -290,9 +260,7 @@ void main() {
               .pump();
 
           // Start dragging horizontally.
-          final gesture = await tester.startGesture(
-            tester.getCenter(find.byType(SuperReader)),
-          );
+          final gesture = await tester.startGesture(tester.getCenter(find.byType(SuperReader)));
 
           // Drag horizontally.
           for (int i = 1; i < 10; i += 1) {
@@ -320,12 +288,10 @@ void main() {
       testWidgetsOnIos("expands selection when dragging horizontally", (tester) async {
         final testContext = await tester
             .createDocument()
-            .fromMarkdown(
-              '''
+            .fromMarkdown('''
 SuperEditor containing a
 paragraph that spans 
-multiple lines.''',
-            )
+multiple lines.''')
             .insideCustomScrollView()
             .pump();
 
@@ -336,10 +302,7 @@ multiple lines.''',
 
         // Drag from "SuperEdito|r" a distance long enough to go through the entire first line.
         await SuperReaderRobot(tester).dragSelectDocumentFromPositionByOffset(
-          from: DocumentPosition(
-            nodeId: paragraphNode.id,
-            nodePosition: const TextNodePosition(offset: 10),
-          ),
+          from: DocumentPosition(nodeId: paragraphNode.id, nodePosition: const TextNodePosition(offset: 10)),
           delta: const Offset(300, 0),
         );
 
@@ -348,14 +311,8 @@ multiple lines.''',
           SuperReaderInspector.findDocumentSelection(),
           selectionEquivalentTo(
             DocumentSelection(
-              base: DocumentPosition(
-                nodeId: paragraphNode.id,
-                nodePosition: const TextNodePosition(offset: 0),
-              ),
-              extent: DocumentPosition(
-                nodeId: paragraphNode.id,
-                nodePosition: const TextNodePosition(offset: 24),
-              ),
+              base: DocumentPosition(nodeId: paragraphNode.id, nodePosition: const TextNodePosition(offset: 0)),
+              extent: DocumentPosition(nodeId: paragraphNode.id, nodePosition: const TextNodePosition(offset: 24)),
             ),
           ),
         );
@@ -364,12 +321,10 @@ multiple lines.''',
       testWidgetsOnIos("expands selection when dragging vertically", (tester) async {
         final testContext = await tester
             .createDocument()
-            .fromMarkdown(
-              '''
+            .fromMarkdown('''
 SuperEditor containing a
 paragraph that spans 
-multiple lines.''',
-            )
+multiple lines.''')
             .insideCustomScrollView()
             .pump();
 
@@ -380,10 +335,7 @@ multiple lines.''',
 
         // Drag from "SuperEdito|r" a distance long enough to go to the last line.
         await SuperReaderRobot(tester).dragSelectDocumentFromPositionByOffset(
-          from: DocumentPosition(
-            nodeId: paragraphNode.id,
-            nodePosition: const TextNodePosition(offset: 10),
-          ),
+          from: DocumentPosition(nodeId: paragraphNode.id, nodePosition: const TextNodePosition(offset: 10)),
           delta: const Offset(0, 40),
         );
 
@@ -392,14 +344,8 @@ multiple lines.''',
           SuperReaderInspector.findDocumentSelection(),
           selectionEquivalentTo(
             DocumentSelection(
-              base: DocumentPosition(
-                nodeId: paragraphNode.id,
-                nodePosition: const TextNodePosition(offset: 0),
-              ),
-              extent: DocumentPosition(
-                nodeId: paragraphNode.id,
-                nodePosition: const TextNodePosition(offset: 57),
-              ),
+              base: DocumentPosition(nodeId: paragraphNode.id, nodePosition: const TextNodePosition(offset: 0)),
+              extent: DocumentPosition(nodeId: paragraphNode.id, nodePosition: const TextNodePosition(offset: 57)),
             ),
           ),
         );

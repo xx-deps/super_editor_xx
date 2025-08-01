@@ -10,22 +10,14 @@ Future<void> main() async {
     group('ToggleTextAttributionsCommand', () {
       test('it toggles selected text and nothing more', () {
         final document = MutableDocument(
-          nodes: [
-            ParagraphNode(
-              id: 'paragraph',
-              text: AttributedText(' make me bold '),
-            )
-          ],
+          nodes: [ParagraphNode(id: 'paragraph', text: AttributedText(' make me bold '))],
         );
         final composer = MutableDocumentComposer();
         final editor = createDefaultDocumentEditor(document: document, composer: composer);
 
         final request = ToggleTextAttributionsRequest(
           documentRange: const DocumentSelection(
-            base: DocumentPosition(
-              nodeId: 'paragraph',
-              nodePosition: TextNodePosition(offset: 1),
-            ),
+            base: DocumentPosition(nodeId: 'paragraph', nodePosition: TextNodePosition(offset: 1)),
             extent: DocumentPosition(
               nodeId: 'paragraph',
               // IMPORTANT: we want to end the bold at the 'd' character but
@@ -50,7 +42,6 @@ Future<void> main() async {
     });
 
     group('TextComposable text entry', () {
-
       test('it does nothing when nothing is selected', () async {
         final editContext = _createEditContext();
 
@@ -73,24 +64,15 @@ Future<void> main() async {
 
         // Add a paragraph to the document.
         (editContext.document as MutableDocument).add(
-          ParagraphNode(
-            id: 'paragraph',
-            text: AttributedText('This is some text'),
-          ),
+          ParagraphNode(id: 'paragraph', text: AttributedText('This is some text')),
         );
 
         // Select multiple characters in the paragraph
         editContext.editor.execute([
           const ChangeSelectionRequest(
             DocumentSelection(
-              base: DocumentPosition(
-                nodeId: 'paragraph',
-                nodePosition: TextNodePosition(offset: 0),
-              ),
-              extent: DocumentPosition(
-                nodeId: 'paragraph',
-                nodePosition: TextNodePosition(offset: 1),
-              ),
+              base: DocumentPosition(nodeId: 'paragraph', nodePosition: TextNodePosition(offset: 0)),
+              extent: DocumentPosition(nodeId: 'paragraph', nodePosition: TextNodePosition(offset: 1)),
             ),
             SelectionChangeType.expandSelection,
             SelectionReason.userInteraction,
@@ -115,9 +97,7 @@ Future<void> main() async {
         final editContext = _createEditContext();
 
         // Add a non-text node to the document.
-        (editContext.document as MutableDocument).add(
-          HorizontalRuleNode(id: 'horizontal_rule'),
-        );
+        (editContext.document as MutableDocument).add(HorizontalRuleNode(id: 'horizontal_rule'));
 
         // Select the horizontal rule node.
         editContext.editor.execute([
@@ -152,20 +132,14 @@ Future<void> main() async {
 
         // Add a paragraph to the document.
         (editContext.document as MutableDocument).add(
-          ParagraphNode(
-            id: 'paragraph',
-            text: AttributedText('This is some text'),
-          ),
+          ParagraphNode(id: 'paragraph', text: AttributedText('This is some text')),
         );
 
         // Select multiple characters in the paragraph
         editContext.editor.execute([
           const ChangeSelectionRequest(
             DocumentSelection.collapsed(
-              position: DocumentPosition(
-                nodeId: 'paragraph',
-                nodePosition: TextNodePosition(offset: 0),
-              ),
+              position: DocumentPosition(nodeId: 'paragraph', nodePosition: TextNodePosition(offset: 0)),
             ),
             SelectionChangeType.placeCaret,
             SelectionReason.userInteraction,
@@ -206,20 +180,14 @@ Future<void> main() async {
 
         // Add a paragraph to the document.
         (editContext.document as MutableDocument).add(
-          ParagraphNode(
-            id: 'paragraph',
-            text: AttributedText('This is some text'),
-          ),
+          ParagraphNode(id: 'paragraph', text: AttributedText('This is some text')),
         );
 
         // Select multiple characters in the paragraph
         editContext.editor.execute([
           const ChangeSelectionRequest(
             DocumentSelection.collapsed(
-              position: DocumentPosition(
-                nodeId: 'paragraph',
-                nodePosition: TextNodePosition(offset: 0),
-              ),
+              position: DocumentPosition(nodeId: 'paragraph', nodePosition: TextNodePosition(offset: 0)),
             ),
             SelectionChangeType.placeCaret,
             SelectionReason.userInteraction,
@@ -239,10 +207,7 @@ Future<void> main() async {
 
         // The handler should insert a character
         expect(result, ExecutionInstruction.haltExecution);
-        expect(
-          (editContext.document.first as TextNode).text.toPlainText(),
-          'aThis is some text',
-        );
+        expect((editContext.document.first as TextNode).text.toPlainText(), 'aThis is some text');
       });
 
       testWidgets('it inserts a non-English character', (WidgetTester tester) async {
@@ -250,20 +215,14 @@ Future<void> main() async {
 
         // Add a paragraph to the document.
         (editContext.document as MutableDocument).add(
-          ParagraphNode(
-            id: 'paragraph',
-            text: AttributedText('This is some text'),
-          ),
+          ParagraphNode(id: 'paragraph', text: AttributedText('This is some text')),
         );
 
         // Select multiple characters in the paragraph
         editContext.editor.execute([
           const ChangeSelectionRequest(
             DocumentSelection.collapsed(
-              position: DocumentPosition(
-                nodeId: 'paragraph',
-                nodePosition: TextNodePosition(offset: 0),
-              ),
+              position: DocumentPosition(nodeId: 'paragraph', nodePosition: TextNodePosition(offset: 0)),
             ),
             SelectionChangeType.placeCaret,
             SelectionReason.userInteraction,
@@ -283,20 +242,14 @@ Future<void> main() async {
 
         // The handler should insert a character
         expect(result, ExecutionInstruction.haltExecution);
-        expect(
-          (editContext.document.first as TextNode).text.toPlainText(),
-          'ßThis is some text',
-        );
+        expect((editContext.document.first as TextNode).text.toPlainText(), 'ßThis is some text');
       });
     });
 
     group('TextNode', () {
       group('computeSelection', () {
         test('throws if passed other types of NodePosition', () {
-          final node = TextNode(
-            id: 'text node',
-            text: AttributedText('text'),
-          );
+          final node = TextNode(id: 'text node', text: AttributedText('text'));
           expect(
             () => node.computeSelection(
               base: const UpstreamDownstreamNodePosition.upstream(),
@@ -307,32 +260,17 @@ Future<void> main() async {
         });
 
         test('preserves the affinity of extent', () {
-          final node = TextNode(
-            id: 'text node',
-            text: AttributedText('text'),
-          );
+          final node = TextNode(id: 'text node', text: AttributedText('text'));
 
           final selectionWithUpstream = node.computeSelection(
-            base: const TextNodePosition(
-              offset: 0,
-              affinity: TextAffinity.downstream,
-            ),
-            extent: const TextNodePosition(
-              offset: 3,
-              affinity: TextAffinity.upstream,
-            ),
+            base: const TextNodePosition(offset: 0, affinity: TextAffinity.downstream),
+            extent: const TextNodePosition(offset: 3, affinity: TextAffinity.upstream),
           );
           expect(selectionWithUpstream.affinity, TextAffinity.upstream);
 
           final selectionWithDownstream = node.computeSelection(
-            base: const TextNodePosition(
-              offset: 0,
-              affinity: TextAffinity.upstream,
-            ),
-            extent: const TextNodePosition(
-              offset: 3,
-              affinity: TextAffinity.downstream,
-            ),
+            base: const TextNodePosition(offset: 0, affinity: TextAffinity.upstream),
+            extent: const TextNodePosition(offset: 3, affinity: TextAffinity.downstream),
           );
           expect(selectionWithDownstream.affinity, TextAffinity.downstream);
         });

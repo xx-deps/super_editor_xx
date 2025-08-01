@@ -16,11 +16,7 @@ void main() {
           'A SuperTextField scrolled to the end should have the last line fully visible with space below it';
 
       // Use a Row as a wrapper to fill the available width.
-      final builder = GoldenBuilder.column(
-        wrap: (child) => Row(
-          children: [child],
-        ),
-      )
+      final builder = GoldenBuilder.column(wrap: (child) => Row(children: [child]))
         ..addScenario(
           '$description (on Android)',
           _buildTextField(
@@ -76,11 +72,7 @@ void main() {
           'A SuperTextField scrolled to the beginning should have the first line fully visible with space above it';
 
       // Use a Row as a wrapper to fill the available width.
-      final builder = GoldenBuilder.column(
-        wrap: (child) => Row(
-          children: [child],
-        ),
-      )
+      final builder = GoldenBuilder.column(wrap: (child) => Row(children: [child]))
         ..addScenario(
           '$description (on Android)',
           _buildTextField(
@@ -143,15 +135,9 @@ Widget _buildTextField({
   SuperTextFieldPlatformConfiguration? configuration,
 }) {
   return ConstrainedBox(
-    constraints: BoxConstraints(
-      maxWidth: maxWidth ?? double.infinity,
-      maxHeight: maxHeight ?? double.infinity,
-    ),
+    constraints: BoxConstraints(maxWidth: maxWidth ?? double.infinity, maxHeight: maxHeight ?? double.infinity),
     child: DecoratedBox(
-      decoration: BoxDecoration(
-        color: Colors.yellow,
-        border: Border.all(),
-      ),
+      decoration: BoxDecoration(color: Colors.yellow, border: Border.all()),
       child: SuperTextField(
         textController: textController,
         lineHeight: 20,

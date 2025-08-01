@@ -15,9 +15,7 @@ void main() {
 
       // Tap close to the right edge of the editor to place the caret
       // downstream on the image.
-      await tester.tapAt(
-        tester.getTopRight(find.byType(SuperEditor)) + const Offset(-20, 20),
-      );
+      await tester.tapAt(tester.getTopRight(find.byType(SuperEditor)) + const Offset(-20, 20));
       await tester.pump();
 
       await screenMatchesGolden(tester, 'super-editor-image-caret-downstream-mac');
@@ -28,9 +26,7 @@ void main() {
 
       // Tap close to the right edge of the editor to place the caret
       // downstream on the image.
-      await tester.tapAt(
-        tester.getTopRight(find.byType(SuperEditor)) + const Offset(-20, 20),
-      );
+      await tester.tapAt(tester.getTopRight(find.byType(SuperEditor)) + const Offset(-20, 20));
       await tester.pump();
 
       await screenMatchesGolden(tester, 'super-editor-image-caret-downstream-ios');
@@ -43,9 +39,7 @@ void main() {
 
         // Tap close to the right edge of the editor to place the caret
         // downstream on the image.
-        await tester.tapAt(
-          tester.getTopRight(find.byType(SuperEditor)) + const Offset(-20, 20),
-        );
+        await tester.tapAt(tester.getTopRight(find.byType(SuperEditor)) + const Offset(-20, 20));
         await tester.pumpAndSettle();
 
         await screenMatchesGolden(tester, 'super-editor-image-caret-downstream-android');
@@ -59,9 +53,7 @@ void main() {
 
       // Tap close to the left edge of the editor to place the caret upstream
       // on the image.
-      await tester.tapAt(
-        tester.getTopLeft(find.byType(SuperEditor)) + const Offset(20, 20),
-      );
+      await tester.tapAt(tester.getTopLeft(find.byType(SuperEditor)) + const Offset(20, 20));
       await tester.pump();
 
       await screenMatchesGolden(tester, 'super-editor-image-caret-upstream-mac');
@@ -72,9 +64,7 @@ void main() {
 
       // Tap close to the left edge of the editor to place the caret upstream
       // on the image.
-      await tester.tapAt(
-        tester.getTopLeft(find.byType(SuperEditor)) + const Offset(20, 20),
-      );
+      await tester.tapAt(tester.getTopLeft(find.byType(SuperEditor)) + const Offset(20, 20));
       await tester.pump();
 
       await screenMatchesGolden(tester, 'super-editor-image-caret-upstream-ios');
@@ -87,9 +77,7 @@ void main() {
 
         // Tap close to the left edge of the editor to place the caret upstream
         // on the image.
-        await tester.tapAt(
-          tester.getTopLeft(find.byType(SuperEditor)) + const Offset(20, 20),
-        );
+        await tester.tapAt(tester.getTopLeft(find.byType(SuperEditor)) + const Offset(20, 20));
         await tester.pump();
 
         await screenMatchesGolden(tester, 'super-editor-image-caret-upstream-android');
@@ -259,36 +247,30 @@ Future<void> _pumpCaretTestApp(WidgetTester tester) async {
             ImageNode(
               id: '1',
               imageUrl: 'https://this.is.a.fake.image',
-              metadata: const SingleColumnLayoutComponentStyles(
-                width: double.infinity,
-              ).toMetadata(),
+              metadata: const SingleColumnLayoutComponentStyles(width: double.infinity).toMetadata(),
             ),
           ],
         ),
       )
-      .withCaretStyle(
-        caretStyle: const CaretStyle(color: Colors.red),
-      )
+      .withCaretStyle(caretStyle: const CaretStyle(color: Colors.red))
       .useStylesheet(
-        defaultStylesheet.copyWith(addRulesAfter: [
-          StyleRule(
-            BlockSelector.all,
-            (doc, docNode) => {
-              // Zeroes the padding so the component takes all
-              // the editor width.
-              Styles.padding: const CascadingPadding.all(0.0),
-            },
-          )
-        ]),
+        defaultStylesheet.copyWith(
+          addRulesAfter: [
+            StyleRule(
+              BlockSelector.all,
+              (doc, docNode) => {
+                // Zeroes the padding so the component takes all
+                // the editor width.
+                Styles.padding: const CascadingPadding.all(0.0),
+              },
+            ),
+          ],
+        ),
       )
-      .withAddedComponents(
-    [
-      const FakeImageComponentBuilder(
-        size: Size(double.infinity, 100),
-        fillColor: Colors.yellow,
-      ),
-    ],
-  ).pump();
+      .withAddedComponents([
+        const FakeImageComponentBuilder(size: Size(double.infinity, 100), fillColor: Colors.yellow),
+      ])
+      .pump();
 }
 
 /// Pumps a widget tree with a [SuperEditor] styled with the Golden Bricks font
@@ -298,16 +280,14 @@ Future<TestDocumentContext> _pumpTestAppWithGoldenBricksFont(WidgetTester tester
       .createDocument()
       .fromMarkdown('Lorem ipsum dolor sit amet, consectetur adipiscing elit.')
       .useStylesheet(
-        defaultStylesheet.copyWith(addRulesAfter: [
-          StyleRule(
-            BlockSelector.all,
-            (doc, docNode) => {
-              Styles.textStyle: const TextStyle(
-                fontFamily: goldenBricks,
-              )
-            },
-          )
-        ]),
+        defaultStylesheet.copyWith(
+          addRulesAfter: [
+            StyleRule(
+              BlockSelector.all,
+              (doc, docNode) => {Styles.textStyle: const TextStyle(fontFamily: goldenBricks)},
+            ),
+          ],
+        ),
       )
       .pump();
 }

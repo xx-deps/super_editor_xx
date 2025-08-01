@@ -12,10 +12,7 @@ void main() {
     // the SuperTextField to present as a desktop textfield.
     testGoldensOnAndroid("displays hint text with padding", (tester) async {
       // Use a Row as a wrapper to fill the available width.
-      final builder = GoldenBuilder.grid(
-        columns: 2,
-        widthToHeightRatio: 3,
-      )
+      final builder = GoldenBuilder.grid(columns: 2, widthToHeightRatio: 3)
         ..addScenario(
           'Desktop - No Padding',
           _buildEmptySingleLineTextField(
@@ -39,10 +36,7 @@ void main() {
         )
         ..addScenario(
           'iOS - No Padding',
-          _buildEmptySingleLineTextField(
-            padding: EdgeInsets.zero,
-            platform: SuperTextFieldPlatformConfiguration.iOS,
-          ),
+          _buildEmptySingleLineTextField(padding: EdgeInsets.zero, platform: SuperTextFieldPlatformConfiguration.iOS),
         )
         ..addScenario(
           'iOS - Small Padding',
@@ -87,26 +81,15 @@ void main() {
   });
 }
 
-Widget _buildEmptySingleLineTextField({
-  EdgeInsets? padding,
-  required SuperTextFieldPlatformConfiguration platform,
-}) {
+Widget _buildEmptySingleLineTextField({EdgeInsets? padding, required SuperTextFieldPlatformConfiguration platform}) {
   return ConstrainedBox(
-    constraints: const BoxConstraints(
-      maxWidth: 250,
-    ),
+    constraints: const BoxConstraints(maxWidth: 250),
     child: DecoratedBox(
-      decoration: BoxDecoration(
-        color: Colors.yellow,
-        border: Border.all(),
-      ),
+      decoration: BoxDecoration(color: Colors.yellow, border: Border.all()),
       child: SuperTextField(
         textController: AttributedTextEditingController(),
         textStyleBuilder: (_) => const TextStyle(fontSize: 20, color: Colors.black, fontFamily: 'Roboto'),
-        hintBuilder: (_) => Text(
-          "Hint text...",
-          style: defaultHintStyleBuilder({}),
-        ),
+        hintBuilder: (_) => Text("Hint text...", style: defaultHintStyleBuilder({})),
         maxLines: 1,
         padding: padding,
         lineHeight: 20,

@@ -6,9 +6,7 @@ void main() {
   group('SuperEditor > computeInlineSpan >', () {
     testWidgets('computes inlineSpan for text with attributions and a placeholder at the beginning', (tester) async {
       // Pump a widget because we need a BuildContext to compute the InlineSpan.
-      await tester.pumpWidget(
-        const MaterialApp(),
-      );
+      await tester.pumpWidget(const MaterialApp());
 
       // Create an AttributedText with the words "Welcome" and "SuperEditor" in bold and with a leading placeholder.
       final text = AttributedText(
@@ -59,9 +57,7 @@ void main() {
 
     testWidgets('computes inlineSpan for text with attributions and a placeholder at the middle', (tester) async {
       // Pump a widget because we need a BuildContext to compute the InlineSpan.
-      await tester.pumpWidget(
-        const MaterialApp(),
-      );
+      await tester.pumpWidget(const MaterialApp());
 
       // Create an AttributedText with the words "Welcome" and "SuperEditor" in bold and with a
       // placeholder after the word "to".
@@ -118,9 +114,7 @@ void main() {
 
     testWidgets('computes inlineSpan for text with attributions and a placeholder at the end', (tester) async {
       // Pump a widget because we need a BuildContext to compute the InlineSpan.
-      await tester.pumpWidget(
-        const MaterialApp(),
-      );
+      await tester.pumpWidget(const MaterialApp());
 
       // Create an AttributedText with the words "Welcome" and "SuperEditor" in bold and a trailing placeholder.
       final text = AttributedText(

@@ -208,21 +208,20 @@ Future<(Editor, Document)> _pumpScaffold(WidgetTester tester, String contentMark
   final composer = MutableDocumentComposer();
   final editor = createDefaultDocumentEditor(document: document, composer: composer);
 
-  await tester.pumpWidget(MaterialApp(
-    home: Scaffold(
-      body: Center(
-        child: SuperEditor(
-          editor: editor,
-          componentBuilders: [
-            TaskComponentBuilder(editor),
-            ...defaultComponentBuilders,
-          ],
-          stylesheet: _stylesheet,
+  await tester.pumpWidget(
+    MaterialApp(
+      home: Scaffold(
+        body: Center(
+          child: SuperEditor(
+            editor: editor,
+            componentBuilders: [TaskComponentBuilder(editor), ...defaultComponentBuilders],
+            stylesheet: _stylesheet,
+          ),
         ),
       ),
+      debugShowCheckedModeBanner: false,
     ),
-    debugShowCheckedModeBanner: false,
-  ));
+  );
 
   return (editor, document);
 }
@@ -232,24 +231,15 @@ Future<void> _simulateComposingRegion(WidgetTester tester, Editor editor, Docume
   editor.execute([
     ChangeSelectionRequest(
       DocumentSelection.collapsed(
-        position: DocumentPosition(
-          nodeId: nodeId,
-          nodePosition: const TextNodePosition(offset: 23),
-        ),
+        position: DocumentPosition(nodeId: nodeId, nodePosition: const TextNodePosition(offset: 23)),
       ),
       SelectionChangeType.placeCaret,
       SelectionReason.userInteraction,
     ),
     ChangeComposingRegionRequest(
       DocumentRange(
-        start: DocumentPosition(
-          nodeId: nodeId,
-          nodePosition: const TextNodePosition(offset: 22),
-        ),
-        end: DocumentPosition(
-          nodeId: nodeId,
-          nodePosition: const TextNodePosition(offset: 23),
-        ),
+        start: DocumentPosition(nodeId: nodeId, nodePosition: const TextNodePosition(offset: 22)),
+        end: DocumentPosition(nodeId: nodeId, nodePosition: const TextNodePosition(offset: 23)),
       ),
     ),
   ]);
@@ -261,10 +251,7 @@ Future<void> _clearComposingRegion(WidgetTester tester, Editor editor, Document 
   editor.execute([
     ChangeSelectionRequest(
       DocumentSelection.collapsed(
-        position: DocumentPosition(
-          nodeId: nodeId,
-          nodePosition: const TextNodePosition(offset: 23),
-        ),
+        position: DocumentPosition(nodeId: nodeId, nodePosition: const TextNodePosition(offset: 23)),
       ),
       SelectionChangeType.placeCaret,
       SelectionReason.userInteraction,
@@ -285,11 +272,7 @@ const _taskMarkdown = "- [ ] Typing with composing a";
 final _stylesheet = defaultStylesheet.copyWith(
   addRulesAfter: [
     StyleRule(BlockSelector.all, (doc, node) {
-      return {
-        Styles.textStyle: const TextStyle(
-          fontFamily: 'Roboto',
-        ),
-      };
-    })
+      return {Styles.textStyle: const TextStyle(fontFamily: 'Roboto')};
+    }),
   ],
 );
