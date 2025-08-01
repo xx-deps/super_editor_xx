@@ -1068,11 +1068,12 @@ final _blankLinePattern = RegExp(r'^(?:[ \t]*)$');
 
 const List<md.BlockSyntax> _standardNonParagraphBlockSyntaxes = [
   md.HeaderSyntax(),
-  md.CodeBlockSyntax(),
-  md.FencedCodeBlockSyntax(),
-  md.BlockquoteSyntax(),
+  // TODO: 暂时不需要四个空格解析为代码块
+  // md.CodeBlockSyntax(),
+  // md.FencedCodeBlockSyntax(),
+  // md.BlockquoteSyntax(),
   md.HorizontalRuleSyntax(),
-  md.UnorderedListWithCheckboxSyntax(),
-  md.UnorderedListSyntax(),
-  md.OrderedListSyntax(),
+  // md.UnorderedListWithCheckboxSyntax(),
+  // md.UnorderedListSyntax(),
+  // md.OrderedListSyntax(),
 ];

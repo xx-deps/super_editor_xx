@@ -22,8 +22,8 @@ String serializeDocumentToMarkdown(
     ...customNodeSerializers,
     ImageNodeSerializer(needDistinguishLocalPath: needDistinguishLocalPath),
     const HorizontalRuleNodeSerializer(),
-    const ListItemNodeSerializer(),
-    const TaskNodeSerializer(),
+    // const ListItemNodeSerializer(),
+    // const TaskNodeSerializer(),
     HeaderNodeSerializer(syntax),
     ParagraphNodeSerializer(syntax),
   ];
