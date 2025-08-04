@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:super_editor/super_editor.dart';
+import 'package:xx_demo_menu/fake_viewport.dart';
 
 class DemoSimple extends StatelessWidget {
   const DemoSimple({super.key});
@@ -9,17 +10,7 @@ class DemoSimple extends StatelessWidget {
     return MaterialApp(
       title: 'Super Editor Simple',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: PageView(
-        // scrollDirection: Axis.vertical,
-        children: [
-          Column(
-            children: [
-              SizedBox(width: 100, height: 200, child: const EditorPage()),
-            ],
-          ),
-          SizedBox(width: 100, height: 200),
-        ],
-      ),
+      home: EditorPage(),
     );
   }
 }
@@ -98,36 +89,41 @@ class _EditorPageState extends State<EditorPage> {
       body: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          SizedBox(width: 200),
           Expanded(
             child: DecoratedBox(
               decoration: BoxDecoration(color: Colors.amber),
               child: SizedBox(
                 height: 800,
-                child: TapRegion(
-                  onTapOutside: (event) {
-                    _editorFocusNode.unfocus();
-                  },
-                  child: SuperEditor(
-                    key: _editorKey,
-                    editor: _editor,
-                    focusNode: _editorFocusNode,
-                    selectionPolicies: const SuperEditorSelectionPolicies(
-                      clearSelectionWhenEditorLosesFocus: false,
-                    ),
-
-                    inputSource: TextInputSource.ime,
-                    stylesheet: defaultStylesheet.copyWith(
-                      addRulesAfter: [
-                        StyleRule(BlockSelector.all, (doc, docNode) {
-                          return {
-                            Styles.padding: const CascadingPadding.symmetric(
-                              vertical: 4.0,
-                            ),
-                          };
-                        }),
-                      ],
+                child: SingleChildScrollView(
+                  physics: const NeverScrollableScrollPhysics(),
+                  // shrinkWrap: true,
+                  // slivers: [
+                  child: FakeViewport(
+                    child: SuperEditor(
+                      key: _editorKey,
+                      editor: _editor,
+                      focusNode: _editorFocusNode,
+                      selectionPolicies: const SuperEditorSelectionPolicies(
+                        clearSelectionWhenEditorLosesFocus: false,
+                      ),
+                      shrinkWrap: true,
+                      inputSource: TextInputSource.ime,
+                      stylesheet: defaultStylesheet.copyWith(
+                        addRulesAfter: [
+                          StyleRule(BlockSelector.all, (doc, docNode) {
+                            return {
+                              Styles.padding:
+                                  const CascadingPadding.symmetric(
+                                    vertical: 4.0,
+                                  ),
+                            };
+                          }),
+                        ],
+                      ),
                     ),
                   ),
+                  // ],
                 ),
               ),
             ),
