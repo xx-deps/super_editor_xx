@@ -334,16 +334,6 @@ extension InspectDocumentAffinity on Document {
     required DocumentPosition base,
     required DocumentPosition extent,
   }) {
-    if (base.nodeId == extent.nodeId) {
-      final position = base.nodePosition;
-      if (position is TextNodePosition) {
-        return position.affinity;
-      } else if (position is UpstreamDownstreamNodePosition) {
-        return position.affinity;
-      } else {
-        return TextAffinity.upstream;
-      }
-    }
     final baseNode = getNode(base);
     if (baseNode == null) {
       throw Exception('No such position in document: $base');
