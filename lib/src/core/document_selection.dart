@@ -2,7 +2,8 @@ import 'dart:ui';
 
 import 'package:super_editor/src/default_editor/text.dart';
 
-import 'document.dart';
+import 'package:super_editor/src/core/document.dart';
+import 'package:super_editor/super_editor.dart';
 
 /// A selection within a [Document].
 ///
@@ -63,6 +64,7 @@ class DocumentSelection extends DocumentRange {
   ///
   /// A [DocumentSelection] is "collapsed" when its [base] and [extent] are
   /// equivalent. Otherwise, the [DocumentSelection] is "expanded".
+  @override
   bool get isCollapsed =>
       base.nodeId == extent.nodeId &&
       base.nodePosition.isEquivalentTo(extent.nodePosition);
@@ -333,7 +335,14 @@ extension InspectDocumentAffinity on Document {
     required DocumentPosition extent,
   }) {
     if (base.nodeId == extent.nodeId) {
-      return TextAffinity.upstream;
+      final position = base.nodePosition;
+      if (position is TextNodePosition) {
+        return position.affinity;
+      } else if (position is UpstreamDownstreamNodePosition) {
+        return position.affinity;
+      } else {
+        return TextAffinity.upstream;
+      }
     }
     final baseNode = getNode(base);
     if (baseNode == null) {
