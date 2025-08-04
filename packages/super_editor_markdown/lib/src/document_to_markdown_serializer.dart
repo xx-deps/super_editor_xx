@@ -21,10 +21,10 @@ String serializeDocumentToMarkdown(
     // `ParagraphNode` with a special `"blockType"`.
     ...customNodeSerializers,
     ImageNodeSerializer(needDistinguishLocalPath: needDistinguishLocalPath),
-    const HorizontalRuleNodeSerializer(),
+    // const HorizontalRuleNodeSerializer(),
     // const ListItemNodeSerializer(),
     // const TaskNodeSerializer(),
-    HeaderNodeSerializer(syntax),
+    // HeaderNodeSerializer(syntax),
     ParagraphNodeSerializer(syntax),
   ];
 
@@ -296,7 +296,6 @@ class AttributedTextMarkdownSerializer extends AttributionVisitor {
       // can't be checked using equality comparison) and asymmetrical in markdown.
       final linkMarker =
           _encodeLinkMarker(startingAttributions, AttributionVisitEvent.start);
-
       final mentionMarker = _encodeMentionMarker(
           startingAttributions, AttributionVisitEvent.start);
       if (mentionMarker.isNotEmpty) {
@@ -415,7 +414,7 @@ class AttributedTextMarkdownSerializer extends AttributionVisitor {
         .where((e) => e.id.contains('(met)'));
     if (mentionAttributions.isNotEmpty) {
       if (event == AttributionVisitEvent.start) {
-        return mentionAttributions.first.id;
+        return mentionAttributions.first.id.split('#').firstOrNull ?? '(met)';
       } else {
         return '(met)';
       }

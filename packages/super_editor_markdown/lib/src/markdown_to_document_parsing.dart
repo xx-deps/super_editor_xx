@@ -121,12 +121,14 @@ MutableDocument deserializeMarkdownToDocument(
     blockSyntaxes: [
       ...customBlockSyntax,
       if (syntax == MarkdownSyntax.superEditor) ...[
-        _HeaderWithAlignmentSyntax(),
-        const _ParagraphWithAlignmentSyntax(),
+        // _HeaderWithAlignmentSyntax(),
+        // const _ParagraphWithAlignmentSyntax(),
       ],
       const _EmptyLinePreservingParagraphSyntax(),
-      const md.UnorderedListWithCheckboxSyntax(),
+      // const md.UnorderedListWithCheckboxSyntax(),
     ],
+    withDefaultBlockSyntaxes: false,
+    withDefaultInlineSyntaxes: false,
   );
   final blockParser = md.BlockParser(markdownLines, markdownDoc);
 
