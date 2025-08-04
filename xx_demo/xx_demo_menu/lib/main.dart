@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:super_editor/super_editor.dart';
-
+part 'focus.dart';
 // class MacNoProxyHttpOverrides extends HttpOverrides {
 //   @override
 //   HttpClient createHttpClient(SecurityContext? context) {
@@ -85,8 +85,8 @@ class _EditorPageState extends State<EditorPage> {
     );
 
     _composer = MutableDocumentComposer();
-    _editorFocusNode = FocusNode();
-
+    _editorFocusNode = FocusNode(debugLabel: '_editorFocusNode');
+    _editorFocusNode.addListener(_onFocusChanged);
     _editor = createDefaultDocumentEditor(
       document: _document,
       composer: _composer,
@@ -94,9 +94,14 @@ class _EditorPageState extends State<EditorPage> {
     );
   }
 
+  void _onFocusChanged() {
+    print('editor focus ${_editorFocusNode.hasFocus} ');
+  }
+
   @override
   void dispose() {
     _contextMenu?.remove();
+    _editorFocusNode.removeListener(_onFocusChanged);
     _editorFocusNode.dispose();
     super.dispose();
   }
@@ -240,6 +245,8 @@ class _EditorPageState extends State<EditorPage> {
                       },
                       child: Text('导入markdown'),
                     ),
+                    FocusButton(),
+                    TextField(),
                   ],
                 ),
               ),
@@ -249,25 +256,30 @@ class _EditorPageState extends State<EditorPage> {
                 decoration: BoxDecoration(color: Colors.amber),
                 child: SizedBox(
                   height: 800,
-                  child: SuperEditor(
-                    key: _editorKey,
-                    editor: _editor,
-                    focusNode: _editorFocusNode,
-                    selectionPolicies: const SuperEditorSelectionPolicies(
-                      clearSelectionWhenEditorLosesFocus: false,
-                    ),
-                    plugins: {XXMenuPlugin()},
-                    inputSource: TextInputSource.ime,
-                    stylesheet: defaultStylesheet.copyWith(
-                      addRulesAfter: [
-                        StyleRule(BlockSelector.all, (doc, docNode) {
-                          return {
-                            Styles.padding: const CascadingPadding.symmetric(
-                              vertical: 4.0,
-                            ),
-                          };
-                        }),
-                      ],
+                  child: TapRegion(
+                    onTapOutside: (event) {
+                      _editorFocusNode.unfocus();
+                    },
+                    child: SuperEditor(
+                      key: _editorKey,
+                      editor: _editor,
+                      focusNode: _editorFocusNode,
+                      selectionPolicies: const SuperEditorSelectionPolicies(
+                        clearSelectionWhenEditorLosesFocus: false,
+                      ),
+                      plugins: {XXMenuPlugin()},
+                      inputSource: TextInputSource.ime,
+                      stylesheet: defaultStylesheet.copyWith(
+                        addRulesAfter: [
+                          StyleRule(BlockSelector.all, (doc, docNode) {
+                            return {
+                              Styles.padding: const CascadingPadding.symmetric(
+                                vertical: 4.0,
+                              ),
+                            };
+                          }),
+                        ],
+                      ),
                     ),
                   ),
                 ),
