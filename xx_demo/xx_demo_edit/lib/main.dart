@@ -3,7 +3,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:super_editor/super_editor.dart';
 import 'package:xx_demo_edit/customer_command.dart';
 import 'package:xx_demo_edit/customer_image_builder.dart';
-import 'package:xx_demo_edit/mention_overlay.dart';
 
 void main() {
   runApp(const MyApp());
@@ -85,6 +84,11 @@ class _MyHomePageState extends State<MyHomePage> {
     _docEditor = createDefaultDocumentEditor(
       document: _doc,
       composer: _composer,
+      historyGroupingPolicy: HistoryGroupingPolicyList([
+        mergeRepeatSelectionChangesPolicy,
+        mergeRapidTextInputPolicy,
+        // ignorePureSelectionOnlyChangesPolicy,
+      ]),
     );
 
     _userTagPlugin = StableTagPlugin()
@@ -108,18 +112,33 @@ class _MyHomePageState extends State<MyHomePage> {
     final editor = Editor(
       editables: {Editor.documentKey: document, Editor.composerKey: composer},
       requestHandlers: [
-        ///添加命令
-        ...List.from(defaultRequestHandlers),
+        // //自定义 handler 放最前面，优先处理
+        // (editor, request) {
+        //   final command = defaultRequestHandlers
+        //       .map((handler) => handler(editor, request))
+        //       .firstWhere((cmd) => cmd != null, orElse: () => null);
+
+        //   if (command is ChangeSelectionCommand ||
+        //       command is ChangeComposingRegionCommand) {
+        //     return NonHistoricalCommandWrapper(command);
+        //   }
+
+        //   return command;
+        // },
         (editor, request) => request is InsertImageCommandRequest
             ? InsertImageCommand(
                 url: request.url,
                 expectedSize: request.expectedSize,
               )
             : null,
+
+        ///添加命令
+        ...List.from(defaultRequestHandlers),
       ],
       historyGroupingPolicy: historyGroupingPolicy,
       reactionPipeline: List.from(defaultEditorReactions),
       isHistoryEnabled: isHistoryEnabled,
+      maxHistorySteps: 5,
     );
 
     return editor;
@@ -203,12 +222,7 @@ class _MyHomePageState extends State<MyHomePage> {
           text: AttributedText('Document #1'),
           metadata: {'blockType': header1Attribution},
         ),
-        ParagraphNode(
-          id: Editor.createNodeId(),
-          text: AttributedText(
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus sed sagittis urna. Aenean mattis ante justo, quis sollicitudin metus interdum id. Aenean ornare urna ac enim consequat mollis. In aliquet convallis efficitur. Phasellus convallis purus in fringilla scelerisque. Ut ac orci a turpis egestas lobortis. Morbi aliquam dapibus sem, vitae sodales arcu ultrices eu. Duis vulputate mauris quam, eleifend pulvinar quam blandit eget.',
-          ),
-        ),
+        ParagraphNode(id: Editor.createNodeId(), text: AttributedText('test')),
       ],
     );
   }
@@ -228,7 +242,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   Container(
-                    height: 600,
+                    height: 500,
                     decoration: BoxDecoration(
                       border: _hasFocus
                           ? Border.all(
