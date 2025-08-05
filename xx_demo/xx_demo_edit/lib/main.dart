@@ -138,7 +138,6 @@ class _MyHomePageState extends State<MyHomePage> {
       historyGroupingPolicy: historyGroupingPolicy,
       reactionPipeline: List.from(defaultEditorReactions),
       isHistoryEnabled: isHistoryEnabled,
-      maxHistorySteps: 5,
     );
 
     return editor;

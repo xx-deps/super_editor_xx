@@ -68,7 +68,6 @@ class Editor implements RequestDispatcher {
     List<EditReaction>? reactionPipeline,
     List<EditListener>? listeners,
     this.isHistoryEnabled = false,
-    this.maxHistorySteps = 100,
   }) : requestHandlers = requestHandlers ?? [],
        reactionPipeline = reactionPipeline ?? [],
        _changeListeners = listeners ?? [],
@@ -83,6 +82,16 @@ class Editor implements RequestDispatcher {
     reactionPipeline.clear();
     _changeListeners.clear();
     _customEventController.close();
+  }
+
+  void reset() {
+    _transaction.changes.clear();
+    _transaction.commands.clear();
+    _transaction = CommandTransaction([], clock.now());
+    _activeChangeList.clear();
+    _activeCommandCount = 0;
+    _future.clear();
+    _history.clear();
   }
 
   /// SuperEditor中editorContext未暴露的方法，在这里通过监听外部事件执行
@@ -109,8 +118,6 @@ class Editor implements RequestDispatcher {
 
   /// Executes [EditCommand]s and collects a list of changes.
   late final _DocumentEditorCommandExecutor _commandExecutor;
-
-  int maxHistorySteps;
 
   /// A list of editor transactions that were run previously, leading to the current
   /// state of the document, and other editables.
@@ -190,6 +197,9 @@ class Editor implements RequestDispatcher {
   ///
   /// Does nothing if a transaction is already in-progress.
   void startTransaction() {
+    print(
+      "editor_startTransaction___commands:${_transaction.commands}__changes:${_transaction.changes}",
+    );
     if (_isInTransaction) {
       return;
     }
@@ -211,6 +221,9 @@ class Editor implements RequestDispatcher {
     }
 
     if (_transaction.commands.isNotEmpty && isHistoryEnabled) {
+      print(
+        "editor_endTransaction___commands:${_transaction.commands}__changes:${_transaction.changes}",
+      );
       if (_history.isEmpty) {
         // Add this transaction onto the history stack.
         _history.add(_transaction);
@@ -219,7 +232,6 @@ class Editor implements RequestDispatcher {
           _transaction,
           _history.last,
         );
-        print("endTransaction___$mergeChoice");
         switch (mergeChoice) {
           case TransactionMerge.noOpinion:
           case TransactionMerge.doNotMerge:
@@ -266,57 +278,74 @@ class Editor implements RequestDispatcher {
   /// of [EditEvent]s.
   @override
   void execute(List<EditRequest> requests) {
-    if (requests.isEmpty) {
-      // No changes were requested. Don't waste time starting and ending transactions, etc.
-      editorEditsLog.warning(
-        "Tried to execute requests without providing any requests",
+    try {
+      print(
+        "editor_execute___activeCommandCount:${_activeCommandCount}_request:${requests.length}__${requests.first}",
       );
+      if (requests.isEmpty) {
+        // No changes were requested. Don't waste time starting and ending transactions, etc.
+        editorEditsLog.warning(
+          "Tried to execute requests without providing any requests",
+        );
+        return;
+      }
+
+      editorEditsLog.finer("Executing requests:");
+      for (final request in requests) {
+        editorEditsLog.finer(" - ${request.runtimeType}");
+      }
+
+      if (_activeCommandCount == 0 && !_isInTransaction) {
+        // No transaction was explicitly requested, but all changes exist in a transaction.
+        // Automatically start one, and then end the transaction after the current changes.
+        _isImplicitTransaction = true;
+        startTransaction();
+      }
+      print(
+        "editor_execute2___activeCommandCount:${_activeCommandCount}_request:${requests.length}__${requests.first}",
+      );
+      _activeCommandCount += 1;
+
+      final undoableCommands = <EditCommand>[];
+      for (final request in requests) {
+        // Execute the given request.
+        final command = _findCommandForRequest(request);
+        final commandChanges = _executeCommand(command);
+        _activeChangeList.addAll(commandChanges);
+
+        if (command.historyBehavior == HistoryBehavior.undoable) {
+          undoableCommands.add(command);
+          _transaction.changes.addAll(List.from(commandChanges));
+        }
+      }
+
+      // Log the time at the end of the actions in this transaction.
+      _transaction.lastChangeTime = clock.now();
+
+      if (undoableCommands.isNotEmpty) {
+        _transaction.commands.addAll(undoableCommands);
+      }
+      print(
+        "editor_execute3___activeCommandCount:${_activeCommandCount}_request:${requests.length}__${requests.first}",
+      );
+
+      if (_activeCommandCount == 1 && _isImplicitTransaction && !_isReacting) {
+        endTransaction();
+      }
+
+      print(
+        "editor_execute4___activeCommandCount:${_activeCommandCount}_request:${requests.length}__${requests.first}",
+      );
+
+      _activeCommandCount -= 1;
+    } catch (e) {
+      print("editor__execute_${e.toString()}");
       return;
     }
-
-    editorEditsLog.finer("Executing requests:");
-    for (final request in requests) {
-      editorEditsLog.finer(" - ${request.runtimeType}");
-    }
-
-    if (_activeCommandCount == 0 && !_isInTransaction) {
-      // No transaction was explicitly requested, but all changes exist in a transaction.
-      // Automatically start one, and then end the transaction after the current changes.
-      _isImplicitTransaction = true;
-      startTransaction();
-    }
-
-    _activeCommandCount += 1;
-
-    final undoableCommands = <EditCommand>[];
-    for (final request in requests) {
-      // Execute the given request.
-      final command = _findCommandForRequest(request);
-      final commandChanges = _executeCommand(command);
-      _activeChangeList.addAll(commandChanges);
-      print("execute:${command.historyBehavior}");
-
-      if (command.historyBehavior == HistoryBehavior.undoable) {
-        undoableCommands.add(command);
-        _transaction.changes.addAll(List.from(commandChanges));
-      }
-    }
-
-    // Log the time at the end of the actions in this transaction.
-    _transaction.lastChangeTime = clock.now();
-
-    if (undoableCommands.isNotEmpty) {
-      _transaction.commands.addAll(undoableCommands);
-    }
-
-    if (_activeCommandCount == 1 && _isImplicitTransaction && !_isReacting) {
-      endTransaction();
-    }
-
-    _activeCommandCount -= 1;
   }
 
   EditCommand _findCommandForRequest(EditRequest request) {
+    print("editor__findCommandForRequest__request:$request");
     EditCommand? command;
     for (final handler in requestHandlers) {
       command = handler(this, request);
@@ -331,6 +360,7 @@ class Editor implements RequestDispatcher {
   }
 
   List<EditEvent> _executeCommand(EditCommand command) {
+    print("editor___executeCommand__command:$command");
     // Execute the given command, and any other commands that it spawns.
     _commandExecutor.executeCommand(command);
 
@@ -355,6 +385,7 @@ class Editor implements RequestDispatcher {
     for (final editable in context._resources.values) {
       editable.onTransactionStart();
     }
+    print("editor__onTransactionStart:${history.length}");
   }
 
   void _onTransactionEnd() {
@@ -362,13 +393,14 @@ class Editor implements RequestDispatcher {
       editable.onTransactionEnd(_activeChangeList);
     }
     _activeChangeList.clear();
-    print("_historyLength_end:${history.length}_maxStep:$maxHistorySteps");
+    print("editor_historyLength_end:${history.length}");
   }
 
   void _reactToChanges() {
     if (_activeChangeList.isEmpty) {
       return;
     }
+    print("editor_reactToChanges__");
 
     _isReacting = true;
 
@@ -400,6 +432,7 @@ class Editor implements RequestDispatcher {
   }
 
   void undo() {
+    print("editor_undo__");
     if (!isHistoryEnabled) {
       // History is disabled, therefore undo/redo are disabled.
       return;
@@ -466,6 +499,7 @@ class Editor implements RequestDispatcher {
   }
 
   void redo() {
+    print("editor_redo__");
     if (!isHistoryEnabled) {
       // History is disabled, therefore undo/redo are disabled.
       return;
