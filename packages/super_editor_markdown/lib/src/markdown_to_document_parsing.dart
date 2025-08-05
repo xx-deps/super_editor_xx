@@ -127,7 +127,7 @@ MutableDocument deserializeMarkdownToDocument(
       const _EmptyLinePreservingParagraphSyntax(),
       // const md.UnorderedListWithCheckboxSyntax(),
     ],
-    withDefaultBlockSyntaxes: false,
+    withDefaultBlockSyntaxes: true,
     withDefaultInlineSyntaxes: false,
   );
   final blockParser = md.BlockParser(markdownLines, markdownDoc);
