@@ -2584,7 +2584,7 @@ class PasteEditorCommand extends EditCommand {
         /// 如果是文字节点需要粘贴进去
         if (node is TextNode) {
           final attributedText = node.text;
-          for (var attributions in currentAttributions) {
+          for (final attributions in currentAttributions) {
             attributedText.addAttribution(
               attributions,
               SpanRange(0, attributedText.length - 1),
@@ -2609,11 +2609,14 @@ class PasteEditorCommand extends EditCommand {
       final pasteTextOffset =
           (_pastePosition.nodePosition as TextPosition).offset;
 
-      if (parsedContent.length > 1 &&
+      final bool needSplit =
+          parsedContent.length > 1 &&
               pasteTextOffset < textNode.endPosition.offset ||
           (parsedContent.isNotEmpty &&
               parsedContent.first is ImageNode &&
-              pasteTextOffset < textNode.endPosition.offset)) {
+              pasteTextOffset < textNode.endPosition.offset);
+
+      if (needSplit) {
         // There is more than 1 node of content being pasted. Therefore,
         // new nodes will need to be added, which means that the currently
         // selected text node will be split at the current text offset.
@@ -2631,8 +2634,9 @@ class PasteEditorCommand extends EditCommand {
       }
 
       final firstParsedContent = parsedContent.first;
+      final bool firstParsedContentIsTextNode = firstParsedContent is TextNode;
       int? aimCaretOffset;
-      if (firstParsedContent is TextNode) {
+      if (firstParsedContentIsTextNode) {
         // Paste the first piece of attributed content into the existing selected TextNode.
         executor.executeCommand(
           InsertAttributedTextCommand(
@@ -2645,23 +2649,40 @@ class PasteEditorCommand extends EditCommand {
 
       // The first line of pasted text was added to the selected paragraph.
       // Now, add all remaining pasted nodes to the document..
-      DocumentNode previousNode = document.getNodeById(_pastePosition.nodeId)!;
-      final usedCount = firstParsedContent is TextNode ? 1 : 0;
-      for (int i = usedCount; i < parsedContent.length; i++) {
+      DocumentNode previousNode = currentNodeWithSelection;
+      final beginIndex = firstParsedContentIsTextNode ? 1 : 0;
+      for (int i = beginIndex; i < parsedContent.length; i++) {
         final pastedNode = parsedContent[i];
-        if (usedCount == 0 &&
+        if (firstParsedContentIsTextNode == false &&
             (textNode.text.isEmpty || pasteTextOffset == 0) &&
             i == 0 &&
             pastedNode is ImageNode) {
           document.replaceNodeById(_pastePosition.nodeId, pastedNode);
+          previousNode = pastedNode;
+        } else if (firstParsedContentIsTextNode == false &&
+            parsedContent.length == 1 &&
+            (textNode.text.isEmpty ||
+                pasteTextOffset == textNode.text.length)) {
+          document.insertNodeAfter(
+            existingNodeId: previousNode.id,
+            newNode: pastedNode,
+          );
+          final newLine = ParagraphNode(
+            id: Editor.createNodeId(),
+            text: AttributedText(),
+          );
+          document.insertNodeAfter(
+            existingNodeId: pastedNode.id,
+            newNode: newLine,
+          );
+          previousNode = newLine;
         } else {
           document.insertNodeAfter(
             existingNodeId: previousNode.id,
             newNode: pastedNode,
           );
+          previousNode = pastedNode;
         }
-
-        previousNode = pastedNode;
 
         executor.logChanges([
           DocumentEdit(
@@ -2826,7 +2847,7 @@ class PasteEditorCommand extends EditCommand {
             previousNode = updated;
           }
         } else {
-          if (firstPastedNode is ImageNode) {
+          if (isBeforeNode) {
             executor.executeCommand(
               InsertNodeBeforeNodeCommand(
                 existingNodeId: previousNode.id,
@@ -2841,7 +2862,21 @@ class PasteEditorCommand extends EditCommand {
                 newNode: firstPastedNode,
               ),
             );
-            previousNode = document.getNodeById(firstPastedNode.id);
+            if (parsedContent.length == 1) {
+              final newLine = ParagraphNode(
+                id: Editor.createNodeId(),
+                text: AttributedText(),
+              );
+              executor.executeCommand(
+                InsertNodeAfterNodeCommand(
+                  existingNodeId: firstPastedNode.id,
+                  newNode: newLine,
+                ),
+              );
+              previousNode = document.getNodeById(newLine.id);
+            } else {
+              previousNode = document.getNodeById(firstPastedNode.id);
+            }
           }
         }
       }
@@ -2861,19 +2896,33 @@ class PasteEditorCommand extends EditCommand {
 
       /// 4. 设置光标到最后插入的位置
       if (previousNode != null) {
-        final position = previousNode.endPosition;
-        executor.executeCommand(
-          ChangeSelectionCommand(
-            DocumentSelection.collapsed(
-              position: DocumentPosition(
-                nodeId: previousNode.id,
-                nodePosition: position,
+        if (isBeforeNode) {
+          executor.executeCommand(
+            ChangeSelectionCommand(
+              DocumentSelection.collapsed(
+                position: DocumentPosition(
+                  nodeId: currentNodeWithSelection.id,
+                  nodePosition: currentNodeWithSelection.beginningPosition,
+                ),
               ),
+              SelectionChangeType.insertContent,
+              SelectionReason.userInteraction,
             ),
-            SelectionChangeType.insertContent,
-            SelectionReason.userInteraction,
-          ),
-        );
+          );
+        } else {
+          executor.executeCommand(
+            ChangeSelectionCommand(
+              DocumentSelection.collapsed(
+                position: DocumentPosition(
+                  nodeId: previousNode.id,
+                  nodePosition: previousNode.endPosition,
+                ),
+              ),
+              SelectionChangeType.insertContent,
+              SelectionReason.userInteraction,
+            ),
+          );
+        }
       }
 
       editorOpsLog.fine(
