@@ -4,13 +4,12 @@ import 'dart:math';
 import 'package:attributed_text/attributed_text.dart';
 import 'package:clock/clock.dart';
 import 'package:collection/collection.dart';
+import 'package:super_editor/src/core/document.dart';
+import 'package:super_editor/src/core/document_composer.dart';
 import 'package:super_editor/src/default_editor/paragraph.dart';
 import 'package:super_editor/src/default_editor/text.dart';
 import 'package:super_editor/src/infrastructure/_logging.dart';
 import 'package:uuid/uuid.dart';
-
-import 'package:super_editor/src/core/document.dart';
-import 'package:super_editor/src/core/document_composer.dart';
 
 enum CustomEditorEvent { cut, copy, paste }
 
@@ -69,9 +68,11 @@ class Editor implements RequestDispatcher {
     List<EditReaction>? reactionPipeline,
     List<EditListener>? listeners,
     this.isHistoryEnabled = false,
+    this.maxHistorySteps = 100,
   }) : requestHandlers = requestHandlers ?? [],
        reactionPipeline = reactionPipeline ?? [],
-       _changeListeners = listeners ?? [] {
+       _changeListeners = listeners ?? [],
+       _transaction = CommandTransaction([], clock.now()) {
     context = EditContext(editables);
     _commandExecutor = _DocumentEditorCommandExecutor(context);
     _customEventController =
@@ -108,6 +109,8 @@ class Editor implements RequestDispatcher {
 
   /// Executes [EditCommand]s and collects a list of changes.
   late final _DocumentEditorCommandExecutor _commandExecutor;
+
+  int maxHistorySteps;
 
   /// A list of editor transactions that were run previously, leading to the current
   /// state of the document, and other editables.
@@ -162,14 +165,14 @@ class Editor implements RequestDispatcher {
   /// it might submit another request, which adds more changes. When Reaction 2 runs, that
   /// reaction needs to know about the original change list, plus all changes caused by
   /// Reaction 1. This list lives across multiple request executions to make that possible.
-  List<EditEvent>? _activeChangeList;
+  final List<EditEvent> _activeChangeList = [];
 
   /// Tracks the number of request executions that are in the process of running.
   int _activeCommandCount = 0;
 
   bool _isInTransaction = false;
   bool _isImplicitTransaction = false;
-  CommandTransaction? _transaction;
+  CommandTransaction _transaction;
 
   /// Whether the editor is currently running reactions for the current transaction.
   bool _isReacting = false;
@@ -193,7 +196,7 @@ class Editor implements RequestDispatcher {
 
     editorEditsLog.finest("Starting transaction");
     _isInTransaction = true;
-    _activeChangeList = <EditEvent>[];
+    _activeChangeList.clear();
     _transaction = CommandTransaction([], clock.now());
 
     _onTransactionStart();
@@ -207,26 +210,27 @@ class Editor implements RequestDispatcher {
       return;
     }
 
-    if (_transaction!.commands.isNotEmpty && isHistoryEnabled) {
+    if (_transaction.commands.isNotEmpty && isHistoryEnabled) {
       if (_history.isEmpty) {
         // Add this transaction onto the history stack.
-        _history.add(_transaction!);
+        _history.add(_transaction);
       } else {
         final mergeChoice = historyGroupingPolicy.shouldMergeLatestTransaction(
-          _transaction!,
+          _transaction,
           _history.last,
         );
+        print("endTransaction___$mergeChoice");
         switch (mergeChoice) {
           case TransactionMerge.noOpinion:
           case TransactionMerge.doNotMerge:
             // Don't alter the transaction history, just add the new transaction to the history.
-            _history.add(_transaction!);
+            _history.add(_transaction);
           case TransactionMerge.mergeOnTop:
             // Merge this transaction with the transaction just before it. This is used, for example,
             // to group repeated text input into a single undoable transaction.
             _history.last
-              ..commands.addAll(_transaction!.commands)
-              ..changes.addAll(_transaction!.changes)
+              ..commands.addAll(_transaction.commands)
+              ..changes.addAll(_transaction.changes)
               ..lastChangeTime = clock.now();
           case TransactionMerge.replacePrevious:
             // Replaces the most recent transaction with the new transaction. This is used, for example,
@@ -234,7 +238,7 @@ class Editor implements RequestDispatcher {
             // only the most recent value is relevant.
             _history
               ..removeLast()
-              ..add(_transaction!);
+              ..add(_transaction);
         }
       }
     }
@@ -245,7 +249,8 @@ class Editor implements RequestDispatcher {
 
     _isInTransaction = false;
     _isImplicitTransaction = false;
-    _transaction = null;
+    _transaction.commands.clear();
+    _transaction.changes.clear();
 
     // Note: The transaction isn't fully considered over until after the reactions run.
     // This is because the reactions need access to the change list from the previous
@@ -288,19 +293,20 @@ class Editor implements RequestDispatcher {
       // Execute the given request.
       final command = _findCommandForRequest(request);
       final commandChanges = _executeCommand(command);
-      _activeChangeList!.addAll(commandChanges);
+      _activeChangeList.addAll(commandChanges);
+      print("execute:${command.historyBehavior}");
 
       if (command.historyBehavior == HistoryBehavior.undoable) {
         undoableCommands.add(command);
-        _transaction!.changes.addAll(List.from(commandChanges));
+        _transaction.changes.addAll(List.from(commandChanges));
       }
     }
 
     // Log the time at the end of the actions in this transaction.
-    _transaction!.lastChangeTime = clock.now();
+    _transaction.lastChangeTime = clock.now();
 
     if (undoableCommands.isNotEmpty) {
-      _transaction!.commands.addAll(undoableCommands);
+      _transaction.commands.addAll(undoableCommands);
     }
 
     if (_activeCommandCount == 1 && _isImplicitTransaction && !_isReacting) {
@@ -353,14 +359,14 @@ class Editor implements RequestDispatcher {
 
   void _onTransactionEnd() {
     for (final editable in context._resources.values) {
-      editable.onTransactionEnd(_activeChangeList!);
+      editable.onTransactionEnd(_activeChangeList);
     }
-
-    _activeChangeList = null;
+    _activeChangeList.clear();
+    print("_historyLength_end:${history.length}_maxStep:$maxHistorySteps");
   }
 
   void _reactToChanges() {
-    if (_activeChangeList!.isEmpty) {
+    if (_activeChangeList.isEmpty) {
       return;
     }
 
@@ -370,7 +376,7 @@ class Editor implements RequestDispatcher {
     for (final reaction in reactionPipeline) {
       // Note: we pass the active change list because reactions will cause more
       // changes to be added to that list.
-      reaction.modifyContent(context, this, _activeChangeList!);
+      reaction.modifyContent(context, this, _activeChangeList);
     }
 
     // Second, start a new transaction and let reactions add separate changes.
@@ -379,16 +385,16 @@ class Editor implements RequestDispatcher {
     for (final reaction in reactionPipeline) {
       // Note: we pass the active change list because reactions will cause more
       // changes to be added to that list.
-      reaction.react(context, this, _activeChangeList!);
+      reaction.react(context, this, _activeChangeList);
     }
 
-    if (_transaction!.commands.isNotEmpty && isHistoryEnabled) {
-      _history.add(_transaction!);
+    if (_transaction.commands.isNotEmpty && isHistoryEnabled) {
+      _history.add(_transaction);
     }
 
     // FIXME: try removing this notify listeners
     // Notify all listeners that care about changes, but won't spawn additional requests.
-    _notifyListeners(List<EditEvent>.from(_activeChangeList!, growable: false));
+    _notifyListeners(List<EditEvent>.from(_activeChangeList, growable: false));
 
     _isReacting = false;
   }
@@ -541,6 +547,45 @@ const defaultMergePolicy = HistoryGroupingPolicyList([
   mergeRepeatSelectionChangesPolicy,
   mergeRapidTextInputPolicy,
 ]);
+
+const ignorePureSelectionOnlyChangesPolicy = _IgnoreSelectionOnlyPolicy();
+
+class _IgnoreSelectionOnlyPolicy implements HistoryGroupingPolicy {
+  const _IgnoreSelectionOnlyPolicy();
+
+  @override
+  TransactionMerge shouldMergeLatestTransaction(
+    CommandTransaction newTx,
+    CommandTransaction prevTx,
+  ) {
+    final onlySelection = newTx.changes.every(
+      (c) => c is SelectionChangeEvent || c is ComposingRegionChangeEvent,
+    );
+
+    if (onlySelection) {
+      return TransactionMerge.replacePrevious;
+    }
+
+    return TransactionMerge.noOpinion;
+  }
+}
+
+class NonHistoricalCommandWrapper extends EditCommand {
+  NonHistoricalCommandWrapper(this._wrapped);
+
+  final EditCommand _wrapped;
+
+  @override
+  void execute(EditContext context, CommandExecutor executor) {
+    _wrapped.execute(context, executor);
+  }
+
+  @override
+  HistoryBehavior get historyBehavior => HistoryBehavior.nonHistorical;
+
+  @override
+  String describe() => _wrapped.describe();
+}
 
 abstract interface class HistoryGroupingPolicy {
   TransactionMerge shouldMergeLatestTransaction(
