@@ -2462,7 +2462,6 @@ class CommonEditorOperations {
         if (i < selectedNodes.length - 1) {
           buffer.writeln();
           markdownBuffer.writeln();
-          markdownBuffer.writeln();
         }
       }
     }
@@ -2895,8 +2894,6 @@ class PasteEditorCommand extends EditCommand {
     final List<DocumentNode> nodes = mutableDocument.nodes;
     return nodes;
   }
-
- 
 
   Iterable<DocumentNode> _convertLinesToParagraphs(
     Iterable<AttributedText> attributedLines,

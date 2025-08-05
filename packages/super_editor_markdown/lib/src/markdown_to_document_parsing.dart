@@ -95,6 +95,36 @@ MutableDocument deserializeMarkdownToDocumentForPaste(
   return MutableDocument(nodes: documentNodes);
 }
 
+const int _LF = 10;
+const int _CR = 13;
+List<String> _convertTextToLines(String data) {
+  var lines = <String>[];
+  var end = data.length;
+  var sliceStart = 0;
+  var char = 0;
+  for (var i = 0; i < end; i++) {
+    var previousChar = char;
+    char = data.codeUnitAt(i);
+    if (char != _CR) {
+      if (char != _LF) continue;
+      if (previousChar == _CR) {
+        sliceStart = i + 1;
+        continue;
+      }
+    }
+    lines.add(data.substring(sliceStart, i));
+    sliceStart = i + 1;
+  }
+  if (sliceStart < end) {
+    lines.add(data.substring(sliceStart, end));
+  } else if (sliceStart == end) {
+    // 新增逻辑：最后一个字符是换行时，保留空行
+    lines.add('');
+  }
+
+  return lines;
+}
+
 /// Parses the given [markdown] and deserializes it into a [MutableDocument].
 ///
 /// The given [syntax] controls how the [markdown] is parsed, e.g., [MarkdownSyntax.normal]
@@ -111,8 +141,11 @@ MutableDocument deserializeMarkdownToDocument(
   List<ElementToNodeConverter> customElementToNodeConverters = const [],
   bool encodeHtml = false,
 }) {
-  final markdownLines =
-      const LineSplitter().convert(markdown).map<md.Line>((String l) {
+  // final markdownLines =
+  //     const LineSplitter().convert(markdown).map<md.Line>((String l) {
+  //   return md.Line(l);
+  // }).toList();
+  final markdownLines = _convertTextToLines(markdown).map<md.Line>((String l) {
     return md.Line(l);
   }).toList();
 
@@ -124,7 +157,7 @@ MutableDocument deserializeMarkdownToDocument(
         // _HeaderWithAlignmentSyntax(),
         // const _ParagraphWithAlignmentSyntax(),
       ],
-      const _EmptyLinePreservingParagraphSyntax(),
+      const _LinePreservingParagraphSyntax(),
       // const md.UnorderedListWithCheckboxSyntax(),
     ],
     withDefaultBlockSyntaxes: true,

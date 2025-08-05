@@ -33,10 +33,11 @@ String serializeDocumentToMarkdown(
   bool previousNodeIsImage = false;
   for (int i = 0; i < doc.nodeCount; ++i) {
     if (i > 0) {
+      // TODO: 目前做成不遵循markdown语法：“两个换行才是换行”，目前做成看到几个换行就是几个
       // Add a new line before every node, except the first node.
-      buffer.writeln();
+      // buffer.writeln();
     }
-    // 如果图片节点和其他节点之间缺乏两个\n\n，手动补一个
+    // 如果图片节点和其他节点之间缺乏\n，手动补一个
     // TODO：看后面是否改到插入事件里来手动补
     if (previousNodeIsImage) {
       buffer.writeln();
