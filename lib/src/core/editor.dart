@@ -92,6 +92,10 @@ class Editor implements RequestDispatcher {
     _activeCommandCount = 0;
     _future.clear();
     _history.clear();
+    _isInTransaction = false;
+    _isInTransaction = false;
+    _isImplicitTransaction = false;
+    _isReacting = false;
   }
 
   /// SuperEditor中editorContext未暴露的方法，在这里通过监听外部事件执行
@@ -339,6 +343,15 @@ class Editor implements RequestDispatcher {
 
       _activeCommandCount -= 1;
     } catch (e) {
+      ///重置状态 至少不会导致不能用了
+      _activeChangeList.clear();
+      _activeCommandCount = 0;
+      _future.clear();
+      _history.clear();
+      _isInTransaction = false;
+      _isInTransaction = false;
+      _isImplicitTransaction = false;
+      _isReacting = false;
       print("editor__execute_${e.toString()}");
       return;
     }
