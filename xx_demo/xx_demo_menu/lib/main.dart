@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:xx_demo_menu/main_scroll_view.dart';
 import 'package:xx_demo_menu/main_simple.dart';
 
 import 'package:xx_demo_menu/menu_demo.dart';
@@ -20,6 +21,8 @@ void main() {
   // HttpOverrides.global = MacNoProxyHttpOverrides();
   if (bool.fromEnvironment('menu', defaultValue: false)) {
     runApp(const MenuDemo());
+  } else if (bool.fromEnvironment('scroll', defaultValue: true)) {
+    runApp(DemoScrollView());
   } else {
     runApp(DemoSimple());
   }
