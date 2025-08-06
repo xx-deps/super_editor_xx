@@ -323,16 +323,15 @@ class AttributedTextMarkdownSerializer extends AttributionVisitor {
       // can't be checked using equality comparison) and asymmetrical in markdown.
       final linkMarker =
           _encodeLinkMarker(endingAttributions, AttributionVisitEvent.end);
-
       final mentionMarker =
           _encodeMentionMarker(endingAttributions, AttributionVisitEvent.end);
       if (mentionMarker.isNotEmpty) {
         hasMentionMarker = false;
       }
       _buffer
+        ..write(mentionMarker)
         ..write(markdownStyles)
-        ..write(linkMarker)
-        ..write(mentionMarker);
+        ..write(linkMarker);
     }
   }
 
