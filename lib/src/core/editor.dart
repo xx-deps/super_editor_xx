@@ -1,14 +1,9 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:attributed_text/attributed_text.dart';
 import 'package:clock/clock.dart';
 import 'package:collection/collection.dart';
-import 'package:super_editor/src/core/document.dart';
-import 'package:super_editor/src/core/document_composer.dart';
-import 'package:super_editor/src/default_editor/paragraph.dart';
-import 'package:super_editor/src/default_editor/text.dart';
-import 'package:super_editor/src/infrastructure/_logging.dart';
+import 'package:super_editor/super_editor.dart';
 import 'package:uuid/uuid.dart';
 
 enum CustomEditorEvent { cut, copy, paste }
@@ -233,7 +228,6 @@ class Editor implements RequestDispatcher {
         "___commands:${_transaction.commands}__changes:${_transaction.changes}",
       );
       if (_history.isEmpty) {
-        // Add this transaction onto the history stack.
         _history.add(_transaction);
       } else {
         final mergeChoice = historyGroupingPolicy.shouldMergeLatestTransaction(
@@ -289,7 +283,7 @@ class Editor implements RequestDispatcher {
     try {
       _logger.log(
         "editor_execute",
-        "_activeCommandCount:${_activeCommandCount}_request:${requests.length}__${requests.first}",
+        "_activeCommandCount:${_activeCommandCount}_requestLength:${requests.length}__request:$requests",
       );
       if (requests.isEmpty) {
         // No changes were requested. Don't waste time starting and ending transactions, etc.
@@ -312,7 +306,7 @@ class Editor implements RequestDispatcher {
       }
       _logger.log(
         "editor_execute___2___",
-        "___activeCommandCount:${_activeCommandCount}_request:${requests.length}__${requests.first}",
+        "___activeCommandCount:${_activeCommandCount}_requestLength:${requests.length}__requests:$requests",
       );
       _activeCommandCount += 1;
 
@@ -337,7 +331,7 @@ class Editor implements RequestDispatcher {
       }
       _logger.log(
         "execute___3___",
-        "activeCommandCount:${_activeCommandCount}_request:${requests.length}__${requests.first}",
+        "activeCommandCount:${_activeCommandCount}__undoableCommands:${undoableCommands.length}__undoableCommands$undoableCommands",
       );
 
       if (_activeCommandCount == 1 && _isImplicitTransaction && !_isReacting) {
@@ -346,11 +340,13 @@ class Editor implements RequestDispatcher {
 
       _logger.log(
         "execute__4___",
-        "activeCommandCount:${_activeCommandCount}_request:${requests.length}__${requests.first}",
+        "activeCommandCount:${_activeCommandCount}_transaction_commands_length:${_transaction.commands.length}___transaction_commands:${_transaction.commands}",
       );
 
       _activeCommandCount -= 1;
     } catch (e) {
+      _logger.log("execute_exception", e.toString());
+
       ///重置状态 至少不会导致不能用了
       _activeChangeList.clear();
       _activeCommandCount = 0;
@@ -360,7 +356,6 @@ class Editor implements RequestDispatcher {
       _isInTransaction = false;
       _isImplicitTransaction = false;
       _isReacting = false;
-      _logger.log("execute_exception", e.toString());
       return;
     }
   }
@@ -489,6 +484,7 @@ class Editor implements RequestDispatcher {
       editable.onTransactionStart();
 
       // Revert all editables to the last snapshot.
+      ///光标会置空
       editable.reset();
     }
 
@@ -517,6 +513,20 @@ class Editor implements RequestDispatcher {
 
     // TODO: find out why this is needed. If it's not, remove it.
     _notifyListeners([]);
+
+    ///补光标
+    if (_history.isEmpty) {
+      final lastNode = document.nodes.last;
+      final position = DocumentPosition(
+        nodeId: lastNode.id,
+        nodePosition: lastNode.endPosition,
+      );
+
+      (composer).setSelectionWithReason(
+        DocumentSelection.collapsed(position: position),
+        'undo',
+      );
+    }
   }
 
   void redo() {
