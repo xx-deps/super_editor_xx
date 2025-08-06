@@ -4,12 +4,11 @@ import 'dart:ui';
 import 'package:attributed_text/attributed_text.dart';
 import 'package:flutter/foundation.dart';
 import 'package:super_editor/src/core/document.dart';
+import 'package:super_editor/src/core/document_selection.dart';
+import 'package:super_editor/src/core/editor.dart';
+import 'package:super_editor/src/default_editor/document_ime/document_input_ime.dart';
 import 'package:super_editor/src/infrastructure/_logging.dart';
 import 'package:super_editor/src/infrastructure/pausable_value_notifier.dart';
-
-import '../default_editor/document_ime/document_input_ime.dart';
-import 'document_selection.dart';
-import 'editor.dart';
 
 /// Maintains a [DocumentSelection] within a [Document] and
 /// uses that selection to edit the document.
@@ -375,7 +374,7 @@ class ChangeSelectionCommand extends EditCommand {
   final String reason;
 
   @override
-  HistoryBehavior get historyBehavior => HistoryBehavior.undoable;
+  HistoryBehavior get historyBehavior => HistoryBehavior.nonHistorical;
 
   @override
   String describe() => "Change selection ($changeType): $newSelection";
@@ -556,7 +555,7 @@ class ChangeComposingRegionCommand extends EditCommand {
   final DocumentRange? composingRegion;
 
   @override
-  HistoryBehavior get historyBehavior => HistoryBehavior.undoable;
+  HistoryBehavior get historyBehavior => HistoryBehavior.nonHistorical;
 
   @override
   void execute(EditContext context, CommandExecutor executor) {

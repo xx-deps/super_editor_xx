@@ -66,18 +66,18 @@ class _MyHomePageState extends State<MyHomePage> {
 
   late final StableTagPlugin _userTagPlugin;
 
-  final bool _hasFocus = false;
+  bool _hasFocus = false;
 
   final _composingLink = LeaderLink();
 
   @override
   void initState() {
     _focusNode = FocusNode();
-    // _focusNode.addListener(() {
-    //   print('_focusNode:${_focusNode.hasFocus}');
-    //   _hasFocus = _focusNode.hasFocus;
-    //   setState(() {});
-    // });
+    _focusNode.addListener(() {
+      print('_focusNode:${_focusNode.hasFocus}');
+      _hasFocus = _focusNode.hasFocus;
+      setState(() {});
+    });
 
     _doc = _createDocument();
     _composer = MutableDocumentComposer()..addListener(() {});
@@ -319,6 +319,15 @@ class _MyHomePageState extends State<MyHomePage> {
                                 await _insertImage();
                               },
                               child: Text('添加图片'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Future.delayed(Duration(seconds: 5), () {
+                                  print("___________");
+                                  _focusNode.requestFocus();
+                                });
+                              },
+                              child: Text("focus"),
                             ),
                           ],
                         ),
