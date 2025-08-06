@@ -54,6 +54,8 @@ class Editor implements RequestDispatcher {
   /// Each generated node ID is universally unique.
   static String createNodeId() => _uuid.v4();
 
+  final Logger _logger = Logger(scope: "Editor");
+
   /// Constructs an [Editor] with:
   ///  - [editables], which contains all artifacts that will be mutated by [EditCommand]s, such
   ///    as a [Document] and [DocumentComposer].
@@ -201,8 +203,9 @@ class Editor implements RequestDispatcher {
   ///
   /// Does nothing if a transaction is already in-progress.
   void startTransaction() {
-    print(
-      "editor_startTransaction___commands:${_transaction.commands}__changes:${_transaction.changes}",
+    _logger.log(
+      "startTransaction",
+      "commands:${_transaction.commands}__changes:${_transaction.changes}",
     );
     if (_isInTransaction) {
       return;
@@ -225,8 +228,9 @@ class Editor implements RequestDispatcher {
     }
 
     if (_transaction.commands.isNotEmpty && isHistoryEnabled) {
-      print(
-        "editor_endTransaction___commands:${_transaction.commands}__changes:${_transaction.changes}",
+      _logger.log(
+        "endTransaction",
+        "___commands:${_transaction.commands}__changes:${_transaction.changes}",
       );
       if (_history.isEmpty) {
         // Add this transaction onto the history stack.
@@ -283,8 +287,9 @@ class Editor implements RequestDispatcher {
   @override
   void execute(List<EditRequest> requests) {
     try {
-      print(
-        "editor_execute___activeCommandCount:${_activeCommandCount}_request:${requests.length}__${requests.first}",
+      _logger.log(
+        "editor_execute",
+        "_activeCommandCount:${_activeCommandCount}_request:${requests.length}__${requests.first}",
       );
       if (requests.isEmpty) {
         // No changes were requested. Don't waste time starting and ending transactions, etc.
@@ -305,8 +310,9 @@ class Editor implements RequestDispatcher {
         _isImplicitTransaction = true;
         startTransaction();
       }
-      print(
-        "editor_execute2___activeCommandCount:${_activeCommandCount}_request:${requests.length}__${requests.first}",
+      _logger.log(
+        "editor_execute___2___",
+        "___activeCommandCount:${_activeCommandCount}_request:${requests.length}__${requests.first}",
       );
       _activeCommandCount += 1;
 
@@ -329,16 +335,18 @@ class Editor implements RequestDispatcher {
       if (undoableCommands.isNotEmpty) {
         _transaction.commands.addAll(undoableCommands);
       }
-      print(
-        "editor_execute3___activeCommandCount:${_activeCommandCount}_request:${requests.length}__${requests.first}",
+      _logger.log(
+        "execute___3___",
+        "activeCommandCount:${_activeCommandCount}_request:${requests.length}__${requests.first}",
       );
 
       if (_activeCommandCount == 1 && _isImplicitTransaction && !_isReacting) {
         endTransaction();
       }
 
-      print(
-        "editor_execute4___activeCommandCount:${_activeCommandCount}_request:${requests.length}__${requests.first}",
+      _logger.log(
+        "execute__4___",
+        "activeCommandCount:${_activeCommandCount}_request:${requests.length}__${requests.first}",
       );
 
       _activeCommandCount -= 1;
@@ -352,13 +360,13 @@ class Editor implements RequestDispatcher {
       _isInTransaction = false;
       _isImplicitTransaction = false;
       _isReacting = false;
-      print("editor__execute_${e.toString()}");
+      _logger.log("execute_exception", e.toString());
       return;
     }
   }
 
   EditCommand _findCommandForRequest(EditRequest request) {
-    print("editor__findCommandForRequest__request:$request");
+    _logger.log("findCommandForRequest", "__request:$request");
     EditCommand? command;
     for (final handler in requestHandlers) {
       command = handler(this, request);
@@ -373,7 +381,7 @@ class Editor implements RequestDispatcher {
   }
 
   List<EditEvent> _executeCommand(EditCommand command) {
-    print("editor___executeCommand__command:$command");
+    _logger.log("executeCommand", "__command:$command");
     // Execute the given command, and any other commands that it spawns.
     _commandExecutor.executeCommand(command);
 
@@ -398,7 +406,7 @@ class Editor implements RequestDispatcher {
     for (final editable in context._resources.values) {
       editable.onTransactionStart();
     }
-    print("editor__onTransactionStart:${history.length}");
+    _logger.log("_onTransactionStart", "${history.length}");
   }
 
   void _onTransactionEnd() {
@@ -406,14 +414,14 @@ class Editor implements RequestDispatcher {
       editable.onTransactionEnd(_activeChangeList);
     }
     _activeChangeList.clear();
-    print("editor_historyLength_end:${history.length}");
+    _logger.log("_onTransactionEnd", "${history.length}");
   }
 
   void _reactToChanges() {
     if (_activeChangeList.isEmpty) {
       return;
     }
-    print("editor_reactToChanges__");
+    _logger.log("reactToChanges__", '$_activeChangeList');
 
     _isReacting = true;
 
@@ -445,7 +453,7 @@ class Editor implements RequestDispatcher {
   }
 
   void undo() {
-    print("editor_undo__");
+    _logger.log("undo__", '$history');
     if (!isHistoryEnabled) {
       // History is disabled, therefore undo/redo are disabled.
       return;
@@ -512,7 +520,7 @@ class Editor implements RequestDispatcher {
   }
 
   void redo() {
-    print("editor_redo__");
+    _logger.log("redo__", '$history');
     if (!isHistoryEnabled) {
       // History is disabled, therefore undo/redo are disabled.
       return;
