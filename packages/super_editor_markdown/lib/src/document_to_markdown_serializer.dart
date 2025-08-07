@@ -350,7 +350,7 @@ extension Markdown on AttributedText {
     final newStart = startOffset + leadingWhitespace;
     final newEnd = endOffset - trailingWhitespace;
 
-    if (newStart >= newEnd || newStart < 0 || newEnd > text.length) {
+    if (newStart >= newEnd || newStart < 0 || newEnd > text.length - 1) {
       return null;
     }
 
