@@ -254,9 +254,118 @@ String? _convertAlignmentToMarkdown(String alignment) {
 
 /// Extension on [AttributedText] to serialize the [AttributedText] to a Markdown `String`.
 extension Markdown on AttributedText {
-  String toMarkdown() {
+  String toWithSpaceMarkdown() {
     final serializer = AttributedTextMarkdownSerializer();
     return serializer.serialize(this);
+  }
+
+  /// 如果加粗、下划线标记包裹的文本两侧有空格，自动收缩到文本两侧，否则解析不出来这个样式
+  /// 如: ** aaaa.   ** => **aaaa.**
+  String toMarkdown() {
+    final newAttributedText = _trimSpanMarkersQuiet(this);
+    final markdown = newAttributedText.toWithSpaceMarkdown();
+    return markdown;
+  }
+
+  /// 更简洁的版本（不带调试输出）
+  AttributedText _trimSpanMarkersQuiet(AttributedText attributedText) {
+    final text = attributedText.toPlainText(includePlaceholders: true);
+    final originalMarkers = List<SpanMarker>.from(attributedText.spans.markers);
+    final List<SpanMarker> trimmedMarkers = [];
+
+    // 按 Attribution 分组处理
+    final Map<Attribution, List<SpanMarker>> attributionGroups = {};
+    for (final marker in originalMarkers) {
+      attributionGroups.putIfAbsent(marker.attribution, () => []).add(marker);
+    }
+
+    // 处理每个 attribution 组
+    for (final entry in attributionGroups.entries) {
+      final markers = entry.value;
+      if (entry.key.id.contains('(met)')) {
+        trimmedMarkers.addAll(markers);
+        continue;
+      }
+      markers.sort((a, b) => a.offset.compareTo(b.offset));
+
+      // 处理每对 start/end markers
+      for (int i = 0; i < markers.length; i += 2) {
+        if (i + 1 >= markers.length) break;
+
+        final startMarker = markers[i];
+        final endMarker = markers[i + 1];
+
+        if (!startMarker.isStart || !endMarker.isEnd) {
+          trimmedMarkers.add(startMarker);
+          trimmedMarkers.add(endMarker);
+          continue;
+        }
+
+        final trimmedPair = _trimSpanMarkerPairQuiet(
+          text: text,
+          startMarker: startMarker,
+          endMarker: endMarker,
+        );
+
+        if (trimmedPair != null) {
+          trimmedMarkers.addAll(trimmedPair);
+        }
+      }
+    }
+
+    trimmedMarkers.sort();
+
+    return AttributedText(
+      attributedText.toPlainText(includePlaceholders: false),
+      AttributedSpans(attributions: trimmedMarkers),
+      Map.from(attributedText.placeholders),
+    );
+  }
+
+  List<SpanMarker>? _trimSpanMarkerPairQuiet({
+    required String text,
+    required SpanMarker startMarker,
+    required SpanMarker endMarker,
+  }) {
+    final startOffset = startMarker.offset;
+    final endOffset = endMarker.offset;
+
+    if (startOffset < 0 ||
+        endOffset > text.length ||
+        startOffset >= endOffset) {
+      return null;
+    }
+
+    final spanText = text.substring(
+      startOffset,
+      endOffset + 1 > text.length ? text.length : endOffset + 1,
+    );
+    if (spanText.trim().isEmpty) {
+      return null;
+    }
+
+    final leadingWhitespace = spanText.length - spanText.trimLeft().length;
+    final trailingWhitespace = spanText.length - spanText.trimRight().length;
+
+    final newStart = startOffset + leadingWhitespace;
+    final newEnd = endOffset - trailingWhitespace;
+
+    if (newStart >= newEnd || newStart < 0 || newEnd > text.length - 1) {
+      return null;
+    }
+
+    return [
+      SpanMarker(
+        attribution: startMarker.attribution,
+        offset: newStart,
+        markerType: SpanMarkerType.start,
+      ),
+      SpanMarker(
+        attribution: endMarker.attribution,
+        offset: newEnd,
+        markerType: SpanMarkerType.end,
+      ),
+    ];
   }
 }
 

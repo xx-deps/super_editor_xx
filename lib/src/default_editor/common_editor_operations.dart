@@ -2451,13 +2451,11 @@ class CommonEditorOperations {
           final attributedSubstring = fullText.copyTextInRange(
             SpanRange(normalizedStart, normalizedEnd),
           );
-
           final markdown = attributedSubstring.toMarkdown();
           markdownBuffer.write(markdown);
         } else {
           markdownBuffer.write(nodeContent);
         }
-
         buffer.write(nodeContent);
         if (i < selectedNodes.length - 1) {
           buffer.writeln();
