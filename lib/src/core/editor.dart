@@ -17,9 +17,9 @@ class EditorUndoRedoService {
   EditorUndoRedoService._internal() {
     _undoStreamController = StreamController.broadcast();
   }
-  late StreamController<(MutableDocument, MutableDocumentComposer)>
+  late StreamController<(MutableDocument, DocumentSelection?)>
   _undoStreamController;
-  Stream<(MutableDocument, MutableDocumentComposer)> get undoStream =>
+  Stream<(MutableDocument, DocumentSelection?)> get undoStream =>
       _undoStreamController.stream;
 }
 
@@ -67,6 +67,8 @@ class Editor implements RequestDispatcher {
   static String createNodeId() => _uuid.v4();
 
   final Logger _logger = Logger(scope: "Editor");
+
+  EditorHistory? beforeTransactionHistory;
 
   /// Constructs an [Editor] with:
   ///  - [editables], which contains all artifacts that will be mutated by [EditCommand]s, such
@@ -145,6 +147,7 @@ class Editor implements RequestDispatcher {
 
   ///通过 state 来控制历史
   final List<EditorHistory> _stateHistory = [];
+  final List<EditorHistory> _stateFuture = [];
   final bool isStateHistoryEnable;
 
   /// A list of editor transactions that were undone since the last time a change was
@@ -233,6 +236,13 @@ class Editor implements RequestDispatcher {
     _activeChangeList.clear();
     _transaction = CommandTransaction([], clock.now());
 
+    if (isStateHistoryEnable) {
+      final next = document.copy();
+      beforeTransactionHistory = EditorHistory(
+        document: next,
+        selection: composer.selection?.copyWith(),
+      );
+    }
     _onTransactionStart();
   }
 
@@ -285,19 +295,8 @@ class Editor implements RequestDispatcher {
     if (_transaction.commands.isNotEmpty) {
       for (var element in _transaction.commands) {
         if (element.historyBehavior == HistoryBehavior.undoable) {
-          if (isStateHistoryEnable) {
-            final latestEditorHistory = EditorHistory(
-              document: document.copy(),
-              composer: composer,
-            );
-            for (var element in _stateHistory) {
-              final document = element.document;
-              for (var doc in document._nodes) {
-                print("editor_nodeId:${doc.id}___docContent:$doc");
-              }
-            }
-
-            _stateHistory.add(latestEditorHistory);
+          if (isStateHistoryEnable && beforeTransactionHistory != null) {
+            _stateHistory.add(beforeTransactionHistory!);
           }
         }
       }
@@ -503,19 +502,20 @@ class Editor implements RequestDispatcher {
       }
       final stateUndo = _stateHistory.removeLast();
       final stateDocument = stateUndo.document;
-      final stateComposer = stateUndo.composer;
-      document.addAll(stateDocument._nodes);
-      composer.setSelectionWithReason(
-        stateComposer.selection,
-        SelectionReason.contentChange,
-      );
+      final selection = stateUndo.selection;
+      document.addAll(stateDocument.nodes);
+      if (selection != null) {
+        composer.setSelectionWithReason(selection);
+      } else {
+        composer.clearSelection();
+      }
 
-      // context.put(documentKey, stateDocument);
-      // context.put(composerKey, stateComposer);
+      // composer.setSelectionWithReason(stateComposer.selection);
       EditorUndoRedoService._instance._undoStreamController.add((
         stateDocument,
-        stateComposer,
+        selection,
       ));
+      _stateFuture.add(stateUndo);
     } else {
       if (!isHistoryEnabled) {
         // History is disabled, therefore undo/redo are disabled.
@@ -603,45 +603,65 @@ class Editor implements RequestDispatcher {
   }
 
   void redo() {
-    _logger.log("redo__", '$history');
-    if (!isHistoryEnabled) {
-      // History is disabled, therefore undo/redo are disabled.
-      return;
+    if (isStateHistoryEnable) {
+      if (_stateFuture.isEmpty) {
+        return;
+      }
+      final stateRedo = _stateFuture.removeLast();
+      final stateDocument = stateRedo.document;
+      final selection = stateRedo.selection;
+      document.addAll(stateDocument._nodes);
+      if (selection != null) {
+        composer.setSelectionWithReason(selection);
+      } else {
+        composer.clearSelection();
+      }
+      EditorUndoRedoService._instance._undoStreamController.add((
+        stateDocument,
+        selection,
+      ));
+      _stateHistory.add(stateRedo);
+    } else {
+      _logger.log("redo__", '$history');
+      if (!isHistoryEnabled) {
+        // History is disabled, therefore undo/redo are disabled.
+        return;
+      }
+
+      editorEditsLog.finest("Running redo");
+      if (_future.isEmpty) {
+        return;
+      }
+
+      editorEditsLog.finer("Future transaction:");
+      for (final command in _future.last.commands) {
+        editorEditsLog.finer(" - ${command.runtimeType}");
+      }
+
+      for (final editable in context._resources.values) {
+        // Don't let editables notify listeners during redo.
+        editable.onTransactionStart();
+      }
+
+      final commandTransaction = _future.removeLast();
+      final edits = <EditEvent>[];
+      for (final command in commandTransaction.commands) {
+        final commandEdits = _executeCommand(command);
+        edits.addAll(commandEdits);
+      }
+      _history.add(commandTransaction);
+
+      editorEditsLog.finest("Finished redo");
+
+      editorEditsLog.finer("Ending transaction on all editables");
+      for (final editable in context._resources.values) {
+        // Let editables start notifying listeners again.
+        editable.onTransactionEnd(edits);
+      }
+
+      // TODO: find out why this is needed. If it's not, remove it.
+      _notifyListeners([]);
     }
-
-    editorEditsLog.finest("Running redo");
-    if (_future.isEmpty) {
-      return;
-    }
-
-    editorEditsLog.finer("Future transaction:");
-    for (final command in _future.last.commands) {
-      editorEditsLog.finer(" - ${command.runtimeType}");
-    }
-
-    for (final editable in context._resources.values) {
-      // Don't let editables notify listeners during redo.
-      editable.onTransactionStart();
-    }
-
-    final commandTransaction = _future.removeLast();
-    final edits = <EditEvent>[];
-    for (final command in commandTransaction.commands) {
-      final commandEdits = _executeCommand(command);
-      edits.addAll(commandEdits);
-    }
-    _history.add(commandTransaction);
-
-    editorEditsLog.finest("Finished redo");
-
-    editorEditsLog.finer("Ending transaction on all editables");
-    for (final editable in context._resources.values) {
-      // Let editables start notifying listeners again.
-      editable.onTransactionEnd(edits);
-    }
-
-    // TODO: find out why this is needed. If it's not, remove it.
-    _notifyListeners([]);
   }
 
   void cut({String? customMarkdownText}) {
@@ -1739,8 +1759,8 @@ class MutableDocument
 
 class EditorHistory {
   MutableDocument document;
-  MutableDocumentComposer composer;
-  EditorHistory({required this.document, required this.composer});
+  DocumentSelection? selection;
+  EditorHistory({required this.document, this.selection});
 
   // Map<String, dynamic> toMap() {
   //   return <String, dynamic>{
@@ -1759,4 +1779,38 @@ class EditorHistory {
   // String toJson() => json.encode(toMap());
 
   // factory DocumentHistory.fromJson(String source) => DocumentHistory.fromMap(json.decode(source) as Map<String, dynamic>);
+}
+
+extension on MutableDocument {
+  bool isEqual(MutableDocument other) {
+    final otherNodes = other._nodes;
+    final currentNodes = _nodes;
+    if (otherNodes.length != currentNodes.length) return false;
+
+    final isNotEqual = currentNodes.any((currentNode) {
+      final i = currentNodes.indexOf(currentNode);
+      final otherNode = otherNodes[i];
+
+      if (otherNode.runtimeType != currentNode.runtimeType) return true;
+      if (currentNode is TextNode && otherNode is TextNode) {
+        return currentNode == otherNode;
+      }
+      if (currentNode is ParagraphNode && otherNode is ParagraphNode) {
+        return currentNode == otherNode;
+      }
+      if (currentNode is ImageNode && otherNode is ImageNode) {
+        return currentNode == otherNode;
+      }
+      if (currentNode is HorizontalRuleNode &&
+          otherNode is HorizontalRuleNode) {
+        return currentNode == otherNode;
+      }
+      if (currentNode is ListItemNode && otherNode is ListItemNode) {
+        return currentNode == otherNode;
+      }
+      return false;
+    });
+    if (isNotEqual) return false;
+    return true;
+  }
 }
