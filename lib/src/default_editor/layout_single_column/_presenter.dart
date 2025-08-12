@@ -141,7 +141,12 @@ class SingleColumnLayoutPresenter {
     }
   }
 
-  void updateViewModel() {
+  void updateViewModel({bool isUndo = false}) {
+    if (isUndo) {
+      _earliestDirtyPhase = 0;
+      print("editor_updateViewModel");
+    }
+
     editorLayoutLog.finest(
       "Calculating an updated view model for document layout.",
     );

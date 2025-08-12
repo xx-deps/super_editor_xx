@@ -501,12 +501,12 @@ class SuperEditorState extends State<SuperEditor> {
 
   void _handlerUndo((MutableDocument, MutableDocumentComposer) event) {
     print("_handlerUndo____document:${event.$1}____composer:${event.$2}");
-    // _document = MutableDocument(nodes: [event.$1.last]);
-    // _composer = event.$2;
+    _docLayoutPresenter?.updateViewModel(isUndo: true);
   }
 
   @override
   void didUpdateWidget(SuperEditor oldWidget) {
+    print("_handlerUndo____didUpdateWidget");
     super.didUpdateWidget(oldWidget);
 
     if (widget.focusNode != oldWidget.focusNode) {

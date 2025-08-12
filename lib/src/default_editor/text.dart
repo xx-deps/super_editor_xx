@@ -172,6 +172,7 @@ class TextNode extends DocumentNode {
     return copyTextNodeWith(id: id);
   }
 
+  @override
   TextNode copy() {
     return TextNode(
       id: id,

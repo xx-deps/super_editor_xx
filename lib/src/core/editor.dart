@@ -279,6 +279,30 @@ class Editor implements RequestDispatcher {
       }
     }
 
+    print(
+      "editor_endtransaction_transaction.commonds.length:${_transaction.commands.length}",
+    );
+    if (_transaction.commands.isNotEmpty) {
+      for (var element in _transaction.commands) {
+        if (element.historyBehavior == HistoryBehavior.undoable) {
+          if (isStateHistoryEnable) {
+            final latestEditorHistory = EditorHistory(
+              document: document.copy(),
+              composer: composer,
+            );
+            for (var element in _stateHistory) {
+              final document = element.document;
+              for (var doc in document._nodes) {
+                print("editor_nodeId:${doc.id}___docContent:$doc");
+              }
+            }
+
+            _stateHistory.add(latestEditorHistory);
+          }
+        }
+      }
+    }
+
     // Now that an atomic set of changes have completed, let the reactions followup
     // with more changes, such as auto-correction, tagging, etc.
     _reactToChanges();
@@ -287,10 +311,12 @@ class Editor implements RequestDispatcher {
     _isImplicitTransaction = false;
     _transaction.commands.clear();
     _transaction.changes.clear();
+    _transaction.lastChangeTime = clock.now();
 
     // Note: The transaction isn't fully considered over until after the reactions run.
     // This is because the reactions need access to the change list from the previous
     // transaction.
+
     _onTransactionEnd();
 
     editorEditsLog.finest("Finished transaction");
@@ -432,14 +458,6 @@ class Editor implements RequestDispatcher {
     }
     _activeChangeList.clear();
     _logger.log("_onTransactionEnd", "${history.length}");
-    if (isStateHistoryEnable) {
-      final latestEditorHistory = EditorHistory(
-        document: document,
-        composer: composer,
-      );
-
-      _stateHistory.add(latestEditorHistory);
-    }
   }
 
   void _reactToChanges() {
@@ -486,7 +504,12 @@ class Editor implements RequestDispatcher {
       final stateUndo = _stateHistory.removeLast();
       final stateDocument = stateUndo.document;
       final stateComposer = stateUndo.composer;
-      // (context._resources[documentKey] as MutableDocument).testNotify();
+      document.addAll(stateDocument._nodes);
+      composer.setSelectionWithReason(
+        stateComposer.selection,
+        SelectionReason.contentChange,
+      );
+
       // context.put(documentKey, stateDocument);
       // context.put(composerKey, stateComposer);
       EditorUndoRedoService._instance._undoStreamController.add((
@@ -1565,6 +1588,25 @@ class MutableDocument
   void clear() {
     _nodes.clear();
     _refreshNodeIdCaches();
+  }
+
+  void addAll(List<DocumentNode> nodes) {
+    _nodes.clear();
+    _nodes.addAll(nodes);
+    _refreshNodeIdCaches();
+  }
+
+  MutableDocument copy() {
+    final newDoc = MutableDocument(
+      nodes: _nodes.map((node) => node.copy()).toList(),
+    );
+
+    for (final listener in _listeners) {
+      newDoc.addListener(listener);
+    }
+    newDoc._didReset = true;
+
+    return newDoc;
   }
 
   /// Moves a [DocumentNode] matching the given [nodeId] from its current index
