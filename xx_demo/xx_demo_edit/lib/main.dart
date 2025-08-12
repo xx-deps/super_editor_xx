@@ -76,7 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
     _focusNode.addListener(() {
       print('_focusNode:${_focusNode.hasFocus}');
       _hasFocus = _focusNode.hasFocus;
-      setState(() {});
+      // setState(() {});
     });
 
     _doc = _createDocument();
@@ -84,11 +84,14 @@ class _MyHomePageState extends State<MyHomePage> {
     _docEditor = createDefaultDocumentEditor(
       document: _doc,
       composer: _composer,
-      historyGroupingPolicy: HistoryGroupingPolicyList([
-        mergeRepeatSelectionChangesPolicy,
-        mergeRapidTextInputPolicy,
-        // ignorePureSelectionOnlyChangesPolicy,
-      ]),
+      isHistoryEnabled: false,
+      isStateHistoryEnable: true,
+      // historyGroupingPolicy: HistoryGroupingPolicyList([
+      //   // _NeverMergePolicy()
+      //   // mergeRepeatSelectionChangesPolicy,
+      //   // mergeRapidTextInputPolicy,
+      //   // ignorePureSelectionOnlyChangesPolicy,
+      // ]),
     );
 
     _userTagPlugin = StableTagPlugin()
@@ -100,7 +103,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void onTagChange() {
     print('_userTagPlugin:${_userTagPlugin.tagIndex.composingStableTag.value}');
-    setState(() {});
+    // setState(() {});
   }
 
   Editor createDefaultDocumentEditor({
@@ -108,6 +111,7 @@ class _MyHomePageState extends State<MyHomePage> {
     required MutableDocumentComposer composer,
     HistoryGroupingPolicy historyGroupingPolicy = defaultMergePolicy,
     bool isHistoryEnabled = true,
+    bool isStateHistoryEnable = false,
   }) {
     final editor = Editor(
       editables: {Editor.documentKey: document, Editor.composerKey: composer},
@@ -135,9 +139,10 @@ class _MyHomePageState extends State<MyHomePage> {
         ///添加命令
         ...List.from(defaultRequestHandlers),
       ],
-      historyGroupingPolicy: historyGroupingPolicy,
+      // historyGroupingPolicy: historyGroupingPolicy,
       reactionPipeline: List.from(defaultEditorReactions),
       isHistoryEnabled: isHistoryEnabled,
+      isStateHistoryEnable: isStateHistoryEnable,
     );
 
     return editor;
@@ -300,6 +305,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                     ),
                   ),
+
                   Expanded(
                     child: GestureDetector(
                       behavior: HitTestBehavior.translucent,
@@ -322,12 +328,39 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                             TextButton(
                               onPressed: () {
-                                Future.delayed(Duration(seconds: 5), () {
-                                  print("___________");
-                                  _focusNode.requestFocus();
-                                });
+                                // _docEditor.resetEditor();
+                                _docEditor.execute([ClearDocumentRequest()]);
                               },
-                              child: Text("focus"),
+                              child: Text("notext"),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                // _docEditor.resetEditor();
+                                final documentNew =
+                                    deserializeMarkdownToDocument("啊哈哈哈哈哈哈");
+
+                                _docEditor.execute([
+                                  ...documentNew.map(
+                                    (e) => InsertNodeAtEndOfDocumentRequest(e),
+                                  ),
+                                ]);
+                                _docEditor.execute([
+                                  ChangeSelectionRequest(
+                                    DocumentSelection.collapsed(
+                                      position: DocumentPosition(
+                                        nodeId: _docEditor.document.last.id,
+                                        nodePosition: _docEditor
+                                            .document
+                                            .last
+                                            .endPosition,
+                                      ),
+                                    ),
+                                    SelectionChangeType.insertContent,
+                                    SelectionReason.userInteraction,
+                                  ),
+                                ]);
+                              },
+                              child: Text("text"),
                             ),
                           ],
                         ),

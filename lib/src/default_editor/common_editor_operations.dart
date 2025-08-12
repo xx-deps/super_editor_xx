@@ -10,21 +10,18 @@ import 'package:super_editor/src/core/document_composer.dart';
 import 'package:super_editor/src/core/document_layout.dart';
 import 'package:super_editor/src/core/document_selection.dart';
 import 'package:super_editor/src/core/editor.dart';
+import 'package:super_editor/src/default_editor/attributions.dart';
 import 'package:super_editor/src/default_editor/box_component.dart';
-import 'package:super_editor/src/default_editor/default_document_editor_reactions.dart';
+import 'package:super_editor/src/default_editor/horizontal_rule.dart';
+import 'package:super_editor/src/default_editor/image.dart';
 import 'package:super_editor/src/default_editor/list_items.dart';
+import 'package:super_editor/src/default_editor/multi_node_editing.dart';
 import 'package:super_editor/src/default_editor/paragraph.dart';
 import 'package:super_editor/src/default_editor/selection_upstream_downstream.dart';
 import 'package:super_editor/src/default_editor/tasks.dart';
 import 'package:super_editor/src/default_editor/text.dart';
-import 'package:super_editor/src/infrastructure/_logging.dart';
-
-import 'package:super_editor/src/default_editor/attributions.dart';
-import 'package:super_editor/src/default_editor/horizontal_rule.dart';
-import 'package:super_editor/src/default_editor/image.dart';
-import 'package:super_editor/src/default_editor/multi_node_editing.dart';
 import 'package:super_editor/src/default_editor/text_tools.dart';
-
+import 'package:super_editor/src/infrastructure/_logging.dart';
 import 'package:super_editor_markdown/super_editor_markdown.dart';
 
 /// Performs common, high-level editing and composition tasks

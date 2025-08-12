@@ -475,6 +475,9 @@ abstract class DocumentNode {
   // unequal, because the hashCodes would be different.
   @override
   int get hashCode => 1;
+
+  ///实现拷贝历史
+  DocumentNode copy();
 }
 
 extension InspectNodeAffinity on DocumentNode {
