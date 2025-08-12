@@ -6,6 +6,23 @@ import 'package:collection/collection.dart';
 import 'package:super_editor/super_editor.dart';
 import 'package:uuid/uuid.dart';
 
+class EditorUndoRedoService {
+  static final EditorUndoRedoService _instance =
+      EditorUndoRedoService._internal();
+
+  factory EditorUndoRedoService() {
+    return _instance;
+  }
+
+  EditorUndoRedoService._internal() {
+    _undoStreamController = StreamController.broadcast();
+  }
+  late StreamController<(MutableDocument, MutableDocumentComposer)>
+  _undoStreamController;
+  Stream<(MutableDocument, MutableDocumentComposer)> get undoStream =>
+      _undoStreamController.stream;
+}
+
 enum CustomEditorEvent { cut, copy, paste }
 
 class CustomEditorEventData {
@@ -65,6 +82,7 @@ class Editor implements RequestDispatcher {
     List<EditReaction>? reactionPipeline,
     List<EditListener>? listeners,
     this.isHistoryEnabled = false,
+    this.isStateHistoryEnable = false,
   }) : requestHandlers = requestHandlers ?? [],
        reactionPipeline = reactionPipeline ?? [],
        _changeListeners = listeners ?? [],
@@ -124,6 +142,10 @@ class Editor implements RequestDispatcher {
   /// state of the document, and other editables.
   List<CommandTransaction> get history => List.from(_history);
   final _history = <CommandTransaction>[];
+
+  ///通过 state 来控制历史
+  final List<EditorHistory> _stateHistory = [];
+  final bool isStateHistoryEnable;
 
   /// A list of editor transactions that were undone since the last time a change was
   /// made.
@@ -410,6 +432,14 @@ class Editor implements RequestDispatcher {
     }
     _activeChangeList.clear();
     _logger.log("_onTransactionEnd", "${history.length}");
+    if (isStateHistoryEnable) {
+      final latestEditorHistory = EditorHistory(
+        document: document,
+        composer: composer,
+      );
+
+      _stateHistory.add(latestEditorHistory);
+    }
   }
 
   void _reactToChanges() {
@@ -449,83 +479,103 @@ class Editor implements RequestDispatcher {
 
   void undo() {
     _logger.log("undo__", '$history');
-    if (!isHistoryEnabled) {
-      // History is disabled, therefore undo/redo are disabled.
-      return;
-    }
+    if (isStateHistoryEnable) {
+      if (_stateHistory.isEmpty) {
+        return;
+      }
+      final stateUndo = _stateHistory.removeLast();
+      final stateDocument = stateUndo.document;
+      final stateComposer = stateUndo.composer;
+      // (context._resources[documentKey] as MutableDocument).testNotify();
+      // context.put(documentKey, stateDocument);
+      // context.put(composerKey, stateComposer);
+      EditorUndoRedoService._instance._undoStreamController.add((
+        stateDocument,
+        stateComposer,
+      ));
+    } else {
+      if (!isHistoryEnabled) {
+        // History is disabled, therefore undo/redo are disabled.
+        return;
+      }
 
-    editorEditsLog.finest("Running undo");
-    if (_history.isEmpty) {
-      return;
-    }
+      editorEditsLog.finest("Running undo");
+      if (_history.isEmpty) {
+        return;
+      }
 
-    editorEditsLog.finer("History before undo:");
-    for (final transaction in _history) {
-      editorEditsLog.finer(" - transaction");
-      for (final command in transaction.commands) {
+      editorEditsLog.finer("History before undo:");
+      for (final transaction in _history) {
+        editorEditsLog.finer(" - transaction");
+        for (final command in transaction.commands) {
+          editorEditsLog.finer(
+            "   - ${command.runtimeType}: ${command.describe()}",
+          );
+        }
+      }
+      editorEditsLog.finer("---");
+
+      // Move the latest command from the history to the future.
+      final transactionToUndo = _history.removeLast();
+      _future.add(transactionToUndo);
+      editorEditsLog.finer("The commands being undone are:");
+      for (final command in transactionToUndo.commands) {
         editorEditsLog.finer(
-          "   - ${command.runtimeType}: ${command.describe()}",
+          "  - ${command.runtimeType}: ${command.describe()}",
         );
       }
-    }
-    editorEditsLog.finer("---");
 
-    // Move the latest command from the history to the future.
-    final transactionToUndo = _history.removeLast();
-    _future.add(transactionToUndo);
-    editorEditsLog.finer("The commands being undone are:");
-    for (final command in transactionToUndo.commands) {
-      editorEditsLog.finer("  - ${command.runtimeType}: ${command.describe()}");
-    }
+      editorEditsLog.finer(
+        "Resetting all editables to their last checkpoint...",
+      );
+      for (final editable in context._resources.values) {
+        // Don't let editables notify listeners during undo.
+        editable.onTransactionStart();
 
-    editorEditsLog.finer("Resetting all editables to their last checkpoint...");
-    for (final editable in context._resources.values) {
-      // Don't let editables notify listeners during undo.
-      editable.onTransactionStart();
-
-      // Revert all editables to the last snapshot.
-      ///光标会置空
-      editable.reset();
-    }
-
-    // Replay all history except for the most recent command transaction.
-    editorEditsLog.finer(
-      "Replaying all command history except for the most recent transaction...",
-    );
-    final changeEvents = <EditEvent>[];
-    for (final commandTransaction in _history) {
-      for (final command in commandTransaction.commands) {
-        // We re-run the commands without tracking changes and without running reactions
-        // because any relevant reactions should have run the first time around, and already
-        // submitted their commands.
-        final commandChanges = _executeCommand(command);
-        changeEvents.addAll(commandChanges);
+        // Revert all editables to the last snapshot.
+        ///光标会置空
+        editable.reset();
       }
-    }
 
-    editorEditsLog.finest("Finished undo");
-
-    editorEditsLog.finer("Ending transaction on all editables");
-    for (final editable in context._resources.values) {
-      // Let editables start notifying listeners again.
-      editable.onTransactionEnd(changeEvents);
-    }
-
-    // TODO: find out why this is needed. If it's not, remove it.
-    _notifyListeners([]);
-
-    ///补光标
-    if (_history.isEmpty) {
-      final lastNode = document.nodes.last;
-      final position = DocumentPosition(
-        nodeId: lastNode.id,
-        nodePosition: lastNode.endPosition,
+      // Replay all history except for the most recent command transaction.
+      editorEditsLog.finer(
+        "Replaying all command history except for the most recent transaction...",
       );
+      final changeEvents = <EditEvent>[];
+      for (final commandTransaction in _history) {
+        for (final command in commandTransaction.commands) {
+          // We re-run the commands without tracking changes and without running reactions
+          // because any relevant reactions should have run the first time around, and already
+          // submitted their commands.
+          final commandChanges = _executeCommand(command);
+          changeEvents.addAll(commandChanges);
+        }
+      }
 
-      (composer).setSelectionWithReason(
-        DocumentSelection.collapsed(position: position),
-        'undo',
-      );
+      editorEditsLog.finest("Finished undo");
+
+      editorEditsLog.finer("Ending transaction on all editables");
+      for (final editable in context._resources.values) {
+        // Let editables start notifying listeners again.
+        editable.onTransactionEnd(changeEvents);
+      }
+
+      // TODO: find out why this is needed. If it's not, remove it.
+      _notifyListeners([]);
+
+      ///补光标
+      if (_history.isEmpty) {
+        final lastNode = document.nodes.last;
+        final position = DocumentPosition(
+          nodeId: lastNode.id,
+          nodePosition: lastNode.endPosition,
+        );
+
+        (composer).setSelectionWithReason(
+          DocumentSelection.collapsed(position: position),
+          'undo',
+        );
+      }
     }
   }
 
@@ -1643,4 +1693,28 @@ class MutableDocument
 
   @override
   int get hashCode => _nodes.hashCode;
+}
+
+class EditorHistory {
+  MutableDocument document;
+  MutableDocumentComposer composer;
+  EditorHistory({required this.document, required this.composer});
+
+  // Map<String, dynamic> toMap() {
+  //   return <String, dynamic>{
+  //     'document': document.toMap(),
+  //     'composer': composer.toMap(),
+  //   };
+  // }
+
+  // factory DocumentHistory.fromMap(Map<String, dynamic> map) {
+  //   return DocumentHistory(
+  //     document: MutableDocument.fromMap(map['document'] as Map<String,dynamic>),
+  //     composer: MutableDocumentComposer.fromMap(map['composer'] as Map<String,dynamic>),
+  //   );
+  // }
+
+  // String toJson() => json.encode(toMap());
+
+  // factory DocumentHistory.fromJson(String source) => DocumentHistory.fromMap(json.decode(source) as Map<String, dynamic>);
 }

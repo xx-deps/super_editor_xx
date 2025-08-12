@@ -16,47 +16,46 @@ import 'package:super_editor/src/core/document_selection.dart';
 import 'package:super_editor/src/core/edit_context.dart';
 import 'package:super_editor/src/core/editor.dart';
 import 'package:super_editor/src/core/styles.dart';
+import 'package:super_editor/src/default_editor/attributions.dart';
+import 'package:super_editor/src/default_editor/blockquote.dart';
 import 'package:super_editor/src/default_editor/common_editor_operations.dart';
 import 'package:super_editor/src/default_editor/debug_visualization.dart';
+import 'package:super_editor/src/default_editor/document_caret_overlay.dart';
+import 'package:super_editor/src/default_editor/document_focus_and_selection_policies.dart';
+import 'package:super_editor/src/default_editor/document_gestures_mouse.dart';
 import 'package:super_editor/src/default_editor/document_gestures_touch_android.dart';
 import 'package:super_editor/src/default_editor/document_gestures_touch_ios.dart';
+import 'package:super_editor/src/default_editor/document_hardware_keyboard/document_input_keyboard.dart';
+import 'package:super_editor/src/default_editor/document_ime/document_input_ime.dart';
 import 'package:super_editor/src/default_editor/document_scrollable.dart';
+import 'package:super_editor/src/default_editor/horizontal_rule.dart';
+import 'package:super_editor/src/default_editor/image.dart';
 import 'package:super_editor/src/default_editor/layout_single_column/_styler_composing_region.dart';
+import 'package:super_editor/src/default_editor/layout_single_column/layout_single_column.dart';
 import 'package:super_editor/src/default_editor/list_items.dart';
+import 'package:super_editor/src/default_editor/paragraph.dart';
 import 'package:super_editor/src/default_editor/tap_handlers/tap_handlers.dart';
 import 'package:super_editor/src/default_editor/tasks.dart';
+import 'package:super_editor/src/default_editor/text.dart';
 import 'package:super_editor/src/default_editor/text/custom_underlines.dart';
+import 'package:super_editor/src/default_editor/unknown_component.dart';
 import 'package:super_editor/src/infrastructure/content_layers.dart';
+import 'package:super_editor/src/infrastructure/document_gestures_interaction_overrides.dart';
 import 'package:super_editor/src/infrastructure/documents/document_scaffold.dart';
 import 'package:super_editor/src/infrastructure/documents/document_scroller.dart';
 import 'package:super_editor/src/infrastructure/documents/selection_leader_document_layer.dart';
 import 'package:super_editor/src/infrastructure/flutter/build_context.dart';
 import 'package:super_editor/src/infrastructure/platforms/android/toolbar.dart';
+import 'package:super_editor/src/infrastructure/platforms/ios/ios_system_context_menu.dart';
 import 'package:super_editor/src/infrastructure/platforms/ios/toolbar.dart';
 import 'package:super_editor/src/infrastructure/platforms/mac/mac_ime.dart';
+import 'package:super_editor/src/infrastructure/platforms/mobile_documents.dart';
 import 'package:super_editor/src/infrastructure/platforms/platform.dart';
+import 'package:super_editor/src/infrastructure/render_sliver_ext.dart';
 import 'package:super_editor/src/infrastructure/signal_notifier.dart';
 import 'package:super_editor/src/infrastructure/text_input.dart';
 import 'package:super_editor/src/undo_redo.dart';
-import 'package:super_editor/src/infrastructure/render_sliver_ext.dart';
 import 'package:super_text_layout/super_text_layout.dart';
-
-import 'package:super_editor/src/infrastructure/document_gestures_interaction_overrides.dart';
-import 'package:super_editor/src/infrastructure/platforms/ios/ios_system_context_menu.dart';
-import 'package:super_editor/src/infrastructure/platforms/mobile_documents.dart';
-import 'package:super_editor/src/default_editor/attributions.dart';
-import 'package:super_editor/src/default_editor/blockquote.dart';
-import 'package:super_editor/src/default_editor/document_caret_overlay.dart';
-import 'package:super_editor/src/default_editor/document_focus_and_selection_policies.dart';
-import 'package:super_editor/src/default_editor/document_gestures_mouse.dart';
-import 'package:super_editor/src/default_editor/document_hardware_keyboard/document_input_keyboard.dart';
-import 'package:super_editor/src/default_editor/document_ime/document_input_ime.dart';
-import 'package:super_editor/src/default_editor/horizontal_rule.dart';
-import 'package:super_editor/src/default_editor/image.dart';
-import 'package:super_editor/src/default_editor/layout_single_column/layout_single_column.dart';
-import 'package:super_editor/src/default_editor/paragraph.dart';
-import 'package:super_editor/src/default_editor/text.dart';
-import 'package:super_editor/src/default_editor/unknown_component.dart';
 
 /// A rich text editor that displays a document in a single-column layout.
 ///
@@ -497,6 +496,13 @@ class SuperEditorState extends State<SuperEditor> {
     _streamSubscription = widget.editor.customEventStream.listen(
       _handleCustomEvent,
     );
+    EditorUndoRedoService().undoStream.listen(_handlerUndo);
+  }
+
+  void _handlerUndo((MutableDocument, MutableDocumentComposer) event) {
+    print("_handlerUndo____document:${event.$1}____composer:${event.$2}");
+    // _document = MutableDocument(nodes: [event.$1.last]);
+    // _composer = event.$2;
   }
 
   @override

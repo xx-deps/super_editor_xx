@@ -1,9 +1,8 @@
 import 'package:attributed_text/attributed_text.dart';
 import 'package:flutter/painting.dart';
+import 'package:super_editor/src/core/document.dart';
 import 'package:super_editor/src/default_editor/text/custom_underlines.dart';
 import 'package:super_editor/src/infrastructure/attributed_text_styles.dart';
-
-import 'document.dart';
 
 /// Stylesheet for styling content within a document.
 ///
@@ -180,7 +179,7 @@ class BlockSelector {
       return false;
     }
 
-    if (_indexMatcher != null && !_indexMatcher!.matches(document, node)) {
+    if (_indexMatcher != null && !_indexMatcher.matches(document, node)) {
       return false;
     }
 
