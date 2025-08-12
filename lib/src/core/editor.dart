@@ -503,13 +503,14 @@ class Editor implements RequestDispatcher {
       final stateUndo = _stateHistory.removeLast();
       final stateDocument = stateUndo.document;
       final selection = stateUndo.selection;
-      document.addAll(stateDocument.nodes);
       if (selection != null) {
         composer.setSelectionWithReason(selection);
       } else {
         composer.clearSelection();
       }
 
+      /// 由于  composer.setSelectionWithReason 会触发rebuild，因此 要先设置 selection 再出发  document 更换
+      document.replaceAllNodes(stateDocument.nodes);
       // composer.setSelectionWithReason(stateComposer.selection);
       EditorUndoRedoService._instance._undoStreamController.add((
         stateDocument,
@@ -610,7 +611,7 @@ class Editor implements RequestDispatcher {
       final stateRedo = _stateFuture.removeLast();
       final stateDocument = stateRedo.document;
       final selection = stateRedo.selection;
-      document.addAll(stateDocument._nodes);
+      document.replaceAllNodes(stateDocument._nodes);
       if (selection != null) {
         composer.setSelectionWithReason(selection);
       } else {
@@ -1610,9 +1611,10 @@ class MutableDocument
     _refreshNodeIdCaches();
   }
 
-  void addAll(List<DocumentNode> nodes) {
-    _nodes.clear();
-    _nodes.addAll(nodes);
+  void replaceAllNodes(List<DocumentNode> replacedNodes) {
+    _nodes
+      ..clear()
+      ..addAll(replacedNodes);
     _refreshNodeIdCaches();
   }
 
