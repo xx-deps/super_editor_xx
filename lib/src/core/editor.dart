@@ -101,21 +101,114 @@ class Editor implements RequestDispatcher {
     _customEventController.close();
   }
 
-  void reset() {
+  void resetEditor() {
+    // 清事务状态
     _transaction.changes.clear();
     _transaction.commands.clear();
     _transaction = CommandTransaction([], clock.now());
     _activeChangeList.clear();
     _activeCommandCount = 0;
+
+    // 清历史
     _future.clear();
     _history.clear();
     _stateHistory.clear();
     _stateFuture.clear();
     beforeTransactionHistory = null;
-    _isInTransaction = false;
+
+    // 清运行状态
     _isInTransaction = false;
     _isImplicitTransaction = false;
     _isReacting = false;
+
+    // 清选区
+    composer.clearSelection();
+    composer.reset();
+    final initDocument = MutableDocument.empty();
+    //设置合法光标位置
+    if (initDocument.nodes.isNotEmpty) {
+      final lastNode = initDocument.nodes.last;
+      composer.setSelectionWithReason(
+        DocumentSelection.collapsed(
+          position: DocumentPosition(
+            nodeId: lastNode.id,
+            nodePosition: lastNode.endPosition,
+          ),
+        ),
+      );
+    }
+    // 初始化文档
+
+    document.replaceAllNodes(initDocument.nodes);
+
+    // 通知 UI 刷新
+    EditorUndoRedoService._instance._undoStreamController.add(true);
+  }
+
+  void resetAndLoadDocument(
+    MutableDocument newDocument, {
+    DocumentSelection? selection,
+  }) {
+    // 1. 清空当前事务状态
+    _activeChangeList.clear();
+    _activeCommandCount = 0;
+    _transaction.changes.clear();
+    _transaction.commands.clear();
+    _transaction = CommandTransaction([], clock.now());
+    _stateHistory.clear();
+    _stateFuture.clear();
+    beforeTransactionHistory = null;
+    _future.clear();
+    _history.clear();
+    _isInTransaction = false;
+    _isImplicitTransaction = false;
+    _isReacting = false;
+
+    // 2. 替换 Document
+    document.replaceAllNodes(newDocument.nodes);
+
+    final lastNode = newDocument.last;
+    final endPosition = lastNode.endPosition;
+    final newSelection = DocumentSelection.collapsed(
+      position: DocumentPosition(
+        nodeId: lastNode.id,
+        nodePosition: endPosition,
+      ),
+    );
+    composer.clearSelection();
+    composer.setSelectionWithReason(newSelection);
+
+    final emptyDocument = MutableDocument.empty();
+    DocumentSelection? emptySelection;
+    // if (emptyDocument.nodes.isNotEmpty) {
+    //   final emptyFirstNode = emptyDocument.nodes.first;
+    //   emptySelection = DocumentSelection.collapsed(
+    //     position: DocumentPosition(
+    //       nodeId: emptyFirstNode.id,
+    //       nodePosition: emptyFirstNode.beginningPosition,
+    //     ),
+    //   );
+    // }
+    final firstHistory = EditorHistory(
+      document: emptyDocument,
+      selection: emptySelection,
+    );
+
+    final firstFuture = EditorHistory(
+      document: document.copy(),
+      selection: composer.selection,
+    );
+
+    // 4. 拍快照并压入历史栈
+    final snapshot = EditorHistoryEntry(
+      before: firstHistory,
+      after: firstFuture,
+    );
+
+    _stateHistory.add(snapshot);
+
+    //4. 通知 UI 刷新（如果你的 Editor 有刷新流）
+    EditorUndoRedoService._instance._undoStreamController.add(true);
   }
 
   /// SuperEditor中editorContext未暴露的方法，在这里通过监听外部事件执行
@@ -240,8 +333,8 @@ class Editor implements RequestDispatcher {
     _isInTransaction = true;
     _activeChangeList.clear();
     _transaction = CommandTransaction([], clock.now());
-
     if (isStateHistoryEnable) {
+      print("startTransaction_${composer.selection}");
       beforeTransactionHistory = EditorHistory(
         document: document.copy(),
         selection: composer.selection?.copyWith(),
@@ -323,7 +416,7 @@ class Editor implements RequestDispatcher {
         document: document.copy(),
         selection: composer.selection?.copyWith(),
       );
-
+      print("endTransaction_savehistory");
       _stateHistory.addLast(
         EditorHistoryEntry(before: beforeTransactionHistory!, after: after),
       );
@@ -382,6 +475,7 @@ class Editor implements RequestDispatcher {
         // No transaction was explicitly requested, but all changes exist in a transaction.
         // Automatically start one, and then end the transaction after the current changes.
         _isImplicitTransaction = true;
+        print("execute__requrestLength:${requests.length},requests:$requests");
         startTransaction();
       }
       _logger.log(
@@ -536,19 +630,21 @@ class Editor implements RequestDispatcher {
       if (_stateHistory.isEmpty) return;
       final entry = _stateHistory.removeLast();
       final before = entry.before;
-      final sel = before.selection;
-      try {
+      if (before != null) {
+        final sel = before.selection;
+
+        // try {
         if (sel != null) {
           composer.setSelectionWithReason(sel);
         } else {
           composer.clearSelection();
         }
-      } catch (e) {
-        composer.clearSelection();
-      } finally {
+        // } catch (e) {
+        //   print(e);
+        //   composer.clearSelection();
+        // }
         document.replaceAllNodes(before.document.nodes);
         EditorUndoRedoService._instance._undoStreamController.add((true));
-
         // 把整笔事务推到 redo 栈
         _stateFuture.add(entry);
       }
@@ -561,17 +657,19 @@ class Editor implements RequestDispatcher {
 
       final entry = _stateFuture.removeLast();
       final after = entry.after;
-      final sel = after.selection;
-      document.replaceAllNodes(after.document.nodes);
-      try {
+      if (after != null) {
+        final sel = after.selection;
+        // try {
         if (sel != null) {
           composer.setSelectionWithReason(sel);
         } else {
           composer.clearSelection();
         }
-      } catch (e) {
-        composer.clearSelection();
-      } finally {
+        // } catch (e) {
+        //   print(e);
+        //   composer.clearSelection();
+        // }
+        document.replaceAllNodes(after.document.nodes);
         EditorUndoRedoService._instance._undoStreamController.add((true));
         // 重新回到历史栈
         _stateHistory.add(entry);
@@ -1529,7 +1627,7 @@ class MutableDocument
     _nodes
       ..clear()
       ..addAll(replacedNodes);
-    // _refreshNodeIdCaches();
+    _refreshNodeIdCaches();
   }
 
   MutableDocument copy() {
@@ -1680,9 +1778,9 @@ class EditorHistory {
 }
 
 class EditorHistoryEntry {
-  final EditorHistory before;
-  final EditorHistory after;
-  EditorHistoryEntry({required this.before, required this.after});
+  final EditorHistory? before;
+  final EditorHistory? after;
+  EditorHistoryEntry({this.before, this.after});
 }
 
 extension on MutableDocument {

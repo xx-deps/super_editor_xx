@@ -2,15 +2,14 @@ import 'package:attributed_text/attributed_text.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/painting.dart';
+import 'package:super_editor/src/core/document.dart';
 import 'package:super_editor/src/core/document_selection.dart';
 import 'package:super_editor/src/core/styles.dart';
+import 'package:super_editor/src/default_editor/attributions.dart';
+import 'package:super_editor/src/default_editor/layout_single_column/_presenter.dart';
 import 'package:super_editor/src/default_editor/layout_single_column/selection_aware_viewmodel.dart';
 import 'package:super_editor/src/default_editor/text.dart';
 import 'package:super_editor/src/infrastructure/_logging.dart';
-
-import '../../core/document.dart';
-import '../attributions.dart';
-import '_presenter.dart';
 
 /// [SingleColumnLayoutStylePhase] that applies visual selections to each component,
 /// e.g., text selections, image selections, caret positioning.
@@ -97,6 +96,7 @@ class SingleColumnLayoutSelectionStyler extends SingleColumnLayoutStylePhase {
     final node = _document.getNodeById(viewModel.nodeId);
 
     if (node == null) {
+      return viewModel;
       throw Exception('node is null');
     }
 

@@ -505,7 +505,6 @@ class SuperEditorState extends State<SuperEditor> {
 
   @override
   void didUpdateWidget(SuperEditor oldWidget) {
-    print("_handlerUndo____didUpdateWidget");
     super.didUpdateWidget(oldWidget);
 
     if (widget.focusNode != oldWidget.focusNode) {
