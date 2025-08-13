@@ -338,11 +338,12 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                             TextButton(
                               onPressed: () {
-                                // _docEditor.resetEditor();
+                                _docEditor.resetEditor();
 
-                                final documentNew =
-                                    deserializeMarkdownToDocument("啊哈哈哈哈哈哈");
-                                _docEditor.resetAndLoadDocument(documentNew);
+                                // final documentNew =
+                                //     deserializeMarkdownToDocument("啊哈哈哈哈哈哈");
+                                // _docEditor.resetAndLoadDocument(documentNew);
+                                // _docEditor.resetAndLoadDocument(documentNew);
                                 // _docEditor.execute([
                                 //   ...documentNew.map(
                                 //     (e) => InsertNodeAtEndOfDocumentRequest(e),
