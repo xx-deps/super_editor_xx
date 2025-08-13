@@ -2021,14 +2021,6 @@ class Editor implements RequestDispatcher {
     _stateHistory.add(firstHistory);
     _stateFuture.add(firstFuture);
 
-    // // 4. 拍快照并压入历史栈
-    // final snapshot = EditorHistoryEntry(
-    //   before: firstHistory,
-    //   after: firstFuture,
-    // );
-
-    // _stateHistory.add(snapshot);
-
     //4. 通知 UI 刷新（如果你的 Editor 有刷新流）
     EditorUndoRedoService._instance._undoStreamController.add(true);
   }
@@ -2186,6 +2178,11 @@ class Editor implements RequestDispatcher {
       return;
     }
 
+    // 这次事务是否有可撤销命令？（要在清空 _transaction 之前记录）
+    final bool hasUndoable = _transaction.commands.any(
+      (c) => c.historyBehavior == HistoryBehavior.undoable,
+    );
+
     if (_transaction.commands.isNotEmpty && isHistoryEnabled) {
       _logger.log(
         "endTransaction",
@@ -2221,22 +2218,39 @@ class Editor implements RequestDispatcher {
       }
     }
 
-    print(
-      "editor_endtransaction_transaction.commonds.length:${_transaction.commands.length}",
-    );
-    if (_transaction.commands.isNotEmpty) {
-      for (var element in _transaction.commands) {
-        if (element.historyBehavior == HistoryBehavior.undoable) {
-          if (isStateHistoryEnable && beforeTransactionHistory != null) {
-            _stateHistory.add(beforeTransactionHistory!);
-          }
-        }
-      }
-    }
+    // print(
+    //   "editor_endtransaction_transaction.commonds.length:${_transaction.commands.length}",
+    // );
+    // if (_transaction.commands.isNotEmpty) {
+    //   for (var element in _transaction.commands) {
+    //     if (element.historyBehavior == HistoryBehavior.undoable) {
+    //       if (isStateHistoryEnable && beforeTransactionHistory != null) {
+    //         print("history_add__$beforeTransactionHistory");
+    //         _stateHistory.add(beforeTransactionHistory!);
+    //       }
+    //     }
+    //   }
+    // }
 
     // Now that an atomic set of changes have completed, let the reactions followup
     // with more changes, such as auto-correction, tagging, etc.
     _reactToChanges();
+
+    // 现在文档是事务“最终状态” -> 拍 “after”，然后只 push 一次
+    if (isStateHistoryEnable &&
+        hasUndoable &&
+        beforeTransactionHistory != null) {
+      final after = EditorHistory(
+        document: document.copy(),
+        selection: composer.selection?.copyWith(),
+      );
+      print("history_add__$beforeTransactionHistory");
+      _stateHistory.add(beforeTransactionHistory!);
+
+      // 有新编辑产生 -> 清空 redo 栈
+      _stateFuture.clear();
+      beforeTransactionHistory = null;
+    }
 
     _isInTransaction = false;
     _isImplicitTransaction = false;
@@ -2435,6 +2449,12 @@ class Editor implements RequestDispatcher {
       final stateUndo = _stateHistory.removeLast();
       final stateDocument = stateUndo.document;
       final selection = stateUndo.selection;
+
+      ///记录一下当前的状态,放入到回退栈中
+      final currentState = EditorHistory(
+        document: document.copy(),
+        selection: composer.selection,
+      );
       document.replaceAllNodes(stateDocument.nodes);
       if (selection != null) {
         composer.setSelectionWithReason(selection);
@@ -2444,90 +2464,7 @@ class Editor implements RequestDispatcher {
 
       // composer.setSelectionWithReason(stateComposer.selection);
       EditorUndoRedoService._instance._undoStreamController.add((true));
-      _stateFuture.add(stateUndo);
-    } else {
-      if (!isHistoryEnabled) {
-        // History is disabled, therefore undo/redo are disabled.
-        return;
-      }
-
-      editorEditsLog.finest("Running undo");
-      if (_history.isEmpty) {
-        return;
-      }
-
-      editorEditsLog.finer("History before undo:");
-      for (final transaction in _history) {
-        editorEditsLog.finer(" - transaction");
-        for (final command in transaction.commands) {
-          editorEditsLog.finer(
-            "   - ${command.runtimeType}: ${command.describe()}",
-          );
-        }
-      }
-      editorEditsLog.finer("---");
-
-      // Move the latest command from the history to the future.
-      final transactionToUndo = _history.removeLast();
-      _future.add(transactionToUndo);
-      editorEditsLog.finer("The commands being undone are:");
-      for (final command in transactionToUndo.commands) {
-        editorEditsLog.finer(
-          "  - ${command.runtimeType}: ${command.describe()}",
-        );
-      }
-
-      editorEditsLog.finer(
-        "Resetting all editables to their last checkpoint...",
-      );
-      for (final editable in context._resources.values) {
-        // Don't let editables notify listeners during undo.
-        editable.onTransactionStart();
-
-        // Revert all editables to the last snapshot.
-        ///光标会置空
-        editable.reset();
-      }
-
-      // Replay all history except for the most recent command transaction.
-      editorEditsLog.finer(
-        "Replaying all command history except for the most recent transaction...",
-      );
-      final changeEvents = <EditEvent>[];
-      for (final commandTransaction in _history) {
-        for (final command in commandTransaction.commands) {
-          // We re-run the commands without tracking changes and without running reactions
-          // because any relevant reactions should have run the first time around, and already
-          // submitted their commands.
-          final commandChanges = _executeCommand(command);
-          changeEvents.addAll(commandChanges);
-        }
-      }
-
-      editorEditsLog.finest("Finished undo");
-
-      editorEditsLog.finer("Ending transaction on all editables");
-      for (final editable in context._resources.values) {
-        // Let editables start notifying listeners again.
-        editable.onTransactionEnd(changeEvents);
-      }
-
-      // TODO: find out why this is needed. If it's not, remove it.
-      _notifyListeners([]);
-
-      ///补光标
-      if (_history.isEmpty) {
-        final lastNode = document.nodes.last;
-        final position = DocumentPosition(
-          nodeId: lastNode.id,
-          nodePosition: lastNode.endPosition,
-        );
-
-        (composer).setSelectionWithReason(
-          DocumentSelection.collapsed(position: position),
-          'undo',
-        );
-      }
+      _stateFuture.add(currentState);
     }
   }
 
@@ -2547,46 +2484,6 @@ class Editor implements RequestDispatcher {
       }
       EditorUndoRedoService._instance._undoStreamController.add((true));
       _stateHistory.add(stateRedo);
-    } else {
-      _logger.log("redo__", '$history');
-      if (!isHistoryEnabled) {
-        // History is disabled, therefore undo/redo are disabled.
-        return;
-      }
-
-      editorEditsLog.finest("Running redo");
-      if (_future.isEmpty) {
-        return;
-      }
-
-      editorEditsLog.finer("Future transaction:");
-      for (final command in _future.last.commands) {
-        editorEditsLog.finer(" - ${command.runtimeType}");
-      }
-
-      for (final editable in context._resources.values) {
-        // Don't let editables notify listeners during redo.
-        editable.onTransactionStart();
-      }
-
-      final commandTransaction = _future.removeLast();
-      final edits = <EditEvent>[];
-      for (final command in commandTransaction.commands) {
-        final commandEdits = _executeCommand(command);
-        edits.addAll(commandEdits);
-      }
-      _history.add(commandTransaction);
-
-      editorEditsLog.finest("Finished redo");
-
-      editorEditsLog.finer("Ending transaction on all editables");
-      for (final editable in context._resources.values) {
-        // Let editables start notifying listeners again.
-        editable.onTransactionEnd(edits);
-      }
-
-      // TODO: find out why this is needed. If it's not, remove it.
-      _notifyListeners([]);
     }
   }
 
