@@ -109,6 +109,9 @@ class Editor implements RequestDispatcher {
     _activeCommandCount = 0;
     _future.clear();
     _history.clear();
+    _stateHistory.clear();
+    _stateFuture.clear();
+    beforeTransactionHistory = null;
     _isInTransaction = false;
     _isInTransaction = false;
     _isImplicitTransaction = false;
@@ -433,6 +436,9 @@ class Editor implements RequestDispatcher {
       _isInTransaction = false;
       _isImplicitTransaction = false;
       _isReacting = false;
+      _stateHistory.clear();
+      _stateFuture.clear();
+      beforeTransactionHistory = null;
       return;
     }
   }
