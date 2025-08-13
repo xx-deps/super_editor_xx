@@ -499,14 +499,12 @@ class SuperEditorState extends State<SuperEditor> {
     EditorUndoRedoService().undoStream.listen(_handlerUndo);
   }
 
-  void _handlerUndo((MutableDocument, DocumentSelection?) event) {
-    print("_handlerUndo____document:${event.$1}____composer:${event.$2}");
+  void _handlerUndo(bool isUndoRedo) {
     _docLayoutPresenter?.updateViewModel(isUndo: true);
   }
 
   @override
   void didUpdateWidget(SuperEditor oldWidget) {
-    print("_handlerUndo____didUpdateWidget");
     super.didUpdateWidget(oldWidget);
 
     if (widget.focusNode != oldWidget.focusNode) {

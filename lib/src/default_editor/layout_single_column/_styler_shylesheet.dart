@@ -1,8 +1,7 @@
 import 'package:flutter/painting.dart';
+import 'package:super_editor/src/core/document.dart';
 import 'package:super_editor/src/core/styles.dart';
-
-import '../../core/document.dart';
-import '_presenter.dart';
+import 'package:super_editor/src/default_editor/layout_single_column/_presenter.dart';
 
 /// Style phase that applies a given [Stylesheet] to the document view model.
 class SingleColumnStylesheetStyler extends SingleColumnLayoutStylePhase {

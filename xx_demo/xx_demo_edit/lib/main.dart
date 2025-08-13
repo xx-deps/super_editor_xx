@@ -58,7 +58,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  late MutableDocument _doc;
+  // late MutableDocument _doc;
   late MutableDocumentComposer _composer;
   late Editor _docEditor;
 
@@ -79,10 +79,10 @@ class _MyHomePageState extends State<MyHomePage> {
       // setState(() {});
     });
 
-    _doc = _createDocument();
+    // _doc = _createDocument();
     _composer = MutableDocumentComposer()..addListener(() {});
     _docEditor = createDefaultDocumentEditor(
-      document: _doc,
+      // document: _doc,
       composer: _composer,
       isHistoryEnabled: false,
       isStateHistoryEnable: true,
@@ -107,14 +107,17 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Editor createDefaultDocumentEditor({
-    required MutableDocument document,
+    // required MutableDocument document,
     required MutableDocumentComposer composer,
     HistoryGroupingPolicy historyGroupingPolicy = defaultMergePolicy,
     bool isHistoryEnabled = true,
     bool isStateHistoryEnable = false,
   }) {
     final editor = Editor(
-      editables: {Editor.documentKey: document, Editor.composerKey: composer},
+      editables: {
+        Editor.documentKey: MutableDocument.empty(),
+        Editor.composerKey: composer,
+      },
       requestHandlers: [
         // //自定义 handler 放最前面，优先处理
         // (editor, request) {
@@ -336,30 +339,32 @@ class _MyHomePageState extends State<MyHomePage> {
                             TextButton(
                               onPressed: () {
                                 // _docEditor.resetEditor();
+
                                 final documentNew =
                                     deserializeMarkdownToDocument("啊哈哈哈哈哈哈");
-
-                                _docEditor.execute([
-                                  ...documentNew.map(
-                                    (e) => InsertNodeAtEndOfDocumentRequest(e),
-                                  ),
-                                ]);
-                                _docEditor.execute([
-                                  ChangeSelectionRequest(
-                                    DocumentSelection.collapsed(
-                                      position: DocumentPosition(
-                                        nodeId: _docEditor.document.last.id,
-                                        nodePosition: _docEditor
-                                            .document
-                                            .last
-                                            .endPosition,
-                                      ),
-                                    ),
-                                    SelectionChangeType.insertContent,
-                                    SelectionReason.userInteraction,
-                                  ),
-                                ]);
+                                _docEditor.resetAndLoadDocument(documentNew);
+                                // _docEditor.execute([
+                                //   ...documentNew.map(
+                                //     (e) => InsertNodeAtEndOfDocumentRequest(e),
+                                //   ),
+                                // ]);
+                                // _docEditor.execute([
+                                //   ChangeSelectionRequest(
+                                //     DocumentSelection.collapsed(
+                                //       position: DocumentPosition(
+                                //         nodeId: _docEditor.document.last.id,
+                                //         nodePosition: _docEditor
+                                //             .document
+                                //             .last
+                                //             .endPosition,
+                                //       ),
+                                //     ),
+                                //     SelectionChangeType.insertContent,
+                                //     SelectionReason.userInteraction,
+                                //   ),
+                                // ]);
                               },
+
                               child: Text("text"),
                             ),
                           ],
