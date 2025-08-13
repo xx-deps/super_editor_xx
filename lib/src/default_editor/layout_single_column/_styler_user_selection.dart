@@ -96,8 +96,8 @@ class SingleColumnLayoutSelectionStyler extends SingleColumnLayoutStylePhase {
     final node = _document.getNodeById(viewModel.nodeId);
 
     if (node == null) {
+      /// 如果没有找到节点，则不再修改其selection
       return viewModel;
-      throw Exception('node is null');
     }
 
     DocumentNodeSelection? nodeSelection;
