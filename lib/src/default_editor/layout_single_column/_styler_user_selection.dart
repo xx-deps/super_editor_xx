@@ -8,9 +8,9 @@ import 'package:super_editor/src/default_editor/layout_single_column/selection_a
 import 'package:super_editor/src/default_editor/text.dart';
 import 'package:super_editor/src/infrastructure/_logging.dart';
 
-import '../../core/document.dart';
-import '../attributions.dart';
-import '_presenter.dart';
+import 'package:super_editor/src/core/document.dart';
+import 'package:super_editor/src/default_editor/attributions.dart';
+import 'package:super_editor/src/default_editor/layout_single_column/_presenter.dart';
 
 /// [SingleColumnLayoutStylePhase] that applies visual selections to each component,
 /// e.g., text selections, image selections, caret positioning.
@@ -97,7 +97,8 @@ class SingleColumnLayoutSelectionStyler extends SingleColumnLayoutStylePhase {
     final node = _document.getNodeById(viewModel.nodeId);
 
     if (node == null) {
-      throw Exception('node is null');
+      /// 如果没有找到节点，则不再修改其selection
+      return viewModel;
     }
 
     DocumentNodeSelection? nodeSelection;
