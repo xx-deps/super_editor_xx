@@ -2015,7 +2015,7 @@ class Editor implements RequestDispatcher {
 
     final firstFuture = EditorHistory(
       document: document.copy(),
-      selection: composer.selection,
+      selection: composer.selection?.copyWith(),
     );
 
     _stateHistory.add(firstHistory);
