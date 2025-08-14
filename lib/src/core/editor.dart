@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 import 'dart:math';
 
 import 'package:clock/clock.dart';
@@ -45,6 +46,7 @@ class CustomEditorEventData {
 ///  - [EditReaction] - (optionally) requests more changes after some original change.
 ///  - [EditListener] - is notified of all changes made by an [Editor].
 class Editor implements RequestDispatcher {
+  bool _isComposingTransaction = false;
   static const Uuid _uuid = Uuid();
 
   /// Service locator key to obtain a [Document] from [find], if a [Document]
@@ -82,6 +84,7 @@ class Editor implements RequestDispatcher {
     List<EditReaction>? reactionPipeline,
     List<EditListener>? listeners,
     this.isStateHistoryEnable = false,
+    this.historyMaxSteps = 100,
   }) : requestHandlers = requestHandlers ?? [],
        reactionPipeline = reactionPipeline ?? [],
        _changeListeners = listeners ?? [],
@@ -219,9 +222,10 @@ class Editor implements RequestDispatcher {
   // final _history = <CommandTransaction>[];
 
   ///通过 state 来控制历史
-  final List<EditorHistory> _stateHistory = [];
-  final List<EditorHistory> _stateFuture = [];
+  final ListQueue<EditorHistory> _stateHistory = ListQueue();
+  final ListQueue<EditorHistory> _stateFuture = ListQueue();
   final bool isStateHistoryEnable;
+  final int historyMaxSteps;
 
   /// A list of editor transactions that were undone since the last time a change was
   /// made.
@@ -296,6 +300,7 @@ class Editor implements RequestDispatcher {
   ///
   /// Does nothing if a transaction is already in-progress.
   void startTransaction() {
+    _isComposingTransaction = false; // 🚩 每次事务开始先重置
     _logger.log(
       "startTransaction",
       "commands:${_transaction.commands}__changes:${_transaction.changes}",
@@ -338,11 +343,15 @@ class Editor implements RequestDispatcher {
     if (isStateHistoryEnable &&
         hasUndoable &&
         beforeTransactionHistory != null) {
-      print("history_add__$beforeTransactionHistory");
-      _stateHistory.add(beforeTransactionHistory!);
-
-      // 有新编辑产生 -> 清空 redo 栈
-      _stateFuture.clear();
+      // 🚩 如果是 IME 输入中事务，跳过历史记录
+      if (!_isComposingTransaction) {
+        _stateHistory.addLast(beforeTransactionHistory!);
+        // FIFO 限制到 20
+        while (_stateHistory.length > historyMaxSteps) {
+          _stateHistory.removeFirst();
+        }
+        _stateFuture.clear();
+      }
       beforeTransactionHistory = null;
     }
 
@@ -392,6 +401,10 @@ class Editor implements RequestDispatcher {
 
       final undoableCommands = <EditCommand>[];
       for (final request in requests) {
+        // 🚩 在这里识别 IME 组合中请求
+        if (composer.composingRegion.value != null) {
+          _isComposingTransaction = true;
+        }
         // Execute the given request.
         final command = _findCommandForRequest(request);
         final commandChanges = _executeCommand(command);
@@ -544,7 +557,7 @@ class Editor implements RequestDispatcher {
 
       // composer.setSelectionWithReason(stateComposer.selection);
       EditorUndoRedoService._instance._undoStreamController.add((true));
-      _stateFuture.add(currentState);
+      _stateFuture.addLast(currentState);
     }
   }
 
@@ -569,7 +582,7 @@ class Editor implements RequestDispatcher {
         composer.clearSelection();
       }
       EditorUndoRedoService._instance._undoStreamController.add((true));
-      _stateHistory.add(currentState);
+      _stateHistory.addLast(currentState);
     }
   }
 
@@ -1256,6 +1269,12 @@ extension StandardEditables on Editor {
   /// [MutableDocumentComposer] is in the [Editor].
   MutableDocumentComposer? get maybeComposer =>
       context.findMaybe<MutableDocumentComposer>(Editor.composerKey);
+
+  DocumentLayoutEditable get layout =>
+      context.find<DocumentLayoutEditable>(Editor.layoutKey);
+
+  DocumentLayoutEditable? get maybeLayout =>
+      context.findMaybe<DocumentLayoutEditable>(Editor.layoutKey);
 }
 
 /// Extensions that provide direct, type-safe access to [Editable]s that are
