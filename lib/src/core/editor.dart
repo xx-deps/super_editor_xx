@@ -7,22 +7,7 @@ import 'package:collection/collection.dart';
 import 'package:super_editor/super_editor.dart';
 import 'package:uuid/uuid.dart';
 
-class EditorUndoRedoService {
-  static final EditorUndoRedoService _instance =
-      EditorUndoRedoService._internal();
-
-  factory EditorUndoRedoService() {
-    return _instance;
-  }
-
-  EditorUndoRedoService._internal() {
-    _undoStreamController = StreamController.broadcast();
-  }
-  late StreamController<bool> _undoStreamController;
-  Stream<bool> get undoStream => _undoStreamController.stream;
-}
-
-enum CustomEditorEvent { cut, copy, paste }
+enum CustomEditorEvent { cut, copy, paste, undo, redo, replaceDocument, reset }
 
 class CustomEditorEventData {
   final CustomEditorEvent event;
@@ -113,6 +98,7 @@ class Editor implements RequestDispatcher {
     _isReacting = false;
     _stateHistory.clear();
     _stateFuture.clear();
+    document.clear();
 
     // 清选区
     composer.clearSelection();
@@ -135,8 +121,10 @@ class Editor implements RequestDispatcher {
       );
     }
 
-    // 通知 UI 刷新
-    EditorUndoRedoService._instance._undoStreamController.add(true);
+    //4. 通知 UI 刷新（
+    _customEventController.add(
+      CustomEditorEventData(event: CustomEditorEvent.reset, text: ""),
+    );
   }
 
   void resetAndLoadDocument(
@@ -186,9 +174,10 @@ class Editor implements RequestDispatcher {
     );
 
     _stateHistory.add(firstHistory);
-
-    //4. 通知 UI 刷新（如果你的 Editor 有刷新流）
-    EditorUndoRedoService._instance._undoStreamController.add(true);
+    //4. 通知 UI 刷新
+    _customEventController.add(
+      CustomEditorEventData(event: CustomEditorEvent.replaceDocument, text: ""),
+    );
   }
 
   /// SuperEditor中editorContext未暴露的方法，在这里通过监听外部事件执行
@@ -555,8 +544,11 @@ class Editor implements RequestDispatcher {
         composer.clearSelection();
       }
 
-      // composer.setSelectionWithReason(stateComposer.selection);
-      EditorUndoRedoService._instance._undoStreamController.add((true));
+      //4. 通知 UI 刷新
+      _customEventController.add(
+        CustomEditorEventData(event: CustomEditorEvent.undo, text: ""),
+      );
+
       _stateFuture.addLast(currentState);
     }
   }
@@ -581,7 +573,12 @@ class Editor implements RequestDispatcher {
       } else {
         composer.clearSelection();
       }
-      EditorUndoRedoService._instance._undoStreamController.add((true));
+
+      //通知刷新 ui
+      _customEventController.add(
+        CustomEditorEventData(event: CustomEditorEvent.redo, text: ""),
+      );
+
       _stateHistory.addLast(currentState);
     }
   }
