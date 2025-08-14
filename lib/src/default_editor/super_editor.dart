@@ -496,7 +496,6 @@ class SuperEditorState extends State<SuperEditor> {
     _streamSubscription = widget.editor.customEventStream.listen(
       _handleCustomEvent,
     );
-    EditorUndoRedoService().undoStream.listen(_handlerUndo);
   }
 
   void _handlerUndo(bool isUndoRedo) {
@@ -646,6 +645,11 @@ class SuperEditorState extends State<SuperEditor> {
       editContext.commonOps.paste(customMarkdownText: data.text);
     } else if (data.event == CustomEditorEvent.cut) {
       editContext.commonOps.cut();
+    } else if (data.event == CustomEditorEvent.redo ||
+        data.event == CustomEditorEvent.undo ||
+        data.event == CustomEditorEvent.reset ||
+        data.event == CustomEditorEvent.replaceDocument) {
+      _handlerUndo(true);
     }
   }
 
