@@ -119,32 +119,17 @@ class _MyHomePageState extends State<MyHomePage> {
         Editor.composerKey: composer,
       },
       requestHandlers: [
-        // //自定义 handler 放最前面，优先处理
-        // (editor, request) {
-        //   final command = defaultRequestHandlers
-        //       .map((handler) => handler(editor, request))
-        //       .firstWhere((cmd) => cmd != null, orElse: () => null);
-
-        //   if (command is ChangeSelectionCommand ||
-        //       command is ChangeComposingRegionCommand) {
-        //     return NonHistoricalCommandWrapper(command);
-        //   }
-
-        //   return command;
-        // },
         (editor, request) => request is InsertImageCommandRequest
             ? InsertImageCommand(
                 url: request.url,
                 expectedSize: request.expectedSize,
               )
             : null,
-
-        ///添加命令
-        ...List.from(defaultRequestHandlers),
+        ...defaultRequestHandlers,
       ],
       // historyGroupingPolicy: historyGroupingPolicy,
       reactionPipeline: List.from(defaultEditorReactions),
-      isHistoryEnabled: isHistoryEnabled,
+      // isHistoryEnabled: isHistoryEnabled,
       isStateHistoryEnable: isStateHistoryEnable,
     );
 
@@ -284,6 +269,13 @@ class _MyHomePageState extends State<MyHomePage> {
                           },
                         ),
                         componentBuilders: [
+                          HintComponentBuilder(
+                            "请输入内容...",
+                            (context) => TextStyle(
+                              color: Colors.grey.shade400,
+                              fontSize: 14,
+                            ),
+                          ),
                           // BlockquoteComponentBuilder(),
                           ParagraphComponentBuilder(),
                           // ListItemComponentBuilder(),
@@ -331,18 +323,18 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                             TextButton(
                               onPressed: () {
-                                // _docEditor.resetEditor();
-                                _docEditor.execute([ClearDocumentRequest()]);
+                                _docEditor.resetEditor();
+                                // _docEditor.execute([ClearDocumentRequest()]);
                               },
                               child: Text("notext"),
                             ),
                             TextButton(
                               onPressed: () {
-                                _docEditor.resetEditor();
+                                // _docEditor.resetEditor();
 
-                                // final documentNew =
-                                //     deserializeMarkdownToDocument("啊哈哈哈哈哈哈");
-                                // _docEditor.resetAndLoadDocument(documentNew);
+                                final documentNew =
+                                    deserializeMarkdownToDocument("啊哈哈哈哈哈哈");
+                                _docEditor.resetAndLoadDocument(documentNew);
                                 // _docEditor.resetAndLoadDocument(documentNew);
                                 // _docEditor.execute([
                                 //   ...documentNew.map(

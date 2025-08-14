@@ -24,7 +24,7 @@ Editor createDefaultDocumentEditor({
     requestHandlers: List.from(defaultRequestHandlers),
     historyGroupingPolicy: historyGroupingPolicy,
     reactionPipeline: List.from(defaultEditorReactions),
-    isHistoryEnabled: isHistoryEnabled,
+    // isHistoryEnabled: isHistoryEnabled,
   );
 
   return editor;
