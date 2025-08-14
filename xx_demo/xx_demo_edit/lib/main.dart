@@ -84,8 +84,6 @@ class _MyHomePageState extends State<MyHomePage> {
     _docEditor = createDefaultDocumentEditor(
       // document: _doc,
       composer: _composer,
-      isHistoryEnabled: false,
-      isStateHistoryEnable: true,
       // historyGroupingPolicy: HistoryGroupingPolicyList([
       //   // _NeverMergePolicy()
       //   // mergeRepeatSelectionChangesPolicy,
@@ -110,8 +108,6 @@ class _MyHomePageState extends State<MyHomePage> {
     // required MutableDocument document,
     required MutableDocumentComposer composer,
     HistoryGroupingPolicy historyGroupingPolicy = defaultMergePolicy,
-    bool isHistoryEnabled = true,
-    bool isStateHistoryEnable = false,
   }) {
     final editor = Editor(
       editables: {
@@ -130,7 +126,7 @@ class _MyHomePageState extends State<MyHomePage> {
       // historyGroupingPolicy: historyGroupingPolicy,
       reactionPipeline: List.from(defaultEditorReactions),
       // isHistoryEnabled: isHistoryEnabled,
-      isStateHistoryEnable: isStateHistoryEnable,
+      isStateHistoryEnable: true,
     );
 
     return editor;
