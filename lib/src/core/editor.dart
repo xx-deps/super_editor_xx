@@ -169,7 +169,7 @@ class Editor implements RequestDispatcher {
       );
     }
     final firstHistory = EditorHistory(
-      document: emptyDocument,
+      document: emptyDocument.copy(),
       selection: emptySelection?.copyWith(),
     );
 
@@ -567,7 +567,7 @@ class Editor implements RequestDispatcher {
         document: document.copy(),
         selection: composer.selection?.copyWith(),
       );
-      document.replaceAllNodes(stateDocument._nodes);
+      document.replaceAllNodes(stateDocument.nodes);
       if (selection != null) {
         composer.setSelectionWithReason(selection);
       } else {
@@ -1524,15 +1524,10 @@ class MutableDocument
     _refreshNodeIdCaches();
   }
 
-  MutableDocument copy() {
-    final newDoc = MutableDocument(
+  MutableDocumentNodes copy() {
+    final newDoc = MutableDocumentNodes(
       nodes: _nodes.map((node) => node.copy()).toList(),
     );
-
-    for (final listener in _listeners) {
-      newDoc.addListener(listener);
-    }
-    newDoc._didReset = true;
 
     return newDoc;
   }
@@ -1666,7 +1661,7 @@ class MutableDocument
 }
 
 class EditorHistory {
-  MutableDocument document;
+  MutableDocumentNodes document;
   DocumentSelection? selection;
   EditorHistory({required this.document, this.selection});
 
@@ -1721,4 +1716,9 @@ extension on MutableDocument {
     if (isNotEqual) return false;
     return true;
   }
+}
+
+class MutableDocumentNodes {
+  const MutableDocumentNodes({required this.nodes});
+  final List<DocumentNode> nodes;
 }
