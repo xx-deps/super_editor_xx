@@ -98,19 +98,19 @@ class Editor implements RequestDispatcher {
     _isReacting = false;
     _stateHistory.clear();
     _stateFuture.clear();
-    document.clear();
 
     // 清选区
     composer.clearSelection();
     composer.reset();
 
-    ///初始化文档
-    final initDocument = MutableDocument.empty();
-    document.replaceAllNodes(initDocument.nodes);
+    //重置document
+    document.replaceAllNodes([
+      ParagraphNode(id: Editor.createNodeId(), text: AttributedText()),
+    ]);
 
     //设置合法光标位置
-    if (initDocument.nodes.isNotEmpty) {
-      final lastNode = initDocument.nodes.first;
+    if (document.nodes.isNotEmpty) {
+      final lastNode = document.nodes.first;
       composer.setSelectionWithReason(
         DocumentSelection.collapsed(
           position: DocumentPosition(
@@ -143,6 +143,10 @@ class Editor implements RequestDispatcher {
     _stateHistory.clear();
     _stateFuture.clear();
 
+    // 清选区
+    composer.clearSelection();
+    composer.reset();
+
     // 2. 替换 Document
     document.replaceAllNodes(newDocument.nodes);
 
@@ -154,7 +158,7 @@ class Editor implements RequestDispatcher {
         nodePosition: endPosition,
       ),
     );
-    composer.clearSelection();
+
     composer.setSelectionWithReason(newSelection);
 
     final emptyDocument = MutableDocument.empty();
@@ -173,6 +177,7 @@ class Editor implements RequestDispatcher {
       selection: emptySelection?.copyWith(),
     );
     emptyDocument.dispose();
+    newDocument.dispose();
     _stateHistory.add(firstHistory);
     //4. 通知 UI 刷新
     _customEventController.add(
