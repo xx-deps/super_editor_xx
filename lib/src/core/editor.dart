@@ -172,7 +172,7 @@ class Editor implements RequestDispatcher {
       document: emptyDocument.copy(),
       selection: emptySelection?.copyWith(),
     );
-
+    emptyDocument.dispose();
     _stateHistory.add(firstHistory);
     //4. 通知 UI 刷新
     _customEventController.add(
@@ -567,7 +567,7 @@ class Editor implements RequestDispatcher {
         document: document.copy(),
         selection: composer.selection?.copyWith(),
       );
-      document.replaceAllNodes(stateDocument._nodes);
+      document.replaceAllNodes(stateDocument.nodes);
       if (selection != null) {
         composer.setSelectionWithReason(selection);
       } else {
@@ -1524,12 +1524,10 @@ class MutableDocument
     _refreshNodeIdCaches();
   }
 
-  MutableDocument copy() {
-    final newDoc = MutableDocument(
+  MutableDocumentNodes copy() {
+    final newDoc = MutableDocumentNodes(
       nodes: _nodes.map((node) => node.copy()).toList(),
     );
-
-    newDoc._didReset = true;
 
     return newDoc;
   }
@@ -1663,7 +1661,7 @@ class MutableDocument
 }
 
 class EditorHistory {
-  MutableDocument document;
+  MutableDocumentNodes document;
   DocumentSelection? selection;
   EditorHistory({required this.document, this.selection});
 }
@@ -1700,4 +1698,9 @@ extension on MutableDocument {
     if (isNotEqual) return false;
     return true;
   }
+}
+
+class MutableDocumentNodes {
+  const MutableDocumentNodes({required this.nodes});
+  final List<DocumentNode> nodes;
 }
