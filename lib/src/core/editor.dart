@@ -98,19 +98,19 @@ class Editor implements RequestDispatcher {
     _isReacting = false;
     _stateHistory.clear();
     _stateFuture.clear();
-    document.clear();
 
     // 清选区
     composer.clearSelection();
     composer.reset();
 
-    ///初始化文档
-    final initDocument = MutableDocument.empty();
-    document.replaceAllNodes(initDocument.nodes);
+    //重置document
+    document.replaceAllNodes([
+      ParagraphNode(id: Editor.createNodeId(), text: AttributedText()),
+    ]);
 
     //设置合法光标位置
-    if (initDocument.nodes.isNotEmpty) {
-      final lastNode = initDocument.nodes.first;
+    if (document.nodes.isNotEmpty) {
+      final lastNode = document.nodes.first;
       composer.setSelectionWithReason(
         DocumentSelection.collapsed(
           position: DocumentPosition(
@@ -143,6 +143,10 @@ class Editor implements RequestDispatcher {
     _stateHistory.clear();
     _stateFuture.clear();
 
+    // 清选区
+    composer.clearSelection();
+    composer.reset();
+
     // 2. 替换 Document
     document.replaceAllNodes(newDocument.nodes);
 
@@ -154,7 +158,7 @@ class Editor implements RequestDispatcher {
         nodePosition: endPosition,
       ),
     );
-    composer.clearSelection();
+
     composer.setSelectionWithReason(newSelection);
 
     final emptyDocument = MutableDocument.empty();
@@ -173,6 +177,7 @@ class Editor implements RequestDispatcher {
       selection: emptySelection?.copyWith(),
     );
     emptyDocument.dispose();
+    newDocument.dispose();
     _stateHistory.add(firstHistory);
     //4. 通知 UI 刷新
     _customEventController.add(
@@ -302,11 +307,9 @@ class Editor implements RequestDispatcher {
     _isInTransaction = true;
     _activeChangeList.clear();
     _transaction = CommandTransaction([], clock.now());
-
     if (isStateHistoryEnable) {
-      final next = document.copy();
       beforeTransactionHistory = EditorHistory(
-        document: next,
+        document: document.copy(),
         selection: composer.selection?.copyWith(),
       );
     }
@@ -335,7 +338,7 @@ class Editor implements RequestDispatcher {
       // 🚩 如果是 IME 输入中事务，跳过历史记录
       if (!_isComposingTransaction) {
         _stateHistory.addLast(beforeTransactionHistory!);
-        // FIFO 限制到 20
+        // FIFO 限制
         while (_stateHistory.length > historyMaxSteps) {
           _stateHistory.removeFirst();
         }
@@ -391,7 +394,9 @@ class Editor implements RequestDispatcher {
       final undoableCommands = <EditCommand>[];
       for (final request in requests) {
         // 🚩 在这里识别 IME 组合中请求
-        if (composer.composingRegion.value != null) {
+        final composingRegion = composer.composingRegion.value;
+        if (composingRegion != null && !composingRegion.isCollapsed) {
+          // 只有在组合区域存在且非折叠状态时，才认为是 IME 正在输入
           _isComposingTransaction = true;
         }
         // Execute the given request.
@@ -1664,24 +1669,6 @@ class EditorHistory {
   MutableDocumentNodes document;
   DocumentSelection? selection;
   EditorHistory({required this.document, this.selection});
-
-  // Map<String, dynamic> toMap() {
-  //   return <String, dynamic>{
-  //     'document': document.toMap(),
-  //     'composer': composer.toMap(),
-  //   };
-  // }
-
-  // factory DocumentHistory.fromMap(Map<String, dynamic> map) {
-  //   return DocumentHistory(
-  //     document: MutableDocument.fromMap(map['document'] as Map<String,dynamic>),
-  //     composer: MutableDocumentComposer.fromMap(map['composer'] as Map<String,dynamic>),
-  //   );
-  // }
-
-  // String toJson() => json.encode(toMap());
-
-  // factory DocumentHistory.fromJson(String source) => DocumentHistory.fromMap(json.decode(source) as Map<String, dynamic>);
 }
 
 extension on MutableDocument {
