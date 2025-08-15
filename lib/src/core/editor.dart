@@ -169,7 +169,7 @@ class Editor implements RequestDispatcher {
       );
     }
     final firstHistory = EditorHistory(
-      document: emptyDocument,
+      document: emptyDocument.copy(),
       selection: emptySelection?.copyWith(),
     );
 
@@ -302,11 +302,9 @@ class Editor implements RequestDispatcher {
     _isInTransaction = true;
     _activeChangeList.clear();
     _transaction = CommandTransaction([], clock.now());
-
     if (isStateHistoryEnable) {
-      final next = document.copy();
       beforeTransactionHistory = EditorHistory(
-        document: next,
+        document: document.copy(),
         selection: composer.selection?.copyWith(),
       );
     }
@@ -335,7 +333,7 @@ class Editor implements RequestDispatcher {
       // 🚩 如果是 IME 输入中事务，跳过历史记录
       if (!_isComposingTransaction) {
         _stateHistory.addLast(beforeTransactionHistory!);
-        // FIFO 限制到 20
+        // FIFO 限制
         while (_stateHistory.length > historyMaxSteps) {
           _stateHistory.removeFirst();
         }
@@ -391,7 +389,9 @@ class Editor implements RequestDispatcher {
       final undoableCommands = <EditCommand>[];
       for (final request in requests) {
         // 🚩 在这里识别 IME 组合中请求
-        if (composer.composingRegion.value != null) {
+        final composingRegion = composer.composingRegion.value;
+        if (composingRegion != null && !composingRegion.isCollapsed) {
+          // 只有在组合区域存在且非折叠状态时，才认为是 IME 正在输入
           _isComposingTransaction = true;
         }
         // Execute the given request.
@@ -1529,9 +1529,6 @@ class MutableDocument
       nodes: _nodes.map((node) => node.copy()).toList(),
     );
 
-    for (final listener in _listeners) {
-      newDoc.addListener(listener);
-    }
     newDoc._didReset = true;
 
     return newDoc;
@@ -1669,24 +1666,6 @@ class EditorHistory {
   MutableDocument document;
   DocumentSelection? selection;
   EditorHistory({required this.document, this.selection});
-
-  // Map<String, dynamic> toMap() {
-  //   return <String, dynamic>{
-  //     'document': document.toMap(),
-  //     'composer': composer.toMap(),
-  //   };
-  // }
-
-  // factory DocumentHistory.fromMap(Map<String, dynamic> map) {
-  //   return DocumentHistory(
-  //     document: MutableDocument.fromMap(map['document'] as Map<String,dynamic>),
-  //     composer: MutableDocumentComposer.fromMap(map['composer'] as Map<String,dynamic>),
-  //   );
-  // }
-
-  // String toJson() => json.encode(toMap());
-
-  // factory DocumentHistory.fromJson(String source) => DocumentHistory.fromMap(json.decode(source) as Map<String, dynamic>);
 }
 
 extension on MutableDocument {
