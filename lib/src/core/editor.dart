@@ -172,7 +172,7 @@ class Editor implements RequestDispatcher {
       document: emptyDocument.copy(),
       selection: emptySelection?.copyWith(),
     );
-
+    emptyDocument.dispose();
     _stateHistory.add(firstHistory);
     //4. 通知 UI 刷新
     _customEventController.add(
