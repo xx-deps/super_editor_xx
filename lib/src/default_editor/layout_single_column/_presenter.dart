@@ -144,7 +144,6 @@ class SingleColumnLayoutPresenter {
   void updateViewModel({bool isUndo = false}) {
     if (isUndo) {
       _earliestDirtyPhase = 0;
-      print("editor_updateViewModel");
     }
 
     editorLayoutLog.finest(
