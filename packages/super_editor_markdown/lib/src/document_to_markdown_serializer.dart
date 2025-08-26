@@ -315,11 +315,15 @@ extension Markdown on AttributedText {
 
     trimmedMarkers.sort();
 
-    return AttributedText(
-      attributedText.toPlainText(includePlaceholders: false),
+    String currentText = attributedText.toPlainText(includePlaceholders: false);
+
+    final attributedTextCurrent = AttributedText(
+      currentText,
       AttributedSpans(attributions: trimmedMarkers),
       Map.from(attributedText.placeholders),
     );
+
+    return attributedTextCurrent;
   }
 
   List<SpanMarker>? _trimSpanMarkerPairQuiet({
@@ -406,8 +410,26 @@ class AttributedTextMarkdownSerializer extends AttributionVisitor {
       // can't be checked using equality comparison) and asymmetrical in markdown.
       final linkMarker =
           _encodeLinkMarker(startingAttributions, AttributionVisitEvent.start);
+      ////只在mention上有用其他标签无用
+      bool lastNeedSpace = false;
+      if (fullText.isEmpty || index == 0) {
+        lastNeedSpace = true;
+      } else {
+        ///这边都是大于等于1的情况
+        final text = fullText.toPlainText();
+
+        try {
+          ///如果长度大于1
+          final c = text[index - 1];
+          if (c != ' ') {
+            lastNeedSpace = true;
+          }
+        } catch (e, s) {
+          print(e);
+        }
+      }
       final mentionMarker = _encodeMentionMarker(
-          startingAttributions, AttributionVisitEvent.start);
+          startingAttributions, AttributionVisitEvent.start, lastNeedSpace);
       if (mentionMarker.isNotEmpty) {
         hasMentionMarker = true;
       }
@@ -432,8 +454,9 @@ class AttributedTextMarkdownSerializer extends AttributionVisitor {
       // can't be checked using equality comparison) and asymmetrical in markdown.
       final linkMarker =
           _encodeLinkMarker(endingAttributions, AttributionVisitEvent.end);
-      final mentionMarker =
-          _encodeMentionMarker(endingAttributions, AttributionVisitEvent.end);
+
+      final mentionMarker = _encodeMentionMarker(
+          endingAttributions, AttributionVisitEvent.end, false);
       if (mentionMarker.isNotEmpty) {
         hasMentionMarker = false;
       }
@@ -516,14 +539,17 @@ class AttributedTextMarkdownSerializer extends AttributionVisitor {
     }
   }
 
-  static String _encodeMentionMarker(
-      Set<Attribution> attributions, AttributionVisitEvent event) {
+  static String _encodeMentionMarker(Set<Attribution> attributions,
+      AttributionVisitEvent event, bool needSpace) {
     final mentionAttributions = attributions
         .whereType<NamedAttribution>()
         .where((e) => e.id.contains('(met)'));
     if (mentionAttributions.isNotEmpty) {
       if (event == AttributionVisitEvent.start) {
-        return mentionAttributions.first.id.split('#').firstOrNull ?? '(met)';
+        final attributions = mentionAttributions.first;
+
+        return (needSpace ? " " : "") +
+            (attributions.id.split('#').firstOrNull ?? '(met)');
       } else {
         return '(met)';
       }
