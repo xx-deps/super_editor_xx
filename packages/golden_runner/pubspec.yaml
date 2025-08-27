@@ -2,7 +2,6 @@ name: golden_runner
 description: Commands to test and update goldens in a Docker container
 version: 0.0.1
 
-
 executables:
   goldens:
 
@@ -13,5 +12,3 @@ dependencies:
   args: ^2.3.1
   meta: ^1.8.0
   path: ^1.8.3
-
-flutter:

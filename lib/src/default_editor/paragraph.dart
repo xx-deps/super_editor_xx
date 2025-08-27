@@ -10,9 +10,11 @@ import 'package:super_editor/src/core/editor.dart';
 import 'package:super_editor/src/default_editor/attributions.dart';
 import 'package:super_editor/src/default_editor/blocks/indentation.dart';
 import 'package:super_editor/src/default_editor/box_component.dart';
+import 'package:super_editor/src/default_editor/layout_single_column/layout_single_column.dart';
 import 'package:super_editor/src/default_editor/multi_node_editing.dart';
 import 'package:super_editor/src/default_editor/text.dart';
 import 'package:super_editor/src/default_editor/text/custom_underlines.dart';
+import 'package:super_editor/src/default_editor/text_tools.dart';
 import 'package:super_editor/src/infrastructure/_logging.dart';
 import 'package:super_editor/src/infrastructure/attributed_text_styles.dart';
 import 'package:super_editor/src/infrastructure/composable_text.dart';
@@ -20,9 +22,6 @@ import 'package:super_editor/src/infrastructure/key_event_extensions.dart';
 import 'package:super_editor/src/infrastructure/keyboard.dart';
 import 'package:super_editor/src/infrastructure/platforms/platform.dart';
 import 'package:super_text_layout/super_text_layout.dart';
-
-import 'package:super_editor/src/default_editor/layout_single_column/layout_single_column.dart';
-import 'package:super_editor/src/default_editor/text_tools.dart';
 
 @immutable
 class ParagraphNode extends TextNode {
@@ -983,9 +982,6 @@ class DeleteUpstreamAtBeginningOfParagraphCommand extends EditCommand {
 
     final document = context.document;
     final composer = context.find<MutableDocumentComposer>(Editor.composerKey);
-    final documentLayoutEditable = context.find<DocumentLayoutEditable>(
-      Editor.layoutKey,
-    );
 
     final paragraphNode = node as ParagraphNode;
     if (paragraphNode.metadata["blockType"] != paragraphAttribution) {
@@ -1011,14 +1007,6 @@ class DeleteUpstreamAtBeginningOfParagraphCommand extends EditCommand {
       // The caret is at the beginning of one TextNode and is preceded by
       // another TextNode. Merge the two TextNodes.
       mergeTextNodeWithUpstreamTextNode(executor, document, composer);
-      return;
-    }
-
-    final componentBefore = documentLayoutEditable.documentLayout
-        .getComponentByNodeId(nodeBefore.id)!;
-    if (!componentBefore.isVisualSelectionSupported()) {
-      // The node/component above is not selectable. Delete it.
-      executor.executeCommand(DeleteNodeCommand(nodeId: nodeBefore.id));
       return;
     }
 

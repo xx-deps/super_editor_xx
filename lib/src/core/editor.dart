@@ -44,7 +44,7 @@ class Editor implements RequestDispatcher {
 
   /// Service locator key to obtain a [DocumentLayoutEditable] from [find], if
   /// a [DocumentLayoutEditable] is available in the [EditContext].
-  static const layoutKey = "layout";
+  // static const layoutKey = "layout";
 
   /// Generates a new ID for a [DocumentNode].
   ///
@@ -1271,12 +1271,6 @@ extension StandardEditables on Editor {
   /// [MutableDocumentComposer] is in the [Editor].
   MutableDocumentComposer? get maybeComposer =>
       context.findMaybe<MutableDocumentComposer>(Editor.composerKey);
-
-  DocumentLayoutEditable get layout =>
-      context.find<DocumentLayoutEditable>(Editor.layoutKey);
-
-  DocumentLayoutEditable? get maybeLayout =>
-      context.findMaybe<DocumentLayoutEditable>(Editor.layoutKey);
 }
 
 /// Extensions that provide direct, type-safe access to [Editable]s that are

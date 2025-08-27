@@ -483,13 +483,6 @@ class SuperEditorState extends State<SuperEditor> {
 
     _isImeConnected = widget.isImeConnected ?? ValueNotifier(false);
 
-    widget.editor.context.put(
-      Editor.layoutKey,
-      DocumentLayoutEditable(
-        () => _docLayoutKey.currentState as DocumentLayout,
-      ),
-    );
-
     _createEditContext();
     _createLayoutPresenter();
 
@@ -533,14 +526,6 @@ class SuperEditorState extends State<SuperEditor> {
       for (final plugin in oldWidget.plugins) {
         plugin.detach(oldWidget.editor);
       }
-
-      oldWidget.editor.context.remove(Editor.layoutKey);
-      widget.editor.context.put(
-        Editor.layoutKey,
-        DocumentLayoutEditable(
-          () => _docLayoutKey.currentState as DocumentLayout,
-        ),
-      );
 
       _createEditContext();
       _createLayoutPresenter();
@@ -586,9 +571,6 @@ class SuperEditorState extends State<SuperEditor> {
     _iosControlsController.dispose();
     _androidControlsController.dispose();
 
-    widget.editor.context.remove(Editor.layoutKey);
-
-    _focusNode.removeListener(_onFocusChange);
     if (widget.focusNode == null) {
       // We are using our own private FocusNode. Dispose it.
       _focusNode.dispose();

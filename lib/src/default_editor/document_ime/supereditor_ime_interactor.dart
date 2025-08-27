@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -8,6 +7,12 @@ import 'package:super_editor/src/core/document_layout.dart';
 import 'package:super_editor/src/core/edit_context.dart';
 import 'package:super_editor/src/default_editor/debug_visualization.dart';
 import 'package:super_editor/src/default_editor/document_gestures_touch_ios.dart';
+import 'package:super_editor/src/default_editor/document_hardware_keyboard/document_input_keyboard.dart';
+import 'package:super_editor/src/default_editor/document_ime/document_delta_editing.dart';
+import 'package:super_editor/src/default_editor/document_ime/document_ime_communication.dart';
+import 'package:super_editor/src/default_editor/document_ime/document_ime_interaction_policies.dart';
+import 'package:super_editor/src/default_editor/document_ime/ime_decoration.dart';
+import 'package:super_editor/src/default_editor/document_ime/ime_keyboard_control.dart';
 import 'package:super_editor/src/default_editor/text.dart';
 import 'package:super_editor/src/infrastructure/_logging.dart';
 import 'package:super_editor/src/infrastructure/actions.dart';
@@ -16,13 +21,6 @@ import 'package:super_editor/src/infrastructure/ime_input_owner.dart';
 import 'package:super_editor/src/infrastructure/platforms/ios/ios_document_controls.dart';
 import 'package:super_editor/src/infrastructure/platforms/platform.dart';
 import 'package:super_editor/src/infrastructure/render_sliver_ext.dart';
-
-import '../document_hardware_keyboard/document_input_keyboard.dart';
-import 'document_delta_editing.dart';
-import 'document_ime_communication.dart';
-import 'document_ime_interaction_policies.dart';
-import 'ime_decoration.dart';
-import 'ime_keyboard_control.dart';
 
 /// [SuperEditor] interactor that edits a document based on IME input
 /// from the operating system.
@@ -417,9 +415,9 @@ class SuperEditorImeInteractorState extends State<SuperEditorImeInteractor>
     }
 
     if (selectedComponent == null) {
-      editorImeLog.warning(
-        'A selection exists but no component for node ${selection.extent.nodeId} was found',
-      );
+      // editorImeLog.warning(
+      //   'A selection exists but no component for node ${selection.extent.nodeId} was found',
+      // );
       return;
     }
 
@@ -492,9 +490,9 @@ class SuperEditorImeInteractorState extends State<SuperEditorImeInteractor>
     }
 
     if (selectedComponent == null) {
-      editorImeLog.warning(
-        'A selection exists but no component for node ${selection.extent.nodeId} was found',
-      );
+      // editorImeLog.warning(
+      //   'A selection exists but no component for node ${selection.extent.nodeId} was found',
+      // );
       return null;
     }
 

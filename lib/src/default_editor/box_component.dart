@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:super_editor/src/core/document.dart';
 import 'package:super_editor/src/core/document_composer.dart';
+import 'package:super_editor/src/core/document_layout.dart';
 import 'package:super_editor/src/core/document_selection.dart';
 import 'package:super_editor/src/core/editor.dart';
 import 'package:super_editor/src/default_editor/multi_node_editing.dart';
@@ -8,8 +9,6 @@ import 'package:super_editor/src/default_editor/selection_upstream_downstream.da
 import 'package:super_editor/src/default_editor/text.dart';
 import 'package:super_editor/src/infrastructure/_logging.dart';
 import 'package:super_editor/src/infrastructure/flutter/geometry.dart';
-
-import '../core/document_layout.dart';
 
 // ignore: unused_element
 final _log = Logger(scope: 'box_component.dart');
@@ -322,9 +321,9 @@ class DeleteUpstreamAtBeginningOfBlockNodeCommand extends EditCommand {
   void execute(EditContext context, CommandExecutor executor) {
     final document = context.document;
     final composer = context.find<MutableDocumentComposer>(Editor.composerKey);
-    final documentLayoutEditable = context.find<DocumentLayoutEditable>(
-      Editor.layoutKey,
-    );
+    // final documentLayoutEditable = context.find<DocumentLayoutEditable>(
+    //   Editor.layoutKey,
+    // );
 
     final deletionPosition = DocumentPosition(
       nodeId: node.id,
@@ -359,13 +358,13 @@ class DeleteUpstreamAtBeginningOfBlockNodeCommand extends EditCommand {
       return;
     }
 
-    final componentBefore = documentLayoutEditable.documentLayout
-        .getComponentByNodeId(nodeBefore.id)!;
-    if (!componentBefore.isVisualSelectionSupported()) {
-      // The node/component above is not selectable. Delete it.
-      executor.executeCommand(DeleteNodeCommand(nodeId: nodeBefore.id));
-      return;
-    }
+    // final componentBefore = documentLayoutEditable.documentLayout
+    //     .getComponentByNodeId(nodeBefore.id)!;
+    // if (!componentBefore.isVisualSelectionSupported()) {
+    //   // The node/component above is not selectable. Delete it.
+    //   executor.executeCommand(DeleteNodeCommand(nodeId: nodeBefore.id));
+    //   return;
+    // }
 
     moveSelectionToEndOfPrecedingNode(executor, document, composer);
   }
