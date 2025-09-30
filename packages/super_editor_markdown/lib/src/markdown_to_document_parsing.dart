@@ -4,9 +4,6 @@ import 'dart:ui';
 import 'package:markdown/markdown.dart' as md;
 import 'package:super_editor/super_editor.dart';
 import 'package:super_editor_markdown/src/image_syntax.dart';
-import 'package:super_editor_markdown/super_editor_markdown.dart';
-
-import 'super_editor_syntax.dart';
 
 /// 不管是空行还是非空行，都保留一个段落
 /// A [BlockSyntax] that treats every line as a separate paragraph,
@@ -575,7 +572,8 @@ class _MarkdownToDocument implements md.NodeVisitor {
           SingleStrikethroughSyntax(), // this needs to be before md.StrikethroughSyntax to be recognized
           md.StrikethroughSyntax(),
           UnderlineSyntax(),
-          MentionSyntax(),
+          MemberMentionSyntax(),
+          ChannelMentionSyntax(),
           if (syntax == MarkdownSyntax.superEditor) //
             SuperEditorImageSyntax(),
         ],
@@ -683,10 +681,18 @@ class _InlineMarkdownToDocument implements md.NodeVisitor {
       );
     } else if (element.tag == '(met)') {
       final uid = element.attributes['content'] ?? '';
-      styledText = styledText
-          .insertPlaceholders({0: InlineMentionPlaceholder(uid: uid)});
+      styledText = styledText.insertPlaceholders(
+          {0: InlineMentionPlaceholder(uid: uid, mentionTag: "@")});
       styledText.addAttribution(
         NamedAttribution('(met)$uid'),
+        SpanRange(0, styledText.length - 1),
+      );
+    } else if (element.tag == '(chn)') {
+      final uid = element.attributes['content'] ?? '';
+      styledText = styledText.insertPlaceholders(
+          {0: InlineMentionPlaceholder(uid: uid, mentionTag: "#")});
+      styledText.addAttribution(
+        NamedAttribution('(chn)$uid'),
         SpanRange(0, styledText.length - 1),
       );
     }
@@ -710,8 +716,8 @@ abstract class ElementToNodeConverter {
   DocumentNode? handleElement(md.Element element);
 }
 
-class MentionSyntax extends md.InlineSyntax {
-  MentionSyntax() : super(r'\(met\)([^)]*)\(met\)');
+class MemberMentionSyntax extends md.InlineSyntax {
+  MemberMentionSyntax() : super(r'\(met\)([^)]*)\(met\)');
 
   @override
   bool onMatch(md.InlineParser parser, Match match) {
@@ -725,6 +731,25 @@ class MentionSyntax extends md.InlineSyntax {
     final element = md.Element('(met)', []);
     element.attributes['content'] = content;
 
+    parser.addNode(element);
+    return true;
+  }
+}
+
+class ChannelMentionSyntax extends md.InlineSyntax {
+  ChannelMentionSyntax() : super(r'\(chn\)([^)]*)\(chn\)');
+
+  @override
+  bool onMatch(md.InlineParser parser, Match match) {
+    final fullMatch = match.group(0);
+    final content = match.group(1);
+
+    if (fullMatch == null || content == null) {
+      return false;
+    }
+
+    final element = md.Element('(chn)', []);
+    element.attributes['content'] = content;
     parser.addNode(element);
     return true;
   }
