@@ -35,17 +35,25 @@ class InlineAssetImagePlaceholder {
 }
 
 class InlineMentionPlaceholder {
-  const InlineMentionPlaceholder({required this.uid});
+  const InlineMentionPlaceholder({
+    required this.uid,
+    required this.mentionTag,
+    this.rawString = '',
+  });
 
   final String uid;
+  final String mentionTag;
+  final String rawString;
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is InlineMentionPlaceholder &&
           runtimeType == other.runtimeType &&
-          uid == other.uid;
+          uid == other.uid &&
+          mentionTag == other.mentionTag &&
+          rawString == other.rawString;
 
   @override
-  int get hashCode => uid.hashCode;
+  int get hashCode => Object.hash(uid, mentionTag, rawString);
 }

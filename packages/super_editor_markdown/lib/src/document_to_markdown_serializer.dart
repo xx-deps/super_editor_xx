@@ -282,7 +282,7 @@ extension Markdown on AttributedText {
     // 处理每个 attribution 组
     for (final entry in attributionGroups.entries) {
       final markers = entry.value;
-      if (entry.key.id.contains('(met)')) {
+      if (entry.key.id.contains('(met)') || entry.key.id.contains('(chn)')) {
         trimmedMarkers.addAll(markers);
         continue;
       }
@@ -539,19 +539,27 @@ class AttributedTextMarkdownSerializer extends AttributionVisitor {
     }
   }
 
-  static String _encodeMentionMarker(Set<Attribution> attributions,
-      AttributionVisitEvent event, bool needSpace) {
-    final mentionAttributions = attributions
-        .whereType<NamedAttribution>()
-        .where((e) => e.id.contains('(met)'));
-    if (mentionAttributions.isNotEmpty) {
-      if (event == AttributionVisitEvent.start) {
-        final attributions = mentionAttributions.first;
+  static String _encodeMentionMarker(
+    Set<Attribution> attributions,
+    AttributionVisitEvent event,
+    bool needSpace,
+  ) {
+    final mentionAttributions =
+        attributions.whereType<NamedAttribution>().where(
+              (e) => e.id.contains('(met)') || e.id.contains('(chn)'),
+            );
 
-        return (needSpace ? " " : "") +
-            (attributions.id.split('#').firstOrNull ?? '(met)');
+    if (mentionAttributions.isNotEmpty) {
+      final attr = mentionAttributions.first;
+
+      // 提取标签类型 (met) 或 (chn)
+      final tag = attr.id.contains('(chn)') ? '(chn)' : '(met)';
+
+      if (event == AttributionVisitEvent.start) {
+        final prefix = attr.id.split('#').firstOrNull ?? tag;
+        return (needSpace ? " " : "") + prefix;
       } else {
-        return '(met)';
+        return tag;
       }
     }
     return "";
